@@ -1,0 +1,12 @@
+api/node_modules
+api/.env
+
+.idea
+
+frontend/*
+!frontend/.gitkeep
+!frontend/Dockerfile
+!frontend/Dockerfile.dev
+
+data/*
+!data/.gitkeep
