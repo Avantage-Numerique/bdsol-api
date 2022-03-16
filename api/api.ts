@@ -1,6 +1,10 @@
 import express from 'express';
 import ApiRouter from "./routes";
 import * as dotenv from "dotenv";
+import HealthCheckRouter from "./Healthcheck/Routes/HealthCheckRoutes";
+import AuthentificationRouter from "./Authentification/Routes/AuthentificationRoutes";
+
+//Init the .env file config vars.
 dotenv.config();
 
 /**
@@ -33,7 +37,15 @@ class Api {
     }
 
     private initRouter() {
+
+        //main log and feedback from the API
         this.express.use("/", ApiRouter);
+
+        //Tools the manage the health of the API
+        this.express.use("/", HealthCheckRouter);
+
+        // Auth Routes
+        this.express.use("/", AuthentificationRouter);
     }
 }
 
