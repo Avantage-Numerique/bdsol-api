@@ -1,3 +1,4 @@
+
 interface PingResponse {
     message: string;
 }

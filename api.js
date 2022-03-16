@@ -38,24 +38,6 @@ const permissions = [
 ];
 
 
-//  Routes Middleware
-
-
-//  Header CORS
-
-api.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
-    next();
-});
-
-// parse application/x-www-form-urlencoded
-//api.use(express.urlencoded({extended: false}));
-
-// parse application/json
-api.use(express.json());
 
 
 //  Routes GET
@@ -86,8 +68,3 @@ api.post('/ping', (req, res) => {
 
 
 
-//  Listen PORT
-
-api.listen(port, () => {
-    console.log(`BDSOL API server (version ${version}) started listening on port: ${port}`);//@todo Add this string to a string manager.
-});
