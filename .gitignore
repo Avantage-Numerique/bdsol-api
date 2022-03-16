@@ -5,3 +5,5 @@ api/.env
 
 data/*
 !data/.gitkeep
+
+frontend/node_modules
