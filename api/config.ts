@@ -1,5 +1,4 @@
 // config.js
-import AuthentificationRouter from "./Authentification/Routes/AuthentificationRoutes";
 
 const config = {
 
