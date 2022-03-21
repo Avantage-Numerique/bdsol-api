@@ -11,6 +11,12 @@ interface LoginResponse {
     fields: object|null;
 }
 
+interface LogoutResponse {
+    user: string|undefined;
+    code: number;
+    message: string;
+}
+
 interface User {
     username:string;
     email:string;
@@ -50,7 +56,7 @@ class AuthenficationController
         return {
             userConnectedToken: undefined,
             code: 401,
-            message: 'Vos informations de connection sont incorrect, vérifiez votre utilisateur et mot de passe.',
+            message: 'Vos informations de connexion sont incorrectes, vérifiez votre utilisateur et mot de passe.',
             fields: {
                 username: {
                     status: false,
@@ -61,6 +67,15 @@ class AuthenficationController
                     message: ''
                 }
             }
+        };
+    }
+
+    public async logout(username:string): Promise<LogoutResponse> {
+        //set the logout process
+        return {
+            user: username,
+            code: 200,
+            message: `L'utilisateur ${username} a été déconnecté avec succès.`
         };
     }
 
