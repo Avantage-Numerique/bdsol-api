@@ -5,9 +5,10 @@ import LogHelper from "../../Monitoring/Helpers/LogHelper"
 
 
 interface LoginResponse {
-    userConnectedToken: string;
+    userConnectedToken: string|undefined;
     code: number;
     message: string;
+    fields: object|null;
 }
 
 interface User {
@@ -38,14 +39,28 @@ class AuthenficationController
             return {
                 userConnectedToken: userConnectedToken,
                 code: 200,
-                message: 'OK'
+                message: 'OK',
+                fields: {
+                    username: true,
+                    password: true
+                }
             };
         }
 
         return {
-            userConnectedToken: '',
+            userConnectedToken: undefined,
             code: 401,
-            message: 'Vos informations de connection sont incorrect, vérifiez votre utilisateur et mot de passe.'//@todo Add this string to a string manager.
+            message: 'Vos informations de connection sont incorrect, vérifiez votre utilisateur et mot de passe.',
+            fields: {
+                username: {
+                    status: false,
+                    message: ''
+                },
+                password:  {
+                    status: false,
+                    message: ''
+                }
+            }
         };
     }
 
@@ -53,7 +68,7 @@ class AuthenficationController
         return jwt.sign({ username: user.username,  role: user.role }, config.tokenSecret);
     }
 
-    private static getUser(username:string, password:string):User|undefined {
+    private static getUser(username:string, password:string): User | undefined {
 
         return users.find(
             u => { return u.username === username && u.password === password }
