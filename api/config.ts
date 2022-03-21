@@ -1,4 +1,8 @@
-// config.js
+
+//Init the .env file config vars.
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 const config = {
 

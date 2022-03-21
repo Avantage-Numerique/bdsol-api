@@ -1,11 +1,7 @@
 import express from 'express';
 import ApiRouter from "./routes";
-import * as dotenv from "dotenv";
 import HealthCheckRouter from "./Healthcheck/Routes/HealthCheckRoutes";
 import AuthentificationRouter from "./Authentification/Routes/AuthentificationRoutes";
-
-//Init the .env file config vars.
-dotenv.config();
 
 /**
  * Main class for the API
