@@ -1,5 +1,5 @@
 
-const data = require("../../../data/users");
+const data = require("../../../../data/users");
 
 class UserController
 {
@@ -7,7 +7,7 @@ class UserController
 
     getUser($userId) {
         if (!this.#users) {
-            this.#users = require("../../../data/users");
+            this.#users = require("../../../../data/users");
         }
         return this.#users;
     }

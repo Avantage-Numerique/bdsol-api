@@ -15,6 +15,9 @@ Les directives assument que vous vous rendez au bon endroit sur votre disque dur
 1. Démarrer l'api en mode dev : `cd ./api` et ensuite `npm run serve-ts`
 1. Démarrer le frontend en mode dev : `cd ./frontend` et ensuite `npm run dev`
 
+### MongoDB
+#### Notes
+Lorsqu'on est dans l'environnement docker le port est `27017` et lorsque nous sommes dans l'environnement exterieur, le port ouvert est `27018`.
 
 ## Code de succès et d'erreur
 
