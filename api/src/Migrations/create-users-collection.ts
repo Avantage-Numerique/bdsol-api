@@ -17,10 +17,14 @@ export default class CreateUsersCollection {
         //check if this.name is already created ?
         //this.db.createCollection(this.name, this.onUp);
         /*if (this.db.getCollection(this.name).exists()) {
-
+            //check if fake users exists
+            //Ajoute le schema pour l'utilisateur.
         }*/
         this.collection = this.db.collection(this.name);
-        await this.collection.insertMany(users);
+        let userCount = await this.collection.countDocuments();
+        if (userCount <= 0) {
+            await this.collection.insertMany(users);
+        }
         //this.db.getDatabase("test")
 
         /*if (this.collection) {
