@@ -33,6 +33,8 @@ class Api {
         this.express.use(express.json());
     }
 
+    // check for migration to trigger ?
+
     private initRouter() {
 
         //main log and feedback from the API

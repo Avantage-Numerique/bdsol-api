@@ -1,8 +1,11 @@
 import * as mongoDB from "mongodb";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
-import users from "../Authentification/Models/UserModel";
+import {fakeUsers} from "../Authentification/Models/UserModel";
+import config from "../config";
+import {Migration} from "../Database/Migration";
 
-export default class CreateUsersCollection {
+
+export default class CreateUsersCollection implements Migration {
 
     db: mongoDB.Db;
     name: string = 'users';
@@ -14,38 +17,35 @@ export default class CreateUsersCollection {
     }
 
     public async up() {
-        //check if this.name is already created ?
-        //this.db.createCollection(this.name, this.onUp);
-        /*if (this.db.getCollection(this.name).exists()) {
-            //check if fake users exists
-            //Ajoute le schema pour l'utilisateur.
-        }*/
-        this.collection = this.db.collection(this.name);
-        let userCount = await this.collection.countDocuments();
-        if (userCount <= 0) {
-            await this.collection.insertMany(users);
-        }
-        //this.db.getDatabase("test")
 
-        /*if (this.collection) {
-            await users.forEach( (fakeUser) => {
-                const result = this.collection.insertOne(fakeUser);
-            });
-        }*/
-        //name
-        //username
-        //email
-        //password
-        //role
-        //
+        this.collection = this.db.collection(this.name);
+        await this.fake();
     }
 
     public onUp(error:any, result:any) {
         LogHelper.error(error, result);
     }
 
-    public down() {
-
+    public async down() {
+        //clear fake
+        //clear document ?
     }
+
+    public onDown(error:any, result:any) {
+        LogHelper.error(error, result);
+    }
+
+    public async fake() {
+        if (config.environnement === 'development'
+            && this.collection !== null) {
+
+            let userCount = await this.collection.countDocuments();
+            if (userCount <= 0) {
+                await this.collection.insertMany(fakeUsers);
+                return true
+            }
+        }
+        return false;
+    }
+
 }
-//

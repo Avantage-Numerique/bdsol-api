@@ -8,27 +8,24 @@ export default class ServerController {
 
     server: http.Server;
     api: express.Application;
-    database: DBDriver;
+    static database: DBDriver;
 
     constructor(api: express.Application) {
         this.api = api;
         this.server = http.createServer(this.api);
-        this.database = new MongoDBDriver();
+        ServerController.database = new MongoDBDriver();
         LogHelper.log('Départ de la configuration du serveur pour l\'API');
     }
 
     public async start() {
 
-        //version = version || 'not set';
-        // port = port || 'not set';
-        //console.log(`BDSOL API server (version ${config.version}) started listening on port: ${config.port}`);
         this.server = http.createServer(this.api);
 
         this.server.on("error", this.onError);
         this.server.on("listening", this.onListening);
 
         try {
-            await this.database.connect();
+            await ServerController.database.connect();
             LogHelper.log('Connexion à la base de données ...');
 
         } catch(error: any) {

@@ -45,7 +45,6 @@ export default class MongoDBDriver implements DBDriver {
 
             //will create the fake user for now.
             let usersCollection = new CreateUsersCollection(this.db);
-            LogHelper.log('Creating the fake users');
             usersCollection.up();
         }
     }

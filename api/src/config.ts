@@ -6,6 +6,7 @@ dotenv.config();
 
 const config = {
 
+    environnement: process.env.ENVIRONNEMENT || "development",
     port: process.env.PORT || "8000",
     version: process.env.VERSION || "0.0.0",
     tokenSecret: process.env.JWT_KEY || "not set",
