@@ -1,4 +1,4 @@
-import UserModel, {User} from "../Models/UserModel";
+import UserModel from "../../Users/Models/UserModel";
 import * as jwt from "jsonwebtoken";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper"

@@ -1,6 +1,6 @@
 import * as mongoDB from "mongodb";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
-import {fakeUsers} from "../Authentification/Models/UserModel";
+import {fakeUsers} from "../Users/fakeUsers";
 import config from "../config";
 import {Migration} from "../Database/Migration";
 
