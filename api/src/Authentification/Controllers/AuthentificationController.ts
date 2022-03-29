@@ -1,31 +1,16 @@
-import UserModel from "../../Users/Models/UserModel";
+import UserModel, {UserContract} from "../../Users/Models/UserModel";
 import * as jwt from "jsonwebtoken";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper"
 import * as mongoDB from "mongodb";
 import ServerController from "../../Server/Controllers/ServerController";
+import LoginResponse from "../Responses/LoginResponse";
+import {LogoutResponse} from "../Responses/LogoutResponse";
+import UserAuthContract from "../Contracts/UserAuthContract";
+import FakeUserModel from "../../Users/Models/FakeUserModel";
 
 
-export interface LoginResponse {
-    userConnectedToken: string|undefined;
-    code: number;
-    message: string;
-    fields: object|null;
-}
-
-export interface LogoutResponse {
-    user: string|undefined;
-    code: number;
-    message: string;
-}
-
-export interface UserCredential {
-    user: string | null;
-    password: string | null;
-}
-
-
-class AuthenficationController
+class AuthentificationController
 {
     public async login(username:string, password:string): Promise<LoginResponse> {
 
@@ -33,7 +18,7 @@ class AuthenficationController
         LogHelper.log(`${username} trying to connect ...`);
 
         // TEMP DB BYPASS to make this working quicker.
-        const user = await AuthenficationController.getUser(username, password);
+        const user = await AuthentificationController.getUser(username, password);
         const targetUser = new UserModel(user);
 
         // User was find in DB
@@ -42,7 +27,7 @@ class AuthenficationController
             LogHelper.log(`Les information de ${targetUser.username} fonctionnent, génération du token JW ...`);
 
             // Generate an access token
-            const userConnectedToken = AuthenficationController.generateToken(targetUser);
+            const userConnectedToken = AuthentificationController.generateToken(targetUser);
 
             return {
                 userConnectedToken: userConnectedToken,
@@ -81,20 +66,43 @@ class AuthenficationController
         };
     }
 
+    /**
+     *
+     * @param user
+     * @private
+     */
     private static generateToken(user:UserModel):string {
         return jwt.sign({ username: user.username,  role: user.role }, config.tokenSecret);
     }
 
-    private static async getUser(username:string, password:string): Promise<mongoDB.Document | null> {
 
-        let targetUser: UserCredential = new class implements UserCredential {
+    /**
+     * search in the current database driver for the user.
+     * @param username
+     * @param password
+     * @private
+     */
+    private static async getUser(username:string, password:string): Promise<mongoDB.Document | UserContract | null> {
+
+        //construct the credential as UserAuthContract.
+        let targetUser: UserAuthContract = new class implements UserAuthContract {
             password = password;
             user = username;
         };
-        //{ username: username, password: password };
-        //let user = ;
-        UserModel.collection = ServerController.database.db.collection('users');//this is wrong, my design is clunky. Need refactoring.
-        return await UserModel.findOne(targetUser);
+
+        ServerController.setUsersModelCollection();
+
+        if (ServerController.database.driverPrefix === 'fakeusers') {
+            return await FakeUserModel.findOne(targetUser) as UserContract;
+        }
+        if (ServerController.database.driverPrefix === 'mongodb') {
+            return await UserModel.findOne(targetUser);
+        }
+        return null;
+        //ServerController.database.getModel('users').collection = ServerController.database.getCollection('users');//db.collection('users');//this is wrong, my design is clunky. Need refactoring.
+
+        //LogHelper.log(ServerController.database.driverPrefix, ServerController.usersModel);
+        //return await ServerController.usersModel.findOne(targetUser);
     }
 }
-export default AuthenficationController;
+export default AuthentificationController;

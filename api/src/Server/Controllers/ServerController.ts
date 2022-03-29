@@ -2,19 +2,49 @@ import express from 'express';
 import * as http from "http";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import config from "../../config";
-import MongoDBDriver, {DBDriver} from "../../Database/Drivers/MongoDBDriver";
+import DBDriver from "../../Database/Drivers/DBDriver";
+import MongoDBDriver from "../../Database/Drivers/MongoDBDriver";
+import FakeUserDBDriver from "../../Database/Drivers/FakeUserDBDriver";
 
+/**
+ * Manage all the serveur actions and connect the app to the ROUTE.
+ */
 export default class ServerController {
 
     server: http.Server;
     api: express.Application;
+    static usersTable: string = 'users';
+    static usersModel: any;
     static database: DBDriver;
 
     constructor(api: express.Application) {
         this.api = api;
         this.server = http.createServer(this.api);
-        ServerController.database = new MongoDBDriver();
+        ServerController._setDBDriver();
         LogHelper.log('Départ de la configuration du serveur pour l\'API');
+    }
+
+    private static _setDBDriver() {
+        LogHelper.log(`Initiation du driver ${config.db.driver} de la base de données.`);
+        if (config.db.driver === 'mongodb') {
+            ServerController.database = new MongoDBDriver();
+            return;
+        }
+        if (config.db.driver === 'fakeusers') {
+            ServerController.database = new FakeUserDBDriver();
+            return;
+        }
+    }
+
+    public static setUsersModelCollection() {
+        LogHelper.log(`Initiation des utilisateurs.`);
+
+        ServerController.usersModel = ServerController.database.getModel(ServerController.usersTable);
+        ServerController.usersModel.collection = ServerController.database.getCollection(ServerController.usersTable);
+
+        ServerController.database.getModel(ServerController.usersTable).collection = ServerController.database.getCollection(ServerController.usersTable);
+
+        return ServerController.usersModel;
     }
 
     public async start() {
@@ -26,7 +56,6 @@ export default class ServerController {
 
         try {
             await ServerController.database.connect();
-            LogHelper.log('Connexion à la base de données ...');
 
         } catch(error: any) {
             LogHelper.error("Database connection failed", error);

@@ -1,4 +1,5 @@
-import MongoDBDriver, {DBDriver} from "./Drivers/MongoDBDriver";
+import MongoDBDriver from "./Drivers/MongoDBDriver";
+import DBDriver from "./Drivers/DBDriver";
 
 const database: DBDriver = new MongoDBDriver();
 database.connect();

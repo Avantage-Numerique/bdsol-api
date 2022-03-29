@@ -2,15 +2,8 @@ import * as mongoDB from "mongodb";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import CreateUsersCollection from "../../Migrations/create-users-collection";
-
-export interface DBDriver {
-    driverPrefix: string;
-    client: any;
-    db: any;
-    connect: () => void;
-    initDb: () => void;
-    getConnectionUrl: () => string;
-}
+import DBDriver from "./DBDriver";
+import UserModel from "../../Users/Models/UserModel";
 
 export default class MongoDBDriver implements DBDriver {
 
@@ -25,6 +18,7 @@ export default class MongoDBDriver implements DBDriver {
     }
 
     public async connect() {
+        LogHelper.log(`Connexion à la base de données mongodb ...`);
         try {
             let dbUrl = this.getConnectionUrl();
             this.client = new mongoDB.MongoClient(dbUrl);
@@ -51,6 +45,21 @@ export default class MongoDBDriver implements DBDriver {
 
     public getConnectionUrl() {
         return `${this.driverPrefix}://${config.db.host}:${config.db.port}`;
+    }
+
+
+    public getCollection(name:string):any {
+        if (this.db !== null) {
+            return this.db.collection(name);
+        }
+        return null;
+    }
+
+    public getModel(name:string):any {
+        if (this.db !== null && name === 'users') {
+            return UserModel;
+        }
+        return null;
     }
 
 }

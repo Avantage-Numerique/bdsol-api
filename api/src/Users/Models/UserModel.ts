@@ -2,13 +2,14 @@
 // Database connection.
 //temp fake to have the JWT token first,
 import * as mongoDB from "mongodb";
-import {UserCredential} from "../../Authentification/Controllers/AuthenficationController";
+import UserAuthContract from "../../Authentification/Contracts/UserAuthContract";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 
 /**
  *
  */
-export interface User {
+export interface UserContract {
     collection: mongoDB.Collection | null;
     username:string;
     email:string;
@@ -46,13 +47,14 @@ export default class UserModel {
         }
     }
 
-    public static async findOne(userInfo:UserCredential):Promise<mongoDB.Document | null> {
+    public static async findOne(userInfo:UserAuthContract):Promise<mongoDB.Document | null> {
         if (UserModel.collection !== null) {
-            return await UserModel.collection.findOne({
+            return await UserModel.collection.find({
                 'username': userInfo.user,
                 'password': userInfo.password
             });
         }
+        LogHelper.warn('UserModel collection is null');
         return null;
     }
 }
