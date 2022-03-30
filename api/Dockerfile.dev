@@ -13,4 +13,4 @@ EXPOSE 8000
 
 
 ENTRYPOINT ["npm"]
-CMD ["run","prod"]
+CMD ["run","dev"]

@@ -6,6 +6,11 @@ dotenv.config();
 
 const config = {
 
+    environnement: process.env.ENVIRONNEMENT || "development",
+    isProduction: process.env.ENVIRONNEMENT === 'production',
+    isStaging: process.env.ENVIRONNEMENT === 'staging',
+    isDevelopment: process.env.ENVIRONNEMENT === 'development',
+
     port: process.env.PORT || "8000",
     version: process.env.VERSION || "0.0.0",
     tokenSecret: process.env.JWT_KEY || "not set",
@@ -17,6 +22,7 @@ const config = {
         port: process.env.DB_PORT || 27017,
         user: process.env.DB_USER || '',
         password: process.env.DB_PASSWORD || '',
+        name: process.env.DB_NAME || '',
     }
 };
 

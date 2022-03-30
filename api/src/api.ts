@@ -28,10 +28,12 @@ class Api {
 
         // parse application/x-www-form-urlencoded
         this.express.use(express.urlencoded({extended: false}));
-
+        // this is the end
         // parse application/json
         this.express.use(express.json());
     }
+
+    // check for migration to trigger ?
 
     private initRouter() {
 
