@@ -12,10 +12,21 @@ Les directives assument que vous vous rendez au bon endroit sur votre disque dur
 
 ## Démarrer l'environnement de travail.
 
-1. Démarrer l'api en mode dev : `cd ./api` et ensuite `npm run serve-ts`
-1. Démarrer le frontend en mode dev : `cd ./frontend` et ensuite `npm run dev`
+### Sans Docker
 
-### MongoDB
+1. Démarrer l'api en mode dev : `cd ./api` et ensuite `npm run serve-ts`
+   1. Il faut changer la variable d'environnement de l'API `DB_DRIVER='fakeusers`
+2. Démarrer le frontend en mode dev : `cd ./frontend` et ensuite `npm run dev`
+
+### Avec Docker
+1. `docker compose build`
+2. `docker compose up`
+
+#### Pour voir la BD
+La base de donnée est en MongoDB. Le plus simple est d'utiliser un UI comme : [Compass](https://www.mongodb.com/products/compass)
+L'adresse de connexion est : `mongodb://localhost:27018/?readPreference=primary&appname=mongo&directConnection=true&ssl=false`
+
+## MongoDB
 #### Notes
 Lorsqu'on est dans l'environnement docker le port est `27017` et lorsque nous sommes dans l'environnement exterieur, le port ouvert est `27018`.
 
@@ -26,7 +37,7 @@ Les codes d'erreurs et de succès sont basés sur les standards HTTP.
 
 ### Codes implémentés
 
-#### /login
+#### Pour `/login`
 
 ##### Code : **200** : lorsque les informations sont OK
 
