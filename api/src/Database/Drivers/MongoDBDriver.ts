@@ -4,6 +4,7 @@ import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import CreateUsersCollection from "../../Migrations/create-users-collection";
 import DBDriver from "./DBDriver";
 import UserModel from "../../Users/Models/UserModel";
+import mongoose from "mongoose";
 
 export default class MongoDBDriver implements DBDriver {
 

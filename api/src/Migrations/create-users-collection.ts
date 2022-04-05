@@ -2,10 +2,10 @@ import * as mongoDB from "mongodb";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 import {fakeUsers} from "../Users/fakeUsers";
 import config from "../config";
-import {Migration} from "../Database/Migration";
+import {MigrationContract} from "../Database/Contracts/Migration";
 
 
-export default class CreateUsersCollection implements Migration {
+export default class CreateUsersCollection implements MigrationContract {
 
     db: mongoDB.Db;
     name: string = 'users';

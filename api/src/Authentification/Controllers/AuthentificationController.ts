@@ -90,14 +90,17 @@ class AuthentificationController
             user = username;
         };
 
-        ServerController.setUsersModelCollection();
+        /*ServerController.setUsersModelCollection();
 
         if (ServerController.database.driverPrefix === 'fakeusers') {
             return await FakeUserModel.findOne(targetUser) as UserContract;
         }
         if (ServerController.database.driverPrefix === 'mongodb') {
             return await UserModel.findOne(targetUser);
-        }
+        }*/
+
+
+
         return null;
         //ServerController.database.getModel('users').collection = ServerController.database.getCollection('users');//db.collection('users');//this is wrong, my design is clunky. Need refactoring.
 
