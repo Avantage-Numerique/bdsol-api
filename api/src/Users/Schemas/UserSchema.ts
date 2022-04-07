@@ -1,11 +1,9 @@
-import * as mongoDB from "mongodb";
 import {Schema, Document} from "mongoose"
-
 
 /**
  *
  */
-export interface UserSchema extends Document{
+export interface UserSchema extends Document {
     username:string;
     email:string;
     password:string;

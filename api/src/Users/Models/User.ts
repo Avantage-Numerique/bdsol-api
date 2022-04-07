@@ -1,16 +1,17 @@
 //src/models/Post.js
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 import {UserSchema} from "../Schemas/UserSchema";
 
 class User {
+    static modelName:string = 'User';
 
     static initSchema() {
-        mongoose.model("user", UserSchema);
+        mongoose.model(User.modelName, UserSchema);
     }
 
     static getInstance() {
         User.initSchema();
-        return mongoose.model("User");
+        return mongoose.model(User.modelName);
     }
 }
 

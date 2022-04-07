@@ -8,11 +8,13 @@ export default class FakeUserDBDriver implements DBDriver {
     public driverPrefix: string;
     public client: any | null;
     public db: any | null;
+    public baseUrl: string;
 
     constructor() {
         this.driverPrefix = 'fakeusers';
         this.client = "fake";
         this.db = "fake";
+        this.baseUrl = "";
     }
 
     public async connect() {
@@ -23,8 +25,12 @@ export default class FakeUserDBDriver implements DBDriver {
 
     }
 
+
     public getConnectionUrl() {
-        return "";
+        if (this.baseUrl === '') {
+            this.baseUrl = '';
+        }
+        return this.baseUrl;
     }
 
     public getCollection(name:string):any {
