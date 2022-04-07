@@ -82,9 +82,9 @@ export default class MongoDBDriver implements DBDriver {
 
     }
 
-    public getConnectionUrl() {
+    public getConnectionUrl(db:string='bdsol-users') {
         if (this.baseUrl === '') {
-            this.baseUrl = `${this.driverPrefix}://${config.db.host}:${config.db.port}`;
+            this.baseUrl = `${this.driverPrefix}://${config.db.host}:${config.db.port}/${db}`;
         }
         return this.baseUrl;
     }

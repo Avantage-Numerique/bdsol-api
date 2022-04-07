@@ -77,7 +77,6 @@ class AuthentificationController
         return TokenController.generate({ username: user.username,  role: user.role });
     }
 
-
     /**
      * search in the current database driver for the user.
      * @param username
@@ -93,7 +92,7 @@ class AuthentificationController
 
         if (ServerController.database.driverPrefix === 'mongodb') {
             //construct the credential as UserAuthContract.
-            ServerController.database.db('bdsol-users');
+            //ServerController.database.db('bdsol-users');
             let users = new UsersService(User.getInstance());
 
             return await users.get(targetUser);
