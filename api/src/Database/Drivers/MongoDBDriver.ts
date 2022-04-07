@@ -14,6 +14,9 @@ export default class MongoDBDriver implements DBDriver {
     public db: mongoDB.Db | mongoose.Connection | null;
     public baseUrl: string;
 
+    /**
+     * Constructor fo this driver. Object is created 1 time in  ServerController.
+     */
     constructor() {
         this.driverPrefix = 'mongodb';
         this.client = null;
@@ -23,33 +26,32 @@ export default class MongoDBDriver implements DBDriver {
 
     public async connect() {
         LogHelper.log(`Connexion à la base de données mongodb ${this.getConnectionUrl()}`);
-        this.initDb();
+        await this.initDb();
     }
 
+    /**
+     * Method mandatory in DBDriver, to init this driver.
+     */
     public async initDb() {
         //await this.initMongoDb();
         await this.initMongoose();
     }
 
+    /**
+     * Connect mongoose to our mongodb serveur, setup error handling for it.
+     */
     public async initMongoose() {
         try {
-            //mongoose.Promise = global.Promise;
-
             mongoose.connect(this.getConnectionUrl(), {
                 useNewUrlParser: true,
-                //useFindAndModify: false,
-                //useCreateIndex: true,
                 useUnifiedTopology: true,
             } as ConnectOptions);
 
             if (this.db === null) {
                 //Get the default connection
                 this.db = mongoose.connection;
+                this.db.on('error', this.onDbError);
             }
-
-            //Bind connection to error event (to get notification of connection errors)
-            //this.db.on('error', this.onDbError);
-            //db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
         } catch (error: any) {
             throw new Error(error.message);
@@ -57,6 +59,10 @@ export default class MongoDBDriver implements DBDriver {
         LogHelper.log(`Moogoose a été initialisé`);
     }
 
+    /**
+     * This is code to connect to mongo db directly. Without mongoose.
+     * Keeping it for now. Because of mongoose is still in test.
+     */
     public async initMongoDb() {
 
         try {
@@ -104,8 +110,9 @@ export default class MongoDBDriver implements DBDriver {
         return null;
     }
 
-    public onDbError(e: any) {
-        LogHelper.error(e);
+    public onDbError(error: any) {
+        LogHelper.error(error);
+        throw new Error(error.message);
     }
 
 }

@@ -8,6 +8,7 @@ import {TokenController} from "./TokenController";
 import FakeUserModel from "../../Users/Models/FakeUserModel";
 import UsersService from "../../Users/Services/UsersService";
 import User from "../../Users/Models/User";
+import {StatusCodes} from "http-status-codes";
 
 
 class AuthentificationController
@@ -19,7 +20,7 @@ class AuthentificationController
 
         // TEMP DB BYPASS to make this working quicker.
         let targetUser = await AuthentificationController.authenticate(username, password);
-        LogHelper.log(targetUser);
+
         // User was find in DB
         if (targetUser && typeof targetUser.username !== 'undefined') {
 
@@ -31,7 +32,7 @@ class AuthentificationController
             return {
                 error: false,
                 userConnectedToken: userConnectedToken,
-                code: 200,
+                code: StatusCodes.OK,
                 message: 'OK',
                 fields: {
                     username: true,
@@ -43,7 +44,7 @@ class AuthentificationController
         return {
             error: true,
             userConnectedToken: undefined,
-            code: 401,
+            code: StatusCodes.UNAUTHORIZED,
             message: 'Vos informations de connexion sont incorrectes, vérifiez votre utilisateur et mot de passe.',
             fields: {
                 username: {
@@ -63,7 +64,7 @@ class AuthentificationController
         return {
             error: false,
             user: username,
-            code: 200,
+            code: StatusCodes.OK,
             message: `L'utilisateur ${username} a été déconnecté avec succès.`
         };
     }
@@ -91,41 +92,22 @@ class AuthentificationController
         } as UserAuthContract;
 
         if (ServerController.database.driverPrefix === 'mongodb') {
-            //construct the credential as UserAuthContract.
-            //ServerController.database.db('bdsol-users');
-            let users = new UsersService(User.getInstance());
 
+            let users = new UsersService(User.getInstance());
             return await users.get(targetUser);
         }
 
+        /**
+         * If we need to develop directly in node serveur running outside of docker.
+         * Still clumsy structure.
+         */
         if (ServerController.database.driverPrefix === 'fakeusers') {
 
             let fakeUser = await FakeUserModel.findOne(targetUser);
             return fakeUser as UserContract;
         }
-        /*
-        let targetUserQuery: UserAuthContract = new class implements UserAuthContract {
-            limit: 1,
-            password = password;
-            user = username;
-        };
-         */
-        /*ServerController.setUsersModelCollection();
-
-        if (ServerController.database.driverPrefix === 'fakeusers') {
-            return await FakeUserModel.findOne(targetUser) as UserContract;
-        }
-        if (ServerController.database.driverPrefix === 'mongodb') {
-            return await UserModel.findOne(targetUser);
-        }*/
-
-
 
         return false;
-        //ServerController.database.getModel('users').collection = ServerController.database.getCollection('users');//db.collection('users');//this is wrong, my design is clunky. Need refactoring.
-
-        //LogHelper.log(ServerController.database.driverPrefix, ServerController.usersModel);
-        //return await ServerController.usersModel.findOne(targetUser);
     }
 }
 export default AuthentificationController;

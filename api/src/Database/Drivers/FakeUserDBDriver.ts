@@ -2,6 +2,7 @@ import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import DBDriver from "./DBDriver";
 import FakeUserModel from "../../Users/Models/FakeUserModel";
 import {fakeUsers} from "../../Users/fakeUsers";
+import ServerController from "../../Server/Controllers/ServerController";
 
 export default class FakeUserDBDriver implements DBDriver {
 
@@ -19,12 +20,13 @@ export default class FakeUserDBDriver implements DBDriver {
 
     public async connect() {
         LogHelper.log('Faker User Driver usen, passing the connecting process.');
+        this.initDb();
     }
 
     public initDb() {
-
+        FakeUserModel.collection = this.getCollection(ServerController.usersTable);
+        return ServerController.usersModel;
     }
-
 
     public getConnectionUrl() {
         if (this.baseUrl === '') {

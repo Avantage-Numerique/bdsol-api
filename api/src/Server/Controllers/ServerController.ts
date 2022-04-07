@@ -1,22 +1,28 @@
 import express from 'express';
 import * as http from "http";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import config from "../../config";
 import DBDriver from "../../Database/Drivers/DBDriver";
-import MongoDBDriver from "../../Database/Drivers/MongoDBDriver";
 import FakeUserDBDriver from "../../Database/Drivers/FakeUserDBDriver";
+import {ReasonPhrases,StatusCodes} from 'http-status-codes';
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import MongoDBDriver from "../../Database/Drivers/MongoDBDriver";
 
 /**
  * Manage all the serveur actions and connect the app to the ROUTE.
  */
 export default class ServerController {
 
-    server: http.Server;
-    api: express.Application;
     static usersTable: string = 'users';
     static usersModel: any;
     static database: DBDriver;
 
+    server: http.Server;
+    api: express.Application;
+
+    /**
+     * Create an instance of ServerController with the express app.
+     * @param api express.Application
+     */
     constructor(api: express.Application) {
         this.api = api;
         this.server = http.createServer(this.api);
@@ -24,6 +30,10 @@ export default class ServerController {
         LogHelper.log('Départ de la configuration du serveur pour l\'API');
     }
 
+    /**
+     * Setup the database static property of ServerController for controlling the DB.
+     * @private
+     */
     private static _setDBDriver() {
         LogHelper.log(`Initiation du driver ${config.db.driver} de la base de données.`);
         if (config.db.driver === 'mongodb') {
@@ -36,17 +46,11 @@ export default class ServerController {
         }
     }
 
-    public static setUsersModelCollection() {
-        LogHelper.log(`Initiation des utilisateurs.`);
 
-        ServerController.usersModel = ServerController.database.getModel(ServerController.usersTable);
-        ServerController.usersModel.collection = ServerController.database.getCollection(ServerController.usersTable);
-
-        ServerController.database.getModel(ServerController.usersTable).collection = ServerController.database.getCollection(ServerController.usersTable);
-
-        return ServerController.usersModel;
-    }
-
+    /**
+     * Create an HTTP server from node.http, listence on error and on config.port.
+     * Connect to the database
+     */
     public async start() {
 
         this.server = http.createServer(this.api);
@@ -59,29 +63,30 @@ export default class ServerController {
 
         } catch(error: any) {
             LogHelper.error("Database connection failed", error);
-            process.exit();
+            process.exit(StatusCodes.INTERNAL_SERVER_ERROR);
         }
 
         LogHelper.log('Configuration terminée, départ de l\'écoute sur le serveur');
         this.server.listen(config.port);
     }
 
+
     public onError(error: any) {
         if (error.syscall !== "listen") {
             throw error;
         }
 
-        const bind = "Port " + config.port;
+        const bind = `Port ${config.port} `;
 
         // handle specific listen errors with friendly messages
         switch (error.code) {
             case "EACCES":
-                LogHelper.error(bind + " requires elevated privileges");
-                process.exit(1);
+                LogHelper.error(bind + ReasonPhrases.FORBIDDEN);
+                process.exit(StatusCodes.FORBIDDEN);
                 break;
             case "EADDRINUSE":
-                LogHelper.error(bind + " is already in use");
-                process.exit(1);
+                LogHelper.error(bind + "is already in use" + ReasonPhrases.INTERNAL_SERVER_ERROR);
+                process.exit(StatusCodes.INTERNAL_SERVER_ERROR);
                 break;
             default:
                 throw error;
@@ -89,7 +94,8 @@ export default class ServerController {
     }
 
     /**
-     * Event listener for HTTP server "listening" event.
+     * Event listener for HTTP server "listening" on target port.
+     * port is setup in the .env file.
      */
     public onListening() {
         LogHelper.log(`BDSOL API (version ${config.version}) répond sur le port: ${config.port}`);
