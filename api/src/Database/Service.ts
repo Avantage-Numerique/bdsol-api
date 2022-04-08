@@ -2,6 +2,7 @@
 import * as mongoose from "mongoose";
 import config from "../config";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
+import {StatusCodes} from "http-status-codes";
 
 
 /**
@@ -10,14 +11,10 @@ import LogHelper from "../Monitoring/Helpers/LogHelper";
  */
 class Service {
 
-    model: any;//@todo create or find the best type for that.
+    model: any;//@todo create or find the best type for that ?
 
     constructor(model: any) {
         this.model = model;
-        /*this.getAll = this.getAll.bind(this);
-        this.insert = this.insert.bind(this);
-        this.update = this.update.bind(this);
-        this.delete = this.delete.bind(this);*/
     }
 
     /**
@@ -42,7 +39,7 @@ class Service {
         } catch (getAllErrors:any) {
             return {
                 error: true,
-                code: 500,
+                code: StatusCodes.INTERNAL_SERVER_ERROR,
                 message: getAllErrors.errmsg || "Not able to get the queried items",
                 errors: getAllErrors.errors
             };
@@ -53,7 +50,7 @@ class Service {
      * Get all the documents from a collection that fits the query.
      * @param query
      */
-    async getAll(query:any) {
+    async all(query:any) {
 
         //set and dry parameters passed via query, but for preheating purposes.
         let {skip, limit} = query;
@@ -81,14 +78,14 @@ class Service {
             //@todo rethink this structure, add a meta data for total, and more ?
             return {
                 error: false,
-                code: 200,
+                code: StatusCodes.OK,
                 data: items,
-                total
+                total: total
             };
         } catch (getAllErrors:any) {
             return {
                 error: true,
-                code: 500,
+                code: StatusCodes.INTERNAL_SERVER_ERROR,
                 message: getAllErrors.errmsg || "Not able to get the queried items",
                 errors: getAllErrors.errors
             };
@@ -96,7 +93,7 @@ class Service {
     }
 
     /**
-     * Inset is the create in CRUD
+     * Insert is the create in CRUD
      * @param data any the document structure. This is type any because that class will be extended.
      */
     async insert(data:any) {
@@ -105,13 +102,17 @@ class Service {
             if (item)
                 return {
                     error: false,
-                    item
+                    code: StatusCodes.ACCEPTED,
+                    message: "Ajout de l'item réussi",
+                    data: {
+                        item
+                    }
                 };
         } catch (insertError:any) {
             LogHelper.log("Service Error", insertError);
             return {
                 error: true,
-                code: 500,
+                code: StatusCodes.INTERNAL_SERVER_ERROR,
                 message: insertError.errmsg || "Not able to create item",
                 errors: insertError.errors
             };
@@ -128,13 +129,16 @@ class Service {
             let item = await this.model.findByIdAndUpdate(id, data, {new: true});
             return {
                 error: false,
-                code: 202,
-                item
+                code: StatusCodes.ACCEPTED,
+                message: "Mise à jour de l'item réussi",
+                data: {
+                    item
+                }
             };
         } catch (updateError:any) {
             return {
                 error: true,
-                code: 500,
+                code: StatusCodes.INTERNAL_SERVER_ERROR,
                 message: updateError.errmsg || "Not able to update item",
                 errors: updateError.errors
             };
@@ -148,20 +152,26 @@ class Service {
             if (!item) {
                 return {
                     error: true,
-                    code: 404,
-                    message: "item not found"
+                    code: StatusCodes.NOT_FOUND,
+                    message: "item to delete not found",
+                    deleted: false
                 };
             }
             return {
                 error: false,
+                code: StatusCodes.ACCEPTED,
                 deleted: true,
-                code: 202,
-                item
+                message: "Item will be deleted",
+                data: {
+                    item
+                }
             };
         } catch (deleteError:any) {
             return {
                 error: true,
-                code: 500,
+                code: StatusCodes.INTERNAL_SERVER_ERROR,
+                message: "Item will be deleted",
+                deleted: false,
                 deleteError
             };
         }

@@ -19,7 +19,7 @@ export interface UserContract {
 }
 
 /**
- *
+ *  @deprecated UserModel
  */
 export default class UserModel {
     static collection: mongoDB.Collection | null;

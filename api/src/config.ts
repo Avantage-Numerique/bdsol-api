@@ -11,8 +11,10 @@ const config = {
     isStaging: process.env.ENVIRONNEMENT === 'staging',
     isDevelopment: process.env.ENVIRONNEMENT === 'development',
 
+    appName: process.env.APP_NAME || "API",
     port: process.env.PORT || "8000",
     version: process.env.VERSION || "0.0.0",
+
     tokenSecret: process.env.JWT_KEY || "not set",
     tokenSecureSecret: process.env.SECURE_JWT_KEY || "not set",
 

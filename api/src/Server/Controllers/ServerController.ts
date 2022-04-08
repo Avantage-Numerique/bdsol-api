@@ -35,7 +35,9 @@ export default class ServerController {
      * @private
      */
     private static _setDBDriver() {
+
         LogHelper.log(`Initiation du driver ${config.db.driver} de la base de données.`);
+
         if (config.db.driver === 'mongodb') {
             ServerController.database = new MongoDBDriver();
             return;
@@ -45,7 +47,6 @@ export default class ServerController {
             return;
         }
     }
-
 
     /**
      * Create an HTTP server from node.http, listence on error and on config.port.
@@ -70,7 +71,10 @@ export default class ServerController {
         this.server.listen(config.port);
     }
 
-
+    /**
+     * When the API got and error. Will exit and
+     * @param error
+     */
     public onError(error: any) {
         if (error.syscall !== "listen") {
             throw error;
@@ -81,13 +85,13 @@ export default class ServerController {
         // handle specific listen errors with friendly messages
         switch (error.code) {
             case "EACCES":
-                LogHelper.error(bind + ReasonPhrases.FORBIDDEN);
-                process.exit(StatusCodes.FORBIDDEN);
+                this.exitApi(StatusCodes.FORBIDDEN, bind + ReasonPhrases.FORBIDDEN);
                 break;
+
             case "EADDRINUSE":
-                LogHelper.error(bind + "is already in use" + ReasonPhrases.INTERNAL_SERVER_ERROR);
-                process.exit(StatusCodes.INTERNAL_SERVER_ERROR);
+                this.exitApi(StatusCodes.INTERNAL_SERVER_ERROR, bind + "is already in use" + ReasonPhrases.INTERNAL_SERVER_ERROR);
                 break;
+
             default:
                 throw error;
         }
@@ -98,6 +102,16 @@ export default class ServerController {
      * port is setup in the .env file.
      */
     public onListening() {
-        LogHelper.log(`BDSOL API (version ${config.version}) répond sur le port: ${config.port}`);
+        LogHelper.log(`${config.appName} (version ${config.version}) répond sur le port: ${config.port}`);
+    }
+
+    /**
+     * Method to concentrate the process of exiting the API, to control the steps in one place.
+     * @param errorCode
+     * @param message
+     */
+    public exitApi(errorCode:any, message:string) {
+        LogHelper.error(message);
+        process.exit(errorCode);
     }
 }
