@@ -39,14 +39,16 @@ mongodb://localhost:27018/?readPreference=primary&appname=mongo&directConnection
 Les codes d'erreurs et de succès sont basés sur les standards HTTP.
 [Voir les codes sur la documentation de Mozilla](https://developer.mozilla.org/fr/docs/Web/HTTP/Status).
 
-### Codes implémentés
+### Intégration de librairy
+Pour gérer mieux les erreurs HTTP : voir : https://www.npmjs.com/package/http-status-codes
 
-#### Pour `/login`
+### Pour `/login`
 
-##### Code : **200** : lorsque les informations sont OK
+#### Code : **200** : lorsque les informations sont OK
 
 ```json
 {
+  "error": false,
   "userConnectedToken": "theJWTTOKEN signed",
   "code": 200,
   "message": "OK",
@@ -57,10 +59,12 @@ Les codes d'erreurs et de succès sont basés sur les standards HTTP.
 }
 ```
 
-##### Code : **401** : lorsque les informations ne sont pas OK.
+
+#### Code : **401** : lorsque les informations ne sont pas OK.
 
 ```json
 {
+  "error": true,
   "userConnectedToken": null,
   "code": 401,
   "message": "Vos informations de connexion sont incorrectes, vérifiez votre utilisateur et mot de passe.",
@@ -77,6 +81,28 @@ Les codes d'erreurs et de succès sont basés sur les standards HTTP.
 }
 ```
 
+### Pour les services
+
+
+#### Code : **202** : Tout est ok, mais le serveur n'a pas terminé
+À voir si on le garde, présentement dans le Service abstrait.
+[Code 202 pour HTTP](https://developer.mozilla.org/fr/docs/Web/HTTP/Status/202)
+
+#### Code : **404** : lorsqu'on ne trouve pas ce qui a été demandé
+Dans les services, présentement dans la méthode : `delete`, si l'item demandé n'existe pas.
+
+#### Code : **500** : une erreur est survenue
+
+```json
+{
+    "error": true,
+    "code": 500,
+    "message": "string",
+    "errors": "errors objects"
+}
+```
+
+
 ### Un résumé :
 
 - 1xx: Information
@@ -92,7 +118,7 @@ Version 0.0.5 : on a décidé d'utiliser Docker pour garder les containers sépa
 ## Plan de travail
 - [X] Établir un environnement reproduisable pour bien testé le front-end et le backend.
 - [X] établir les dépendances et restrictions de versions : **[Node](https://nodejs.org/fr/) 16 pour l'api et l'app**
-   - [X] Ports **`3000` front end et `8000` pour API**
+   - [X] Ports **`3000` frontend** et **`8000` pour API**
    - [X] Environnement / Type de serveurs : Node pour les deux, [mongodb](https://www.mongodb.com/fr-fr) pour l'instant comme engin de base de données.
    - [ ] Gestion des versions et des dépendances à venir pour l'API
 
@@ -123,8 +149,13 @@ Une des sources intéressantes sur le sujet : https://medium.com/serverlessguru/
 ##### Behavioural testing
 - [Jasmine](https://jasmine.github.io/pages/getting_started.html)
 
+##### Test MongoDB
+- Regarde : https://www.npmjs.com/package/mockingoose
+
 
 ## À faire
+- [ ] Contrat pour les requêtes aux services
+  - [ ] Abstrait pour fonctionner avec tous les services ?
 - [ ] Tests à faire API
   - [ ] Endpoint Login positif, négatif
   - [ ] Fake db driver

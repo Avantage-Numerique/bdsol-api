@@ -13,7 +13,7 @@ Langage : Typescript
 - Base de données : [Mongodb](https://www.mongodb.com/)
 - Schema et Document modeling (ODM) : [Mongoose](https://mongoosejs.com/)
 - JWT Token : [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)
-- Encryption : candidats : [bcrypt](https://github.com/kelektiv/node.bcrypt.js), [À lire](https://openbase.com/categories/js/best-nodejs-encryption-libraries)
+- Encryption : candidats : [PBKDF2](https://github.com/crypto-browserify/pbkdf2), [bcrypt](https://github.com/kelektiv/node.bcrypt.js), [À lire](https://openbase.com/categories/js/best-nodejs-encryption-libraries)
 
 
 ## Frontend et zone utilisateur

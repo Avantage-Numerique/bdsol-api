@@ -1,6 +1,6 @@
 import * as mongoDB from "mongodb";
 
-export interface Migration {
+export interface MigrationContract {
     db: mongoDB.Db;
     name: any;
     collection: mongoDB.Collection | null;

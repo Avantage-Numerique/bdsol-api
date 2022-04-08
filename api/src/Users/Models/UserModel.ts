@@ -19,7 +19,7 @@ export interface UserContract {
 }
 
 /**
- *
+ *  @deprecated UserModel
  */
 export default class UserModel {
     static collection: mongoDB.Collection | null;
@@ -50,7 +50,7 @@ export default class UserModel {
     public static async findOne(userInfo:UserAuthContract):Promise<mongoDB.Document | null> {
         if (UserModel.collection !== null) {
             return await UserModel.collection.find({
-                'username': userInfo.user,
+                'username': userInfo.username,
                 'password': userInfo.password
             });
         }

@@ -11,8 +11,10 @@ const config = {
     isStaging: process.env.ENVIRONNEMENT === 'staging',
     isDevelopment: process.env.ENVIRONNEMENT === 'development',
 
+    appName: process.env.APP_NAME || "API",
     port: process.env.PORT || "8000",
     version: process.env.VERSION || "0.0.0",
+
     tokenSecret: process.env.JWT_KEY || "not set",
     tokenSecureSecret: process.env.SECURE_JWT_KEY || "not set",
 
@@ -23,6 +25,10 @@ const config = {
         user: process.env.DB_USER || '',
         password: process.env.DB_PASSWORD || '',
         name: process.env.DB_NAME || '',
+    },
+    query: {
+        defaultSkip: process.env.QUERY_DEFAULT_SKIP || 0,
+        defaultLimit: process.env.QUERY_DEFAULT_LIMIT || 10,
     }
 };
 
