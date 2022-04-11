@@ -7,8 +7,9 @@ Les directives assument que vous vous rendez au bon endroit sur votre disque dur
 1. Déterminer l'endroit sur votre environnement pour cloner et installer le projet.
 2. Se rendre dans le dossier cloner du projet `cd chemin/vers/votre/env/dev`
 3. `git clone https://github.com/Avantage-Numerique/bdsol-api.git ./`
-4. Il faut ensuite installer les package de l'API : `cd ./api` et ensuite `npm install`
-5. Il faut ensuite installer les package du frontend : `cd ./frontend` et ensuite `npm install`
+4. Il faut ensuite faire `git submodule update --init --progress -- "frontend"` dans le base path du projet.
+5. Il faut ensuite installer les package de l'API : `cd ./api` et ensuite `npm install`
+6. Il faut ensuite installer les package du frontend : `cd ./frontend` et ensuite `npm install`
 
 ## Démarrer l'environnement de travail.
 
