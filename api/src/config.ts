@@ -26,6 +26,13 @@ const config = {
         password: process.env.DB_PASSWORD || '',
         name: process.env.DB_NAME || '',
     },
+    users: {
+        db: {
+            user: process.env.USERS_DB_USER || '',
+            password: process.env.USERS_DB_PASSWORD || '',
+            name: process.env.USERS_DB_NAME || '',
+        }
+    },
     query: {
         defaultSkip: process.env.QUERY_DEFAULT_SKIP || 0,
         defaultLimit: process.env.QUERY_DEFAULT_LIMIT || 10,

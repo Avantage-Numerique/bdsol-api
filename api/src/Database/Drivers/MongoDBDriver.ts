@@ -6,6 +6,9 @@ import DBDriver from "./DBDriver";
 import UserModel from "../../Users/Models/UserModel";
 import mongoose from "mongoose";
 import {ConnectOptions} from "mongodb";
+import CreateDbAndUsersMongoose from "../../Migrations/create-db-and-users-mongoose";
+import UsersService from "../../Users/Services/UsersService";
+import User from "../../Users/Models/User";
 
 export default class MongoDBDriver implements DBDriver {
 
@@ -42,16 +45,21 @@ export default class MongoDBDriver implements DBDriver {
      */
     public async initMongoose() {
         try {
-            mongoose.connect(this.getConnectionUrl(), {
+            LogHelper.log(`Connecting ...`);
+            await mongoose.connect(this.getConnectionUrl(), {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
             } as ConnectOptions);
 
             if (this.db === null) {
-                //Get the default connection
                 this.db = mongoose.connection;
                 this.db.on('error', this.onDbError);
             }
+
+            let users = new UsersService(User.getInstance());
+            let usersCollection = new CreateDbAndUsersMongoose(users);
+            await usersCollection.up();
+            //will create the fake user for now.
 
         } catch (error: any) {
             throw new Error(error.message);
@@ -60,6 +68,7 @@ export default class MongoDBDriver implements DBDriver {
     }
 
     /**
+     * @Deprecated Will be use mongoose, but kept raw mongodb connection here in case. 2022-04-11
      * This is code to connect to mongo db directly. Without mongoose.
      * Keeping it for now. Because of mongoose is still in test.
      */
@@ -78,14 +87,14 @@ export default class MongoDBDriver implements DBDriver {
                 LogHelper.log('Setting the default db ', config.db.name);
 
                 //will create the fake user for now.
-                let usersCollection = new CreateUsersCollection(this.db);
-                usersCollection.up();
+                let usersCollection = new CreateUsersCollection();
+                usersCollection.db = this.db;
+                await usersCollection.up();
             }
 
         } catch (error: any) {
             throw new Error(error.message);
         }
-
     }
 
     public getConnectionUrl(db:string='bdsol-users') {

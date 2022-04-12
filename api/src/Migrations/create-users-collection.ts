@@ -7,19 +7,20 @@ import {MigrationContract} from "../Database/Contracts/Migration";
 
 export default class CreateUsersCollection implements MigrationContract {
 
-    db: mongoDB.Db;
+    db: mongoDB.Db | null;
     name: string = 'users';
-    collection: mongoDB.Collection | null;
+    model: mongoDB.Collection | null;
 
-    constructor(db: mongoDB.Db) {
-        this.db = db;
-        this.collection = null;
+    constructor(model:any=null) {
+        this.db = null;
+        this.model = model;
     }
 
     public async up() {
-
-        this.collection = this.db.collection(this.name);
-        await this.fake();
+        if (this.db !== null) {
+            this.model = this.db.collection(this.name);
+            await this.fake();
+        }
     }
 
     public onUp(error:any, result:any) {
@@ -37,11 +38,11 @@ export default class CreateUsersCollection implements MigrationContract {
 
     public async fake() {
         if (config.environnement === 'development'
-            && this.collection !== null) {
+            && this.model !== null) {
 
-            let userCount = await this.collection.countDocuments();
+            let userCount = await this.model.countDocuments();
             if (userCount <= 0) {
-                await this.collection.insertMany(fakeUsers);
+                await this.model.insertMany(fakeUsers);
                 return true
             }
         }
