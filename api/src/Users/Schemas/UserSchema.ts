@@ -3,7 +3,7 @@ import {Schema, Document} from "mongoose"
 /**
  *
  */
-export interface UserSchema extends Document {
+export interface UserDocument extends Document {
     username:string;
     email:string;
     password:string;
@@ -12,7 +12,7 @@ export interface UserSchema extends Document {
     avatar:string;
 }
 
-export const UserSchema = new Schema<UserSchema>({
+export const UserSchema = new Schema<UserDocument>({
         username: { type: String, required: true },
         email: { type: String, required: true },
         password: { type: String, required: true },
