@@ -2,6 +2,7 @@ import express from 'express';
 import ApiRouter from "./routes";
 import HealthCheckRouter from "./Healthcheck/Routes/HealthCheckRoutes";
 import AuthentificationRouter from "./Authentification/Routes/AuthentificationRoutes";
+import UserRoutes from "./Users/Routes/UserRoutes";
 
 
 /**
@@ -27,7 +28,7 @@ class Api {
         });
 
         // parse application/x-www-form-urlencoded
-        this.express.use(express.urlencoded({extended: false}));
+        //this.express.use(express.urlencoded({extended: false}));
         // this is the end
         // parse application/json
         this.express.use(express.json());
@@ -45,6 +46,9 @@ class Api {
 
         // Auth Routes
         this.express.use("/", AuthentificationRouter);
+
+        // Users Routes
+        this.express.use("/users", UserRoutes);
     }
 }
 

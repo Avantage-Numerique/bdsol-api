@@ -12,6 +12,10 @@ export class TokenController {
         return jwt.sign(encapsulateData, config.tokenSecret);
     }
 
+    public static isValid(token:string):any {
+        return token;
+    }
+
     public static verify(token:string):any {
         return jwt.verify(token, config.tokenSecret);
     }

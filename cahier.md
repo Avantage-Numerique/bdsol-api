@@ -1,7 +1,8 @@
 # Cahier du projet
 
 ## API
-Langage : Typescript
+- Langage : Typescript
+- Batî avec Expressjs
 
 
 ### Patterns
