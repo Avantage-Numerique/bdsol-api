@@ -138,7 +138,7 @@ class Service {
 
         try {
             let item = await this.model.findByIdAndUpdate(id, data, {new: true});
-            if (item) 
+            if (item)
                 return {
                     error: false,
                     code: StatusCodes.ACCEPTED,
