@@ -8,7 +8,7 @@ export interface UserSchema extends Document {
     email:string;
     password:string;
     name:string;
-    role: string;
+    role:string;
     avatar:string;
 }
 
