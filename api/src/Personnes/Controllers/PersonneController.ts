@@ -1,11 +1,13 @@
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import ServerController from "../../Server/Controllers/ServerController";
 import PersonneService from "../Services/PersonneService";
+import Personne from "../Models/Personne"
 
 class PersonneController {
 
-    public async create(nom:string, prenom:string, surnom:string):Promise<void> {
-        LogHelper.log(`Début de création d'une personne avec les paramètre suivants: nom=${nom}, prenom=${prenom}, surnom=${surnom}`);
+    public async create(nom:string, prenom:string, surnom:string, description:string):Promise<void> {
+        LogHelper.log("Début de création d'une personne avec les paramètre suivants: "+
+                        `nom=${nom}, prenom=${prenom}, surnom=${surnom}, description=${description}`);
         LogHelper.log("Réussite de la création d'une personne");
         LogHelper.error("Échec de la création d'une personne");
         return;

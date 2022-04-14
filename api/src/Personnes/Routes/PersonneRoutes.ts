@@ -1,6 +1,7 @@
 import express from "express";
 import PersonneController from "../Controllers/PersonneController";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import Personne from "../Models/Personne";
 
 const PersonneRouter = express.Router();
 
@@ -9,11 +10,14 @@ const PersonneRouter = express.Router();
 //POST Create new personne
 PersonneRouter.post('/create', async (req, res) => {
     LogHelper.log("Demande de création d'une personne");
-
-    let {nom, prenom, surnom} = req.body;
     
+    //Construction de la nouvelle personne (Optimalement controller.create prend une personne en param)
+    let {nom, prenom, surnom, description} = req.body;
+    //const pers:Personne = new Personne();
+
+
     const controller = new PersonneController();
-    const response = await controller.create(nom, prenom, surnom);
+    const response = await controller.create(nom, prenom, surnom, description);
     return res.status(200).send(response);
 });
 
