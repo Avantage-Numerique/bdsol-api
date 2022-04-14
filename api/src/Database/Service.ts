@@ -115,6 +115,7 @@ class Service {
                         item
                     }
                 } as ServiceResponse;
+            // if not found, ajouter un arrays vides : users: [];
 
         } catch (insertError:any) {
             LogHelper.log("Service Error", insertError);
@@ -126,7 +127,8 @@ class Service {
                 data: {}
             } as ServiceResponse;
         }
-        return Service.errorNothingHappend();
+
+        return Service.errorNothingHappened();
     }
 
     /**
@@ -148,6 +150,7 @@ class Service {
                         item
                     }
                 } as ServiceResponse;
+
         } catch (updateError:any) {
             return {
                 error: true,
@@ -158,7 +161,7 @@ class Service {
             } as ServiceResponse;
         }
 
-        return Service.errorNothingHappend();
+        return Service.errorNothingHappened();
     }
 
 
@@ -194,7 +197,7 @@ class Service {
         }
     }
 
-    private static errorNothingHappend():ServiceResponse {
+    private static errorNothingHappened():ServiceResponse {
         return {
             error: false,
             code: StatusCodes.NO_CONTENT,
