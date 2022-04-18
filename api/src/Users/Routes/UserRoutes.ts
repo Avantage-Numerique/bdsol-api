@@ -10,7 +10,7 @@ const UserRouter = express.Router();
 // USER/UPDATE
 UserRouter.post('/update', async (req, res) => {
     let {data} = req.body;
-    LogHelper.log(`Update user route for ${data.id}`)
+    LogHelper.log(`Update user route for ${data.id}`);
     const controller = new UserController();
     const response:any = await controller.update(data.id, data.updatedValues);
     return res.status(response.code).send(response);

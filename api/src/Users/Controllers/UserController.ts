@@ -34,6 +34,7 @@ export default class UserController {
         return this.eroroNotAcceptable('Les données semblent être ok, mais la création n\'a pas eu lieu.');
     }
 
+
     /**
      * Update the user information
      * Password shall now be updated this way.
@@ -63,9 +64,11 @@ export default class UserController {
         return this.eroroNotAcceptable('Les données semblent être ok, mais la mise à jour n\'a pas eu lieu.');
     }
 
+
     public get(requestData:any) {
         return requestData !== undefined;
     }
+
 
     public delete(userID:string) {
         return userID !== undefined;
@@ -82,6 +85,7 @@ export default class UserController {
         } as UserDocument;
     }
 
+
     public userCreationFailed($message:string = 'Impossible de créé l\'utilsiateur.'):ServiceResponse {
         return {
             error: true,
@@ -92,6 +96,7 @@ export default class UserController {
         } as ServiceResponse;
     }
 
+
     public eroroNotAcceptable($message:string = 'Les données partagé sont erronés ou manquantes.'):ServiceResponse {
         return {
             error: true,
@@ -101,6 +106,7 @@ export default class UserController {
             data: {}
         } as ServiceResponse;
     }
+
 
     public validateData(requestData:any):boolean {
         // get required data and format data

@@ -14,12 +14,11 @@ export interface UserContract {
     role: string;
 }
 
-
 class User {
     static modelName:string = 'User';
 
     static initSchema() {
-        mongoose.model(User.modelName, UserSchema);
+        mongoose.model(User.modelName, UserSchema.schema());
     }
 
     static getInstance() {
