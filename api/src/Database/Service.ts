@@ -12,7 +12,7 @@ import ServiceResponse from "./Responses/ServiceResponse";
  */
 class Service {
 
-    model: any;//@todo create or find the best type for that ?
+    model: any;//@todo create or find the best type for this.
 
     constructor(model: any) {
         this.model = model;

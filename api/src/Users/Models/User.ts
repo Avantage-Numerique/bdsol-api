@@ -15,6 +15,7 @@ export interface UserContract {
 }
 
 class User {
+    static collectionName:string = 'users';
     static modelName:string = 'User';
 
     static initSchema() {
