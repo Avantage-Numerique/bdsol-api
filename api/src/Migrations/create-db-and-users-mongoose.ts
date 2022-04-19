@@ -29,7 +29,7 @@ export default class CreateDbAndUsersMongoose implements MigrationContract {
         if (config.environnement === 'development'
             && this.usersService !== null) {
 
-            let userCount:Number = await mongoose.connection.db.collection(config.users.db.name).count();
+            let userCount:Number = await mongoose.connection.db.collection('users').count();
 
             if (userCount <= 0) {
 
