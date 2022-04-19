@@ -3,6 +3,7 @@ import ApiRouter from "./routes";
 import HealthCheckRouter from "./Healthcheck/Routes/HealthCheckRoutes";
 import AuthentificationRouter from "./Authentification/Routes/AuthentificationRoutes";
 import UserRoutes from "./Users/Routes/UserRoutes";
+import PersonneRouter from './Personnes/Routes/PersonneRoutes';
 
 
 /**
@@ -44,11 +45,14 @@ class Api {
         //Tools the manage the health of the API
         this.express.use("/", HealthCheckRouter);
 
-        // Auth Routes
+        //Auth Routes
         this.express.use("/", AuthentificationRouter);
 
         // Users Routes
         this.express.use("/users", UserRoutes);
+
+        //Personnes Routes
+        this.express.use("/personne", PersonneRouter);
     }
 }
 

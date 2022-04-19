@@ -30,7 +30,7 @@ export default class CreateDbAndUsersMongoose implements MigrationContract {
             && this.usersService !== null) {
 
             let userCount:Number = await mongoose.connection.db.collection('users').count();
-            LogHelper.log(`fake ${config.users.db.name} count ${userCount}`);
+
             if (userCount <= 0) {
 
                 LogHelper.log(`Aucun utilisateurs de créer, on ajoute deux utilisateurs test pour l'environnement ${config.environnement}`);
