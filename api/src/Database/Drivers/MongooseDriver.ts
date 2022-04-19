@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import CreateDbAndUsersMongoose from "../../Migrations/create-db-and-users-mongoose";
 import User from "../../Users/Models/User";
 import {UsersProvider} from "../Providers/UsersProvider";
+import {DataProvider} from "../Providers/DataProvider";
 
 export default class MongooseDBDriver implements DBDriver {
 
@@ -26,12 +27,12 @@ export default class MongooseDBDriver implements DBDriver {
 
         this.providers = {
             'users': new UsersProvider(config.users.db.name),
-            'data': new UsersProvider(config.users.db.name)
+            'data': new DataProvider(config.db.name)
         };
     }
 
     public async connect() {
-        LogHelper.log(`Connexion à la base de données mongodb ${this.getConnectionUrl()}`);
+        LogHelper.info(`Connexion aux base de données ...`);
         await this.initDb();
     }
 
@@ -40,7 +41,10 @@ export default class MongooseDBDriver implements DBDriver {
      */
     public async initDb() {
         //await this.initMongoose();
+        LogHelper.info(`Connexion à la  base de données utilisateurs ...`);
         await this.providers.users.connect();
+        LogHelper.info(`Connexion à la  base de données structurée, ouverte et liée ...`);
+        await this.providers.data.connect();
         await this.generateFakeUsers();
     }
 

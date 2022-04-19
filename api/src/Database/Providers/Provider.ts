@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import config from "../../config";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 
 export default interface Provider {
@@ -28,6 +29,7 @@ export class BaseProvider implements Provider {
     }
 
     public connect():Promise<mongoose.Connection|null> {
+        LogHelper.log(this.url);
         this.connection = mongoose.createConnection(this.url);
         return this.connection;
     }
@@ -59,7 +61,7 @@ export class BaseProvider implements Provider {
     }
 
     public get url():string {
-        if (this._url === '') {
+        if (this._url === '' || this._url === undefined) {
             this.url = `${this.urlPrefix}://${config.db.host}:${config.db.port}/${this._databaseName}`;
         }
         return this._url;
