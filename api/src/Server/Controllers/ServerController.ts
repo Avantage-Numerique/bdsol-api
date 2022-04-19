@@ -5,7 +5,7 @@ import DBDriver from "../../Database/Drivers/DBDriver";
 import FakeUserDBDriver from "../../Database/Drivers/FakeUserDBDriver";
 import {ReasonPhrases,StatusCodes} from 'http-status-codes';
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import MongoDBDriver from "../../Database/Drivers/MongoDBDriver";
+import MongooseDBDriver from "../../Database/Drivers/MongooseDriver";
 
 /**
  * Manage all the serveur actions and connect the app to the ROUTE.
@@ -39,7 +39,7 @@ export default class ServerController {
         LogHelper.log(`Initiation du driver ${config.db.driver} de la base de données.`);
 
         if (config.db.driver === 'mongodb') {
-            ServerController.database = new MongoDBDriver();
+            ServerController.database = new MongooseDBDriver();
             return;
         }
         if (config.db.driver === 'fakeusers') {

@@ -1,4 +1,4 @@
-import {UserContract} from "../../Users/Models/UserModel";
+import {UserContract} from "../../Users/Models/User";
 import LogHelper from "../../Monitoring/Helpers/LogHelper"
 import ServerController from "../../Server/Controllers/ServerController";
 import LoginResponse from "../Responses/LoginResponse";
@@ -75,7 +75,7 @@ class AuthentificationController
      * @private
      */
     private static generateToken(user:any):string {
-        return TokenController.generate({ username: user.username,  role: user.role });
+        return TokenController.generate({ user_id: user._id, username: user.username, role: user.role });
     }
 
     /**

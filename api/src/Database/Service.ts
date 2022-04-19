@@ -2,7 +2,8 @@
 import * as mongoose from "mongoose";
 import config from "../config";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
-import {StatusCodes} from "http-status-codes";
+import {StatusCodes, ReasonPhrases} from "http-status-codes";
+import ServiceResponse from "./Responses/ServiceResponse";
 
 
 /**
@@ -11,7 +12,7 @@ import {StatusCodes} from "http-status-codes";
  */
 class Service {
 
-    model: any;//@todo create or find the best type for that ?
+    model: any;//@todo create or find the best type for this.
 
     constructor(model: any) {
         this.model = model;
@@ -73,22 +74,27 @@ class Service {
                 .find(query)
                 .skip(skip)
                 .limit(limit);
-            let total = await this.model.count();
+            //let total = await this.model.count();
 
             //@todo rethink this structure, add a meta data for total, and more ?
             return {
                 error: false,
                 code: StatusCodes.OK,
-                data: items,
-                total: total
-            };
+                message: ReasonPhrases.OK,
+                errors: [],
+                data: {
+                    items
+                }
+            } as ServiceResponse;
+
         } catch (getAllErrors:any) {
             return {
                 error: true,
                 code: StatusCodes.INTERNAL_SERVER_ERROR,
                 message: getAllErrors.errmsg || "Not able to get the queried items",
-                errors: getAllErrors.errors
-            };
+                errors: getAllErrors.errors,
+                data: {}
+            } as ServiceResponse;
         }
     }
 
@@ -96,7 +102,7 @@ class Service {
      * Insert is the create in CRUD
      * @param data any the document structure. This is type any because that class will be extended.
      */
-    async insert(data:any) {
+    async insert(data:any):Promise<ServiceResponse> {
         try {
             let item = await this.model.create(data);
             if (item)
@@ -104,19 +110,25 @@ class Service {
                     error: false,
                     code: StatusCodes.ACCEPTED,
                     message: "Ajout de l'item réussi",
+                    errors: [],
                     data: {
                         item
                     }
-                };
+                } as ServiceResponse;
+            // if not found, ajouter un arrays vides : users: [];
+
         } catch (insertError:any) {
             LogHelper.log("Service Error", insertError);
             return {
                 error: true,
                 code: StatusCodes.INTERNAL_SERVER_ERROR,
                 message: insertError.errmsg || "Not able to create item",
-                errors: insertError.errors
-            };
+                errors: insertError.errors,
+                data: {}
+            } as ServiceResponse;
         }
+
+        return Service.errorNothingHappened();
     }
 
     /**
@@ -124,29 +136,36 @@ class Service {
      * @param id string
      * @param data any document data
      */
-    async update(id:string, data:any) {
+    async update(id:string, data:any):Promise<ServiceResponse> {
+
         try {
             let item = await this.model.findByIdAndUpdate(id, data, {new: true});
-            return {
-                error: false,
-                code: StatusCodes.ACCEPTED,
-                message: "Mise à jour de l'item réussi",
-                data: {
-                    item
-                }
-            };
+            if (item)
+                return {
+                    error: false,
+                    code: StatusCodes.ACCEPTED,
+                    message: "Mise à jour de l'item réussi",
+                    errors:[],
+                    data: {
+                        item
+                    }
+                } as ServiceResponse;
+
         } catch (updateError:any) {
             return {
                 error: true,
                 code: StatusCodes.INTERNAL_SERVER_ERROR,
                 message: updateError.errmsg || "Not able to update item",
-                errors: updateError.errors
-            };
+                errors: updateError.errors,
+                data: {}
+            } as ServiceResponse;
         }
+
+        return Service.errorNothingHappened();
     }
 
 
-    async delete(id:string) {
+    async delete(id:string):Promise<ServiceResponse> {
         try {
             let item = await this.model.findByIdAndDelete(id);
             if (!item) {
@@ -154,14 +173,15 @@ class Service {
                     error: true,
                     code: StatusCodes.NOT_FOUND,
                     message: "item to delete not found",
-                    deleted: false
+                    errors:[],
+                    data: {}
                 };
             }
             return {
                 error: false,
                 code: StatusCodes.ACCEPTED,
-                deleted: true,
                 message: "Item will be deleted",
+                errors:[],
                 data: {
                     item
                 }
@@ -171,10 +191,20 @@ class Service {
                 error: true,
                 code: StatusCodes.INTERNAL_SERVER_ERROR,
                 message: "Item will be deleted",
-                deleted: false,
-                deleteError
+                errors: deleteError.errors,
+                data: {}
             };
         }
+    }
+
+    private static errorNothingHappened():ServiceResponse {
+        return {
+            error: false,
+            code: StatusCodes.NO_CONTENT,
+            message: "Tried doesn't return nothing and there is no error to catch.",
+            errors:[],
+            data: {}
+        };
     }
 }
 

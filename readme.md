@@ -15,7 +15,7 @@ Les directives assument que vous vous rendez au bon endroit sur votre disque dur
 
 ### Démarrer l'environnement de travail.
 
-#### Sans Débardeur
+#### Sans Docker
 
 1. Démarrer l'api en mode dev : `cd ./api` et ensuite `npm run serve-ts`
   1. Il faut changer la variable d'environnement de l'API `DB_DRIVER='fakeusers'`
@@ -120,6 +120,10 @@ Code : **500** : une erreur est survenue
 - 3xx: Redirection
 - 4xx: Client Erreur
 - 5xx: Server Erreur
+
+### Objet de requête bâti par express js
+[Documentation](https://expressjs.com/fr/api.html)
+* On utilise `req.body`
 
 ---
 # Outils pour coordonner le développement

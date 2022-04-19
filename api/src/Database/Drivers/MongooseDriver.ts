@@ -1,33 +1,32 @@
 import * as mongoDB from "mongodb";
-import mongoose from "mongoose";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import DBDriver from "./DBDriver";
+import mongoose from "mongoose";
+import {ConnectOptions} from "mongodb";
+import CreateDbAndUsersMongoose from "../../Migrations/create-db-and-users-mongoose";
+import UsersService from "../../Users/Services/UsersService";
 import User from "../../Users/Models/User";
-import CreateUsersCollection from "../../Migrations/create-users-collection";
+import Provider from "../Providers/Provider";
 
-
-/**
- * @Deprecated
- * We use MongooseDriver instead to have an ODM
- *
- * Mongodb was a raw driver to manage mongodb without ODM/ORM.
- */
-export default class MongoDBDriver implements DBDriver {
+export default class MongooseDBDriver implements DBDriver {
 
     public driverPrefix: string;
     public client: mongoDB.MongoClient | null;
-    public db: mongoDB.Db | mongoose.Connection | null;
+    public db: mongoDB.Db | mongoose.Connection | null;//will be the provider.
     public baseUrl: string;
+    public providers: Array<Provider>;
 
     /**
      * Constructor fo this driver. Object is created 1 time in  ServerController.
      */
     constructor() {
-        this.driverPrefix = 'mongodb-deprecated';
+        this.driverPrefix = 'mongodb';
         this.client = null;
         this.db = null;
         this.baseUrl = '';
+
+        this.providers = [];
     }
 
     public async connect() {
@@ -39,37 +38,39 @@ export default class MongoDBDriver implements DBDriver {
      * Method mandatory in DBDriver, to init this driver.
      */
     public async initDb() {
-        //await this.initMongoDb();;
+        await this.initMongoose();
     }
 
     /**
-     * @Deprecated Will be use mongoose, but kept raw mongodb connection here in case. 2022-04-11
-     * This is code to connect to mongo db directly. Without mongoose.
-     * Keeping it for now. Because of mongoose is still in test.
+     * Connect mongoose to our mongodb serveur, setup error handling for it.
      */
-    public async initMongoDb() {
-
+    public async initMongoose() {
         try {
 
-            this.client = new mongoDB.MongoClient(this.getConnectionUrl());
-            LogHelper.log('connecting to ', this.getConnectionUrl());
+            // loop throught the providers to init here.
 
-            await this.client.connect();
+            LogHelper.log(`Connecting ...`);
+            await mongoose.connect(this.getConnectionUrl(), {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+            } as ConnectOptions);
 
-            if (this.client) {
+            if (this.db === null) {
+                this.db = mongoose.connection;
+                this.db.on('error', this.onDbError);
+            }
 
-                this.db = this.client.db(config.db.name);
-                LogHelper.log('Setting the default db ', config.db.name);
-
-                //will create the fake user for now.
-                let usersCollection = new CreateUsersCollection();
-                usersCollection.db = this.db;
+            if (config.environnement === 'development') {
+                //will create the fake users if the collection is empty.
+                let users = new UsersService(User.getInstance());
+                let usersCollection = new CreateDbAndUsersMongoose(users);
                 await usersCollection.up();
             }
 
         } catch (error: any) {
             throw new Error(error.message);
         }
+        LogHelper.log(`Moogoose a été initialisé`);
     }
 
     public getConnectionUrl(db:string='bdsol-users') {

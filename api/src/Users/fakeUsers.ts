@@ -1,4 +1,4 @@
-import {UserContract} from "./Models/UserModel";
+import {UserContract} from "./Models/User";
 
 export const fakeUsers:Array<UserContract> = [
     {
