@@ -6,6 +6,8 @@ import FakeUserDBDriver from "../../Database/Drivers/FakeUserDBDriver";
 import {ReasonPhrases,StatusCodes} from 'http-status-codes';
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import MongooseDBDriver from "../../Database/Drivers/MongooseDriver";
+import {UsersProvider} from "../../Database/Providers/UsersProvider";
+import Provider from "../../Database/Providers/Provider";
 
 /**
  * Manage all the serveur actions and connect the app to the ROUTE.
@@ -15,6 +17,8 @@ export default class ServerController {
     static usersTable: string = 'users';
     static usersModel: any;
     static database: DBDriver;
+    static userProvider: UsersProvider;
+    static dataProvider: Provider;
 
     server: http.Server;
     api: express.Application;

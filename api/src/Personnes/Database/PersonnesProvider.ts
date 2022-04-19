@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 import config from "../../config";
-import Provider from "./Provider";
+import Provider from "../../Database/Providers/Provider";
 import {ConnectOptions} from "mongodb";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import User from "../../Users/Models/User";
-import Service from "../Service";
+import Service from "../../Database/Service";
 
 
-export class UsersProvider implements Provider {
+export class PersonnesProvider implements Provider {
 
     private _connection:mongoose.Connection;
     private _service:Service;
@@ -17,16 +17,16 @@ export class UsersProvider implements Provider {
     private _url:string;
     private _databaseName:string;
 
-    private _singleton:UsersProvider;
+    private _singleton:PersonnesProvider;
 
-    constructor(name='users') {
+    constructor(name='personnes') {
         this.databaseName = name;
         this.urlPrefix = "mongodb";
     }
 
-    public getInstance():UsersProvider {
+    public getInstance():PersonnesProvider {
         if (this._singleton === null) {
-            this._singleton = new UsersProvider(config.users.db.name);
+            this._singleton = new PersonnesProvider(config.db.name);
         }
         return this._singleton;
     }
@@ -44,7 +44,7 @@ export class UsersProvider implements Provider {
             return this.connection;
         }
         catch (error:any) {
-            LogHelper.error("Can't connect to db in UsersProvider");
+            LogHelper.error("Can't connect to db in PersonnesProvider");
         }
         return null;
     }

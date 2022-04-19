@@ -17,14 +17,19 @@ export interface UserContract {
 class User {
     static collectionName:string = 'users';
     static modelName:string = 'User';
+    static connection:mongoose.Connection;
 
     static initSchema() {
-        mongoose.model(User.modelName, UserSchema.schema());
+        User.connection.model(User.modelName, UserSchema.schema());
     }
 
     static getInstance() {
-        User.initSchema();
-        return mongoose.model(User.modelName);
+
+        if (User.connection !== null) {
+            User.initSchema();
+            return User.connection.model(User.modelName);
+        }
+        return null;
     }
 }
 

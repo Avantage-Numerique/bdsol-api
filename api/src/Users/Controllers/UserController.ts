@@ -19,7 +19,7 @@ export default class UserController {
 
     public async create(requestData:any):Promise<ServiceResponse> {
         if (!this.validateData(requestData)) {
-            return this.eroroNotAcceptable();
+            return this.errorNotAcceptable();
         }
 
         let formatedData = this.formatRequestDataForDocument(requestData);
@@ -31,7 +31,7 @@ export default class UserController {
             return createdDocumentResponse
         }
 
-        return this.eroroNotAcceptable('Les données semblent être ok, mais la création n\'a pas eu lieu.');
+        return this.errorNotAcceptable('Les données semblent être ok, mais la création n\'a pas eu lieu.');
     }
 
 
@@ -45,10 +45,10 @@ export default class UserController {
     public async update(id:string, requestData:any):Promise<ServiceResponse>  {
 
         if (!this.validateData(requestData)) {
-            return this.eroroNotAcceptable();
+            return this.errorNotAcceptable();
         }
         if (id === undefined) {
-            return this.eroroNotAcceptable();
+            return this.errorNotAcceptable();
         }
 
         let formatedData = this.formatRequestDataForDocument(requestData);
@@ -61,7 +61,7 @@ export default class UserController {
             return updatedModelResponse
         }
 
-        return this.eroroNotAcceptable('Les données semblent être ok, mais la mise à jour n\'a pas eu lieu.');
+        return this.errorNotAcceptable('Les données semblent être ok, mais la mise à jour n\'a pas eu lieu.');
     }
 
 
@@ -73,6 +73,7 @@ export default class UserController {
     public delete(userID:string) {
         return userID !== undefined;
     }
+
 
     public formatRequestDataForDocument(requestData:any) {
         return {
@@ -97,7 +98,7 @@ export default class UserController {
     }
 
 
-    public eroroNotAcceptable($message:string = 'Les données partagé sont erronés ou manquantes.'):ServiceResponse {
+    public errorNotAcceptable($message:string = 'Les données partagé sont erronés ou manquantes.'):ServiceResponse {
         return {
             error: true,
             code: StatusCodes.NOT_ACCEPTABLE,

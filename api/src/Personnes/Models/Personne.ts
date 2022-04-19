@@ -1,17 +1,23 @@
 
 import mongoose from "mongoose";
-import { StringMappingType } from "typescript";
+//import { StringMappingType } from "typescript";
 //import {PersonneSchema} from "../Schemas/PersonneSchema"
 import {Schema} from "mongoose"
 import { PersonneSchema } from "../Schemas/PersonneSchema";
+//import {UserSchema} from "../../Users/Schemas/UserSchema";
+
+
 class Personne {
     
     //Attributs static
     static modelName:string = 'Personne'
+    static collectionName:string = 'personnes';
+    static connection:mongoose.Connection;
+
     static schema:Schema =
         new Schema<PersonneSchema>({
 
-            _id: Schema.Types.ObjectId,
+            //_id: Schema.Types.ObjectId,
             nom: { type: String, required: true },
             prenom: { type: String, required: true },
             surnom: String,
@@ -50,16 +56,23 @@ class Personne {
 
     //Méthodes
     public AttributsPersonneToString(): string {
-        return `nom=${this.nom}, prenom=${this.prenom}, surnom=${this.nom}, description=${this.nom}`;
+        return `nom=${this.nom}, prenom=${this.prenom}, surnom=${this.nom}, description=${this.description}`;
     }
 
     static initSchema() {
-        mongoose.model(Personne.modelName, Personne.schema);
+        Personne.connection.model(Personne.modelName, Personne.schema);
+        //mongoose.model(Personne.modelName, Personne.schema);
     }
 
-    static getInstance(){
-        Personne.initSchema();
-        return mongoose.model(Personne.modelName);
+    static getInstance() {
+
+        if (Personne.connection !== null) {
+            Personne.initSchema();
+            return Personne.connection.model(Personne.modelName);
+        }
+        return null;
+        //Personne.initSchema();
+        //return mongoose.model(Personne.modelName);
     }
 }
 

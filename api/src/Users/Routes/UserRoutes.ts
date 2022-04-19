@@ -1,6 +1,7 @@
 import express from "express";
 import UserController from "../Controllers/UserController";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import {StatusCodes} from "http-status-codes";
 
 // add { mergeParams: true } to get the main route params.
 const UserRouter = express.Router();
@@ -9,11 +10,22 @@ const UserRouter = express.Router();
 
 // USER/UPDATE
 UserRouter.post('/update', async (req, res) => {
-    let {data} = req.body;
-    LogHelper.log(`Update user route for ${data.id}`);
-    const controller = new UserController();
-    const response:any = await controller.update(data.id, data.updatedValues);
-    return res.status(response.code).send(response);
+    let {user} = req.body;
+    LogHelper.log(`Update request on users route with this date : ${user}`);
+    try {
+        LogHelper.log(`Update user id : ${user.id}`);
+        const controller = new UserController();
+        const response:any = await controller.update(user.id, user.updatedValues);
+        return res.status(response.code).send(response);
+
+    } catch (errors:any) {
+        return {
+            error: true,
+            code: StatusCodes.INTERNAL_SERVER_ERROR,
+            message: errors.errmsg || "Not able to get the queried items",
+            errors: errors.errors
+        };
+    }
 });
 
 // USERS/CREATE
