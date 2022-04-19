@@ -7,26 +7,38 @@ const PersonneRouter = express.Router();
 
 
 
-//POST Create new personne
+//POST CREATE new personne
 PersonneRouter.post('/create', async (req, res) => {
     LogHelper.log("Demande de création d'une personne");
     
-    //Construction de la nouvelle personne (Optimalement controller.create prend une personne en param)
     let {nom, prenom, surnom, description} = req.body;
-    //const pers:Personne = new Personne();
-
+    const pers:Personne = new Personne(nom, prenom, surnom, description);
 
     const controller = new PersonneController();
-    const response = await controller.create(nom, prenom, surnom, description);
+    const response = await controller.create(pers);
     return res.status(200).send(response);
 });
 
-//POST Find une personne dans la liste
+//POST UPDATE une personne
+PersonneRouter.post('/update', async (req, res) => {
+    LogHelper.log("Demande d'update des données d'une personne");
+
+
+    //Création de la personne update
+    let {id, nom, prenom, surnom, description} = req.body;
+    const pers:Personne = new Personne(nom, prenom, surnom, description);
+
+    const controller = new PersonneController();
+    const response = await controller.update(id, pers);
+    //return
+})
+
+//POST FIND une personne dans la liste
 PersonneRouter.post('/find', async (req, res) => {
     LogHelper.log("Demande de recherche dans la liste de personnes");
 });
 
-//POST Read/List des personnes
+//POST READ/LIST des personnes
 PersonneRouter.post('/list', async (req, res) => {
     LogHelper.log("Demande d'accès à la liste de personnes");
 
@@ -35,14 +47,6 @@ PersonneRouter.post('/list', async (req, res) => {
     //return
 })
 
-//POST UPDATE une personne
-PersonneRouter.post('/update', async (req, res) => {
-    LogHelper.log("Demande d'update des données d'une personne");
-
-    const controller = new PersonneController();
-    const response = await controller.update();
-    //return
-})
 
 //POST-->Delete http? Delete une personne
 PersonneRouter.delete('/delete', async (req, res) => {
