@@ -5,7 +5,26 @@ import Personne from "../Models/Personne";
 
 const PersonneRouter = express.Router();
 
+//Route TestLog
+PersonneRouter.post('/log', async (req,res) => {
+    LogHelper.log("Entrée dans /log");
 
+    LogHelper.log("1 - Test Log");
+    LogHelper.log("Log");
+    
+    LogHelper.error("2 - Test Error");
+    LogHelper.error("Error");
+    
+    LogHelper.warn("3 - Test Warn");
+    LogHelper.warn("Warn");
+    
+    LogHelper.info("4 - Test Info");
+    LogHelper.info("Info");
+
+    LogHelper.debug("5 - Test Debug");
+    LogHelper.debug("Debug");
+    return res.status(200).send(); 
+})
 
 //POST CREATE new personne
 PersonneRouter.post('/create', async (req, res) => {
