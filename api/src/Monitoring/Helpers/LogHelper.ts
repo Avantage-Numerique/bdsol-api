@@ -31,6 +31,7 @@ export default class LogHelper
         if (LogHelper.printToConsole) {
 
             /*https://simplernerd.com/js-console-colors/
+            https://www.geeksforgeeks.org/node-js-util-format-method/
 
                \x1b            [          97        ;      4             m               %   s 
               EscChar      start func    style    add2nd style       func name     1stparam.ToString  
