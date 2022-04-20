@@ -58,7 +58,7 @@ export default class UserController {
         if (updatedModelResponse !== undefined &&
             !updatedModelResponse.error) {
 
-            return updatedModelResponse
+            return updatedModelResponse;
         }
 
         return this.errorNotAcceptable('Les données semblent être ok, mais la mise à jour n\'a pas eu lieu.');

@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 //import {PersonneSchema} from "../Schemas/PersonneSchema"
 import {Schema} from "mongoose"
 import { PersonneSchema } from "../Schemas/PersonneSchema";
+import Provider from "../../Database/Providers/Provider";
 //import {UserSchema} from "../../Users/Schemas/UserSchema";
 
 
@@ -13,6 +14,7 @@ class Personne {
     static modelName:string = 'Personne'
     static collectionName:string = 'personnes';
     static connection:mongoose.Connection;
+    static provider:Provider;
 
     static schema:Schema =
         new Schema<PersonneSchema>({

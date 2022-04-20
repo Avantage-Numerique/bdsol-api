@@ -41,10 +41,13 @@ export default class MongooseDBDriver implements DBDriver {
      */
     public async initDb() {
         //await this.initMongoose();
+
         LogHelper.info(`Connexion à la  base de données utilisateurs ...`);
         await this.providers.users.connect();
+
         LogHelper.info(`Connexion à la  base de données structurée, ouverte et liée ...`);
         await this.providers.data.connect();
+
         await this.generateFakeUsers();
     }
 
