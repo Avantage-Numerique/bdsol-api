@@ -1,9 +1,7 @@
 import * as mongoDB from "mongodb";
-import {UserContract} from "../Models/UserModel";
-//import UserAuthContract from "../../Authentification/Contracts/UserAuthContract";
 
 export interface UserModelContract {
-    collection: mongoDB.Collection | Array<UserContract> | null;
+    collection: mongoDB.Collection | null;
     username:string;
     email:string;
     password:string;

@@ -16,7 +16,8 @@ PersonneRouter.post('/create', async (req, res) => {
 
     const controller = new PersonneController();
     const response = await controller.create(pers);
-    return res.status(200).send(response);
+
+    return res.status(200).send('awesome');
 });
 
 //POST UPDATE une personne
@@ -31,7 +32,7 @@ PersonneRouter.post('/update', async (req, res) => {
     const controller = new PersonneController();
     const response = await controller.update(id, pers);
     //return
-})
+});
 
 //POST FIND une personne dans la liste
 PersonneRouter.post('/find', async (req, res) => {
@@ -45,7 +46,7 @@ PersonneRouter.post('/list', async (req, res) => {
     const controller = new PersonneController();
     const response = await controller.list();
     //return
-})
+});
 
 
 //POST-->Delete http? Delete une personne
@@ -55,7 +56,7 @@ PersonneRouter.delete('/delete', async (req, res) => {
     const controller = new PersonneController();
     const response = await controller.delete();
     //return
-})
+});
 
 
 export default PersonneRouter;

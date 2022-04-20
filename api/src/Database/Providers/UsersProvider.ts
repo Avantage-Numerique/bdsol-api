@@ -1,106 +1,34 @@
 import mongoose from "mongoose";
 import config from "../../config";
-import Provider from "./Provider";
-import {ConnectOptions} from "mongodb";
+import Provider, {BaseProvider} from "./Provider";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import User from "../../Users/Models/User";
-import Service from "../Service";
 
 
-export class UsersProvider implements Provider {
+export class UsersProvider extends BaseProvider implements Provider {
 
-    private _connection:mongoose.Connection;
-    private _service:Service;
-    private _model:any;
+    private static _singleton:UsersProvider;
 
-    private _urlPrefix:string;
-    private _url:string;
-    private _databaseName:string;
-
-    private _singleton:UsersProvider;
-
-    constructor(name='users') {
-        this.databaseName = name;
+    constructor(name='') {
+        super(name);
         this.urlPrefix = "mongodb";
     }
 
-    public getInstance():UsersProvider {
-        if (this._singleton === null) {
-            this._singleton = new UsersProvider(config.users.db.name);
+    public static getInstance():UsersProvider|null {
+        if (UsersProvider._singleton === undefined) {
+            UsersProvider._singleton = new UsersProvider(config.users.db.name);
         }
-        return this._singleton;
+        return UsersProvider._singleton;
     }
 
     public async connect():Promise<mongoose.Connection|null> {
-        try {
-            this.connection = await mongoose.createConnection(this.url, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-            } as ConnectOptions);
+        LogHelper.log("UserProvider Connecting to DB");
+        await super.connect();
 
-            User.connection = this.connection;
-            this.model = User.getInstance();
+        User.connection = this.connection;
+        this.model = User.getInstance();
 
-            return this.connection;
-        }
-        catch (error:any) {
-            LogHelper.error("Can't connect to db in UsersProvider");
-        }
-        return null;
-    }
-
-
-    //  GETTER / SETTER
-
-
-    public get model():any {
-        return this._model;
-    }
-    public set model(model) {
-        this._model = model;
-    }
-
-
-    public get service():any {
-        return this._service;
-    }
-    public set service(service) {
-        this._service = service;
-    }
-
-
-    public get connection():any {
-        return this._connection;
-    }
-    public set connection(connection) {
-        this._connection = connection;
-    }
-
-
-    public get urlPrefix():string {
-        return this._urlPrefix;
-    }
-    public set urlPrefix(urlPrefix) {
-        this._urlPrefix = urlPrefix;
-    }
-
-
-    public get url():string {
-        if (this._url === '' || this._url === undefined) {
-            this.url = `${this.urlPrefix}://${config.db.host}:${config.db.port}/${this._databaseName}`;
-        }
-        return this._url;
-    }
-    public set url(url) {
-        this._url = url;
-    }
-
-
-    public get databaseName() {
-        return this._databaseName;
-    }
-    public set databaseName(name) {
-        this._databaseName = name;
+        return this.connection;
     }
 
 }

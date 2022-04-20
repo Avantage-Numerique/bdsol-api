@@ -26,8 +26,8 @@ export default class MongooseDBDriver implements DBDriver {
         this.baseUrl = '';
 
         this.providers = {
-            'users': new UsersProvider(config.users.db.name),
-            'data': new DataProvider(config.db.name)
+            'users': UsersProvider.getInstance(),
+            'data': DataProvider.getInstance()
         };
     }
 

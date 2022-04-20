@@ -16,12 +16,12 @@ class PersonneController {
     public async create(pers:Personne):Promise<void> {
         LogHelper.log("Début de création d'une personne avec les paramètre suivants: " + pers.AttributsPersonneToString());
 
-        try{
+        try {
             let createdDocumentResponse = await this.service.insert(pers);
             if(createdDocumentResponse != undefined) LogHelper.error("createdDocumentResponse : " + createdDocumentResponse.message, createdDocumentResponse.code, createdDocumentResponse.error)
             LogHelper.log("Réussite de la création d'une personne");
         }
-        catch(e){
+        catch(e) {
             LogHelper.error("Échec de la création d'une personne", e);
         }
 

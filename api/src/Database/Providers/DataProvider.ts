@@ -1,21 +1,23 @@
 import Provider, {BaseProvider} from "./Provider";
 import config from "../../config";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 
 export class DataProvider extends BaseProvider implements Provider {
 
-    private _singleton:DataProvider;
+    private static _singleton:DataProvider;
 
     constructor(name='data') {
         super(name);
         this.urlPrefix = "mongodb";
+        LogHelper.log("Data Provider instanciated");
     }
 
-    public getInstance():DataProvider {
-        if (this._singleton === null) {
-            this._singleton = new DataProvider(config.db.name);
+    public static getInstance():DataProvider {
+        if (DataProvider._singleton === undefined) {
+            DataProvider._singleton = new DataProvider(config.db.name);
         }
-        return this._singleton;
+        return DataProvider._singleton;
     }
 
 }

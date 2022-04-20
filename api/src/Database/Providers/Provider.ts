@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import Service from "../Service";
+import {ConnectOptions} from "mongodb";
 
 
 export default interface Provider {
@@ -11,15 +13,18 @@ export default interface Provider {
     model:any;
 
     connect():Promise<mongoose.Connection|null>;
+    getInstance():Provider|null;
 }
 
 export class BaseProvider implements Provider {
 
     protected _connection:mongoose.Connection;
+    protected _model:any;
+    protected _service:Service;
+
     protected _urlPrefix:string;
     protected _url:string;
     protected _databaseName:string;
-    protected _model:any;
 
 
     constructor(name='') {
@@ -28,14 +33,46 @@ export class BaseProvider implements Provider {
         }
     }
 
-    public connect():Promise<mongoose.Connection|null> {
+    public async connect():Promise<mongoose.Connection|null> {
+
         LogHelper.log(this.url);
-        this.connection = mongoose.createConnection(this.url);
-        return this.connection;
+        try {
+            this.connection = await mongoose.createConnection(this.url, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+            } as ConnectOptions);
+
+            return this.connection;
+        }
+        catch (error:any) {
+            LogHelper.error("Can't connect to db in UsersProvider");
+        }
+        return null;
+    }
+
+    public getInstance(): Provider|null {
+        //to overwrite.
+        return null;
     }
 
 
     //  GETTER / SETTER
+
+
+    public get connection():any {
+        return this._connection;
+    }
+    public set connection(connection) {
+        this._connection = connection;
+    }
+
+
+    public get service():any {
+        return this._service;
+    }
+    public set service(service) {
+        this._service = service;
+    }
 
 
     public get model():any {
@@ -45,13 +82,6 @@ export class BaseProvider implements Provider {
         this._model = model;
     }
 
-
-    public get connection():any {
-        return this._connection;
-    }
-    public set connection(connection) {
-        this._connection = connection;
-    }
 
     public get urlPrefix():string {
         return this._urlPrefix;
