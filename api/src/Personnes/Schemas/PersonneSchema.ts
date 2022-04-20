@@ -7,12 +7,10 @@ import PersonneService from "../Services/PersonneService";
  */
 
 export interface PersonneSchema extends Document {
-    _id:Schema.Types.ObjectId;
     nom:string;
     prenom:string;
     surnom:string;
     description:string
-
 }
 /*
 export const PersonneSchema = new Schema­<PersonneSchema>({

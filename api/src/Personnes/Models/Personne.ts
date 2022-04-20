@@ -11,7 +11,7 @@ class Personne {
     static schema:Schema =
         new Schema<PersonneSchema>({
 
-            _id: Schema.Types.ObjectId,
+            //_id: Schema.Types.ObjectId,
             nom: { type: String, required: true },
             prenom: { type: String, required: true },
             surnom: String,
