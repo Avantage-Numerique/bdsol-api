@@ -51,19 +51,19 @@ export default class LogHelper
 
             switch(consoleMethod){
                 case 'log': {
-                    console.log("\x1b[37;4m%s\x1b[0;37m%s\x1b[0m", "[LOG]", " - "+toLog); break;
+                    console.log("\x1b[37;4m%s\x1b[0;37m%j\x1b[0m", "[LOG] ", toLog); break;
                 }
                 case 'error': {
-                    console.log("\x1b[31;4m%s\x1b[0;31m%s\x1b[0m", "[ERROR]", " - "+toLog); break;
+                    console.log("\x1b[31;4m%s\x1b[0;31m%j\x1b[0m", "[ERROR] ", toLog); break;
                 }
                 case 'warn': {
-                    console.log("\x1b[33;4m%s\x1b[0;33m%s\x1b[0m", "[WARN]", " - "+toLog); break;
+                    console.log("\x1b[33;4m%s\x1b[0;33m%j\x1b[0m", "[WARN] ", toLog); break;
                 }
                 case 'info': {
-                    console.log("\x1b[90;4m%s\x1b[0;90m%s\x1b[0m", "[INFO]", " - "+toLog); break;
+                    console.log("\x1b[90;4m%s\x1b[0;90m%j\x1b[0m", "[INFO] ", toLog); break;
                 }
                 case 'debug': {
-                    console.log("\x1b[36;4m%s\x1b[0;36m%s\x1b[0m", "[DEBUG]", " - "+toLog); break;
+                    console.log("\x1b[36;4m%s\x1b[0;36m%j\x1b[0m", "[DEBUG] ", toLog); break;
                 }
             }
         }
