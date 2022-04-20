@@ -7,18 +7,6 @@ import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 
 /**
- *
- */
-export interface UserContract {
-    collection: mongoDB.Collection | null;
-    username:string;
-    email:string;
-    password:string;
-    name:string;
-    role: string;
-}
-
-/**
  *  @deprecated UserModel
  */
 export default class UserModel {

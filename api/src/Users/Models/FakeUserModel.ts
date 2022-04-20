@@ -1,7 +1,7 @@
 
 // Database connection.
 import UserAuthContract from "../../Authentification/Contracts/UserAuthContract";
-import {UserContract} from "./UserModel";
+import {UserContract} from "./User";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 

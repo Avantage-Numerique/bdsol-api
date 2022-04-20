@@ -1,5 +1,7 @@
 # Tests pour l'application
 
+# Utilisateur
+
 ## 1. Se connecter
 
 ### Étape préalables
@@ -63,6 +65,12 @@
 - Étape #1 : Regarder comment l'utilisateur trouve la section de l'entité
   - D'où il est partie pour se rendre là ?
   - Quel endroit dans l'interface il a chercher (pour l'associé à un design)
-- Étape #4 : Vérifier le sentiments de sécurité de l'utilisateur face à son ajout
+- Étape #2 : Vérifier le sentiments de sécurité de l'utilisateur face à son ajout
   - Vérifier son assurance qu'il a face à son action
     - réussi, pas certain ou non ça n'a pas fonctionné
+
+# Ajout d'une personne
+
+- Étape #1 : se rendre au formulaire de création d'une personne
+  - Prendre en note les cliques et le(les) chemins utilisés pour se rendre.
+  - 
