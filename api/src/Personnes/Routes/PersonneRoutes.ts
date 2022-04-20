@@ -6,7 +6,6 @@ import { LoggerLevel } from "mongoose/node_modules/mongodb";
 
 const PersonneRouter = express.Router();
 
-
 //POST UPDATE une personne
 PersonneRouter.post('/update', async (req, res) => {
     let {data} = req.body;
