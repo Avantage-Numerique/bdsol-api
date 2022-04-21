@@ -9,6 +9,7 @@ Les directives assument que vous vous rendez au bon endroit sur votre disque dur
 3. Ensuite, cloner le repo. : <br>`git clone --recurse-submodules https://github.com/Avantage-Numerique/bdsol-api.git ./`
 4. Installer les package de l'API : `cd ./api` et ensuite `npm install`
 5. Installer les package du frontend : `cd ./frontend` et ensuite `npm install`
+6. Copier le fichier `.env.exemple` et le renommé en `.env`.
 
 * Si vous avez besoin de *Puller* le *submodule* de l'application public (*frontend*)<br>
   sur le même chemin de dossier de base de la bdsol-api : `git submodule update --init --progress -- "frontend"`
@@ -39,6 +40,22 @@ Lorsqu'on interagi avec la base de données à l'extérieur de Docker, dans votr
 ```url
 mongodb://localhost:27018/?readPreference=primary&appname=mongo&directConnection=true&ssl=false
 ```
+### Travailler sur le frontend à partir d'ici
+1. Lors du git clone, on copie tout les fichiers du submodule : frontend.
+2. Lorsqu'on a des modifications à pusher au répertoire original du submodule `Frontend` on doit
+```shell
+cd <MYSUBMODULE> #frontend
+git add <stuff> # si pertinent
+git commit -m "Votre commentaire en français sur vos changements." #ça sera commité dans la branche main paramétré dans le fichier .gitmodules.
+git push origin main # ça commitera vos changement dans la branche du sous-module.
+```
+#### Pour que l'équipe voit les changements, il faut commiter aussi le répertoire pour qu'il soit
+```shell
+cd .. # retour dans le repo de l'API avec le docker
+git commit -m "Mise à jour du submodule frontend"
+git push origin master # La branche principale du répertoire de l'API.
+```
+
 ---
 ## Utilisation de l'API
 
