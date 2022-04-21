@@ -1,8 +1,9 @@
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import Personne from "../Models/Personne"
-//import { PersonneSchema } from "../Schemas/PersonneSchema";
-import mongoose from "mongoose";
+import ServiceResponse from "../../Database/Responses/ServiceResponse";
 import PersonneService from "../Services/PersonneService";
+import {StatusCodes} from "http-status-codes";
+import {PersonneSchema} from "../Schemas/PersonneSchema";
 
 class PersonneController {
 
@@ -13,65 +14,43 @@ class PersonneController {
         this.service = new PersonneService(Personne.getInstance());
     }
 
-    public async create(pers:Personne):Promise<void> {
-        LogHelper.log("Début de création d'une personne avec les paramètre suivants: " + pers.AttributsPersonneToString());
+    public async create(requestData:any):Promise<ServiceResponse> {
+        if (!this.validateData(requestData))
+            return this.errorNotAcceptable();
 
-        try {
-            let createdDocumentResponse = await this.service.insert(pers);
-            if(createdDocumentResponse != undefined) LogHelper.error("createdDocumentResponse : " + createdDocumentResponse.message, createdDocumentResponse.code, createdDocumentResponse.error)
-            LogHelper.log("Réussite de la création d'une personne");
+        let formatedData = this.formatRequestDataForDocument(requestData);
+        let createdDocumentResponse = await this.service.insert(formatedData);
+        
+        if (createdDocumentResponse !== undefined &&
+            !createdDocumentResponse.error) {
+
+            return createdDocumentResponse;
         }
-        catch(e) {
-            LogHelper.error("Échec de la création d'une personne", e);
-        }
-
-        //Demande à la BD la création/vérification de la personne
-
-        //Si all good, add new personne => return all good
-        /*try{
-            //const personneService:PersonneService = new PersonneService(Personne.modelName);
-            //personneService.insert("allo");
-            const personne = mongoose.model(Personne.modelName,Personne.schema);
-            const p = new personne();
-            p._id = new mongoose.Types.ObjectId();
-            p.nom = pers.nom;
-            p.prenom = pers.prenom;
-            p.surnom = pers.surnom;
-            p.description = pers.description;
-            p.markModified(p.nom);
-            await p.save();
-            */
-            //Si all good
-            //LogHelper.log("Réussite de la création d'une personne");
-        //}
-        /*catch(e){
-            //Sinon (Went wrong => return went wrong)
-            LogHelper.error("Échec de la création d'une personne", e);
-        }*/
-
-        return;
+        return this.errorNotAcceptable('Les données semblent être ok, mais la création n\'a pas eu lieu.');
     }
 
     
-    public async update(id:string, pers:Personne):Promise<void> {
-        LogHelper.log("Début de la tentative d'update les données d'une personne");
+    public async update(id:string, requestData:any):Promise<ServiceResponse> {
 
-        try{
-            //Demande à la BD l'objet personne à modifier
-            let updateDocumentResponse = await this.service.update(id, pers);
-
-            //Si all good, send modif => return all good
-            if (updateDocumentResponse.error == false && updateDocumentResponse.message == "Mise à jour de l'item réussi")
-            LogHelper.warn(updateDocumentResponse.message);
-
+        if (!this.validateData(requestData)) {
+            return this.errorNotAcceptable();
         }
-        catch(e){
-            //Sinon (went wrong => return went wrong)
-            LogHelper.log("Échec de l'update des données d'une personne");
-            return;
+        if (id === undefined) {
+            return this.errorNotAcceptable();
         }
-        LogHelper.log("Réussite de l'update des données d'une personne");
-        return;
+
+        let formatedData = this.formatRequestDataForDocument(requestData);
+
+        let updatedModelResponse:any = await this.service.update(id, formatedData);
+
+        if (updatedModelResponse !== undefined &&
+            !updatedModelResponse.error) {
+
+            return updatedModelResponse
+        }
+
+        return this.errorNotAcceptable('Les données semblent être ok, mais la mise à jour n\'a pas eu lieu.');
+    
     }
 
     public async list():Promise<void> {
@@ -95,6 +74,41 @@ class PersonneController {
         LogHelper.log("Échec de la suppression d'une personne");
         return;
     }
+
+    public errorNotAcceptable($message:string = 'Les données partagé sont erronés ou manquantes.'):ServiceResponse {
+        return {
+            error: true,
+            code: StatusCodes.NOT_ACCEPTABLE,
+            message: $message,
+            errors: [],
+            data: {}
+        } as ServiceResponse;
+    }
+
+
+    public validateData(requestData:any):boolean {
+        // get required data and format data
+        // parsed them
+        // Return if validation passed or not.
+
+        LogHelper.log(`Validating ${typeof requestData}`, requestData);
+        //first test
+        return typeof requestData === 'object' &&
+            requestData.username !== null &&
+            requestData.username !== undefined &&
+            typeof requestData.username === 'string';
+    }
+
+    public formatRequestDataForDocument(requestData:any) {
+        return {
+            nom: requestData.nom,
+            prenom: requestData.prenom,
+            surnom: requestData.surnom,
+            description: requestData.description
+        } as PersonneSchema;
+    }
+
+
 
 }
 
