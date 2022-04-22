@@ -9,20 +9,23 @@ const PersonneRouter = express.Router();
 //POST UPDATE une personne
 PersonneRouter.post('/update', async (req, res) => {
     let {data} = req.body;
+    try{
     LogHelper.log(`Update Personne route for ${data.id}`);
+    }
+    catch(e){
+        LogHelper.error("Update échouée");
+        LogHelper.debug("id manquant? req.body :", req.body);
+        return;//Retourner un status?
+    }
     const controller = new PersonneController();
     const response = await controller.update(data.id, data.updatedValues);
-    //return
+    return res.status(response.code).send(response);
 })
 
 //POST CREATE new personne
 PersonneRouter.post('/create', async (req, res) => {
-    LogHelper.log(req.body);
-    LogHelper.log(req);
-    let {nom, prenom, surnom, description} = req.body;
-    LogHelper.log(nom, prenom, surnom, description);
     let {data} = req.body;
-    LogHelper.log(`Create Personne route for ${data}`);
+    LogHelper.log("Create Personne route for ", data);
     const controller = new PersonneController();
     const response:any = await controller.create(data);
     return res.status(response.code).send(response);

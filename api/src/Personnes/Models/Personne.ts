@@ -53,6 +53,27 @@ class Personne {
         return `nom=${this.nom}, prenom=${this.prenom}, surnom=${this.nom}, description=${this.nom}`;
     }
 
+    static isNomValid(p_nom:string):boolean
+    {
+        if( p_nom === null ||
+            p_nom === undefined ||
+            typeof p_nom !== "string" || 
+            p_nom.length < 2)
+            return false;
+        return true;
+    }
+
+    static isPrenomValid(p_prenom:string):boolean
+    {
+        if( p_prenom === null ||
+            p_prenom === undefined ||
+            typeof p_prenom !== "string" || 
+            p_prenom.length < 2)
+            return false;
+        return true;
+    }
+
+
     static initSchema() {
         mongoose.model(Personne.modelName, Personne.schema);
     }

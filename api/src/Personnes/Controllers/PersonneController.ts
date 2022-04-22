@@ -4,6 +4,7 @@ import ServiceResponse from "../../Database/Responses/ServiceResponse";
 import PersonneService from "../Services/PersonneService";
 import {StatusCodes} from "http-status-codes";
 import {PersonneSchema} from "../Schemas/PersonneSchema";
+import { request } from "express";
 
 class PersonneController {
 
@@ -14,42 +15,42 @@ class PersonneController {
         this.service = new PersonneService(Personne.getInstance());
     }
 
+    /** allo */
     public async create(requestData:any):Promise<ServiceResponse> {
-        if (!this.validateData(requestData))
-            return this.errorNotAcceptable();
+        let messageValidate = this.validateData(requestData);
+        if (!messageValidate.isValid)
+            return this.errorNotAcceptable(messageValidate.message);
 
         let formatedData = this.formatRequestDataForDocument(requestData);
         let createdDocumentResponse = await this.service.insert(formatedData);
         
         if (createdDocumentResponse !== undefined &&
-            !createdDocumentResponse.error) {
-
+            !createdDocumentResponse.error)
             return createdDocumentResponse;
-        }
-        return this.errorNotAcceptable('Les données semblent être ok, mais la création n\'a pas eu lieu.');
+        
+
+        return this.errorNotAcceptable('Échec de la création d\'une Personne');
     }
 
     
     public async update(id:string, requestData:any):Promise<ServiceResponse> {
+        let messageUpdate = this.validateData(requestData);
+        if (!messageUpdate.isValid)
+            return this.errorNotAcceptable(messageUpdate.message);
 
-        if (!this.validateData(requestData)) {
-            return this.errorNotAcceptable();
-        }
-        if (id === undefined) {
-            return this.errorNotAcceptable();
-        }
+        if (id === undefined)
+            return this.errorNotAcceptable("Aucun no. d'identification fournit");
 
         let formatedData = this.formatRequestDataForDocument(requestData);
 
         let updatedModelResponse:any = await this.service.update(id, formatedData);
 
         if (updatedModelResponse !== undefined &&
-            !updatedModelResponse.error) {
+            !updatedModelResponse.error)
+            return updatedModelResponse;
 
-            return updatedModelResponse
-        }
 
-        return this.errorNotAcceptable('Les données semblent être ok, mais la mise à jour n\'a pas eu lieu.');
+        return this.errorNotAcceptable('Échec de l\'update d\'une Personne');
     
     }
 
@@ -76,6 +77,7 @@ class PersonneController {
     }
 
     public errorNotAcceptable($message:string = 'Les données partagé sont erronés ou manquantes.'):ServiceResponse {
+        LogHelper.error("Échec NotAcceptable ", $message);
         return {
             error: true,
             code: StatusCodes.NOT_ACCEPTABLE,
@@ -86,17 +88,26 @@ class PersonneController {
     }
 
 
-    public validateData(requestData:any):boolean {
-        // get required data and format data
-        // parsed them
-        // Return if validation passed or not.
+    public validateData(requestData:any): {isValid:boolean, message:string} {
 
         LogHelper.log(`Validating ${typeof requestData}`, requestData);
-        //first test
-        return typeof requestData === 'object' &&
-            requestData.username !== null &&
-            requestData.username !== undefined &&
-            typeof requestData.username === 'string';
+
+        if (typeof requestData !== 'object')
+            return {isValid:false, message:"La requête n'est pas un objet."};
+
+        //Validation Nom
+        if(requestData.nom !== undefined){
+            if (!Personne.isNomValid(requestData.nom))
+                return {isValid:false, message:"Le paramètre 'nom' est problématique"};
+        }
+
+        //Validate prénom
+        if(requestData.prenom !== undefined){
+            if (!Personne.isNomValid(requestData.prenom))
+                return {isValid:false, message:"Le paramètre 'prenom' est problématique"};
+        }
+
+        return {isValid:true, message:"OK"};          
     }
 
     public formatRequestDataForDocument(requestData:any) {
