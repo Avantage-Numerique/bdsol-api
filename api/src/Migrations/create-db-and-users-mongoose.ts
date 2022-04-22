@@ -14,10 +14,8 @@ export default class CreateDbAndUsersMongoose implements MigrationContract {
     }
 
     public async up() {
-
-        LogHelper.log(`Migration ${CreateDbAndUsersMongoose.name} en cours`);
+        LogHelper.log(`Appel de la migration ${CreateDbAndUsersMongoose.name}`);
         await this.fake();
-
     }
 
     public async down() {
@@ -29,6 +27,7 @@ export default class CreateDbAndUsersMongoose implements MigrationContract {
         if (config.environnement === 'development'
             && this.usersService !== null) {
 
+            LogHelper.log(`Migration ${CreateDbAndUsersMongoose.name} en cours`);
             let userCount:Number = await mongoose.connection.db.collection('users').count();
 
             if (userCount <= 0) {
@@ -38,6 +37,7 @@ export default class CreateDbAndUsersMongoose implements MigrationContract {
                 return true
             }
         }
+        LogHelper.log(`No need to execute Migration ${CreateDbAndUsersMongoose.name}`);
         return false;
     }
 

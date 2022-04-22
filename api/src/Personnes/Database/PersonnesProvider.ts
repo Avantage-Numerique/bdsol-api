@@ -1,57 +1,51 @@
 import mongoose from "mongoose";
 import config from "../../config";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import Service from "../Service";
+import Provider from "../../Database/Providers/Provider";
 import {ConnectOptions} from "mongodb";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import User from "../../Users/Models/User";
+import Service from "../../Database/Service";
 
 
-export default interface Provider {
-    connection:mongoose.Connection;
-    urlPrefix:string;
-    url:string;
-    databaseName:string;
-    model:any;
+export class PersonnesProvider implements Provider {
 
-    connect():Promise<mongoose.Connection|null>;
-    getInstance():Provider|null;
-}
+    private _connection:mongoose.Connection;
+    private _service:Service;
+    private _model:any;
 
-export class BaseProvider implements Provider {
+    private _urlPrefix:string;
+    private _url:string;
+    private _databaseName:string;
 
-    protected _connection:mongoose.Connection;
-    protected _model:any;
-    protected _service:Service;
+    private _singleton:PersonnesProvider;
 
-    protected _urlPrefix:string;
-    protected _url:string;
-    protected _databaseName:string;
+    constructor(name='personnes') {
+        this.databaseName = name;
+        this.urlPrefix = "mongodb";
+    }
 
-
-    constructor(name='') {
-        if (name !== "") {
-            this.databaseName = name;
+    public getInstance():PersonnesProvider {
+        if (this._singleton === null) {
+            this._singleton = new PersonnesProvider(config.db.name);
         }
+        return this._singleton;
     }
 
     public async connect():Promise<mongoose.Connection|null> {
-
-        LogHelper.log(this.url);
         try {
             this.connection = await mongoose.createConnection(this.url, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
             } as ConnectOptions);
 
+            User.connection = this.connection;
+            this.model = User.getInstance();
+
             return this.connection;
         }
         catch (error:any) {
-            LogHelper.error("Can't connect to db in UsersProvider");
+            LogHelper.error("Can't connect to db in PersonnesProvider");
         }
-        return null;
-    }
-
-    public getInstance(): Provider|null {
-        //to overwrite.
         return null;
     }
 
@@ -59,11 +53,11 @@ export class BaseProvider implements Provider {
     //  GETTER / SETTER
 
 
-    public get connection():any {
-        return this._connection;
+    public get model():any {
+        return this._model;
     }
-    public set connection(connection) {
-        this._connection = connection;
+    public set model(model) {
+        this._model = model;
     }
 
 
@@ -75,11 +69,11 @@ export class BaseProvider implements Provider {
     }
 
 
-    public get model():any {
-        return this._model;
+    public get connection():any {
+        return this._connection;
     }
-    public set model(model) {
-        this._model = model;
+    public set connection(connection) {
+        this._connection = connection;
     }
 
 
@@ -90,22 +84,23 @@ export class BaseProvider implements Provider {
         this._urlPrefix = urlPrefix;
     }
 
+
     public get url():string {
         if (this._url === '' || this._url === undefined) {
             this.url = `${this.urlPrefix}://${config.db.host}:${config.db.port}/${this._databaseName}`;
         }
         return this._url;
     }
-
     public set url(url) {
         this._url = url;
     }
 
+
     public get databaseName() {
         return this._databaseName;
     }
-
     public set databaseName(name) {
         this._databaseName = name;
     }
+
 }

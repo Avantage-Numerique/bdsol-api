@@ -6,6 +6,8 @@ import FakeUserDBDriver from "../../Database/Drivers/FakeUserDBDriver";
 import {ReasonPhrases,StatusCodes} from 'http-status-codes';
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import MongooseDBDriver from "../../Database/Drivers/MongooseDriver";
+import {UsersProvider} from "../../Database/Providers/UsersProvider";
+import Provider from "../../Database/Providers/Provider";
 
 /**
  * Manage all the serveur actions and connect the app to the ROUTE.
@@ -15,9 +17,13 @@ export default class ServerController {
     static usersTable: string = 'users';
     static usersModel: any;
     static database: DBDriver;
+    static userProvider: UsersProvider;
+    static dataProvider: Provider;
 
     server: http.Server;
     api: express.Application;
+
+    static _singleton:ServerController;
 
     /**
      * Create an instance of ServerController with the express app.
@@ -26,8 +32,21 @@ export default class ServerController {
     constructor(api: express.Application) {
         this.api = api;
         this.server = http.createServer(this.api);
-        ServerController._setDBDriver();
+
+        //this.api.serverController = this;
         LogHelper.log('Départ de la configuration du serveur pour l\'API');
+        ServerController._setDBDriver();
+    }
+
+    /**
+     * Le singleton du ServerController qu'on veut avoir seulement une instance.
+     * @param api express.Application Pour initié et associé l'application express au projet.
+     */
+    static getInstance(api:express.Application) {
+        if (ServerController._singleton === undefined) {
+            ServerController._singleton = new ServerController(api);
+        }
+        return ServerController._singleton;
     }
 
     /**
@@ -60,6 +79,7 @@ export default class ServerController {
         this.server.on("listening", this.onListening);
 
         try {
+            //
             await ServerController.database.connect();
 
         } catch(error: any) {

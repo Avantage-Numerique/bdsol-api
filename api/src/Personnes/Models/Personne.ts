@@ -1,13 +1,23 @@
 
 import mongoose from "mongoose";
-import { StringMappingType } from "typescript";
+//import { StringMappingType } from "typescript";
 //import {PersonneSchema} from "../Schemas/PersonneSchema"
 import {Schema} from "mongoose"
 import { PersonneSchema } from "../Schemas/PersonneSchema";
+import Provider from "../../Database/Providers/Provider";
+import {DataProvider} from "../../Database/Providers/DataProvider";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
+//import {UserSchema} from "../../Users/Schemas/UserSchema";
+
+
 class Personne {
     
     //Attributs static
     static modelName:string = 'Personne'
+    static collectionName:string = 'personnes';
+    static connection:mongoose.Connection;
+    static provider:Provider;
+
     static schema:Schema =
         new Schema<PersonneSchema>({
 
@@ -45,12 +55,12 @@ class Personne {
         this.prenom = prenom;
         this.surnom = surnom;
         this.description = description;
-
+        Personne.provider = DataProvider.getInstance();//must have
     }
 
     //Méthodes
     public AttributsPersonneToString(): string {
-        return `nom=${this.nom}, prenom=${this.prenom}, surnom=${this.nom}, description=${this.nom}`;
+        return `nom=${this.nom}, prenom=${this.prenom}, surnom=${this.nom}, description=${this.description}`;
     }
 
     static isNomValid(p_nom:string):boolean
@@ -75,12 +85,27 @@ class Personne {
 
 
     static initSchema() {
-        mongoose.model(Personne.modelName, Personne.schema);
+        if (Personne.providerIsSetup()) {
+            Personne.provider.connection.model(Personne.modelName, Personne.schema);
+            //mongoose.model(Personne.modelName, Personne.schema);
+        }
     }
 
-    static getInstance(){
-        Personne.initSchema();
-        return mongoose.model(Personne.modelName);
+    static getInstance() {
+
+        if (Personne.providerIsSetup()) {
+            Personne.initSchema();
+            return Personne.provider.connection.model(Personne.modelName);
+        }
+        throw new Error("Personne Provider is not setup. Can't get Personne's model");
+        //return null;
+        //Personne.initSchema();
+        //return mongoose.model(Personne.modelName);
+    }
+
+    static providerIsSetup():boolean {
+        LogHelper.log(Personne.provider, Personne.provider.connection);
+        return Personne.provider !== undefined && Personne.provider.connection !== undefined;
     }
 }
 

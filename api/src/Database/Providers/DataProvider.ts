@@ -1,60 +1,23 @@
-import mongoose from "mongoose";
+import Provider, {BaseProvider} from "./Provider";
 import config from "../../config";
-import Provider from "./Provider";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 
-export class DataProvider implements Provider {
+export class DataProvider extends BaseProvider implements Provider {
 
-    private _connection:mongoose.Connection;
-    private _urlPrefix:string;
-    private _url:string;
-    private _databaseName:string;
+    private static _singleton:DataProvider;
 
     constructor(name='data') {
-        this.databaseName = name;
+        super(name);
+        this.urlPrefix = "mongodb";
+        LogHelper.log("Data Provider instanciated");
     }
 
-    public connect():mongoose.Connection {
-        this.connection = mongoose.createConnection(this.url);
-        return this.connection;
-    }
-
-
-    //  GETTER / SETTER
-
-    public get connection():any {
-        return this._connection;
-    }
-
-    public set connection(connection) {
-        this._connection = connection;
-    }
-
-    public get urlPrefix():string {
-        return this._urlPrefix;
-    }
-
-    public set urlPrefix(urlPrefix) {
-        this._urlPrefix = urlPrefix;
-    }
-
-    public get url():string {
-        if (this._url === '') {
-            this.url = `${this.urlPrefix}://${config.db.host}:${config.db.port}/${this._databaseName}`;
+    public static getInstance():DataProvider {
+        if (DataProvider._singleton === undefined) {
+            DataProvider._singleton = new DataProvider(config.db.name);
         }
-        return this._url;
-    }
-
-    public set url(url) {
-        this._url = url;
-    }
-
-    public get databaseName() {
-        return this._databaseName;
-    }
-
-    public set databaseName(name) {
-        this._databaseName = name;
+        return DataProvider._singleton;
     }
 
 }

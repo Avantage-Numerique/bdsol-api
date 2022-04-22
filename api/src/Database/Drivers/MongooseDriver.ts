@@ -3,11 +3,10 @@ import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import DBDriver from "./DBDriver";
 import mongoose from "mongoose";
-import {ConnectOptions} from "mongodb";
 import CreateDbAndUsersMongoose from "../../Migrations/create-db-and-users-mongoose";
-import UsersService from "../../Users/Services/UsersService";
 import User from "../../Users/Models/User";
-import Provider from "../Providers/Provider";
+import {UsersProvider} from "../Providers/UsersProvider";
+import {DataProvider} from "../Providers/DataProvider";
 
 export default class MongooseDBDriver implements DBDriver {
 
@@ -15,7 +14,7 @@ export default class MongooseDBDriver implements DBDriver {
     public client: mongoDB.MongoClient | null;
     public db: mongoDB.Db | mongoose.Connection | null;//will be the provider.
     public baseUrl: string;
-    public providers: Array<Provider>;
+    public providers: any;
 
     /**
      * Constructor fo this driver. Object is created 1 time in  ServerController.
@@ -26,11 +25,14 @@ export default class MongooseDBDriver implements DBDriver {
         this.db = null;
         this.baseUrl = '';
 
-        this.providers = [];
+        this.providers = {
+            'users': UsersProvider.getInstance(),
+            'data': DataProvider.getInstance()
+        };
     }
 
     public async connect() {
-        LogHelper.log(`Connexion à la base de données mongodb ${this.getConnectionUrl()}`);
+        LogHelper.info(`Connexion aux base de données ...`);
         await this.initDb();
     }
 
@@ -38,7 +40,15 @@ export default class MongooseDBDriver implements DBDriver {
      * Method mandatory in DBDriver, to init this driver.
      */
     public async initDb() {
-        await this.initMongoose();
+        //await this.initMongoose();
+
+        LogHelper.info(`Connexion à la  base de données utilisateurs ...`);
+        await this.providers.users.connect();
+
+        LogHelper.info(`Connexion à la  base de données structurée, ouverte et liée ...`);
+        await this.providers.data.connect();
+
+        await this.generateFakeUsers();
     }
 
     /**
@@ -50,7 +60,7 @@ export default class MongooseDBDriver implements DBDriver {
             // loop throught the providers to init here.
 
             LogHelper.log(`Connecting ...`);
-            await mongoose.connect(this.getConnectionUrl(), {
+            /*await mongoose.connect(this.getConnectionUrl(), {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
             } as ConnectOptions);
@@ -58,19 +68,23 @@ export default class MongooseDBDriver implements DBDriver {
             if (this.db === null) {
                 this.db = mongoose.connection;
                 this.db.on('error', this.onDbError);
-            }
+            }*/
 
-            if (config.environnement === 'development') {
-                //will create the fake users if the collection is empty.
-                let users = new UsersService(User.getInstance());
-                let usersCollection = new CreateDbAndUsersMongoose(users);
-                await usersCollection.up();
-            }
+            await this.generateFakeUsers();
 
         } catch (error: any) {
             throw new Error(error.message);
         }
         LogHelper.log(`Moogoose a été initialisé`);
+    }
+
+    public async generateFakeUsers() {
+        if (config.environnement === 'development') {
+            //will create the fake users if the collection is empty.
+            //let users = new UsersService(User.getInstance());
+            let usersCollection = new CreateDbAndUsersMongoose(this.providers.users.service);
+            await usersCollection.up();
+        }
     }
 
     public getConnectionUrl(db:string='bdsol-users') {

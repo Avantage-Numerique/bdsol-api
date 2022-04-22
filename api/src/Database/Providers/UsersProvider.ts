@@ -1,60 +1,34 @@
 import mongoose from "mongoose";
 import config from "../../config";
-import Provider from "./Provider";
+import Provider, {BaseProvider} from "./Provider";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import User from "../../Users/Models/User";
 
 
-export class UsersProvider implements Provider{
+export class UsersProvider extends BaseProvider implements Provider {
 
-    private _connection:mongoose.Connection;
-    private _urlPrefix:string;
-    private _url:string;
-    private _databaseName:string;
+    private static _singleton:UsersProvider;
 
-    constructor(name='users') {
-        this.databaseName = name;
+    constructor(name='') {
+        super(name);
+        this.urlPrefix = "mongodb";
     }
 
-    public connect():mongoose.Connection {
-        this.connection = mongoose.createConnection(this.url);
-        return this.connection;
-    }
-
-
-    //  GETTER / SETTER
-
-    public get connection():any {
-        return this._connection;
-    }
-
-    public set connection(connection) {
-        this._connection = connection;
-    }
-
-    public get urlPrefix():string {
-        return this._urlPrefix;
-    }
-
-    public set urlPrefix(urlPrefix) {
-        this._urlPrefix = urlPrefix;
-    }
-
-    public get url():string {
-        if (this._url === '') {
-            this.url = `${this.urlPrefix}://${config.db.host}:${config.db.port}/${this._databaseName}`;
+    public static getInstance():UsersProvider|null {
+        if (UsersProvider._singleton === undefined) {
+            UsersProvider._singleton = new UsersProvider(config.users.db.name);
         }
-        return this._url;
+        return UsersProvider._singleton;
     }
 
-    public set url(url) {
-        this._url = url;
-    }
+    public async connect():Promise<mongoose.Connection|null> {
+        LogHelper.log("UserProvider Connecting to DB");
+        await super.connect();
 
-    public get databaseName() {
-        return this._databaseName;
-    }
+        User.connection = this.connection;
+        this.model = User.getInstance();
 
-    public set databaseName(name) {
-        this._databaseName = name;
+        return this.connection;
     }
 
 }
