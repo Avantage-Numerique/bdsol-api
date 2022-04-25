@@ -1,6 +1,8 @@
 import Provider, {BaseProvider} from "./Provider";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import mongoose from "mongoose";
+import Personne from "../../Personnes/Models/Personne";
 
 
 export class DataProvider extends BaseProvider implements Provider {
@@ -10,7 +12,6 @@ export class DataProvider extends BaseProvider implements Provider {
     constructor(name='data') {
         super(name);
         this.urlPrefix = "mongodb";
-        LogHelper.log("Data Provider instanciated");
     }
 
     public static getInstance():DataProvider {
@@ -18,6 +19,22 @@ export class DataProvider extends BaseProvider implements Provider {
             DataProvider._singleton = new DataProvider(config.db.name);
         }
         return DataProvider._singleton;
+    }
+
+
+    public async connect():Promise<mongoose.Connection|null> {
+        try {
+            LogHelper.log("DataProvider Connecting to DB");
+            await super.connect();
+
+            Personne.connection = this.connection;
+
+            return this.connection;
+        }
+        catch (error:any) {
+            LogHelper.error("Can't connect to db in DataProvider");
+        }
+        return null;
     }
 
 }

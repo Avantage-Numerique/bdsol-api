@@ -4,7 +4,6 @@ import ServiceResponse from "../../Database/Responses/ServiceResponse";
 import PersonneService from "../Services/PersonneService";
 import {StatusCodes} from "http-status-codes";
 import {PersonneSchema} from "../Schemas/PersonneSchema";
-import { request } from "express";
 
 class PersonneController {
 
@@ -32,7 +31,6 @@ class PersonneController {
         if (createdDocumentResponse !== undefined &&
             !createdDocumentResponse.error)
             return createdDocumentResponse;
-        
 
         return this.errorNotAcceptable('Échec de la création d\'une Personne');
     }

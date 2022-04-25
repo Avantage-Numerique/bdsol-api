@@ -28,7 +28,7 @@ export default class UserController {
         if (createdDocumentResponse !== undefined &&
             !createdDocumentResponse.error) {
 
-            return createdDocumentResponse
+            return createdDocumentResponse;
         }
 
         return this.errorNotAcceptable('Les données semblent être ok, mais la création n\'a pas eu lieu.');

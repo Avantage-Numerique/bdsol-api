@@ -48,34 +48,7 @@ export default class MongooseDBDriver implements DBDriver {
         LogHelper.info(`Connexion à la  base de données structurée, ouverte et liée ...`);
         await this.providers.data.connect();
 
-        await this.generateFakeUsers();
-    }
-
-    /**
-     * Connect mongoose to our mongodb serveur, setup error handling for it.
-     */
-    public async initMongoose() {
-        try {
-
-            // loop throught the providers to init here.
-
-            LogHelper.log(`Connecting ...`);
-            /*await mongoose.connect(this.getConnectionUrl(), {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-            } as ConnectOptions);
-
-            if (this.db === null) {
-                this.db = mongoose.connection;
-                this.db.on('error', this.onDbError);
-            }*/
-
-            await this.generateFakeUsers();
-
-        } catch (error: any) {
-            throw new Error(error.message);
-        }
-        LogHelper.log(`Moogoose a été initialisé`);
+        //await this.generateFakeUsers();
     }
 
     public async generateFakeUsers() {
@@ -87,6 +60,11 @@ export default class MongooseDBDriver implements DBDriver {
         }
     }
 
+    /**
+     * @deprecated
+     * This is was used before providers.
+     * @param db string to get the connection to mongo db.
+     */
     public getConnectionUrl(db:string='bdsol-users') {
         if (this.baseUrl === '') {
             this.baseUrl = `${this.driverPrefix}://${config.db.host}:${config.db.port}/${db}`;
