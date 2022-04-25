@@ -63,7 +63,7 @@ class Personne {
         return `nom=${this.nom}, prenom=${this.prenom}, surnom=${this.nom}, description=${this.description}`;
     }
 
-    static isNomValid(p_nom:string):boolean
+    static isNomOrPrenomValid(p_nom:string):boolean
     {
         if( p_nom === null ||
             p_nom === undefined ||
@@ -72,17 +72,6 @@ class Personne {
             return false;
         return true;
     }
-
-    static isPrenomValid(p_prenom:string):boolean
-    {
-        if( p_prenom === null ||
-            p_prenom === undefined ||
-            typeof p_prenom !== "string" || 
-            p_prenom.length < 2)
-            return false;
-        return true;
-    }
-
 
     static initSchema() {
         if (Personne.providerIsSetup()) {

@@ -15,7 +15,12 @@ class PersonneController {
         this.service = new PersonneService(Personne.getInstance());
     }
 
-    /** allo */
+    /** Méthode create permet de créer et d'insérer une nouvelle entité "Personne" dans la base de donnée à partir de la requête. 
+     * Paramètres : 
+     *      @requestData = { data: { *champs requis à la création d'une personne* } }
+     * 
+     * Retourne :
+    */
     public async create(requestData:any):Promise<ServiceResponse> {
         let messageValidate = this.validateData(requestData);
         if (!messageValidate.isValid)
@@ -33,6 +38,14 @@ class PersonneController {
     }
 
     
+    /** Méthode update permet de modifier et mettre à jour les champs d'une personne dans la base de donnée.
+     * Paramètres :
+     *      @requestData = { data:{ {id:}, {updatedValues:} } } 
+     *          @id = identifiant de la personne à modifier
+     *          @updatedValues = champs à modifier.
+     * 
+     * Retourne :
+     */
     public async update(id:string, requestData:any):Promise<ServiceResponse> {
         let messageUpdate = this.validateData(requestData);
         if (!messageUpdate.isValid)
@@ -54,6 +67,10 @@ class PersonneController {
     
     }
 
+    /** Méthode list permet d'obtenir une liste de personne à des fin d'affichage. 
+     * Paramètres : 
+     * Retourne :
+    */
     public async list():Promise<void> {
         LogHelper.log("Début de la requête d'obtention de la liste de personne");
         LogHelper.log("Réussite de la requête d'obtention de la liste");
@@ -61,6 +78,10 @@ class PersonneController {
         return;
     }
 
+    /** Méthode find permet d'effectuer une recherche afin de retourner la ou les personnes qui répondent aux critères de recherche.
+     * Paramètres : 
+     * Retourne :
+    */
     public async find():Promise<void> {
         LogHelper.log("Début de la recherche dans la liste");
         LogHelper.log("X résultat trouvé");
@@ -69,13 +90,23 @@ class PersonneController {
         return;
     }
 
+    /** Méthode delete permet d'effectuer une suppression de la fiche d'une personne dans la base de données. 
+     * Paramètres : 
+     * Retourne :
+    */
     public async delete():Promise<void> {
         LogHelper.log("Début de la suppression d'une personne");
         LogHelper.log("Réussite de la suppression d'une personne");
         LogHelper.log("Échec de la suppression d'une personne");
         return;
     }
-
+    
+    /** Méthode errorNotAcceptable écrit l'erreur dans les logs et retourne une réponse d'erreur au fureteur internet.
+     * Paramètres :
+     *      @message = erreur à mettre dans les logs (Défaut : 'Les données partagé sont erronés ou manquantes.' )
+     * 
+     * Retourne :
+     */
     public errorNotAcceptable($message:string = 'Les données partagé sont erronés ou manquantes.'):ServiceResponse {
         LogHelper.error("Échec NotAcceptable ", $message);
         return {
@@ -87,7 +118,13 @@ class PersonneController {
         } as ServiceResponse;
     }
 
-
+    /** Méthode validateData si les éléments à valider se trouve dans la requête, alors effectue la validation de ceux-ci
+     * Paramètres : 
+     * Retourne : validité et message d'erreur
+     *      @objet = { isValid: , message: }
+     *          @isValid = boolean représentant si les données sont validée
+     *          @message = message d'erreur décrivant l'échec de validité ou de réussite 
+     */
     public validateData(requestData:any): {isValid:boolean, message:string} {
 
         LogHelper.log(`Validating ${typeof requestData}`, requestData);
@@ -97,19 +134,23 @@ class PersonneController {
 
         //Validation Nom
         if(requestData.nom !== undefined){
-            if (!Personne.isNomValid(requestData.nom))
+            if (!Personne.isNomOrPrenomValid(requestData.nom))
                 return {isValid:false, message:"Le paramètre 'nom' est problématique"};
         }
 
-        //Validate prénom
+        //Validation prénom
         if(requestData.prenom !== undefined){
-            if (!Personne.isNomValid(requestData.prenom))
+            if (!Personne.isNomOrPrenomValid(requestData.prenom))
                 return {isValid:false, message:"Le paramètre 'prenom' est problématique"};
         }
 
+        //Validation terminée et réussie
         return {isValid:true, message:"OK"};          
     }
 
+    /** Méthode formatRequestDataForDocument insère dans le schéma les données de la requête.
+     * Paramètres : @requestData = { data: { champs de Personne }}
+     * Retourne : @PersonneSchema = l'interface Schéma contenant les données de la requête */
     public formatRequestDataForDocument(requestData:any) {
         return {
             nom: requestData.nom,

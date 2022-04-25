@@ -6,7 +6,12 @@ import { LoggerLevel } from "mongoose/node_modules/mongodb";
 
 const PersonneRouter = express.Router();
 
-//POST UPDATE une personne
+/**POST UPDATE : Demande la mise à jour des données d'une personne de la base de données.
+ * Paramètre : 
+ *      @req : req.body contient { data: { { id: }, { updatedValues: } } }
+ * 
+ * Retourne :
+ */
 PersonneRouter.post('/update', async (req, res) => {
     let {data} = req.body;
     try{
@@ -22,7 +27,12 @@ PersonneRouter.post('/update', async (req, res) => {
     return res.status(response.code).send(response);
 })
 
-//POST CREATE new personne
+/**POST CREATE : Demande la création d'une personne dans la base de données
+ * Paramètre :
+ *      @req : req.body contient { data: { *champs requit à la création d'une personne* }}
+ * 
+ * Retourne : 
+ */
 PersonneRouter.post('/create', async (req, res) => {
     let {data} = req.body;
     LogHelper.log("Create Personne route for ", data);
