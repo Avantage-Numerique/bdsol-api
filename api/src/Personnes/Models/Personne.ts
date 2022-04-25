@@ -1,23 +1,26 @@
 
 import mongoose from "mongoose";
-//import { StringMappingType } from "typescript";
-//import {PersonneSchema} from "../Schemas/PersonneSchema"
 import {Schema} from "mongoose"
 import { PersonneSchema } from "../Schemas/PersonneSchema";
 import Provider from "../../Database/Providers/Provider";
 import {DataProvider} from "../../Database/Providers/DataProvider";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-//import {UserSchema} from "../../Users/Schemas/UserSchema";
 
 
 class Personne {
     
-    //Attributs static
+    /** @static Nom du modèle */
     static modelName:string = 'Personne'
+
+    /** @static Nom de la collection dans la base de donnée */
     static collectionName:string = 'personnes';
+
+    /** @static Connection mongoose */
     static connection:mongoose.Connection;
+
     static provider:Provider;
 
+    /** @static Schéma pour la base de donnée */
     static schema:Schema =
         new Schema<PersonneSchema>({
 
@@ -31,15 +34,20 @@ class Personne {
                 timestamps: true
         });
 
-    //Attributs
-    //public _id:mongoose.Types.ObjectId;
+    /** @public Nom de famille de la personne */
     public nom:string;
+
+    /** @public Prenom de la personne */
     public prenom:string;
+
+    /** @public Surnom de la personne */
     public surnom:string;
+
+    /** @public Description de la personne (biographie) */
     public description:string;
     
     
-    //Constructeur
+    /** @constructor */
     constructor (nom:string, prenom:string, surnom:string, description:string)
     {
         /*
@@ -58,11 +66,21 @@ class Personne {
         Personne.provider = DataProvider.getInstance();//must have
     }
 
-    //Méthodes
+
+    /**
+     * @method AttributsPersonneToString Revoie les attributs de la personne en string
+     * @return {string} concaténation "@attribut=@value"
+     */
     public AttributsPersonneToString(): string {
         return `nom=${this.nom}, prenom=${this.prenom}, surnom=${this.nom}, description=${this.description}`;
     }
 
+    
+    /**
+     * @method isNomOrPrenomValid Vérifie les conditions d'insertion dans la base de donnée d'un nom ou d'un prénom.
+     * @param {string} nomOuPrenom - Nom ou prénom à valider
+     * @return {boolean} isValid
+     */
     static isNomOrPrenomValid(p_nom:string):boolean
     {
         if( p_nom === null ||
@@ -73,6 +91,11 @@ class Personne {
         return true;
     }
 
+
+    /**
+     * @static method
+     * @method initSchema
+     */
     static initSchema() {
         if (Personne.providerIsSetup()) {
             Personne.provider.connection.model(Personne.modelName, Personne.schema);
@@ -80,6 +103,11 @@ class Personne {
         }
     }
 
+
+    /**
+     * @static method
+     * @method getInstance
+     */
     static getInstance() {
 
         if (Personne.providerIsSetup()) {
@@ -92,6 +120,12 @@ class Personne {
         //return mongoose.model(Personne.modelName);
     }
 
+
+    /**
+     * @static method
+     * @method providerIsSetup
+     * @return {boolean} isSetup
+     */
     static providerIsSetup():boolean {
         LogHelper.log(Personne.provider, Personne.provider.connection);
         return Personne.provider !== undefined && Personne.provider.connection !== undefined;

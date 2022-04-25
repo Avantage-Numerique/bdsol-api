@@ -26,13 +26,19 @@ export default class LogHelper
         LogHelper.finalLog('debug', args);
     }
 
-
+    /** 
+     *  @method finalLog applique des styles aux logs, les affiche et les inscrit dans un fichier log.
+     *  @desc Explains syntax
+     *  @see {@link https://simplernerd.com/js-console-colors/}
+     *  @desc Explains supported specifier that converts "%" to types (string/json...)
+     *  @see {@link https://www.geeksforgeeks.org/node-js-util-format-method/} 
+     *  @desc Other usefull doc
+     *  @see {@link https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color}
+     */
     public static finalLog(consoleMethod:string, toLog: any[]) {
         if (LogHelper.printToConsole) {
 
-            /*https://simplernerd.com/js-console-colors/
-            https://www.geeksforgeeks.org/node-js-util-format-method/
-
+            /*
                \x1b            [          97        ;      4             m               %   s 
               EscChar      start func    style    add2nd style       func name     1stparam.ToString  
             
@@ -74,5 +80,3 @@ export default class LogHelper
         return args;
     }
 }
-//red color console : https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color
-//console.log('\x1b[36m', 'sometext' ,'\x1b[0m');

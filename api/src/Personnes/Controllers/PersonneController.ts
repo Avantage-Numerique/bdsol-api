@@ -4,22 +4,28 @@ import ServiceResponse from "../../Database/Responses/ServiceResponse";
 import PersonneService from "../Services/PersonneService";
 import {StatusCodes} from "http-status-codes";
 import {PersonneSchema} from "../Schemas/PersonneSchema";
-import { request } from "express";
 
 class PersonneController {
 
     // Service attribute + constructeur userservice user. getinstance()
+
+    /** @public PersonneService */
     public service:PersonneService;
 
+    /** @constructor */
     constructor(){
         this.service = new PersonneService(Personne.getInstance());
     }
 
-    /** Méthode create permet de créer et d'insérer une nouvelle entité "Personne" dans la base de donnée à partir de la requête. 
+
+    /**
+     * @method create permet de créer et d'insérer une nouvelle entité "Personne" dans la base de donnée à partir de la requête.
+     * 
      * Paramètres : 
-     *      @requestData = { data: { *champs requis à la création d'une personne* } }
+     *      @param {liste} requestData - attributs requis à la création d'une personne
      * 
      * Retourne :
+     *      @return {ServiceResponse}
     */
     public async create(requestData:any):Promise<ServiceResponse> {
         let messageValidate = this.validateData(requestData);
@@ -38,13 +44,15 @@ class PersonneController {
     }
 
     
-    /** Méthode update permet de modifier et mettre à jour les champs d'une personne dans la base de donnée.
+    /** 
+     * @method update permet de modifier et mettre à jour les attributs d'une personne dans la base de donnée.
+     * 
      * Paramètres :
-     *      @requestData = { data:{ {id:}, {updatedValues:} } } 
-     *          @id = identifiant de la personne à modifier
-     *          @updatedValues = champs à modifier.
+     *      @param {string} id - identifiant de la personne à modifier. (provient de data:id)
+     *      @param {liste} requestData - attributs à modifier. (provient de data:updatedValues)
      * 
      * Retourne :
+     *      @return {ServiceResponse} 
      */
     public async update(id:string, requestData:any):Promise<ServiceResponse> {
         let messageUpdate = this.validateData(requestData);
@@ -67,9 +75,15 @@ class PersonneController {
     
     }
 
-    /** Méthode list permet d'obtenir une liste de personne à des fin d'affichage. 
+
+    /**
+     * @method list permet d'obtenir une liste de personne.
+     * 
      * Paramètres : 
-     * Retourne :
+     *      @param {type}
+     * 
+     * Retourne : 
+     *      @return 
     */
     public async list():Promise<void> {
         LogHelper.log("Début de la requête d'obtention de la liste de personne");
@@ -78,10 +92,16 @@ class PersonneController {
         return;
     }
 
-    /** Méthode find permet d'effectuer une recherche afin de retourner la ou les personnes qui répondent aux critères de recherche.
+    /**
+     * @method find permet d'effectuer une recherche afin de retourner la ou les personnes qui répondent aux critères de recherche.
+     * 
      * Paramètres : 
-     * Retourne :
+     *      @param {type}
+     * 
+     * Retourne : 
+     *      @return 
     */
+
     public async find():Promise<void> {
         LogHelper.log("Début de la recherche dans la liste");
         LogHelper.log("X résultat trouvé");
@@ -90,9 +110,14 @@ class PersonneController {
         return;
     }
 
-    /** Méthode delete permet d'effectuer une suppression de la fiche d'une personne dans la base de données. 
+    /**
+     * @method delete permet d'effectuer une suppression de la fiche d'une personne dans la base de données.
+     * 
      * Paramètres : 
-     * Retourne :
+     *      @param 
+     * 
+     * Retourne : 
+     *      @return 
     */
     public async delete():Promise<void> {
         LogHelper.log("Début de la suppression d'une personne");
@@ -100,12 +125,16 @@ class PersonneController {
         LogHelper.log("Échec de la suppression d'une personne");
         return;
     }
+
     
-    /** Méthode errorNotAcceptable écrit l'erreur dans les logs et retourne une réponse d'erreur au fureteur internet.
+    /** 
+     * @method errorNotAcceptable log erreur $message et retourne une réponse d'erreur au fureteur internet.
+     * 
      * Paramètres :
-     *      @message = erreur à mettre dans les logs (Défaut : 'Les données partagé sont erronés ou manquantes.' )
+     *      @param {string} $message - erreur à mettre dans les logs @default 'Les données partagé sont erronés ou manquantes.'
      * 
      * Retourne :
+     *      @returns {ServiceResponse}
      */
     public errorNotAcceptable($message:string = 'Les données partagé sont erronés ou manquantes.'):ServiceResponse {
         LogHelper.error("Échec NotAcceptable ", $message);
@@ -118,12 +147,17 @@ class PersonneController {
         } as ServiceResponse;
     }
 
-    /** Méthode validateData si les éléments à valider se trouve dans la requête, alors effectue la validation de ceux-ci
-     * Paramètres : 
+
+    /**
+     * @method validateData valide les éléments pour l'entitée Personne s'ils sont présent.
+     * 
+     * Paramètres :
+     *      @param {liste} requestData - attributs de personne à valider
+     * 
      * Retourne : validité et message d'erreur
-     *      @objet = { isValid: , message: }
-     *          @isValid = boolean représentant si les données sont validée
-     *          @message = message d'erreur décrivant l'échec de validité ou de réussite 
+     *      @return {objet} { isValid, message } :
+     *          @desc isValid (boolean): représentant si les données sont validée
+     *          @desc message (string) : décrivant l'échec ou réussite de la validation 
      */
     public validateData(requestData:any): {isValid:boolean, message:string} {
 
@@ -148,9 +182,16 @@ class PersonneController {
         return {isValid:true, message:"OK"};          
     }
 
-    /** Méthode formatRequestDataForDocument insère dans le schéma les données de la requête.
-     * Paramètres : @requestData = { data: { champs de Personne }}
-     * Retourne : @PersonneSchema = l'interface Schéma contenant les données de la requête */
+
+    /** 
+     * @method formatRequestDataForDocument insère dans le schéma les données de la requête.
+     * 
+     * Paramètres :
+     *      @param {liste} requestData - attributs de Personne
+     * 
+     * Retourne :
+     *      @return {PersonneSchema} l'interface Schéma contenant les données de la requête
+     */
     public formatRequestDataForDocument(requestData:any) {
         return {
             nom: requestData.nom,
@@ -159,8 +200,6 @@ class PersonneController {
             description: requestData.description
         } as PersonneSchema;
     }
-
-
 
 }
 

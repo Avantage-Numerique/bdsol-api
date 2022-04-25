@@ -6,11 +6,17 @@ import { LoggerLevel } from "mongoose/node_modules/mongodb";
 
 const PersonneRouter = express.Router();
 
-/**POST UPDATE : Demande la mise à jour des données d'une personne de la base de données.
+
+/**
+ * @method POST/UPDATE Demande la mise à jour des données d'une personne de la base de données.
+ * 
  * Paramètre : 
- *      @req : req.body contient { data: { { id: }, { updatedValues: } } }
+ *      @param {objet} req - req.body contient { data: { { id: }, { updatedValues: } } }
+ *          @desc id (string) - identifiant de la personne à modifier
+ *          @desc updatedValues (liste) - attributs à modifier
  * 
  * Retourne :
+ *      @return
  */
 PersonneRouter.post('/update', async (req, res) => {
     let {data} = req.body;
@@ -27,11 +33,14 @@ PersonneRouter.post('/update', async (req, res) => {
     return res.status(response.code).send(response);
 })
 
-/**POST CREATE : Demande la création d'une personne dans la base de données
- * Paramètre :
- *      @req : req.body contient { data: { *champs requit à la création d'une personne* }}
+/**
+ * @method POST/CREATE : Demande la création d'une personne dans la base de données
  * 
- * Retourne : 
+ * Paramètre :
+ *      @param {objet} req : req.body contient { data: { *champs requit à la création d'une personne* }}
+ * 
+ * Retourne :
+ *      @return 
  */
 PersonneRouter.post('/create', async (req, res) => {
     let {data} = req.body;
@@ -42,7 +51,9 @@ PersonneRouter.post('/create', async (req, res) => {
 });
 
 
-//POST FIND une personne dans la liste
+/**
+ * @method POST/FIND trouve une personne dans la liste
+ * @todo */
 PersonneRouter.post('/find', async (req, res) => {
     LogHelper.log("Demande de recherche dans la liste de personnes");
     LogHelper.log("FIND not implemented");
@@ -53,7 +64,9 @@ PersonneRouter.post('/find', async (req, res) => {
     //return
 });
 
-//POST READ/LIST des personnes
+/**
+ * @method POST/READ/LIST trouve une personne dans la liste
+ * @todo */
 PersonneRouter.post('/list', async (req, res) => {
     LogHelper.log("Demande d'accès à la liste de personnes");
     LogHelper.log("READ/LIST not implemented");
@@ -65,8 +78,10 @@ PersonneRouter.post('/list', async (req, res) => {
 })
 
 
-//POST-->Delete http? Delete une personne
-PersonneRouter.delete('/delete', async (req, res) => {
+/**
+ * @method POST/DELETE trouve une personne dans la liste
+ * @todo */
+PersonneRouter.post('/delete', async (req, res) => {
     LogHelper.log("Demande de suppression d'une personne");
     LogHelper.log("DELETE not implemented");
     return;
