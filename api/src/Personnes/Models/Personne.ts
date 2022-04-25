@@ -63,6 +63,16 @@ class Personne {
         return `nom=${this.nom}, prenom=${this.prenom}, surnom=${this.nom}, description=${this.description}`;
     }
 
+    static isNomOrPrenomValid(p_nom:string):boolean
+    {
+        if( p_nom === null ||
+            p_nom === undefined ||
+            typeof p_nom !== "string" || 
+            p_nom.length < 2)
+            return false;
+        return true;
+    }
+
     static initSchema() {
         if (Personne.providerIsSetup()) {
             Personne.provider.connection.model(Personne.modelName, Personne.schema);

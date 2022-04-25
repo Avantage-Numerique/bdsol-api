@@ -6,23 +6,36 @@ import { LoggerLevel } from "mongoose/node_modules/mongodb";
 
 const PersonneRouter = express.Router();
 
-//POST UPDATE une personne
+/**POST UPDATE : Demande la mise à jour des données d'une personne de la base de données.
+ * Paramètre : 
+ *      @req : req.body contient { data: { { id: }, { updatedValues: } } }
+ * 
+ * Retourne :
+ */
 PersonneRouter.post('/update', async (req, res) => {
     let {data} = req.body;
+    try{
     LogHelper.log(`Update Personne route for ${data.id}`);
+    }
+    catch(e){
+        LogHelper.error("Update échouée");
+        LogHelper.debug("id manquant? req.body :", req.body);
+        return;//Retourner un status?
+    }
     const controller = new PersonneController();
     const response = await controller.update(data.id, data.updatedValues);
-    //return
+    return res.status(response.code).send(response);
 })
 
-//POST CREATE new personne
+/**POST CREATE : Demande la création d'une personne dans la base de données
+ * Paramètre :
+ *      @req : req.body contient { data: { *champs requit à la création d'une personne* }}
+ * 
+ * Retourne : 
+ */
 PersonneRouter.post('/create', async (req, res) => {
-    LogHelper.log(req.body);
-    LogHelper.log(req);
-    let {nom, prenom, surnom, description} = req.body;
-    LogHelper.log(nom, prenom, surnom, description);
     let {data} = req.body;
-    LogHelper.log(`Create Personne route for ${data}`);
+    LogHelper.log("Create Personne route for ", data);
     const controller = new PersonneController();
     const response:any = await controller.create(data);
     return res.status(response.code).send(response);
