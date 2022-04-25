@@ -43,7 +43,8 @@ class Service {
                 error: true,
                 code: StatusCodes.INTERNAL_SERVER_ERROR,
                 message: getAllErrors.errmsg || "Not able to get the queried items",
-                errors: getAllErrors.errors
+                errors: getAllErrors.errors,
+                data: {}
             };
         }
     }

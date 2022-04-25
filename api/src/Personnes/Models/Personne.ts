@@ -4,7 +4,8 @@ import {Schema} from "mongoose"
 import { PersonneSchema } from "../Schemas/PersonneSchema";
 import Provider from "../../Database/Providers/Provider";
 import {DataProvider} from "../../Database/Providers/DataProvider";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
+//import LogHelper from "../../Monitoring/Helpers/LogHelper";
+//import {UserSchema} from "../../Users/Schemas/UserSchema";
 
 
 class Personne {
@@ -63,7 +64,6 @@ class Personne {
         this.prenom = prenom;
         this.surnom = surnom;
         this.description = description;
-        Personne.provider = DataProvider.getInstance();//must have
     }
 
 
@@ -83,12 +83,12 @@ class Personne {
      */
     static isNomOrPrenomValid(p_nom:string):boolean
     {
-        if( p_nom === null ||
+        //typeof p_nom !== "string" || // ça va toujours être
+        // Mon IDE propose ceci : C'est assez lisible, tu en pense quoi @fred ?
+        return !(p_nom === null ||
             p_nom === undefined ||
-            typeof p_nom !== "string" || 
-            p_nom.length < 2)
-            return false;
-        return true;
+            p_nom.length < 2);
+
     }
 
 
@@ -97,9 +97,9 @@ class Personne {
      * @method initSchema
      */
     static initSchema() {
+
         if (Personne.providerIsSetup()) {
             Personne.provider.connection.model(Personne.modelName, Personne.schema);
-            //mongoose.model(Personne.modelName, Personne.schema);
         }
     }
 
@@ -110,14 +110,12 @@ class Personne {
      */
     static getInstance() {
 
+        Personne.provider = DataProvider.getInstance();//must have
         if (Personne.providerIsSetup()) {
             Personne.initSchema();
             return Personne.provider.connection.model(Personne.modelName);
         }
         throw new Error("Personne Provider is not setup. Can't get Personne's model");
-        //return null;
-        //Personne.initSchema();
-        //return mongoose.model(Personne.modelName);
     }
 
 
@@ -127,7 +125,6 @@ class Personne {
      * @return {boolean} isSetup
      */
     static providerIsSetup():boolean {
-        LogHelper.log(Personne.provider, Personne.provider.connection);
         return Personne.provider !== undefined && Personne.provider.connection !== undefined;
     }
 }

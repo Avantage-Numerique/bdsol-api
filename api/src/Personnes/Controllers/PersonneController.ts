@@ -38,7 +38,6 @@ class PersonneController {
         if (createdDocumentResponse !== undefined &&
             !createdDocumentResponse.error)
             return createdDocumentResponse;
-        
 
         return this.errorNotAcceptable('Échec de la création d\'une Personne');
     }

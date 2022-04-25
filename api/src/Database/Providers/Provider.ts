@@ -10,7 +10,6 @@ export default interface Provider {
     urlPrefix:string;
     url:string;
     databaseName:string;
-    model:any;
 
     connect():Promise<mongoose.Connection|null>;
     getInstance():Provider|null;
@@ -19,7 +18,6 @@ export default interface Provider {
 export class BaseProvider implements Provider {
 
     protected _connection:mongoose.Connection;
-    protected _model:any;
     protected _service:Service;
 
     protected _urlPrefix:string;
@@ -58,7 +56,6 @@ export class BaseProvider implements Provider {
 
     //  GETTER / SETTER
 
-
     public get connection():any {
         return this._connection;
     }
@@ -75,20 +72,13 @@ export class BaseProvider implements Provider {
     }
 
 
-    public get model():any {
-        return this._model;
-    }
-    public set model(model) {
-        this._model = model;
-    }
-
-
     public get urlPrefix():string {
         return this._urlPrefix;
     }
     public set urlPrefix(urlPrefix) {
         this._urlPrefix = urlPrefix;
     }
+
 
     public get url():string {
         if (this._url === '' || this._url === undefined) {

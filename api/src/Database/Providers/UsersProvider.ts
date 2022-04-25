@@ -26,9 +26,7 @@ export class UsersProvider extends BaseProvider implements Provider {
         await super.connect();
 
         User.connection = this.connection;
-        this.model = User.getInstance();
 
         return this.connection;
     }
-
 }

@@ -36,10 +36,13 @@ class AuthentificationController
                 error: false,
                 userConnectedToken: userConnectedToken,
                 code: StatusCodes.OK,
+                errors: [],
                 message: 'OK',
-                fields: {
-                    username: true,
-                    password: true
+                data: {
+                    fields: {
+                        username: true,
+                        password: true
+                    }
                 }
             };
         }
@@ -48,15 +51,18 @@ class AuthentificationController
             error: true,
             userConnectedToken: undefined,
             code: StatusCodes.UNAUTHORIZED,
+            errors: [],
             message: 'Vos informations de connexion sont incorrectes, vérifiez votre utilisateur et mot de passe.',
-            fields: {
-                username: {
-                    status: false,
-                    message: ''
-                },
-                password:  {
-                    status: false,
-                    message: ''
+            data: {
+                fields: {
+                    username: {
+                        status: false,
+                        message: ''
+                    },
+                    password:  {
+                        status: false,
+                        message: ''
+                    }
                 }
             }
         };
@@ -67,8 +73,10 @@ class AuthentificationController
         return {
             error: false,
             user: username,
+            errors: [],
             code: StatusCodes.OK,
-            message: `L'utilisateur ${username} a été déconnecté avec succès.`
+            message: `L'utilisateur ${username} a été déconnecté avec succès.`,
+            data: {}
         };
     }
 
