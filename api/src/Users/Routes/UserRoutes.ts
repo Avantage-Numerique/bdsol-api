@@ -14,6 +14,7 @@ const UserRouter = express.Router();
 UserRouter.post('/update', async (req, res) => {
     let {data} = req.body;
     LogHelper.log(`Update request on users route with this data : ${data}`);
+    //await ajoute avant le try.
     try {
         LogHelper.log(`Update user id : ${data.id}`);
         const controller = new UserController();
@@ -21,12 +22,12 @@ UserRouter.post('/update', async (req, res) => {
         return res.status(response.code).send(response);
 
     } catch (errors:any) {
-        return {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
             error: true,
             code: StatusCodes.INTERNAL_SERVER_ERROR,
-            message: errors.errmsg || "Not able to get the queried items",
+            message: errors.errmsg || "Not able to update the queried items",
             errors: errors.errors
-        };
+        });
     }
 });
 

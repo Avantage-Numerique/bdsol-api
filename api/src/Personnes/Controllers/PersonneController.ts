@@ -29,7 +29,11 @@ class PersonneController {
         return this.errorNotAcceptable('Les données semblent être ok, mais la création n\'a pas eu lieu.');
     }
 
-    
+    /**
+     *
+     * @param id
+     * @param requestData
+     */
     public async update(id:string, requestData:any):Promise<ServiceResponse> {
 
         if (!this.validateData(requestData)) {
