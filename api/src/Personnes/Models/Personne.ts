@@ -1,4 +1,3 @@
-
 import mongoose from "mongoose";
 import {Schema} from "mongoose"
 import { PersonneSchema } from "../Schemas/PersonneSchema";
@@ -34,17 +33,11 @@ class Personne {
     
     /**
      * @method isNomOrPrenomValid Vérifie les conditions d'insertion dans la base de donnée d'un nom ou d'un prénom.
-     * @param {string} nomOuPrenom - Nom ou prénom à valider
+     * @param {string} nom - Nom ou prénom à valider
      * @return {boolean} isValid
      */
-    static isNomOrPrenomValid(p_nom:string):boolean
-    {
-        //typeof p_nom !== "string" || // ça va toujours être
-        // Mon IDE propose ceci : C'est assez lisible, tu en pense quoi @fred ?
-        return !(p_nom === null ||
-            p_nom === undefined ||
-            p_nom.length < 2);
-
+    static isNomOrPrenomValid(nom:string):boolean {
+        return (typeof nom === "string" && nom.length >= 2);
     }
 
     /**
@@ -52,7 +45,6 @@ class Personne {
      * @method initSchema
      */
     static initSchema() {
-
         if (Personne.providerIsSetup()) {
             Personne.provider.connection.model(Personne.modelName, Personne.schema);
         }
@@ -63,7 +55,6 @@ class Personne {
      * @method getInstance
      */
     static getInstance() {
-
         Personne.provider = DataProvider.getInstance();//must have
         if (Personne.providerIsSetup()) {
             Personne.initSchema();
@@ -81,5 +72,4 @@ class Personne {
         return Personne.provider !== undefined && Personne.provider.connection !== undefined;
     }
 }
-
 export default Personne;

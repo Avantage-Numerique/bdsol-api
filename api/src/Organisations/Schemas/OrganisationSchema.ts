@@ -1,4 +1,4 @@
-import {Schema, Document} from "mongoose"
+import {Document} from "mongoose"
 
 export interface OrganisationSchema extends Document {
     nom:string;

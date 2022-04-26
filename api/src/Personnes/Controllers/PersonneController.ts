@@ -7,8 +7,6 @@ import {PersonneSchema} from "../Schemas/PersonneSchema";
 
 class PersonneController {
 
-    // Service attribute + constructeur userservice user. getinstance()
-
     /** @public PersonneService */
     public service:PersonneService;
 
@@ -53,14 +51,15 @@ class PersonneController {
      *      @return {ServiceResponse} 
      */
     public async update(requestData:any):Promise<ServiceResponse> {
-        let messageUpdate = this.validateData(requestData);
-        //Validation des données
-        if (!messageUpdate.isValid)
-            return this.errorNotAcceptable(messageUpdate.message);
-
+        
         //Validation ID
         if (requestData.id === undefined)
-            return this.errorNotAcceptable("Aucun no. d'identification fournit");
+        return this.errorNotAcceptable("Aucun no. d'identification fournit");
+        
+        //Validation des données
+        let messageUpdate = this.validateData(requestData);
+        if (!messageUpdate.isValid)
+            return this.errorNotAcceptable(messageUpdate.message);
 
         let formatedData = this.formatRequestDataForDocument(requestData);
         let updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
