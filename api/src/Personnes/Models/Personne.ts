@@ -11,7 +11,7 @@ import {DataProvider} from "../../Database/Providers/DataProvider";
 class Personne {
     
     /** @static Nom du modèle */
-    static modelName:string = 'Personne'
+    static modelName:string = 'Personne';
 
     /** @static Nom de la collection dans la base de donnée */
     static collectionName:string = 'personnes';

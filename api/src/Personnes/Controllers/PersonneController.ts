@@ -13,7 +13,7 @@ class PersonneController {
     public service:PersonneService;
 
     /** @constructor */
-    constructor(){
+    constructor() {
         this.service = new PersonneService(Personne.getInstance());
     }
 
@@ -77,7 +77,7 @@ class PersonneController {
 
     /**
      * @method list permet d'obtenir une liste de personne.
-     * 
+     * @todo
      * Paramètres : 
      *      @param {type}
      * 
@@ -93,7 +93,7 @@ class PersonneController {
 
     /**
      * @method find permet d'effectuer une recherche afin de retourner la ou les personnes qui répondent aux critères de recherche.
-     * 
+     * @todo
      * Paramètres : 
      *      @param {type}
      * 
@@ -111,7 +111,7 @@ class PersonneController {
 
     /**
      * @method delete permet d'effectuer une suppression de la fiche d'une personne dans la base de données.
-     * 
+     * @todo
      * Paramètres : 
      *      @param 
      * 
