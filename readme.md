@@ -69,44 +69,7 @@ Pour gérer mieux les erreurs HTTP : voir : https://www.npmjs.com/package/http-s
 
 ### Documentation des retours d'erreurs des points de terminaison à l'API (endpoints)
 
-#### Pour `/login`
-
-Code : **200** : lorsque les informations sont OK
-
-```json
-{
-  "error": false,
-  "userConnectedToken": "theJWTTOKEN signed",
-  "code": 200,
-  "message": "OK",
-  "fields": {
-    "username": true,
-    "password": true
-  }
-}
-```
-
-
-Code : **401** : lorsque les informations ne sont pas OK.
-
-```json
-{
-  "error": true,
-  "userConnectedToken": null,
-  "code": 401,
-  "message": "Vos informations de connexion sont incorrectes, vérifiez votre utilisateur et mot de passe.",
-  "fields": {
-    "username": {
-      "status": false,
-      "message": ""
-    },
-    "password": {
-      "status": false,
-      "message": ""
-    }
-  }
-}
-```
+[Voir la documentation des URI définis.](api/doc/documentation-api.md)
 
 ### Début du travail pour les point de terminaison CRUD
 
