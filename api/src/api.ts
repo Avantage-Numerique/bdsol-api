@@ -4,6 +4,7 @@ import HealthCheckRouter from "./Healthcheck/Routes/HealthCheckRoutes";
 import AuthentificationRouter from "./Authentification/Routes/AuthentificationRoutes";
 import UserRoutes from "./Users/Routes/UserRoutes";
 import PersonneRouter from './Personnes/Routes/PersonneRoutes';
+import OrganisationRouter from './Organisations/Routes/OrganisationRoutes'
 
 
 /**
@@ -53,6 +54,9 @@ class Api {
 
         //Personnes Routes
         this.express.use("/personne", PersonneRouter);
+
+        //Organisation Routes
+        this.express.use("/organisations", OrganisationRouter);
     }
 }
 
