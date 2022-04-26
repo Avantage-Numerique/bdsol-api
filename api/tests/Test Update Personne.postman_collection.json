@@ -1,0 +1,261 @@
+{
+	"info": {
+		"_postman_id": "2f72fbd5-d33f-423d-9a6b-a90d0f133e66",
+		"name": "Test Update Personne",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1-TestUpdateP1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\":{\r\n        \"id\":\"6266e36346731552d989797e\",\r\n        \"nom\":\"Richard\",\r\n        \"prenom\":\"Jean-Marcel\",\r\n        \"surnom\":\"Rickette\",\r\n        \"description\":\"Humour noir\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/personne/update",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"personne",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2-TestUpdateP1 (NoNom)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\":{\r\n        \"id\":\"6266e36346731552d989797e\",\r\n        \"prenom\":\"Jean-Marcel\",\r\n        \"surnom\":\"Bickette\",\r\n        \"description\":\"Humour Blanc\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/personne/update",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"personne",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3-TestUpdateP1 (NoPrenom)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\":{\r\n        \"id\":\"6266e36346731552d989797e\",\r\n        \"nom\":\"Winchester\",\r\n        \"surnom\":\"Lickette\",\r\n        \"description\":\"Humour turquoise\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/personne/update",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"personne",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4-TestUpdateP1 (empty nom)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\":{\r\n        \"id\":\"6266e36346731552d989797e\",\r\n        \"nom\":\"\",\r\n        \"prenom\":\"Sylvain\",\r\n        \"surnom\":\"Kickette\",\r\n        \"description\":\"Humour bleu\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/personne/update",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"personne",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5-TestUpdateP1 (empty prenom)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\":{\r\n        \"id\":\"6266e36346731552d989797e\",\r\n        \"nom\":\"Gichard\",\r\n        \"prenom\":\"\",\r\n        \"surnom\":\"Nickette\",\r\n        \"description\":\"Humour noir\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/personne/update",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"personne",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6-TestUpdateP1 (empty non Req)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\":{\r\n        \"id\":\"6266e36346731552d989797e\",\r\n        \"nom\":\"Lavallée\",\r\n        \"prenom\":\"Jean-Marcel\",\r\n        \"surnom\":\"\",\r\n        \"description\":\"\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/personne/update",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"personne",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7-TestUpdateP1 (No update data)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\":{\r\n        \"id\":\"6266e36346731552d989797e\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/personne/update",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"personne",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8-TestUpdateP1 (only prenom updatevalue)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\":{\r\n        \"id\":\"6266e36346731552d989797e\",\r\n        \"prenom\":\"Jean-Simon\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/personne/update",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"personne",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "9-TestUpdateP1 (only req in update)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\":{\r\n        \"id\":\"6266e36346731552d989797e\",\r\n        \"nom\":\"Lavallée\",\r\n        \"prenom\":\"Jean-Simone\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/personne/update",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"personne",
+						"update"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

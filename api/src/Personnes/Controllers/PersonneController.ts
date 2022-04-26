@@ -47,23 +47,23 @@ class PersonneController {
      * @method update permet de modifier et mettre à jour les attributs d'une personne dans la base de donnée.
      * 
      * Paramètres :
-     *      @param {string} id - identifiant de la personne à modifier. (provient de data:id)
-     *      @param {liste} requestData - attributs à modifier. (provient de data:updatedValues)
+     *      @param {liste} requestData - id et attributs à modifier.
      * 
      * Retourne :
      *      @return {ServiceResponse} 
      */
-    public async update(id:string, requestData:any):Promise<ServiceResponse> {
+    public async update(requestData:any):Promise<ServiceResponse> {
         let messageUpdate = this.validateData(requestData);
+        //Validation des données
         if (!messageUpdate.isValid)
             return this.errorNotAcceptable(messageUpdate.message);
 
-        if (id === undefined)
+        //Validation ID
+        if (requestData.id === undefined)
             return this.errorNotAcceptable("Aucun no. d'identification fournit");
 
         let formatedData = this.formatRequestDataForDocument(requestData);
-
-        let updatedModelResponse:any = await this.service.update(id, formatedData);
+        let updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
 
         if (updatedModelResponse !== undefined &&
             !updatedModelResponse.error)
