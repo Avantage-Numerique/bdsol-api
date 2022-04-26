@@ -37,3 +37,5 @@ OrganisationRouter.post('/update', async (req, res) => {
     const response = await controller.create(data);
     return;
 })
+
+export default OrganisationRouter;

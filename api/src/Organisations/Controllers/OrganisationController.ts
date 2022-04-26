@@ -2,9 +2,6 @@ import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import Organisation from "../Models/Organisation"
 import ServiceResponse from "../../Database/Responses/ServiceResponse";
 import OrganisationService from "../Services/OrganisationService";
-import {StatusCodes} from "http-status-codes";
-import {OrganisationSchema} from "../Schemas/OrganisationSchema";
-
 
 class OrganisationController {
 

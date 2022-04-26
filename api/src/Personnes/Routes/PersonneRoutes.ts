@@ -1,8 +1,6 @@
 import express from "express";
 import PersonneController from "../Controllers/PersonneController";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import Personne from "../Models/Personne";
-import { LoggerLevel } from "mongoose/node_modules/mongodb";
 
 const PersonneRouter = express.Router();
 
@@ -90,6 +88,5 @@ PersonneRouter.post('/delete', async (req, res) => {
     const response = await controller.delete();
     //return
 })
-
 
 export default PersonneRouter;

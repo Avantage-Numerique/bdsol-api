@@ -36,35 +36,33 @@ class Organisation {
      * @static method
      * @method initSchema
      */
-         static initSchema() {
-
-            if (Organisation.providerIsSetup()) {
-                Organisation.provider.connection.model(Organisation.modelName, Organisation.schema);
-            }
+    static initSchema() {
+        if (Organisation.providerIsSetup()) {
+            Organisation.provider.connection.model(Organisation.modelName, Organisation.schema);
         }
+    }
 
     /**
      * @static method
      * @method getInstance
      */
-         static getInstance() {
-
-            Organisation.provider = DataProvider.getInstance();//must have
-            if (Organisation.providerIsSetup()) {
-                Organisation.initSchema();
-                return Organisation.provider.connection.model(Organisation.modelName);
-            }
-            throw new Error("Organisation Provider is not setup. Can't get Organisation's model");
+    static getInstance() {
+    Organisation.provider = DataProvider.getInstance();//must have
+        if (Organisation.providerIsSetup()) {
+            Organisation.initSchema();
+            return Organisation.provider.connection.model(Organisation.modelName);
         }
+        throw new Error("Organisation Provider is not setup. Can't get Organisation's model");
+    }
 
-        /**
+    /**
      * @static method
      * @method providerIsSetup
      * @return {boolean} isSetup
      */
-         static providerIsSetup():boolean {
-            return Organisation.provider !== undefined && Organisation.provider.connection !== undefined;
-        }
+    static providerIsSetup():boolean {
+        return Organisation.provider !== undefined && Organisation.provider.connection !== undefined;
+    }
 }
 
 export default Organisation;
