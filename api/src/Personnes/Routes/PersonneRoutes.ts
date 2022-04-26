@@ -29,7 +29,7 @@ PersonneRouter.post('/update', async (req, res) => {
         return;//Retourner un status?
     }
     const controller = new PersonneController();
-    const response = await controller.update(data.id, data.updatedValues);
+    const response = await controller.update(data);
     return res.status(response.code).send(response);
 })
 
