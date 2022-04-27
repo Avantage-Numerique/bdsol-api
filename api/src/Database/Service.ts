@@ -36,7 +36,17 @@ class Service {
         try {
 
             LogHelper.log(this.model, "Get target doc with ", query);
-            return await this.model.findOne(query);
+
+            let item = await this.model.findOne(query);
+            return {
+                error: false,
+                code: StatusCodes.OK,
+                message: ReasonPhrases.OK,
+                errors: [],
+                data: {
+                    item
+                }
+            } as ServiceResponse;
 
         } catch (getAllErrors:any) {
             return {
