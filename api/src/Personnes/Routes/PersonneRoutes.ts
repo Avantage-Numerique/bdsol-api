@@ -1,11 +1,8 @@
 import express from "express";
 import PersonneController from "../Controllers/PersonneController";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import Personne from "../Models/Personne";
-import { LoggerLevel } from "mongoose/node_modules/mongodb";
 
 const PersonneRouter = express.Router();
-
 
 /**
  * @method POST/UPDATE Demande la mise à jour des données d'une personne de la base de données.
@@ -20,14 +17,7 @@ const PersonneRouter = express.Router();
  */
 PersonneRouter.post('/update', async (req, res) => {
     let {data} = req.body;
-    try{
-    LogHelper.log(`Update Personne route for ${data.id}`);
-    }
-    catch(e){
-        LogHelper.error("Update échouée");
-        LogHelper.debug("id manquant? req.body :", req.body);
-        return;//Retourner un status?
-    }
+    LogHelper.log("Update Personne route for ", data);
     const controller = new PersonneController();
     const response = await controller.update(data);
     return res.status(response.code).send(response);
@@ -50,18 +40,16 @@ PersonneRouter.post('/create', async (req, res) => {
     return res.status(response.code).send(response);
 });
 
-
 /**
- * @method POST/FIND trouve une personne dans la liste
- * @todo */
+ * @method POST/FIND trouve les personnes correspondant aux critères de recherches
+ **/
 PersonneRouter.post('/find', async (req, res) => {
-    LogHelper.log("Demande de recherche dans la liste de personnes");
-    LogHelper.log("FIND not implemented");
-    return;
-
+    let {data} = req.body;
+    LogHelper.log("Find Personne route for ", data);
     const controller = new PersonneController();
-    const response = await controller.find();
-    //return
+    const response = await controller.find(data);
+    
+    return res.status(response.code).send(response);
 });
 
 /**
@@ -72,11 +60,10 @@ PersonneRouter.post('/list', async (req, res) => {
     LogHelper.log("READ/LIST not implemented");
     return;
 
-    const controller = new PersonneController();
-    const response = await controller.list();
+    //const controller = new PersonneController();
+    //const response = await controller.list();
     //return
 })
-
 
 /**
  * @method POST/DELETE trouve une personne dans la liste
@@ -86,10 +73,9 @@ PersonneRouter.post('/delete', async (req, res) => {
     LogHelper.log("DELETE not implemented");
     return;
 
-    const controller = new PersonneController();
-    const response = await controller.delete();
+    //const controller = new PersonneController();
+    //const response = await controller.delete();
     //return
 })
-
 
 export default PersonneRouter;

@@ -1,10 +1,4 @@
-import { Timestamp } from "bson";
-import {Schema, Document} from "mongoose"
-import PersonneService from "../Services/PersonneService";
-/**
- *
- *
- */
+import {Document} from "mongoose"
 
 export interface PersonneSchema extends Document {
     nom:string;
@@ -12,19 +6,6 @@ export interface PersonneSchema extends Document {
     surnom:string;
     description:string
 }
-/*
-export const PersonneSchema = new Schema­<PersonneSchema>({
-    _id: Schema.Types.ObjectId,
-    nom: { type: String, required: true},
-    prenom: { type: String, required: true },
-    surnom: String,
-    description: String
-};
-    {
-        timestamps: true
-});
-
-*/
 
 
 

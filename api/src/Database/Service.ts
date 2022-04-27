@@ -7,7 +7,7 @@ import ServiceResponse from "./Responses/ServiceResponse";
 
 
 /**
- * Give abality to query and CRUD on collections and its document.
+ * Give ability to query and CRUD on collections and its document.
  * @param model any The
  */
 class Service {

@@ -4,16 +4,15 @@ import ServiceResponse from "../../Database/Responses/ServiceResponse";
 import PersonneService from "../Services/PersonneService";
 import {StatusCodes} from "http-status-codes";
 import {PersonneSchema} from "../Schemas/PersonneSchema";
+import mongoose from "mongoose";
 
 class PersonneController {
-
-    // Service attribute + constructeur userservice user. getinstance()
 
     /** @public PersonneService */
     public service:PersonneService;
 
     /** @constructor */
-    constructor(){
+    constructor() {
         this.service = new PersonneService(Personne.getInstance());
     }
 
@@ -53,14 +52,15 @@ class PersonneController {
      *      @return {ServiceResponse} 
      */
     public async update(requestData:any):Promise<ServiceResponse> {
-        let messageUpdate = this.validateData(requestData);
-        //Validation des données
-        if (!messageUpdate.isValid)
-            return this.errorNotAcceptable(messageUpdate.message);
 
         //Validation ID
         if (requestData.id === undefined)
-            return this.errorNotAcceptable("Aucun no. d'identification fournit");
+        return this.errorNotAcceptable("Aucun no. d'identification fournit");
+        
+        //Validation des données
+        let messageUpdate = this.validateData(requestData);
+        if (!messageUpdate.isValid)
+            return this.errorNotAcceptable(messageUpdate.message);
 
         let formatedData = this.formatRequestDataForDocument(requestData);
         let updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
@@ -77,7 +77,7 @@ class PersonneController {
 
     /**
      * @method list permet d'obtenir une liste de personne.
-     * 
+     * @todo
      * Paramètres : 
      *      @param {type}
      * 
@@ -93,25 +93,26 @@ class PersonneController {
 
     /**
      * @method find permet d'effectuer une recherche afin de retourner la ou les personnes qui répondent aux critères de recherche.
-     * 
+     * @todo
      * Paramètres : 
      *      @param {type}
      * 
      * Retourne : 
-     *      @return 
+     *      @return
     */
 
-    public async find():Promise<void> {
+    public async find(requestData:any):Promise<ServiceResponse> {
         LogHelper.log("Début de la recherche dans la liste");
-        LogHelper.log("X résultat trouvé");
-        LogHelper.log("Aucun résultat trouvé");
-        LogHelper.log("Échec de la recherche. Cause : ______");
-        return;
+        return this.errorNotAcceptable("FIND NOT IMPLEMENTED");
+        const query = new mongoose.Query();
+        let q = {nom:'Lavallée'};
+        return await this.service.get(q);
+        //return this.errorNotAcceptable();
     }
 
     /**
      * @method delete permet d'effectuer une suppression de la fiche d'une personne dans la base de données.
-     * 
+     * @todo
      * Paramètres : 
      *      @param 
      * 
@@ -161,24 +162,48 @@ class PersonneController {
     public validateData(requestData:any): {isValid:boolean, message:string} {
 
         LogHelper.log(`Validating ${typeof requestData}`, requestData);
+        let isValid = true;
+        let message = "";
 
-        if (typeof requestData !== 'object')
-            return {isValid:false, message:"La requête n'est pas un objet."};
+        if (typeof requestData === 'object')
+        {
+            //Verification data est vide
+            if (requestData.nom === undefined &&
+                requestData.prenom === undefined &&
+                requestData.surnom === undefined &&
+                requestData.description === undefined){
+                    isValid = false;
+                    message += "Data doit contenir un champ à modifier. ";
+                }
 
-        //Validation Nom
-        if(requestData.nom !== undefined){
-            if (!Personne.isNomOrPrenomValid(requestData.nom))
-                return {isValid:false, message:"Le paramètre 'nom' est problématique"};
+            //Si n'est pas vide
+            else{
+                
+                //Validation Nom
+                //Le (if nom !== undefined) est inutile (à effacer au besoin)
+                if (requestData.nom !== undefined){
+                    if (!Personne.isNomOrPrenomValid(requestData.nom)){
+                        isValid = false;
+                        message += "Le paramètre 'nom' est problématique. "
+                    }
+                }
+
+                //Validation prénom
+                if(requestData.prenom !== undefined){
+                    if (!Personne.isNomOrPrenomValid(requestData.prenom)){
+                        isValid = false;
+                        message += "Le paramètre 'prenom' est problématique";
+                    }
+                }
+            }
+        }
+        //Si n'est pas un objet
+        else{
+            isValid = false;
+            message += "La requête n'est pas un objet."
         }
 
-        //Validation prénom
-        if(requestData.prenom !== undefined){
-            if (!Personne.isNomOrPrenomValid(requestData.prenom))
-                return {isValid:false, message:"Le paramètre 'prenom' est problématique"};
-        }
-
-        //Validation terminée et réussie
-        return {isValid:true, message:"OK"};          
+        return { isValid, message };      
     }
 
 
