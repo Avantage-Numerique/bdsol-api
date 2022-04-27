@@ -51,8 +51,9 @@ class Personne {
     }
 
     /**
-     * @static method
+     * @static Method
      * @method getInstance
+     * @return model
      */
     static getInstance() {
         Personne.provider = DataProvider.getInstance();//must have

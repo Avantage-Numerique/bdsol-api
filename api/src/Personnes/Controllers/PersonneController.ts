@@ -4,6 +4,7 @@ import ServiceResponse from "../../Database/Responses/ServiceResponse";
 import PersonneService from "../Services/PersonneService";
 import {StatusCodes} from "http-status-codes";
 import {PersonneSchema} from "../Schemas/PersonneSchema";
+import mongoose from "mongoose";
 
 class PersonneController {
 
@@ -51,7 +52,7 @@ class PersonneController {
      *      @return {ServiceResponse} 
      */
     public async update(requestData:any):Promise<ServiceResponse> {
-        
+
         //Validation ID
         if (requestData.id === undefined)
         return this.errorNotAcceptable("Aucun no. d'identification fournit");
@@ -97,15 +98,16 @@ class PersonneController {
      *      @param {type}
      * 
      * Retourne : 
-     *      @return 
+     *      @return
     */
 
-    public async find():Promise<void> {
+    public async find(requestData:any):Promise<ServiceResponse> {
         LogHelper.log("Début de la recherche dans la liste");
-        LogHelper.log("X résultat trouvé");
-        LogHelper.log("Aucun résultat trouvé");
-        LogHelper.log("Échec de la recherche. Cause : ______");
-        return;
+        return this.errorNotAcceptable("FIND NOT IMPLEMENTED");
+        const query = new mongoose.Query();
+        let q = {nom:'Lavallée'};
+        return await this.service.get(q);
+        //return this.errorNotAcceptable();
     }
 
     /**
@@ -160,24 +162,48 @@ class PersonneController {
     public validateData(requestData:any): {isValid:boolean, message:string} {
 
         LogHelper.log(`Validating ${typeof requestData}`, requestData);
+        let isValid = true;
+        let message = "";
 
-        if (typeof requestData !== 'object')
-            return {isValid:false, message:"La requête n'est pas un objet."};
+        if (typeof requestData === 'object')
+        {
+            //Verification data est vide
+            if (requestData.nom === undefined &&
+                requestData.prenom === undefined &&
+                requestData.surnom === undefined &&
+                requestData.description === undefined){
+                    isValid = false;
+                    message += "Data doit contenir un champ à modifier. ";
+                }
 
-        //Validation Nom
-        if(requestData.nom !== undefined){
-            if (!Personne.isNomOrPrenomValid(requestData.nom))
-                return {isValid:false, message:"Le paramètre 'nom' est problématique"};
+            //Si n'est pas vide
+            else{
+                
+                //Validation Nom
+                //Le (if nom !== undefined) est inutile (à effacer au besoin)
+                if (requestData.nom !== undefined){
+                    if (!Personne.isNomOrPrenomValid(requestData.nom)){
+                        isValid = false;
+                        message += "Le paramètre 'nom' est problématique. "
+                    }
+                }
+
+                //Validation prénom
+                if(requestData.prenom !== undefined){
+                    if (!Personne.isNomOrPrenomValid(requestData.prenom)){
+                        isValid = false;
+                        message += "Le paramètre 'prenom' est problématique";
+                    }
+                }
+            }
+        }
+        //Si n'est pas un objet
+        else{
+            isValid = false;
+            message += "La requête n'est pas un objet."
         }
 
-        //Validation prénom
-        if(requestData.prenom !== undefined){
-            if (!Personne.isNomOrPrenomValid(requestData.prenom))
-                return {isValid:false, message:"Le paramètre 'prenom' est problématique"};
-        }
-
-        //Validation terminée et réussie
-        return {isValid:true, message:"OK"};          
+        return { isValid, message };      
     }
 
 

@@ -17,7 +17,7 @@ const PersonneRouter = express.Router();
  */
 PersonneRouter.post('/update', async (req, res) => {
     let {data} = req.body;
-    LogHelper.log("PersonneRouter.port/update");
+    LogHelper.log("Update Personne route for ", data);
     const controller = new PersonneController();
     const response = await controller.update(data);
     return res.status(response.code).send(response);
@@ -44,13 +44,12 @@ PersonneRouter.post('/create', async (req, res) => {
  * @method POST/FIND trouve les personnes correspondant aux critères de recherches
  **/
 PersonneRouter.post('/find', async (req, res) => {
-    LogHelper.log("Demande de recherche dans la liste de personnes");
-    LogHelper.log("FIND not implemented");
-    return;
-
-    //const controller = new PersonneController();
-    //const response = await controller.find();
-    //return
+    let {data} = req.body;
+    LogHelper.log("Find Personne route for ", data);
+    const controller = new PersonneController();
+    const response = await controller.find(data);
+    
+    return res.status(response.code).send(response);
 });
 
 /**
