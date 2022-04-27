@@ -2,6 +2,7 @@ import User from "../Models/User";
 import {UserDocument} from "../Schemas/UserSchema";
 import UsersService from "../Services/UsersService";
 import {StatusCodes} from "http-status-codes";
+import { Error } from "../../Error/Error";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import ServiceResponse from "../../Database/Responses/ServiceResponse";
 
@@ -19,7 +20,7 @@ export default class UserController {
 
     public async create(requestData:any):Promise<ServiceResponse> {
         if (!this.validateData(requestData)) {
-            return this.errorNotAcceptable();
+            return Error.NotAcceptable();
         }
 
         let formatedData = this.formatRequestDataForDocument(requestData);
@@ -31,7 +32,7 @@ export default class UserController {
             return createdDocumentResponse;
         }
 
-        return this.errorNotAcceptable('Les données semblent être ok, mais la création n\'a pas eu lieu.');
+        return Error.NotAcceptable('Les données semblent être ok, mais la création n\'a pas eu lieu.');
     }
 
 
@@ -45,10 +46,10 @@ export default class UserController {
     public async update(id:string, requestData:any):Promise<ServiceResponse>  {
 
         if (!this.validateData(requestData)) {
-            return this.errorNotAcceptable();
+            return Error.NotAcceptable();
         }
         if (id === undefined) {
-            return this.errorNotAcceptable();
+            return Error.NotAcceptable();
         }
 
         let formatedData = this.formatRequestDataForDocument(requestData);
@@ -61,19 +62,16 @@ export default class UserController {
             return updatedModelResponse;
         }
 
-        return this.errorNotAcceptable('Les données semblent être ok, mais la mise à jour n\'a pas eu lieu.');
+        return Error.NotAcceptable('Les données semblent être ok, mais la mise à jour n\'a pas eu lieu.');
     }
-
 
     public get(requestData:any) {
         return requestData !== undefined;
     }
 
-
     public delete(userID:string) {
         return userID !== undefined;
     }
-
 
     public formatRequestDataForDocument(requestData:any) {
         return {
@@ -86,7 +84,6 @@ export default class UserController {
         } as UserDocument;
     }
 
-
     public userCreationFailed($message:string = 'Impossible de créé l\'utilsiateur.'):ServiceResponse {
         return {
             error: true,
@@ -96,18 +93,6 @@ export default class UserController {
             data: {}
         } as ServiceResponse;
     }
-
-
-    public errorNotAcceptable($message:string = 'Les données partagé sont erronés ou manquantes.'):ServiceResponse {
-        return {
-            error: true,
-            code: StatusCodes.NOT_ACCEPTABLE,
-            message: $message,
-            errors: [],
-            data: {}
-        } as ServiceResponse;
-    }
-
 
     public validateData(requestData:any):boolean {
         // get required data and format data

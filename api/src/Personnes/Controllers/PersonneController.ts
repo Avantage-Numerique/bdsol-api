@@ -4,6 +4,7 @@ import ServiceResponse from "../../Database/Responses/ServiceResponse";
 import PersonneService from "../Services/PersonneService";
 import {StatusCodes} from "http-status-codes";
 import {PersonneSchema} from "../Schemas/PersonneSchema";
+import { Error } from "../../Error/Error";
 import mongoose from "mongoose";
 
 class PersonneController {
@@ -29,7 +30,7 @@ class PersonneController {
     public async create(requestData:any):Promise<ServiceResponse> {
         let messageValidate = this.validateData(requestData);
         if (!messageValidate.isValid)
-            return this.errorNotAcceptable(messageValidate.message);
+            return Error.NotAcceptable(messageValidate.message);
 
         let formatedData = this.formatRequestDataForDocument(requestData);
         let createdDocumentResponse = await this.service.insert(formatedData);
@@ -38,7 +39,7 @@ class PersonneController {
             !createdDocumentResponse.error)
             return createdDocumentResponse;
 
-        return this.errorNotAcceptable('Échec de la création d\'une Personne');
+        return Error.NotAcceptable('Échec de la création d\'une Personne');
     }
 
     
@@ -55,12 +56,12 @@ class PersonneController {
 
         //Validation ID
         if (requestData.id === undefined)
-        return this.errorNotAcceptable("Aucun no. d'identification fournit");
+        return Error.NotAcceptable("Aucun no. d'identification fournit");
         
         //Validation des données
         let messageUpdate = this.validateData(requestData);
         if (!messageUpdate.isValid)
-            return this.errorNotAcceptable(messageUpdate.message);
+            return Error.NotAcceptable(messageUpdate.message);
 
         let formatedData = this.formatRequestDataForDocument(requestData);
         let updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
@@ -70,7 +71,7 @@ class PersonneController {
             return updatedModelResponse;
 
 
-        return this.errorNotAcceptable('Échec de l\'update d\'une Personne');
+        return Error.NotAcceptable('Échec de l\'update d\'une Personne');
     
     }
 
@@ -103,11 +104,11 @@ class PersonneController {
 
     public async find(requestData:any):Promise<ServiceResponse> {
         LogHelper.log("Début de la recherche dans la liste");
-        return this.errorNotAcceptable("FIND NOT IMPLEMENTED");
+        return Error.NotAcceptable("FIND NOT IMPLEMENTED");
         const query = new mongoose.Query();
         let q = {nom:'Lavallée'};
         return await this.service.get(q);
-        //return this.errorNotAcceptable();
+        //return Error.NotAcceptable();
     }
 
     /**
@@ -125,28 +126,6 @@ class PersonneController {
         LogHelper.log("Échec de la suppression d'une personne");
         return;
     }
-
-    
-    /** 
-     * @method errorNotAcceptable log erreur $message et retourne une réponse d'erreur au fureteur internet.
-     * 
-     * Paramètres :
-     *      @param {string} $message - erreur à mettre dans les logs @default 'Les données partagé sont erronés ou manquantes.'
-     * 
-     * Retourne :
-     *      @returns {ServiceResponse}
-     */
-    public errorNotAcceptable($message:string = 'Les données partagé sont erronés ou manquantes.'):ServiceResponse {
-        LogHelper.error("Échec NotAcceptable ", $message);
-        return {
-            error: true,
-            code: StatusCodes.NOT_ACCEPTABLE,
-            message: $message,
-            errors: [],
-            data: {}
-        } as ServiceResponse;
-    }
-
 
     /**
      * @method validateData valide les éléments pour l'entitée Personne s'ils sont présent.
