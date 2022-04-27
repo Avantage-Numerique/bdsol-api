@@ -4,11 +4,13 @@ import config from "../config";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 import {StatusCodes, ReasonPhrases} from "http-status-codes";
 import ServiceResponse from "./Responses/ServiceResponse";
+import {SuccessResponse} from "../Http/Responses/SuccessResponse";
+import {ErrorResponse} from "../Http/Responses/ErrorResponse";
 
 
 /**
- * Give ability to query and CRUD on collections and its document.
- * @param model any The
+ * Give ability to query and CRUD on collections and its documents.
+ * @param model any The model to be use to query in the documents.
  */
 class Service {
 
@@ -21,7 +23,7 @@ class Service {
 
     /**
      * Get all the documents from a collection that fits the query.
-     * @param query
+     * @param query any Should be an object with the document's
      */
     async get(query:any) {
 
@@ -38,7 +40,10 @@ class Service {
             LogHelper.log(this.model, "Get target doc with ", query);
 
             let item = await this.model.findOne(query);
-            return {
+
+            return SuccessResponse.create(item, StatusCodes.OK, ReasonPhrases.OK);
+
+            /*return {
                 error: false,
                 code: StatusCodes.OK,
                 message: ReasonPhrases.OK,
@@ -46,16 +51,19 @@ class Service {
                 data: {
                     item
                 }
-            } as ServiceResponse;
+            } as ServiceResponse;*/
 
         } catch (getAllErrors:any) {
-            return {
+
+            return ErrorResponse.create(getAllErrors, StatusCodes.INTERNAL_SERVER_ERROR);
+
+            /*return {
                 error: true,
                 code: StatusCodes.INTERNAL_SERVER_ERROR,
                 message: getAllErrors.errmsg || "Not able to get the queried items",
                 errors: getAllErrors.errors,
                 data: {}
-            };
+            };*/
         }
     }
 
@@ -63,7 +71,7 @@ class Service {
      * Get all the documents from a collection that fits the query.
      * @param query
      */
-    async all(query:any) {
+    async all(query:any):Promise<ServiceResponse> {
 
         //set and dry parameters passed via query, but for preheating purposes.
         let {skip, limit} = query;
@@ -176,7 +184,10 @@ class Service {
         return Service.errorNothingHappened();
     }
 
-
+    /**
+     * Delete the target document with the target id
+     * @param id string of the objectid for the document.
+     */
     async delete(id:string):Promise<ServiceResponse> {
         try {
             let item = await this.model.findByIdAndDelete(id);
@@ -209,6 +220,11 @@ class Service {
         }
     }
 
+    /**
+     * Centralize error to say that the system didn't crash, but we couldn't return something.
+     * @private
+     * @return ServiceResponse error:False and code NO_CONTENT
+     */
     private static errorNothingHappened():ServiceResponse {
         return {
             error: false,

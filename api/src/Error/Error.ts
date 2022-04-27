@@ -1,17 +1,3 @@
-
-export class Error {
-
-    //public statusCode;
-    public response;
-
-    constructor(response:object) {
-        if (typeof response === 'object') {
-            this.response = response;
-        }
-    }
-
-}
-
 /**
  * Erreur dansService : Delete.
  */
