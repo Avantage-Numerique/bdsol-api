@@ -6,6 +6,7 @@ import {StatusCodes} from "http-status-codes";
 import {PersonneSchema} from "../Schemas/PersonneSchema";
 import { Error } from "../../Error/Error";
 import mongoose from "mongoose";
+import { request } from "express";
 
 class PersonneController {
 
@@ -93,21 +94,47 @@ class PersonneController {
     }
 
     /**
-     * @method find permet d'effectuer une recherche afin de retourner la ou les personnes qui répondent aux critères de recherche.
+     * @method find permet d'effectuer une recherche afin de retourner une personnes qui répond aux critères de recherche.
      * @todo
      * Paramètres : 
-     *      @param {type}
+     *      @param {liste} requestData - objet query:{ "nom":"qqch" *Champs à chercher* }
      * 
      * Retourne : 
-     *      @return
+     *      @return {ServiceResponse}
     */
 
     public async find(requestData:any):Promise<ServiceResponse> {
         LogHelper.log("Début de la recherche dans la liste");
-        return Error.NotAcceptable("FIND NOT IMPLEMENTED");
-        const query = new mongoose.Query();
-        let q = {nom:'Lavallée'};
-        return await this.service.get(q);
+        //return Error.NotAcceptable("FIND NOT IMPLEMENTED");
+        //const query = new mongoose.Query();
+        let {query} = requestData;
+        let finalQuery = {"nom":{},"prenom":{},"surnom":{},"description":{}};
+        if ( query.nom !== undefined) {
+         finalQuery.nom = { $regex: query.nom };
+        }
+        else{
+            finalQuery.nom = { $regex: ""};
+        }
+        if ( query.prenom !== undefined) {
+         finalQuery.prenom = { $regex: query.prenom };
+        }
+        else{
+            finalQuery.prenom = { $regex: ""};
+        }
+        if ( query.surnom !== undefined) {
+         finalQuery.surnom = { $regex: query.surnom };
+        }
+        else{
+            finalQuery.surnom = { $regex: ""};
+        }
+        if ( query.description !== undefined) {
+         finalQuery.description = { $regex: query.description };
+        }
+        else{
+            finalQuery.description = { $regex: ""};
+        }
+
+        return await this.service.get(finalQuery);
         //return Error.NotAcceptable();
     }
 
