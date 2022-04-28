@@ -3,7 +3,7 @@ import {UserDocument} from "../Schemas/UserSchema";
 import UsersService from "../Services/UsersService";
 import {StatusCodes} from "http-status-codes";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import ServiceResponse from "../../Database/Responses/ServiceResponse";
+import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
 
 /**
  * First pitch, in parallele with fred, for a crud controller.
@@ -17,21 +17,26 @@ export default class UserController {
         this.service = new UsersService(User.getInstance());
     }
 
-    public async create(requestData:any):Promise<ServiceResponse> {
+    /**
+     * Créer un nouvel utilisateur
+     * @param requestData any un object ou un object prémâcher
+     */
+    public async create(requestData:any):Promise<ApiResponseContract> {
+
         if (!this.validateData(requestData)) {
             return this.errorNotAcceptable();
         }
 
         let formatedData = this.formatRequestDataForDocument(requestData);
-        let createdDocumentResponse:ServiceResponse = await this.service.insert(formatedData);
+        //let createdDocumentResponse:ApiResponseContract =
 
-        if (createdDocumentResponse !== undefined &&
+        /*if (createdDocumentResponse !== undefined &&
             !createdDocumentResponse.error) {
 
-            return createdDocumentResponse;
-        }
+        }*/
 
-        return this.errorNotAcceptable('Les données semblent être ok, mais la création n\'a pas eu lieu.');
+        return await this.service.insert(formatedData);
+        //return this.errorNotAcceptable('Les données semblent être ok, mais la création n\'a pas eu lieu.');
     }
 
 
@@ -39,25 +44,23 @@ export default class UserController {
      * Update the user information
      * Password shall now be updated this way.
      * @todo add error if password is added here.
-     * @param id the document id of the user.
      * @param requestData the data to update.
      */
-    public async update(id:string, requestData:any):Promise<ServiceResponse>  {
+    public async update(requestData:any):Promise<ApiResponseContract>  {
+
+        if (requestData.id === undefined) {
+            return this.errorNotAcceptable("Il faut absolument le id de l'utilisateur pour mettre à jour ses informations.");
+        }
 
         if (!this.validateData(requestData)) {
-            return this.errorNotAcceptable();
-        }
-        if (id === undefined) {
-            return this.errorNotAcceptable();
+            return this.errorNotAcceptable("Les données sont dans un format erronés.");
         }
 
         let formatedData = this.formatRequestDataForDocument(requestData);
 
-        let updatedModelResponse:any = await this.service.update(id, formatedData);
-
-        if (updatedModelResponse !== undefined &&
-            !updatedModelResponse.error) {
-
+        let updatedModelResponse:ApiResponseContract = await this.service.update(requestData.id, formatedData);
+        LogHelper.warn("UserController update", updatedModelResponse);
+        if (updatedModelResponse !== undefined) {
             return updatedModelResponse;
         }
 
@@ -87,25 +90,25 @@ export default class UserController {
     }
 
 
-    public userCreationFailed($message:string = 'Impossible de créé l\'utilsiateur.'):ServiceResponse {
+    public userCreationFailed($message:string = 'Impossible de créé l\'utilsiateur.'):ApiResponseContract {
         return {
             error: true,
             code: StatusCodes.NOT_ACCEPTABLE,
             message: $message,
             errors: [],
             data: {}
-        } as ServiceResponse;
+        } as ApiResponseContract;
     }
 
 
-    public errorNotAcceptable($message:string = 'Les données partagé sont erronés ou manquantes.'):ServiceResponse {
+    public errorNotAcceptable($message:string = 'Les données partagées sont erronées ou manquantes.'):ApiResponseContract {
         return {
             error: true,
             code: StatusCodes.NOT_ACCEPTABLE,
             message: $message,
             errors: [],
             data: {}
-        } as ServiceResponse;
+        } as ApiResponseContract;
     }
 
 
@@ -114,7 +117,7 @@ export default class UserController {
         // parsed them
         // Return if validation passed or not.
 
-        LogHelper.log(`Validating ${typeof requestData}`, requestData);
+        LogHelper.info(`Validating data in UserController for a : ${typeof requestData}`, requestData);
         //first test
         return typeof requestData === 'object' &&
             requestData.username !== null &&

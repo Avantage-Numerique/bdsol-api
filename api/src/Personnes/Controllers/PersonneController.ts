@@ -5,6 +5,7 @@ import PersonneService from "../Services/PersonneService";
 import {StatusCodes} from "http-status-codes";
 import {PersonneSchema} from "../Schemas/PersonneSchema";
 import mongoose from "mongoose";
+import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
 
 class PersonneController {
 
@@ -26,7 +27,7 @@ class PersonneController {
      * Retourne :
      *      @return {ServiceResponse}
     */
-    public async create(requestData:any):Promise<ServiceResponse> {
+    public async create(requestData:any):Promise<ApiResponseContract> {
         let messageValidate = this.validateData(requestData);
         if (!messageValidate.isValid)
             return this.errorNotAcceptable(messageValidate.message);
@@ -51,7 +52,7 @@ class PersonneController {
      * Retourne :
      *      @return {ServiceResponse} 
      */
-    public async update(requestData:any):Promise<ServiceResponse> {
+    public async update(requestData:any):Promise<ApiResponseContract> {
 
         //Validation ID
         if (requestData.id === undefined)
@@ -84,11 +85,12 @@ class PersonneController {
      * Retourne : 
      *      @return 
     */
-    public async list():Promise<void> {
+    public async list(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la requête d'obtention de la liste de personne");
         LogHelper.log("Réussite de la requête d'obtention de la liste");
         LogHelper.log("Échec de la requête d'obtention de la liste");
-        return;
+        let q = {};
+        return await this.service.all(q);
     }
 
     /**
@@ -101,9 +103,9 @@ class PersonneController {
      *      @return
     */
 
-    public async find(requestData:any):Promise<ServiceResponse> {
+    public async find(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la recherche dans la liste");
-        return this.errorNotAcceptable("FIND NOT IMPLEMENTED");
+        //return this.errorNotAcceptable("FIND NOT IMPLEMENTED");
         const query = new mongoose.Query();
         let q = {nom:'Lavallée'};
         return await this.service.get(q);

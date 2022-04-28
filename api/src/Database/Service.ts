@@ -6,6 +6,7 @@ import {StatusCodes, ReasonPhrases} from "http-status-codes";
 import ServiceResponse from "./Responses/ServiceResponse";
 import {SuccessResponse} from "../Http/Responses/SuccessResponse";
 import {ErrorResponse} from "../Http/Responses/ErrorResponse";
+import {ApiResponseContract} from "../Http/Responses/ApiResponse";
 
 
 /**
@@ -25,7 +26,7 @@ class Service {
      * Get all the documents from a collection that fits the query.
      * @param query any Should be an object with the document's
      */
-    async get(query:any) {
+    async get(query:any):Promise<ApiResponseContract> {
 
         if (query._id) {
             try {
@@ -128,7 +129,7 @@ class Service {
             if (item)
                 return {
                     error: false,
-                    code: StatusCodes.ACCEPTED,
+                    code: StatusCodes.OK,
                     message: "Ajout de l'item réussi",
                     errors: [],
                     data: {
@@ -155,34 +156,56 @@ class Service {
      * With modify the target document.
      * @param id string
      * @param data any document data
+     * @note error 11000 //error = not unique {"index":0,"code":11000,"keyPattern":{"username":1},"keyValue":{"username":"mamilidasdasdasd"}}
      */
-    async update(id:string, data:any):Promise<ServiceResponse> {
+    async update(id:string, data:any):Promise<ApiResponseContract> {
 
         try {
-            let item = await this.model.findByIdAndUpdate(id, data, {new: true});
-            if (item)
-                return {
-                    error: false,
-                    code: StatusCodes.ACCEPTED,
-                    message: "Mise à jour de l'item réussi",
-                    errors:[],
-                    data: {
-                        item
-                    }
-                } as ServiceResponse;
+            // UpdateOne
+            let meta = await this.model.updateOne({_id: id }, data, {new:true}).catch((e:any) => {
+                LogHelper.info("UpdateOne catch:", e);
+                return e;
+            });
+
+            // if method findByIdAndUpdate fail, it returns a mongo error with a code and a message.
+            if (meta.index === 0) {
+
+                let wrongElements = Object.getOwnPropertyNames(meta.keyValue),
+                    wrongElementsValues = "";
+
+                wrongElements.forEach((key:string) => {
+                    wrongElementsValues += key + " (" + meta.keyValue[key] + ") n'est pas unique";
+                    LogHelper.warn("WrongElements loop ", key);
+                });
+
+                return ErrorResponse.create({
+                        name: "Erreur de service",
+                        message: "Un élément existe déjà dans la collection."
+                    },
+                    StatusCodes.NOT_ACCEPTABLE,
+                    wrongElementsValues);
+            }
+
+            if (meta) {
+                return SuccessResponse.create(
+                    meta,
+                    StatusCodes.OK,
+                    "Mise à jour de l'item réussi"
+                );
+            }
 
         } catch (updateError:any) {
-            return {
-                error: true,
-                code: StatusCodes.INTERNAL_SERVER_ERROR,
-                message: updateError.errmsg || "Not able to update item",
-                errors: updateError.errors,
-                data: {}
-            } as ServiceResponse;
+            return ErrorResponse.create(
+                updateError.errors,
+                StatusCodes.INTERNAL_SERVER_ERROR,
+                updateError.errmsg || "Not able to update item"
+            );
         }
 
         return Service.errorNothingHappened();
     }
+
+
 
     /**
      * Delete the target document with the target id
@@ -202,7 +225,7 @@ class Service {
             }
             return {
                 error: false,
-                code: StatusCodes.ACCEPTED,
+                code: StatusCodes.OK,
                 message: "Item will be deleted",
                 errors:[],
                 data: {

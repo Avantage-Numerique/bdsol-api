@@ -11,6 +11,7 @@ export interface ApiResponseContract {
 export default class ApiResponse implements ApiResponseContract {
 
     //public statusCode;
+    protected _rawResponse:ApiResponseContract;
     protected _response:ApiResponseContract;
     protected _data:object;
     protected _code:number;
@@ -19,6 +20,11 @@ export default class ApiResponse implements ApiResponseContract {
     protected _message:string;
 
     constructor(responseParams:ApiResponseContract) {
+        this.error = responseParams.error;
+        this.code = responseParams.code;
+        this.message = responseParams.message;
+        this.errors = responseParams.errors;
+        this.data = responseParams.data;
         this.response = responseParams;
     }
 
@@ -32,7 +38,7 @@ export default class ApiResponse implements ApiResponseContract {
         } as ApiResponseContract;
     }
     public set response(response:ApiResponseContract) {
-        this._response = response;
+        this._rawResponse = response;
     }
 
     public get error():boolean {

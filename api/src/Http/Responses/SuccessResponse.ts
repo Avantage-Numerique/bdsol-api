@@ -8,13 +8,15 @@ export class SuccessResponse extends ApiResponse {
     }
 
     public static create(data:object, code:number, message:string):ApiResponseContract {
-        return new SuccessResponse({
+
+        let success = new SuccessResponse({
             error:false,
             code: code,
             message: message,
             errors: [],
             data: data
         } as ApiResponseContract);
+        return success.response;
     }
 
 }
