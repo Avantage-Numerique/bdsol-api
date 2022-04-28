@@ -34,6 +34,26 @@ export class Error {
     }
 
 
+    /** 
+     * @static @method NotImplemented log erreur $message et retourne une réponse d'erreur (ServiceResponse).
+     * 
+     * Paramètres :
+     *      @param {string} $message - erreur à mettre dans les logs @default ""
+     * 
+     * Retourne :
+     *      @returns {ServiceResponse}
+     */
+         static NotImplemented($message:string=""):ServiceResponse {
+            LogHelper.error("Échec Not_Implemented ", $message);
+            return {
+                error: true,
+                code: StatusCodes.NOT_IMPLEMENTED,
+                message: $message,
+                errors: [],
+                data: {}
+            } as ServiceResponse;
+        }
+
 }
 
 /**

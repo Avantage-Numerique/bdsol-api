@@ -56,9 +56,12 @@ PersonneRouter.post('/find', async (req, res) => {
  * @method POST/READ/LIST trouve une personne dans la liste
  * @todo */
 PersonneRouter.post('/list', async (req, res) => {
-    LogHelper.log("Demande d'accès à la liste de personnes");
-    LogHelper.log("READ/LIST not implemented");
-    return;
+    let {data} = req.body;
+    LogHelper.log("List Personne route for ", data);
+    const controller = new PersonneController();
+    const response = await controller.find(data);
+    
+    return res.status(response.code).send(response);
 
     //const controller = new PersonneController();
     //const response = await controller.list();
