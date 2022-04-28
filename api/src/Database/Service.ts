@@ -3,7 +3,6 @@ import * as mongoose from "mongoose";
 import config from "../config";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 import {StatusCodes, ReasonPhrases} from "http-status-codes";
-import ServiceResponse from "./Responses/ServiceResponse";
 import {SuccessResponse} from "../Http/Responses/SuccessResponse";
 import {ErrorResponse} from "../Http/Responses/ErrorResponse";
 import {ApiResponseContract} from "../Http/Responses/ApiResponse";
@@ -33,38 +32,18 @@ class Service {
                 query._id = new mongoose.mongo.ObjectId(query._id);
             } catch (error:any) {
                 LogHelper.log("not able to generate mongoose id with content", query._id);
+                return ErrorResponse.create(error, StatusCodes.INTERNAL_SERVER_ERROR, "not able to generate mongoose id with content");
             }
         }
 
         try {
-
             LogHelper.log(this.model, "Get target doc with ", query);
-
             let item = await this.model.findOne(query);
 
             return SuccessResponse.create(item, StatusCodes.OK, ReasonPhrases.OK);
 
-            /*return {
-                error: false,
-                code: StatusCodes.OK,
-                message: ReasonPhrases.OK,
-                errors: [],
-                data: {
-                    item
-                }
-            } as ServiceResponse;*/
-
         } catch (getAllErrors:any) {
-
             return ErrorResponse.create(getAllErrors, StatusCodes.INTERNAL_SERVER_ERROR);
-
-            /*return {
-                error: true,
-                code: StatusCodes.INTERNAL_SERVER_ERROR,
-                message: getAllErrors.errmsg || "Not able to get the queried items",
-                errors: getAllErrors.errors,
-                data: {}
-            };*/
         }
     }
 
@@ -72,7 +51,7 @@ class Service {
      * Get all the documents from a collection that fits the query.
      * @param query
      */
-    async all(query:any):Promise<ServiceResponse> {
+    async all(query:any):Promise<ApiResponseContract> {
 
         //set and dry parameters passed via query, but for preheating purposes.
         let {skip, limit} = query;
@@ -87,6 +66,11 @@ class Service {
                 query._id = new mongoose.mongo.ObjectId(query._id);
             } catch (error:any) {
                 LogHelper.log("not able to generate mongoose id with content", query._id);
+                return ErrorResponse.create(
+                    error.errors,
+                    StatusCodes.INTERNAL_SERVER_ERROR,
+                    error.errmsg || "not able to generate mongoose id with content"
+                );
             }
         }
 
@@ -95,27 +79,20 @@ class Service {
                 .find(query)
                 .skip(skip)
                 .limit(limit);
-            //let total = await this.model.count();
 
-            //@todo rethink this structure, add a meta data for total, and more ?
-            return {
-                error: false,
-                code: StatusCodes.OK,
-                message: ReasonPhrases.OK,
-                errors: [],
-                data: {
-                    items
-                }
-            } as ServiceResponse;
+            return SuccessResponse.create(
+                items,
+                StatusCodes.OK,
+                ReasonPhrases.OK
+            );
 
         } catch (getAllErrors:any) {
-            return {
-                error: true,
-                code: StatusCodes.INTERNAL_SERVER_ERROR,
-                message: getAllErrors.errmsg || "Not able to get the queried items",
-                errors: getAllErrors.errors,
-                data: {}
-            } as ServiceResponse;
+
+            return ErrorResponse.create(
+                getAllErrors.errors,
+                StatusCodes.INTERNAL_SERVER_ERROR,
+                getAllErrors.errmsg || "Not able to get the queried items"
+            );
         }
     }
 
@@ -123,30 +100,24 @@ class Service {
      * Insert is the create in CRUD
      * @param data any the document structure. This is type any because that class will be extended.
      */
-    async insert(data:any):Promise<ServiceResponse> {
+    async insert(data:any):Promise<ApiResponseContract> {
         try {
             let item = await this.model.create(data);
-            if (item)
-                return {
-                    error: false,
-                    code: StatusCodes.OK,
-                    message: "Ajout de l'item réussi",
-                    errors: [],
-                    data: {
-                        item
-                    }
-                } as ServiceResponse;
-            // if not found, ajouter un arrays vides : users: [];
+            if (item) {
+                return SuccessResponse.create(
+                    item,
+                    StatusCodes.OK,
+                    "Ajout de l'item réussi"
+                );
+            }
 
         } catch (insertError:any) {
-            LogHelper.log("Service Error", insertError);
-            return {
-                error: true,
-                code: StatusCodes.INTERNAL_SERVER_ERROR,
-                message: insertError.errmsg || "Not able to create item",
-                errors: insertError.errors,
-                data: {}
-            } as ServiceResponse;
+
+            return ErrorResponse.create(
+                insertError.errors,
+                StatusCodes.INTERNAL_SERVER_ERROR,
+                insertError.errmsg || "Not able to update item"
+            );
         }
 
         return Service.errorNothingHappened();
@@ -211,51 +182,45 @@ class Service {
      * Delete the target document with the target id
      * @param id string of the objectid for the document.
      */
-    async delete(id:string):Promise<ServiceResponse> {
+    async delete(id:string):Promise<ApiResponseContract> {
+
         try {
             let item = await this.model.findByIdAndDelete(id);
             if (!item) {
-                return {
-                    error: true,
-                    code: StatusCodes.NOT_FOUND,
-                    message: "item to delete not found",
-                    errors:[],
-                    data: {}
-                };
+                return ErrorResponse.create(
+                    new Error("item to delete not found"),
+                    StatusCodes.NOT_FOUND,
+                    "item to delete not found"
+                );
             }
-            return {
-                error: false,
-                code: StatusCodes.OK,
-                message: "Item will be deleted",
-                errors:[],
-                data: {
-                    item
-                }
-            };
+
+            return SuccessResponse.create(
+                item,
+                StatusCodes.OK,
+                "Item will be deleted"
+            );
+
         } catch (deleteError:any) {
-            return {
-                error: true,
-                code: StatusCodes.INTERNAL_SERVER_ERROR,
-                message: "Item will be deleted",
-                errors: deleteError.errors,
-                data: {}
-            };
+
+            return ErrorResponse.create(
+                deleteError.errors,
+                StatusCodes.INTERNAL_SERVER_ERROR,
+                deleteError.message || "Error on delete item in Service"
+            );
         }
     }
 
     /**
      * Centralize error to say that the system didn't crash, but we couldn't return something.
      * @private
-     * @return ServiceResponse error:False and code NO_CONTENT
+     * @return ApiResponseContract error:False and code NO_CONTENT nor errors
      */
-    private static errorNothingHappened():ServiceResponse {
-        return {
-            error: false,
-            code: StatusCodes.NO_CONTENT,
-            message: "Tried doesn't return nothing and there is no error to catch.",
-            errors:[],
-            data: {}
-        };
+    private static errorNothingHappened():ApiResponseContract {
+        return SuccessResponse.create(
+            [],
+            StatusCodes.NO_CONTENT,
+            "Tried doesn't return nothing and there is no error to catch."
+        );
     }
 }
 
