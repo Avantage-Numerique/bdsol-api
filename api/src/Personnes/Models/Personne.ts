@@ -72,5 +72,10 @@ class Personne {
     static providerIsSetup():boolean {
         return Personne.provider !== undefined && Personne.provider.connection !== undefined;
     }
+
+    get searchSearchableFields():object {
+        //eturn {"nom":{},"prenom":{},"surnom":{},"description":{}};
+        return ["nom", "prenom","surnom","description"];
+    }
 }
 export default Personne;

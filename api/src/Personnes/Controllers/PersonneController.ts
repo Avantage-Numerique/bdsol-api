@@ -2,10 +2,8 @@ import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import Personne from "../Models/Personne"
 import ServiceResponse from "../../Database/Responses/ServiceResponse";
 import PersonneService from "../Services/PersonneService";
-import {StatusCodes} from "http-status-codes";
 import {PersonneSchema} from "../Schemas/PersonneSchema";
-import mongoose from "mongoose";
-import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import { Error } from "../../Error/Error";
 
 class PersonneController {
 
@@ -27,10 +25,10 @@ class PersonneController {
      * Retourne :
      *      @return {ServiceResponse}
     */
-    public async create(requestData:any):Promise<ApiResponseContract> {
+    public async create(requestData:any):Promise<ServiceResponse> {
         let messageValidate = this.validateData(requestData);
         if (!messageValidate.isValid)
-            return this.errorNotAcceptable(messageValidate.message);
+            return Error.NotAcceptable(messageValidate.message);
 
         let formatedData = this.formatRequestDataForDocument(requestData);
         let createdDocumentResponse = await this.service.insert(formatedData);
@@ -39,7 +37,7 @@ class PersonneController {
             !createdDocumentResponse.error)
             return createdDocumentResponse;
 
-        return this.errorNotAcceptable('Échec de la création d\'une Personne');
+        return Error.NotAcceptable('Échec de la création d\'une Personne');
     }
 
     
@@ -52,16 +50,16 @@ class PersonneController {
      * Retourne :
      *      @return {ServiceResponse} 
      */
-    public async update(requestData:any):Promise<ApiResponseContract> {
+    public async update(requestData:any):Promise<ServiceResponse> {
 
         //Validation ID
         if (requestData.id === undefined)
-        return this.errorNotAcceptable("Aucun no. d'identification fournit");
+        return Error.NotAcceptable("Aucun no. d'identification fournit");
         
         //Validation des données
         let messageUpdate = this.validateData(requestData);
         if (!messageUpdate.isValid)
-            return this.errorNotAcceptable(messageUpdate.message);
+            return Error.NotAcceptable(messageUpdate.message);
 
         let formatedData = this.formatRequestDataForDocument(requestData);
         let updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
@@ -71,7 +69,7 @@ class PersonneController {
             return updatedModelResponse;
 
 
-        return this.errorNotAcceptable('Échec de l\'update d\'une Personne');
+        return Error.NotAcceptable('Échec de l\'update d\'une Personne');
     
     }
 
@@ -79,37 +77,112 @@ class PersonneController {
     /**
      * @method list permet d'obtenir une liste de personne.
      * @todo
+     * 
      * Paramètres : 
-     *      @param {type}
+     *      @param {liste} requestData - Doit présentement contenir tout les attributs (nom, prénom, surnom, desc.) objet query:{ {"nom":"qqch"}, {*Champs à chercher*} }
      * 
      * Retourne : 
      *      @return 
     */
-    public async list(requestData:any):Promise<ApiResponseContract> {
+    public async list(requestData:any):Promise<ServiceResponse> {
         LogHelper.log("Début de la requête d'obtention de la liste de personne");
-        LogHelper.log("Réussite de la requête d'obtention de la liste");
-        LogHelper.log("Échec de la requête d'obtention de la liste");
-        let q = {};
-        return await this.service.all(q);
+
+        let {query} = requestData;
+        //let finalQuery = new Object();
+        
+        //Devrait être un genre de ( foreach element in query do finalQuery.add(objet.name, objet.value) où objet est name:value => {"nom":"richard"}
+        let finalQuery = {"nom":{},"prenom":{},"surnom":{},"description":{}};
+        if ( query.nom !== undefined) {
+         finalQuery.nom = { $regex: query.nom };
+        }
+        else{
+            finalQuery.nom = { $regex: ""};
+        }
+        if ( query.prenom !== undefined) {
+         finalQuery.prenom = { $regex: query.prenom };
+        }
+        else{
+            finalQuery.prenom = { $regex: ""};
+        }
+        if ( query.surnom !== undefined) {
+         finalQuery.surnom = { $regex: query.surnom };
+        }
+        else{
+            finalQuery.surnom = { $regex: ""};
+        }
+        if ( query.description !== undefined) {
+         finalQuery.description = { $regex: query.description };
+        }
+        else{
+            finalQuery.description = { $regex: ""};
+        }
+
+        return await this.service.all(finalQuery);
     }
 
     /**
-     * @method find permet d'effectuer une recherche afin de retourner la ou les personnes qui répondent aux critères de recherche.
-     * @todo
+     * @method find permet d'effectuer une recherche afin de retourner la première personne répondant au critère de recherche.
+     * @todo Permettre à la requête d'envoyer seulement les champs à chercher plutot que la totalité des champs
+     * 
      * Paramètres : 
-     *      @param {type}
+     *      @param {liste} requestData - Doit présentement contenir tout les attributs (nom, prénom, surnom, desc.) objet query:{ {"nom":"qqch"}, {*Champs à chercher*} }
      * 
      * Retourne : 
-     *      @return
+     *      @return {ServiceResponse}
     */
 
-    public async find(requestData:any):Promise<ApiResponseContract> {
+    public async find(requestData:any):Promise<ServiceResponse> {
         LogHelper.log("Début de la recherche dans la liste");
-        //return this.errorNotAcceptable("FIND NOT IMPLEMENTED");
-        const query = new mongoose.Query();
-        let q = {nom:'Lavallée'};
-        return await this.service.get(q);
-        //return this.errorNotAcceptable();
+
+        let {query} = requestData;
+        //let finalQuery = new Object();
+        
+        //Devrait être un genre de ( foreach element in query do finalQuery.add(objet.name, objet.value) où objet est name:value => {"nom":"richard"}
+        let finalQuery = {"nom":{},"prenom":{},"surnom":{},"description":{}};
+
+        //get the model's searchable fields.
+        //
+
+        // au frond
+
+        query.forEach((key:any, index:number) => {
+            let value = query[key];
+        });
+
+        /**
+         *
+         for (const property in object) {
+  console.log(`${property}: ${object[property]}`);
+}
+         */
+
+        if ( query.nom !== undefined) {
+         finalQuery.nom = { $regex: query.nom };
+        }
+        else{
+            finalQuery.nom = { $regex: ""};
+        }
+        if ( query.prenom !== undefined) {
+         finalQuery.prenom = { $regex: query.prenom };
+        }
+        else{
+            finalQuery.prenom = { $regex: ""};
+        }
+        if ( query.surnom !== undefined) {
+         finalQuery.surnom = { $regex: query.surnom };
+        }
+        else{
+            finalQuery.surnom = { $regex: ""};
+        }
+        if ( query.description !== undefined) {
+         finalQuery.description = { $regex: query.description };
+        }
+        else{
+            finalQuery.description = { $regex: ""};
+        }
+
+        return await this.service.get(finalQuery);
+        //return Error.NotAcceptable();
     }
 
     /**
@@ -127,28 +200,6 @@ class PersonneController {
         LogHelper.log("Échec de la suppression d'une personne");
         return;
     }
-
-    
-    /** 
-     * @method errorNotAcceptable log erreur $message et retourne une réponse d'erreur au fureteur internet.
-     * 
-     * Paramètres :
-     *      @param {string} $message - erreur à mettre dans les logs @default 'Les données partagé sont erronés ou manquantes.'
-     * 
-     * Retourne :
-     *      @returns {ServiceResponse}
-     */
-    public errorNotAcceptable($message:string = 'Les données partagé sont erronés ou manquantes.'):ServiceResponse {
-        LogHelper.error("Échec NotAcceptable ", $message);
-        return {
-            error: true,
-            code: StatusCodes.NOT_ACCEPTABLE,
-            message: $message,
-            errors: [],
-            data: {}
-        } as ServiceResponse;
-    }
-
 
     /**
      * @method validateData valide les éléments pour l'entitée Personne s'ils sont présent.
