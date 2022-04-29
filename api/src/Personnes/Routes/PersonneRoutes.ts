@@ -8,7 +8,7 @@ const PersonneRouter = express.Router();
  * @method POST/UPDATE Demande la mise à jour des données d'une personne de la base de données.
  * 
  * Paramètre : 
- *      @param {objet} req - req.body contient { data: { { id: }, { updatedValues: } } }
+ *      @param {object} req - req.body contient { data: { { id: }, { updatedValues: } } }
  *          @desc id (string) - identifiant de la personne à modifier
  *          @desc updatedValues (liste) - attributs à modifier
  * 
@@ -27,7 +27,7 @@ PersonneRouter.post('/update', async (req, res) => {
  * @method POST/CREATE : Demande la création d'une personne dans la base de données
  * 
  * Paramètre :
- *      @param {objet} req : req.body contient { data: { *champs requit à la création d'une personne* }}
+ *      @param {object} req : req.body contient { data: { *champs requit à la création d'une personne* }}
  * 
  * Retourne :
  *      @return 

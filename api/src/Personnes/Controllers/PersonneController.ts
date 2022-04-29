@@ -1,9 +1,9 @@
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import Personne from "../Models/Personne"
-import ServiceResponse from "../../Database/Responses/ServiceResponse";
+import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
 import PersonneService from "../Services/PersonneService";
 import {PersonneSchema} from "../Schemas/PersonneSchema";
-import { Error } from "../../Error/Error";
+import { HttpError } from "../../Error/HttpError";
 
 class PersonneController {
 
@@ -20,15 +20,15 @@ class PersonneController {
      * @method create permet de créer et d'insérer une nouvelle entité "Personne" dans la base de donnée à partir de la requête.
      * 
      * Paramètres : 
-     *      @param {liste} requestData - attributs requis à la création d'une personne
+     *      @param {object} requestData - attributs requis à la création d'une personne
      * 
      * Retourne :
-     *      @return {ServiceResponse}
+     *      @return {ApiResponseContract}
     */
-    public async create(requestData:any):Promise<ServiceResponse> {
+    public async create(requestData:any):Promise<ApiResponseContract> {
         let messageValidate = this.validateData(requestData);
         if (!messageValidate.isValid)
-            return Error.NotAcceptable(messageValidate.message);
+            return HttpError.NotAcceptable(messageValidate.message);
 
         let formatedData = this.formatRequestDataForDocument(requestData);
         let createdDocumentResponse = await this.service.insert(formatedData);
@@ -37,7 +37,7 @@ class PersonneController {
             !createdDocumentResponse.error)
             return createdDocumentResponse;
 
-        return Error.NotAcceptable('Échec de la création d\'une Personne');
+        return HttpError.NotAcceptable('Échec de la création d\'une Personne');
     }
 
     
@@ -45,21 +45,21 @@ class PersonneController {
      * @method update permet de modifier et mettre à jour les attributs d'une personne dans la base de donnée.
      * 
      * Paramètres :
-     *      @param {liste} requestData - id et attributs à modifier.
+     *      @param {object} requestData - id et attributs à modifier.
      * 
      * Retourne :
-     *      @return {ServiceResponse} 
+     *      @return {ApiResponseContract} 
      */
-    public async update(requestData:any):Promise<ServiceResponse> {
+    public async update(requestData:any):Promise<ApiResponseContract> {
 
         //Validation ID
         if (requestData.id === undefined)
-        return Error.NotAcceptable("Aucun no. d'identification fournit");
+        return HttpError.NotAcceptable("Aucun no. d'identification fournit");
         
         //Validation des données
         let messageUpdate = this.validateData(requestData);
         if (!messageUpdate.isValid)
-            return Error.NotAcceptable(messageUpdate.message);
+            return HttpError.NotAcceptable(messageUpdate.message);
 
         let formatedData = this.formatRequestDataForDocument(requestData);
         let updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
@@ -69,22 +69,22 @@ class PersonneController {
             return updatedModelResponse;
 
 
-        return Error.NotAcceptable('Échec de l\'update d\'une Personne');
+        return HttpError.NotAcceptable('Échec de l\'update d\'une Personne');
     
     }
 
 
     /**
-     * @method list permet d'obtenir une liste de personne.
+     * @method list permet d'obtenir une object de personne.
      * @todo
      * 
      * Paramètres : 
-     *      @param {liste} requestData - Doit présentement contenir tout les attributs (nom, prénom, surnom, desc.) objet query:{ {"nom":"qqch"}, {*Champs à chercher*} }
+     *      @param {object} requestData - Doit présentement contenir tout les attributs (nom, prénom, surnom, desc.) objet query:{ {"nom":"qqch"}, {*Champs à chercher*} }
      * 
      * Retourne : 
      *      @return 
     */
-    public async list(requestData:any):Promise<ServiceResponse> {
+    public async list(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la requête d'obtention de la liste de personne");
 
         let {query} = requestData;
@@ -125,13 +125,13 @@ class PersonneController {
      * @todo Permettre à la requête d'envoyer seulement les champs à chercher plutot que la totalité des champs
      * 
      * Paramètres : 
-     *      @param {liste} requestData - Doit présentement contenir tout les attributs (nom, prénom, surnom, desc.) objet query:{ {"nom":"qqch"}, {*Champs à chercher*} }
+     *      @param {object} requestData - Doit présentement contenir tout les attributs (nom, prénom, surnom, desc.) objet query:{ {"nom":"qqch"}, {*Champs à chercher*} }
      * 
      * Retourne : 
-     *      @return {ServiceResponse}
+     *      @return {ApiResponseContract}
     */
 
-    public async find(requestData:any):Promise<ServiceResponse> {
+    public async find(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la recherche dans la liste");
 
         let {query} = requestData;
@@ -143,11 +143,6 @@ class PersonneController {
         //get the model's searchable fields.
         //
 
-        // au frond
-
-        query.forEach((key:any, index:number) => {
-            let value = query[key];
-        });
 
         /**
          *
@@ -187,12 +182,10 @@ class PersonneController {
 
     /**
      * @method delete permet d'effectuer une suppression de la fiche d'une personne dans la base de données.
-     * @todo
      * Paramètres : 
-     *      @param 
-     * 
+     *
      * Retourne : 
-     *      @return 
+     *      @return void
     */
     public async delete():Promise<void> {
         LogHelper.log("Début de la suppression d'une personne");
@@ -205,10 +198,10 @@ class PersonneController {
      * @method validateData valide les éléments pour l'entitée Personne s'ils sont présent.
      * 
      * Paramètres :
-     *      @param {liste} requestData - attributs de personne à valider
+     *      @param {object} requestData - attributs de personne à valider
      * 
      * Retourne : validité et message d'erreur
-     *      @return {objet} { isValid, message } :
+     *      @return {object} { isValid, message } :
      *          @desc isValid (boolean): représentant si les données sont validée
      *          @desc message (string) : décrivant l'échec ou réussite de la validation 
      */
@@ -264,7 +257,7 @@ class PersonneController {
      * @method formatRequestDataForDocument insère dans le schéma les données de la requête.
      * 
      * Paramètres :
-     *      @param {liste} requestData - attributs de Personne
+     *      @param {object} requestData - attributs de Personne
      * 
      * Retourne :
      *      @return {PersonneSchema} l'interface Schéma contenant les données de la requête
