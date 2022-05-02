@@ -94,9 +94,9 @@ class OrganisationController {
             {
                 //Verification data est vide
                 if (requestData.nom === undefined &&
-                    requestData.prenom === undefined &&
-                    requestData.surnom === undefined &&
-                    requestData.description === undefined){
+                    requestData.description === undefined &&
+                    requestData.url === undefined &&
+                    requestData.contactPoint === undefined){
                         isValid = false;
                         message += "Data doit contenir un champ. ";
                     }
@@ -106,8 +106,8 @@ class OrganisationController {
                     //Validation Nom
                     //Le (if nom !== undefined) est inutile (à effacer au besoin)
                     if (requestData.nom !== undefined){
-                        if (typeof requestData.nom !== "string" &&
-                            requestData.nom.lenght <= 2){
+                        if (typeof requestData.nom !== "string" ||
+                            requestData.nom.length <= 2){
                             isValid = false;
                             message += "Le paramètre 'nom' est problématique. "
                         }

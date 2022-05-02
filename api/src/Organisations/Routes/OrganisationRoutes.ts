@@ -14,8 +14,8 @@ const OrganisationRouter = express.Router();
  *      @return
  */
 OrganisationRouter.post('/update', async (req, res) => {
-    LogHelper.debug("OrganisationRouter.post/update");
     let {data} = req.body;
+    LogHelper.log("Update Organisations route for ", data);
     const controller = new OrganisationController();
     const response = await controller.update(data);
     return res.status(response.code).send(response);
@@ -33,8 +33,8 @@ OrganisationRouter.post('/update', async (req, res) => {
  *      @return 
  */
  OrganisationRouter.post('/create', async (req, res) => {
-    LogHelper.debug("OrganisationRouter.post/create");
-    let {data} = req.body;
+     let {data} = req.body;
+     LogHelper.log("Create Personne route for ", data);
     const controller = new OrganisationController();
     const response = await controller.create(data);
     return res.status(response.code).send(response);
