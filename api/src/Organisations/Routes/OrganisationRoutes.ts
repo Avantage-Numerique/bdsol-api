@@ -18,8 +18,10 @@ OrganisationRouter.post('/update', async (req, res) => {
     let {data} = req.body;
     const controller = new OrganisationController();
     const response = await controller.update(data);
-    return;
-})
+    return res.status(response.code).send(response);
+});
+
+
 
 /**
  * @method POST/CREATE : Demande la création d'une personne dans la base de données
@@ -35,7 +37,7 @@ OrganisationRouter.post('/update', async (req, res) => {
     let {data} = req.body;
     const controller = new OrganisationController();
     const response = await controller.create(data);
-    return;
-})
+    return res.status(response.code).send(response);
+});
 
 export default OrganisationRouter;

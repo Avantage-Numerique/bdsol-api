@@ -20,7 +20,7 @@ PersonneRouter.post('/update', async (req, res) => {
     const controller = new PersonneController();
     const response = await controller.update(data);
     return res.status(response.code).send(response);
-})
+});
 
 /**
  * @method POST/CREATE : Demande la création d'une personne dans la base de données
@@ -73,7 +73,7 @@ PersonneRouter.post('/list', async (req, res) => {
     const response = await controller.list(data);
     
     return res.status(response.code).send(response);
-})
+});
 
 /**
  * @method POST/DELETE trouve une personne dans la liste
@@ -86,6 +86,6 @@ PersonneRouter.post('/delete', async (req, res) => {
     //const controller = new PersonneController();
     //const response = await controller.delete();
     //return
-})
+});
 
 export default PersonneRouter;

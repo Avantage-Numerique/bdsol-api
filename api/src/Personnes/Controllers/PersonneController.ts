@@ -158,12 +158,11 @@ class PersonneController {
                 requestData.surnom === undefined &&
                 requestData.description === undefined){
                     isValid = false;
-                    message += "Data doit contenir un champ à modifier. ";
+                    message += "Data doit contenir un champ. ";
                 }
 
             //Si n'est pas vide
             else{
-                
                 //Validation Nom
                 //Le (if nom !== undefined) est inutile (à effacer au besoin)
                 if (requestData.nom !== undefined){
@@ -177,7 +176,7 @@ class PersonneController {
                 if(requestData.prenom !== undefined){
                     if (!Personne.isNomOrPrenomValid(requestData.prenom)){
                         isValid = false;
-                        message += "Le paramètre 'prenom' est problématique";
+                        message += "Le paramètre 'prenom' est problématique. ";
                     }
                 }
             }
@@ -185,7 +184,7 @@ class PersonneController {
         //Si n'est pas un objet
         else{
             isValid = false;
-            message += "La requête n'est pas un objet."
+            message += "La requête n'est pas un objet. "
         }
 
         return { isValid, message };      
