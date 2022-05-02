@@ -8,9 +8,8 @@ const PersonneRouter = express.Router();
  * @method POST/UPDATE Demande la mise à jour des données d'une personne de la base de données.
  * 
  * Paramètre : 
- *      @param {objet} req - req.body contient { data: { { id: }, { updatedValues: } } }
+ *      @param {objet} req - req.body contient { data: { { id: }, { "nom":"" (*Champs de création*) } } } }
  *          @desc id (string) - identifiant de la personne à modifier
- *          @desc updatedValues (liste) - attributs à modifier
  * 
  * Retourne :
  *      @return
@@ -27,7 +26,7 @@ PersonneRouter.post('/update', async (req, res) => {
  * @method POST/CREATE : Demande la création d'une personne dans la base de données
  * 
  * Paramètre :
- *      @param {objet} req : req.body contient { data: { *champs requit à la création d'une personne* }}
+ *      @param {objet} req : req.body contient { data: { "nom":"Jean-Marc" (*champs requit à la création d'une personne*) }}
  * 
  * Retourne :
  *      @return 
@@ -41,31 +40,39 @@ PersonneRouter.post('/create', async (req, res) => {
 });
 
 /**
- * @method POST/FIND trouve les personnes correspondant aux critères de recherches
+ * @method POST/SEARCH trouve les personnes correspondant aux critères de recherche
+ * 
+ * Paramètre :
+ *      @param {objet} req : req.body contient {data : { "nom":"Jean-Marc" (*critères de recherche*) }}
+ * 
+ * Retourne :
+ *      @return
  **/
-PersonneRouter.post('/find', async (req, res) => {
+PersonneRouter.post('/search', async (req, res) => {
     let {data} = req.body;
-    LogHelper.log("Find Personne route for ", data);
+    LogHelper.log("Search Personne route for ", data);
     const controller = new PersonneController();
-    const response = await controller.find(data);
+    const response = await controller.search(data);
     
     return res.status(response.code).send(response);
 });
 
 /**
- * @method POST/READ/LIST trouve une personne dans la liste
- * @todo */
+ * @method POST/LIST Retourne la liste des personnes
+ * 
+ * Paramètre :
+ *      @param {objet} req : req.body contient {data : { "nom":"Jean-Marc" (*critères de recherche*) }}
+ * 
+ * Retourne :
+ *      @return
+ **/
 PersonneRouter.post('/list', async (req, res) => {
     let {data} = req.body;
     LogHelper.log("List Personne route for ", data);
     const controller = new PersonneController();
-    const response = await controller.find(data);
+    const response = await controller.list(data);
     
     return res.status(response.code).send(response);
-
-    //const controller = new PersonneController();
-    //const response = await controller.list();
-    //return
 })
 
 /**
