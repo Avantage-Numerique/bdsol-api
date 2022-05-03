@@ -2,9 +2,9 @@ import User from "../Models/User";
 import {UserDocument} from "../Schemas/UserSchema";
 import UsersService from "../Services/UsersService";
 import {StatusCodes} from "http-status-codes";
-import { Error } from "../../Error/Error";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import ServiceResponse from "../../Database/Responses/ServiceResponse";
+import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import HttpError from "../../Error/HttpError";
 
 /**
  * First pitch, in parallele with fred, for a crud controller.
@@ -18,21 +18,24 @@ export default class UserController {
         this.service = new UsersService(User.getInstance());
     }
 
-    public async create(requestData:any):Promise<ServiceResponse> {
+    public async create(requestData:any):Promise<ApiResponseContract> {
         if (!this.validateData(requestData)) {
-            return Error.NotAcceptable();
+            return HttpError.NotAcceptable();
         }
+        LogHelper.info(requestData, "validated");
 
         let formatedData = this.formatRequestDataForDocument(requestData);
-        let createdDocumentResponse:ServiceResponse = await this.service.insert(formatedData);
+        LogHelper.info(formatedData, "data formated");
 
-        if (createdDocumentResponse !== undefined &&
-            !createdDocumentResponse.error) {
 
+        let createdDocumentResponse:ApiResponseContract = await this.service.insert(formatedData);
+        LogHelper.info(createdDocumentResponse, "service response");
+
+        if (createdDocumentResponse !== undefined) {
             return createdDocumentResponse;
         }
 
-        return Error.NotAcceptable('Les données semblent être ok, mais la création n\'a pas eu lieu.');
+        return HttpError.NotAcceptable('Les données semblent être ok, mais la création n\'a pas eu lieu.');
     }
 
 
@@ -43,26 +46,28 @@ export default class UserController {
      * @param id the document id of the user.
      * @param requestData the data to update.
      */
-    public async update(id:string, requestData:any):Promise<ServiceResponse>  {
+    public async update(id:string, requestData:any):Promise<ApiResponseContract>  {
 
+        LogHelper.info("Validating resquestData");
         if (!this.validateData(requestData)) {
-            return Error.NotAcceptable();
+            return HttpError.NotAcceptable();
         }
+        LogHelper.info("ID is ok ?");
         if (id === undefined) {
-            return Error.NotAcceptable();
+            return HttpError.NotAcceptable();
         }
-
+        LogHelper.info("Format the resquestData", requestData);
         let formatedData = this.formatRequestDataForDocument(requestData);
 
+        LogHelper.info("Trying to update user from the serivce", formatedData);
         let updatedModelResponse:any = await this.service.update(id, formatedData);
 
-        if (updatedModelResponse !== undefined &&
-            !updatedModelResponse.error) {
-
+        LogHelper.info("Controller response : ", updatedModelResponse);
+        if (updatedModelResponse !== undefined) {
             return updatedModelResponse;
         }
 
-        return Error.NotAcceptable('Les données semblent être ok, mais la mise à jour n\'a pas eu lieu.');
+        return HttpError.NotAcceptable('Les données semblent être ok, mais la mise à jour n\'a pas eu lieu.');
     }
 
     public get(requestData:any) {
@@ -84,14 +89,14 @@ export default class UserController {
         } as UserDocument;
     }
 
-    public userCreationFailed($message:string = 'Impossible de créé l\'utilsiateur.'):ServiceResponse {
+    public userCreationFailed($message:string = 'Impossible de créé l\'utilsiateur.'):ApiResponseContract {
         return {
             error: true,
             code: StatusCodes.NOT_ACCEPTABLE,
             message: $message,
             errors: [],
             data: {}
-        } as ServiceResponse;
+        } as ApiResponseContract;
     }
 
     public validateData(requestData:any):boolean {

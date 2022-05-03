@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 import config from "../../config";
-import Provider, {BaseProvider} from "./Provider";
+import DbProvider, {BaseProvider} from "./DbProvider";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import User from "../../Users/Models/User";
 
 
-export class UsersProvider extends BaseProvider implements Provider {
+export class UsersProvider extends BaseProvider implements DbProvider {
 
     private static _singleton:UsersProvider;
 
@@ -14,7 +14,7 @@ export class UsersProvider extends BaseProvider implements Provider {
         this.urlPrefix = "mongodb";
     }
 
-    public static getInstance():UsersProvider|null {
+    public static getInstance():DbProvider|null {
         if (UsersProvider._singleton === undefined) {
             UsersProvider._singleton = new UsersProvider(config.users.db.name);
         }
