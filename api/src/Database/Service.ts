@@ -27,14 +27,13 @@ class Service {
      */
     async get(query:any):Promise<ApiResponseContract> {
 
-        if (query._id) {
-            try {
-                query._id = new mongoose.mongo.ObjectId(query._id);//@todo Throw error
-            } catch (error:any) {
-                LogHelper.log("not able to generate mongoose id with content", query._id);
-                return ErrorResponse.create(error, StatusCodes.INTERNAL_SERVER_ERROR, "not able to generate mongoose id with content");
+        if (config.db.config.createObjectIdForQuery) {
+            query._id = Service.transformToObjectId(query._id);
+            if (query._id.error) {
+                return query._id;
             }
         }
+
         try {
             LogHelper.log(this.model, "Get target doc with ", query);
             let item = await this.model.findOne(query);
@@ -60,16 +59,10 @@ class Service {
         delete query.skip;
         delete query.limit;
 
-        if (query._id) {
-            try {
-                query._id = new mongoose.mongo.ObjectId(query._id);
-            } catch (error:any) {
-                LogHelper.log("not able to generate mongoose id with content", query._id);
-                return ErrorResponse.create(
-                    error.errors,
-                    StatusCodes.INTERNAL_SERVER_ERROR,
-                    error.errmsg || "not able to generate mongoose id with content"
-                );
+        if (config.db.config.createObjectIdForQuery) {
+            query._id = Service.transformToObjectId(query._id);
+            if (query._id.error) {
+                return query._id;
             }
         }
 
@@ -193,6 +186,15 @@ class Service {
             StatusCodes.NO_CONTENT,
             "Tried doesn't return nothing and there is no error to catch."
         );
+    }
+
+    private static transformToObjectId(id:string): mongoose.Types.ObjectId | ApiResponseContract {
+        try {
+            return new mongoose.Types.ObjectId(id);
+        } catch (error: any) {
+            LogHelper.log("not able to generate mongoose id with content", id);
+            return ErrorResponse.create(error, StatusCodes.INTERNAL_SERVER_ERROR, "not able to generate mongoose id with content");
+        }
     }
 
     private parseResult(meta:any, actionMessage:string="Mise à jour"):ApiResponseContract {
