@@ -133,7 +133,7 @@ class Service {
             let meta = await this.model.updateOne({_id: id }, data, {new:true}).catch((e:any) => {
                 LogHelper.info("UpdateOne catch:", e);
                 return e;
-            });
+                });
             LogHelper.info("UpdateOne return after the catch :", meta);
             // if method updateOne fail, it returns a mongo error with a code and a message. // was method findByIdAndUpdate used.
 
@@ -197,7 +197,24 @@ class Service {
 
     private parseResult(meta:any, actionMessage:string="Mise à jour"):ApiResponseContract {
         // ERRORS
-        if (meta.index === 0) {
+
+        // Champ mal formulé
+        if (meta.name === "CastError")
+        {
+            let field = meta.path + " (" + meta.valueType + "): " + meta.stringValue,
+                msg = field + " ne peut pas être casted correctement";
+            LogHelper.error(StatusCodes.NOT_ACCEPTABLE + " " + msg);
+            return ErrorResponse.create({
+                    name: "Erreur de service : "+meta.name,
+                    message: meta.message
+                },
+                StatusCodes.NOT_ACCEPTABLE,
+                msg);
+        }
+
+        // Si not unique
+        if (meta.index === 0)
+        {
             let wrongElements = Object.getOwnPropertyNames(meta.keyValue),
                 wrongElementsValues = "";
 

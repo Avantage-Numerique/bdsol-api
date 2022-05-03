@@ -22,14 +22,9 @@ export default class UserController {
         if (!this.validateData(requestData)) {
             return HttpError.NotAcceptable();
         }
-        LogHelper.info(requestData, "validated");
 
         let formatedData = this.formatRequestDataForDocument(requestData);
-        LogHelper.info(formatedData, "data formated");
-
-
         let createdDocumentResponse:ApiResponseContract = await this.service.insert(formatedData);
-        LogHelper.info(createdDocumentResponse, "service response");
 
         if (createdDocumentResponse !== undefined) {
             return createdDocumentResponse;
@@ -48,21 +43,16 @@ export default class UserController {
      */
     public async update(id:string, requestData:any):Promise<ApiResponseContract>  {
 
-        LogHelper.info("Validating resquestData");
         if (!this.validateData(requestData)) {
             return HttpError.NotAcceptable();
         }
-        LogHelper.info("ID is ok ?");
         if (id === undefined) {
             return HttpError.NotAcceptable();
         }
-        LogHelper.info("Format the resquestData", requestData);
-        let formatedData = this.formatRequestDataForDocument(requestData);
 
-        LogHelper.info("Trying to update user from the serivce", formatedData);
+        let formatedData = this.formatRequestDataForDocument(requestData);
         let updatedModelResponse:any = await this.service.update(id, formatedData);
 
-        LogHelper.info("Controller response : ", updatedModelResponse);
         if (updatedModelResponse !== undefined) {
             return updatedModelResponse;
         }

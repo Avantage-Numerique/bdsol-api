@@ -59,13 +59,12 @@ class PersonnesController {
 
         //Validation ID
         if (requestData.id === undefined)
-        return HttpError.NotAcceptable("Aucun no. d'identification fournit");
+            return HttpError.NotAcceptable("Aucun no. d'identification fournit");
         
         let formatedData = this.formatRequestDataForDocument(requestData);
         let updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
 
-        if (updatedModelResponse !== undefined &&
-            !updatedModelResponse.error)
+        if (updatedModelResponse !== undefined)
             return updatedModelResponse;
 
         return HttpError.NotAcceptable('Échec de l\'update d\'une Personne');
