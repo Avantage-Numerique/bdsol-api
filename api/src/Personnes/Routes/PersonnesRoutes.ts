@@ -3,7 +3,7 @@ import PersonnesController from "../Controllers/PersonnesController";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 const PersonnesRouter = express.Router();
-const controller = new PersonnesController();
+//const controller = new PersonnesController();
 /**
  * @method POST/UPDATE Demande la mise à jour des données d'une personne de la base de données.
  * 
@@ -17,10 +17,10 @@ const controller = new PersonnesController();
 PersonnesRouter.post('/update', async (req, res) => {
     let {data} = req.body;
     LogHelper.log("Update Personne route for ", data);
-    //const controller = new PersonnesController();
+    const controller = new PersonnesController();
     const response = await controller.update(data);
     return res.status(response.code).send(response);
-}).bind(controller);
+});
 
 /**
  * @method POST/CREATE : Demande la création d'une personne dans la base de données

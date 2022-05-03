@@ -3,6 +3,7 @@ import {Schema} from "mongoose"
 import { PersonneSchema } from "../Schemas/PersonneSchema";
 import Provider from "../../Database/Providers/Provider";
 import {DataProvider} from "../../Database/Providers/DataProvider";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 class Personne {
     
@@ -37,7 +38,7 @@ class Personne {
      * @return {boolean} isValid
      */
     static isNomOrPrenomValid(nom:string):boolean {
-        return (typeof nom === "string" && nom.length >= 2);
+        return (nom.length >= 2);//nom will always be a string selon mon IDE : typeof nom === "string" &&
     }
 
     /**
@@ -61,6 +62,12 @@ class Personne {
             Personne.initSchema();
             return Personne.provider.connection.model(Personne.modelName);
         }
+        LogHelper.error("Personne Provider is not setup. Can't get Personne's model",
+            Personne.provider,
+            typeof Personne.provider,
+            Personne.provider.connection,
+            typeof Personne.provider.connection
+        );
         throw new Error("Personne Provider is not setup. Can't get Personne's model");
     }
 
