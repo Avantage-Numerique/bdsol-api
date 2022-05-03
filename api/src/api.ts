@@ -3,8 +3,8 @@ import ApiRouter from "./routes";
 import HealthCheckRouter from "./Healthcheck/Routes/HealthCheckRoutes";
 import AuthentificationRouter from "./Authentification/Routes/AuthentificationRoutes";
 import UserRoutes from "./Users/Routes/UserRoutes";
-import PersonneRouter from './Personnes/Routes/PersonnesRoutes';
-import OrganisationRouter from './Organisations/Routes/OrganisationRoutes'
+import PersonnesRouter from './Personnes/Routes/PersonnesRoutes';
+import OrganisationsRouter from './Organisations/Routes/OrganisationsRoutes'
 
 
 /**
@@ -53,10 +53,10 @@ class Api {
         this.express.use("/users", UserRoutes);
 
         //Personnes Routes
-        this.express.use("/personne", PersonneRouter);
+        this.express.use("/personnes", PersonnesRouter);
 
         //Organisation Routes
-        this.express.use("/organisations", OrganisationRouter);
+        this.express.use("/organisations", OrganisationsRouter);
     }
 }
 
