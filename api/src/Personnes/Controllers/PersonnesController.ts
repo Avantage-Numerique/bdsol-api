@@ -4,6 +4,7 @@ import ServiceResponse from "../../Database/Responses/ServiceResponse";
 import PersonnesService from "../Services/PersonnesService";
 import {PersonneSchema} from "../Schemas/PersonneSchema";
 import { Error } from "../../Error/Error";
+import { request } from "express";
 
 class PersonnesController {
 
@@ -59,7 +60,10 @@ class PersonnesController {
 
         //Validation ID
         if (requestData.id === undefined)
-        return Error.NotAcceptable("Aucun no. d'identification fournit");
+            return Error.NotAcceptable("Aucun no. d'identification fournit");
+        if (requestData.id.length != 24)
+            return Error.NotAcceptable("Numéro d'identification erroné");
+        
         
         let formatedData = this.formatRequestDataForDocument(requestData);
         let updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
@@ -86,9 +90,22 @@ class PersonnesController {
  
     public async search(requestData:any):Promise<ServiceResponse> {
         LogHelper.log("Début de la recherche dans la liste");
-        if (requestData.id !== undefined){
-            LogHelper.debug("La recherche par id n'est pas implémentée");
-        }
+
+        if (typeof requestData === undefined || typeof requestData !== 'object')
+            return Error.NotAcceptable("La requête n'est pas un objet. ");
+        if (requestData == {})
+            return Error.NotAcceptable("La requête est vide");
+        //Verification data est vide
+        if (requestData.nom === undefined &&
+            requestData.prenom === undefined &&
+            requestData.surnom === undefined &&
+            requestData.description === undefined &&
+            requestData.id === undefined)
+                return Error.NotAcceptable("La requête ne peut être vide");
+
+        //Validation ID
+        if (requestData.id !== undefined && requestData.id.length != 24)
+            return Error.NotAcceptable("Numéro d'identification erroné");
         
         let query = this.tempQueryBuilder(requestData);
  
@@ -222,7 +239,7 @@ class PersonnesController {
         let finalQuery = {};
         
         if ( query.id !== undefined)//@ts-ignore
-            finalQuery._id = { $regex: query.id };
+            finalQuery._id = query.id;
 
         if ( query.nom !== undefined)//@ts-ignore
             finalQuery.nom = { $regex: query.nom , $options : 'i' };
