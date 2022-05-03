@@ -4,7 +4,7 @@ export class SuccessResponse extends ApiResponse {
 
     constructor(response:ApiResponseContract) {
         super(response);
-        this.error = true;
+        this.error = false;
     }
 
     public static create(data:object, code:number, message:string):ApiResponseContract {

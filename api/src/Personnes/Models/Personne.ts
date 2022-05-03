@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import {Schema} from "mongoose"
 import { PersonneSchema } from "../Schemas/PersonneSchema";
-import Provider from "../../Database/Providers/Provider";
+import DbProvider from "../../Database/Providers/DbProvider";
 import {DataProvider} from "../../Database/Providers/DataProvider";
 
 class Personne {
@@ -15,7 +15,7 @@ class Personne {
     /** @static Connection mongoose */
     static connection:mongoose.Connection;
 
-    static provider:Provider;
+    static provider:DbProvider;
 
     /** @static Schéma pour la base de donnée */
     static schema:Schema =

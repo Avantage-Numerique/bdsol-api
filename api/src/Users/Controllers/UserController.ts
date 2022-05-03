@@ -5,6 +5,7 @@ import {StatusCodes} from "http-status-codes";
 import { Error } from "../../Error/Error";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import {HttpError} from "../../Error/HttpError";
 
 /**
  * First pitch, in parallele with fred, for a crud controller.
@@ -20,7 +21,7 @@ export default class UserController {
 
     public async create(requestData:any):Promise<ApiResponseContract> {
         if (!this.validateData(requestData)) {
-            return Error.NotAcceptable();
+            return HttpError.NotAcceptable();
         }
 
         let formatedData = this.formatRequestDataForDocument(requestData);
@@ -32,7 +33,7 @@ export default class UserController {
             return createdDocumentResponse;
         }
 
-        return Error.NotAcceptable('Les données semblent être ok, mais la création n\'a pas eu lieu.');
+        return HttpError.NotAcceptable('Les données semblent être ok, mais la création n\'a pas eu lieu.');
     }
 
 
@@ -45,24 +46,28 @@ export default class UserController {
      */
     public async update(id:string, requestData:any):Promise<ApiResponseContract>  {
 
+        LogHelper.info("Validating resquestData");
         if (!this.validateData(requestData)) {
-            return Error.NotAcceptable();
+            return HttpError.NotAcceptable();
         }
+        LogHelper.info("ID is ok ?");
         if (id === undefined) {
-            return Error.NotAcceptable();
+            return HttpError.NotAcceptable();
         }
-
+        LogHelper.info("Format the resquestData", requestData);
         let formatedData = this.formatRequestDataForDocument(requestData);
 
+        LogHelper.info("Trying to update user from the serivce", formatedData);
         let updatedModelResponse:any = await this.service.update(id, formatedData);
 
+        LogHelper.info("Controller response : ", updatedModelResponse);
         if (updatedModelResponse !== undefined &&
             !updatedModelResponse.error) {
 
             return updatedModelResponse;
         }
 
-        return Error.NotAcceptable('Les données semblent être ok, mais la mise à jour n\'a pas eu lieu.');
+        return HttpError.NotAcceptable('Les données semblent être ok, mais la mise à jour n\'a pas eu lieu.');
     }
 
     public get(requestData:any) {

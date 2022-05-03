@@ -19,11 +19,15 @@ export class HttpError {
      * @static @method NotAcceptable log erreur $message et retourne une réponse d'erreur (ServiceResponse).
      * Paramètres :
      * @param {string} message - erreur à mettre dans les logs @default ""
+     * @param {boolean} log - Si on log l'erreur @default true
      * @returns {ApiResponseContract}
      */
-    static NotAcceptable(message: string = ""): ApiResponseContract
+    static NotAcceptable(message: string = "", log=true): ApiResponseContract
     {
-        LogHelper.error(ReasonPhrases.NOT_ACCEPTABLE, message);
+        if (log) {
+            LogHelper.error(ReasonPhrases.NOT_ACCEPTABLE, message);
+        }
+
         return ErrorResponse.create(
             new Error(ReasonPhrases.NOT_ACCEPTABLE),
             StatusCodes.NOT_ACCEPTABLE,

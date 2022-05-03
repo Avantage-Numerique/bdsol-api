@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 import config from "../../config";
-import Provider from "../../Database/Providers/Provider";
+import DbProvider from "../../Database/Providers/DbProvider";
 import {ConnectOptions} from "mongodb";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import User from "../../Users/Models/User";
 import Service from "../../Database/Service";
 
 
-export class PersonnesProvider implements Provider {
+export class PersonnesProvider implements DbProvider {
 
     private _connection:mongoose.Connection;
     private _service:Service;

@@ -35,7 +35,6 @@ class Service {
                 return ErrorResponse.create(error, StatusCodes.INTERNAL_SERVER_ERROR, "not able to generate mongoose id with content");
             }
         }
-
         try {
             LogHelper.log(this.model, "Get target doc with ", query);
             let item = await this.model.findOne(query);
@@ -137,10 +136,11 @@ class Service {
                 LogHelper.info("UpdateOne catch:", e);
                 return e;
             });
+            LogHelper.info("UpdateOne return after the catch :", meta);
+            // if method updateOne fail, it returns a mongo error with a code and a message. // was method findByIdAndUpdate used.
 
-            // if method findByIdAndUpdate fail, it returns a mongo error with a code and a message.
+            // ERRORS
             if (meta.index === 0) {
-
                 let wrongElements = Object.getOwnPropertyNames(meta.keyValue),
                     wrongElementsValues = "";
 
@@ -149,6 +149,7 @@ class Service {
                     LogHelper.warn("WrongElements loop ", key);
                 });
 
+                LogHelper.error(StatusCodes.NOT_ACCEPTABLE + " Un élément existe déjà dans la collection : "+wrongElementsValues);
                 return ErrorResponse.create({
                         name: "Erreur de service",
                         message: "Un élément existe déjà dans la collection."
@@ -157,11 +158,29 @@ class Service {
                     wrongElementsValues);
             }
 
-            if (meta) {
+            // RESULTS
+
+            // UPDATE SUCCESSFUL
+            if (meta.acknowledged !== undefined &&
+                meta.acknowledged)
+            {
+                LogHelper.log(StatusCodes.OK + " Mise à jour de l'item réussi");
                 return SuccessResponse.create(
                     meta,
                     StatusCodes.OK,
                     "Mise à jour de l'item réussi"
+                );
+            }
+
+            // UPDATE FAILED
+            if (meta.acknowledged !== undefined &&
+                !meta.acknowledged)
+            {
+                LogHelper.log(StatusCodes.NOT_MODIFIED + " Mise à jour de l'item n'a pas été réussi");
+                return ErrorResponse.create(
+                    meta,
+                    StatusCodes.NOT_MODIFIED,
+                    "Mise à jour de l'item n'a pas été réussi"
                 );
             }
 

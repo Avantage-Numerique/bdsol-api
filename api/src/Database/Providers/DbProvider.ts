@@ -5,17 +5,17 @@ import Service from "../Service";
 import {ConnectOptions} from "mongodb";
 
 
-export default interface Provider {
+export default interface DbProvider {
     connection:mongoose.Connection;
     urlPrefix:string;
     url:string;
     databaseName:string;
 
     connect():Promise<mongoose.Connection|null>;
-    getInstance():Provider|null;
+    getInstance():DbProvider|null;
 }
 
-export class BaseProvider implements Provider {
+export class BaseProvider implements DbProvider {
 
     protected _connection:mongoose.Connection;
     protected _service:Service;
@@ -48,7 +48,7 @@ export class BaseProvider implements Provider {
         return null;
     }
 
-    public getInstance(): Provider|null {
+    public getInstance(): DbProvider|null {
         //to overwrite.
         return null;
     }

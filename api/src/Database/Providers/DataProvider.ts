@@ -1,11 +1,11 @@
-import Provider, {BaseProvider} from "./Provider";
+import DbProvider, {BaseProvider} from "./DbProvider";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import mongoose from "mongoose";
 import Personne from "../../Personnes/Models/Personne";
 
 
-export class DataProvider extends BaseProvider implements Provider {
+export class DataProvider extends BaseProvider implements DbProvider {
 
     private static _singleton:DataProvider;
 
