@@ -1,7 +1,7 @@
 import Service from "../../Database/Service";
 import Personne from "../Models/Personne";
 
-class PersonneService extends Service {
+class PersonnesService extends Service {
     constructor(model:any=null) {
         if (model === null) {
             Personne.getInstance();
@@ -10,4 +10,4 @@ class PersonneService extends Service {
     }
 }
 
-export default PersonneService;
+export default PersonnesService;

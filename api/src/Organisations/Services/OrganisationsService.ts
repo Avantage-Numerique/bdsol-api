@@ -2,7 +2,7 @@
 import Service from "../../Database/Service";
 import Organisation from "../Models/Organisation";
 
-class OrganisationService extends Service {
+class OrganisationsService extends Service {
     //this should received the connection.
     constructor(model:any=null) {
         if (model === null) {
@@ -12,4 +12,4 @@ class OrganisationService extends Service {
     }
 }
 
-export default OrganisationService;
+export default OrganisationsService;

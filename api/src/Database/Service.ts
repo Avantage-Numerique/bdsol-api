@@ -29,7 +29,7 @@ class Service {
 
         if (query._id) {
             try {
-                query._id = new mongoose.mongo.ObjectId(query._id);
+                query._id = new mongoose.mongo.ObjectId(query._id);//@todo Throw error
             } catch (error:any) {
                 LogHelper.log("not able to generate mongoose id with content", query._id);
                 return ErrorResponse.create(error, StatusCodes.INTERNAL_SERVER_ERROR, "not able to generate mongoose id with content");

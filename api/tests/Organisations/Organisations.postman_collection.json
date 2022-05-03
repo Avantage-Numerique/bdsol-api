@@ -1,0 +1,467 @@
+{
+	"info": {
+		"_postman_id": "e106aeff-aa49-42cd-abbb-facf3742e035",
+		"name": "Organisations",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create",
+			"item": [
+				{
+					"name": "1-Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"nom\": \"Petit f\",\r\n        \"description\": \"Théâtre et f\",\r\n        \"url\":\"https://f.org/\",\r\n        \"contactPoint\":\"info@f.org\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/organisations/create",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"organisations",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2-Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"nom\": \"Agora des Arts\",\r\n        \"description\": \"Petite église, salle de spectacle sympatoche\",\r\n        \"url\":\"http://www.agoradesarts.com/\",\r\n        \"contactPoint\":\"info@agoradesarts.com\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/organisations/create",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"organisations",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3-Create(empty data)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/organisations/create",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"organisations",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4-Create(no data)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/organisations/create",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"organisations",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5-Create(no Nom)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"description\": \"Culturama sse-toi\",\r\n        \"url\":\"http://www.culturamassetoi.com/\",\r\n        \"contactPoint\":\"info@ramasse.png\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/organisations/create",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"organisations",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6-Create(empty Nom)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"nom\": \"\",\r\n        \"description\": \"Culturama sse-toi\",\r\n        \"url\":\"http://www.culturamassetoi.com/\",\r\n        \"contactPoint\":\"info@ramasse.png\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/organisations/create",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"organisations",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "7-Create(empty non req)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"nom\": \"Synvain Rénove\",\r\n        \"description\": \"Rénovation de tout genre\",\r\n        \"url\":\"\",\r\n        \"contactPoint\":\"\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/organisations/create",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"organisations",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "8-Create(No non req)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"nom\": \"L'alphabet à 9 ans\",\r\n        \"description\": \"Garderie\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/organisations/create",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"organisations",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Update",
+			"item": [
+				{
+					"name": "1-Update(all)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"id\":\"62701f5995ff27baa4a719d9\",\r\n        \"nom\":\"Petit théâtre du vieux Noranda\",\r\n        \"description\": \"Théâtre et magie\",\r\n        \"url\":\"https://petittheatre.org/\",\r\n        \"contactPoint\":\"info@petittheatre.org\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/organisations/update",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"organisations",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2-Update(No Data)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/organisations/update",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"organisations",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3-Update(empty Data)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/organisations/update",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"organisations",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4-Update(No id)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"nom\":\"qqch\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/organisations/update",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"organisations",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5-Update(empty req)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"id\":\"62701f5995ff27baa4a719d9\",\r\n        \"nom\":\"\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/organisations/update",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"organisations",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6-Update(No req)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"id\":\"62701f5995ff27baa4a719d9\",\r\n        \"description\": \"C'est une farce\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/organisations/update",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"organisations",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "7-Update(empty non req)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"id\":\"62701f5995ff27baa4a719d9\",\r\n        \"description\": \"\",\r\n        \"url\":\"\",\r\n        \"contactPoint\":\"\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/organisations/update",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"organisations",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "8-Update(id random)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"id\":\"62781a5f35fcc7cba42778d9\",\r\n        \"description\": \"\",\r\n        \"url\":\"\",\r\n        \"contactPoint\":\"\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/organisations/update",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"organisations",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
