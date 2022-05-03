@@ -1,9 +1,9 @@
 import NotEmpty from "./NotEmpty";
+import RuleContract from "../Contracts/RuleContract";
 
-export default class IsSet {
+export default class IsSet implements RuleContract {
 
-    public static verify(value:any):boolean {
-        //add lenght checkup ? if yes we should limit the Rules to certain types ?
+    public verify(value:any):boolean {
         return NotEmpty.verify(value) &&
             value !== undefined &&
             value !== null;
