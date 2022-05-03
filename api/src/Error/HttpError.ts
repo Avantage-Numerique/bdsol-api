@@ -3,7 +3,7 @@ import LogHelper from "../Monitoring/Helpers/LogHelper";
 import {StatusCodes, ReasonPhrases} from "http-status-codes";
 import {ErrorResponse} from "../Http/Responses/ErrorResponse";
 
-export class HttpError {
+export default class HttpError {
 
     //public statusCode;
     public response;

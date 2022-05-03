@@ -2,10 +2,9 @@ import User from "../Models/User";
 import {UserDocument} from "../Schemas/UserSchema";
 import UsersService from "../Services/UsersService";
 import {StatusCodes} from "http-status-codes";
-import { Error } from "../../Error/Error";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
-import {HttpError} from "../../Error/HttpError";
+import HttpError from "../../Error/HttpError";
 
 /**
  * First pitch, in parallele with fred, for a crud controller.
@@ -23,13 +22,16 @@ export default class UserController {
         if (!this.validateData(requestData)) {
             return HttpError.NotAcceptable();
         }
+        LogHelper.info(requestData, "validated");
 
         let formatedData = this.formatRequestDataForDocument(requestData);
+        LogHelper.info(formatedData, "data formated");
+
+
         let createdDocumentResponse:ApiResponseContract = await this.service.insert(formatedData);
+        LogHelper.info(createdDocumentResponse, "service response");
 
-        if (createdDocumentResponse !== undefined &&
-            !createdDocumentResponse.error) {
-
+        if (createdDocumentResponse !== undefined) {
             return createdDocumentResponse;
         }
 
@@ -61,9 +63,7 @@ export default class UserController {
         let updatedModelResponse:any = await this.service.update(id, formatedData);
 
         LogHelper.info("Controller response : ", updatedModelResponse);
-        if (updatedModelResponse !== undefined &&
-            !updatedModelResponse.error) {
-
+        if (updatedModelResponse !== undefined) {
             return updatedModelResponse;
         }
 

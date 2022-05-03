@@ -101,14 +101,14 @@ class Service {
      */
     async insert(data:any):Promise<ApiResponseContract> {
         try {
-            let item = await this.model.create(data);
-            if (item) {
-                return SuccessResponse.create(
-                    item,
-                    StatusCodes.OK,
-                    "Ajout de l'item réussi"
-                );
-            }
+            //let item = await this.model.create(data);
+            // UpdateOne
+            let meta = await this.model.create(data).catch((e:any) => {
+                LogHelper.info("insert catch:", e);
+                return e;
+            });
+
+            return this.parseResult(meta, 'Création');
 
         } catch (insertError:any) {
 
@@ -118,8 +118,6 @@ class Service {
                 insertError.errmsg || "Not able to update item"
             );
         }
-
-        return Service.errorNothingHappened();
     }
 
     /**
@@ -139,50 +137,7 @@ class Service {
             LogHelper.info("UpdateOne return after the catch :", meta);
             // if method updateOne fail, it returns a mongo error with a code and a message. // was method findByIdAndUpdate used.
 
-            // ERRORS
-            if (meta.index === 0) {
-                let wrongElements = Object.getOwnPropertyNames(meta.keyValue),
-                    wrongElementsValues = "";
-
-                wrongElements.forEach((key:string) => {
-                    wrongElementsValues += key + " (" + meta.keyValue[key] + ") n'est pas unique";
-                    LogHelper.warn("WrongElements loop ", key);
-                });
-
-                LogHelper.error(StatusCodes.NOT_ACCEPTABLE + " Un élément existe déjà dans la collection : "+wrongElementsValues);
-                return ErrorResponse.create({
-                        name: "Erreur de service",
-                        message: "Un élément existe déjà dans la collection."
-                    },
-                    StatusCodes.NOT_ACCEPTABLE,
-                    wrongElementsValues);
-            }
-
-            // RESULTS
-
-            // UPDATE SUCCESSFUL
-            if (meta.acknowledged !== undefined &&
-                meta.acknowledged)
-            {
-                LogHelper.log(StatusCodes.OK + " Mise à jour de l'item réussi");
-                return SuccessResponse.create(
-                    meta,
-                    StatusCodes.OK,
-                    "Mise à jour de l'item réussi"
-                );
-            }
-
-            // UPDATE FAILED
-            if (meta.acknowledged !== undefined &&
-                !meta.acknowledged)
-            {
-                LogHelper.log(StatusCodes.NOT_MODIFIED + " Mise à jour de l'item n'a pas été réussi");
-                return ErrorResponse.create(
-                    meta,
-                    StatusCodes.NOT_MODIFIED,
-                    "Mise à jour de l'item n'a pas été réussi"
-                );
-            }
+            return this.parseResult(meta, 'Mise à jour');
 
         } catch (updateError:any) {
             return ErrorResponse.create(
@@ -191,8 +146,6 @@ class Service {
                 updateError.errmsg || "Not able to update item"
             );
         }
-
-        return Service.errorNothingHappened();
     }
 
 
@@ -240,6 +193,54 @@ class Service {
             StatusCodes.NO_CONTENT,
             "Tried doesn't return nothing and there is no error to catch."
         );
+    }
+
+    private parseResult(meta:any, actionMessage:string="Mise à jour"):ApiResponseContract {
+        // ERRORS
+        if (meta.index === 0) {
+            let wrongElements = Object.getOwnPropertyNames(meta.keyValue),
+                wrongElementsValues = "";
+
+            wrongElements.forEach((key:string) => {
+                wrongElementsValues += key + " (" + meta.keyValue[key] + ") n'est pas unique";
+                LogHelper.warn("WrongElements loop ", key);
+            });
+
+            LogHelper.error(StatusCodes.NOT_ACCEPTABLE + " Un élément existe déjà dans la collection : "+wrongElementsValues);
+            return ErrorResponse.create({
+                    name: "Erreur de service",
+                    message: "Un élément existe déjà dans la collection."
+                },
+                StatusCodes.NOT_ACCEPTABLE,
+                wrongElementsValues);
+        }
+
+        // RESULTS
+
+        // UPDATE SUCCESSFUL
+        if (meta.acknowledged !== undefined &&
+            meta.acknowledged)
+        {
+            LogHelper.log(StatusCodes.OK + " " + actionMessage + " de l'item réussi");
+            return SuccessResponse.create(
+                meta,
+                StatusCodes.OK,
+                actionMessage + " de l'item réussi"
+            );
+        }
+
+        // UPDATE FAILED
+        if (meta.acknowledged !== undefined &&
+            !meta.acknowledged)
+        {
+            LogHelper.log(StatusCodes.NOT_MODIFIED + " " + actionMessage + " de l'item n'a pas été réussi");
+            return ErrorResponse.create(
+                meta,
+                StatusCodes.NOT_MODIFIED,
+                actionMessage + " de l'item n'a pas été réussi"
+            );
+        }
+        return Service.errorNothingHappened();
     }
 }
 

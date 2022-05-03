@@ -6,7 +6,6 @@ import UserRoutes from "./Users/Routes/UserRoutes";
 import PersonnesRouter from './Personnes/Routes/PersonnesRoutes';
 import OrganisationsRouter from './Organisations/Routes/OrganisationsRoutes'
 
-
 /**
  * Main class for the API
  * Use the express instance as public property.
@@ -55,7 +54,7 @@ class Api {
         //Personnes Routes
         this.express.use("/personnes", PersonnesRouter);
 
-        //Organisation Routes
+        //Organisations Routes
         this.express.use("/organisations", OrganisationsRouter);
     }
 }
