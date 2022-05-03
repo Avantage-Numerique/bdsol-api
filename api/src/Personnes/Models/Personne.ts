@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import {Schema} from "mongoose"
 import { PersonneSchema } from "../Schemas/PersonneSchema";
-import Provider from "../../Database/Providers/Provider";
+import DbProvider from "../../Database/Providers/DbProvider";
 import {DataProvider} from "../../Database/Providers/DataProvider";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
@@ -16,7 +16,7 @@ class Personne {
     /** @static Connection mongoose */
     static connection:mongoose.Connection;
 
-    static provider:Provider;
+    static provider:DbProvider;
 
     /** @static Schéma pour la base de donnée */
     static schema:Schema =
@@ -78,6 +78,11 @@ class Personne {
      */
     static providerIsSetup():boolean {
         return Personne.provider !== undefined && Personne.provider.connection !== undefined;
+    }
+
+    get searchSearchableFields():object {
+        //eturn {"nom":{},"prenom":{},"surnom":{},"description":{}};
+        return ["nom", "prenom","surnom","description"];
     }
 }
 export default Personne;

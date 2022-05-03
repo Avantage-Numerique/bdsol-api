@@ -3,7 +3,7 @@ import PersonnesController from "../Controllers/PersonnesController";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 const PersonnesRouter = express.Router();
-//const controller = new PersonnesController();
+
 /**
  * @method POST/UPDATE Demande la mise à jour des données d'une personne de la base de données.
  * 

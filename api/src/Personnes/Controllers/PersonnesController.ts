@@ -1,10 +1,9 @@
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import Personne from "../Models/Personne"
-import ServiceResponse from "../../Database/Responses/ServiceResponse";
+import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
 import PersonnesService from "../Services/PersonnesService";
 import {PersonneSchema} from "../Schemas/PersonneSchema";
-import { Error } from "../../Error/Error";
-import { request } from "express";
+import HttpError from "../../Error/HttpError";
 
 class PersonnesController {
 
@@ -24,12 +23,12 @@ class PersonnesController {
      *      @param {name:value} requestData - attributs requis à la création d'une personne
      * 
      * Retourne :
-     *      @return {ServiceResponse}
+     *      @return {ApiResponseContract}
     */
-    public async create(requestData:any):Promise<ServiceResponse> {
+    public async create(requestData:any):Promise<ApiResponseContract> {
         let messageValidate = this.validateData(requestData);
         if (!messageValidate.isValid)
-            return Error.NotAcceptable(messageValidate.message);
+            return HttpError.NotAcceptable(messageValidate.message);
 
         let formatedData = this.formatRequestDataForDocument(requestData);
         let createdDocumentResponse = await this.service.insert(formatedData);
@@ -38,7 +37,7 @@ class PersonnesController {
             !createdDocumentResponse.error)
             return createdDocumentResponse;
 
-        return Error.NotAcceptable('Échec de la création d\'une Personne');
+        return HttpError.NotAcceptable('Échec de la création d\'une Personne');
     }
 
     
@@ -49,20 +48,20 @@ class PersonnesController {
      *      @param {name:value} requestData - id et attributs à modifier.
      * 
      * Retourne :
-     *      @return {ServiceResponse} 
+     *      @return {ApiResponseContract} 
      */
-    public async update(requestData:any):Promise<ServiceResponse> {
+    public async update(requestData:any):Promise<ApiResponseContract> {
         
         //Validation des données
         let messageUpdate = this.validateData(requestData);
         if (!messageUpdate.isValid)
-            return Error.NotAcceptable(messageUpdate.message);
+            return HttpError.NotAcceptable(messageUpdate.message);
 
         //Validation ID
         if (requestData.id === undefined)
-            return Error.NotAcceptable("Aucun no. d'identification fournit");
+            return HttpError.NotAcceptable("Aucun no. d'identification fournit");
         if (requestData.id.length != 24)
-            return Error.NotAcceptable("Numéro d'identification erroné");
+            return HttpError.NotAcceptable("Numéro d'identification erroné");
         
         
         let formatedData = this.formatRequestDataForDocument(requestData);
@@ -72,7 +71,7 @@ class PersonnesController {
             !updatedModelResponse.error)
             return updatedModelResponse;
 
-        return Error.NotAcceptable('Échec de l\'update d\'une Personne');
+        return HttpError.NotAcceptable('Échec de l\'update d\'une Personne');
     
     }
 
@@ -85,27 +84,27 @@ class PersonnesController {
      * 
      * Retourne : 
      *      @default critères vide: Retourne le premier résultat
-     *      @return {ServiceResponse}
+     *      @return {ApiResponseContract}
     */
  
-    public async search(requestData:any):Promise<ServiceResponse> {
+    public async search(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la recherche dans la liste");
 
         if (typeof requestData === undefined || typeof requestData !== 'object')
-            return Error.NotAcceptable("La requête n'est pas un objet. ");
+            return HttpError.NotAcceptable("La requête n'est pas un objet. ");
         if (requestData == {})
-            return Error.NotAcceptable("La requête est vide");
+            return HttpError.NotAcceptable("La requête est vide");
         //Verification data est vide
         if (requestData.nom === undefined &&
             requestData.prenom === undefined &&
             requestData.surnom === undefined &&
             requestData.description === undefined &&
             requestData.id === undefined)
-                return Error.NotAcceptable("La requête ne peut être vide");
+                return HttpError.NotAcceptable("La requête ne peut être vide");
 
         //Validation ID
         if (requestData.id !== undefined && requestData.id.length != 24)
-            return Error.NotAcceptable("Numéro d'identification erroné");
+            return HttpError.NotAcceptable("Numéro d'identification erroné");
         
         let query = this.tempQueryBuilder(requestData);
  
@@ -122,7 +121,7 @@ class PersonnesController {
      * Retourne : 
      *      @return 
     */
-    public async list(requestData:any):Promise<ServiceResponse> {
+    public async list(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la requête d'obtention de la liste de personne");
         if (requestData.id !== undefined){
             LogHelper.debug("La recherche par id n'est pas implémentée");
@@ -255,7 +254,6 @@ class PersonnesController {
 
         return finalQuery;
     }
-
 }
 
 export default PersonnesController;

@@ -2,6 +2,7 @@ import express from "express";
 import UserController from "../Controllers/UserController";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {StatusCodes} from "http-status-codes";
+import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
 
 // add { mergeParams: true } to get the main route params.
 const UserRouter = express.Router();
@@ -12,16 +13,24 @@ const UserRouter = express.Router();
 // USER/UPDATE
 
 UserRouter.post('/update', async (req, res) => {
+
     let {data} = req.body;
-    LogHelper.log(`Update request on users route with this data : ${data}`);
+    LogHelper.info(`Update request on users route with this data`, data);
+
     //await ajoute avant le try.
     try {
-        LogHelper.log(`Update user id : ${data.id}`);
+
+        LogHelper.info(`Update user id : ${data.id}`);
+
         const controller = new UserController();
-        const response:any = await controller.update(data.id, data.updatedValues);
+        const response:ApiResponseContract = await controller.update(data.id, data);
+
+        LogHelper.info(`User id : ${data.id} update response`, response);
+
         return res.status(response.code).send(response);
 
     } catch (errors:any) {
+        LogHelper.error(errors, "update - error catch");
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
             error: true,
             code: StatusCodes.INTERNAL_SERVER_ERROR,
@@ -35,6 +44,7 @@ UserRouter.post('/update', async (req, res) => {
 // USERS/CREATE
 
 UserRouter.post('/create', async (req, res) => {
+
     let {data} = req.body;
     LogHelper.log(`Received`, req.body, `Create user ${data}`);
 

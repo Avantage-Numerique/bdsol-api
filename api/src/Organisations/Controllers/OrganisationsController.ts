@@ -1,9 +1,9 @@
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import Organisation from "../Models/Organisation"
-import ServiceResponse from "../../Database/Responses/ServiceResponse";
 import OrganisationsService from "../Services/OrganisationsService";
-import { Error } from "../../Error/Error";
+import HttpError from "../../Error/HttpError";
 import { OrganisationSchema } from "../Schemas/OrganisationSchema";
+import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
 
 class OrganisationsController {
 
@@ -24,16 +24,16 @@ class OrganisationsController {
      * Retourne :
      *      @return {ServiceResponse} 
      */
-     public async update(requestData:any):Promise<ServiceResponse> {
+     public async update(requestData:any):Promise<ApiResponseContract> {
         
         //Validation des données
         let messageUpdate = this.validateData(requestData);
         if (!messageUpdate.isValid)
-            return Error.NotAcceptable(messageUpdate.message);
+            return HttpError.NotAcceptable(messageUpdate.message);
 
         //Validation ID
         if (requestData.id === undefined)
-        return Error.NotAcceptable("Aucun no. d'identification fournit");
+        return HttpError.NotAcceptable("Aucun no. d'identification fournit");
         
         let formatedData = this.formatRequestDataForDocument(requestData);
         let updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
@@ -43,7 +43,7 @@ class OrganisationsController {
             return updatedModelResponse;
 
 
-        return Error.NotAcceptable('Échec de l\'update d\'une Organisation');
+        return HttpError.NotAcceptable('Échec de l\'update d\'une Organisation');
     
     }
 
@@ -57,10 +57,10 @@ class OrganisationsController {
      * Retourne :
      *      @return {ServiceResponse}
      */
-    public async create(requestData:any):Promise<ServiceResponse> {
+    public async create(requestData:any):Promise<ApiResponseContract> {
         let messageValidate = this.validateData(requestData);
         if (!messageValidate.isValid)
-            return Error.NotAcceptable(messageValidate.message);
+            return HttpError.NotAcceptable(messageValidate.message);
 
         let formatedData = this.formatRequestDataForDocument(requestData);
         let createdDocumentResponse = await this.service.insert(formatedData);
@@ -69,7 +69,7 @@ class OrganisationsController {
             !createdDocumentResponse.error)
             return createdDocumentResponse;
 
-        return Error.NotAcceptable('Échec de la création d\'une Organisation');
+        return HttpError.NotAcceptable('Échec de la création d\'une Organisation');
     }
 
     /**

@@ -7,7 +7,7 @@ import {ReasonPhrases,StatusCodes} from 'http-status-codes';
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import MongooseDBDriver from "../../Database/Drivers/MongooseDriver";
 import {UsersProvider} from "../../Database/Providers/UsersProvider";
-import Provider from "../../Database/Providers/Provider";
+import DbProvider from "../../Database/Providers/DbProvider";
 
 /**
  * Manage all the serveur actions and connect the app to the ROUTE.
@@ -18,7 +18,7 @@ export default class ServerController {
     static usersModel: any;
     static database: DBDriver;
     static userProvider: UsersProvider;
-    static dataProvider: Provider;
+    static dataProvider: DbProvider;
 
     server: http.Server;
     api: express.Application;

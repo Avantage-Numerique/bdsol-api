@@ -1,5 +1,6 @@
+import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
 
-export default interface ServiceResponse {
+export default interface ServiceResponse extends ApiResponseContract {
 
     error:boolean;
     code:number;//statusCode - ?

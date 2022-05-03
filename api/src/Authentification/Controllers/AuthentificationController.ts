@@ -14,7 +14,12 @@ import {StatusCodes} from "http-status-codes";
 class AuthentificationController
 {
 
+    public service:UsersService;
     //user provider.
+
+    constructor() {
+        this.service = new UsersService(User.getInstance());
+    }
 
     public async login(username:string, password:string): Promise<LoginResponse> {
 
@@ -22,7 +27,7 @@ class AuthentificationController
         LogHelper.log(`${username} trying to connect ...`);
 
         // TEMP DB BYPASS to make this working quicker.
-        let targetUser = await AuthentificationController.authenticate(username, password);
+        let targetUser = await this.authenticate(username, password);
 
         // User was find in DB
         if (targetUser && typeof targetUser.username !== 'undefined') {
@@ -30,7 +35,7 @@ class AuthentificationController
             LogHelper.log(`Les information de ${targetUser.username} fonctionnent, génération du token JW ...`);
 
             // Generate an access token
-            const userConnectedToken = AuthentificationController.generateToken(targetUser);
+            const userConnectedToken = this.generateToken(targetUser);
 
             return {
                 error: false,
@@ -85,7 +90,7 @@ class AuthentificationController
      * @param user
      * @private
      */
-    private static generateToken(user:any):string {
+    private generateToken(user:any):string {
         return TokenController.generate({ user_id: user._id, username: user.username, role: user.role });
     }
 
@@ -95,7 +100,7 @@ class AuthentificationController
      * @param password
      * @private
      */
-    private static async authenticate(username:string, password:string): Promise<any> {
+    private async authenticate(username:string, password:string): Promise<any> {
 
         let targetUser = {
             username: username,
@@ -103,9 +108,8 @@ class AuthentificationController
         } as UserAuthContract;
 
         if (ServerController.database.driverPrefix === 'mongodb') {
-
-            let users = new UsersService(User.getInstance());
-            return await users.get(targetUser);
+            LogHelper.log(this.service, "authenticate");
+            return await this.service.get(targetUser);
         }
 
         /**
