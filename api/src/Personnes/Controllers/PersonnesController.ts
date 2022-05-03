@@ -60,11 +60,15 @@ class PersonnesController {
         //Validation ID
         if (requestData.id === undefined)
             return HttpError.NotAcceptable("Aucun no. d'identification fournit");
+        if (requestData.id.length != 24)
+            return HttpError.NotAcceptable("Numéro d'identification erroné");
+        
         
         let formatedData = this.formatRequestDataForDocument(requestData);
         let updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
 
-        if (updatedModelResponse !== undefined)
+        if (updatedModelResponse !== undefined &&
+            !updatedModelResponse.error)
             return updatedModelResponse;
 
         return HttpError.NotAcceptable('Échec de l\'update d\'une Personne');
@@ -85,9 +89,22 @@ class PersonnesController {
  
     public async search(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la recherche dans la liste");
-        if (requestData.id !== undefined){
-            LogHelper.debug("La recherche par id n'est pas implémentée");
-        }
+
+        if (typeof requestData === undefined || typeof requestData !== 'object')
+            return HttpError.NotAcceptable("La requête n'est pas un objet. ");
+        if (requestData == {})
+            return HttpError.NotAcceptable("La requête est vide");
+        //Verification data est vide
+        if (requestData.nom === undefined &&
+            requestData.prenom === undefined &&
+            requestData.surnom === undefined &&
+            requestData.description === undefined &&
+            requestData.id === undefined)
+                return HttpError.NotAcceptable("La requête ne peut être vide");
+
+        //Validation ID
+        if (requestData.id !== undefined && requestData.id.length != 24)
+            return HttpError.NotAcceptable("Numéro d'identification erroné");
         
         let query = this.tempQueryBuilder(requestData);
  
@@ -221,7 +238,7 @@ class PersonnesController {
         let finalQuery = {};
         
         if ( query.id !== undefined)//@ts-ignore
-            finalQuery._id = { $regex: query.id };
+            finalQuery._id = query.id;
 
         if ( query.nom !== undefined)//@ts-ignore
             finalQuery.nom = { $regex: query.nom , $options : 'i' };
