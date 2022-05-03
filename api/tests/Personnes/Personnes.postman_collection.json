@@ -29,7 +29,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"create"
 							]
 						}
@@ -57,7 +57,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"create"
 							]
 						}
@@ -85,7 +85,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"create"
 							]
 						}
@@ -113,7 +113,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"create"
 							]
 						}
@@ -141,7 +141,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"create"
 							]
 						}
@@ -169,7 +169,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"create"
 							]
 						}
@@ -197,7 +197,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"create"
 							]
 						}
@@ -225,7 +225,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"create"
 							]
 						}
@@ -253,7 +253,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"create"
 							]
 						}
@@ -281,7 +281,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"create"
 							]
 						}
@@ -314,7 +314,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"update"
 							]
 						}
@@ -342,7 +342,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"update"
 							]
 						}
@@ -370,7 +370,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"update"
 							]
 						}
@@ -398,7 +398,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"update"
 							]
 						}
@@ -426,7 +426,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"update"
 							]
 						}
@@ -454,7 +454,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"update"
 							]
 						}
@@ -482,7 +482,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"update"
 							]
 						}
@@ -510,7 +510,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"update"
 							]
 						}
@@ -538,7 +538,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"update"
 							]
 						}
@@ -566,7 +566,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"update"
 							]
 						}
@@ -594,7 +594,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"update"
 							]
 						}
@@ -622,7 +622,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"update"
 							]
 						}
@@ -655,7 +655,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -683,7 +683,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -711,7 +711,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -739,7 +739,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -767,7 +767,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -795,7 +795,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -823,7 +823,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -851,7 +851,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -879,7 +879,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -907,7 +907,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -935,7 +935,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -968,7 +968,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -996,7 +996,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -1024,7 +1024,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -1052,7 +1052,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -1080,7 +1080,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -1108,7 +1108,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -1136,7 +1136,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -1164,7 +1164,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -1192,7 +1192,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -1220,7 +1220,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -1248,7 +1248,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"search"
 							]
 						}
@@ -1281,7 +1281,7 @@
 							],
 							"port": "8000",
 							"path": [
-								"personne",
+								"personnes",
 								"list"
 							]
 						}

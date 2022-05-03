@@ -219,62 +219,23 @@ class PersonnesController {
      */
     public tempQueryBuilder(query:any) {
 
-        let finalQuery = {"nom":{},"prenom":{},"surnom":{},"description":{}, "createdAt":{}, "updatedAt":{}};
-
-        /*if ( query.id !== undefined) {
+        let finalQuery = {};
+        
+        if ( query.id !== undefined)//@ts-ignore
             finalQuery._id = { $regex: query.id };
-           }
-        else{
-            finalQuery._id = { $regex: ""};
-        }*/
-        if ( query.nom !== undefined) {
+
+        if ( query.nom !== undefined)//@ts-ignore
             finalQuery.nom = { $regex: query.nom , $options : 'i' };
-           }
-        else{
-            finalQuery.nom = { $regex: "" };
-        }
-        if ( query.prenom !== undefined) {
+
+        if ( query.prenom !== undefined)//@ts-ignore
             finalQuery.prenom = { $regex : query.prenom , $options : 'i' };
-        }
-        else{
-            finalQuery.prenom = { $regex: "" };
-        }
-        if ( query.surnom !== undefined) {
-            finalQuery.surnom = { $regex: query.surnom , $options : 'i' };
-        }
-        else{
-            finalQuery.surnom = { $regex: "" };
-        }
-        if ( query.description !== undefined) {
+
+        if ( query.surnom !== undefined)//@ts-ignore
+        finalQuery.surnom = { $regex: query.surnom , $options : 'i' };
+
+        if ( query.description !== undefined)//@ts-ignore
             finalQuery.description = { $regex: query.description , $options : 'i' };
-        }
-        else{
-            finalQuery.description = { $regex: "" };
-        }
-        if ( query.createdAfter !== undefined) {
-            finalQuery.createdAt = { $gt : query.createdAfter+"T-23:59:59.999+00:00" };
-        }
-        else{
-            finalQuery.createdAt = { $regex: "" };
-        }
-        //if ( query.createdBefore !== undefined) {
-        //    finalQuery.createdAt = { $lt : query.createdBefore+"T-23:59:59.999+00:00" };
-        //}
-        //else{
-        //    finalQuery.createdAt = { $regex: "" };
-        //}
-        if ( query.updatedAfter !== undefined) {
-            finalQuery.updatedAt = { $gt : query.updatedAfter+"T-23:59:59.999+00:00" };
-        }
-        else{
-            finalQuery.updatedAt = { $regex: "" };
-        }
-        if ( query.updatedBefore !== undefined) {
-            finalQuery.updatedAt = { $lt : query.updatedBefore+"T-23:59:59.999+00:00" };
-        }
-        else{
-            finalQuery.updatedAt = { $regex: "" };
-        }
+
         return finalQuery;
     }
 
