@@ -1,18 +1,18 @@
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import Personne from "../Models/Personne"
 import ServiceResponse from "../../Database/Responses/ServiceResponse";
-import PersonneService from "../Services/PersonneService";
+import PersonnesService from "../Services/PersonnesService";
 import {PersonneSchema} from "../Schemas/PersonneSchema";
 import { Error } from "../../Error/Error";
 
-class PersonneController {
+class PersonnesController {
 
     /** @public PersonneService */
-    public service:PersonneService;
+    public service:PersonnesService;
 
     /** @constructor */
     constructor() {
-        this.service = new PersonneService(Personne.getInstance());
+        this.service = new PersonnesService(Personne.getInstance());
     }
 
 
@@ -67,7 +67,6 @@ class PersonneController {
         if (updatedModelResponse !== undefined &&
             !updatedModelResponse.error)
             return updatedModelResponse;
-
 
         return Error.NotAcceptable('Échec de l\'update d\'une Personne');
     
@@ -263,4 +262,4 @@ class PersonneController {
 
 }
 
-export default PersonneController;
+export default PersonnesController;

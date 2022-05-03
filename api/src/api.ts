@@ -3,7 +3,7 @@ import ApiRouter from "./routes";
 import HealthCheckRouter from "./Healthcheck/Routes/HealthCheckRoutes";
 import AuthentificationRouter from "./Authentification/Routes/AuthentificationRoutes";
 import UserRoutes from "./Users/Routes/UserRoutes";
-import PersonneRouter from './Personnes/Routes/PersonneRoutes';
+import PersonneRouter from './Personnes/Routes/PersonnesRoutes';
 import OrganisationRouter from './Organisations/Routes/OrganisationRoutes'
 
 

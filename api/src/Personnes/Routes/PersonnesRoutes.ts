@@ -1,5 +1,5 @@
 import express from "express";
-import PersonneController from "../Controllers/PersonneController";
+import PersonnesController from "../Controllers/PersonnesController";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 const PersonneRouter = express.Router();
@@ -18,7 +18,7 @@ const PersonneRouter = express.Router();
 PersonneRouter.post('/update', async (req, res) => {
     let {data} = req.body;
     LogHelper.log("Update Personne route for ", data);
-    const controller = new PersonneController();
+    const controller = new PersonnesController();
     const response = await controller.update(data);
     return res.status(response.code).send(response);
 })
@@ -35,7 +35,7 @@ PersonneRouter.post('/update', async (req, res) => {
 PersonneRouter.post('/create', async (req, res) => {
     let {data} = req.body;
     LogHelper.log("Create Personne route for ", data);
-    const controller = new PersonneController();
+    const controller = new PersonnesController();
     const response:any = await controller.create(data);
     return res.status(response.code).send(response);
 });
@@ -46,7 +46,7 @@ PersonneRouter.post('/create', async (req, res) => {
 PersonneRouter.post('/find', async (req, res) => {
     let {data} = req.body;
     LogHelper.log("Find Personne route for ", data);
-    const controller = new PersonneController();
+    const controller = new PersonnesController();
     const response = await controller.find(data);
     
     return res.status(response.code).send(response);
@@ -58,7 +58,7 @@ PersonneRouter.post('/find', async (req, res) => {
 PersonneRouter.post('/list', async (req, res) => {
     let {data} = req.body;
     LogHelper.log("List Personne route for ", data);
-    const controller = new PersonneController();
+    const controller = new PersonnesController();
     const response = await controller.find(data);
     
     return res.status(response.code).send(response);
