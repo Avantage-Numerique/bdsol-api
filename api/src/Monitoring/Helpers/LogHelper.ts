@@ -77,6 +77,6 @@ export default class LogHelper
     }
 
     public static logToFile(args:any[]) {
-        return args;
+        //nothing yet.
     }
 }

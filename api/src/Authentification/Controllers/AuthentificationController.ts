@@ -5,9 +5,7 @@ import LoginResponse from "../Responses/LoginResponse";
 import {LogoutResponse} from "../Responses/LogoutResponse";
 import UserAuthContract from "../Contracts/UserAuthContract";
 import {TokenController} from "./TokenController";
-import FakeUserModel from "../../Users/Models/FakeUserModel";
-import UsersService from "../../Users/Services/UsersService";
-import User from "../../Users/Models/User";
+import {UsersService, User, FakeUserModel} from "../../Users/UsersDomain";
 import {StatusCodes} from "http-status-codes";
 
 
@@ -18,13 +16,18 @@ class AuthentificationController
     //user provider.
 
     constructor() {
-        this.service = new UsersService(User.getInstance());
+        this.service = UsersService.getInstance(User.getInstance());//new UsersService(User.getInstance());
+
+        if (this.service === undefined) {
+            LogHelper.error("Service is null in Authentification");
+        }
     }
 
     public async login(username:string, password:string): Promise<LoginResponse> {
 
         // add encryption on send form till checking here.
-        LogHelper.log(`${username} trying to connect ...`);
+        LogHelper.info(`${username} trying to connect ...`);
+        LogHelper.info(`Le service`, this.service);
 
         // TEMP DB BYPASS to make this working quicker.
         let targetUser = await this.authenticate(username, password);
@@ -107,6 +110,7 @@ class AuthentificationController
             password: password
         } as UserAuthContract;
 
+        //DEBUGING LOGIN : THIS"SERVICE IS an EMPTY Object here.
         if (ServerController.database.driverPrefix === 'mongodb') {
             LogHelper.log(this.service, "authenticate");
             return await this.service.get(targetUser);
@@ -117,12 +121,13 @@ class AuthentificationController
          * Still clumsy structure.
          */
         if (ServerController.database.driverPrefix === 'fakeusers') {
-
             let fakeUser = await FakeUserModel.findOne(targetUser);
             return fakeUser as UserContract;
         }
 
-        return false;
+        return {
+            user: undefined
+        };
     }
 }
 export default AuthentificationController;

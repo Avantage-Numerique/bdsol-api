@@ -1,5 +1,5 @@
 import express from "express";
-import UserController from "../Controllers/UserController";
+import {UserController} from "../UsersDomain";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {StatusCodes} from "http-status-codes";
 import {ApiResponseContract} from "../../Http/Responses/ApiResponse";

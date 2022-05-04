@@ -1,14 +1,12 @@
 import * as mongoDB from "mongodb";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import DBDriver from "./DBDriver";
 import mongoose from "mongoose";
 import CreateDbAndUsersMongoose from "../../Migrations/create-db-and-users-mongoose";
-import User from "../../Users/Models/User";
-import {UsersProvider} from "../Providers/UsersProvider";
-import {DataProvider} from "../Providers/DataProvider";
+import {DBDriver, UsersProvider, DataProvider} from "../DatabaseDomain";
+import {User} from "../../Users/UsersDomain";
 
-export default class MongooseDBDriver implements DBDriver {
+export class MongooseDBDriver implements DBDriver {
 
     public driverPrefix: string;
     public client: mongoDB.MongoClient | null;

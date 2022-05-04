@@ -2,8 +2,8 @@ import * as mongoDB from "mongodb";
 import mongoose from "mongoose";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import DBDriver from "./DBDriver";
-import User from "../../Users/Models/User";
+import {DBDriver} from "../DatabaseDomain";
+import {User} from "../../Users/UsersDomain";
 import CreateUsersCollection from "../../Migrations/create-users-collection";
 
 
@@ -13,7 +13,7 @@ import CreateUsersCollection from "../../Migrations/create-users-collection";
  *
  * Mongodb was a raw driver to manage mongodb without ODM/ORM.
  */
-export default class MongoDBDriver implements DBDriver {
+export class MongoDBDriver implements DBDriver {
 
     public driverPrefix: string;
     public client: mongoDB.MongoClient | null;

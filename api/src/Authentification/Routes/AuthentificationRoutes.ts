@@ -12,9 +12,12 @@ AuthentificationRouter.get('/login', (req, res) => {
 });
 
 AuthentificationRouter.post('/login', async (req, res) => {
+
     let {username, password} = req.body;
+
     const controller = new AuthenficationController();
     const response = await controller.login(username, password);
+
     return res.status(response.code).send(response);
 });
 

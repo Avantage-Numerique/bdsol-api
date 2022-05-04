@@ -1,5 +1,5 @@
 
-export default interface DBDriver {
+export interface DBDriver {
     driverPrefix: string;
     client: any;
     db: any;

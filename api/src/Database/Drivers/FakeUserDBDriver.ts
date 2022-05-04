@@ -1,10 +1,9 @@
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import DBDriver from "./DBDriver";
-import FakeUserModel from "../../Users/Models/FakeUserModel";
-import {fakeUsers} from "../../Users/fakeUsers";
+import {DBDriver} from "../DatabaseDomain";
+import {FakeUserModel, fakeUsers} from "../../Users/UsersDomain";
 import ServerController from "../../Server/Controllers/ServerController";
 
-export default class FakeUserDBDriver implements DBDriver {
+export class FakeUserDBDriver implements DBDriver {
 
     public driverPrefix: string;
     public client: any | null;

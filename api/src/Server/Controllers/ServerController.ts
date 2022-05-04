@@ -1,13 +1,17 @@
 import express from 'express';
 import * as http from "http";
 import config from "../../config";
-import DBDriver from "../../Database/Drivers/DBDriver";
-import FakeUserDBDriver from "../../Database/Drivers/FakeUserDBDriver";
+
+import {
+    DBDriver,
+    FakeUserDBDriver,
+    MongooseDBDriver,
+    DbProvider,
+    UsersProvider
+} from "../../Database/DatabaseDomain";
+
 import {ReasonPhrases,StatusCodes} from 'http-status-codes';
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import MongooseDBDriver from "../../Database/Drivers/MongooseDriver";
-import {UsersProvider} from "../../Database/Providers/UsersProvider";
-import DbProvider from "../../Database/Providers/DbProvider";
 
 /**
  * Manage all the serveur actions and connect the app to the ROUTE.

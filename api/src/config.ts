@@ -36,6 +36,11 @@ const config = {
             name: process.env.USERS_DB_NAME || '',
         }
     },
+    jwt: {
+        defaultOptions: {
+            expiresIn: '1h'
+        }
+    },
     query: {
         defaultSkip: process.env.QUERY_DEFAULT_SKIP || 0,
         defaultLimit: process.env.QUERY_DEFAULT_LIMIT || 10,

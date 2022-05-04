@@ -1,6 +1,5 @@
-import User from "../Models/User";
-import {UserDocument} from "../Schemas/UserSchema";
-import UsersService from "../Services/UsersService";
+import {User, UserDocument, UsersService} from "../UsersDomain";
+
 import {StatusCodes} from "http-status-codes";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
@@ -10,21 +9,26 @@ import HttpError from "../../Error/HttpError";
  * First pitch, in parallele with fred, for a crud controller.
  * Next step will be to create a CrudController, to abstract the core that will be designed here.
  */
-export default class UserController {
+export class UserController {
 
     public service:UsersService;
 
     constructor() {
-        this.service = new UsersService(User.getInstance());
+        this.service = UsersService.getInstance(User.getInstance());//new UsersService(User.getInstance());
+        if (this.service === undefined) {
+            LogHelper.error("Service is null in UsersService");
+        }
     }
 
-    public async create(requestData:any):Promise<ApiResponseContract> {
+    public async create(requestData:any):Promise<ApiResponseContract>
+    {
         if (!this.validateData(requestData)) {
             return HttpError.NotAcceptable();
         }
 
         let formatedData = this.formatRequestDataForDocument(requestData);
         let createdDocumentResponse:ApiResponseContract = await this.service.insert(formatedData);
+        LogHelper.debug("userController", createdDocumentResponse);
 
         if (createdDocumentResponse !== undefined) {
             return createdDocumentResponse;
@@ -41,7 +45,7 @@ export default class UserController {
      * @param id the document id of the user.
      * @param requestData the data to update.
      */
-    public async update(id:string, requestData:any):Promise<ApiResponseContract>  {
+    public async update(id:string, requestData:any):Promise<ApiResponseContract> {
 
         if (!this.validateData(requestData)) {
             return HttpError.NotAcceptable();

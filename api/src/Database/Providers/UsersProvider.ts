@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import config from "../../config";
-import DbProvider, {BaseProvider} from "./DbProvider";
+import {DbProvider, BaseProvider} from "../DatabaseDomain";
+import {User} from "../../Users/UsersDomain";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import User from "../../Users/Models/User";
 
 
 export class UsersProvider extends BaseProvider implements DbProvider {
@@ -14,14 +14,16 @@ export class UsersProvider extends BaseProvider implements DbProvider {
         this.urlPrefix = "mongodb";
     }
 
-    public static getInstance():DbProvider|null {
+    public static getInstance():DbProvider|undefined
+    {
         if (UsersProvider._singleton === undefined) {
             UsersProvider._singleton = new UsersProvider(config.users.db.name);
         }
         return UsersProvider._singleton;
     }
 
-    public async connect():Promise<mongoose.Connection|null> {
+    public async connect():Promise<mongoose.Connection|undefined>
+    {
         LogHelper.log("UserProvider Connecting to DB");
         await super.connect();
 

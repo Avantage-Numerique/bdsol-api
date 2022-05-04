@@ -1,8 +1,8 @@
-//src/models/Post.js
-import mongoose from "mongoose";
-import {UserSchema} from "../Schemas/UserSchema";
-import DbProvider from "../../Database/Providers/DbProvider";
 
+import mongoose from "mongoose";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import {UserSchema} from "../UsersDomain";
+import {DbProvider} from "../../Database/DatabaseDomain";
 
 /**
  *
@@ -15,31 +15,35 @@ export interface UserContract {
     role: string;
 }
 
-class User {
+/**
+ * Model User
+ */
+export class User {
     static collectionName:string = 'users';
     static modelName:string = 'User';
     static connection:mongoose.Connection;
-    static provider:DbProvider|null;
+    static provider:DbProvider|undefined;
 
-    static initSchema() {
+    public static initSchema()
+    {
         User.connection.model(User.modelName, UserSchema.schema());
     }
 
-    static getInstance() {
-
-        if (User.connection !== null) {
+    public static getInstance()
+    {
+        LogHelper.debug("User get instance", User.connection);
+        if (User.providerIsSetup()) {
             User.initSchema();
             return User.connection.model(User.modelName);
         }
         return null;
     }
 
-    static providerIsSetup():boolean {
+    public static providerIsSetup():boolean
+    {
         return User.provider !== undefined &&
             User.provider !== null &&
             User.provider.connection !== undefined;
     }
+
 }
-
-export default User;
-

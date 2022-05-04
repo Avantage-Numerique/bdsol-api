@@ -5,17 +5,17 @@ import Service from "../Service";
 import {ConnectOptions} from "mongodb";
 
 
-export default interface DbProvider {
+export interface DbProvider {
     connection:mongoose.Connection;
     urlPrefix:string;
     url:string;
     databaseName:string;
 
-    connect():Promise<mongoose.Connection|null>;
-    getInstance():DbProvider|null;
+    connect():Promise<mongoose.Connection|undefined>;
+    getInstance():DbProvider|undefined;
 }
 
-export class BaseProvider implements DbProvider {
+export abstract class BaseProvider implements DbProvider {
 
     protected _connection:mongoose.Connection;
     protected _service:Service;
@@ -31,7 +31,7 @@ export class BaseProvider implements DbProvider {
         }
     }
 
-    public async connect():Promise<mongoose.Connection|null> {
+    public async connect():Promise<mongoose.Connection|undefined> {
 
         LogHelper.log(this.url);
         try {
@@ -43,14 +43,14 @@ export class BaseProvider implements DbProvider {
             return this.connection;
         }
         catch (error:any) {
-            LogHelper.error("Can't connect to db in UsersProvider");
+            LogHelper.error("Can't connect to db in provider");
         }
-        return null;
+        return undefined;
     }
 
-    public getInstance(): DbProvider|null {
+    public getInstance(): DbProvider|undefined {
         //to overwrite.
-        return null;
+        return undefined;
     }
 
 
