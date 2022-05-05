@@ -1,12 +1,11 @@
 import {User, UserDocument, UsersService} from "../UsersDomain";
 
-import {StatusCodes} from "http-status-codes";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
 import HttpError from "../../Error/HttpError";
 
 /**
- * First pitch, in parallele with fred, for a crud controller.
+ * First pitch, in parallel with fred, for a crud controller.
  * Next step will be to create a CrudController, to abstract the core that will be designed here.
  */
 export class UserController {
@@ -26,8 +25,8 @@ export class UserController {
             return HttpError.NotAcceptable();
         }
 
-        let formatedData = this.formatRequestDataForDocument(requestData);
-        let createdDocumentResponse:ApiResponseContract = await this.service.insert(formatedData);
+        let formattedData = this.formatRequestDataForDocument(requestData);
+        let createdDocumentResponse:ApiResponseContract = await this.service.insert(formattedData);
         LogHelper.debug("userController", createdDocumentResponse);
 
         if (createdDocumentResponse !== undefined) {
@@ -54,8 +53,8 @@ export class UserController {
             return HttpError.NotAcceptable();
         }
 
-        let formatedData = this.formatRequestDataForDocument(requestData);
-        let updatedModelResponse:any = await this.service.update(id, formatedData);
+        let formattedData = this.formatRequestDataForDocument(requestData);
+        let updatedModelResponse:any = await this.service.update(id, formattedData);
 
         if (updatedModelResponse !== undefined) {
             return updatedModelResponse;
@@ -81,16 +80,6 @@ export class UserController {
             role: requestData.role,
             avatar: requestData.avatar
         } as UserDocument;
-    }
-
-    public userCreationFailed($message:string = 'Impossible de créé l\'utilsiateur.'):ApiResponseContract {
-        return {
-            error: true,
-            code: StatusCodes.NOT_ACCEPTABLE,
-            message: $message,
-            errors: [],
-            data: {}
-        } as ApiResponseContract;
     }
 
     public validateData(requestData:any):boolean {
