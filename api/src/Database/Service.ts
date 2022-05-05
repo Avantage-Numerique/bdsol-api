@@ -11,7 +11,7 @@ import {ApiResponseContract} from "../Http/Responses/ApiResponse";
  * Give ability to query and CRUD on collections and its documents.
  * @param model any The model to be use to query in the documents.
  */
-class Service {
+export class Service {
 
     model: any;//@todo create or find the best type for this.
     connection: any;
@@ -269,5 +269,3 @@ class Service {
         //return Service.errorNothingHappened();
     }
 }
-
-export default Service;

@@ -1,9 +1,8 @@
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 import {fakeUsers} from "../Users/fakeUsers";
 import config from "../config";
-import {MigrationContract} from "../Database/Contracts/Migration";
 import mongoose from "mongoose";
-import Service from "../Database/Service";
+import {Service, MigrationContract} from "../Database/DatabaseDomain";
 
 export default class CreateDbAndUsersMongoose implements MigrationContract {
 

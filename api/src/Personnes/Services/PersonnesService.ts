@@ -1,4 +1,4 @@
-import Service from "../../Database/Service";
+import {Service} from "../../Database/DatabaseDomain";
 import Personne from "../Models/Personne";
 
 class PersonnesService extends Service {

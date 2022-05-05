@@ -1,6 +1,5 @@
 import {User} from "../UsersDomain";
-import Service from "../../Database/Service";
-import {UsersProvider} from "../../Database/Providers/UsersProvider";
+import {Service, UsersProvider} from "../../Database/DatabaseDomain";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 export class UsersService extends Service {

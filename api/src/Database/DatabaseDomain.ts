@@ -5,6 +5,7 @@
 
 export * from './Drivers/DBDriver';
 export * from './Providers/DbProvider';
+export * from './Service';
 
 export * from './Drivers/FakeUserDBDriver';
 export * from './Drivers/MongoDBDriver';
@@ -12,3 +13,5 @@ export * from './Drivers/MongooseDriver';
 
 export * from './Providers/DataProvider';
 export * from './Providers/UsersProvider';
+
+export * from './Contracts/Migration';
