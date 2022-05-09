@@ -22,3 +22,17 @@ Language : Javascript
 
 ### Outils
 - Nextjs (react)
+- Madge (outil de débugging pour les circulars).
+`generateInfraGraph --circular --extensions ts ./src`
+
+## Design brainstorm
+Domaine provider ? Ou Domaine Facade ?
+
+La facade ? Pour le user
+https://refactoring.guru/design-patterns/facade/typescript/example#lang-features
+
+Le visitor :
+https://refactoring.guru/design-patterns/visitor
+
+Le mediator
+https://refactoring.guru/design-patterns/mediator

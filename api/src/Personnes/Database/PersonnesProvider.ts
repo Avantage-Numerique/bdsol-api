@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import config from "../../config";
-import DbProvider from "../../Database/Providers/DbProvider";
-import {ConnectOptions} from "mongodb";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import User from "../../Users/Models/User";
+import {DbProvider} from "../../Database/DatabaseDomain";
+import {ConnectOptions} from "mongodb";
+import {User} from "../../Users/UsersDomain";
 import Service from "../../Database/Service";
 
 
@@ -31,7 +31,7 @@ export class PersonnesProvider implements DbProvider {
         return this._singleton;
     }
 
-    public async connect():Promise<mongoose.Connection|null> {
+    public async connect():Promise<mongoose.Connection|undefined> {
         try {
             this.connection = await mongoose.createConnection(this.url, {
                 useNewUrlParser: true,
@@ -46,7 +46,7 @@ export class PersonnesProvider implements DbProvider {
         catch (error:any) {
             LogHelper.error("Can't connect to db in PersonnesProvider");
         }
-        return null;
+        return undefined;
     }
 
 

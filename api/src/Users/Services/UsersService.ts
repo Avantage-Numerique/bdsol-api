@@ -1,27 +1,29 @@
+import {User} from "../UsersDomain";
+import {Service} from "../../Database/DatabaseDomain";
+import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
 
-import Service from "../../Database/Service";
-import User from "../Models/User";
-import {UsersProvider} from "../../Database/Providers/UsersProvider";
+export class UsersService extends Service {
 
-class UsersService extends Service {
+    private static _instance:UsersService;
 
     //this should received the connection.
     constructor(model:any=null) {
         if (model === null) {
-            User.getInstance();
+            model = User.getInstance();
         }
         super(model);
     }
 
-    static getInstance() {
-        User.provider = UsersProvider.getInstance();//must have
-        if (User.providerIsSetup()) {
-            User.initSchema();
-            // @ts-ignore
-            return User.provider.connection.model(User.modelName);
+    public static getInstance(model:any):UsersService
+    {
+        if (UsersService._instance === undefined) {
+            UsersService._instance = new UsersService(model);
         }
-        throw new Error("Personne Provider is not setup. Can't get Personne's model");
+        return UsersService._instance;
+    }
+
+    async get(query: any): Promise<ApiResponseContract>
+    {
+        return await super.get(query);
     }
 }
-
-export default UsersService;

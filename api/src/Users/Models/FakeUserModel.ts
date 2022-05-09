@@ -8,7 +8,7 @@ import LogHelper from "../../Monitoring/Helpers/LogHelper";
 /**
  *  User to get in fakeuser to test authenfication wihtout have to run mongodb serveur aside. That help develop without docker.
  */
-export default class FakeUserModel {
+export class FakeUserModel {
     static collection:Array<UserContract>;
 
     username:string;

@@ -1,36 +1,34 @@
 import mongoose from "mongoose";
-import {Schema} from "mongoose"
-import {OrganisationSchema} from "../Schemas/OrganisationSchema"
-import DbProvider from "../../Database/Providers/DbProvider";
-import {DataProvider} from "../../Database/Providers/DataProvider";
+import {Schema} from "mongoose";
+import {OrganisationSchema} from "../Schemas/OrganisationSchema";
+import {DbProvider, DataProvider} from "../../Database/DatabaseDomain";
 
 
 class Organisation {
-    
+
     /** @static Nom du modèle */
-    static modelName:string = "Organisation";
+    static modelName: string = "Organisation";
 
     /** @static Nom de la collection dans la base de données */
-    static collectionName:string = 'organisations';
+    static collectionName: string = 'organisations';
 
     /** @static Connection mongoose */
-    static connection:mongoose.Connection;
+    static connection: mongoose.Connection;
 
     /** @static Provider */
-    static provider:DbProvider;
+    static provider: DbProvider;
 
     /** @static Schéma pour la base de donnée */
-    static schema:Schema = 
+    static schema: Schema =
         new Schema<OrganisationSchema>({
-
-            nom: { type: String, required: true},
-            description: String,
-            url: String, //String? TODO
-            contactPoint: String //String? TODO
-        },
+                nom: {type: String, required: true},
+                description: String,
+                url: String, //String? TODO
+                contactPoint: String //String? TODO
+            },
             {
                 timestamps: true
-        });
+            });
 
     /**
      * @static method
@@ -47,7 +45,7 @@ class Organisation {
      * @method getInstance
      */
     static getInstance() {
-    Organisation.provider = DataProvider.getInstance();//must have
+        Organisation.provider = DataProvider.getInstance();//must have
         if (Organisation.providerIsSetup()) {
             Organisation.initSchema();
             return Organisation.provider.connection.model(Organisation.modelName);
@@ -60,7 +58,7 @@ class Organisation {
      * @method providerIsSetup
      * @return {boolean} isSetup
      */
-    static providerIsSetup():boolean {
+    static providerIsSetup(): boolean {
         return Organisation.provider !== undefined && Organisation.provider.connection !== undefined;
     }
 }

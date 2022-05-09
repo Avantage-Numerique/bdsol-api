@@ -1,14 +1,15 @@
 import * as mongoDB from "mongodb";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import DBDriver from "./DBDriver";
 import mongoose from "mongoose";
-import CreateDbAndUsersMongoose from "../../Migrations/create-db-and-users-mongoose";
-import User from "../../Users/Models/User";
+import type {DBDriver} from "./DBDriver";
 import {UsersProvider} from "../Providers/UsersProvider";
 import {DataProvider} from "../Providers/DataProvider";
+import {User} from "../../Users/UsersDomain";
 
-export default class MongooseDBDriver implements DBDriver {
+import CreateDbAndUsersMongoose from "../../Migrations/create-db-and-users-mongoose";
+
+export class MongooseDBDriver implements DBDriver {
 
     public driverPrefix: string;
     public client: mongoDB.MongoClient | null;
@@ -32,7 +33,7 @@ export default class MongooseDBDriver implements DBDriver {
     }
 
     public async connect() {
-        LogHelper.info(`Connexion aux base de données ...`);
+        LogHelper.info(`[BD] Connexion aux base de données ...`);
         await this.initDb();
     }
 
@@ -42,10 +43,10 @@ export default class MongooseDBDriver implements DBDriver {
     public async initDb() {
         //await this.initMongoose();
 
-        LogHelper.info(`Connexion à la  base de données utilisateurs ...`);
+        LogHelper.info(`[BD] Connexion à la  base de données utilisateurs ...`);
         await this.providers.users.connect();
 
-        LogHelper.info(`Connexion à la  base de données structurée, ouverte et liée ...`);
+        LogHelper.info(`[BD] Connexion à la  base de données structurée, ouverte et liée ...`);
         await this.providers.data.connect();
 
         //await this.generateFakeUsers();
@@ -55,7 +56,7 @@ export default class MongooseDBDriver implements DBDriver {
         if (config.environnement === 'development') {
             //will create the fake users if the collection is empty.
             //let users = new UsersService(User.getInstance());
-            let usersCollection = new CreateDbAndUsersMongoose(this.providers.users.service);
+            const usersCollection = new CreateDbAndUsersMongoose(this.providers.users.service);
             await usersCollection.up();
         }
     }

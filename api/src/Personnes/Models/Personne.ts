@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import {Schema} from "mongoose"
-import { PersonneSchema } from "../Schemas/PersonneSchema";
-import DbProvider from "../../Database/Providers/DbProvider";
-import {DataProvider} from "../../Database/Providers/DataProvider";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import { PersonneSchema } from "../Schemas/PersonneSchema";
+import type {DbProvider} from "../../Database/DatabaseDomain";
+import {DataProvider} from "../../Database/DatabaseDomain";
 
 class Personne {
     

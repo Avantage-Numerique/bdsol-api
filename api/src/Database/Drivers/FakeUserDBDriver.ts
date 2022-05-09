@@ -1,10 +1,8 @@
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import DBDriver from "./DBDriver";
-import FakeUserModel from "../../Users/Models/FakeUserModel";
-import {fakeUsers} from "../../Users/fakeUsers";
-import ServerController from "../../Server/Controllers/ServerController";
+import type {DBDriver} from "./DBDriver";
+import {FakeUserModel, fakeUsers} from "../../Users/UsersDomain";
 
-export default class FakeUserDBDriver implements DBDriver {
+export class FakeUserDBDriver implements DBDriver {
 
     public driverPrefix: string;
     public client: any | null;
@@ -24,8 +22,7 @@ export default class FakeUserDBDriver implements DBDriver {
     }
 
     public initDb() {
-        FakeUserModel.collection = this.getCollection(ServerController.usersTable);
-        return ServerController.usersModel;
+        FakeUserModel.collection = this.getCollection("users");
     }
 
     public getConnectionUrl() {

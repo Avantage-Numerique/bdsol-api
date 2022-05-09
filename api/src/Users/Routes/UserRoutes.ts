@@ -1,8 +1,8 @@
 import express from "express";
-import UserController from "../Controllers/UserController";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {StatusCodes} from "http-status-codes";
-import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import type {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import {UserController} from "../Controllers/UserController";
 
 // add { mergeParams: true } to get the main route params.
 const UserRouter = express.Router();
@@ -14,7 +14,7 @@ const UserRouter = express.Router();
 
 UserRouter.post('/update', async (req, res) => {
 
-    let {data} = req.body;
+    const {data} = req.body;
     LogHelper.info(`Update request on users route with this data`, data);
 
     //await ajoute avant le try.
@@ -45,7 +45,7 @@ UserRouter.post('/update', async (req, res) => {
 
 UserRouter.post('/create', async (req, res) => {
 
-    let {data} = req.body;
+    const {data} = req.body;
     LogHelper.log(`Received`, req.body, `Create user ${data}`);
 
     try {
@@ -54,18 +54,19 @@ UserRouter.post('/create', async (req, res) => {
         return res.status(response.code).send(response);
 
     } catch (errors:any) {
-        return {
-            error: true,
-            code: StatusCodes.INTERNAL_SERVER_ERROR,
-            message: errors.errmsg || "Not able to get the queried items",
-            errors: errors.errors
-        };
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .send({
+                error: true,
+                code: StatusCodes.INTERNAL_SERVER_ERROR,
+                message: errors.errmsg || "Not able to get the queried items",
+                errors: errors.errors
+            });
     }
 });
 
 
 UserRouter.post('/get', async (req, res) => {
-    let {data} = req.body;
+    const {data} = req.body;
     LogHelper.log(`Received`, req.body, `Create user ${data}`);
 
     try {
@@ -84,7 +85,7 @@ UserRouter.post('/get', async (req, res) => {
 });
 
 UserRouter.post('/delete', async (req, res) => {
-    let {data} = req.body;
+    const {data} = req.body;
     LogHelper.log(`Received`, req.body, `Delete user ${data}`);
 
     try {

@@ -2,8 +2,8 @@ import * as mongoDB from "mongodb";
 import mongoose from "mongoose";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import DBDriver from "./DBDriver";
-import User from "../../Users/Models/User";
+import type {DBDriver} from "./DBDriver";
+import {User} from "../../Users/UsersDomain";
 import CreateUsersCollection from "../../Migrations/create-users-collection";
 
 
@@ -13,7 +13,7 @@ import CreateUsersCollection from "../../Migrations/create-users-collection";
  *
  * Mongodb was a raw driver to manage mongodb without ODM/ORM.
  */
-export default class MongoDBDriver implements DBDriver {
+export class MongoDBDriver implements DBDriver {
 
     public driverPrefix: string;
     public client: mongoDB.MongoClient | null;
@@ -31,7 +31,7 @@ export default class MongoDBDriver implements DBDriver {
     }
 
     public async connect() {
-        LogHelper.log(`Connexion à la base de données mongodb ${this.getConnectionUrl()}`);
+        LogHelper.log(`[BD] Connexion à la base de données mongodb ${this.getConnectionUrl()}`);
         await this.initDb();
     }
 
@@ -52,17 +52,17 @@ export default class MongoDBDriver implements DBDriver {
         try {
 
             this.client = new mongoDB.MongoClient(this.getConnectionUrl());
-            LogHelper.log('connecting to ', this.getConnectionUrl());
+            LogHelper.log('[BD] connecting to ', this.getConnectionUrl());
 
             await this.client.connect();
 
             if (this.client) {
 
                 this.db = this.client.db(config.db.name);
-                LogHelper.log('Setting the default db ', config.db.name);
+                LogHelper.log('[BD] Setting the default db ', config.db.name);
 
                 //will create the fake user for now.
-                let usersCollection = new CreateUsersCollection();
+                const usersCollection = new CreateUsersCollection();
                 usersCollection.db = this.db;
                 await usersCollection.up();
             }

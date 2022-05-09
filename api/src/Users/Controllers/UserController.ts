@@ -1,30 +1,35 @@
-import User from "../Models/User";
-import {UserDocument} from "../Schemas/UserSchema";
-import UsersService from "../Services/UsersService";
-import {StatusCodes} from "http-status-codes";
+import {User} from "../Models/User";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
 import HttpError from "../../Error/HttpError";
+import type {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import type {UserDocument} from "../Schemas/UserSchema";
+import {UsersService} from "../Services/UsersService";
 
 /**
- * First pitch, in parallele with fred, for a crud controller.
+ * First pitch, in parallel with fred, for a crud controller.
  * Next step will be to create a CrudController, to abstract the core that will be designed here.
  */
-export default class UserController {
+export class UserController {
 
     public service:UsersService;
 
-    constructor() {
-        this.service = new UsersService(User.getInstance());
+    constructor()
+    {
+        this.service = UsersService.getInstance(User.getInstance());//new UsersService(User.getInstance());
+        if (this.service === undefined) {
+            LogHelper.error("Service is null in UsersService");
+        }
     }
 
-    public async create(requestData:any):Promise<ApiResponseContract> {
+    public async create(requestData:any):Promise<ApiResponseContract>
+    {
         if (!this.validateData(requestData)) {
             return HttpError.NotAcceptable();
         }
-
-        let formatedData = this.formatRequestDataForDocument(requestData);
-        let createdDocumentResponse:ApiResponseContract = await this.service.insert(formatedData);
+        const formattedData = this.formatRequestDataForDocument(requestData);
+        LogHelper.debug("userController", formattedData);
+        const createdDocumentResponse:ApiResponseContract = await this.service.insert(formattedData);
+        LogHelper.debug("userController", createdDocumentResponse);
 
         if (createdDocumentResponse !== undefined) {
             return createdDocumentResponse;
@@ -41,8 +46,8 @@ export default class UserController {
      * @param id the document id of the user.
      * @param requestData the data to update.
      */
-    public async update(id:string, requestData:any):Promise<ApiResponseContract>  {
-
+    public async update(id:string, requestData:any):Promise<ApiResponseContract>
+    {
         if (!this.validateData(requestData)) {
             return HttpError.NotAcceptable();
         }
@@ -50,8 +55,8 @@ export default class UserController {
             return HttpError.NotAcceptable();
         }
 
-        let formatedData = this.formatRequestDataForDocument(requestData);
-        let updatedModelResponse:any = await this.service.update(id, formatedData);
+        const formattedData = this.formatRequestDataForDocument(requestData);
+        const updatedModelResponse:any = await this.service.update(id, formattedData);
 
         if (updatedModelResponse !== undefined) {
             return updatedModelResponse;
@@ -68,7 +73,8 @@ export default class UserController {
         return userID !== undefined;
     }
 
-    public formatRequestDataForDocument(requestData:any) {
+    public formatRequestDataForDocument(requestData:any)
+    {
         return {
             username: requestData.username,
             email: requestData.email,
@@ -79,17 +85,8 @@ export default class UserController {
         } as UserDocument;
     }
 
-    public userCreationFailed($message:string = 'Impossible de créé l\'utilsiateur.'):ApiResponseContract {
-        return {
-            error: true,
-            code: StatusCodes.NOT_ACCEPTABLE,
-            message: $message,
-            errors: [],
-            data: {}
-        } as ApiResponseContract;
-    }
-
-    public validateData(requestData:any):boolean {
+    public validateData(requestData:any):boolean
+    {
         // get required data and format data
         // parsed them
         // Return if validation passed or not.
