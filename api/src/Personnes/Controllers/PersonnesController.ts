@@ -33,8 +33,7 @@ class PersonnesController {
         let formatedData = this.formatRequestDataForDocument(requestData);
         let createdDocumentResponse = await this.service.insert(formatedData);
         
-        if (createdDocumentResponse !== undefined &&
-            !createdDocumentResponse.error)
+        if (createdDocumentResponse !== undefined)
             return createdDocumentResponse;
 
         return HttpError.NotAcceptable('Échec de la création d\'une Personne');
@@ -67,8 +66,7 @@ class PersonnesController {
         let formatedData = this.formatRequestDataForDocument(requestData);
         let updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
 
-        if (updatedModelResponse !== undefined &&
-            !updatedModelResponse.error)
+        if (updatedModelResponse !== undefined)
             return updatedModelResponse;
 
         return HttpError.NotAcceptable('Échec de l\'update d\'une Personne');
@@ -92,15 +90,26 @@ class PersonnesController {
 
         if (typeof requestData === undefined || typeof requestData !== 'object')
             return HttpError.NotAcceptable("La requête n'est pas un objet. ");
-        if (requestData == {})
-            return HttpError.NotAcceptable("La requête est vide");
+
         //Verification data est vide
         if (requestData.nom === undefined &&
             requestData.prenom === undefined &&
             requestData.surnom === undefined &&
             requestData.description === undefined &&
-            requestData.id === undefined)
+            requestData.id === undefined &&
+            requestData.createdAt === undefined &&
+            requestData.updatedAt === undefined)
                 return HttpError.NotAcceptable("La requête ne peut être vide");
+
+        //Validation date
+        if (requestData.createdAt !== undefined &&
+            //typeof requestData.createdAt == 'string' &&
+            ( requestData.createdAt.substring(0,1) != '<' && requestData.createdAt.substring(0,1) != '>' ))
+            return HttpError.NotAcceptable("Le premier caractère de createdAt doit être '<' ou '>'");
+        if (requestData.updatedAt !== undefined &&
+            //typeof requestData.updatedAt == 'string' &&
+            ( requestData.updatedAt.substring(0,1) != '<' && requestData.updatedAt.substring(0,1) != '>' ))
+            return HttpError.NotAcceptable("Le premier caractère de updatedAt doit être '<' ou '>'");
 
         //Validation ID
         if (requestData.id !== undefined && requestData.id.length != 24)
@@ -123,10 +132,33 @@ class PersonnesController {
     */
     public async list(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la requête d'obtention de la liste de personne");
-        if (requestData.id !== undefined){
-            LogHelper.debug("La recherche par id n'est pas implémentée");
-        }
+        if (typeof requestData === undefined || typeof requestData !== 'object')
+            return HttpError.NotAcceptable("La requête n'est pas un objet. ");
 
+        //Verification data est vide
+        if (requestData.nom === undefined &&
+            requestData.prenom === undefined &&
+            requestData.surnom === undefined &&
+            requestData.description === undefined &&
+            requestData.id === undefined &&
+            requestData.createdAt === undefined &&
+            requestData.updatedAt === undefined)
+                return HttpError.NotAcceptable("La requête ne peut être vide");
+
+        //Validation date
+        if (requestData.createdAt !== undefined &&
+            //typeof requestData.createdAt == 'string' &&
+            ( requestData.createdAt.substring(0,1) != '<' && requestData.createdAt.substring(0,1) != '>' ))
+            return HttpError.NotAcceptable("Le premier caractère de createdAt doit être '<' ou '>'");
+        if (requestData.updatedAt !== undefined &&
+            //typeof requestData.updatedAt == 'string' &&
+            ( requestData.updatedAt.substring(0,1) != '<' && requestData.updatedAt.substring(0,1) != '>' ))
+            return HttpError.NotAcceptable("Le premier caractère de updatedAt doit être '<' ou '>'");
+            
+        //Validation ID
+        if (requestData.id !== undefined && requestData.id.length != 24)
+            return HttpError.NotAcceptable("Numéro d'identification erroné");
+        
         let query = this.tempQueryBuilder(requestData);
 
         return await this.service.all(query);
@@ -251,6 +283,24 @@ class PersonnesController {
 
         if ( query.description !== undefined)//@ts-ignore
             finalQuery.description = { $regex: query.description , $options : 'i' };
+
+        if ( query.createdAt !== undefined )
+        {
+            if (query.createdAt.substring(0,1) == '<')//@ts-ignore
+                finalQuery.createdAt = { $lte: query.createdAt.substring(1, query.createdAt.length) };
+
+            if (query.createdAt.substring(0,1) == '>')//@ts-ignore
+                finalQuery.createdAt = { $gte: query.createdAt.substring(1, query.createdAt.length) };
+        }
+
+        if ( query.updatedAt !== undefined )
+        {
+            if (query.updatedAt.substring(0,1) == '<')//@ts-ignore
+                finalQuery.updatedAt = { $lte: query.updatedAt.substring(1, query.updatedAt.length) };
+
+            if (query.updatedAt.substring(0,1) == '>')//@ts-ignore
+                finalQuery.updatedAt = { $gte: query.updatedAt.substring(1, query.updatedAt.length) };
+        }
 
         return finalQuery;
     }
