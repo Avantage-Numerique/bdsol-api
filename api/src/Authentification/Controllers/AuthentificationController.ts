@@ -22,7 +22,7 @@ class AuthentificationController
         AuthentificationController.service = UsersService.getInstance(User.getInstance());//new UsersService(User.getInstance());
 
         if (AuthentificationController.service === undefined) {
-            LogHelper.error("Service is null in Authentification");
+            LogHelper.error("[AuthentificationController] Service is null in Authentification");
         }
     }
 

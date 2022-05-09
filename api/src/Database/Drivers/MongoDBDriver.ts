@@ -31,7 +31,7 @@ export class MongoDBDriver implements DBDriver {
     }
 
     public async connect() {
-        LogHelper.log(`Connexion à la base de données mongodb ${this.getConnectionUrl()}`);
+        LogHelper.log(`[BD] Connexion à la base de données mongodb ${this.getConnectionUrl()}`);
         await this.initDb();
     }
 
@@ -52,14 +52,14 @@ export class MongoDBDriver implements DBDriver {
         try {
 
             this.client = new mongoDB.MongoClient(this.getConnectionUrl());
-            LogHelper.log('connecting to ', this.getConnectionUrl());
+            LogHelper.log('[BD] connecting to ', this.getConnectionUrl());
 
             await this.client.connect();
 
             if (this.client) {
 
                 this.db = this.client.db(config.db.name);
-                LogHelper.log('Setting the default db ', config.db.name);
+                LogHelper.log('[BD] Setting the default db ', config.db.name);
 
                 //will create the fake user for now.
                 const usersCollection = new CreateUsersCollection();

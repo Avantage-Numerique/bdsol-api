@@ -25,7 +25,7 @@ export class DataProvider extends BaseProvider implements DbProvider {
 
     public async connect():Promise<mongoose.Connection|undefined> {
         try {
-            LogHelper.log("DataProvider Connecting to DB");
+            LogHelper.log("[BD] DataProvider Connecting to DB");
             await super.connect();
 
             Personne.connection = this.connection;
@@ -33,7 +33,7 @@ export class DataProvider extends BaseProvider implements DbProvider {
             return this.connection;
         }
         catch (error:any) {
-            LogHelper.error("Can't connect to db in DataProvider");
+            LogHelper.error("[BD] Can't connect to db in DataProvider");
         }
         return undefined;
     }

@@ -28,13 +28,13 @@ export default class CreateDbAndUsersMongoose implements MigrationContract {
     public async fake()
     {
         if (config.environnement === 'development'
-            && this.usersService !== null) {
-
+            && this.usersService !== null)
+        {
             LogHelper.log(`Migration ${CreateDbAndUsersMongoose.name} en cours`);
             const userCount:number = await mongoose.connection.db.collection('users').count();
 
-            if (userCount <= 0) {
-
+            if (userCount <= 0)
+            {
                 LogHelper.log(`Aucun utilisateurs de créer, on ajoute deux utilisateurs test pour l'environnement ${config.environnement}`);
                 await this.usersService.model.insertMany(fakeUsers);
                 return true

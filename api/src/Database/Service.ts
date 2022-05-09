@@ -17,7 +17,6 @@ export abstract class Service {
 
     constructor(model: any) {
         this.model = model;
-        LogHelper.debug("Instanciate Service", model, this.model);
     }
 
     /**
@@ -32,11 +31,10 @@ export abstract class Service {
                 return query._id;
             }
         }
-        LogHelper.log(this.model, "Before the try for the query : ", query);
-        try {
-            LogHelper.log(this.model, "Get target doc with ", query);
-            const item = await this.model.findOne(query);
 
+        try
+        {
+            const item = await this.model.findOne(query);
             return SuccessResponse.create(item, StatusCodes.OK, ReasonPhrases.OK);
 
         } catch (getAllErrors: any) {
@@ -97,11 +95,9 @@ export abstract class Service {
             // UpdateOne
             const meta = await this.model.create(data)
                 .then((model: any) => {
-                    LogHelper.info("insert catch:", model);
                     return model;
                 })
                 .catch((e: any) => {
-                    LogHelper.info("insert catch:", e);
                     return e;
                 });
 
@@ -195,7 +191,7 @@ export abstract class Service {
         try {
             return new mongoose.Types.ObjectId(id);
         } catch (error: any) {
-            LogHelper.log("not able to generate mongoose id with content", id);
+            LogHelper.error("not able to generate mongoose id with content", id);
             return ErrorResponse.create(error, StatusCodes.INTERNAL_SERVER_ERROR, "not able to generate mongoose id with content");
         }
     }
@@ -205,10 +201,13 @@ export abstract class Service {
         LogHelper.debug("parseResult in Service", meta);
 
         // Champ mal formulé
-        if (meta.name === "CastError") {
+        if (meta.name === "CastError")
+        {
             const field = meta.path + " (" + meta.valueType + "): " + meta.stringValue,
                 msg = field + " ne peut pas être casted correctement";
+
             LogHelper.error(StatusCodes.NOT_ACCEPTABLE + " " + msg);
+
             return ErrorResponse.create({
                     name: "Erreur de service : " + meta.name,
                     message: meta.message
@@ -240,7 +239,8 @@ export abstract class Service {
 
         // UPDATE SUCCESSFUL
         if (meta.acknowledged !== undefined &&
-            meta.acknowledged) {
+            meta.acknowledged)
+        {
             LogHelper.log(StatusCodes.OK + " " + actionMessage + " de l'item réussi");
             return SuccessResponse.create(
                 meta,
@@ -251,7 +251,8 @@ export abstract class Service {
 
         // UPDATE FAILED
         if (meta.acknowledged !== undefined &&
-            !meta.acknowledged) {
+            !meta.acknowledged)
+        {
             LogHelper.log(StatusCodes.NOT_MODIFIED + " " + actionMessage + " de l'item n'a pas été réussi");
             return ErrorResponse.create(
                 meta,

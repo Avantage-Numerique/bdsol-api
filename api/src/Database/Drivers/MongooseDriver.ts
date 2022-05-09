@@ -33,7 +33,7 @@ export class MongooseDBDriver implements DBDriver {
     }
 
     public async connect() {
-        LogHelper.info(`Connexion aux base de données ...`);
+        LogHelper.info(`[BD] Connexion aux base de données ...`);
         await this.initDb();
     }
 
@@ -43,10 +43,10 @@ export class MongooseDBDriver implements DBDriver {
     public async initDb() {
         //await this.initMongoose();
 
-        LogHelper.info(`Connexion à la  base de données utilisateurs ...`);
+        LogHelper.info(`[BD] Connexion à la  base de données utilisateurs ...`);
         await this.providers.users.connect();
 
-        LogHelper.info(`Connexion à la  base de données structurée, ouverte et liée ...`);
+        LogHelper.info(`[BD] Connexion à la  base de données structurée, ouverte et liée ...`);
         await this.providers.data.connect();
 
         //await this.generateFakeUsers();

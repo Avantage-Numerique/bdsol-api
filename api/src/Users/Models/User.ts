@@ -31,12 +31,9 @@ export class User {
 
     public static getInstance()
     {
-        LogHelper.debug("User get instance", User.connection);
         if (User.connectionIsSetup()) {
             User.initSchema();
-            const userModel = User.connection.model(User.modelName);
-            LogHelper.debug("userModel mongoose", userModel);
-            return userModel;
+            return User.connection.model(User.modelName);
         }
         return null;
     }
