@@ -6,34 +6,39 @@ import {LogoutResponse} from "../Responses/LogoutResponse";
 import UserAuthContract from "../Contracts/UserAuthContract";
 import {TokenController} from "./TokenController";
 import {UsersService, User, FakeUserModel} from "../../Users/UsersDomain";
+
 import {StatusCodes} from "http-status-codes";
+import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
 
 
 class AuthentificationController
 {
 
-    public service:UsersService;
+    public static service:UsersService;
     //user provider.
 
-    constructor() {
-        this.service = UsersService.getInstance(User.getInstance());//new UsersService(User.getInstance());
+    constructor()
+    {
+        AuthentificationController.service = UsersService.getInstance(User.getInstance());//new UsersService(User.getInstance());
 
-        if (this.service === undefined) {
+        if (AuthentificationController.service === undefined) {
             LogHelper.error("Service is null in Authentification");
         }
     }
 
-    public async login(username:string, password:string): Promise<LoginResponse> {
+
+    public async login(username:string, password:string): Promise<LoginResponse>
+    {
+        //AuthentificationController.service = UsersService.getInstance(User.getInstance());//new UsersService(User.getInstance());
 
         // add encryption on send form till checking here.
         LogHelper.info(`${username} trying to connect ...`);
-        LogHelper.info(`Le service`, this.service);
 
         // TEMP DB BYPASS to make this working quicker.
-        let targetUser = await this.authenticate(username, password);
+        const targetUser = await this.authenticate(username, password);
 
         // User was find in DB
-        if (targetUser && typeof targetUser.username !== 'undefined') {
+        if (!targetUser.error) {
 
             LogHelper.log(`Les information de ${targetUser.username} fonctionnent, génération du token JW ...`);
 
@@ -47,6 +52,7 @@ class AuthentificationController
                 errors: [],
                 message: 'OK',
                 data: {
+                    userConnectedToken: userConnectedToken,
                     fields: {
                         username: true,
                         password: true
@@ -76,7 +82,9 @@ class AuthentificationController
         };
     }
 
-    public async logout(username:string): Promise<LogoutResponse> {
+
+    public async logout(username:string): Promise<LogoutResponse>
+    {
         //set the logout process
         return {
             error: false,
@@ -88,12 +96,14 @@ class AuthentificationController
         };
     }
 
+
     /**
      *
      * @param user
      * @private
      */
-    private generateToken(user:any):string {
+    private generateToken(user:any):string
+    {
         return TokenController.generate({ user_id: user._id, username: user.username, role: user.role });
     }
 
@@ -101,33 +111,33 @@ class AuthentificationController
      * search in the current database driver for the user.
      * @param username
      * @param password
+     * @return {Promise} of type Any. Fakeusers driver is now
      * @private
      */
-    private async authenticate(username:string, password:string): Promise<any> {
-
-        let targetUser = {
+    private async authenticate(username:string, password:string): Promise<any>
+    {
+        const targetUser = {
             username: username,
             password: password
         } as UserAuthContract;
 
-        //DEBUGING LOGIN : THIS"SERVICE IS an EMPTY Object here.
-        if (ServerController.database.driverPrefix === 'mongodb') {
-            LogHelper.log(this.service, "authenticate");
-            return await this.service.get(targetUser);
-        }
+        try {
 
-        /**
-         * If we need to develop directly in node serveur running outside of docker.
-         * Still clumsy structure.
-         */
-        if (ServerController.database.driverPrefix === 'fakeusers') {
-            let fakeUser = await FakeUserModel.findOne(targetUser);
-            return fakeUser as UserContract;
-        }
+            if (ServerController.database.driverPrefix === 'mongodb') {
+                return await AuthentificationController.service.get(targetUser);
+            }
 
-        return {
-            user: undefined
-        };
+            /**
+             * If we need to develop directly in node serveur running outside of docker.
+             * Still clumsy structure.
+             */
+            if (ServerController.database.driverPrefix === 'fakeusers') {
+                const fakeUser = await FakeUserModel.findOne(targetUser);
+                return fakeUser as UserContract;
+            }
+        } catch (errors: any) {
+            return ErrorResponse.create(errors, StatusCodes.INTERNAL_SERVER_ERROR);
+        }
     }
 }
 export default AuthentificationController;

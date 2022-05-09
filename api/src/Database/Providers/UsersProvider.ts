@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import config from "../../config";
-import {DbProvider, BaseProvider} from "../DatabaseDomain";
+import type {DbProvider} from "./DbProvider";
+import {BaseProvider} from "./DbProvider";
 import {User} from "../../Users/UsersDomain";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
@@ -9,10 +10,12 @@ export class UsersProvider extends BaseProvider implements DbProvider {
 
     private static _singleton:UsersProvider;
 
-    constructor(name='') {
+    constructor(name='')
+    {
         super(name);
         this.urlPrefix = "mongodb";
     }
+
 
     public static getInstance():DbProvider|undefined
     {
@@ -21,6 +24,7 @@ export class UsersProvider extends BaseProvider implements DbProvider {
         }
         return UsersProvider._singleton;
     }
+
 
     public async connect():Promise<mongoose.Connection|undefined>
     {

@@ -4,38 +4,38 @@ import LogHelper from "../Monitoring/Helpers/LogHelper";
 import {StatusCodes, ReasonPhrases} from "http-status-codes";
 import {SuccessResponse} from "../Http/Responses/SuccessResponse";
 import {ErrorResponse} from "../Http/Responses/ErrorResponse";
-import {ApiResponseContract} from "../Http/Responses/ApiResponse";
-
+import type {ApiResponseContract} from "../Http/Responses/ApiResponse";
 
 /**
  * Give ability to query and CRUD on collections and its documents.
  * @param model any The model to be use to query in the documents.
  */
-export class Service {
+export abstract class Service {
 
     model: any;//@todo create or find the best type for this.
     connection: any;
 
     constructor(model: any) {
         this.model = model;
+        LogHelper.debug("Instanciate Service", model, this.model);
     }
 
     /**
      * Get all the documents from a collection that fits the query.
      * @param query any Should be an object with the document's
      */
-    async get(query: any): Promise<ApiResponseContract> {
-
+    async get(query: any): Promise<ApiResponseContract>
+    {
         if (config.db.config.createObjectIdForQuery) {
             query._id = Service.transformToObjectId(query._id);
             if (query._id.error) {
                 return query._id;
             }
         }
-
+        LogHelper.log(this.model, "Before the try for the query : ", query);
         try {
             LogHelper.log(this.model, "Get target doc with ", query);
-            let item = await this.model.findOne(query);
+            const item = await this.model.findOne(query);
 
             return SuccessResponse.create(item, StatusCodes.OK, ReasonPhrases.OK);
 
@@ -66,7 +66,7 @@ export class Service {
         }
 
         try {
-            let items = await this.model
+            const items = await this.model
                 .find(query)
                 .skip(skip)
                 .limit(limit);
@@ -95,7 +95,7 @@ export class Service {
         try {
             //let item = await this.model.create(data);
             // UpdateOne
-            let meta = await this.model.create(data)
+            const meta = await this.model.create(data)
                 .then((model: any) => {
                     LogHelper.info("insert catch:", model);
                     return model;
@@ -127,7 +127,7 @@ export class Service {
 
         try {
             // UpdateOne
-            let meta = await this.model.updateOne({_id: id}, data, {new: true}).catch((e: any) => {
+            const meta = await this.model.updateOne({_id: id}, data, {new: true}).catch((e: any) => {
                 LogHelper.info("UpdateOne catch:", e);
                 return e;
             });
@@ -153,7 +153,7 @@ export class Service {
     async delete(id: string): Promise<ApiResponseContract> {
 
         try {
-            let item = await this.model.findByIdAndDelete(id);
+            const item = await this.model.findByIdAndDelete(id);
             if (!item) {
                 return ErrorResponse.create(
                     new Error("item to delete not found"),
@@ -206,7 +206,7 @@ export class Service {
 
         // Champ mal formulé
         if (meta.name === "CastError") {
-            let field = meta.path + " (" + meta.valueType + "): " + meta.stringValue,
+            const field = meta.path + " (" + meta.valueType + "): " + meta.stringValue,
                 msg = field + " ne peut pas être casted correctement";
             LogHelper.error(StatusCodes.NOT_ACCEPTABLE + " " + msg);
             return ErrorResponse.create({
@@ -219,8 +219,8 @@ export class Service {
 
         // Si not unique
         if (meta.index === 0) {
-            let wrongElements = Object.getOwnPropertyNames(meta.keyValue),
-                wrongElementsValues = "";
+            const wrongElements = Object.getOwnPropertyNames(meta.keyValue);
+            let wrongElementsValues = "";
 
             wrongElements.forEach((key: string) => {
                 wrongElementsValues += key + " (" + meta.keyValue[key] + ") n'est pas unique";

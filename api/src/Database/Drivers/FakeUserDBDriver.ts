@@ -1,7 +1,6 @@
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import {DBDriver} from "../DatabaseDomain";
+import type {DBDriver} from "./DBDriver";
 import {FakeUserModel, fakeUsers} from "../../Users/UsersDomain";
-import ServerController from "../../Server/Controllers/ServerController";
 
 export class FakeUserDBDriver implements DBDriver {
 
@@ -23,8 +22,7 @@ export class FakeUserDBDriver implements DBDriver {
     }
 
     public initDb() {
-        FakeUserModel.collection = this.getCollection(ServerController.usersTable);
-        return ServerController.usersModel;
+        FakeUserModel.collection = this.getCollection("users");
     }
 
     public getConnectionUrl() {

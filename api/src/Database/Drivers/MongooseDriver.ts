@@ -2,9 +2,12 @@ import * as mongoDB from "mongodb";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import mongoose from "mongoose";
-import CreateDbAndUsersMongoose from "../../Migrations/create-db-and-users-mongoose";
-import {DBDriver, UsersProvider, DataProvider} from "../DatabaseDomain";
+import type {DBDriver} from "./DBDriver";
+import {UsersProvider} from "../Providers/UsersProvider";
+import {DataProvider} from "../Providers/DataProvider";
 import {User} from "../../Users/UsersDomain";
+
+import CreateDbAndUsersMongoose from "../../Migrations/create-db-and-users-mongoose";
 
 export class MongooseDBDriver implements DBDriver {
 
@@ -53,7 +56,7 @@ export class MongooseDBDriver implements DBDriver {
         if (config.environnement === 'development') {
             //will create the fake users if the collection is empty.
             //let users = new UsersService(User.getInstance());
-            let usersCollection = new CreateDbAndUsersMongoose(this.providers.users.service);
+            const usersCollection = new CreateDbAndUsersMongoose(this.providers.users.service);
             await usersCollection.up();
         }
     }

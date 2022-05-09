@@ -1,8 +1,8 @@
-import {DbProvider, BaseProvider} from "../DatabaseDomain";
-
+import mongoose from "mongoose";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import mongoose from "mongoose";
+import type {DbProvider} from "./DbProvider";
+import {BaseProvider} from "./DbProvider";
 import Personne from "../../Personnes/Models/Personne";
 
 

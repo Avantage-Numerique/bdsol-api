@@ -2,7 +2,7 @@ import * as mongoDB from "mongodb";
 import mongoose from "mongoose";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import {DBDriver} from "../DatabaseDomain";
+import type {DBDriver} from "./DBDriver";
 import {User} from "../../Users/UsersDomain";
 import CreateUsersCollection from "../../Migrations/create-users-collection";
 
@@ -62,7 +62,7 @@ export class MongoDBDriver implements DBDriver {
                 LogHelper.log('Setting the default db ', config.db.name);
 
                 //will create the fake user for now.
-                let usersCollection = new CreateUsersCollection();
+                const usersCollection = new CreateUsersCollection();
                 usersCollection.db = this.db;
                 await usersCollection.up();
             }

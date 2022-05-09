@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import Service from "../Service";
+import {Service} from "../Service";
 import {ConnectOptions} from "mongodb";
 
 
@@ -15,6 +15,9 @@ export interface DbProvider {
     getInstance():DbProvider|undefined;
 }
 
+/**
+ * Abstract class to set the provider more dry and easy to extends.
+ */
 export abstract class BaseProvider implements DbProvider {
 
     protected _connection:mongoose.Connection;
@@ -31,7 +34,9 @@ export abstract class BaseProvider implements DbProvider {
         }
     }
 
-    public async connect():Promise<mongoose.Connection|undefined> {
+
+    public async connect():Promise<mongoose.Connection|undefined>
+    {
 
         LogHelper.log(this.url);
         try {
@@ -48,7 +53,9 @@ export abstract class BaseProvider implements DbProvider {
         return undefined;
     }
 
-    public getInstance(): DbProvider|undefined {
+
+    public getInstance(): DbProvider|undefined
+    {
         //to overwrite.
         return undefined;
     }
@@ -86,7 +93,6 @@ export abstract class BaseProvider implements DbProvider {
         }
         return this._url;
     }
-
     public set url(url) {
         this._url = url;
     }

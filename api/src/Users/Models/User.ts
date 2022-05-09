@@ -1,8 +1,8 @@
 
 import mongoose from "mongoose";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import {UserSchema} from "../UsersDomain";
-import {DbProvider} from "../../Database/DatabaseDomain";
+import type {DbProvider} from "../../Database/DatabaseDomain";
+import {UserSchema} from "../Schemas/UserSchema";
 
 /**
  *
@@ -32,15 +32,25 @@ export class User {
     public static getInstance()
     {
         LogHelper.debug("User get instance", User.connection);
-        if (User.providerIsSetup()) {
+        if (User.connectionIsSetup()) {
             User.initSchema();
-            return User.connection.model(User.modelName);
+            const userModel = User.connection.model(User.modelName);
+            LogHelper.debug("userModel mongoose", userModel);
+            return userModel;
         }
         return null;
     }
 
+    public static connectionIsSetup():boolean
+    {
+        LogHelper.debug(User.connection);
+        return User.connection !== undefined &&
+            User.connection !== null;
+    }
+
     public static providerIsSetup():boolean
     {
+        LogHelper.debug(User.provider);
         return User.provider !== undefined &&
             User.provider !== null &&
             User.provider.connection !== undefined;
