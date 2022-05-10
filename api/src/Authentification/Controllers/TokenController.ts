@@ -24,11 +24,15 @@ export class TokenController {
      * @param token
      */
     public static verify(token:string):any {
-        return jwt.verify(
+        let user;
+        jwt.verify(
             token,
             config.tokenSecret,
-            (err, decoded) => TokenController.onVerifyToken
+            (err, decoded) => {
+                user = TokenController.onVerifyToken(err, decoded);
+            }
         );
+        return user;
     }
 
     /**
@@ -37,11 +41,36 @@ export class TokenController {
      * @param decoded {JwtPayload|null}
      * @protected
      */
-    protected static async onVerifyToken(err:VerifyErrors|null, decoded:JwtPayload|null)
+    protected static onVerifyToken(err:VerifyErrors|null, decoded:string|JwtPayload|undefined)
     {
         if (err) {
+            /*
+            err = {
+        name: 'TokenExpiredError',
+        message: 'jwt expired',
+        expiredAt: 1408621000
+      }
+
+             */
+      /*
+      JsonWebTokenError
+
+Error object:
+
+    name: 'JsonWebTokenError'
+    message:
+        'jwt malformed'
+        'jwt signature is required'
+        'invalid signature'
+        'jwt audience invalid. expected: [OPTIONS AUDIENCE]'
+        'jwt issuer invalid. expected: [OPTIONS ISSUER]'
+        'jwt id invalid. expected: [OPTIONS JWT ID]'
+        'jwt subject invalid. expected: [OPTIONS SUBJECT]'
+
+       */
             throw err;
         }
         LogHelper.info("TokenController.onVerifyToken", err, decoded);
+        return decoded;
     }
 }

@@ -1,28 +1,39 @@
 import {NextFunction, Response} from "express";
-import Payload from "../Types/Payload";
 import AuthRequest from "../Types/AuthRequest";
 import {TokenController} from "../Controllers/TokenController";
+import {StatusCodes, ReasonPhrases} from "http-status-codes";
 
 class VerifyToken {
 
     public inHeader(req: AuthRequest, res: Response, next: NextFunction) {
         // Get token from header
-        const token = req.header("x-auth-token");
+        const authHeader = req.headers.authorization;
 
-        // Check if no token
-        if (!token) {
-            //HttpStatusCodes.UNAUTHORIZED
-            return res.status(401).json({ msg: "No token, authorization denied" });
+        if (authHeader)
+        {
+            const token = authHeader.split(' ')[1];
+
+            // Check if no token
+            if (!token) {
+                return this.unauthorizedResponse(res);
+            }
+
+            try {
+                req.user = TokenController.verify(token);
+                next();
+            }
+            catch (err)
+            {
+                this.unauthorizedResponse(res);
+            }
         }
-        // Verify token
-        try {
-            const payload: Payload | any = TokenController.verify(token);
-            req.userId = payload.userId;
-            next();
-        } catch (err) {
-            //HttpStatusCodes.UNAUTHORIZED
-            res.status(401).json({ msg: "Token is not valid" });
-        }
+        this.unauthorizedResponse(res);
+    }
+
+    protected unauthorizedResponse(res:Response):Response {
+        return res.status(StatusCodes.UNAUTHORIZED).json({
+            "message": ReasonPhrases.UNAUTHORIZED
+        });
     }
 }
 

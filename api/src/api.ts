@@ -14,11 +14,11 @@ class Api {
     public express: express.Application = express();
 
     constructor() {
-        this.initMiddleware();
-        this.initRouter();
+        this._initMiddleware();
+        this._initRouter();
     }
 
-    private initMiddleware() {
+    private _initMiddleware() {
 
         this.express.use(function (req, res, next) {
             res.header("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -37,13 +37,9 @@ class Api {
 
     // check for migration to trigger ?
 
-    private initRouter() {
+    private _initRouter() {
 
-        //main log and feedback from the API
-        this.express.use("/", ApiRouter);
-
-        //Tools the manage the health of the API
-        this.express.use("/", HealthCheckRouter);
+        this._initPublicRoutes();
 
         //Auth Routes
         this.express.use("/", AuthentificationRouter);
@@ -56,6 +52,19 @@ class Api {
 
         //Organisations Routes
         this.express.use("/organisations", OrganisationsRouter);
+    }
+
+    private _initPublicRoutes()
+    {
+        //main log and feedback from the API
+        this.express.use("/", ApiRouter);
+
+        //Tools the manage the health of the API
+        this.express.use("/", HealthCheckRouter);
+    }
+
+    private _initNeedUserRoutes() {
+
     }
 }
 

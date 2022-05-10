@@ -40,7 +40,7 @@ class AuthentificationController
         // User was find in DB
         if (!targetUser.error) {
 
-            LogHelper.log(`Les information de ${targetUser.username} fonctionnent, génération du token JW ...`);
+            LogHelper.log(`Les information de ${targetUser.data.username} fonctionnent, génération du token JW ...`);
 
             // Generate an access token
             const userConnectedToken = this.generateToken(targetUser);
@@ -68,6 +68,7 @@ class AuthentificationController
             errors: [],
             message: 'Vos informations de connexion sont incorrectes, vérifiez votre utilisateur et mot de passe.',
             data: {
+                userConnectedToken: undefined,
                 fields: {
                     username: {
                         status: false,
