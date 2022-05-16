@@ -91,7 +91,7 @@ Il sera pertinent d'utiliser différentes fonctions `pm.test` pour séparer des 
 
 - **Accéder aux informations du script**
 `pm.info`
-    - `.todo("au besoin")`
+    - `.requestId`
 
 - **Accéder aux informations des cookies**
 `pm.cookies`
@@ -164,7 +164,8 @@ Lorsqu'on bâtit un *schéma*, il est **important de le vérifier** en s'assuran
 
 ### Data Types :
 
-Il est possible de spécifier le type de donnée attendu dans le **json** en ajoutant `{ "type": "data_type" }` dans la valeur.
+Il est possible de spécifier le type de donnée attendu dans le **json** en ajoutant `{ "type": "data_type" }` dans la valeur.<br>
+**À noté :** Cette vérification ne s'effectue que si le paramètre est présent. On doit, en complément, ajouter que le champs est requis.
 
 - Number
 - String
@@ -223,6 +224,123 @@ const schema = {
 ```
 
 ## Enchainement de test
-On peut enchainer des tests :
-`TODO`
-postman.setNextRequest(requestName:String):Function ??? Probablement important.
+On peut enchainer les tests et même boucler sur le même test. On utilise `postman.setNextRequest(requestName:String):Function` ou bien on peut aussi spécifié `(requestId:String)`.
+
+Avant de se lancer dans les enchainements de tests voici quelques points important :
+
+- setNextRequest n'a **pas d'impact** si la requête est envoyée avec "Send". La fonction est opérationnelle **seulement** lors de l'utilisation du **Runner Postman**.
+
+- Seule la dernière valeur ajoutée dans "setNextRequest" s'effectuera (s'il y en a plusieurs. Par exemple, dans un pre-test, et une dans le test).
+
+- La fonction s'effectuera toujours comme dernière action dans le bloc de code même si du code se trouve après.
+
+- Si l'on passe le nom de la requête en cours, elle loopera sur elle même **indéfiniement**. Il est important d'ajouter une condition d'arrêt.
+
+- `postman.setNextRequest(null)` Arrête l'execution de collection.
+
+- Limité aux test contenu dans le même fichier (Personne/Create/ "only those").
+
+### Exemple d'utilisation et condition d'arrêt
+
+Il est possible d'utiliser plusieurs façon de faire. Le **Body** de la requête peut être par exemple ceci :
+```json
+{
+    "data":{
+        "nom": "{{v_nom}}",
+        "prenom":"{{v_prenom}}",
+        "surnom":"{{v_surnom}}",
+        "description":"{{v_description}}"
+    }
+}
+```
+Cette implémentation utilisera donc 4 variables d'environnement et on devra manuellement gérer les 4. Celle-ci peut être intéressante et pratique.
+
+Cependant, il semble plus facile de gérer une seule variable. On utilisera donc cette implémentation qui n'utilise qu'une seule variable.
+
+```json
+{
+    "data":{{v_data}}
+}
+```
+On manipulera une seule variable qui sera un objet Javascript. Cette implémentation nécessite que l'on convertisse notre objet Javascript en Json. On l'effectue de cette façon :
+```javascript
+let v_data = {};
+v_data.nom = "de Martineau";
+v_data.prenom = "Yannick";
+
+/*(Objet javascript)
+    v_data =
+    {
+        nom : "de Martineau",
+        prenom : "Yannick"
+    }
+*/
+pm.environment.set("v_data", JSON.stringify(v_data));
+
+/*variable d'environnement
+  v_data =
+  {
+      "nom" : "de Martineau",
+      "prenom" : "Yannick"
+  }
+*/
+```
+
+Voici une implémentation pour boucler plusieurs fois sur la même requête (un create multiple users) :
+
+*Requête "CreateMultiple" Section Pre-request Script*
+```javascript
+const tableNom = ["Falconne", "Falconne", "Yitubi"];
+const tablePrenom = ["Jimmy", "Theresa", "Markiplier"];
+const tableSurnom = ["Jimmy", "Bimbo", "Mark"];
+const tableDescription = ["Grand Mafioso et traitre au grand coeur", "Fille du mafieux", "Youtubeur"];
+
+if(!pm.environment.has("index"))
+    pm.environment.set("index", Number(0));
+
+const index = pm.environment.get("index");
+let v_data = {};
+v_data.nom = tableNom[index];
+v_data.prenom = tablePrenom[index];
+v_data.surnom = tableSurnom[index];
+v_data.description = tableDescription[index];
+
+pm.environment.set("v_data", JSON.stringify(v_data));
+```
+**La requête s'execute et insère une nouvelle personne dans la BD**
+
+*La requête arrive dans la section Test*
+```javascript
+let index = Number(pm.environment.get("index"));
+console.log("Itération numéro " + index);
+
+//Assertions de vérification du create
+//pm.test("Validation des données", [...]
+
+//Si nous devons faire d'autre create
+if ( NextCreate() )
+    postman.setNextRequest("CreateMultiple");
+else
+{
+    // We've gone through all the create
+    console.log("No more create to do!");
+    postman.setNextRequest(null); //Ou setNextRequest(autre requête)
+}
+
+function NextCreate(){
+    //Incrémentation
+    index++;
+    //Met à jour la variable d'environnement
+    pm.environment.set("index", index);
+
+    //CONDITION D'ARRÊT!!!
+    const nbrDeBoucle = 3;
+    if (index < nbrDeBoucle)
+        return true
+    else
+        return false;
+}
+```
+Ayant incrémenter l'index dans les variables d'environnement. Lorsque Postman effectuera de nouveau le create, il prendra les valeurs contenu dans l'index suivant et créera une personne différente.
+
+On peut aussi insérer dans une variable d'environnement le "id" de création qui a été retourné par le serveur comme réponse au create et s'en servir pour une prochaine requête update, search ou delete.
