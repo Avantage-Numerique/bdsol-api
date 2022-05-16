@@ -17,6 +17,23 @@ services:
       - mongo
     depends_on:
       - mongo
+  bdsol:
+    container_name: bdsol
+    image: latest/bdsol
+    restart: always
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - type: bind
+        source: ./frontend
+        target: /app
+    ports:
+      - "3000:3000"
+    links:
+      - bdsolapi
+    depends_on:
+      - bdsolapi
   mongo:
     container_name: mongo
     image: mongo
