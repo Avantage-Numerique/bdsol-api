@@ -1,6 +1,5 @@
 
 import mongoose from "mongoose";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import {UserSchema} from "../Schemas/UserSchema";
 
@@ -40,14 +39,12 @@ export class User {
 
     public static connectionIsSetup():boolean
     {
-        LogHelper.debug(User.connection);
         return User.connection !== undefined &&
             User.connection !== null;
     }
 
     public static providerIsSetup():boolean
     {
-        LogHelper.debug(User.provider);
         return User.provider !== undefined &&
             User.provider !== null &&
             User.provider.connection !== undefined;

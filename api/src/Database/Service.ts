@@ -35,6 +35,7 @@ export abstract class Service {
         try
         {
             const item = await this.model.findOne(query);
+            LogHelper.debug("Service: get", item);
             return SuccessResponse.create(item, StatusCodes.OK, ReasonPhrases.OK);
 
         } catch (getAllErrors: any) {
@@ -197,8 +198,6 @@ export abstract class Service {
     }
 
     private parseResult(meta: any, actionMessage: string = "Mise à jour"): ApiResponseContract {
-        // ERRORS
-        LogHelper.debug("parseResult in Service", meta);
 
         // Champ mal formulé
         if (meta.name === "CastError")

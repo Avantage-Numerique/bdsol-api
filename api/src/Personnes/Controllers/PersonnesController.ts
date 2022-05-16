@@ -26,12 +26,12 @@ class PersonnesController {
      *      @return {ApiResponseContract}
     */
     public async create(requestData:any):Promise<ApiResponseContract> {
-        let messageValidate = this.validateData(requestData);
+        const messageValidate = this.validateData(requestData);
         if (!messageValidate.isValid)
             return HttpError.NotAcceptable(messageValidate.message);
 
-        let formatedData = this.formatRequestDataForDocument(requestData);
-        let createdDocumentResponse = await this.service.insert(formatedData);
+        const formatedData = this.formatRequestDataForDocument(requestData);
+        const createdDocumentResponse = await this.service.insert(formatedData);
         
         if (createdDocumentResponse !== undefined)
             return createdDocumentResponse;
@@ -52,7 +52,7 @@ class PersonnesController {
     public async update(requestData:any):Promise<ApiResponseContract> {
         
         //Validation des données
-        let messageUpdate = this.validateData(requestData);
+        const messageUpdate = this.validateData(requestData);
         if (!messageUpdate.isValid)
             return HttpError.NotAcceptable(messageUpdate.message);
 
@@ -61,10 +61,10 @@ class PersonnesController {
             return HttpError.NotAcceptable("Aucun no. d'identification fournit");
         if (requestData.id.length != 24)
             return HttpError.NotAcceptable("Numéro d'identification erroné");
-        
-        
-        let formatedData = this.formatRequestDataForDocument(requestData);
-        let updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
+
+
+        const formatedData = this.formatRequestDataForDocument(requestData);
+        const updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
 
         if (updatedModelResponse !== undefined)
             return updatedModelResponse;
@@ -114,8 +114,8 @@ class PersonnesController {
         //Validation ID
         if (requestData.id !== undefined && requestData.id.length != 24)
             return HttpError.NotAcceptable("Numéro d'identification erroné");
-        
-        let query = this.tempQueryBuilder(requestData);
+
+        const query = this.tempQueryBuilder(requestData);
  
         return await this.service.get(query);
     }
@@ -159,7 +159,7 @@ class PersonnesController {
         if (requestData.id !== undefined && requestData.id.length != 24)
             return HttpError.NotAcceptable("Numéro d'identification erroné");
         
-        let query = this.tempQueryBuilder(requestData);
+        const query = this.tempQueryBuilder(requestData);
 
         return await this.service.all(query);
     }
@@ -167,11 +167,9 @@ class PersonnesController {
     /**
      * @method delete permet d'effectuer une suppression de la fiche d'une personne dans la base de données.
      * @todo
-     * Paramètres : 
-     *      @param 
      * 
      * Retourne : 
-     *      @return 
+     *      @return null
     */
     public async delete():Promise<void> {
         LogHelper.log("Début de la suppression d'une personne");
@@ -203,7 +201,7 @@ class PersonnesController {
             if (requestData.nom === undefined &&
                 requestData.prenom === undefined &&
                 requestData.surnom === undefined &&
-                requestData.description === undefined){
+                requestData.description === undefined) {
                     isValid = false;
                     message += "Data doit contenir un champ. ";
                 }
@@ -267,7 +265,7 @@ class PersonnesController {
      */
     public tempQueryBuilder(query:any) {
 
-        let finalQuery = {};
+        const finalQuery = {};
         
         if ( query.id !== undefined)//@ts-ignore
             finalQuery._id = query.id;

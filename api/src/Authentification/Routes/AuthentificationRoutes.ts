@@ -30,7 +30,8 @@ AuthentificationRouter.post('/login',
 AuthentificationRouter.post('/generate-token',
     async (req, res) => {
 
-        if (config.isDevelopment) {
+        if (config.isDevelopment)
+        {
             const token = TokenController.generate({ user_id: "6271b8ceee860ac5d96a32be", username: "datageek", role: "admin" });
 
             return res.status(StatusCodes.OK).send({
@@ -44,4 +45,4 @@ AuthentificationRouter.post('/generate-token',
 
     });
 
-export default AuthentificationRouter;
+export {AuthentificationRouter};

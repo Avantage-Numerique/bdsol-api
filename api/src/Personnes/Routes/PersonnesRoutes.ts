@@ -15,7 +15,7 @@ const PersonnesRouter = express.Router();
  *      @return
  */
 PersonnesRouter.post('/update', async (req, res) => {
-    let {data} = req.body;
+    const {data} = req.body;
     LogHelper.log("Update Personne route for ", data);
     const controller = new PersonnesController();
     const response = await controller.update(data);
@@ -32,7 +32,8 @@ PersonnesRouter.post('/update', async (req, res) => {
  *      @return 
  */
 PersonnesRouter.post('/create', async (req, res) => {
-    let {data} = req.body;
+    const {data} = req.body;
+    LogHelper.log("Create Personne route for ", req.body);
     LogHelper.log("Create Personne route for ", data);
     const controller = new PersonnesController();
     const response:any = await controller.create(data);
@@ -49,7 +50,7 @@ PersonnesRouter.post('/create', async (req, res) => {
  *      @return
  **/
 PersonnesRouter.post('/search', async (req, res) => {
-    let {data} = req.body;
+    const {data} = req.body;
     LogHelper.log("Search Personne route for ", data);
     const controller = new PersonnesController();
     const response = await controller.search(data);
@@ -67,7 +68,7 @@ PersonnesRouter.post('/search', async (req, res) => {
  *      @return
  **/
 PersonnesRouter.post('/list', async (req, res) => {
-    let {data} = req.body;
+    const {data} = req.body;
     LogHelper.log("List Personne route for ", data);
     const controller = new PersonnesController();
     const response = await controller.list(data);
