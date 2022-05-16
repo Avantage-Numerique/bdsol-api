@@ -36,6 +36,7 @@ export class TokenController {
     }
 
     /**
+     * Not used for now.
      * Callback of the jwt.verify, to handle the error and the decoded value in the TokenController Scope.
      * @param err {VerifyErrors|null}
      * @param decoded {JwtPayload|null}
