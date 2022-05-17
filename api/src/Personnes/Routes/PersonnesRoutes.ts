@@ -33,7 +33,6 @@ PersonnesRouter.post('/update', async (req, res) => {
  */
 PersonnesRouter.post('/create', async (req, res) => {
     const {data} = req.body;
-    LogHelper.log("Create Personne route for ", req.body);
     LogHelper.log("Create Personne route for ", data);
     const controller = new PersonnesController();
     const response:any = await controller.create(data);
