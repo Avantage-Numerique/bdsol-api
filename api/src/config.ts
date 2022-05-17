@@ -15,8 +15,8 @@ const config = {
     port: process.env.PORT || "8000",
     version: process.env.VERSION || "0.0.0",
 
-    tokenSecret: process.env.JWT_KEY || "not set",
-    tokenSecureSecret: process.env.SECURE_JWT_KEY || "not set",
+    tokenSecret: process.env.JWT_KEY || "not set yet",
+    tokenSecureSecret: process.env.SECURE_JWT_KEY || "not set securely :P",
 
     db: {
         driver: process.env.DB_DRIVER || "mongodb",

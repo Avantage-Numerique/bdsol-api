@@ -27,16 +27,16 @@ class OrganisationsController {
      public async update(requestData:any):Promise<ApiResponseContract> {
         
         //Validation des données
-        let messageUpdate = this.validateData(requestData);
+        const messageUpdate = this.validateData(requestData);
         if (!messageUpdate.isValid)
             return HttpError.NotAcceptable(messageUpdate.message);
 
         //Validation ID
         if (requestData.id === undefined)
         return HttpError.NotAcceptable("Aucun no. d'identification fournit");
-        
-        let formatedData = this.formatRequestDataForDocument(requestData);
-        let updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
+
+        const formatedData = this.formatRequestDataForDocument(requestData);
+        const updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
 
         if (updatedModelResponse !== undefined &&
             !updatedModelResponse.error)
@@ -58,12 +58,12 @@ class OrganisationsController {
      *      @return {ServiceResponse}
      */
     public async create(requestData:any):Promise<ApiResponseContract> {
-        let messageValidate = this.validateData(requestData);
+        const messageValidate = this.validateData(requestData);
         if (!messageValidate.isValid)
             return HttpError.NotAcceptable(messageValidate.message);
 
-        let formatedData = this.formatRequestDataForDocument(requestData);
-        let createdDocumentResponse = await this.service.insert(formatedData);
+        const formatedData = this.formatRequestDataForDocument(requestData);
+        const createdDocumentResponse = await this.service.insert(formatedData);
         
         if (createdDocumentResponse !== undefined &&
             !createdDocumentResponse.error)

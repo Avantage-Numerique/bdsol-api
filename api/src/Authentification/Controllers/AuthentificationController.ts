@@ -40,7 +40,6 @@ class AuthentificationController
         if (targetUser &&
             !targetUser.error &&
             targetUser.data !== null) {
-            LogHelper.debug(targetUser, username, password);
             LogHelper.log(`Les information de ${targetUser.data.username} fonctionnent, génération du token JW ...`);
 
             // Generate an access token
