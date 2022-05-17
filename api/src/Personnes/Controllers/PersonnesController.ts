@@ -4,6 +4,7 @@ import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
 import PersonnesService from "../Services/PersonnesService";
 import {PersonneSchema} from "../Schemas/PersonneSchema";
 import HttpError from "../../Error/HttpError";
+import QueryBuilder from "../../Database/QueryBuilder/QueryBuilder";
 
 class PersonnesController {
 
@@ -115,7 +116,7 @@ class PersonnesController {
         if (requestData.id !== undefined && requestData.id.length != 24)
             return HttpError.NotAcceptable("Numéro d'identification erroné");
         
-        let query = this.tempQueryBuilder(requestData);
+        let query = QueryBuilder.build(requestData);
  
         return await this.service.get(query);
     }
@@ -159,7 +160,7 @@ class PersonnesController {
         if (requestData.id !== undefined && requestData.id.length != 24)
             return HttpError.NotAcceptable("Numéro d'identification erroné");
         
-        let query = this.tempQueryBuilder(requestData);
+        let query = QueryBuilder.build(requestData);
 
         return await this.service.all(query);
     }
