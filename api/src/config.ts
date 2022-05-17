@@ -39,8 +39,8 @@ const config = {
     jwt: {
         defaultOptions: {
             expiresIn: '24h',
-            requestAdditionnalTime: '15m'
-        }
+        },
+        requestAdditionnalTime: '15m'
     },
     query: {
         defaultSkip: process.env.QUERY_DEFAULT_SKIP || 0,
