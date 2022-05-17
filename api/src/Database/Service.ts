@@ -103,7 +103,7 @@ export abstract class Service {
                 .catch((e: any) => {
                     return e;
                 });
-            LogHelper.debug("Service Insert", meta);
+
             return this.parseResult(meta, 'Création');
 
         } catch (insertError: any) {
@@ -201,7 +201,19 @@ export abstract class Service {
         }
     }
 
-    private parseResult(meta: any, actionMessage: string = "Mise à jour"): ApiResponseContract {
+    private parseResult(meta: any, actionMessage: string = "Mise à jour"): ApiResponseContract
+    {
+        LogHelper.debug(`Parse Result method for ${actionMessage}`, meta, actionMessage);
+
+
+        // Mongo DB validation failed, make that excalade the response flow, shall we.
+        if (meta.errors) {
+            //on create, mongodb validate the data and return an object if errors occurs.
+            return ErrorResponse.createWithMultipleErrors(
+                meta.errors,
+                StatusCodes.NOT_ACCEPTABLE,
+                "Validating the data fail. Please readjust the request.");
+        }
 
         // Champ mal formulé
         if (meta.name === "CastError") {
@@ -216,28 +228,6 @@ export abstract class Service {
                 },
                 StatusCodes.NOT_ACCEPTABLE,
                 msg);
-        }
-
-        // Mongo DB validation failed, make that excalade the response flow, shall we.
-        if (meta.errors) {
-            //on create, mongodb validate the data and return an object if errors occurs.
-
-            //&& meta.errors.name  === "ValidatorError"
-            const errors: Array<any> = [];
-            meta.errors.forEach(
-                (field: string, errorObj: any) => {
-                    errors.push({
-                        "name": errorObj.name,
-                        "message": errorObj.message,
-                        "properties": errorObj.properties
-                    });
-                }
-            );
-
-            return ErrorResponse.createWithMultipleErrors(
-                errors,
-                StatusCodes.NOT_ACCEPTABLE,
-                "Validating the date fail. Please readjust the request.");
         }
 
         // Si not unique
