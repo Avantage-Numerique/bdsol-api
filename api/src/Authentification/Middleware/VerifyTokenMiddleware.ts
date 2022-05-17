@@ -40,10 +40,32 @@ export class VerifyTokenMiddleware {
         }
     }
 
-    /*protected static verifyLifeSpan(token:any):any
+    protected static updateTokenLife(verifiedToken:any):any
     {
+        if (verifiedToken)
+        {
+            //const now = date();
+            //if augment lifespan
+            //add params with last updated
+            //add params with the count of request
+            //
+            return verifiedToken;
+        }
+    }
 
-    }*/
+    protected static verifyLifeSpan(verifiedToken:any):any
+    {
+        if (verifiedToken)
+        {
+            //const now = date();
+            //if now - verifiedToken.emission <= lifespan
+            //token actif
+            //sinon
+            //token invalide
+            //invalidetoken
+            return verifiedToken;
+        }
+    }
 
 
     protected static unauthorizedResponse(res:Response):Response

@@ -38,7 +38,8 @@ const config = {
     },
     jwt: {
         defaultOptions: {
-            expiresIn: '24h'
+            expiresIn: '24h',
+            requestAdditionnalTime: '15m'
         }
     },
     query: {

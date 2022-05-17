@@ -37,12 +37,14 @@ class AuthentificationController
         const targetUser = await this.authenticate(username, password);
 
         // User was find in DB
-        if (!targetUser.error) {
+        if (targetUser &&
+            !targetUser.error &&
+            targetUser.data !== null) {
             LogHelper.debug(targetUser, username, password);
-            LogHelper.log(`Les information de ${targetUser.username} fonctionnent, génération du token JW ...`);
+            LogHelper.log(`Les information de ${targetUser.data.username} fonctionnent, génération du token JW ...`);
 
             // Generate an access token
-            const userConnectedToken = this.generateToken(targetUser);
+            const userConnectedToken = this.generateToken(targetUser.data);
 
             return {
                 error: false,
@@ -123,10 +125,11 @@ class AuthentificationController
 
         try {
 
-            if (ServerController.database.driverPrefix === 'mongodb') {
+            if (ServerController.database.driverPrefix === 'mongodb')
+            {
                 const user = await AuthentificationController.service.get(targetUser);
-                LogHelper.debug("AuthControlller / authenticate", user.data);
-                return user.data;
+                LogHelper.debug("AuthControlller / authenticate", user);
+                return user;
             }
 
             /**

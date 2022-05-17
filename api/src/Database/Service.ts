@@ -35,8 +35,12 @@ export abstract class Service {
         try
         {
             const item = await this.model.findOne(query);
-            LogHelper.debug("Service: get", item);
-            return SuccessResponse.create(item, StatusCodes.OK, ReasonPhrases.OK);
+
+            if (item !== null) {
+                return SuccessResponse.create(item, StatusCodes.OK, ReasonPhrases.OK);
+            }
+
+            return ErrorResponse.create(new Error(ReasonPhrases.NOT_FOUND), StatusCodes.NOT_FOUND);
 
         } catch (getAllErrors: any) {
             return ErrorResponse.create(getAllErrors, StatusCodes.INTERNAL_SERVER_ERROR);
