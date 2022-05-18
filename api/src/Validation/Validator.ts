@@ -12,6 +12,16 @@
 //@todo add an Abstrack Handler for Validor to extends from.
 // Implement set the Rules contract to be the handle ?
 
+// See this package instead ? https://joi.dev/api/?v=17.6.0
+/**
+ * Permet de chainer les validation comme ça. Ça pourrait être nice pour appliquer les rules qu'On va envoyer.
+ * username: Joi.string()
+ .alphanum()
+ .min(3)
+ .max(30)
+ .required(),
+ */
+
 
 export default class Validator {
 
@@ -28,6 +38,7 @@ export default class Validator {
                 //rules definition ?
                 // Sets rule from the the Model.schema
                 //isValid = isValid ?? Rules[rule].validate();
+                isValid = true;
             }
         }
 
