@@ -23,8 +23,7 @@ export abstract class Service {
      * Get all the documents from a collection that fits the query.
      * @param query any Should be an object with the document's
      */
-    async get(query: any): Promise<ApiResponseContract>
-    {
+    async get(query: any): Promise<ApiResponseContract> {
         if (config.db.config.createObjectIdForQuery) {
             query._id = Service.transformToObjectId(query._id);
             if (query._id.error) {
@@ -32,10 +31,14 @@ export abstract class Service {
             }
         }
 
-        try
-        {
+        try {
             const item = await this.model.findOne(query);
-            return SuccessResponse.create(item, StatusCodes.OK, ReasonPhrases.OK);
+
+            if (item !== null) {
+                return SuccessResponse.create(item, StatusCodes.OK, ReasonPhrases.OK);
+            }
+
+            return ErrorResponse.create(new Error(ReasonPhrases.NOT_FOUND), StatusCodes.NOT_FOUND);
 
         } catch (getAllErrors: any) {
             return ErrorResponse.create(getAllErrors, StatusCodes.INTERNAL_SERVER_ERROR);
@@ -108,7 +111,7 @@ export abstract class Service {
             return ErrorResponse.create(
                 insertError.errors,
                 StatusCodes.INTERNAL_SERVER_ERROR,
-                insertError.errmsg || "Not able to update item"
+                insertError.errmsg || "Not able to insert item"
             );
         }
     }
@@ -123,10 +126,12 @@ export abstract class Service {
 
         try {
             // UpdateOne
-            const meta = await this.model.updateOne({_id: id}, data, {new: true}).catch((e: any) => {
-                LogHelper.info("UpdateOne catch:", e);
-                return e;
-            });
+            const meta = await this.model.updateOne({_id: id}, data, {new: true})
+                .catch((e: any) => {
+                        LogHelper.info("UpdateOne catch:", e);
+                        return e;
+                    }
+                );
             LogHelper.info("UpdateOne return after the catch :", meta);
             // if method updateOne fail, it returns a mongo error with a code and a message. // was method findByIdAndUpdate used.
 
@@ -196,13 +201,22 @@ export abstract class Service {
         }
     }
 
-    private parseResult(meta: any, actionMessage: string = "Mise à jour"): ApiResponseContract {
-        // ERRORS
-        LogHelper.debug("parseResult in Service", meta);
+    private parseResult(meta: any, actionMessage: string = "Mise à jour"): ApiResponseContract
+    {
+        LogHelper.debug(`Parse Result method for ${actionMessage}`, meta, actionMessage);
+
+
+        // Mongo DB validation failed, make that excalade the response flow, shall we.
+        if (meta.errors) {
+            //on create, mongodb validate the data and return an object if errors occurs.
+            return ErrorResponse.createWithMultipleErrors(
+                meta.errors,
+                StatusCodes.NOT_ACCEPTABLE,
+                "Validating the data fail. Please readjust the request.");
+        }
 
         // Champ mal formulé
-        if (meta.name === "CastError")
-        {
+        if (meta.name === "CastError") {
             const field = meta.path + " (" + meta.valueType + "): " + meta.stringValue,
                 msg = field + " ne peut pas être casted correctement";
 
@@ -239,8 +253,7 @@ export abstract class Service {
 
         // UPDATE SUCCESSFUL
         if (meta.acknowledged !== undefined &&
-            meta.acknowledged)
-        {
+            meta.acknowledged) {
             LogHelper.log(StatusCodes.OK + " " + actionMessage + " de l'item réussi");
             return SuccessResponse.create(
                 meta,
@@ -251,8 +264,7 @@ export abstract class Service {
 
         // UPDATE FAILED
         if (meta.acknowledged !== undefined &&
-            !meta.acknowledged)
-        {
+            !meta.acknowledged) {
             LogHelper.log(StatusCodes.NOT_MODIFIED + " " + actionMessage + " de l'item n'a pas été réussi");
             return ErrorResponse.create(
                 meta,

@@ -5,9 +5,7 @@ import config from "../../config";
 import {
     DBDriver,
     FakeUserDBDriver,
-    MongooseDBDriver,
-    DbProvider,
-    UsersProvider
+    MongooseDBDriver
 } from "../../Database/DatabaseDomain";
 
 import {ReasonPhrases,StatusCodes} from 'http-status-codes';
@@ -18,11 +16,7 @@ import LogHelper from "../../Monitoring/Helpers/LogHelper";
  */
 export default class ServerController {
 
-    static usersTable: string = 'users';
-    static usersModel: any;
     static database: DBDriver;
-    static userProvider: UsersProvider;
-    static dataProvider: DbProvider;
 
     server: http.Server;
     api: express.Application;
@@ -33,7 +27,8 @@ export default class ServerController {
      * Create an instance of ServerController with the express app.
      * @param api express.Application
      */
-    constructor(api: express.Application) {
+    constructor(api: express.Application)
+    {
         this.api = api;
         this.server = http.createServer(this.api);
 
@@ -46,7 +41,8 @@ export default class ServerController {
      * Le singleton du ServerController qu'on veut avoir seulement une instance.
      * @param api express.Application Pour initié et associé l'application express au projet.
      */
-    static getInstance(api:express.Application) {
+    static getInstance(api:express.Application)
+    {
         if (ServerController._singleton === undefined) {
             ServerController._singleton = new ServerController(api);
         }
@@ -57,8 +53,8 @@ export default class ServerController {
      * Setup the database static property of ServerController for controlling the DB.
      * @private
      */
-    private static _setDBDriver() {
-
+    private static _setDBDriver()
+    {
         LogHelper.log(`Initiation du driver ${config.db.driver} de la base de données.`);
 
         if (config.db.driver === 'mongodb') {

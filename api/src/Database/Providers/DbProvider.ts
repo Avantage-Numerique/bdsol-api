@@ -38,7 +38,7 @@ export abstract class BaseProvider implements DbProvider {
     public async connect():Promise<mongoose.Connection|undefined>
     {
 
-        LogHelper.log(this.url);
+        LogHelper.log("Connect to url : ", this.url);
         try {
             this.connection = await mongoose.createConnection(this.url, {
                 useNewUrlParser: true,

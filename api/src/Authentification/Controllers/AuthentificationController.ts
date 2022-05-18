@@ -1,4 +1,3 @@
-import {UserContract} from "../../Users/Models/User";
 import LogHelper from "../../Monitoring/Helpers/LogHelper"
 import ServerController from "../../Server/Controllers/ServerController";
 import LoginResponse from "../Responses/LoginResponse";
@@ -38,12 +37,13 @@ class AuthentificationController
         const targetUser = await this.authenticate(username, password);
 
         // User was find in DB
-        if (!targetUser.error) {
-
-            LogHelper.log(`Les information de ${targetUser.username} fonctionnent, génération du token JW ...`);
+        if (targetUser &&
+            !targetUser.error &&
+            targetUser.data !== null) {
+            LogHelper.log(`Les information de ${targetUser.data.username} fonctionnent, génération du token JW ...`);
 
             // Generate an access token
-            const userConnectedToken = this.generateToken(targetUser);
+            const userConnectedToken = this.generateToken(targetUser.data);
 
             return {
                 error: false,
@@ -68,6 +68,7 @@ class AuthentificationController
             errors: [],
             message: 'Vos informations de connexion sont incorrectes, vérifiez votre utilisateur et mot de passe.',
             data: {
+                userConnectedToken: undefined,
                 fields: {
                     username: {
                         status: false,
@@ -104,7 +105,7 @@ class AuthentificationController
      */
     private generateToken(user:any):string
     {
-        return TokenController.generate({ user_id: user._id, username: user.username, role: user.role });
+        return TokenController.generate({ "user_id": `${user._id}`, "username": `${user.username}`, "role": `${user.role}` });
     }
 
     /**
@@ -123,8 +124,11 @@ class AuthentificationController
 
         try {
 
-            if (ServerController.database.driverPrefix === 'mongodb') {
-                return await AuthentificationController.service.get(targetUser);
+            if (ServerController.database.driverPrefix === 'mongodb')
+            {
+                const user = await AuthentificationController.service.get(targetUser);
+                LogHelper.debug("AuthControlller / authenticate", user);
+                return user;
             }
 
             /**
@@ -132,12 +136,12 @@ class AuthentificationController
              * Still clumsy structure.
              */
             if (ServerController.database.driverPrefix === 'fakeusers') {
-                const fakeUser = await FakeUserModel.findOne(targetUser);
-                return fakeUser as UserContract;
+                return await FakeUserModel.findOne(targetUser);
             }
         } catch (errors: any) {
             return ErrorResponse.create(errors, StatusCodes.INTERNAL_SERVER_ERROR);
         }
+        LogHelper.debug("AuthControlller / authenticate to the end of authenticate.");
     }
 }
 export default AuthentificationController;
