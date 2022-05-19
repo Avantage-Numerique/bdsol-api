@@ -4,6 +4,7 @@ import OrganisationsService from "../Services/OrganisationsService";
 import HttpError from "../../Error/HttpError";
 import { OrganisationSchema } from "../Schemas/OrganisationSchema";
 import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import QueryBuilder from "../../Database/QueryBuilder/QueryBuilder";
 
 class OrganisationsController {
 
@@ -35,6 +36,7 @@ class OrganisationsController {
         if (requestData.id === undefined)
         return HttpError.NotAcceptable("Aucun no. d'identification fournit");
 
+       
         const formatedData = this.formatRequestDataForDocument(requestData);
         const updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
 
