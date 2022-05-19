@@ -154,17 +154,26 @@ export abstract class Service {
     async delete(id: string): Promise<ApiResponseContract> {
 
         try {
-            const item = await this.model.findByIdAndDelete(id);
-            if (!item) {
+            const meta = await this.model.findByIdAndDelete(id)
+                .catch((e: any) => {
+                    LogHelper.info("findByIdAndDelete catch:", e);
+                    return e;
+                }
+            );
+            if (!meta) {
                 return ErrorResponse.create(
                     new Error("item to delete not found"),
                     StatusCodes.NOT_FOUND,
                     "item to delete not found"
                 );
             }
+            LogHelper.info("UpdateOne return after the catch :", meta);
+            // if method updateOne fail, it returns a mongo error with a code and a message. // was method findByIdAndUpdate used.
+
+            return this.parseResult(meta, 'Delete');
 
             return SuccessResponse.create(
-                item,
+                meta,
                 StatusCodes.OK,
                 "Item will be deleted"
             );

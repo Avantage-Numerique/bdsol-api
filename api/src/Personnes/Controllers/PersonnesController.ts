@@ -304,4 +304,4 @@ class PersonnesController {
     }
 }
 
-export default PersonnesController;
+export {PersonnesController};
