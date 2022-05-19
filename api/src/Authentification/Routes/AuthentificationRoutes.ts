@@ -1,6 +1,9 @@
 import express from "express";
 import AuthenficationController from "../Controllers/AuthentificationController";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import config from "../../config";
+import {ReasonPhrases, StatusCodes} from "http-status-codes";
+import {TokenController} from "../Controllers/TokenController";
 
 // add { mergeParams: true } to get the main route params.
 const AuthentificationRouter = express.Router();
@@ -23,4 +26,23 @@ AuthentificationRouter.post('/login',
         return res.status(response.code).send(response);
     });
 
-export default AuthentificationRouter;
+
+AuthentificationRouter.post('/generate-token',
+    async (req, res) => {
+
+        if (config.isDevelopment)
+        {
+            const token = TokenController.generate({ user_id: "6271b8ceee860ac5d96a32be", username: "datageek", role: "admin" });
+
+            return res.status(StatusCodes.OK).send({
+                "message": ReasonPhrases.OK,
+                "token": token
+            });
+        }
+        return res.status(StatusCodes.UNAUTHORIZED).json({
+            "message": ReasonPhrases.UNAUTHORIZED
+        });
+
+    });
+
+export {AuthentificationRouter};

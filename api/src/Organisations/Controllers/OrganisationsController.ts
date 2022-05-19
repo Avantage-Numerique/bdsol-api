@@ -35,7 +35,8 @@ class OrganisationsController {
         //Validation ID
         if (requestData.id === undefined)
         return HttpError.NotAcceptable("Aucun no. d'identification fournit");
-        
+
+       
         const formatedData = this.formatRequestDataForDocument(requestData);
         const updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
 

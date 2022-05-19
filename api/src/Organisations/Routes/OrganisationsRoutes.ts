@@ -14,13 +14,12 @@ const OrganisationsRouter = express.Router();
  *      @return
  */
 OrganisationsRouter.post('/update', async (req, res) => {
-    let {data} = req.body;
+    const {data} = req.body;
     LogHelper.log("Update Organisations route for ", data);
     const controller = new OrganisationsController();
     const response = await controller.update(data);
     return res.status(response.code).send(response);
 });
-
 
 
 /**
@@ -33,11 +32,12 @@ OrganisationsRouter.post('/update', async (req, res) => {
  *      @return 
  */
  OrganisationsRouter.post('/create', async (req, res) => {
-     let {data} = req.body;
-     LogHelper.log("Create Personne route for ", data);
+     const {data} = req.body;
+     LogHelper.log("Create Organisations route for ", data);
     const controller = new OrganisationsController();
     const response = await controller.create(data);
     return res.status(response.code).send(response);
 });
 
-export default OrganisationsRouter;
+
+export {OrganisationsRouter};

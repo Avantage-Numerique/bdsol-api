@@ -10,6 +10,6 @@ export * from './Models/FakeUserModel';//UserContract
 
 export * from './Services/UsersService';
 export * from './Controllers/UserController';
-export * from './Routes/UserRoutes';
+export * from './Routes/UsersRouter';
 
 export * from './fakeUsers';

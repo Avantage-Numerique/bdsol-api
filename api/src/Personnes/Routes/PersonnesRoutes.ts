@@ -1,5 +1,5 @@
 import express from "express";
-import PersonnesController from "../Controllers/PersonnesController";
+import {PersonnesController} from "../Controllers/PersonnesController";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 const PersonnesRouter = express.Router();
@@ -88,4 +88,4 @@ PersonnesRouter.post('/delete', async (req, res) => {
     //return
 });
 
-export default PersonnesRouter;
+export {PersonnesRouter};

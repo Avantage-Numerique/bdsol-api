@@ -62,8 +62,7 @@ class PersonnesController {
             return HttpError.NotAcceptable("Aucun no. d'identification fournit");
         if (requestData.id.length != 24)
             return HttpError.NotAcceptable("Numéro d'identification erroné");
-        
-        
+
         const formatedData = this.formatRequestDataForDocument(requestData);
         const updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
 
@@ -114,10 +113,9 @@ class PersonnesController {
 
         //Validation ID
         if (requestData.id !== undefined && requestData.id.length != 24)
-            return HttpError.NotAcceptable("Numéro d'identification erroné");
-        
+            return HttpError.NotAcceptable("Numéro d'identification erroné");   
         const query = QueryBuilder.build(requestData);
- 
+
         return await this.service.get(query);
     }
 
@@ -159,7 +157,7 @@ class PersonnesController {
         //Validation ID
         if (requestData.id !== undefined && requestData.id.length != 24)
             return HttpError.NotAcceptable("Numéro d'identification erroné");
-        
+
         const query = QueryBuilder.build(requestData);
 
         return await this.service.all(query);
@@ -168,11 +166,9 @@ class PersonnesController {
     /**
      * @method delete permet d'effectuer une suppression de la fiche d'une personne dans la base de données.
      * @todo
-     * Paramètres : 
-     *      @param 
      * 
      * Retourne : 
-     *      @return 
+     *      @return null
     */
     public async delete():Promise<void> {
         LogHelper.log("Début de la suppression d'une personne");
@@ -204,7 +200,7 @@ class PersonnesController {
             if (requestData.nom === undefined &&
                 requestData.prenom === undefined &&
                 requestData.surnom === undefined &&
-                requestData.description === undefined){
+                requestData.description === undefined) {
                     isValid = false;
                     message += "Data doit contenir un champ. ";
                 }
@@ -258,4 +254,4 @@ class PersonnesController {
     }
 }
 
-export default PersonnesController;
+export {PersonnesController};
