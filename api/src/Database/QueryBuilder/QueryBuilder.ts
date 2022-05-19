@@ -13,14 +13,14 @@ export default class QueryBuilder {
      */
     static build(query:any) {
 
-        let finalQuery = {};
+        const finalQuery = {};
         
         const prop = Object.keys(query)
         const value = Object.values(query)
         for (let i = 0; i <= prop.length; i++)
         {
-            let p = prop[i];
-            let v = value[i];
+            const p = prop[i];
+            const v = value[i];
 
             //S'il s'agit d'un id
             if ( p == "id" )//@ts-ignore

@@ -27,12 +27,12 @@ class PersonnesController {
      *      @return {ApiResponseContract}
     */
     public async create(requestData:any):Promise<ApiResponseContract> {
-        let messageValidate = this.validateData(requestData);
+        const messageValidate = this.validateData(requestData);
         if (!messageValidate.isValid)
             return HttpError.NotAcceptable(messageValidate.message);
 
-        let formatedData = this.formatRequestDataForDocument(requestData);
-        let createdDocumentResponse = await this.service.insert(formatedData);
+        const formatedData = this.formatRequestDataForDocument(requestData);
+        const createdDocumentResponse = await this.service.insert(formatedData);
         
         if (createdDocumentResponse !== undefined)
             return createdDocumentResponse;
@@ -53,7 +53,7 @@ class PersonnesController {
     public async update(requestData:any):Promise<ApiResponseContract> {
         
         //Validation des données
-        let messageUpdate = this.validateData(requestData);
+        const messageUpdate = this.validateData(requestData);
         if (!messageUpdate.isValid)
             return HttpError.NotAcceptable(messageUpdate.message);
 
@@ -64,8 +64,8 @@ class PersonnesController {
             return HttpError.NotAcceptable("Numéro d'identification erroné");
         
         
-        let formatedData = this.formatRequestDataForDocument(requestData);
-        let updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
+        const formatedData = this.formatRequestDataForDocument(requestData);
+        const updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
 
         if (updatedModelResponse !== undefined)
             return updatedModelResponse;
@@ -116,7 +116,7 @@ class PersonnesController {
         if (requestData.id !== undefined && requestData.id.length != 24)
             return HttpError.NotAcceptable("Numéro d'identification erroné");
         
-        let query = QueryBuilder.build(requestData);
+        const query = QueryBuilder.build(requestData);
  
         return await this.service.get(query);
     }
@@ -160,7 +160,7 @@ class PersonnesController {
         if (requestData.id !== undefined && requestData.id.length != 24)
             return HttpError.NotAcceptable("Numéro d'identification erroné");
         
-        let query = QueryBuilder.build(requestData);
+        const query = QueryBuilder.build(requestData);
 
         return await this.service.all(query);
     }
@@ -255,55 +255,6 @@ class PersonnesController {
             surnom: requestData.surnom,
             description: requestData.description
         } as PersonneSchema;
-    }
-
-    /**
-     * @method tempQueryBuilder Forme la requête de condition à envoyer à mongoose.
-     * 
-     * Paramètre :
-     * @param {name:value} query  - Les critère de recherche
-     * 
-     * Retourne :
-     * @return {object} finalQuery est la totalité des conditions associé à la recherche
-     */
-    public tempQueryBuilder(query:any) {
-
-        let finalQuery = {};
-        
-        if ( query.id !== undefined)//@ts-ignore
-            finalQuery._id = query.id;
-
-        if ( query.nom !== undefined)//@ts-ignore
-            finalQuery.nom = { $regex: query.nom , $options : 'i' };
-
-        if ( query.prenom !== undefined)//@ts-ignore
-            finalQuery.prenom = { $regex : query.prenom , $options : 'i' };
-
-        if ( query.surnom !== undefined)//@ts-ignore
-        finalQuery.surnom = { $regex: query.surnom , $options : 'i' };
-
-        if ( query.description !== undefined)//@ts-ignore
-            finalQuery.description = { $regex: query.description , $options : 'i' };
-
-        if ( query.createdAt !== undefined )
-        {
-            if (query.createdAt.substring(0,1) == '<')//@ts-ignore
-                finalQuery.createdAt = { $lte: query.createdAt.substring(1, query.createdAt.length) };
-
-            if (query.createdAt.substring(0,1) == '>')//@ts-ignore
-                finalQuery.createdAt = { $gte: query.createdAt.substring(1, query.createdAt.length) };
-        }
-
-        if ( query.updatedAt !== undefined )
-        {
-            if (query.updatedAt.substring(0,1) == '<')//@ts-ignore
-                finalQuery.updatedAt = { $lte: query.updatedAt.substring(1, query.updatedAt.length) };
-
-            if (query.updatedAt.substring(0,1) == '>')//@ts-ignore
-                finalQuery.updatedAt = { $gte: query.updatedAt.substring(1, query.updatedAt.length) };
-        }
-
-        return finalQuery;
     }
 }
 
