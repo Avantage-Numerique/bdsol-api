@@ -194,7 +194,7 @@ export abstract class Service {
             //on create, mongodb validate the data and return an object if errors occurs.
             return ErrorResponse.createWithMultipleErrors(
                 meta.errors,
-                StatusCodes.NOT_ACCEPTABLE,
+                StatusCodes.BAD_REQUEST,
                 "Validating the data fail. Please readjust the request.");
         }
 
@@ -203,13 +203,13 @@ export abstract class Service {
             const field = meta.path + " (" + meta.valueType + "): " + meta.stringValue,
                 msg = field + " ne peut pas être casted correctement";
 
-            LogHelper.error(StatusCodes.NOT_ACCEPTABLE + " " + msg);
+            LogHelper.error(StatusCodes.BAD_REQUEST + " " + msg);
 
             return ErrorResponse.create({
                     name: "Erreur de service : " + meta.name,
                     message: meta.message
                 },
-                StatusCodes.NOT_ACCEPTABLE,
+                StatusCodes.UNPROCESSABLE_ENTITY,
                 msg);
         }
 
@@ -223,12 +223,13 @@ export abstract class Service {
                 LogHelper.warn("WrongElements loop ", key);
             });
 
-            LogHelper.error(StatusCodes.NOT_ACCEPTABLE + " Un élément existe déjà dans la collection : " + wrongElementsValues);
+            //Peut être CONFLICT=409, UNPROCESSABLE_ENTITY=422
+            LogHelper.error(StatusCodes.CONFLICT + " Un élément existe déjà dans la collection : " + wrongElementsValues);
             return ErrorResponse.create({
                     name: "Erreur de service",
                     message: "Un élément existe déjà dans la collection."
                 },
-                StatusCodes.NOT_ACCEPTABLE,
+                StatusCodes.CONFLICT,
                 wrongElementsValues);
         }
 
@@ -237,10 +238,10 @@ export abstract class Service {
         // UPDATE SUCCESSFUL
         if (meta.acknowledged !== undefined &&
             meta.acknowledged) {
-            LogHelper.log(StatusCodes.OK + " " + actionMessage + " de l'item réussi");
+            LogHelper.log(StatusCodes.CREATED + " " + actionMessage + " de l'item réussi");
             return SuccessResponse.create(
                 meta,
-                StatusCodes.OK,
+                StatusCodes.CREATED,
                 actionMessage + " de l'item réussi"
             );
         }
@@ -259,7 +260,7 @@ export abstract class Service {
         // CREATE SUCCESS //By Default after all the rest ? Not White listing.
         return SuccessResponse.create(
             meta,
-            StatusCodes.OK,
+            StatusCodes.CREATED,
             actionMessage + " de l'item réussi"
         );
     }
