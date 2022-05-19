@@ -154,20 +154,15 @@ export abstract class Service {
     async delete(id: string): Promise<ApiResponseContract> {
 
         try {
-            const item = await this.model.findByIdAndDelete(id);
-            if (!item) {
-                return ErrorResponse.create(
-                    new Error("item to delete not found"),
-                    StatusCodes.NOT_FOUND,
-                    "item to delete not found"
-                );
-            }
-
-            return SuccessResponse.create(
-                item,
-                StatusCodes.OK,
-                "Item will be deleted"
+            const meta = await this.model.findByIdAndDelete(id)
+                .catch((e: any) => {
+                    LogHelper.info("findByIdAndDelete catch:", e);
+                    return e;
+                }
             );
+            LogHelper.info("findByIdAndDelete return after the catch :", meta);
+
+            return this.parseResult(meta, 'La supression');
 
         } catch (deleteError: any) {
 
@@ -179,18 +174,6 @@ export abstract class Service {
         }
     }
 
-    /**
-     * Centralize error to say that the system didn't crash, but we couldn't return something.
-     * @private
-     * @return ApiResponseContract error:False and code NO_CONTENT nor errors
-     */
-    private static errorNothingHappened(): ApiResponseContract {
-        return SuccessResponse.create(
-            [],
-            StatusCodes.NO_CONTENT,
-            "Tried doesn't return nothing and there is no error to catch."
-        );
-    }
 
     private static transformToObjectId(id: string): mongoose.Types.ObjectId | ApiResponseContract {
         try {
@@ -279,6 +262,5 @@ export abstract class Service {
             StatusCodes.OK,
             actionMessage + " de l'item réussi"
         );
-        //return Service.errorNothingHappened();
     }
 }

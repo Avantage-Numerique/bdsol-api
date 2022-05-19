@@ -1,11 +1,11 @@
 import express from "express";
 import cors from "cors";
-import ApiRouter from "./routes";
-import HealthCheckRouter from "./Healthcheck/Routes/HealthCheckRoutes";
+import {ApiRouter} from "./routes";
+import {HealthCheckRouter} from "./Healthcheck/Routes/HealthCheckRoutes";
 import {AuthentificationRouter} from "./Authentification/Routes/AuthentificationRoutes";
-import UserRoutes from "./Users/Routes/UserRoutes";
-import PersonnesRouter from './Personnes/Routes/PersonnesRoutes';
-import OrganisationsRouter from './Organisations/Routes/OrganisationsRoutes'
+import {UsersRouter} from "./Users/Routes/UsersRouter";
+import {PersonnesRouter} from './Personnes/Routes/PersonnesRoutes';
+import {OrganisationsRouter} from './Organisations/Routes/OrganisationsRoutes'
 import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
 
 /**
@@ -14,6 +14,7 @@ import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMi
  */
 class Api {
     public express: express.Application = express();
+    public authRouters:any;
 
     constructor()
     {
@@ -42,7 +43,6 @@ class Api {
 
     private _initRouter()
     {
-
         this._initPublicRoutes();
 
         // @ts-ignore
@@ -64,11 +64,10 @@ class Api {
         this.express.use("/", HealthCheckRouter);
     }
 
-
     private _needAuthentificationRoutes()
     {
         // Users Routes
-        this.express.use("/users", UserRoutes);
+        this.express.use("/users", UsersRouter);
 
         //Personnes Routes
         this.express.use("/personne", PersonnesRouter);

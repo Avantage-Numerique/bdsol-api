@@ -5,14 +5,14 @@ import type {ApiResponseContract} from "../../Http/Responses/ApiResponse";
 import {UserController} from "../Controllers/UserController";
 
 // add { mergeParams: true } to get the main route params.
-const UserRouter = express.Router();
+const UsersRouter = express.Router();
 
 //  CRUD
 
 
 // USER/UPDATE
 
-UserRouter.post('/update', async (req, res) => {
+UsersRouter.post('/update', async (req, res, ) => {
 
     const {data} = req.body;
     LogHelper.info(`Update request on users route with this data`, data);
@@ -43,7 +43,7 @@ UserRouter.post('/update', async (req, res) => {
 
 // USERS/CREATE
 
-UserRouter.post('/create', async (req, res) => {
+UsersRouter.post('/create', async (req, res) => {
 
     const {data} = req.body;
     LogHelper.log(`Received`, req.body, `Create user ${data}`);
@@ -65,7 +65,7 @@ UserRouter.post('/create', async (req, res) => {
 });
 
 
-UserRouter.post('/get', async (req, res) => {
+UsersRouter.post('/get', async (req, res) => {
     const {data} = req.body;
     LogHelper.log(`Received`, req.body, `Create user ${data}`);
 
@@ -84,7 +84,7 @@ UserRouter.post('/get', async (req, res) => {
     }
 });
 
-UserRouter.post('/delete', async (req, res) => {
+UsersRouter.post('/delete', async (req, res) => {
     const {data} = req.body;
     LogHelper.log(`Received`, req.body, `Delete user ${data}`);
 
@@ -104,4 +104,4 @@ UserRouter.post('/delete', async (req, res) => {
 
 });
 
-export default UserRouter;
+export {UsersRouter};

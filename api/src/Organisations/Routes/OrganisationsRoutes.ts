@@ -22,7 +22,6 @@ OrganisationsRouter.post('/update', async (req, res) => {
 });
 
 
-
 /**
  * @method POST/CREATE : Demande la création d'une personne dans la base de données
  * 
@@ -40,4 +39,5 @@ OrganisationsRouter.post('/update', async (req, res) => {
     return res.status(response.code).send(response);
 });
 
-export default OrganisationsRouter;
+
+export {OrganisationsRouter};

@@ -9,4 +9,4 @@ HealthCheckRouter.get("/ping", async (_req, res) => {
     return res.status(200).send(response);
 });
 
-export default HealthCheckRouter;
+export {HealthCheckRouter};
