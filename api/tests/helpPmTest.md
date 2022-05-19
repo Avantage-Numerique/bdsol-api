@@ -117,7 +117,8 @@ L'utilisation des variables se fait en ordre d'importance hiérarchique *(si une
 - `variables` Manipule les variables dans les différent scopes.
 - `collectionVariables` Manipule les variables de collections.
 - `globals` Manipule les variables globales.
-- `iterationData` Permet d'accéder et manipuler les variables d'un [data file](https://learning.postman.com/docs/running-collections/working-with-data-files/)
+- `iterationData` Permet d'accéder et manipuler les variables d'un [data file](https://learning.postman.com/docs/running-collections/working-with-data-files/)<br>
+**Voir section "IterationData"**
 
 ### action:
 - `.has(variableName:string)` *:boolean (est dans le scope?)*
@@ -290,6 +291,7 @@ Voici une implémentation pour boucler plusieurs fois sur la même requête (un 
 
 *Requête "CreateMultiple" Section Pre-request Script*
 ```javascript
+//@depecrated voir data file, iterationData
 const tableNom = ["Falconne", "Falconne", "Yitubi"];
 const tablePrenom = ["Jimmy", "Theresa", "Markiplier"];
 const tableSurnom = ["Jimmy", "Bimbo", "Mark"];
@@ -326,7 +328,7 @@ else
     console.log("No more create to do!");
     postman.setNextRequest(null); //Ou setNextRequest(autre requête)
 }
-
+//@deprecated voir data file, iterationData
 function NextCreate(){
     //Incrémentation
     index++;
@@ -344,3 +346,97 @@ function NextCreate(){
 Ayant incrémenter l'index dans les variables d'environnement. Lorsque Postman effectuera de nouveau le create, il prendra les valeurs contenu dans l'index suivant et créera une personne différente.
 
 On peut aussi insérer dans une variable d'environnement le "id" de création qui a été retourné par le serveur comme réponse au create et s'en servir pour une prochaine requête update, search ou delete.
+
+## IterationData et data file
+On peux fournir au Runner Postman un fichier (.csv, ou **.json**).
+Dans le runner, on sélectionne le bouton "Select File" de la section "Data".
+
+### Si une erreur postman est déclanchée disant que l'importation est impossible :
+
+> Couldn't upload file <br>
+Make sure that Postman can read files inside the working directory. 
+- `Ctrl + ,` ou aller dans l'engrenage -> Setting.
+    - Scroll vers le bas.
+    - `"Allow reading files outside working directory"`
+
+- `Windows + e` ou aller dans l'explorateur de fichier. Diriger vous dans votre disque vers le fichier postman (C:\Users\\"tonUserName").<br>
+    - Renommer le répertoire "Postman Agent" pour le nom "Postman".<br>(Comme dans le navigateur, on ne peut modifier l'emplacement du fichier, on peut le renommer comme étant "Postman", en enlevant le "Agent" ce qui devrait règler le problème.)
+
+### Fonctionnement du data file
+Le data file contient différent objet de tests que l'on peut personnaliser et postman itérera dans les objets dont ont pourra manipuler les propriétés.<br>
+On peut le fournir en `.csv` ou `.json`.<br>
+Dans notre cas, ce sera json. En voici un exemple pour l'entité User :
+```json
+[
+    {
+        "username": "datageek",
+        "email": "vilain@wwe.com",
+        "password": "1234lamouche",
+        "avatar": "Ti-recks",
+        "name": "Steve Austin",
+        "role": "admin"
+    },
+    {
+        "username": "Flowra",
+        "email": "petitefleure95@jardin.petal",
+        "password": "TuliPEOraNGe1",
+        "avatar": "PoroAvecFleur",
+        "name": "Hortensia Verdoyante",
+        "role": "Paysagiste"
+    }
+]
+```
+On spécifie le nombre d'itération (2 dans ce cas), et pour chaque itération, les valeurs que l'on manipulera avec l'objet `iterationData` seront celle de l'objet de l'itération en cours.
+
+On ajoute aussi une section nommé `infoTest` qui devra être **Retirer avant d'être envoyer** qui servira à vérifier le contenu de la réponse.
+```javascript
+//Crée la variable d'environnement
+pm.environment.set( "infoTest", pm.iterationData.get("infoTest") );
+//Retire la variable de l'iterationData
+pm.iterationData.unset("infoTest");
+```
+Par exemple, si le test devrait retourner une erreur, ou quel code de status http on s'attend à recevoir après la requête. Il est possible de rajouter des sections spécifique pour faire différent test.<br>
+Voici un exemple basique comprennant `infoTest` :
+```json
+    {
+        "infoTest":
+        {
+            "name":"Full create 2",
+            "error":false,
+            "status":201
+        },
+        "username": "Flowra",
+        "email": "petitefleure95@jardin.petal",
+        "password": "TuliPEOraNGe1",
+        "avatar": "PoroAvecFleur",
+        "name": "Hortensia Verdoyante",
+        "role": "Paysagiste"
+    },
+    {
+        "infoTest":
+        {
+            "name":"empty username",
+            "error":true,
+            "status":400
+        },
+        "username": "",
+        "email": "AlTem@culturel.org",
+        "password": "abcdefg",
+        "avatar": "Jules",
+        "name": "Alphonse Téminis",
+        "role": "Larbin"
+    },
+```
+
+### Fonctionnement du iterationData
+Comme mentionné dans la section des variables, `iterationData` se manipule avec le même fonctionnement. <br>
+On pourra utiliser principalement `.has .get .set .toObject()`.
+
+```javascript
+const infoTest = pm.environment.get("infoTest");
+
+pm.expect(jsonResponse.code).to.equal(infoTest.status);
+
+//Not sure about the toObject conversion.
+pm.expect(jsonData).to.equal(pm.iterationData.toObject());
+```
