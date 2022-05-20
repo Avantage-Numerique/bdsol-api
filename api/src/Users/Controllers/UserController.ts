@@ -62,7 +62,7 @@ export class UserController {
                 "Data non valide"
             );
         }
-        if (id === undefined)
+        if (id === undefined || id.length != 24)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,

@@ -203,7 +203,7 @@ export abstract class Service {
             const field = meta.path + " (" + meta.valueType + "): " + meta.stringValue,
                 msg = field + " ne peut pas être casted correctement";
 
-            LogHelper.error(StatusCodes.BAD_REQUEST + " " + msg);
+            LogHelper.error(StatusCodes.UNPROCESSABLE_ENTITY + " " + msg);
 
             return ErrorResponse.create({
                     name: "Erreur de service : " + meta.name,
@@ -238,10 +238,10 @@ export abstract class Service {
         // UPDATE SUCCESSFUL
         if (meta.acknowledged !== undefined &&
             meta.acknowledged) {
-            LogHelper.log(StatusCodes.CREATED + " " + actionMessage + " de l'item réussi");
+            LogHelper.log(StatusCodes.OK + " " + actionMessage + " de l'item réussi");
             return SuccessResponse.create(
                 meta,
-                StatusCodes.CREATED,
+                StatusCodes.OK,
                 actionMessage + " de l'item réussi"
             );
         }

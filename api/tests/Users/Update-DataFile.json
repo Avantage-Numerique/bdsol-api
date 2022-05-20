@@ -1,0 +1,108 @@
+[
+    {
+        "infoTest":
+        {
+            "name":"Full update",
+            "error":false,
+            "status":200
+        },
+        "username": "Limonette5",
+        "email": "limono.soleil@terre.universe",
+        "password": "not1234",
+        "avatar": "Krik",
+        "name": "Simonette Lymerman",
+        "role": "Persil"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update no data",
+            "error":true,
+            "status":400
+        }
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update empty username",
+            "error":true,
+            "status":400
+        },
+        "username": ""
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update empty email",
+            "error":true,
+            "status":400
+        },
+        "email": ""
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update empty password",
+            "error":true,
+            "status":400
+        },
+        "password": ""
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update empty non req",
+            "error":true,
+            "status":400
+        },
+        "avatar": "",
+        "name": "",
+        "role": ""
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update random id",
+            "error":true,
+            "status":400
+        },
+        "id":"123456789123456789123456",
+        "username":"Salutations"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update id lenght != 24",
+            "error":true,
+            "status":400
+        },
+        "id":"123456789456",
+        "username":"Salutations2"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update only id",
+            "error":true,
+            "status":400
+        }
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update not unique username",
+            "error":true,
+            "status":409
+        },
+        "username": "Flowra"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update not unique email",
+            "error":true,
+            "status":409
+        },
+        "email": "petitefleure95@jardin.petal"
+    }
+]
