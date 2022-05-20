@@ -227,15 +227,31 @@ class PersonnesController {
     /**
      * @method delete permet d'effectuer une suppression de la fiche d'une personne dans la base de données.
      * @todo
+     * Paramètres : 
+     *      @param 
      * 
      * Retourne : 
-     *      @return null
+     *      @return 
     */
-    public async delete():Promise<void> {
+     public async delete(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la suppression d'une personne");
-        LogHelper.log("Réussite de la suppression d'une personne");
-        LogHelper.log("Échec de la suppression d'une personne");
-        return;
+
+        if (typeof requestData === undefined || typeof requestData !== 'object')
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "La requête n'est pas un objet. "
+                );
+
+        //Verification data est vide
+        if (requestData.id === undefined || requestData.id.length != 24 )
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "id non valide"
+            );  
+        
+        return await this.service.delete(requestData.id);
     }
 
     /**
