@@ -1,7 +1,8 @@
 import {User} from "../Models/User";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import HttpError from "../../Error/HttpError";
 import type {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import {StatusCodes, ReasonPhrases} from "http-status-codes";
+import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
 import type {UserDocument} from "../Schemas/UserSchema";
 import {UsersService} from "../Services/UsersService";
 
@@ -23,19 +24,25 @@ export class UserController {
 
     public async create(requestData:any):Promise<ApiResponseContract>
     {
-        if (!this.validateData(requestData)) {
-            return HttpError.NotAcceptable();
-        }
+        if (!this.validateData(requestData))
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "Data non valide"
+            );
         const formattedData = this.formatRequestDataForDocument(requestData);
         LogHelper.debug("userController", formattedData);
         const createdDocumentResponse:ApiResponseContract = await this.service.insert(formattedData);
         LogHelper.debug("userController", createdDocumentResponse);
 
-        if (createdDocumentResponse !== undefined) {
+        if (createdDocumentResponse !== undefined)
             return createdDocumentResponse;
-        }
 
-        return HttpError.NotAcceptable('Les données semblent être ok, mais la création n\'a pas eu lieu.');
+        return ErrorResponse.create(
+            new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            'Les données semblent être ok, mais la création n\'a pas eu lieu.'
+            );
     }
 
 
@@ -49,20 +56,32 @@ export class UserController {
     public async update(id:string, requestData:any):Promise<ApiResponseContract>
     {
         if (!this.validateData(requestData)) {
-            return HttpError.NotAcceptable();
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "Data non valide"
+            );
         }
-        if (id === undefined) {
-            return HttpError.NotAcceptable();
-        }
+        if (id === undefined)
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "id non valide"
+            );
+
 
         const formattedData = this.formatRequestDataForDocument(requestData);
         const updatedModelResponse:any = await this.service.update(id, formattedData);
 
-        if (updatedModelResponse !== undefined) {
+        if (updatedModelResponse !== undefined)
             return updatedModelResponse;
-        }
 
-        return HttpError.NotAcceptable('Les données semblent être ok, mais la mise à jour n\'a pas eu lieu.');
+
+        return ErrorResponse.create(
+            new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            'Les données semblent être ok, mais la mise à jour n\'a pas eu lieu.'
+            );
     }
 
     public get(requestData:any) {

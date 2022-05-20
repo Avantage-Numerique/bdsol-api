@@ -59,7 +59,7 @@
         {
             "name":"not unique username",
             "error":true,
-            "status":400
+            "status":409
         },
         "username":"datageek",
         "email":"Lafaillette.@tulipod.com",
@@ -100,7 +100,7 @@
         {
             "name":"not unique email",
             "error":true,
-            "status":400
+            "status":409
         },
         "username":"Trescerte15",
         "email":"vilain@wwe.com",
