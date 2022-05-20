@@ -1,0 +1,102 @@
+[
+    {
+        "infoTest":
+        {
+            "name":"Create Full",
+            "error":false,
+            "status":201
+        },
+        "nom":"Parent",
+        "prenom":"Jean-marc",
+        "surnom":"Mickette",
+        "description":"Humour"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create Full",
+            "error":false,
+            "status":201
+        },
+        "nom":"Tremblay",
+        "prenom":"Michel",
+        "surnom":"Dj Pro Grand Gangsta",
+        "description":"La musica fiesta"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create no nom",
+            "error":true,
+            "status":400
+        },
+        "prenom":"Sarah",
+        "surnom":"Le Patin Mou",
+        "description":""
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create no prenom",
+            "error":true,
+            "status":400
+        },
+        "nom":"Daigneault",
+        "surnom":"Pikotte",
+        "description":"Circus is love, circus is life"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create empty nom",
+            "error":true,
+            "status":400
+        },
+        "nom":"",
+        "prenom":"Adelard",
+        "surnom":"Jean-guy la moustache",
+        "description":"Moustachios"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create empty prenom",
+            "error":true,
+            "status":400
+        },
+        "nom":"Boutin",
+        "prenom":"",
+        "surnom":"Prime Minister",
+        "description":"Redneck"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create empty non req",
+            "error":false,
+            "status":201
+        },
+        "nom":"Croche",
+        "prenom":"Sarah",
+        "surnom":"",
+        "description":""
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create no non req",
+            "error":false,
+            "status":201
+        },
+        "nom":"Neutron",
+        "prenom":"Jimmy"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create empty data",
+            "error":true,
+            "status":400
+        }
+    }
+]

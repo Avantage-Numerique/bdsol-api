@@ -1,0 +1,106 @@
+[
+    {
+        "infoTest":
+        {
+            "name":"Update full",
+            "error":false,
+            "status":200
+        },
+        "nom":"Richard",
+        "prenom":"Jean-Marcel",
+        "surnom":"Rickette",
+        "description":"Humour noir"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update id random",
+            "error":true,
+            "status":400
+        },
+        "id":"123456789123456789123456",
+        "nom":"Bichard",
+        "prenom":"Kean-Marcel",
+        "surnom":"Hickette",
+        "description":"Numour hoir"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update id length != 24",
+            "error":true,
+            "status":400
+        },
+        "id":"1234567",
+        "nom":"Bichard",
+        "prenom":"Kean-Marcel",
+        "surnom":"Hickette",
+        "description":"Numour hoir"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update no nom",
+            "error":false,
+            "status":200
+        },
+        "prenom":"Jean-Marcel",
+        "surnom":"Bickette",
+        "description":"Humour Blanc"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update no prenom",
+            "error":false,
+            "status":200
+        },
+        "nom":"Winchester",
+        "surnom":"Lickette",
+        "description":"Humour turquoise"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update empty nom",
+            "error":true,
+            "status":400
+        },
+        "nom":"",
+        "prenom":"Sylvain",
+        "surnom":"Kickette",
+        "description":"Humour bleu"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update empty prenom",
+            "error":true,
+            "status":400
+        },
+        "nom":"Gichard",
+        "prenom":"",
+        "surnom":"Nickette",
+        "description":"Humour noir"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update empty non req",
+            "error":false,
+            "status":200
+        },
+        "nom":"Lavallée",
+        "prenom":"Jean-Marcel",
+        "surnom":"",
+        "description":""
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update no update data",
+            "error":true,
+            "status":400
+        }
+    }
+]
