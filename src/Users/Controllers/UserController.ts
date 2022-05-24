@@ -5,6 +5,7 @@ import {StatusCodes, ReasonPhrases} from "http-status-codes";
 import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
 import type {UserDocument} from "../Schemas/UserSchema";
 import {UsersService} from "../Services/UsersService";
+import type {Service} from "../../Database/Service";
 
 /**
  * First pitch, in parallel with fred, for a crud controller.
@@ -12,7 +13,7 @@ import {UsersService} from "../Services/UsersService";
  */
 export class UserController {
 
-    public service:UsersService;
+    public service:Service;
 
     constructor()
     {

@@ -43,20 +43,19 @@ export class MongooseDBDriver implements DBDriver {
     public async initDb() {
         //await this.initMongoose();
 
-        LogHelper.info(`[BD] Connexion à la  base de données utilisateurs ...`);
+        LogHelper.info(`[BD] Connexion à la base de données utilisateurs ...`);
         await this.providers.users.connect();
 
-        LogHelper.info(`[BD] Connexion à la  base de données structurée, ouverte et liée ...`);
+        LogHelper.info(`[BD] Connexion à la base de données structurée, ouverte et liée ...`);
         await this.providers.data.connect();
 
-        //await this.generateFakeUsers();
+        await this.generateFakeUsers();
     }
 
     public async generateFakeUsers() {
         if (config.environnement === 'development') {
             //will create the fake users if the collection is empty.
-            //let users = new UsersService(User.getInstance());
-            const usersCollection = new CreateDbAndUsersMongoose(this.providers.users.service);
+            const usersCollection = new CreateDbAndUsersMongoose(this.providers.users);
             await usersCollection.up();
         }
     }

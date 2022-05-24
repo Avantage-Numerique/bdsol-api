@@ -79,7 +79,6 @@ export default class ServerController {
         this.server.on("listening", this.onListening);
 
         try {
-            //
             await ServerController.database.connect();
 
         } catch(error: any) {

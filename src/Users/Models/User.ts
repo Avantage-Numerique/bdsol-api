@@ -18,6 +18,7 @@ export interface UserContract {
  * Model User
  */
 export class User {
+
     static collectionName:string = 'users';
     static modelName:string = 'User';
     static connection:mongoose.Connection;
