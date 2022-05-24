@@ -1,4 +1,0 @@
-[submodule "frontend"]
-	path = frontend
-	branch = main
-	url = https://github.com/Avantage-Numerique/ontologie-documentation.git

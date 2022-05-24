@@ -22,11 +22,11 @@ services:
     image: latest/bdsol
     restart: always
     build:
-      context: ./frontend
+      context: ./app
       dockerfile: Dockerfile.dev
     volumes:
       - type: bind
-        source: ./frontend
+        source: ./app
         target: /app
     ports:
       - "3000:3000"
