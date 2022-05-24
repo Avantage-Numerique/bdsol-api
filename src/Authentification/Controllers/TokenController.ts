@@ -77,8 +77,10 @@ export class TokenController {
             // could be : TokenExpiredError
             throw err;
         }
-        if (TokenController.isValid(decoded) &&
-            TokenController.isActive(decoded)) {
+        if (TokenController.haveAllPropertiesNeeded(decoded) &&
+            TokenController.isActive(decoded) &&
+            TokenController.isValid(decoded))
+        {
             return decoded;
         }
         throw new Error('Token format is wrong.');
@@ -88,8 +90,9 @@ export class TokenController {
 
     protected static updateTokenLife(verifiedToken:any):any
     {
-        if (TokenController.isValid(verifiedToken) &&
-            TokenController.isActive(verifiedToken))
+        if (TokenController.haveAllPropertiesNeeded(verifiedToken) &&
+            TokenController.isActive(verifiedToken) &&
+            TokenController.isValid(verifiedToken))
         {
             //const now = date();
             //if augment lifespan
@@ -108,7 +111,7 @@ export class TokenController {
 
     protected static isActive(verifiedToken:any):any
     {
-        if (TokenController.isValid(verifiedToken))
+        if (TokenController.haveAllPropertiesNeeded(verifiedToken))
         {
             return now() >= verifiedToken.exp;
         }
@@ -117,6 +120,13 @@ export class TokenController {
 
 
     protected static isValid (verifiedToken:any):any {
+        // Search for the user with the id
+        // chec if
+        return true;
+    }
+
+
+    protected static haveAllPropertiesNeeded (verifiedToken:any):any {
         return verifiedToken &&
             verifiedToken.iat !== undefined &&
             verifiedToken.iat >= 0 &&

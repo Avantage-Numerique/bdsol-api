@@ -9,4 +9,5 @@ export interface MigrationContract {
     down: () => Promise<void>;
     onDown: (error:any, result:any) => void;
     fake: () => Promise<boolean>;
+    conditions: () => Promise<boolean>;
 }

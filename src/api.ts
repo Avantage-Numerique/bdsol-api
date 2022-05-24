@@ -40,7 +40,6 @@ class Api {
         this.express.use(express.json());
     }
 
-    // check for migration to trigger ?
 
     private _initRouter()
     {
@@ -54,6 +53,7 @@ class Api {
         this._defaultsRoutes();
     }
 
+
     private _initPublicRoutes()
     {
         //Auth Routes
@@ -65,6 +65,7 @@ class Api {
         //Tools the manage the health of the API
         this.express.use("/", HealthCheckRouter);
     }
+
 
     private _needAuthentificationRoutes()
     {
@@ -81,6 +82,7 @@ class Api {
 
     private _defaultsRoutes()
     {
+
         //this handle the 404
         this.express.use("/", ApiErrorsRouter);
     }

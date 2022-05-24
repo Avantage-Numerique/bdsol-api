@@ -13,15 +13,15 @@ const ApiErrorsRouter = express.Router();
 
 ApiErrorsRouter.post('*', async (req, res, ) => {
 
-    LogHelper.info(`The requestion : ${req} `+ReasonPhrases.NOT_FOUND);
+    LogHelper.info(`The request is ` + ReasonPhrases.NOT_FOUND, req);
 
-    return res.status(StatusCodes.NOT_FOUND).send(
-        ErrorResponse.create(
-            new Error(ReasonPhrases.NOT_FOUND),
-            StatusCodes.NOT_FOUND,
-            ReasonPhrases.NOT_FOUND
-        )
-    );
+    return res
+        .status(StatusCodes.NOT_FOUND)
+        .send(ErrorResponse.create(
+                new Error(ReasonPhrases.NOT_FOUND),
+                StatusCodes.NOT_FOUND,
+                ReasonPhrases.NOT_FOUND
+        ));
 });
 
 export {ApiErrorsRouter};

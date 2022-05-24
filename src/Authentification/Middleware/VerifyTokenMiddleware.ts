@@ -28,13 +28,14 @@ export class VerifyTokenMiddleware
                 const userToken = token[1];
 
                 // Check if no token
-                if (!userToken) {
-
+                if (!userToken)
+                {
                     LogHelper.error("Token is missing the authentification header. We can't verify the user.");
                     return VerifyTokenMiddleware.unauthorizedResponseAndStopRequest(res);
                 }
 
-                try {
+                try
+                {
                     req.user = TokenController.verify(userToken);
                     LogHelper.log("Verifying the token sent for the current request.");
                     next();

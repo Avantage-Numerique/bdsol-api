@@ -32,7 +32,7 @@ AuthentificationRouter.post('/generate-token',
 
         if (config.isDevelopment)
         {
-            const token = TokenController.generate({ user_id: "6271b8ceee860ac5d96a32be", username: "datageek", role: "admin" });
+            const token = TokenController.generate({ user_id: "628d49ef0b18e903578efd49", username: "datageek", role: "admin" });
 
             return res.status(StatusCodes.OK).send({
                 "message": ReasonPhrases.OK,
