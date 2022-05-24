@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import config from "../../config";
 import type {DbProvider} from "./DbProvider";
 import {BaseProvider} from "./DbProvider";
-import {User} from "../../Users/UsersDomain";
+import {User, UsersService} from "../../Users/UsersDomain";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 
@@ -32,6 +32,7 @@ export class UsersProvider extends BaseProvider implements DbProvider {
         await super.connect();
 
         User.connection = this.connection;
+        this.service = UsersService.getInstance(User.getInstance());
 
         return this.connection;
     }

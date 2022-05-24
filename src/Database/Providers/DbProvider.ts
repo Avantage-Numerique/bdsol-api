@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import {Service} from "../Service";
+import type {Service} from "../Service";
 import {ConnectOptions} from "mongodb";
 
 
 export interface DbProvider {
     connection:mongoose.Connection;
+    service:Service|null;
     urlPrefix:string;
     url:string;
     databaseName:string;
