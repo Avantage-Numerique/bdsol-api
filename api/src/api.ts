@@ -7,6 +7,7 @@ import {UsersRouter} from "./Users/Routes/UsersRouter";
 import {PersonnesRouter} from './Personnes/Routes/PersonnesRoutes';
 import {OrganisationsRouter} from './Organisations/Routes/OrganisationsRoutes'
 import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
+import {ApiErrorsRouter} from "./Http/Routes/ApiErrorsRouter";
 
 /**
  * Main class for the API
@@ -45,11 +46,12 @@ class Api {
     {
         this._initPublicRoutes();
 
-        // @ts-ignore
-        this.express.use("/", VerifyTokenMiddleware.middlewareFunction());//@todo fix the middleware from a class bug with return and params types.
+        this.express.use("/", VerifyTokenMiddleware.middlewareFunction() as any);
+        this.express.use("/", VerifyTokenMiddleware.addUserToResponse() as any);
 
         //Everything under here will need authorization token present in the request Header.
         this._needAuthentificationRoutes();
+        this._defaultsRoutes();
     }
 
     private _initPublicRoutes()
@@ -75,6 +77,12 @@ class Api {
 
         //Organisations Routes
         this.express.use("/organisations", OrganisationsRouter);
+    }
+
+    private _defaultsRoutes()
+    {
+        //this handle the 404
+        this.express.use("/", ApiErrorsRouter);
     }
 }
 

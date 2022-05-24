@@ -40,7 +40,7 @@ const config = {
         defaultOptions: {
             expiresIn: '24h',
         },
-        requestAdditionnalTime: '15m'
+        requestAdditionalTime: 15//in minutes
     },
     query: {
         defaultSkip: process.env.QUERY_DEFAULT_SKIP || 0,

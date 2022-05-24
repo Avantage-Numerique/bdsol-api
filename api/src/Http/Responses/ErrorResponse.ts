@@ -19,8 +19,7 @@ export class ErrorResponse extends ApiResponse {
     {
         let singleError;
         if (errorsObj !== undefined &&
-            errorsObj.name !== undefined)
-        {
+            errorsObj.name !== undefined) {
             singleError = [
                 {
                     name: errorsObj.name,
@@ -42,15 +41,17 @@ export class ErrorResponse extends ApiResponse {
      * @param errors {array} pushes array of errors.
      * @param code number http error code
      * @param message string the error message
+     * @param user the user that had done the request
      * @param data the data almost always empty
      */
-    public static createWithMultipleErrors(errors:any, code:number, message:string="Erreur", data:object={}):ApiResponseContract
+    public static createWithMultipleErrors(errors:any, code:number, message:string="Erreur", data:object={}, user:object={}):ApiResponseContract
     {
         const error = new ErrorResponse({
             error:true,
             code: code,
             message: message,
             errors: errors,
+            user: user,
             data: data
         } as ApiResponseContract);
         return error.response;

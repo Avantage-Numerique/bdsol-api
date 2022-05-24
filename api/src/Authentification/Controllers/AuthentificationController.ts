@@ -47,12 +47,17 @@ class AuthentificationController
 
             return {
                 error: false,
-                userConnectedToken: userConnectedToken,
                 code: StatusCodes.OK,
                 errors: [],
                 message: 'OK',
-                data: {
+                user: {
                     userConnectedToken: userConnectedToken,
+                    username: targetUser.data.username,
+                    name: targetUser.data.name,
+                    email: targetUser.data.email,
+                    avatar: targetUser.data.avatar,
+                },
+                data: {
                     fields: {
                         username: true,
                         password: true
@@ -63,23 +68,11 @@ class AuthentificationController
 
         return {
             error: true,
-            userConnectedToken: undefined,
             code: StatusCodes.UNAUTHORIZED,
             errors: [],
             message: 'Vos informations de connexion sont incorrectes, vérifiez votre utilisateur et mot de passe.',
-            data: {
-                userConnectedToken: undefined,
-                fields: {
-                    username: {
-                        status: false,
-                        message: ''
-                    },
-                    password:  {
-                        status: false,
-                        message: ''
-                    }
-                }
-            }
+            user: {},
+            data: {}
         };
     }
 

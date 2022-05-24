@@ -1,6 +1,9 @@
 import {Service} from "../../Database/Service";
 import type {ApiEndPointsControllerContract} from "../Contracts/ApiEndPointsControllerContract";
 import {ApiResponseContract} from "../Responses/ApiResponse";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import {PersonnesController} from "../../Personnes/Controllers/PersonnesController";
+import {IRouterMatcher} from "express-serve-static-core";
 
 /**
  * This is setup to implement and dry the Controllers of authenfication and deep API mecanisms.
@@ -36,10 +39,18 @@ abstract class ApiEndPointsController implements ApiEndPointsControllerContract 
      * @param method {string} the method to be call on the controller that will be this since it will extend that class.
      * @protected
      */
-    protected _callRoute(route:string, method:string):any {
+    protected _callRoute(route:string, method:string, params:IRouterMatcher={}):any {
         //use a reflector here ?
         //check if method exist
         //this is a problem for the response type.
+
+        //anatomy of the routes right now :
+        const {data} = req.body;
+        LogHelper.log("Create Personne route for ", data);
+        const controller = new PersonnesController();
+        const response:any = await controller.create(data);
+        return res.status(response.code).send(response);
+
     }
 
 

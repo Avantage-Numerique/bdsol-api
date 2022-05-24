@@ -3,9 +3,9 @@
  */
 export default interface LoginResponse {
     error: boolean,
-    userConnectedToken: string|undefined;
     code: number;
     errors: object|null;
     message: string;
+    user: object|null;
     data: object|null;
 }

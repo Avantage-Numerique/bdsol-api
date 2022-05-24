@@ -7,13 +7,14 @@ export class SuccessResponse extends ApiResponse {
         this.error = false;
     }
 
-    public static create(data:object, code:number, message:string):ApiResponseContract {
+    public static create(data:object, code:number, message:string, user:any={}):ApiResponseContract {
 
         const success = new SuccessResponse({
             error:false,
             code: code,
             message: message,
             errors: [],
+            user: user,
             data: data
         } as ApiResponseContract);
         return success.response;

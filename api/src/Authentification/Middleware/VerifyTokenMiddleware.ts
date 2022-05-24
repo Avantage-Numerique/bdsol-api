@@ -1,15 +1,21 @@
 import {NextFunction, Response} from "express";
 import AuthRequest from "../Types/AuthRequest";
+import AuthResponse from "../Types/AuthResponse";
 import {TokenController} from "../Controllers/TokenController";
 import {StatusCodes, ReasonPhrases} from "http-status-codes";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
 
-export class VerifyTokenMiddleware {
+export class VerifyTokenMiddleware
+{
 
+    /**
+     * Express middle function to verify the token on every request on targets Routers.
+     * Used in /src/api.ts
+     */
     public static middlewareFunction()
     {
-        return async function (req: AuthRequest, res: Response, next: NextFunction):Promise<Response<any, Record<string, any>> | undefined> {
+        return async function (req: AuthRequest, res: AuthResponse, next: NextFunction):Promise<Response<any, Record<string, any>> | undefined> {
             // Get token from header
             const headers = req.headers;
 
@@ -25,7 +31,7 @@ export class VerifyTokenMiddleware {
                 if (!userToken) {
 
                     LogHelper.error("Token is missing the authentification header. We can't verify the user.");
-                    return VerifyTokenMiddleware.unauthorizedResponse(res);
+                    return VerifyTokenMiddleware.unauthorizedResponseAndStopRequest(res);
                 }
 
                 try {
@@ -36,13 +42,34 @@ export class VerifyTokenMiddleware {
                 catch (err)
                 {
                     LogHelper.error("Token verification failed.");
-                    VerifyTokenMiddleware.unauthorizedResponse(res);
+                    return VerifyTokenMiddleware.unauthorizedResponseAndStopRequest(res);
                 }
             }
         }
     }
 
-    protected static unauthorizedResponse(res:Response):Response
+
+    /**
+     * Express middleware to add the user to the target request and response.
+     * used in /src/api.ts
+     */
+    public static addUserToResponse() {
+        return async function (req: AuthRequest, res: AuthResponse, next: NextFunction):Promise<Response<any, Record<string, any>> | undefined> {
+            if (req.user) {
+                res.user = req.user;
+            }
+            next();
+            return;
+        }
+    }
+
+
+    /**
+     * Centralized error when the verify
+     * @param res
+     * @protected
+     */
+    protected static unauthorizedResponseAndStopRequest(res:AuthResponse):any
     {
         LogHelper.info("Unauthorized request");
         const unauthorizedRequestError = ErrorResponse.create(

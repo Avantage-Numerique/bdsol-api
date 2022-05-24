@@ -2,7 +2,7 @@ import * as jwt from "jsonwebtoken";
 import config from "../../config";
 import {JwtPayload, VerifyErrors} from "jsonwebtoken";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import {now} from "../../helpers";
+import {addMinutes, now} from "../../helpers";
 
 /**
  * Controller to manage the token operation
@@ -77,7 +77,8 @@ export class TokenController {
             // could be : TokenExpiredError
             throw err;
         }
-        if (TokenController.isValid(decoded)) {
+        if (TokenController.isValid(decoded) &&
+            TokenController.isActive(decoded)) {
             return decoded;
         }
         throw new Error('Token format is wrong.');
@@ -95,6 +96,12 @@ export class TokenController {
             //add params with last updated
             //add params with the count of request
             //
+            if (verifiedToken.exp) {
+                let expiration:Date = new Date(verifiedToken.exp);
+                expiration = addMinutes(expiration, config.jwt.requestAdditionalTime);
+                verifiedToken.exp = expiration.getSeconds();
+                verifiedToken.updateCount += 1;
+            }
             return verifiedToken;
         }
     }
