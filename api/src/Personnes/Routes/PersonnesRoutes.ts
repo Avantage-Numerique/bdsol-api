@@ -78,14 +78,12 @@ PersonnesRouter.post('/list', async (req, res) => {
 /**
  * @method POST/DELETE trouve une personne dans la liste
  * @todo */
-PersonnesRouter.post('/delete', async (req, res) => {
-    LogHelper.log("Demande de suppression d'une personne");
-    LogHelper.log("DELETE not implemented");
-    return;
-
-    //const controller = new PersonneController();
-    //const response = await controller.delete();
-    //return
+ PersonnesRouter.post('/delete', async (req, res) => {
+    const {data} = req.body;
+    LogHelper.log("Delete Personne route for ", data);
+    const controller = new PersonnesController();
+    const response:any = await controller.delete(data);
+    return res.status(response.code).send(response);
 });
 
 export {PersonnesRouter};

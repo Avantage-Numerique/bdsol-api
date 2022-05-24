@@ -1,9 +1,11 @@
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import Personne from "../Models/Personne"
 import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import {StatusCodes, ReasonPhrases} from "http-status-codes";
+import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
 import PersonnesService from "../Services/PersonnesService";
 import {PersonneSchema} from "../Schemas/PersonneSchema";
-import HttpError from "../../Error/HttpError";
+import QueryBuilder from "../../Database/QueryBuilder/QueryBuilder";
 
 class PersonnesController {
 
@@ -28,7 +30,11 @@ class PersonnesController {
     public async create(requestData:any):Promise<ApiResponseContract> {
         const messageValidate = this.validateData(requestData);
         if (!messageValidate.isValid)
-            return HttpError.NotAcceptable(messageValidate.message);
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                messageValidate.message
+                );
 
         const formatedData = this.formatRequestDataForDocument(requestData);
         const createdDocumentResponse = await this.service.insert(formatedData);
@@ -36,7 +42,11 @@ class PersonnesController {
         if (createdDocumentResponse !== undefined)
             return createdDocumentResponse;
 
-        return HttpError.NotAcceptable('Échec de la création d\'une Personne');
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
+                StatusCodes.INTERNAL_SERVER_ERROR,
+                'Les données semblent être ok, mais la création n\'a pas eu lieu.'
+                );
     }
 
     
@@ -54,14 +64,19 @@ class PersonnesController {
         //Validation des données
         const messageUpdate = this.validateData(requestData);
         if (!messageUpdate.isValid)
-            return HttpError.NotAcceptable(messageUpdate.message);
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                messageUpdate.message
+                );
 
         //Validation ID
-        if (requestData.id === undefined)
-            return HttpError.NotAcceptable("Aucun no. d'identification fournit");
-        if (requestData.id.length != 24)
-            return HttpError.NotAcceptable("Numéro d'identification erroné");
-
+        if (requestData.id === undefined || requestData.id.length != 24)
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "id non valide"
+            );
 
         const formatedData = this.formatRequestDataForDocument(requestData);
         const updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
@@ -69,7 +84,11 @@ class PersonnesController {
         if (updatedModelResponse !== undefined)
             return updatedModelResponse;
 
-        return HttpError.NotAcceptable('Échec de l\'update d\'une Personne');
+        return ErrorResponse.create(
+            new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            'Les données semblent être ok, mais la mise à jour n\'a pas eu lieu.'
+            );
     
     }
 
@@ -89,7 +108,11 @@ class PersonnesController {
         LogHelper.log("Début de la recherche dans la liste");
 
         if (typeof requestData === undefined || typeof requestData !== 'object')
-            return HttpError.NotAcceptable("La requête n'est pas un objet. ");
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "La requête n'est pas un objet. "
+                );
 
         //Verification data est vide
         if (requestData.nom === undefined &&
@@ -99,24 +122,40 @@ class PersonnesController {
             requestData.id === undefined &&
             requestData.createdAt === undefined &&
             requestData.updatedAt === undefined)
-                return HttpError.NotAcceptable("La requête ne peut être vide");
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "La requête ne peut être vide"
+                );
 
         //Validation date
         if (requestData.createdAt !== undefined &&
             //typeof requestData.createdAt == 'string' &&
             ( requestData.createdAt.substring(0,1) != '<' && requestData.createdAt.substring(0,1) != '>' ))
-            return HttpError.NotAcceptable("Le premier caractère de createdAt doit être '<' ou '>'");
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "Le premier caractère de createdAt doit être '<' ou '>'"
+                );
+
         if (requestData.updatedAt !== undefined &&
             //typeof requestData.updatedAt == 'string' &&
             ( requestData.updatedAt.substring(0,1) != '<' && requestData.updatedAt.substring(0,1) != '>' ))
-            return HttpError.NotAcceptable("Le premier caractère de updatedAt doit être '<' ou '>'");
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "Le premier caractère de updatedAt doit être '<' ou '>'"
+                );
 
         //Validation ID
         if (requestData.id !== undefined && requestData.id.length != 24)
-            return HttpError.NotAcceptable("Numéro d'identification erroné");
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "id non valide"
+            );  
+        const query = QueryBuilder.build(requestData);
 
-        const query = this.tempQueryBuilder(requestData);
- 
         return await this.service.get(query);
     }
 
@@ -133,7 +172,11 @@ class PersonnesController {
     public async list(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la requête d'obtention de la liste de personne");
         if (typeof requestData === undefined || typeof requestData !== 'object')
-            return HttpError.NotAcceptable("La requête n'est pas un objet. ");
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "La requête n'est pas un objet. "
+                );
 
         //Verification data est vide
         if (requestData.nom === undefined &&
@@ -143,23 +186,40 @@ class PersonnesController {
             requestData.id === undefined &&
             requestData.createdAt === undefined &&
             requestData.updatedAt === undefined)
-                return HttpError.NotAcceptable("La requête ne peut être vide");
+                return ErrorResponse.create(
+                    new Error(ReasonPhrases.BAD_REQUEST),
+                    StatusCodes.BAD_REQUEST,
+                    "La requête ne peut être vide"
+                    );
 
         //Validation date
         if (requestData.createdAt !== undefined &&
             //typeof requestData.createdAt == 'string' &&
             ( requestData.createdAt.substring(0,1) != '<' && requestData.createdAt.substring(0,1) != '>' ))
-            return HttpError.NotAcceptable("Le premier caractère de createdAt doit être '<' ou '>'");
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "Le premier caractère de createdAt doit être '<' ou '>'"
+                );
+
         if (requestData.updatedAt !== undefined &&
             //typeof requestData.updatedAt == 'string' &&
             ( requestData.updatedAt.substring(0,1) != '<' && requestData.updatedAt.substring(0,1) != '>' ))
-            return HttpError.NotAcceptable("Le premier caractère de updatedAt doit être '<' ou '>'");
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "Le premier caractère de updatedAt doit être '<' ou '>'"
+                );
             
         //Validation ID
         if (requestData.id !== undefined && requestData.id.length != 24)
-            return HttpError.NotAcceptable("Numéro d'identification erroné");
-        
-        const query = this.tempQueryBuilder(requestData);
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "id non valide"
+            );  
+
+        const query = QueryBuilder.build(requestData);
 
         return await this.service.all(query);
     }
@@ -167,15 +227,31 @@ class PersonnesController {
     /**
      * @method delete permet d'effectuer une suppression de la fiche d'une personne dans la base de données.
      * @todo
+     * Paramètres : 
+     *      @param 
      * 
      * Retourne : 
-     *      @return null
+     *      @return 
     */
-    public async delete():Promise<void> {
+     public async delete(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la suppression d'une personne");
-        LogHelper.log("Réussite de la suppression d'une personne");
-        LogHelper.log("Échec de la suppression d'une personne");
-        return;
+
+        if (typeof requestData === undefined || typeof requestData !== 'object')
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "La requête n'est pas un objet. "
+                );
+
+        //Verification data est vide
+        if (requestData.id === undefined || requestData.id.length != 24 )
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "id non valide"
+            );  
+        
+        return await this.service.delete(requestData.id);
     }
 
     /**
@@ -252,55 +328,6 @@ class PersonnesController {
             surnom: requestData.surnom,
             description: requestData.description
         } as PersonneSchema;
-    }
-
-    /**
-     * @method tempQueryBuilder Forme la requête de condition à envoyer à mongoose.
-     * 
-     * Paramètre :
-     * @param {name:value} query  - Les critère de recherche
-     * 
-     * Retourne :
-     * @return {object} finalQuery est la totalité des conditions associé à la recherche
-     */
-    public tempQueryBuilder(query:any) {
-
-        const finalQuery = {};
-        
-        if ( query.id !== undefined)//@ts-ignore
-            finalQuery._id = query.id;
-
-        if ( query.nom !== undefined)//@ts-ignore
-            finalQuery.nom = { $regex: query.nom , $options : 'i' };
-
-        if ( query.prenom !== undefined)//@ts-ignore
-            finalQuery.prenom = { $regex : query.prenom , $options : 'i' };
-
-        if ( query.surnom !== undefined)//@ts-ignore
-        finalQuery.surnom = { $regex: query.surnom , $options : 'i' };
-
-        if ( query.description !== undefined)//@ts-ignore
-            finalQuery.description = { $regex: query.description , $options : 'i' };
-
-        if ( query.createdAt !== undefined )
-        {
-            if (query.createdAt.substring(0,1) == '<')//@ts-ignore
-                finalQuery.createdAt = { $lte: query.createdAt.substring(1, query.createdAt.length) };
-
-            if (query.createdAt.substring(0,1) == '>')//@ts-ignore
-                finalQuery.createdAt = { $gte: query.createdAt.substring(1, query.createdAt.length) };
-        }
-
-        if ( query.updatedAt !== undefined )
-        {
-            if (query.updatedAt.substring(0,1) == '<')//@ts-ignore
-                finalQuery.updatedAt = { $lte: query.updatedAt.substring(1, query.updatedAt.length) };
-
-            if (query.updatedAt.substring(0,1) == '>')//@ts-ignore
-                finalQuery.updatedAt = { $gte: query.updatedAt.substring(1, query.updatedAt.length) };
-        }
-
-        return finalQuery;
     }
 }
 

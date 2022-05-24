@@ -16,7 +16,7 @@ export default class HttpError {
     }
 
     /**
-     * @static @method NotAcceptable log erreur $message et retourne une réponse d'erreur (ServiceResponse).
+     * @static @method NotAcceptable log erreur $message et retourne une réponse d'erreur
      * Paramètres :
      * @param {string} message - erreur à mettre dans les logs @default ""
      * @param {boolean} log - Si on log l'erreur @default true

@@ -1,9 +1,11 @@
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import Organisation from "../Models/Organisation"
 import OrganisationsService from "../Services/OrganisationsService";
-import HttpError from "../../Error/HttpError";
 import { OrganisationSchema } from "../Schemas/OrganisationSchema";
 import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import {StatusCodes, ReasonPhrases} from "http-status-codes";
+import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
+import QueryBuilder from "../../Database/QueryBuilder/QueryBuilder";
 
 class OrganisationsController {
 
@@ -29,12 +31,21 @@ class OrganisationsController {
         //Validation des données
         const messageUpdate = this.validateData(requestData);
         if (!messageUpdate.isValid)
-            return HttpError.NotAcceptable(messageUpdate.message);
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                messageUpdate.message
+                );
 
         //Validation ID
         if (requestData.id === undefined)
-        return HttpError.NotAcceptable("Aucun no. d'identification fournit");
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "id non valide"
+            );
 
+       
         const formatedData = this.formatRequestDataForDocument(requestData);
         const updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
 
@@ -43,7 +54,11 @@ class OrganisationsController {
             return updatedModelResponse;
 
 
-        return HttpError.NotAcceptable('Échec de l\'update d\'une Organisation');
+        return ErrorResponse.create(
+            new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            'Les données semblent être ok, mais la mise à jour n\'a pas eu lieu.'
+            );
     
     }
 
@@ -60,7 +75,11 @@ class OrganisationsController {
     public async create(requestData:any):Promise<ApiResponseContract> {
         const messageValidate = this.validateData(requestData);
         if (!messageValidate.isValid)
-            return HttpError.NotAcceptable(messageValidate.message);
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                messageValidate.message
+                );
 
         const formatedData = this.formatRequestDataForDocument(requestData);
         const createdDocumentResponse = await this.service.insert(formatedData);
@@ -69,7 +88,11 @@ class OrganisationsController {
             !createdDocumentResponse.error)
             return createdDocumentResponse;
 
-        return HttpError.NotAcceptable('Échec de la création d\'une Organisation');
+        return ErrorResponse.create(
+            new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            'Les données semblent être ok, mais la création n\'a pas eu lieu.'
+            );
     }
 
     /**
