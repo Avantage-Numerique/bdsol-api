@@ -21,7 +21,7 @@ class OrganisationsController {
      * @method update permet de modifier et mettre à jour les attributs d'une organisation dans la base de donnée.
      * 
      * Paramètres :
-     *      @param {name:value} requestData - id et attributs à modifier.
+     *      @param {key:value} requestData - id et attributs à modifier.
      * 
      * Retourne :
      *      @return {ServiceResponse} 
@@ -67,7 +67,7 @@ class OrganisationsController {
      * @method create permet de créer et d'insérer une nouvelle entité "Organisation" dans la base de données
      * 
      * Paramètres :
-     *      @param {name:value} requestData - Attributs requis à la création d'une organisation
+     *      @param {key:value} requestData - Attributs requis à la création d'une organisation
      * 
      * Retourne :
      *      @return {ServiceResponse}
@@ -99,7 +99,7 @@ class OrganisationsController {
      * @method validateData valide les éléments pour l'entitée Personne s'ils sont présent.
      * 
      * Paramètres :
-     *      @param {name:value} requestData - attributs de personne à valider
+     *      @param {key:value} requestData - attributs de personne à valider
      * 
      * Retourne : validité et message d'erreur
      *      @return {object} { isValid, message } :
@@ -149,7 +149,7 @@ class OrganisationsController {
      * @method formatRequestDataForDocument insère dans le schéma les données de la requête.
      * 
      * Paramètres :
-     *      @param {name:value} requestData - attributs de l'organisation
+     *      @param {key:value} requestData - attributs de l'organisation
      * 
      * Retourne :
      *      @return {OrganisationSchema} l'interface Schéma contenant les données de la requête

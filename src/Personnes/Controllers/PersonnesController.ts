@@ -22,7 +22,7 @@ class PersonnesController {
      * @method create permet de créer et d'insérer une nouvelle entité "Personne" dans la base de donnée à partir de la requête.
      * 
      * Paramètres : 
-     *      @param {name:value} requestData - attributs requis à la création d'une personne
+     *      @param {key:value} requestData - attributs requis à la création d'une personne
      * 
      * Retourne :
      *      @return {ApiResponseContract}
@@ -54,7 +54,7 @@ class PersonnesController {
      * @method update permet de modifier et mettre à jour les attributs d'une personne dans la base de donnée.
      * 
      * Paramètres :
-     *      @param {name:value} requestData - id et attributs à modifier.
+     *      @param {key:value} requestData - id et attributs à modifier.
      * 
      * Retourne :
      *      @return {ApiResponseContract} 
@@ -97,7 +97,7 @@ class PersonnesController {
      * @todo La recherche par id n'est pas implémentée
      * 
      * Paramètre : 
-     *      @param {name:value} requestData - { "nom":"Jean" (*Critère de recherche*) }
+     *      @param {key:value} requestData - { "nom":"Jean" (*Critère de recherche*) }
      * 
      * Retourne : 
      *      @default critères vide: Retourne le premier résultat
@@ -164,7 +164,7 @@ class PersonnesController {
      * @todo La recherche par id n'est pas implémentée
      * 
      * Paramètres : 
-     *      @param {name:value} requestData - { "nom":"Jean" (*Critère de recherche*) }
+     *      @param {key:value} requestData - { "nom":"Jean" (*Critère de recherche*) }
      * 
      * Retourne : 
      *      @return 
@@ -258,7 +258,7 @@ class PersonnesController {
      * @method validateData valide les éléments pour l'entitée Personne s'ils sont présent.
      * 
      * Paramètres :
-     *      @param {name:value} requestData - attributs de personne à valider
+     *      @param {key:value} requestData - attributs de personne à valider
      * 
      * Retourne : validité et message d'erreur
      *      @return {object} { isValid, message } :
@@ -316,7 +316,7 @@ class PersonnesController {
      * @method formatRequestDataForDocument insère dans le schéma les données de la requête.
      * 
      * Paramètres :
-     *      @param {name:value} requestData - attributs de Personne
+     *      @param {key:value} requestData - attributs de Personne
      * 
      * Retourne :
      *      @return {PersonneSchema} l'interface Schéma contenant les données de la requête

@@ -1,3 +1,5 @@
+import Rules from "./Rules"
+import LogHelper from "../Monitoring/Helpers/LogHelper";
 
 //add isValid - contract to limit used
 // Check if this is overkill
@@ -25,27 +27,47 @@
 
 export default class Validator {
 
-    public static validate(data:any, rules:any):boolean
-    {
-        let isValid = false;
-
-        for (let property in data)
-        {
-            for (let rule in rules[property])
-            {
-                //check if the data[property] rule applied
-                //rules must be set
-                //rules definition ?
-                // Sets rule from the the Model.schema
-                //isValid = isValid ?? Rules[rule].validate();
-                isValid = true;
+    /** 
+     * @method validateData Valide le data contre un ensemble de règle 
+     * 
+     * Paramètres :
+     *      @param {key:value} data - Valeur à valider contre le schéma : { "nom" : "Audet" }
+     *      @param {key:value[]} ruleSet - Ensemble de règle pour chaque valeur à vérifier: { "nom":["isDefined", "isSet" ...], "prenom":[...] }
+     * 
+     * Retourne :
+     *      @return {object} - { isValid, message } :
+     *          @desc isValid (boolean): représentant si les données sont validée
+     *          @desc message (string) : décrivant l'échec ou réussite de la validation 
+     */
+    public validateData(data:any, ruleSet:any){
+        //in (key) / of (value)
+        //Warning : for in n'effectue pas nécessairement dans l'ordre
+        let isValid = true;
+        let message = "Erreurs :";
+        for (const field in ruleSet) {
+            for (const rule of ruleSet[field]) { //do we instead => validate(data[field], ruleSet[field].pop())
+                //Si la règle existe
+                if(Rules[rule]){
+                    //Si la valeur n'est pas valide 
+                    if ( !Rules[rule](data[field]) ){
+                        isValid = false;
+                        message += "\n"+Rules.ruleErrorMsg[rule];
+                    }
+                }
+                else {
+                    LogHelper.debug("Validator.validate : La règle "+rule+ "n'est pas implémentée.");
+                    isValid = false;
+                    message += "\nLa règle "+rule+ "n'est pas implémentée.";
+                }
             }
         }
-
-        return isValid;
+        if (isValid)
+            message = "Ok";
+        
+        return { isValid, message };
     }
-}
 
+}
 
 //"Nom" : ["notEmpty", "notNull", "notUndefined"]//Rules
 

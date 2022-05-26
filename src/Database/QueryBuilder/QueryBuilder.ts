@@ -6,7 +6,7 @@ export default class QueryBuilder {
      * @method QueryBuilder Forme la requête de condition à envoyer à mongoose.
      * 
      * Paramètre :
-     * @param {name:value} query  - Les critère de recherche
+     * @param {key:value} query  - Les critère de recherche
      * 
      * Retourne :
      * @return {object} finalQuery est un objet contenant la totalité des conditions associé à la recherche

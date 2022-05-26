@@ -4,6 +4,7 @@ import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import { PersonneSchema } from "../Schemas/PersonneSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import {DataProvider} from "../../Database/DatabaseDomain";
+import Rules from "../../Validation/Rules"
 
 class Personne {
     
@@ -22,7 +23,6 @@ class Personne {
     static schema:Schema =
         new Schema<PersonneSchema>({
 
-            //_id: Schema.Types.ObjectId,
             nom: { type: String, required: true },
             prenom: { type: String, required: true },
             surnom: String,
@@ -31,6 +31,7 @@ class Personne {
             {
                 timestamps: true
         });
+
     
     /**
      * @method isNomOrPrenomValid Vérifie les conditions d'insertion dans la base de donnée d'un nom ou d'un prénom.
