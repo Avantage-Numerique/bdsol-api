@@ -1,0 +1,79 @@
+[
+    {
+        "infoTest":
+        {
+            "name":"Create Full",
+            "error":false,
+            "status":201
+        },
+        "nom": "Petit f",
+        "description": "Théâtre et f",
+        "url":"https://f.org/",
+        "contactPoint":"info@f.org"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create Full2",
+            "error":false,
+            "status":201
+        },
+        "nom": "Agora des Arts",
+        "description": "Petite église, salle de spectacle sympatoche",
+        "url":"http://www.agoradesarts.com/",
+        "contactPoint":"info@agoradesarts.com"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create empty data",
+            "error":true,
+            "status":400
+        }
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create no nom",
+            "error":true,
+            "status":400
+        },
+        "description": "Culturama sse-toi",
+        "url":"http://www.culturamassetoi.com/",
+        "contactPoint":"info@ramasse.png"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create empty nom",
+            "error":true,
+            "status":400
+        },
+        "nom": "",
+        "description": "Culturama sse-toi",
+        "url":"http://www.culturamassetoi.com/",
+        "contactPoint":"info@ramasse.png"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create empty non req",
+            "error":false,
+            "status":201
+        },
+        "nom": "Synvain Rénove",
+        "description": "Rénovation de tout genre",
+        "url":"",
+        "contactPoint":""
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create no non req",
+            "error":false,
+            "status":201
+        },
+        "nom": "L'alphabet à 9 ans",
+        "description": "Garderie"
+    }
+]

@@ -6,6 +6,7 @@ import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
 import {StatusCodes, ReasonPhrases} from "http-status-codes";
 import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
 import QueryBuilder from "../../Database/QueryBuilder/QueryBuilder";
+import { request } from "express";
 
 class OrganisationsController {
 
@@ -38,7 +39,7 @@ class OrganisationsController {
                 );
 
         //Validation ID
-        if (requestData.id === undefined)
+        if (requestData.id === undefined || requestData.id.length != 24)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
@@ -263,8 +264,12 @@ class OrganisationsController {
                         if (typeof requestData.nom !== "string" ||
                             requestData.nom.length <= 2){
                             isValid = false;
-                            message += "Le paramètre 'nom' est problématique. "
+                            message += "Le paramètre 'nom' est problématique. ";
                         }
+                    }
+                    else {
+                        isValid = false;
+                        message += "Le paramètre 'nom' est requis";
                     }
                 }
             }
