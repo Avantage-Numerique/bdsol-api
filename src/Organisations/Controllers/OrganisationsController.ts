@@ -95,6 +95,138 @@ class OrganisationsController {
             );
     }
 
+
+    /**
+     * @method search permet d'effectuer une recherche afin de retourner la première organisation répondant au critères de recherche.
+     * 
+     * Paramètre : 
+     *      @param {name:value} requestData - { "nom":"Petit Théâtre" (*Critère de recherche*) }
+     * 
+     * Retourne : 
+     *      @default critères vide: Retourne le premier résultat
+     *      @return {ApiResponseContract}
+    */
+ 
+     public async search(requestData:any):Promise<ApiResponseContract> {
+        LogHelper.log("Début de la recherche dans la liste");
+
+        if (typeof requestData === undefined || typeof requestData !== 'object')
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "La requête n'est pas un objet. "
+                );
+
+        //Verification data est vide
+        if (requestData.nom === undefined &&
+            requestData.description === undefined &&
+            requestData.url === undefined &&
+            requestData.contactPoint === undefined &&
+            requestData.id === undefined &&
+            requestData.createdAt === undefined &&
+            requestData.updatedAt === undefined)
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "La requête ne peut être vide"
+                );
+
+        //Validation date
+        if (requestData.createdAt !== undefined &&
+            //typeof requestData.createdAt == 'string' &&
+            ( requestData.createdAt.substring(0,1) != '<' && requestData.createdAt.substring(0,1) != '>' ))
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "Le premier caractère de createdAt doit être '<' ou '>'"
+                );
+
+        if (requestData.updatedAt !== undefined &&
+            //typeof requestData.updatedAt == 'string' &&
+            ( requestData.updatedAt.substring(0,1) != '<' && requestData.updatedAt.substring(0,1) != '>' ))
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "Le premier caractère de updatedAt doit être '<' ou '>'"
+                );
+
+        //Validation ID
+        if (requestData.id !== undefined && requestData.id.length != 24)
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "id non valide"
+            );  
+        const query = QueryBuilder.build(requestData);
+
+        return await this.service.get(query);
+    }
+
+
+    /**
+     * @method list permet d'obtenir une liste de personne pouvant être filtré.
+     * 
+     * Paramètres : 
+     *      @param {name:value} requestData - { "nom":"Petit théâtre" (*Critère de recherche*) }
+     * 
+     * Retourne : 
+     *      @return 
+    */
+         public async list(requestData:any):Promise<ApiResponseContract> {
+            LogHelper.log("Début de la requête d'obtention de la liste de personne");
+            if (typeof requestData === undefined || typeof requestData !== 'object')
+                return ErrorResponse.create(
+                    new Error(ReasonPhrases.BAD_REQUEST),
+                    StatusCodes.BAD_REQUEST,
+                    "La requête n'est pas un objet. "
+                    );
+    
+            /*//Verification data est vide
+            if (requestData.nom === undefined &&
+                requestData.prenom === undefined &&
+                requestData.surnom === undefined &&
+                requestData.description === undefined &&
+                requestData.id === undefined &&
+                requestData.createdAt === undefined &&
+                requestData.updatedAt === undefined)
+                    return ErrorResponse.create(
+                        new Error(ReasonPhrases.BAD_REQUEST),
+                        StatusCodes.BAD_REQUEST,
+                        "La requête ne peut être vide"
+                        );*/
+    
+            //Validation date
+            if (requestData.createdAt !== undefined &&
+                //typeof requestData.createdAt == 'string' &&
+                ( requestData.createdAt.substring(0,1) != '<' && requestData.createdAt.substring(0,1) != '>' ))
+                return ErrorResponse.create(
+                    new Error(ReasonPhrases.BAD_REQUEST),
+                    StatusCodes.BAD_REQUEST,
+                    "Le premier caractère de createdAt doit être '<' ou '>'"
+                    );
+    
+            if (requestData.updatedAt !== undefined &&
+                //typeof requestData.updatedAt == 'string' &&
+                ( requestData.updatedAt.substring(0,1) != '<' && requestData.updatedAt.substring(0,1) != '>' ))
+                return ErrorResponse.create(
+                    new Error(ReasonPhrases.BAD_REQUEST),
+                    StatusCodes.BAD_REQUEST,
+                    "Le premier caractère de updatedAt doit être '<' ou '>'"
+                    );
+                
+            //Validation ID
+            if (requestData.id !== undefined && requestData.id.length != 24)
+                return ErrorResponse.create(
+                    new Error(ReasonPhrases.BAD_REQUEST),
+                    StatusCodes.BAD_REQUEST,
+                    "id non valide"
+                );  
+    
+            const query = QueryBuilder.build(requestData);
+    
+            return await this.service.all(query);
+        }
+
     /**
      * @method validateData valide les éléments pour l'entitée Personne s'ils sont présent.
      * 

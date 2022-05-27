@@ -40,4 +40,41 @@ OrganisationsRouter.post('/update', async (req, res) => {
 });
 
 
+/**
+ * @method POST/SEARCH trouve la première organisation correspondant aux critères de recherche
+ * 
+ * Paramètre :
+ *      @param {object} req : req.body contient {data : { "nom":"Jean-Marc" (*critères de recherche*) }}
+ * 
+ * Retourne :
+ *      @return
+ **/
+ OrganisationsRouter.post('/search', async (req, res) => {
+    const {data} = req.body;
+    LogHelper.log("Search Organisation route for ", data);
+    const controller = new OrganisationsController();
+    const response = await controller.search(data);
+    
+    return res.status(response.code).send(response);
+});
+
+
+/**
+ * @method POST/LIST Retourne la liste des organisations
+ * 
+ * Paramètre :
+ *      @param {object} req : req.body contient {data : { "nom":"Petit théâtre" (*critères de recherche*) }}
+ * 
+ * Retourne :
+ *      @return
+ **/
+ OrganisationsRouter.post('/list', async (req, res) => {
+    const {data} = req.body;
+    LogHelper.log("List Organisation route for ", data);
+    const controller = new OrganisationsController();
+    const response = await controller.list(data);
+    
+    return res.status(response.code).send(response);
+});
+
 export {OrganisationsRouter};

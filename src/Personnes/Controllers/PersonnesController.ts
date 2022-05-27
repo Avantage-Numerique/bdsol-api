@@ -94,7 +94,6 @@ class PersonnesController {
 
     /**
      * @method search permet d'effectuer une recherche afin de retourner la première personne répondant au critère de recherche.
-     * @todo La recherche par id n'est pas implémentée
      * 
      * Paramètre : 
      *      @param {name:value} requestData - { "nom":"Jean" (*Critère de recherche*) }
@@ -178,7 +177,7 @@ class PersonnesController {
                 "La requête n'est pas un objet. "
                 );
 
-        //Verification data est vide
+        /*//Verification data est vide
         if (requestData.nom === undefined &&
             requestData.prenom === undefined &&
             requestData.surnom === undefined &&
@@ -190,7 +189,7 @@ class PersonnesController {
                     new Error(ReasonPhrases.BAD_REQUEST),
                     StatusCodes.BAD_REQUEST,
                     "La requête ne peut être vide"
-                    );
+                    );*/
 
         //Validation date
         if (requestData.createdAt !== undefined &&
