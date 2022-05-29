@@ -1,438 +1,443 @@
 {
 	"info": {
-		"_postman_id": "6c0960f4-1841-44c6-88f9-ce82644ab526",
+		"_postman_id": "ce797056-d03e-4791-900a-359bc603fdb3",
 		"name": "BDSOL-API",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20488053"
 	},
 	"item": [
 		{
 			"name": "Organisation",
 			"item": [
 				{
-					"name": "Create",
-					"item": [
+					"name": "1-Create-all-org",
+					"event": [
 						{
-							"name": "1-Create",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\": \"Petit f\",\r\n        \"description\": \"Théâtre et f\",\r\n        \"url\":\"https://f.org/\",\r\n        \"contactPoint\":\"info@f.org\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{orgURL}}/create",
-									"host": [
-										"{{baseURL}}{{orgURL}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data = {};\r",
+									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+									"console.log(pm.iterationData.toObject());\r",
+									"\r",
+									"if (pm.iterationData.has(\"infoTest\"))\r",
+									"{\r",
+									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+									"    pm.iterationData.unset(\"infoTest\");\r",
+									"\r",
+									"    v_data = pm.iterationData.toObject();\r",
+									"\r",
+									"}\r",
+									"else{\r",
+									"    v_data.nom = \"Librairie Pommerleau\";\r",
+									"    v_data.description = \"Librairie de petit marchandeur\";\r",
+									"    v_data.url = \"https://lalibrairiepommerleau.meilleur\";\r",
+									"    v_data.contactPoint = \"info@meilleurelibrairie.meilleurfois2\"\r",
+									"\r",
+									"}\r",
+									"\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
+								],
+								"type": "text/javascript"
+							}
 						},
 						{
-							"name": "2-Create",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\": \"Agora des Arts\",\r\n        \"description\": \"Petite église, salle de spectacle sympatoche\",\r\n        \"url\":\"http://www.agoradesarts.com/\",\r\n        \"contactPoint\":\"info@agoradesarts.com\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{orgPATH}}/create",
-									"host": [
-										"{{baseURL}}{{orgPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "3-Create(empty data)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{orgPATH}}/create",
-									"host": [
-										"{{baseURL}}{{orgPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "4-Create(no data)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{orgPATH}}/create",
-									"host": [
-										"{{baseURL}}{{orgPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "5-Create(no Nom)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"description\": \"Culturama sse-toi\",\r\n        \"url\":\"http://www.culturamassetoi.com/\",\r\n        \"contactPoint\":\"info@ramasse.png\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{orgPATH}}/create",
-									"host": [
-										"{{baseURL}}{{orgPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "6-Create(empty Nom)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\": \"\",\r\n        \"description\": \"Culturama sse-toi\",\r\n        \"url\":\"http://www.culturamassetoi.com/\",\r\n        \"contactPoint\":\"info@ramasse.png\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{orgPATH}}/create",
-									"host": [
-										"{{baseURL}}{{orgPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "7-Create(empty non req)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\": \"Synvain Rénove\",\r\n        \"description\": \"Rénovation de tout genre\",\r\n        \"url\":\"\",\r\n        \"contactPoint\":\"\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{orgPATH}}/create",
-									"host": [
-										"{{baseURL}}{{orgPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "8-Create(No non req)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\": \"L'alphabet à 9 ans\",\r\n        \"description\": \"Garderie\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{orgPATH}}/create",
-									"host": [
-										"{{baseURL}}{{orgPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"error\": { \"type\": \"boolean\" },\r",
+									"        \"code\": { \"type\": \"number\" },\r",
+									"        \"message\": { \"type\": \"string\" },\r",
+									"        \"errors\": { \"type\": \"array\" },\r",
+									"        \"data\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                        \"_id\": { \"type\": \"string\" },\r",
+									"                        \"nom\": { \"type\": \"string\" },\r",
+									"                        \"description\": { \"type\": \"string\" },\r",
+									"                        \"url\": { \"type\": \"string\" },\r",
+									"                        \"contactPoint\": { \"type\": \"string\" },\r",
+									"                        \"createdAt\": { \"type\": \"string\" },\r",
+									"                        \"updatedAt\": { \"type\": \"string\" }\r",
+									"            },\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+									"};\r",
+									"const infoTest = pm.environment.get(\"infoTest\");\r",
+									"pm.iterationData.unset(\"infoTest\");\r",
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"\r",
+									"pm.test('Status/code check', function(){\r",
+									"    pm.response.to.have.status(infoTest.status);\r",
+									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+									"});\r",
+									"\r",
+									"pm.test('Error check', function(){\r",
+									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+									"});\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"if (jsonResponse.error == false)\r",
+									"{\r",
+									"    pm.environment.set(\"org\"+Number(pm.info.iteration+1), jsonData);\r",
+									"\r",
+									"    pm.test('Data check', function(){\r",
+									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
+									"    });\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
 						}
-					]
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{orgPATH}}/create",
+							"host": [
+								"{{baseURL}}{{orgPATH}}"
+							],
+							"path": [
+								"create"
+							]
+						}
+					},
+					"response": []
 				},
 				{
-					"name": "Update",
-					"item": [
+					"name": "2-Update-all-org",
+					"event": [
 						{
-							"name": "1-Update(all)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"62701f5995ff27baa4a719d9\",\r\n        \"nom\":\"Petit théâtre du vieux Noranda\",\r\n        \"description\": \"Théâtre et magie\",\r\n        \"url\":\"https://petittheatre.org/\",\r\n        \"contactPoint\":\"info@petittheatre.org\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{orgPATH}}/update",
-									"host": [
-										"{{baseURL}}{{orgPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data = {};\r",
+									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+									"console.log(pm.iterationData.toObject());\r",
+									"\r",
+									"if (pm.iterationData.has(\"infoTest\"))\r",
+									"{\r",
+									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+									"    pm.iterationData.unset(\"infoTest\");\r",
+									"\r",
+									"    v_data = pm.iterationData.toObject();\r",
+									"\r",
+									"    if(v_data.id === undefined)\r",
+									"        v_data.id = pm.environment.get(\"org1\")._id;\r",
+									"}\r",
+									"else{\r",
+									"    v_data.id = \"bidon\"\r",
+									"}\r",
+									"\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
+								],
+								"type": "text/javascript"
+							}
 						},
 						{
-							"name": "2-Update(No Data)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{orgPATH}}/update",
-									"host": [
-										"{{baseURL}}{{orgPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "3-Update(empty Data)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{orgPATH}}/update",
-									"host": [
-										"{{baseURL}}{{orgPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "4-Update(No id)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\":\"qqch\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{orgPATH}}/update",
-									"host": [
-										"{{baseURL}}{{orgPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "5-Update(empty req)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"62701f5995ff27baa4a719d9\",\r\n        \"nom\":\"\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{orgPATH}}/update",
-									"host": [
-										"{{baseURL}}{{orgPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "6-Update(No req)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"62701f5995ff27baa4a719d9\",\r\n        \"description\": \"C'est une farce\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{orgPATH}}/update",
-									"host": [
-										"{{baseURL}}{{orgPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "7-Update(empty non req)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"62701f5995ff27baa4a719d9\",\r\n        \"description\": \"\",\r\n        \"url\":\"\",\r\n        \"contactPoint\":\"\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{orgPATH}}/update",
-									"host": [
-										"{{baseURL}}{{orgPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "8-Update(id random)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"62781a5f35fcc7cba42778d9\",\r\n        \"description\": \"\",\r\n        \"url\":\"\",\r\n        \"contactPoint\":\"\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{orgPATH}}/update",
-									"host": [
-										"{{baseURL}}{{orgPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"error\": { \"type\": \"boolean\" },\r",
+									"        \"code\": { \"type\": \"number\" },\r",
+									"        \"message\": { \"type\": \"string\" },\r",
+									"        \"errors\": { \"type\": \"array\" },\r",
+									"        \"data\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                        \"acknowledged\": { \"type\": \"boolean\" },\r",
+									"                        \"modifiedCount\": { \"type\": \"number\" },\r",
+									"                        \"upsertedId\": { \"type\": \"null\" },\r",
+									"                        \"upsertedCount\": { \"type\": \"number\" },\r",
+									"                        \"matchedCount\": { \"type\": \"number\" },\r",
+									"            },\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+									"};\r",
+									"\r",
+									"const infoTest = pm.environment.get(\"infoTest\");\r",
+									"pm.iterationData.unset(\"infoTest\");\r",
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"pm.test('Status/code check', function(){\r",
+									"    pm.response.to.have.status(infoTest.status);\r",
+									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+									"});\r",
+									"\r",
+									"pm.test('Error check', function(){\r",
+									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+									"});\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
 						}
-					]
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{orgPATH}}/update",
+							"host": [
+								"{{baseURL}}{{orgPATH}}"
+							],
+							"path": [
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3-Search-all-org",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data = {};\r",
+									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+									"console.log(pm.iterationData.toObject());\r",
+									"\r",
+									"if (pm.iterationData.has(\"infoTest\"))\r",
+									"{\r",
+									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+									"    pm.iterationData.unset(\"infoTest\");\r",
+									"\r",
+									"    v_data = pm.iterationData.toObject();\r",
+									"\r",
+									"    if(pm.environment.get(\"infoTest\").setId == true)\r",
+									"        v_data.id = pm.environment.get(\"org1\")._id;\r",
+									"}\r",
+									"\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"error\": { \"type\": \"boolean\" },\r",
+									"        \"code\": { \"type\": \"number\" },\r",
+									"        \"message\": { \"type\": \"string\" },\r",
+									"        \"errors\": { \"type\": \"array\" },\r",
+									"        \"data\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                        \"_id\": { \"type\": \"string\" },\r",
+									"                        \"nom\": { \"type\": \"string\" },\r",
+									"                        \"description\": { \"type\": \"string\" },\r",
+									"                        \"url\": { \"type\": \"string\" },\r",
+									"                        \"contactPoint\": { \"type\": \"string\" },\r",
+									"                        \"createdAt\": { \"type\": \"string\" },\r",
+									"                        \"updatedAt\": { \"type\": \"string\" }\r",
+									"            },\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+									"};\r",
+									"\r",
+									"\r",
+									"const infoTest = pm.environment.get(\"infoTest\");\r",
+									"pm.iterationData.unset(\"infoTest\");\r",
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"pm.test('Status/code check', function(){\r",
+									"    pm.response.to.have.status(infoTest.status);\r",
+									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+									"});\r",
+									"\r",
+									"pm.test('Error check', function(){\r",
+									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+									"});\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test('Search found or not item correctly', function(){\r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{orgPATH}}/search",
+							"host": [
+								"{{baseURL}}{{orgPATH}}"
+							],
+							"path": [
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4-List-all-org",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data = {};\r",
+									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+									"console.log(pm.iterationData.toObject());\r",
+									"\r",
+									"if (pm.iterationData.has(\"infoTest\"))\r",
+									"{\r",
+									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+									"    pm.iterationData.unset(\"infoTest\");\r",
+									"\r",
+									"    v_data = pm.iterationData.toObject();\r",
+									"\r",
+									"    if(pm.environment.get(\"infoTest\").setId == true)\r",
+									"        v_data.id = pm.environment.get(\"org1\")._id;\r",
+									"}\r",
+									"\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"error\": { \"type\": \"boolean\" },\r",
+									"        \"code\": { \"type\": \"number\" },\r",
+									"        \"message\": { \"type\": \"string\" },\r",
+									"        \"errors\": { \"type\": \"array\" },\r",
+									"        \"data\": {\r",
+									"            \"type\": \"array\",\r",
+									"            \"properties\": {\r",
+									"                        \"_id\": { \"type\": \"string\" },\r",
+									"                        \"nom\": { \"type\": \"string\" },\r",
+									"                        \"description\": { \"type\": \"string\" },\r",
+									"                        \"url\": { \"type\": \"string\" },\r",
+									"                        \"contactPoint\": { \"type\": \"string\" },\r",
+									"                        \"createdAt\": { \"type\": \"string\" },\r",
+									"                        \"updatedAt\": { \"type\": \"string\" }\r",
+									"            },\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+									"};\r",
+									"\r",
+									"\r",
+									"const infoTest = pm.environment.get(\"infoTest\");\r",
+									"pm.iterationData.unset(\"infoTest\");\r",
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"pm.test('Status/code check', function(){\r",
+									"    pm.response.to.have.status(infoTest.status);\r",
+									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+									"});\r",
+									"\r",
+									"pm.test('Error check', function(){\r",
+									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+									"});\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test('List found or not item correctly', function(){\r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{orgPATH}}/list",
+							"host": [
+								"{{baseURL}}{{orgPATH}}"
+							],
+							"path": [
+								"list"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -440,832 +445,807 @@
 			"name": "Personnes",
 			"item": [
 				{
-					"name": "Create",
-					"item": [
+					"name": "1-Create-all-pers",
+					"event": [
 						{
-							"name": "1-Create",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\":\"Parent\",\r\n        \"prenom\":\"Jean-marc\",\r\n        \"surnom\":\"Mickette\",\r\n        \"description\":\"Humour\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/create",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"error\": { \"type\": \"boolean\" },\r",
+									"        \"code\": { \"type\": \"number\" },\r",
+									"        \"message\": { \"type\": \"string\" },\r",
+									"        \"errors\": { \"type\": \"array\" },\r",
+									"        \"data\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                        \"_id\": { \"type\": \"string\" },\r",
+									"                        \"nom\": { \"type\": \"string\" },\r",
+									"                        \"prenom\": { \"type\": \"string\" },\r",
+									"                        \"surnom\": { \"type\": \"string\" },\r",
+									"                        \"description\": { \"type\": \"string\" },\r",
+									"                        \"createdAt\": { \"type\": \"string\" },\r",
+									"                        \"updatedAt\": { \"type\": \"string\" }\r",
+									"            },\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+									"};\r",
+									"const infoTest = pm.environment.get(\"infoTest\");\r",
+									"pm.iterationData.unset(\"infoTest\");\r",
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"\r",
+									"pm.test('Status/code check', function(){\r",
+									"    pm.response.to.have.status(infoTest.status);\r",
+									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+									"});\r",
+									"\r",
+									"pm.test('Error check', function(){\r",
+									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+									"});\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"if (jsonResponse.error == false)\r",
+									"{\r",
+									"    pm.environment.set(\"pers\"+Number(pm.info.iteration+1), jsonData);\r",
+									"\r",
+									"    pm.test('Data check', function(){\r",
+									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
+									"    });\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
 						},
 						{
-							"name": "2-Create",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\":\"Tremblay\",\r\n        \"prenom\":\"Michel\",\r\n        \"surnom\":\"Dj Pro Grand Gangsta\",\r\n        \"description\":\"La musica fiesta\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/create",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "3-Create(No nom)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"prenom\":\"Sarah\",\r\n        \"surnom\":\"Le Patin Mou\",\r\n        \"description\":\"\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/create",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "4-Create(No Prenom)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\":\"Daigneault\",\r\n        \"surnom\":\"Pikotte\",\r\n        \"description\":\"Circus is love, circus is life\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/create",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "5-Create(empty prenom)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\":\"Boutin\",\r\n        \"prenom\":\"\",\r\n        \"surnom\":\"Prime Minister\",\r\n        \"description\":\"Redneck\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/create",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "6-Create(empty nom)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\":\"\",\r\n        \"prenom\":\"Adelard\",\r\n        \"surnom\":\"Jean-guy la moustache\",\r\n        \"description\":\"Moustachios\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/create",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "7-Create(empty non req)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\":\"Croche\",\r\n        \"prenom\":\"Sarah\",\r\n        \"surnom\":\"\",\r\n        \"description\":\"\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/create",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "8-Create(No non req)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\":\"Neutron\",\r\n        \"prenom\":\"Jimmy\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/create",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "9-Create(empty data)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/create",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "10-Create(no data)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/create",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data = {};\r",
+									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+									"console.log(pm.iterationData.toObject());\r",
+									"\r",
+									"if (pm.iterationData.has(\"infoTest\"))\r",
+									"{\r",
+									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+									"    pm.iterationData.unset(\"infoTest\");\r",
+									"\r",
+									"    v_data = pm.iterationData.toObject();\r",
+									"\r",
+									"}\r",
+									"else{\r",
+									"    v_data.nom = \"Parent\";\r",
+									"    v_data.prenom = \"Jean-marc\";\r",
+									"    v_data.surnom = \"Mickette\";\r",
+									"    v_data.description = \"Humour\"\r",
+									"\r",
+									"}\r",
+									"\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
 						}
-					]
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{persPATH}}/create",
+							"host": [
+								"{{baseURL}}{{persPATH}}"
+							],
+							"path": [
+								"create"
+							]
+						}
+					},
+					"response": []
 				},
 				{
-					"name": "Update",
-					"item": [
+					"name": "2-Update-all-pers",
+					"event": [
 						{
-							"name": "1-Update(All)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"6266e36346731552d989797e\",\r\n        \"nom\":\"Richard\",\r\n        \"prenom\":\"Jean-Marcel\",\r\n        \"surnom\":\"Rickette\",\r\n        \"description\":\"Humour noir\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/update",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data = {};\r",
+									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+									"console.log(pm.iterationData.toObject());\r",
+									"\r",
+									"if (pm.iterationData.has(\"infoTest\"))\r",
+									"{\r",
+									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+									"    pm.iterationData.unset(\"infoTest\");\r",
+									"\r",
+									"    v_data = pm.iterationData.toObject();\r",
+									"\r",
+									"    if(v_data.id === undefined)\r",
+									"        v_data.id = pm.environment.get(\"pers1\")._id;\r",
+									"}\r",
+									"else{\r",
+									"    v_data.id = \"bidon\"\r",
+									"}\r",
+									"\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
+								],
+								"type": "text/javascript"
+							}
 						},
 						{
-							"name": "2-Update(no id)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\":\"Richard\",\r\n        \"prenom\":\"Jean-Marcel\",\r\n        \"surnom\":\"Rickette\",\r\n        \"description\":\"Humour noir\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/update",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "3-Update(id random)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"6ae6736386738931dc8b854e\",\r\n        \"nom\":\"Bichard\",\r\n        \"prenom\":\"Kean-Marcel\",\r\n        \"surnom\":\"Hickette\",\r\n        \"description\":\"Numour hoir\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/update",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "4-Update(NoNom)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"6266e36346731552d989797e\",\r\n        \"prenom\":\"Jean-Marcel\",\r\n        \"surnom\":\"Bickette\",\r\n        \"description\":\"Humour Blanc\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/update",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "5-Update(NoPrenom)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"6266e36346731552d989797e\",\r\n        \"nom\":\"Winchester\",\r\n        \"surnom\":\"Lickette\",\r\n        \"description\":\"Humour turquoise\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/update",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "6-Update(empty nom)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"6266e36346731552d989797e\",\r\n        \"nom\":\"\",\r\n        \"prenom\":\"Sylvain\",\r\n        \"surnom\":\"Kickette\",\r\n        \"description\":\"Humour bleu\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/update",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "7-Update(empty prenom)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"6266e36346731552d989797e\",\r\n        \"nom\":\"Gichard\",\r\n        \"prenom\":\"\",\r\n        \"surnom\":\"Nickette\",\r\n        \"description\":\"Humour noir\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/update",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "8-Update(empty non Req)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"6266e36346731552d989797e\",\r\n        \"nom\":\"Lavallée\",\r\n        \"prenom\":\"Jean-Marcel\",\r\n        \"surnom\":\"\",\r\n        \"description\":\"\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/update",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "9-Update(No update data)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"6266e36346731552d989797e\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/update",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "10-Update(only prenom)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"6266e36346731552d989797e\",\r\n        \"prenom\":\"Jean-Simon\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/update",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "11-TestUpdate(only req)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"6266e36346731552d989797e\",\r\n        \"nom\":\"Lavallée\",\r\n        \"prenom\":\"Jean-Simone\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/update",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "12-TestUpdate(no data)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/update",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"error\": { \"type\": \"boolean\" },\r",
+									"        \"code\": { \"type\": \"number\" },\r",
+									"        \"message\": { \"type\": \"string\" },\r",
+									"        \"errors\": { \"type\": \"object\" },\r",
+									"        \"data\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                        \"acknowledged\": { \"type\": \"boolean\" },\r",
+									"                        \"modifiedCount\": { \"type\": \"number\" },\r",
+									"                        \"upsertedId\": { \"type\": \"null\" },\r",
+									"                        \"upsertedCount\": { \"type\": \"number\" },\r",
+									"                        \"matchedCount\": { \"type\": \"number\" },\r",
+									"            },\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+									"};\r",
+									"\r",
+									"\r",
+									"const infoTest = pm.environment.get(\"infoTest\");\r",
+									"pm.iterationData.unset(\"infoTest\");\r",
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"pm.test('Status/code check', function(){\r",
+									"    pm.response.to.have.status(infoTest.status);\r",
+									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+									"});\r",
+									"\r",
+									"pm.test('Error check', function(){\r",
+									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+									"});\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
 						}
-					]
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{persPATH}}/update",
+							"host": [
+								"{{baseURL}}{{persPATH}}"
+							],
+							"path": [
+								"update"
+							]
+						}
+					},
+					"response": []
 				},
 				{
-					"name": "Search",
+					"name": "3-Search-all-pers",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data = {};\r",
+									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+									"console.log(pm.iterationData.toObject());\r",
+									"\r",
+									"if (pm.iterationData.has(\"infoTest\"))\r",
+									"{\r",
+									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+									"    pm.iterationData.unset(\"infoTest\");\r",
+									"\r",
+									"    v_data = pm.iterationData.toObject();\r",
+									"\r",
+									"    if(pm.environment.get(\"infoTest\").setId == true)\r",
+									"        v_data.id = pm.environment.get(\"pers1\")._id;\r",
+									"}\r",
+									"\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"error\": { \"type\": \"boolean\" },\r",
+									"        \"code\": { \"type\": \"number\" },\r",
+									"        \"message\": { \"type\": \"string\" },\r",
+									"        \"errors\": { \"type\": \"array\" },\r",
+									"        \"data\": {\r",
+									"            \"type\": \"array\",\r",
+									"            \"properties\": {\r",
+									"                        \"_id\": { \"type\": \"string\" },\r",
+									"                        \"nom\": { \"type\": \"string\" },\r",
+									"                        \"prenom\": { \"type\": \"string\" },\r",
+									"                        \"surnom\": { \"type\": \"string\" },\r",
+									"                        \"description\": { \"type\": \"string\" },\r",
+									"                        \"createdAt\": { \"type\": \"string\" },\r",
+									"                        \"updatedAt\": { \"type\": \"string\" }\r",
+									"            },\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+									"};\r",
+									"\r",
+									"\r",
+									"const infoTest = pm.environment.get(\"infoTest\");\r",
+									"pm.iterationData.unset(\"infoTest\");\r",
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"pm.test('Status/code check', function(){\r",
+									"    pm.response.to.have.status(infoTest.status);\r",
+									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+									"});\r",
+									"\r",
+									"pm.test('Error check', function(){\r",
+									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+									"});\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test('Search found or not item correctly', function(){\r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{persPATH}}/search",
+							"host": [
+								"{{baseURL}}{{persPATH}}"
+							],
+							"path": [
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4-List-all-pers",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data = {};\r",
+									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+									"console.log(pm.iterationData.toObject());\r",
+									"\r",
+									"if (pm.iterationData.has(\"infoTest\"))\r",
+									"{\r",
+									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+									"    pm.iterationData.unset(\"infoTest\");\r",
+									"\r",
+									"    v_data = pm.iterationData.toObject();\r",
+									"\r",
+									"    if(pm.environment.get(\"infoTest\").setId == true)\r",
+									"        v_data.id = pm.environment.get(\"pers1\")._id;\r",
+									"}\r",
+									"\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"error\": { \"type\": \"boolean\" },\r",
+									"        \"code\": { \"type\": \"number\" },\r",
+									"        \"message\": { \"type\": \"string\" },\r",
+									"        \"errors\": { \"type\": \"array\" },\r",
+									"        \"data\": {\r",
+									"            \"type\": \"array\",\r",
+									"            \"properties\": {\r",
+									"                        \"_id\": { \"type\": \"string\" },\r",
+									"                        \"nom\": { \"type\": \"string\" },\r",
+									"                        \"prenom\": { \"type\": \"string\" },\r",
+									"                        \"surnom\": { \"type\": \"string\" },\r",
+									"                        \"description\": { \"type\": \"string\" },\r",
+									"                        \"createdAt\": { \"type\": \"string\" },\r",
+									"                        \"updatedAt\": { \"type\": \"string\" }\r",
+									"            },\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+									"};\r",
+									"\r",
+									"\r",
+									"const infoTest = pm.environment.get(\"infoTest\");\r",
+									"pm.iterationData.unset(\"infoTest\");\r",
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"pm.test('Status/code check', function(){\r",
+									"    pm.response.to.have.status(infoTest.status);\r",
+									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+									"});\r",
+									"\r",
+									"pm.test('Error check', function(){\r",
+									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+									"});\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test('List found or not item correctly', function(){\r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{persPATH}}/list",
+							"host": [
+								"{{baseURL}}{{persPATH}}"
+							],
+							"path": [
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5-Delete-all-pers",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data = {};\r",
+									"let toDel;\r",
+									"let vars;\r",
+									"let varsKeys;\r",
+									"while(pm.environment.toObject())\r",
+									"{\r",
+									"    vars = pm.environment.toObject();\r",
+									"    varsKeys = Object.keys(vars);\r",
+									"\r",
+									"    toDel = varsKeys.pop();\r",
+									"    if(toDel === undefined)\r",
+									"    break;\r",
+									"\r",
+									"    if (toDel.includes(\"pers\")){\r",
+									"        break;\r",
+									"    }\r",
+									"    pm.environment.unset(toDel);\r",
+									"\r",
+									"}\r",
+									"if(toDel !== undefined)\r",
+									"{\r",
+									"    v_data.id = vars[toDel]._id\r",
+									"    pm.environment.unset(toDel);\r",
+									"}\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"if(Object.keys(pm.environment.toObject()) != 0)\r",
+									"{\r",
+									"    pm.test('Status OK', function(){\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"\r",
+									"    pm.test('Delete successful', function(){\r",
+									"        pm.expect(jsonResponse.error).to.be.false;\r",
+									"        pm.expect(jsonResponse.errors).to.be.empty;\r",
+									"    });\r",
+									"\r",
+									"    postman.setNextRequest(\"5-Delete-all\");\r",
+									"}\r",
+									"else\r",
+									"{\r",
+									"    pm.environment.clear();\r",
+									"    postman.setNextRequest(null);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{persPATH}}/delete",
+							"host": [
+								"{{baseURL}}{{persPATH}}"
+							],
+							"path": [
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "1-Create-all-user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"error\": { \"type\": \"boolean\" },\r",
+									"        \"code\": { \"type\": \"number\" },\r",
+									"        \"message\": { \"type\": \"string\" },\r",
+									"        \"errors\": { \"type\": \"object\" },\r",
+									"        \"data\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                        \"username\": { \"type\": \"string\" },\r",
+									"                        \"email\": { \"type\": \"string\" },\r",
+									"                        \"password\": { \"type\": \"string\" },\r",
+									"                        \"avatar\": { \"type\": \"string\" },\r",
+									"                        \"name\": { \"type\": \"string\" },\r",
+									"                        \"role\": { \"type\": \"string\" },\r",
+									"                        \"createdAt\": { \"type\": \"string\" },\r",
+									"                        \"updatedAt\": { \"type\": \"string\" }\r",
+									"            },\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+									"};\r",
+									"\r",
+									"const infoTest = pm.environment.get(\"infoTest\");\r",
+									"pm.iterationData.unset(\"infoTest\");\r",
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"pm.test('Status/code check', function(){\r",
+									"    pm.response.to.have.status(infoTest.status);\r",
+									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+									"});\r",
+									"\r",
+									"pm.test('Error check', function(){\r",
+									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+									"});\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"if (jsonResponse.error == false)\r",
+									"{\r",
+									"    pm.environment.set(\"user\"+Number(pm.info.iteration+1), jsonData._id);\r",
+									"\r",
+									"    pm.test('Data check', function(){\r",
+									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"let v_data = {};\r",
+									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+									"console.log(pm.iterationData.toObject());\r",
+									"\r",
+									"if (pm.iterationData.has(\"infoTest\"))\r",
+									"{\r",
+									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+									"    pm.iterationData.unset(\"infoTest\");\r",
+									"\r",
+									"    v_data = pm.iterationData.toObject();\r",
+									"    /*if (pm.iterationData.has(\"username\"))\r",
+									"        v_data.username = pm.iterationData.get(\"username\");\r",
+									"    if (pm.iterationData.has(\"email\"))\r",
+									"        v_data.email = pm.iterationData.get(\"email\");\r",
+									"    if (pm.iterationData.has(\"password\"))\r",
+									"        v_data.password = pm.iterationData.get(\"password\");\r",
+									"    if (pm.iterationData.has(\"avatar\"))\r",
+									"        v_data.avatar = pm.iterationData.get(\"avatar\");\r",
+									"    if (pm.iterationData.has(\"name\"))\r",
+									"        v_data.name = pm.iterationData.get(\"name\");\r",
+									"    if (pm.iterationData.has(\"role\"))\r",
+									"        v_data.role = pm.iterationData.get(\"role\");*/\r",
+									"}\r",
+									"else{\r",
+									"    v_data.username = \"Marienero\";\r",
+									"    v_data.email = \"mauveTercelle@jira.atlassian.cash\";\r",
+									"    v_data.password = \"jironde42\";\r",
+									"    v_data.avatar = \"La Marie dans la bible lah..\"\r",
+									"    v_data.name = \"Marie Neron\";\r",
+									"    v_data.role = \"Caliméro\";\r",
+									"}\r",
+									"\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\" : {{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{usersPATH}}/create",
+							"host": [
+								"{{baseURL}}{{usersPATH}}"
+							],
+							"path": [
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2-Update-all",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data = {};\r",
+									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+									"console.log(pm.iterationData.toObject());\r",
+									"\r",
+									"if (pm.iterationData.has(\"infoTest\"))\r",
+									"{\r",
+									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+									"    pm.iterationData.unset(\"infoTest\");\r",
+									"\r",
+									"    v_data = pm.iterationData.toObject();\r",
+									"\r",
+									"    if(v_data.id === undefined)\r",
+									"        v_data.id = pm.environment.get(\"user1\");\r",
+									"}\r",
+									"else{\r",
+									"    v_data.id = \"bidon\"\r",
+									"}\r",
+									"\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"error\": { \"type\": \"boolean\" },\r",
+									"        \"code\": { \"type\": \"number\" },\r",
+									"        \"message\": { \"type\": \"string\" },\r",
+									"        \"errors\": { \"type\": \"object\" },\r",
+									"        \"data\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                        \"acknowledged\": { \"type\": \"boolean\" },\r",
+									"                        \"modifiedCount\": { \"type\": \"number\" },\r",
+									"                        \"upsertedId\": { \"type\": \"null\" },\r",
+									"                        \"upsertedCount\": { \"type\": \"number\" },\r",
+									"                        \"matchedCount\": { \"type\": \"number\" },\r",
+									"            },\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+									"};\r",
+									"\r",
+									"const infoTest = pm.environment.get(\"infoTest\");\r",
+									"pm.iterationData.unset(\"infoTest\");\r",
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"pm.test('Status/code check', function(){\r",
+									"    pm.response.to.have.status(infoTest.status);\r",
+									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+									"});\r",
+									"\r",
+									"pm.test('Error check', function(){\r",
+									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+									"});\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": {{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{usersPATH}}/update",
+							"host": [
+								"{{baseURL}}{{usersPATH}}"
+							],
+							"path": [
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authentification",
+			"item": [
+				{
+					"name": "Dev",
 					"item": [
 						{
-							"name": "0-Create",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\":\"Parent\",\r\n        \"prenom\":\"Jean-marc\",\r\n        \"surnom\":\"Mickette\",\r\n        \"description\":\"Humour\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/create",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "0-Create2",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\":\"Tremblay\",\r\n        \"prenom\":\"Michel\",\r\n        \"surnom\":\"Dj Pro Grand Gangsta\",\r\n        \"description\":\"La musica fiesta\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/create",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "1-Search(all empty)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"\",\r\n        \"nom\": \"\",\r\n        \"prenom\": \"\",\r\n        \"surnom\": \"\",\r\n        \"description\": \"\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/search",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"search"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "2-Search(empty data)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{}\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/search",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"search"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "3-Search(no data)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/search",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"search"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "4-Search(empty id)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\": \"\",\r\n        \"nom\":\"\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/search",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"search"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "5-Search(only nom)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\": \"trem\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/search",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"search"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "6-Search(only prenom)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"prenom\": \"Jean-Marc\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/search",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"search"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "7-Search(nom&prenom)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\": \"par\",\r\n        \"prenom\": \"Je\"\r\n\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/search",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"search"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "8-Search(only surnom)",
+							"name": "Dev Token",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
 										"exec": [
-											""
+											"const jsonResponse = pm.response.json();\r",
+											"\r",
+											"pm.globals.set(\"DevToken\", jsonResponse.token);"
 										],
 										"type": "text/javascript"
 									}
@@ -1274,152 +1254,14 @@
 							"request": {
 								"method": "POST",
 								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"surnom\": \"dj\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
 								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/search",
+									"raw": "localhost:8000/generate-token",
 									"host": [
-										"{{baseURL}}{{persPATH}}"
+										"localhost"
 									],
+									"port": "8000",
 									"path": [
-										"search"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "9-Search(only description)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"description\": \"la\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/search",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"search"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "10-Search(id+nom = 0)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"626ac51d874db13793484984\",\r\n        \"nom\": \"Tremblay\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/search",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"search"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "11-Search(id +nom = 1)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"626ac51d874db13793484984\",\r\n        \"nom\": \"parent\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/search",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"search"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "12-Search(no match)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\": \"Lafayette\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/search",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"search"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Sketch",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"\",\r\n        \"nom\": \"\",\r\n        \"prenom\": \"\",\r\n        \"surnom\": \"\",\r\n        \"description\": \"\",\r\n        \"createdAfter\": \"2022-04-24\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/search",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"search"
+										"generate-token"
 									]
 								}
 							},
@@ -1428,16 +1270,16 @@
 					]
 				},
 				{
-					"name": "List",
+					"name": "Login",
 					"item": [
 						{
-							"name": "1-List(all empty)",
+							"name": "1-Login utilisateur qui n'existe pas",
 							"request": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"\",\r\n        \"nom\": \"\",\r\n        \"prenom\": \"\",\r\n        \"surnom\": \"\",\r\n        \"description\": \"\"\r\n    }\r\n}",
+									"raw": "{\r\n    \"username\": \"username\",\r\n    \"password\": \"password\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1445,25 +1287,26 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/list",
+									"raw": "localhost:8000/login",
 									"host": [
-										"{{baseURL}}{{persPATH}}"
+										"localhost"
 									],
+									"port": "8000",
 									"path": [
-										"list"
+										"login"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "2-List(empty data)",
+							"name": "1-Login utilisateur qui existe",
 							"request": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n    }\r\n}",
+									"raw": "{\r\n    \"username\": \"datageek\",\r\n    \"password\": \"1234\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1471,373 +1314,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/list",
+									"raw": "localhost:8000/login",
 									"host": [
-										"{{baseURL}}{{persPATH}}"
+										"localhost"
 									],
+									"port": "8000",
 									"path": [
-										"list"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "3-List(no data)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/list",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"list"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "4-List(empty id)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\": \"\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/list",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"list"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "5-List(only nom)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\": \"n\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/list",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"list"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "6-List(only prenom)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"prenom\": \"m\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/list",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"list"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "7-List(nom&prenom)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\": \"par\",\r\n        \"prenom\": \"ma\"\r\n\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/list",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"list"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "8-List(only surnom)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"surnom\": \"e\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/list",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"list"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "9-List(only description)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"description\": \"h\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/list",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"list"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "10-List(id+nom = 0)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"626ac51d874db13793484984\",\r\n        \"nom\":\"Win\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/list",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"list"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "11-List(id+nom = 1)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"id\":\"626ae9641e8f3f8936cb10de\",\r\n        \"nom\":\"trem\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/list",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"list"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "12-List(no match)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\": \"Lafayette\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/list",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"list"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "13-List(all empty no id)",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"nom\":\"\",\r\n        \"prenom\":\"\",\r\n        \"surnom\":\"\",\r\n        \"description\":\"\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/list",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"list"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "temp_test",
-					"item": [
-						{
-							"name": "8-Search(only surnom) test",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"const schema = {\r",
-											"    \"type\": \"object\",\r",
-											"    \"properties\": {\r",
-											"        \"error\": { \"type\": \"boolean\" },\r",
-											"        \"code\": { \"type\": \"number\" },\r",
-											"        \"message\": { \"type\": \"string\" },\r",
-											"        \"errors\": { \"type\": \"array\" },\r",
-											"        \"data\": {\r",
-											"            \"type\": \"object\",\r",
-											"            \"properties\": {\r",
-											"                        \"_id\": { \"type\": \"string\" },\r",
-											"                        \"nom\": { \"type\": \"string\" },\r",
-											"                        \"prenom\": { \"type\": \"string\" },\r",
-											"                        \"surnom\": { \"type\": \"string\" },\r",
-											"                        \"description\": { \"type\": \"string\" },\r",
-											"                        \"createdAt\": { \"type\": \"string\" },\r",
-											"                        \"updatedAt\": { \"type\": \"string\" }\r",
-											"            },\r",
-											"            \"required\": [\"_id\", \"nom\", \"prenom\", \"surnom\", \"description\", \"createdAt\", \"updatedAt\"]\r",
-											"        }\r",
-											"    },\r",
-											"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
-											"};\r",
-											"\r",
-											"const response = pm.response.json();\r",
-											"\r",
-											"pm.test('Schema is valid', function() {\r",
-											"    pm.expect(response).to.have.jsonSchema(schema);\r",
-											"});\r",
-											"\r",
-											"pm.test('message and code is OK'), function() {\r",
-											"    //pm.response.to.have.jsonBody(\"messages\",20);\r",
-											"}\r",
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\":{\r\n        \"surnom\": \"dj\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{persPATH}}/search",
-									"host": [
-										"{{baseURL}}{{persPATH}}"
-									],
-									"path": [
-										"search"
+										"login"
 									]
 								}
 							},
@@ -1848,274 +1331,38 @@
 			]
 		},
 		{
-			"name": "Users",
+			"name": "Générique",
 			"item": [
 				{
-					"name": "Create",
-					"item": [
-						{
-							"name": "1-Create-all",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"/*pm.test(\"1-Create all\", function () {\r",
-											"    pm.response.to.have.status(200);\r",
-											"});*/\r",
-											"\r",
-											"pm.test(\"1-Create all response\", function () {\r",
-											"    pm.response.to.be.ok;\r",
-											"    pm.response.to.be.withBody;\r",
-											"    pm.response.to.be.json;\r",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
+					"name": "404",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/asdfasdfasdfasdf",
+							"host": [
+								"{{baseURL}}"
 							],
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\" : {\r\n        \"username\": \"datageek\",\r\n        \"name\": \"Steve Austin\",\r\n        \"email\": \"vilain@wwe.com\",\r\n        \"password\": \"1234\",\r\n        \"role\": \"admin\",\r\n        \"avatar\": \"\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{usersPATH}}/create",
-									"host": [
-										"{{baseURL}}{{usersPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "3.1-Create no email",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\" : {\r\n        \"username\": \"Mam\",\r\n        \"name\": \"Surperise1\",\r\n        \"password\": \"1234\",\r\n        \"role\": \"admin\",\r\n        \"avatar\": \"\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{usersPATH}}/create",
-									"host": [
-										"{{baseURL}}{{usersPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "2-Create only required",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\" : {\r\n        \"username\": \"maxwel\",\r\n        \"name\": \"Surprise zone 31\",\r\n        \"email\": \"alien@brisoubrisou.com\",\r\n        \"password\": \"1234\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{usersPATH}}/create",
-									"host": [
-										"{{baseURL}}{{usersPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "3-Create no username",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\" : {\r\n        \"name\": \"Surprise zone 31\",\r\n        \"email\": \"alien@brisoubrisou.com\",\r\n        \"password\": \"1234\",\r\n        \"role\": \"admin\",\r\n        \"avatar\": \"\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{usersPATH}}/create",
-									"host": [
-										"{{baseURL}}{{usersPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "4-Create no name",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\" : {\r\n        \"username\": \"maxwel\",\r\n        \"email\": \"alien@brisoubrisou.com\",\r\n        \"password\": \"1234\",\r\n        \"role\": \"admin\",\r\n        \"avatar\": \"\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{usersPATH}}/create",
-									"host": [
-										"{{baseURL}}{{usersPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "5-Create no password",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\" : {\r\n        \"username\": \"Mam\",\r\n        \"name\": \"Surperise1\",\r\n        \"email\": \"bebop@carte.com\",\r\n        \"role\": \"admin\",\r\n        \"avatar\": \"\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{usersPATH}}/create",
-									"host": [
-										"{{baseURL}}{{usersPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "6-Create no role",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\" : {\r\n        \"username\": \"Mam\",\r\n        \"name\": \"Surperise1\",\r\n        \"email\": \"bebop@carte.com\",\r\n        \"password\": \"1234\",\r\n        \"avatar\": \"\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{usersPATH}}/create",
-									"host": [
-										"{{baseURL}}{{usersPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "7-Create no avatar",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\" : {\r\n        \"username\": \"Mam\",\r\n        \"name\": \"Surperise1\",\r\n        \"email\": \"bebop@carte.com\",\r\n        \"password\": \"1234\",\r\n        \"role\": \"admin\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{usersPATH}}/create",
-									"host": [
-										"{{baseURL}}{{usersPATH}}"
-									],
-									"path": [
-										"create"
-									]
-								}
-							},
-							"response": []
+							"path": [
+								"asdfasdfasdfasdf"
+							]
 						}
-					]
-				},
-				{
-					"name": "Update",
-					"item": [
-						{
-							"name": "Users/Update",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"data\": {\r\n        \"id\": \"625737d67d3252f2d18a41ba\",\r\n        \"username\": \"Mam\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseURL}}{{usersPATH}}/update",
-									"host": [
-										"{{baseURL}}{{usersPATH}}"
-									],
-									"path": [
-										"update"
-									]
-								}
-							},
-							"response": []
-						}
-					]
+					},
+					"response": []
 				}
 			]
 		}
 	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{DevToken}}",
+				"type": "string"
+			}
+		]
+	},
 	"event": [
 		{
 			"listen": "prerequest",
@@ -2134,28 +1381,6 @@
 					""
 				]
 			}
-		}
-	],
-	"variable": [
-		{
-			"key": "baseURL",
-			"value": "localhost:8000",
-			"type": "string"
-		},
-		{
-			"key": "persPATH",
-			"value": "/personnes",
-			"type": "string"
-		},
-		{
-			"key": "usersPATH",
-			"value": "/users",
-			"type": "string"
-		},
-		{
-			"key": "orgPATH",
-			"value": "/organisations",
-			"type": "string"
 		}
 	]
 }
