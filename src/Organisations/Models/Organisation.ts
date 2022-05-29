@@ -29,6 +29,54 @@ class Organisation {
             {
                 timestamps: true
             });
+    
+    /** @static ruleSet pour la validation du data de personne */
+    static ruleSet = {
+        "info":{
+            /*data {
+                champs = [
+                    {
+                        "name": "nom",
+                        "label": "Nom",
+                        "type": "string",//Rich? //Longtext ?
+                        "reapeatable": true,
+                        "rules": ["required", "notEmpty", "notNull", "notUndefined"]
+                    }
+                ]
+            }*/
+
+        },
+        "create":{
+            "nom":["isDefined", "isString", "minLength:2"],
+            "description":["isString"],
+            "url":["isString"],
+            "contactPoint":["isString"]
+        },
+        "update":{
+            "id":["isDefined", "idValid"],
+            "nom":["isString"],
+            "description":["isString"],
+            "url":["isString"],
+            "contactPoint":["isString"]
+        },
+        "search":{
+            "id":["idValid"],
+            "nom":["isString"],
+            "description":["isString"],
+            "url":["isString"],
+            "contactPoint":["isString"]
+        },
+        "list":{
+            "id":["idValid"],
+            "nom":["isString"],
+            "description":["isString"],
+            "url":["isString"],
+            "contactPoint":["isString"]
+        },
+        "delete":{
+            "id":["isDefined", "idValid"],
+        }
+    }
 
     /**
      * @static method

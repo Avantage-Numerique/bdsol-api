@@ -44,7 +44,7 @@ export default class Validator {
         //in (key) / of (value)
         //Warning : for in n'effectue pas nécessairement dans l'ordre
         let isValid = true;
-        let message = "Erreurs :";
+        let message = "Erreurs : ";
         let rule;
         for (const field in ruleSet) {
             for (rule of ruleSet[field]) { //do we instead => validate(data[field], ruleSet[field].pop())

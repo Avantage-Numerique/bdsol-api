@@ -32,22 +32,51 @@ class Personne {
                 timestamps: true
         });
 
+    /** @static ruleSet pour la validation du data de personne */
     static ruleSet = {
+        "info":{
+            /*data {
+                champs = [
+                    {
+                        "name": "nom",
+                        "label": "Nom",
+                        "type": "string",//Rich? //Longtext ?
+                        "reapeatable": true,
+                        "rules": ["required", "notEmpty", "notNull", "notUndefined"]
+                    }
+                ]
+            }*/
+
+        },
         "create":{
-            "nom":["isDefined", "minLength:2"],
-            "prenom":["isDefined", "minLength:2"]
+            "nom":["isDefined", "isString", "minLength:2"],
+            "prenom":["isDefined", "isString", "minLength:2"],
+            "surnom":["isString"],
+            "description":["isString"]
         },
         "update":{
-            "id":["isDefined", "idValid"]
+            "id":["isDefined", "idValid"],
+            "nom":["isString"],
+            "prenom":["isString"],
+            "surnom":["isString"],
+            "description":["isString"]
         },
         "search":{
-            "id":["idValid"]
+            "id":["idValid"],
+            "nom":["isString"],
+            "prenom":["isString"],
+            "surnom":["isString"],
+            "description":["isString"]
         },
         "list":{
-            "id":["idValid"]
+            "id":["idValid"],
+            "nom":["isString"],
+            "prenom":["isString"],
+            "surnom":["isString"],
+            "description":["isString"]
         },
         "delete":{
-            "id":["isDefined", "idValid"]
+            "id":["isDefined", "idValid"],
         }
     }
 
