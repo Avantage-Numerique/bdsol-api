@@ -32,6 +32,25 @@ class Personne {
                 timestamps: true
         });
 
+    static ruleSet = {
+        "create":{
+            "nom":["isDefined", "minLength:2"],
+            "prenom":["isDefined", "minLength:2"]
+        },
+        "update":{
+            "id":["isDefined", "idValid"]
+        },
+        "search":{
+            "id":["idValid"]
+        },
+        "list":{
+            "id":["idValid"]
+        },
+        "delete":{
+            "id":["isDefined", "idValid"]
+        }
+    }
+
     
     /**
      * @method isNomOrPrenomValid Vérifie les conditions d'insertion dans la base de donnée d'un nom ou d'un prénom.

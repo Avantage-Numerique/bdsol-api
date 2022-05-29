@@ -33,32 +33,105 @@ export default class Validator {
      * Paramètres :
      *      @param {key:value} data - Valeur à valider contre le schéma : { "nom" : "Audet" }
      *      @param {key:value[]} ruleSet - Ensemble de règle pour chaque valeur à vérifier: { "nom":["isDefined", "isSet" ...], "prenom":[...] }
+     *      @note ruleSet se trouve en général dans le model de l'entité
      * 
      * Retourne :
      *      @return {object} - { isValid, message } :
      *          @desc isValid (boolean): représentant si les données sont validée
      *          @desc message (string) : décrivant l'échec ou réussite de la validation 
      */
-    public validateData(data:any, ruleSet:any){
+    static validateData(data:any, ruleSet:any){
         //in (key) / of (value)
         //Warning : for in n'effectue pas nécessairement dans l'ordre
         let isValid = true;
         let message = "Erreurs :";
+        let rule;
         for (const field in ruleSet) {
-            for (const rule of ruleSet[field]) { //do we instead => validate(data[field], ruleSet[field].pop())
-                //Si la règle existe
-                if(Rules[rule]){
-                    //Si la valeur n'est pas valide 
-                    if ( !Rules[rule](data[field]) ){
+            for (rule of ruleSet[field]) { //do we instead => validate(data[field], ruleSet[field].pop())
+                LogHelper.debug("Dans les 2 for loop avec field : "+field+ " et rule : "+rule);
+
+                let param = -1;
+                //Si paramètre à passer
+                if ( rule.indexOf(":") != -1) {
+                    LogHelper.debug("dans indexOf(':')");
+                    //ex: minLenght:3  => param = 3, rule = minLength
+                    param = rule.substring(rule.indexOf(":")+1, rule.length);
+                    rule = rule.substring(0, rule.indexOf(":"));
+                  }
+                
+                switch (rule){
+                case "isDefined" :
+                    if ( !Rules.isDefined(data[field]) ){
                         isValid = false;
-                        message += "\n"+Rules.ruleErrorMsg[rule];
+                        message += "\n"+data[field]+" => "+Rules.ruleErrorMsg.isDefined;
+                    } break;
+                case "isNotNull" :
+                    if ( !Rules.isNotNull(data[field]) ){
+                        isValid = false;
+                        message += "\n"+data[field]+" => "+Rules.ruleErrorMsg.isNotNull;
+                    } break;
+                case "isString" :
+                    if ( !Rules.isString(data[field]) ){
+                        isValid = false;
+                        message += "\n"+data[field]+" => "+Rules.ruleErrorMsg.isString;
+                    } break;
+                case "isNotEmpty" :
+                    if ( !Rules.isNotEmpty(data[field]) ){
+                        isValid = false;
+                        message += "\n"+data[field]+" => "+Rules.ruleErrorMsg.isNotEmpty;
+                    } break;
+                case "minLength" :
+                    if ( !Rules.minLength(data[field], param) ){
+                        isValid = false;
+                        message += "\n"+data[field]+" => "+Rules.ruleErrorMsg.minLength;
+                    } break;
+                case "maxLength" :
+                    if ( !Rules.maxLength(data[field], param) ){
+                        isValid = false;
+                        message += "\n"+data[field]+" => "+Rules.ruleErrorMsg.maxLength;
+                    } break;
+                case "idValid" :
+                    if ( !Rules.idValid(data[field])){
+                        isValid = false;
+                        message += "\n"+data[field]+" => "+Rules.ruleErrorMsg.idValid;
+                    } break;
+                case "isObject" :
+                    if ( !Rules.isObject(data[field])){
+                        isValid = false;
+                        message += "\n"+data[field]+" => "+Rules.ruleErrorMsg.isObject;
+                    } break;
+                default:
+                    LogHelper.debug("Validator.validate : La règle "+rule+ "n'est pas implémentée.");
+                    isValid = false;
+                    message += "\nLa règle "+rule+ "n'est pas implémentée."; break;
+                    
+                }
+                /*
+                //Si la règle existe
+                if(Rules[rule]() != undefined){
+                    LogHelper.debug("Entré dans si la regle existe");
+                    //Si param est défini, appel fonction avec param
+                    if ( param != -1){
+                        if (!Rules[rule](data[field], param)){
+                            //Si la valeur n'est pas valide
+                            isValid = false;
+                            message += "\n"+Rules.ruleErrorMsg[rule];
+                        }
+                    }
+                    //Si param non défini, appel fonction sans param
+                    else{
+                        if ( !Rules[rule](data[field]) ) {
+                            //Si la valeur n'est pas valide
+                            isValid = false;
+                            message += "\n"+Rules.ruleErrorMsg[rule];
+                        }
                     }
                 }
                 else {
                     LogHelper.debug("Validator.validate : La règle "+rule+ "n'est pas implémentée.");
                     isValid = false;
                     message += "\nLa règle "+rule+ "n'est pas implémentée.";
-                }
+                }*/
             }
         }
         if (isValid)

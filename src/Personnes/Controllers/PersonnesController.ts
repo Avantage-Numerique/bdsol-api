@@ -6,6 +6,7 @@ import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
 import PersonnesService from "../Services/PersonnesService";
 import {PersonneSchema} from "../Schemas/PersonneSchema";
 import QueryBuilder from "../../Database/QueryBuilder/QueryBuilder";
+import Validator from "../../Validation/Validator";
 
 class PersonnesController {
 
@@ -28,7 +29,7 @@ class PersonnesController {
      *      @return {ApiResponseContract}
     */
     public async create(requestData:any):Promise<ApiResponseContract> {
-        const messageValidate = this.validateData(requestData);
+        const messageValidate = Validator.validateData(requestData, Personne.ruleSet.create);
         if (!messageValidate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -62,7 +63,7 @@ class PersonnesController {
     public async update(requestData:any):Promise<ApiResponseContract> {
         
         //Validation des données
-        const messageUpdate = this.validateData(requestData);
+        const messageUpdate = Validator.validateData(requestData, Personne.ruleSet.update);
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -253,64 +254,6 @@ class PersonnesController {
         
         return await this.service.delete(requestData.id);
     }
-
-    /**
-     * @method validateData valide les éléments pour l'entitée Personne s'ils sont présent.
-     * 
-     * Paramètres :
-     *      @param {key:value} requestData - attributs de personne à valider
-     * 
-     * Retourne : validité et message d'erreur
-     *      @return {object} { isValid, message } :
-     *          @desc isValid (boolean): représentant si les données sont validée
-     *          @desc message (string) : décrivant l'échec ou réussite de la validation 
-     */
-    public validateData(requestData:any): {isValid:boolean, message:string} {
-
-        LogHelper.log(`Validating ${typeof requestData}`, requestData);
-        let isValid = true;
-        let message = "";
-
-        if (typeof requestData === 'object')
-        {
-            //Verification data est vide
-            if (requestData.nom === undefined &&
-                requestData.prenom === undefined &&
-                requestData.surnom === undefined &&
-                requestData.description === undefined) {
-                    isValid = false;
-                    message += "Data doit contenir un champ. ";
-                }
-
-            //Si n'est pas vide
-            else{
-                //Validation Nom
-                //Le (if nom !== undefined) est inutile (à effacer au besoin)
-                if (requestData.nom !== undefined){
-                    if (!Personne.isNomOrPrenomValid(requestData.nom)){
-                        isValid = false;
-                        message += "Le paramètre 'nom' est problématique. "
-                    }
-                }
-
-                //Validation prénom
-                if(requestData.prenom !== undefined){
-                    if (!Personne.isNomOrPrenomValid(requestData.prenom)){
-                        isValid = false;
-                        message += "Le paramètre 'prenom' est problématique. ";
-                    }
-                }
-            }
-        }
-        //Si n'est pas un objet
-        else{
-            isValid = false;
-            message += "La requête n'est pas un objet. "
-        }
-
-        return { isValid, message };      
-    }
-
 
     /** 
      * @method formatRequestDataForDocument insère dans le schéma les données de la requête.
