@@ -227,7 +227,7 @@ class PersonnesController {
      * @method delete permet d'effectuer une suppression de la fiche d'une personne dans la base de données.
      * @todo
      * Paramètres : 
-     *      @param 
+     *      @param {object} requestData contient le id de la personne à supprimer.
      * 
      * Retourne : 
      *      @return 

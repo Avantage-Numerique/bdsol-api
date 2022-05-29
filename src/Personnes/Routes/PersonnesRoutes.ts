@@ -77,7 +77,8 @@ PersonnesRouter.post('/list', async (req, res) => {
 
 /**
  * @method POST/DELETE trouve une personne dans la liste
- * @todo */
+ * @param {object} req : req.body contient data et le id de la personne à supprimer.
+ */
  PersonnesRouter.post('/delete', async (req, res) => {
     const {data} = req.body;
     LogHelper.log("Delete Personne route for ", data);
