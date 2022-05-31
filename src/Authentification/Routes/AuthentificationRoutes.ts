@@ -42,7 +42,6 @@ AuthentificationRouter.post('/generate-token',
         return res.status(StatusCodes.UNAUTHORIZED).json({
             "message": ReasonPhrases.UNAUTHORIZED
         });
-
     });
 
 export {AuthentificationRouter};

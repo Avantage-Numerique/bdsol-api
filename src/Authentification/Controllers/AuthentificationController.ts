@@ -62,16 +62,12 @@ class AuthentificationController
 
     public async logout(username:string): Promise<LogoutResponse>
     {
-        //set the logout process
-        return {
-            error: false,
-            errors: [],
-            code: StatusCodes.OK,
-            message: `L'utilisateur ${username} a été déconnecté avec succès.`,
-            data: {
-                user: username,
-            }
-        };
+        //réponse uniform
+        return SuccessResponse.create(
+            { user: username },
+            StatusCodes.OK,
+            `L'utilisateur ${username} a été déconnecté avec succès.`
+        );
     }
 
 

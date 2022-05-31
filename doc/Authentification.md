@@ -9,7 +9,12 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 ### POST `/login`
 
 #### structure demandé
-
+```json
+{
+  "username": "string",
+  "password": "string"
+}
+```
 
 #### Retour si tout a fonctionné
 Code : **200** : lorsque les informations sont OK
@@ -17,14 +22,12 @@ Code : **200** : lorsque les informations sont OK
 ```json
 {
   "error": false,
-  "userConnectedToken": "theJWTTOKEN signed",
   "code": 200,
   "errors": [],
   "message": "OK",
   "data": {
-    "fields": {
-      "username": true,
-      "password": true
+    "user": {
+      "token": "string"
     }
   }
 }
@@ -39,22 +42,36 @@ Code : **401** : lorsque les informations ne sont pas OK.
   "userConnectedToken": null,
   "code": 401,
   "message": "Vos informations de connexion sont incorrectes, vérifiez votre utilisateur et mot de passe.",
-  "fields": {
-    "username": {
-      "status": false,
-      "message": ""
-    },
-    "password": {
-      "status": false,
-      "message": ""
-    }
+  "data": {
+      "user": {
+          "token": "undefined"
+      }
   }
 }
 ```
 
 ### POST `/logout`
+Cette fonction n'est pas implémenté encore. l'url retourne toujours cette réponse pour l'instant.
+
+```json
+{
+  "error": false,
+  "code": 200,
+  "message": "Vos informations de connexion sont incorrectes, vérifiez votre utilisateur et mot de passe.",
+  "data": {
+      "user": {
+          "token": "string"
+      }
+  }
+}
+```
 
 #### structure demandé
+```json
+{
+  "username": "string"
+}
+```
 
 
 #### Retour
