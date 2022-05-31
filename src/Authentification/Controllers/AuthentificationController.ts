@@ -6,9 +6,10 @@ import UserAuthContract from "../Contracts/UserAuthContract";
 import {TokenController} from "./TokenController";
 import {UsersService, User, FakeUserModel} from "../../Users/UsersDomain";
 
-import {StatusCodes} from "http-status-codes";
+import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
 import {PasswordsController} from "./PasswordsController";
+import {SuccessResponse} from "../../Http/Responses/SuccessResponse";
 
 
 class AuthentificationController
@@ -19,7 +20,7 @@ class AuthentificationController
 
     constructor()
     {
-        AuthentificationController.service = UsersService.getInstance(User.getInstance());//new UsersService(User.getInstance());
+        AuthentificationController.service = UsersService.getInstance(User.getInstance());
 
         if (AuthentificationController.service === undefined) {
             LogHelper.error("[AuthentificationController] Service is null in Authentification");
@@ -32,7 +33,7 @@ class AuthentificationController
         // add encryption on send form till checking here.
         LogHelper.info(`${username} trying to connect ...`);
 
-        // TEMP DB BYPASS to make this working quicker.
+        //Authenticate the user with the creditentials
         const targetUser = await this.authenticate(username, password);
 
         // User was find in DB
@@ -42,32 +43,20 @@ class AuthentificationController
             LogHelper.log(`Les information de ${targetUser.data.username} fonctionnent, génération du token JW ...`);
 
             // Generate an access token
-            const userConnectedToken = this.generateToken(targetUser.data);
-
-            return {
-                error: false,
-                code: StatusCodes.OK,
-                errors: [],
-                message: 'OK',
-                data: {
-                    user: {
-                        token: userConnectedToken
-                    }
+            const data = {
+                user: {
+                    token: this.generateToken(targetUser.data)
                 }
             };
+
+            return  SuccessResponse.create(data, StatusCodes.OK, ReasonPhrases.OK);
         }
 
-        return {
-            error: true,
-            code: StatusCodes.UNAUTHORIZED,
-            errors: [],
-            message: 'Vos informations de connexion sont incorrectes, vérifiez votre utilisateur et mot de passe.',
-            data: {
-                user: {
-                    token: undefined
-                }
-            }
-        };
+        return ErrorResponse.create(
+            new Error(ReasonPhrases.UNAUTHORIZED),
+            StatusCodes.UNAUTHORIZED,
+            'Vos informations de connexion sont incorrectes, vérifiez votre utilisateur et votre mot de passe.'
+        );
     }
 
 
@@ -76,11 +65,12 @@ class AuthentificationController
         //set the logout process
         return {
             error: false,
-            user: username,
             errors: [],
             code: StatusCodes.OK,
             message: `L'utilisateur ${username} a été déconnecté avec succès.`,
-            data: {}
+            data: {
+                user: username,
+            }
         };
     }
 
@@ -109,31 +99,29 @@ class AuthentificationController
         } as UserAuthContract;
 
         try {
-            LogHelper.log(`Vérification des informations fournis par ${username} ...`);
+            LogHelper.info(`Vérification des informations fournis par ${username} ...`);
             if (ServerController.database.driverPrefix === 'mongodb')
             {
                 const user = await AuthentificationController.service.get(targetUser);
 
+                // If we find a user, we check the password through the hashing comparaison.
                 if (!user.error && user.data.password !== undefined)
                 {
-                    const passwordMatchesUser:boolean = await PasswordsController.matches(user.data.password, password);
-
-                    if (passwordMatchesUser) {
+                    if (await PasswordsController.matches(user.data.password, password)) {
                         return user;
                     }
                 }
                 return ErrorResponse.create(new Error("Connection refusée"), StatusCodes.UNAUTHORIZED);
             }
 
-            /**
-             * If we need to develop directly in node serveur running outside of docker.
-             * Still clumsy structure.
-             */
-            if (ServerController.database.driverPrefix === 'fakeusers') {
+            // If we need to develop directly in node serveur running outside of docker.
+            if (ServerController.database.driverPrefix === 'fakeusers')
+            {
                 return await FakeUserModel.findOne(targetUser);
             }
-
-        } catch (errors: any) {
+        }
+        catch (errors: any)
+        {
             return ErrorResponse.create(errors, StatusCodes.INTERNAL_SERVER_ERROR);
         }
     }
