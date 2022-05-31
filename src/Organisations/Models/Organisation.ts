@@ -54,7 +54,7 @@ class Organisation {
         },
         "update":{
             "id":["isDefined", "idValid"],
-            "nom":["isString"],
+            "nom":["isString", "minLength:2"],
             "description":["isString"],
             "url":["isString"],
             "contactPoint":["isString"]

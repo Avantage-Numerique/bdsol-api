@@ -46,6 +46,13 @@ export default class Validator {
         let isValid = true;
         let message = "Erreurs : ";
         let rule;
+
+        if (data == undefined || typeof data != 'object' || Object.entries(data).length == 0){
+            message += "\n L'objet à valider est vide.";
+            isValid = false;
+            return { isValid, message };
+        }
+
         for (const field in ruleSet) {
             for (rule of ruleSet[field]) { //do we instead => validate(data[field], ruleSet[field].pop())
                 LogHelper.debug("Dans les 2 for loop avec field : "+field+ " et rule : "+rule);

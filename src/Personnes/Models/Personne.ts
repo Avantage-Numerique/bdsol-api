@@ -4,7 +4,6 @@ import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import { PersonneSchema } from "../Schemas/PersonneSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import {DataProvider} from "../../Database/DatabaseDomain";
-import Rules from "../../Validation/Rules"
 
 class Personne {
     
@@ -32,22 +31,16 @@ class Personne {
                 timestamps: true
         });
 
+    /** @static infoChamp pour le retour frontend des champs à créer et règles des attributs de personne */
+    static infoChamp = {
+            "champs":[
+                {
+
+                }
+            ]
+        }
     /** @static ruleSet pour la validation du data de personne */
     static ruleSet = {
-        "info":{
-            /*data {
-                champs = [
-                    {
-                        "name": "nom",
-                        "label": "Nom",
-                        "type": "string",//Rich? //Longtext ?
-                        "reapeatable": true,
-                        "rules": ["required", "notEmpty", "notNull", "notUndefined"]
-                    }
-                ]
-            }*/
-
-        },
         "create":{
             "nom":["isDefined", "isString", "minLength:2"],
             "prenom":["isDefined", "isString", "minLength:2"],
@@ -56,8 +49,8 @@ class Personne {
         },
         "update":{
             "id":["isDefined", "idValid"],
-            "nom":["isString"],
-            "prenom":["isString"],
+            "nom":["isString", "minLength:2"],
+            "prenom":["isString", "minLength:2"],
             "surnom":["isString"],
             "description":["isString"]
         },

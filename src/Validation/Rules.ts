@@ -11,7 +11,8 @@ class Rules{
         minLength: "minLength : n'a pas la longueur minimale requise ou n'est pas un string.",
         maxLength: "maxLength : dépasse la longueur maximal permise ou n'est pas un string.",
         idValid: "idValid : L'id fournit n'est pas valide (.length != 24).",
-        isObject: "isObject : n'est pas un objet (typeof != 'object')."
+        isObject: "isObject : n'est pas un objet (typeof != 'object').",
+        objectNotEmpty: "objectNotEmpty : l'objet à traiter ne contient aucun champs"
     }
 
     /**
@@ -49,20 +50,20 @@ class Rules{
     }
 
     /**
-     * @method minLength - Vérifie si c'est un string, d'une longueur plus grand ou égal au paramètre
+     * @method minLength - Vérifie si l'objet,length est plus grand ou égal au paramètre
      */
     static minLength(value:any, length:number):boolean {
         if (this.isDefined(value))
-            return this.isString(value) && value.length >= length;
+            return value.length >= length;
         return true;
     }
 
     /**
-     * @method maxLength - Vérifie si c'est un string, d'une longueur plus petit ou égal au paramètre
+     * @method maxLength - Vérifie si l'objet.length est plus petit ou égal au paramètre
      */
     static maxLength(value:any, length:number):boolean {
         if (this.isDefined(value))
-            return this.isString(value) && value.length <= length;
+            return value.length <= length;
         return true;
     }
 
@@ -81,6 +82,18 @@ class Rules{
     static isObject(value:any):boolean {
         if (this.isDefined(value))
             return typeof value == 'object';
+        return true;
+    }
+
+    /**
+     * @method objectNotEmpty - Vérifie qu'un objet contient des champs. Si non objet => return false
+     */
+    static objectNotEmpty(value:any):boolean {
+        if (this.isDefined(value))
+            if (this.isObject(value))
+                return Object.entries(value).length > 0;
+            else
+                return false;
         return true;
     }
     

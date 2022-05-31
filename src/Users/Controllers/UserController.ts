@@ -39,6 +39,7 @@ export class UserController {
         if (createdDocumentResponse !== undefined)
             return createdDocumentResponse;
 
+        LogHelper.debug("Le code manque de robustesse. Users/create");
         return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
             StatusCodes.INTERNAL_SERVER_ERROR,
@@ -78,6 +79,7 @@ export class UserController {
             return updatedModelResponse;
 
 
+        LogHelper.debug("Le code manque de robustesse. Users/update");
         return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
             StatusCodes.INTERNAL_SERVER_ERROR,
