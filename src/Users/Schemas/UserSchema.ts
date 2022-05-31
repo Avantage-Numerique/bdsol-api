@@ -1,4 +1,6 @@
 import {Schema, Document} from "mongoose"
+import {PasswordsController} from "../../Authentification/Controllers/PasswordsController";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 /**
  *
@@ -24,17 +26,12 @@ export class UserSchema {
     static documentSchema:Schema<UserDocument>;
 
     constructor (props:any) {
-        //this.initGetterSetter();
-        // make this as a loop from documentSchema to keep this as dry as it should.
         this.username = props.username || "no username";
         this.email = props.email || "no username";
         this.password = props.password || "no username";
         this.avatar = props.avatar || "no username";
         this.name = props.name || "no username";
         this.role = props.role || "no username";
-
-        //this.RestrictAccessToUnderscoreVarsFromExternalScope(this);
-        //this.initGetterSetter();
     }
 
     /**
@@ -55,8 +52,40 @@ export class UserSchema {
             {
                 timestamps: true
             });
+            UserSchema.registerPreEvents();
         }
         return UserSchema.documentSchema;
+    }
+
+    /**
+     * Set the event to adjust data to the current document on Pre.
+     * doc : https://mongoosejs.com/docs/typescript/schemas.html
+     * à relire : https://thecodebarbarian.com/working-with-mongoose-in-typescript.html
+     */
+    static async registerPreEvents()
+    {
+        if (UserSchema.documentSchema !== undefined)
+        {
+            LogHelper.debug("Enregistrement de l'événement pre create sur le UserSchema.");
+            // CREATE users, we hash the password.
+            await UserSchema.documentSchema.pre('save', async function (next:any): Promise<any>
+            {
+                const user:any = this;
+                LogHelper.debug("UserSchema.documentSchema.pre create ", user);
+                if (!user.isModified('password')) {
+                    return next();
+                }
+                try
+                {
+                    user.password = await PasswordsController.hash(user.password);
+                }
+                catch(error:any)
+                {
+                    throw error;
+                }
+                return next();
+            });
+        }
     }
 
 
@@ -79,7 +108,6 @@ export class UserSchema {
     public get username():string {
         return this._username;
     }
-
     public set username(username) {
         this._username = username;
     }
@@ -87,7 +115,6 @@ export class UserSchema {
     public get password():string {
         return this._password;
     }
-
     public set password(password) {
         this._password = password;
     }
@@ -95,15 +122,13 @@ export class UserSchema {
     public get email():string {
         return this._email;
     }
-
     public set email(email) {
         this._email = email;
     }
 
     public get avatar():string {
-        return this._email;
+        return this._avatar;
     }
-
     public set avatar(avatar) {
         this._avatar = avatar;
     }
@@ -111,7 +136,6 @@ export class UserSchema {
     public get name():string {
         return this._email;
     }
-
     public set name(name) {
         this._name = name;
     }
@@ -119,26 +143,11 @@ export class UserSchema {
     public get role():string {
         return this._role;
     }
-
     public set role(role) {
         this._role = role;
     }
 }
 
-//Mongoose pre
-/*
-
-user_schema.pre('save', function (next) {
-  const user = this;
-  if (!user.isModified('password')) return next();
-  bcrypt.hash(user.password, SALT_WORK_FACTOR, function (error, hash) {
-    if (error) return next(error);
-    user.password = hash;
-    console.log(hash); // properly consoles the hash
-    next();
-  });
-});
- */
 
 /*
     private RestrictAccessToUnderscoreVarsFromExternalScope(obj) {

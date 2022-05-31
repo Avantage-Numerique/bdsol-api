@@ -12,4 +12,4 @@ export * from './Services/UsersService';
 export * from './Controllers/UserController';
 export * from './Routes/UsersRouter';
 
-export * from './fakeUsers';
+export * from './fakeUser';
