@@ -4,7 +4,7 @@ import LoginResponse from "../Responses/LoginResponse";
 import {LogoutResponse} from "../Responses/LogoutResponse";
 import UserAuthContract from "../Contracts/UserAuthContract";
 import {TokenController} from "./TokenController";
-import {UsersService, User, FakeUserModel} from "../../Users/UsersDomain";
+import {UsersService, User, FakeUserModel, UserSchema} from "../../Users/UsersDomain";
 
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
@@ -39,17 +39,15 @@ class AuthentificationController
         // User was find in DB
         if (targetUser &&
             !targetUser.error &&
-            targetUser.data !== null) {
+            targetUser.data !== null)
+        {
             LogHelper.log(`Les information de ${targetUser.data.username} fonctionnent, génération du token JW ...`);
 
             // Generate an access token
-            const data = {
-                user: {
-                    token: this.generateToken(targetUser.data)
-                }
-            };
+            const data:any = UserSchema.dataTransfertObject(targetUser.data);
+            data.token = this.generateToken(targetUser.data);
 
-            return  SuccessResponse.create(data, StatusCodes.OK, ReasonPhrases.OK);
+            return  SuccessResponse.create({ user: data }, StatusCodes.OK, ReasonPhrases.OK);
         }
 
         return ErrorResponse.create(
