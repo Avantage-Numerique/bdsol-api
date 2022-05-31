@@ -8,6 +8,7 @@ import {UsersService, User, FakeUserModel} from "../../Users/UsersDomain";
 
 import {StatusCodes} from "http-status-codes";
 import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
+import {PasswordsController} from "./PasswordsController";
 
 
 class AuthentificationController
@@ -28,8 +29,6 @@ class AuthentificationController
 
     public async login(username:string, password:string): Promise<LoginResponse>
     {
-        //AuthentificationController.service = UsersService.getInstance(User.getInstance());//new UsersService(User.getInstance());
-
         // add encryption on send form till checking here.
         LogHelper.info(`${username} trying to connect ...`);
 
@@ -47,15 +46,12 @@ class AuthentificationController
 
             return {
                 error: false,
-                userConnectedToken: userConnectedToken,
                 code: StatusCodes.OK,
                 errors: [],
                 message: 'OK',
                 data: {
-                    userConnectedToken: userConnectedToken,
-                    fields: {
-                        username: true,
-                        password: true
+                    user: {
+                        token: userConnectedToken
                     }
                 }
             };
@@ -63,21 +59,12 @@ class AuthentificationController
 
         return {
             error: true,
-            userConnectedToken: undefined,
             code: StatusCodes.UNAUTHORIZED,
             errors: [],
             message: 'Vos informations de connexion sont incorrectes, vérifiez votre utilisateur et mot de passe.',
             data: {
-                userConnectedToken: undefined,
-                fields: {
-                    username: {
-                        status: false,
-                        message: ''
-                    },
-                    password:  {
-                        status: false,
-                        message: ''
-                    }
+                user: {
+                    token: undefined
                 }
             }
         };
@@ -118,17 +105,24 @@ class AuthentificationController
     private async authenticate(username:string, password:string): Promise<any>
     {
         const targetUser = {
-            username: username,
-            password: password
+            username: username
         } as UserAuthContract;
 
         try {
-
+            LogHelper.log(`Vérification des informations fournis par ${username} ...`);
             if (ServerController.database.driverPrefix === 'mongodb')
             {
                 const user = await AuthentificationController.service.get(targetUser);
-                LogHelper.debug("AuthControlller / authenticate", user);
-                return user;
+
+                if (!user.error && user.data.password !== undefined)
+                {
+                    const passwordMatchesUser:boolean = await PasswordsController.matches(user.data.password, password);
+
+                    if (passwordMatchesUser) {
+                        return user;
+                    }
+                }
+                return ErrorResponse.create(new Error("Connection refusée"), StatusCodes.UNAUTHORIZED);
             }
 
             /**
@@ -138,10 +132,10 @@ class AuthentificationController
             if (ServerController.database.driverPrefix === 'fakeusers') {
                 return await FakeUserModel.findOne(targetUser);
             }
+
         } catch (errors: any) {
             return ErrorResponse.create(errors, StatusCodes.INTERNAL_SERVER_ERROR);
         }
-        LogHelper.debug("AuthControlller / authenticate to the end of authenticate.");
     }
 }
 export default AuthentificationController;

@@ -1,5 +1,6 @@
 import {Schema, Document} from "mongoose"
 import {PasswordsController} from "../../Authentification/Controllers/PasswordsController";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 /**
  *
@@ -51,6 +52,7 @@ export class UserSchema {
             {
                 timestamps: true
             });
+            UserSchema.registerPreEvents();
         }
         return UserSchema.documentSchema;
     }
@@ -60,12 +62,16 @@ export class UserSchema {
      * doc : https://mongoosejs.com/docs/typescript/schemas.html
      * à relire : https://thecodebarbarian.com/working-with-mongoose-in-typescript.html
      */
-    static async registerPreEvents() {
+    static async registerPreEvents()
+    {
         if (UserSchema.documentSchema !== undefined)
         {
+            LogHelper.debug("Enregistrement de l'événement pre create sur le UserSchema.");
+            // CREATE users, we hash the password.
             await UserSchema.documentSchema.pre('save', async function (next:any): Promise<any>
             {
                 const user:any = this;
+                LogHelper.debug("UserSchema.documentSchema.pre create ", user);
                 if (!user.isModified('password')) {
                     return next();
                 }

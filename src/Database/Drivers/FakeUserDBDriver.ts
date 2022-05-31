@@ -1,6 +1,6 @@
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import type {DBDriver} from "./DBDriver";
-import {FakeUserModel, fakeUsers} from "../../Users/UsersDomain";
+import {FakeUserModel, fakeUser} from "../../Users/UsersDomain";
 
 export class FakeUserDBDriver implements DBDriver {
 
@@ -34,7 +34,7 @@ export class FakeUserDBDriver implements DBDriver {
 
     public getCollection(name:string):any {
         if (name === 'users') {
-            return fakeUsers;
+            return [fakeUser];
         }
     }
 
