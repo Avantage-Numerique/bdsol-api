@@ -77,4 +77,16 @@ OrganisationsRouter.post('/update', async (req, res) => {
     return res.status(response.code).send(response);
 });
 
+/**
+ * @method POST/DELETE trouve une organisation dans la liste selon le id
+ * @param {object} req : req.body contient data { id } de la personne à supprimer.
+ */
+ OrganisationsRouter.post('/delete', async (req, res) => {
+    const {data} = req.body;
+    LogHelper.log("Delete Organisation route for ", data);
+    const controller = new OrganisationsController();
+    const response:any = await controller.delete(data);
+    return res.status(response.code).send(response);
+});
+
 export {OrganisationsRouter};

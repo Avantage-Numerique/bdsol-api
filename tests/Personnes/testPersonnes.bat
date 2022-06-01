@@ -7,5 +7,5 @@ CALL newman run BDSOL-API.postman_collection.json --folder 3-Search-all-pers --w
 PAUSE
 CALL newman run BDSOL-API.postman_collection.json --folder 4-List-all-pers --working-dir %cd% -g workspace.postman_globals.json --export-globals ./workspace.postman_globals.json -e ./Personnes/personnes.postman_environment.json --export-environment ./Personnes/personnes.postman_environment.json -d ./Personnes/List-DataFile.json --timeout-request 5000
 PAUSE
-CALL newman run BDSOL-API.postman_collection.json --folder 5-Delete-all-pers --working-dir %cd% -g workspace.postman_globals.json --export-globals ./workspace.postman_globals.json -e ./Personnes/personnes.postman_environment.json --export-environment ./Personnes/personnes.postman_environment.json -n 5 --timeout-request 5000
+CALL newman run BDSOL-API.postman_collection.json --folder 5-Delete-all-pers --working-dir %cd% -g workspace.postman_globals.json --export-globals ./workspace.postman_globals.json -e ./Personnes/personnes.postman_environment.json --export-environment ./Personnes/personnes.postman_environment.json --timeout-request 5000
 PAUSE

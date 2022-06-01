@@ -229,6 +229,36 @@ class OrganisationsController {
         }
 
     /**
+     * @method delete permet d'effectuer une suppression de la fiche d'une organisation dans la base de données.
+     * @todo
+     * Paramètres : 
+     *      @param {object} requestData contient le id de l'organisation à supprimer.
+     * 
+     * Retourne : 
+     *      @return 
+    */
+         public async delete(requestData:any):Promise<ApiResponseContract> {
+            LogHelper.log("Début de la suppression d'une organisation");
+    
+            if (typeof requestData === undefined || typeof requestData !== 'object')
+                return ErrorResponse.create(
+                    new Error(ReasonPhrases.BAD_REQUEST),
+                    StatusCodes.BAD_REQUEST,
+                    "La requête n'est pas un objet. "
+                    );
+    
+            //Verification data est vide
+            if (requestData.id === undefined || requestData.id.length != 24 )
+                return ErrorResponse.create(
+                    new Error(ReasonPhrases.BAD_REQUEST),
+                    StatusCodes.BAD_REQUEST,
+                    "id non valide"
+                );  
+            
+            return await this.service.delete(requestData.id);
+        }
+
+    /**
      * @method validateData valide les éléments pour l'entitée Personne s'ils sont présent.
      * 
      * Paramètres :

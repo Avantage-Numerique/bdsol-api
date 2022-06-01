@@ -438,6 +438,97 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "5-Delete-all-org",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data = {};\r",
+									"let toDel;\r",
+									"let vars;\r",
+									"let varsKeys;\r",
+									"while(pm.environment.toObject())\r",
+									"{\r",
+									"    vars = pm.environment.toObject();\r",
+									"    varsKeys = Object.keys(vars);\r",
+									"\r",
+									"    toDel = varsKeys.pop();\r",
+									"    if(toDel === undefined)\r",
+									"    break;\r",
+									"\r",
+									"    if (toDel.includes(\"org\")){\r",
+									"        break;\r",
+									"    }\r",
+									"    pm.environment.unset(toDel);\r",
+									"\r",
+									"}\r",
+									"if(toDel !== undefined)\r",
+									"{\r",
+									"    v_data.id = vars[toDel]._id\r",
+									"    pm.environment.unset(toDel);\r",
+									"}\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"if(Object.keys(pm.environment.toObject()) != 0)\r",
+									"{\r",
+									"    pm.test('Status OK', function(){\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"\r",
+									"    pm.test('Delete successful', function(){\r",
+									"        pm.expect(jsonResponse.error).to.be.false;\r",
+									"        pm.expect(jsonResponse.errors).to.be.empty;\r",
+									"    });\r",
+									"\r",
+									"    postman.setNextRequest(\"5-Delete-all-org\");\r",
+									"}\r",
+									"else\r",
+									"{\r",
+									"    pm.environment.clear();\r",
+									"    postman.setNextRequest(null);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{orgPATH}}/delete",
+							"host": [
+								"{{baseURL}}{{orgPATH}}"
+							],
+							"path": [
+								"delete"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -704,7 +795,7 @@
 									"        \"message\": { \"type\": \"string\" },\r",
 									"        \"errors\": { \"type\": \"array\" },\r",
 									"        \"data\": {\r",
-									"            \"type\": \"array\",\r",
+									"            \"type\": \"object\",\r",
 									"            \"properties\": {\r",
 									"                        \"_id\": { \"type\": \"string\" },\r",
 									"                        \"nom\": { \"type\": \"string\" },\r",
@@ -931,7 +1022,7 @@
 									"        pm.expect(jsonResponse.errors).to.be.empty;\r",
 									"    });\r",
 									"\r",
-									"    postman.setNextRequest(\"5-Delete-all\");\r",
+									"    postman.setNextRequest(\"5-Delete-all-pers\");\r",
 									"}\r",
 									"else\r",
 									"{\r",
@@ -1125,7 +1216,7 @@
 					"response": []
 				},
 				{
-					"name": "2-Update-all",
+					"name": "2-Update-all-user",
 					"event": [
 						{
 							"listen": "prerequest",
