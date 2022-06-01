@@ -90,27 +90,29 @@ class OrganisationsController {
     /**
      * @method getInfo renvoi la liste des informations des champs de l'entité et les règle de validation de chaque champs.
      * Paramètres : 
-     *      @param {object} requestData - contient "method" qui spécifie le retour des règles approprié
+     *      @param {object} requestData - contient "route" qui spécifie le retour des règles approprié
      * 
      * Retourne : 
      *      @return 
     */
-         public async getInfo(requestData:any):Promise<ApiResponseContract> {
-            LogHelper.log("Début de la création des informations du champs");
-    
-            if (typeof requestData === undefined || typeof requestData !== 'object')
-                return ErrorResponse.create(
-                    new Error(ReasonPhrases.BAD_REQUEST),
-                    StatusCodes.BAD_REQUEST,
-                    "La requête n'est pas un objet. "
-                    );
-    
-            //let infoChamp.state = requestData.method;
-            //infoChamp.champs = Personne.ruleSet.info.champs;
-    
-    
-            return SuccessResponse.create({infoChamp:"todo"}, StatusCodes.OK, ReasonPhrases.OK);
-        }
+    public async getInfo(requestData:any):Promise<ApiResponseContract> {
+        LogHelper.log("Début de la création des informations du champs");
+
+        if (typeof requestData === undefined || typeof requestData !== 'object')
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "La requête n'est pas un objet. "
+                );
+
+        let info = Organisation.infoChamp;
+        info.state = requestData.route;
+        info.champs.forEach(function(value){
+            //@ts-ignore Insère les rules dans le champs ex: Organisation.ruleSet.create.nom
+            value.rules = Organisation.ruleSet["create"]["nom"]
+        });
+        return SuccessResponse.create(info, StatusCodes.OK, ReasonPhrases.OK);
+    }
 
     /** 
      * @method formatRequestDataForDocument insère dans le schéma les données de la requête.

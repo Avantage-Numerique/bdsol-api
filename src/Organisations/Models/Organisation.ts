@@ -30,22 +30,60 @@ class Organisation {
                 timestamps: true
             });
     
+    /** @static infoChamp pour le retour frontend des champs à créer et règles des attributs d'organisation selon la route */
+    static infoChamp =
+    {
+        "state": "",
+        "champs": [
+            {
+                "name": "nom",
+                "label": "Nom",
+                "type": "String",
+                "repeatable": false,
+                "default": "", 
+                "placeholder": "",
+                "options": [],    
+                "dataFetchingAddress": "",
+                //"rules": []
+            },
+            {
+                "name": "description",
+                "label": "Description",
+                "type": "String",
+                "repeatable": false,
+                "default": "", 
+                "placeholder": "",
+                "options": [],    
+                "dataFetchingAddress": "",
+                //"rules": []
+            },
+            {
+                "name": "url",
+                "label": "Site internet",
+                "type": "String",
+                "repeatable": false,
+                "default": "", 
+                "placeholder": "",
+                "options": [],    
+                "dataFetchingAddress": "",
+                //"rules": []
+            },
+            {
+                "name": "contactPoint",
+                "label": "Point de contact",
+                "type": "String",
+                "repeatable": false,
+                "default": "", 
+                "placeholder": "",
+                "options": [],    
+                "dataFetchingAddress": "",
+                //"rules": []
+            }
+        ]
+    };
+    
     /** @static ruleSet pour la validation du data de personne */
     static ruleSet = {
-        "info":{
-            /*data {
-                champs = [
-                    {
-                        "name": "nom",
-                        "label": "Nom",
-                        "type": "string",//Rich? //Longtext ?
-                        "reapeatable": true,
-                        "rules": ["required", "notEmpty", "notNull", "notUndefined"]
-                    }
-                ]
-            }*/
-
-        },
         "create":{
             "nom":["isDefined", "isString", "minLength:2"],
             "description":["isString"],

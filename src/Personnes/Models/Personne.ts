@@ -31,14 +31,58 @@ class Personne {
                 timestamps: true
         });
 
-    /** @static infoChamp pour le retour frontend des champs à créer et règles des attributs de personne */
-    static infoChamp = {
-            "champs":[
-                {
+    /** @static infoChamp pour le retour frontend des champs à créer et règles des attributs d'organisation selon la route */
+    static infoChamp =
+    {
+        "state": "",
+        "champs": [
+            {
+                "name": "nom",
+                "label": "Nom",
+                "type": "String",
+                "repeatable": false,
+                "default": "", 
+                "placeholder": "",
+                "options": [],    
+                "dataFetchingAddress": "",
+                //"rules": []
+            },
+            {
+                "name": "prenom",
+                "label": "Prénom",
+                "type": "String",
+                "repeatable": false,
+                "default": "", 
+                "placeholder": "",
+                "options": [],    
+                "dataFetchingAddress": "",
+                //"rules": []
+            },
+            {
+                "name": "surnom",
+                "label": "Surnom",
+                "type": "String",
+                "repeatable": false,
+                "default": "", 
+                "placeholder": "",
+                "options": [],    
+                "dataFetchingAddress": "",
+                //"rules": []
+            },
+            {
+                "name": "description",
+                "label": "Description",
+                "type": "String",
+                "repeatable": false,
+                "default": "", 
+                "placeholder": "",
+                "options": [],    
+                "dataFetchingAddress": "",
+                //"rules": []
+            }
+        ]
+    };
 
-                }
-            ]
-        }
     /** @static ruleSet pour la validation du data de personne */
     static ruleSet = {
         "create":{
