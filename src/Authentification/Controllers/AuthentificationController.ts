@@ -10,6 +10,7 @@ import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
 import {PasswordsController} from "./PasswordsController";
 import {SuccessResponse} from "../../Http/Responses/SuccessResponse";
+import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
 
 
 class AuthentificationController
@@ -68,6 +69,29 @@ class AuthentificationController
         );
     }
 
+    public async verifyToken(token:string): Promise<ApiResponseContract>
+    {
+        if (ServerController.database.driverPrefix === 'mongodb')
+        {
+            try {
+                LogHelper.info(`Vérification du token`);
+
+                    const decoded:any = await TokenController.verify(token);
+
+                    // If we find a user, we check the password through the hashing comparaison.
+                    if (decoded && !decoded.error) {
+                        return  SuccessResponse.create({}, StatusCodes.OK, ReasonPhrases.OK);
+                    }
+                    return ErrorResponse.create(new Error("Connection refusée"), StatusCodes.UNAUTHORIZED);
+            }
+            catch (error: any)
+            {
+                return ErrorResponse.create(error, StatusCodes.UNAUTHORIZED);
+            }
+        }
+        return ErrorResponse.create(new Error("DB driver don't support verifing token"), StatusCodes.NOT_IMPLEMENTED);
+    }
+
 
     /**
      *
@@ -76,7 +100,11 @@ class AuthentificationController
      */
     private generateToken(user:any):string
     {
-        return TokenController.generate({ "user_id": `${user._id}`, "username": `${user.username}`, "role": `${user.role}` });
+        return TokenController.generate({
+            "user_id": `${user._id}`,
+            "username": `${user.username}`,
+            "role": `${user.role}`
+        });
     }
 
     /**

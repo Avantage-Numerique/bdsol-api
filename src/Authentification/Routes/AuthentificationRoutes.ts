@@ -8,6 +8,8 @@ import {TokenController} from "../Controllers/TokenController";
 // add { mergeParams: true } to get the main route params.
 const AuthentificationRouter = express.Router();
 
+// GET ENDPOINTS
+
 //  LOGIN
 AuthentificationRouter.get('/login',
     (req, res) => {
@@ -15,6 +17,15 @@ AuthentificationRouter.get('/login',
         return res.send('There is no place in eightyworld for login.');
     });
 
+
+//  POST ENDPOINTS
+
+/**
+ * Post method to return a token if the user is in the DB
+ * requête body en JSON :
+ * username:string
+ * password:string
+ */
 AuthentificationRouter.post('/login',
     async (req, res) => {
 
@@ -27,6 +38,30 @@ AuthentificationRouter.post('/login',
     });
 
 
+/**
+ * Post method to verify if a token is valid and if it isn't expired.
+ * requête body en JSON :
+ * token:string
+ */
+AuthentificationRouter.post('/verify-token',
+    async (req, res) => {
+
+        const {token} = req.body;
+
+        const controller = new AuthenficationController();
+        const response = await controller.verifyToken(token);
+
+        //200: success, 401:not valid (unauthorized), 501: Mauvais driver de bd
+        return res.status(response.code).send(response);
+    });
+
+
+
+/**
+ * Post methodqui retourne un token pour un utilisateur.
+ * requête body en JSON :
+ * vide
+ */
 AuthentificationRouter.post('/generate-token',
     async (req, res) => {
 

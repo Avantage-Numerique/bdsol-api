@@ -9,6 +9,7 @@ COPY ["package.json", "package-lock.json", "./"]
 
 
 RUN npm install
+
 # Argon2 prebuild library seem off. We rebuild them all with this.
 RUN npm rebuild
 
