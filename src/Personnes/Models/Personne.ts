@@ -22,7 +22,6 @@ class Personne {
     static schema:Schema =
         new Schema<PersonneSchema>({
 
-            //_id: Schema.Types.ObjectId,
             nom: { type: String, required: true },
             prenom: { type: String, required: true },
             surnom: String,
@@ -31,6 +30,93 @@ class Personne {
             {
                 timestamps: true
         });
+
+    /** @static infoChamp pour le retour frontend des champs à créer et règles des attributs d'organisation selon la route */
+    static infoChamp =
+    {
+        "state": "",
+        "champs": [
+            {
+                "name": "nom",
+                "label": "Nom",
+                "type": "String",
+                "repeatable": false,
+                "default": "", 
+                "placeholder": "",
+                "options": [],    
+                "dataFetchingAddress": "",
+                //"rules": []
+            },
+            {
+                "name": "prenom",
+                "label": "Prénom",
+                "type": "String",
+                "repeatable": false,
+                "default": "", 
+                "placeholder": "",
+                "options": [],    
+                "dataFetchingAddress": "",
+                //"rules": []
+            },
+            {
+                "name": "surnom",
+                "label": "Surnom",
+                "type": "String",
+                "repeatable": false,
+                "default": "", 
+                "placeholder": "",
+                "options": [],    
+                "dataFetchingAddress": "",
+                //"rules": []
+            },
+            {
+                "name": "description",
+                "label": "Description",
+                "type": "String",
+                "repeatable": false,
+                "default": "", 
+                "placeholder": "",
+                "options": [],    
+                "dataFetchingAddress": "",
+                //"rules": []
+            }
+        ]
+    };
+
+    /** @static ruleSet pour la validation du data de personne */
+    static ruleSet = {
+        "create":{
+            "nom":["isDefined", "isString", "minLength:2"],
+            "prenom":["isDefined", "isString", "minLength:2"],
+            "surnom":["isString"],
+            "description":["isString"]
+        },
+        "update":{
+            "id":["isDefined", "idValid"],
+            "nom":["isString", "minLength:2"],
+            "prenom":["isString", "minLength:2"],
+            "surnom":["isString"],
+            "description":["isString"]
+        },
+        "search":{
+            "id":["idValid"],
+            "nom":["isString"],
+            "prenom":["isString"],
+            "surnom":["isString"],
+            "description":["isString"]
+        },
+        "list":{
+            "id":["idValid"],
+            "nom":["isString"],
+            "prenom":["isString"],
+            "surnom":["isString"],
+            "description":["isString"]
+        },
+        "delete":{
+            "id":["isDefined", "idValid"],
+        }
+    }
+
     
     /**
      * @method isNomOrPrenomValid Vérifie les conditions d'insertion dans la base de donnée d'un nom ou d'un prénom.

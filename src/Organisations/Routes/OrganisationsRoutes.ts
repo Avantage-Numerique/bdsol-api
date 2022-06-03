@@ -39,6 +39,24 @@ OrganisationsRouter.post('/update', async (req, res) => {
     return res.status(response.code).send(response);
 });
 
+/**
+ * @method POST/FIELDINFO Retourne les règles et informations de champs des attributs d'organisation
+ * 
+ * Paramètre :
+ *      @param {object} req : req.body contient {data : { "method":"Create" (*critères de recherche*) }}
+ * 
+ * Retourne :
+ *      @return
+ **/
+ OrganisationsRouter.post('/getinfo', async (req, res) => {
+    const {data} = req.body;
+    LogHelper.log("Demande d'envoi des informations de field", data);
+    const controller = new OrganisationsController();
+    const response = await controller.getInfo(data);
+    
+    return res.status(response.code).send(response);
+});
+
 
 /**
  * @method POST/SEARCH trouve la première organisation correspondant aux critères de recherche

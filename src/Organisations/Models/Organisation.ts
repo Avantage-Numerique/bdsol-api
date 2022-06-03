@@ -29,6 +29,92 @@ class Organisation {
             {
                 timestamps: true
             });
+    
+    /** @static infoChamp pour le retour frontend des champs à créer et règles des attributs d'organisation selon la route */
+    static infoChamp =
+    {
+        "state": "",
+        "champs": [
+            {
+                "name": "nom",
+                "label": "Nom",
+                "type": "String",
+                "repeatable": false,
+                "default": "", 
+                "placeholder": "",
+                "options": [],    
+                "dataFetchingAddress": "",
+                //"rules": []
+            },
+            {
+                "name": "description",
+                "label": "Description",
+                "type": "String",
+                "repeatable": false,
+                "default": "", 
+                "placeholder": "",
+                "options": [],    
+                "dataFetchingAddress": "",
+                //"rules": []
+            },
+            {
+                "name": "url",
+                "label": "Site internet",
+                "type": "String",
+                "repeatable": false,
+                "default": "", 
+                "placeholder": "",
+                "options": [],    
+                "dataFetchingAddress": "",
+                //"rules": []
+            },
+            {
+                "name": "contactPoint",
+                "label": "Point de contact",
+                "type": "String",
+                "repeatable": false,
+                "default": "", 
+                "placeholder": "",
+                "options": [],    
+                "dataFetchingAddress": "",
+                //"rules": []
+            }
+        ]
+    };
+    
+    /** @static ruleSet pour la validation du data de personne */
+    static ruleSet = {
+        "create":{
+            "nom":["isDefined", "isString", "minLength:2"],
+            "description":["isString"],
+            "url":["isString"],
+            "contactPoint":["isString"]
+        },
+        "update":{
+            "id":["isDefined", "idValid"],
+            "nom":["isString", "minLength:2"],
+            "description":["isString"],
+            "url":["isString"],
+            "contactPoint":["isString"]
+        },
+        "search":{
+            "id":["idValid"],
+            "nom":["isString"],
+            "description":["isString"],
+            "url":["isString"],
+            "contactPoint":["isString"]
+        },
+        "list":{
+            "id":["idValid"],
+            "nom":["isString"],
+            "description":["isString"],
+            "url":["isString"],
+            "contactPoint":["isString"]
+        },
+        "delete":{
+            "id":["isDefined", "idValid"],
+        }
+    }
 
     /**
      * @static method

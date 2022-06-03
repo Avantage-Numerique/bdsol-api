@@ -6,6 +6,8 @@ import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
 import PersonnesService from "../Services/PersonnesService";
 import {PersonneSchema} from "../Schemas/PersonneSchema";
 import QueryBuilder from "../../Database/QueryBuilder/QueryBuilder";
+import Validator from "../../Validation/Validator";
+import {SuccessResponse} from "../../Http/Responses/SuccessResponse";
 
 class PersonnesController {
 
@@ -22,13 +24,13 @@ class PersonnesController {
      * @method create permet de créer et d'insérer une nouvelle entité "Personne" dans la base de donnée à partir de la requête.
      * 
      * Paramètres : 
-     *      @param {name:value} requestData - attributs requis à la création d'une personne
+     *      @param {key:value} requestData - attributs requis à la création d'une personne
      * 
      * Retourne :
      *      @return {ApiResponseContract}
     */
     public async create(requestData:any):Promise<ApiResponseContract> {
-        const messageValidate = this.validateData(requestData);
+        const messageValidate = Validator.validateData(requestData, Personne.ruleSet.create);
         if (!messageValidate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -42,11 +44,12 @@ class PersonnesController {
         if (createdDocumentResponse !== undefined)
             return createdDocumentResponse;
 
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
-                StatusCodes.INTERNAL_SERVER_ERROR,
-                'Les données semblent être ok, mais la création n\'a pas eu lieu.'
-                );
+        LogHelper.debug("Le code manque de robustesse. Personnes/create");
+        return ErrorResponse.create(
+            new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            'Les données semblent être ok, mais la création n\'a pas eu lieu.'
+            );
     }
 
     
@@ -54,7 +57,7 @@ class PersonnesController {
      * @method update permet de modifier et mettre à jour les attributs d'une personne dans la base de donnée.
      * 
      * Paramètres :
-     *      @param {name:value} requestData - id et attributs à modifier.
+     *      @param {key:value} requestData - id et attributs à modifier.
      * 
      * Retourne :
      *      @return {ApiResponseContract} 
@@ -62,7 +65,7 @@ class PersonnesController {
     public async update(requestData:any):Promise<ApiResponseContract> {
         
         //Validation des données
-        const messageUpdate = this.validateData(requestData);
+        const messageUpdate = Validator.validateData(requestData, Personne.ruleSet.update);
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -70,20 +73,13 @@ class PersonnesController {
                 messageUpdate.message
                 );
 
-        //Validation ID
-        if (requestData.id === undefined || requestData.id.length != 24)
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "id non valide"
-            );
-
         const formatedData = this.formatRequestDataForDocument(requestData);
         const updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
 
         if (updatedModelResponse !== undefined)
             return updatedModelResponse;
 
+        LogHelper.debug("Le code manque de robustesse. Personnes/update");
         return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
             StatusCodes.INTERNAL_SERVER_ERROR,
@@ -96,7 +92,7 @@ class PersonnesController {
      * @method search permet d'effectuer une recherche afin de retourner la première personne répondant au critère de recherche.
      * 
      * Paramètre : 
-     *      @param {name:value} requestData - { "nom":"Jean" (*Critère de recherche*) }
+     *      @param {key:value} requestData - { "nom":"Jean" (*Critère de recherche*) }
      * 
      * Retourne : 
      *      @default critères vide: Retourne le premier résultat
@@ -106,25 +102,12 @@ class PersonnesController {
     public async search(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la recherche dans la liste");
 
-        if (typeof requestData === undefined || typeof requestData !== 'object')
+        const messageUpdate = Validator.validateData(requestData, Personne.ruleSet.search);
+        if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
-                "La requête n'est pas un objet. "
-                );
-
-        //Verification data est vide
-        if (requestData.nom === undefined &&
-            requestData.prenom === undefined &&
-            requestData.surnom === undefined &&
-            requestData.description === undefined &&
-            requestData.id === undefined &&
-            requestData.createdAt === undefined &&
-            requestData.updatedAt === undefined)
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "La requête ne peut être vide"
+                messageUpdate.message
                 );
 
         //Validation date
@@ -146,13 +129,6 @@ class PersonnesController {
                 "Le premier caractère de updatedAt doit être '<' ou '>'"
                 );
 
-        //Validation ID
-        if (requestData.id !== undefined && requestData.id.length != 24)
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "id non valide"
-            );  
         const query = QueryBuilder.build(requestData);
 
         return await this.service.get(query);
@@ -163,33 +139,21 @@ class PersonnesController {
      * @todo La recherche par id n'est pas implémentée
      * 
      * Paramètres : 
-     *      @param {name:value} requestData - { "nom":"Jean" (*Critère de recherche*) }
+     *      @param {key:value} requestData - { "nom":"Jean" (*Critère de recherche*) }
      * 
      * Retourne : 
      *      @return 
     */
     public async list(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la requête d'obtention de la liste de personne");
-        if (typeof requestData === undefined || typeof requestData !== 'object')
+
+        const messageUpdate = Validator.validateData(requestData, Personne.ruleSet.list);
+        if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
-                "La requête n'est pas un objet. "
+                messageUpdate.message
                 );
-
-        /*//Verification data est vide
-        if (requestData.nom === undefined &&
-            requestData.prenom === undefined &&
-            requestData.surnom === undefined &&
-            requestData.description === undefined &&
-            requestData.id === undefined &&
-            requestData.createdAt === undefined &&
-            requestData.updatedAt === undefined)
-                return ErrorResponse.create(
-                    new Error(ReasonPhrases.BAD_REQUEST),
-                    StatusCodes.BAD_REQUEST,
-                    "La requête ne peut être vide"
-                    );*/
 
         //Validation date
         if (requestData.createdAt !== undefined &&
@@ -209,14 +173,6 @@ class PersonnesController {
                 StatusCodes.BAD_REQUEST,
                 "Le premier caractère de updatedAt doit être '<' ou '>'"
                 );
-            
-        //Validation ID
-        if (requestData.id !== undefined && requestData.id.length != 24)
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "id non valide"
-            );  
 
         const query = QueryBuilder.build(requestData);
 
@@ -235,6 +191,28 @@ class PersonnesController {
      public async delete(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la suppression d'une personne");
 
+        const messageUpdate = Validator.validateData(requestData, Personne.ruleSet.delete);
+        if (!messageUpdate.isValid)
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                messageUpdate.message
+                ); 
+        
+        return await this.service.delete(requestData.id);
+    }
+
+    /**
+     * @method getInfo renvoi la liste des informations des champs de l'entité et les règle de validation de chaque champs.
+     * Paramètres : 
+     *      @param {object} requestData - contient "route" qui spécifie le retour des règles approprié
+     * 
+     * Retourne : 
+     *      @return 
+    */
+     public async getInfo(requestData:any):Promise<ApiResponseContract> {
+        LogHelper.log("Début de la création des informations du champs");
+
         if (typeof requestData === undefined || typeof requestData !== 'object')
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -242,80 +220,20 @@ class PersonnesController {
                 "La requête n'est pas un objet. "
                 );
 
-        //Verification data est vide
-        if (requestData.id === undefined || requestData.id.length != 24 )
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "id non valide"
-            );  
-        
-        return await this.service.delete(requestData.id);
+        let info = Personne.infoChamp;
+        info.state = requestData.route;
+        Personne.infoChamp["champs"].forEach(function(value){
+            //Insère les rules dans le champs ex: Personne.ruleSet.create.nom
+            //value.rules = Personne.ruleSet[info.state][value.name]
+        });
+        return SuccessResponse.create(info, StatusCodes.OK, ReasonPhrases.OK);
     }
-
-    /**
-     * @method validateData valide les éléments pour l'entitée Personne s'ils sont présent.
-     * 
-     * Paramètres :
-     *      @param {name:value} requestData - attributs de personne à valider
-     * 
-     * Retourne : validité et message d'erreur
-     *      @return {object} { isValid, message } :
-     *          @desc isValid (boolean): représentant si les données sont validée
-     *          @desc message (string) : décrivant l'échec ou réussite de la validation 
-     */
-    public validateData(requestData:any): {isValid:boolean, message:string} {
-
-        LogHelper.log(`Validating ${typeof requestData}`, requestData);
-        let isValid = true;
-        let message = "";
-
-        if (typeof requestData === 'object')
-        {
-            //Verification data est vide
-            if (requestData.nom === undefined &&
-                requestData.prenom === undefined &&
-                requestData.surnom === undefined &&
-                requestData.description === undefined) {
-                    isValid = false;
-                    message += "Data doit contenir un champ. ";
-                }
-
-            //Si n'est pas vide
-            else{
-                //Validation Nom
-                //Le (if nom !== undefined) est inutile (à effacer au besoin)
-                if (requestData.nom !== undefined){
-                    if (!Personne.isNomOrPrenomValid(requestData.nom)){
-                        isValid = false;
-                        message += "Le paramètre 'nom' est problématique. "
-                    }
-                }
-
-                //Validation prénom
-                if(requestData.prenom !== undefined){
-                    if (!Personne.isNomOrPrenomValid(requestData.prenom)){
-                        isValid = false;
-                        message += "Le paramètre 'prenom' est problématique. ";
-                    }
-                }
-            }
-        }
-        //Si n'est pas un objet
-        else{
-            isValid = false;
-            message += "La requête n'est pas un objet. "
-        }
-
-        return { isValid, message };      
-    }
-
 
     /** 
      * @method formatRequestDataForDocument insère dans le schéma les données de la requête.
      * 
      * Paramètres :
-     *      @param {name:value} requestData - attributs de Personne
+     *      @param {key:value} requestData - attributs de Personne
      * 
      * Retourne :
      *      @return {PersonneSchema} l'interface Schéma contenant les données de la requête
