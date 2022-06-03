@@ -14,6 +14,21 @@ export interface UserDocument extends Document {
     role: string;
 }
 
+export interface UserRegistrationRequiredData {
+    username: string;
+    email: string;
+    password: string;
+}
+
+export const UserValidation:any = {
+    username: ["isString", "required", "unique"],
+    email: ["isString", "required", "unique"],
+    password: ["isString", "isUnique"],
+    avatar: ["isString", "isUrl"],
+    name: ["isString"],
+    role: ["isString"]
+};
+
 export class UserSchema {
 
     private _username: string;
@@ -41,7 +56,8 @@ export class UserSchema {
 
         if (UserSchema.documentSchema === undefined) {
 
-            UserSchema.documentSchema = new Schema<UserDocument>({
+            UserSchema.documentSchema = new Schema<UserDocument>(
+                {
                     username: {type: String, required: true, unique: true},
                     email: {type: String, required: true, unique: true},
                     password: {type: String, required: true},
@@ -63,12 +79,13 @@ export class UserSchema {
      * à relire : https://thecodebarbarian.com/working-with-mongoose-in-typescript.html
      */
     static async registerPreEvents() {
-        if (UserSchema.documentSchema !== undefined) {
+        if (UserSchema.documentSchema !== undefined)
+        {
             LogHelper.debug("Enregistrement de l'événement pre create sur le UserSchema.");
             // CREATE users, we hash the password.
-            await UserSchema.documentSchema.pre('save', async function (next: any): Promise<any> {
+            await UserSchema.documentSchema.pre('save', async function (next: any): Promise<any>
+            {
                 const user: any = this;
-                LogHelper.debug("UserSchema.documentSchema.pre create ", user);
                 if (!user.isModified('password')) {
                     return next();
                 }
