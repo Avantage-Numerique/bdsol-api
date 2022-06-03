@@ -3,5 +3,5 @@
  */
 export default interface UserAuthContract {
     username: string | null;
-    password: string | null;
+    //password: string | null;
 }

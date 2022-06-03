@@ -1,0 +1,91 @@
+[
+    {
+        "infoTest":
+        {
+            "name":"List all empty",
+            "error":true,
+            "status":400
+        },
+        "id":"",
+        "nom": "",
+        "prenom": "",
+        "surnom": "",
+        "description": ""
+    },
+    {
+        "infoTest":
+        {
+            "name":"List empty data",
+            "error":false,
+            "status":200
+        }
+    },
+    {
+        "infoTest":
+        {
+            "name":"List empty id",
+            "error":true,
+            "status":400
+        },
+        "id":"",
+        "nom":""
+    },
+    {
+        "infoTest":
+        {
+            "name":"List only nom",
+            "error":false,
+            "status":200
+        },
+        "nom": "a"
+    },
+    {
+        "infoTest":
+        {
+            "name":"List only prenom",
+            "error":false,
+            "status":200
+        },
+        "prenom": "i"
+    },
+    {
+        "infoTest":
+        {
+            "name":"List nom&prenom",
+            "error":false,
+            "status":200
+        },
+        "nom": "Croche",
+        "prenom": "Sar"
+    },
+    {
+        "infoTest":
+        {
+            "name":"List id",
+            "error":false,
+            "status":200,
+            "setId":true
+        }
+    },
+    {
+        "infoTest":
+        {
+            "name":"List id+nom = 0",
+            "error":false,
+            "status":404,
+            "setId":true
+        },
+        "nom": "fsdga"
+    },
+    {
+        "infoTest":
+        {
+            "name":"List id+nom = 1",
+            "error":false,
+            "status":200,
+            "setId":true
+        },
+        "nom": "Laval"
+    }
+
+]

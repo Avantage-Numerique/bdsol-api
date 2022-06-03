@@ -90,7 +90,6 @@ class PersonnesController {
 
     /**
      * @method search permet d'effectuer une recherche afin de retourner la première personne répondant au critère de recherche.
-     * @todo La recherche par id n'est pas implémentée
      * 
      * Paramètre : 
      *      @param {key:value} requestData - { "nom":"Jean" (*Critère de recherche*) }
@@ -184,7 +183,7 @@ class PersonnesController {
      * @method delete permet d'effectuer une suppression de la fiche d'une personne dans la base de données.
      * @todo
      * Paramètres : 
-     *      @param 
+     *      @param {object} requestData contient le id de la personne à supprimer.
      * 
      * Retourne : 
      *      @return 

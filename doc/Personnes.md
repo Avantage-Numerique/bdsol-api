@@ -11,11 +11,19 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 #### structure demandé
 ```json
 {
-  "data": {
-    "nom": "string",
-    "prenom": "string",
-    "surnom": "string",
-    "description": "string - long"
+  "type": "object",
+  "properties": {
+      "data": {
+          "type": "object",
+          "properties": {
+              "nom": { "type": "string" },
+              "prenom": { "type": "string" },
+              "surnom": { "type": "string" },
+              "description": { "type": "string" }
+          },
+          "required": ["nom","prenom"]
+      },
+      "required": ["data"]
   }
 }
 ```
@@ -28,12 +36,20 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 #### structure demandé
 ```json
 {
-  "data": {
-    "id": "objectId # ID unique de la personne à mettre à jour.",
-    "nom": "string",
-    "prenom": "string",
-    "surnom": "string",
-    "description": "string - long"
+  "type": "object",
+  "properties": {
+      "data": {
+          "type": "object",
+          "properties": {
+              "id":{ "type": "objectID" },
+              "nom": { "type": "string" },
+              "prenom": { "type": "string" },
+              "surnom": { "type": "string" },
+              "description": { "type": "string" }
+          },
+          "required": ["id"]
+      },
+      "required": ["data"]
   }
 }
 ```
@@ -47,12 +63,19 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 #### structure demandé
 ```json
 {
-  "data": {
-    "id": "objectId # ID unique de la personne à rechercher.",
-    "nom": "string",
-    "prenom": "string",
-    "surnom": "string",
-    "description": "string - long"
+  "type": "object",
+  "properties": {
+      "data": {
+          "type": "object",
+          "properties": {
+              "id":{ "type": "objectID" },
+              "nom": { "type": "string" },
+              "prenom": { "type": "string" },
+              "surnom": { "type": "string" },
+              "description": { "type": "string" }
+          }
+      },
+      "required": ["data"]
   }
 }
 ```
@@ -65,15 +88,42 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 #### structure demandé
 ```json
 {
-  "data": {
-    "id": "objectId # ID unique de la personne à rechercher.",
-    "nom": "string",
-    "prenom": "string",
-    "surnom": "string",
-    "description": "string - long"
+  "type": "object",
+  "properties": {
+      "data": {
+          "type": "object",
+          "properties": {
+              "id":{ "type": "objectID" },
+              "nom": { "type": "string" },
+              "prenom": { "type": "string" },
+              "surnom": { "type": "string" },
+              "description": { "type": "string" }
+          },
+          "required": ["id"]
+      },
+      "required": ["data"]
   }
 }
 ```
 
 
 #### Retour
+
+
+### POST `/personnes/delete`
+#### structure demandé
+```json
+{
+  "type": "object",
+  "properties": {
+      "data": {
+          "type": "object",
+          "properties": {
+              "id":{ "type": "objectID" }
+          },
+          "required": ["id"]
+      },
+      "required": ["data"]
+  }
+}
+```

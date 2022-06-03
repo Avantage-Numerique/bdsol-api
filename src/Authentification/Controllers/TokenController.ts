@@ -25,10 +25,10 @@ export class TokenController {
      * It assign the results to the callback TokenController.onVerifyToken
      * @param token
      */
-    public static verify(token:string):any
+    public static async verify(token:string):Promise<string|JwtPayload|undefined>
     {
         let user;
-        jwt.verify(
+        await jwt.verify(
             token,
             config.tokenSecret,
             (err, decoded) => {
@@ -37,6 +37,7 @@ export class TokenController {
         );
         return user;
     }
+
 
     /**
      * Callback of the jwt.verify, to handle the error and the decoded value in the TokenController Scope.
@@ -77,14 +78,19 @@ export class TokenController {
             // could be : TokenExpiredError
             throw err;
         }
-        if (TokenController.isValid(decoded)) {
+        if (TokenController.isValid(decoded) &&
+            TokenController.isActive(decoded)) {
             return decoded;
         }
         throw new Error('Token format is wrong.');
     }
 
 
-
+    /**
+     * @Deprecated
+     * @param verifiedToken {any} Likely to be an object.
+     * @protected
+     */
     protected static updateTokenLife(verifiedToken:any):any
     {
         if (TokenController.isValid(verifiedToken) &&
@@ -94,7 +100,6 @@ export class TokenController {
             //if augment lifespan
             //add params with last updated
             //add params with the count of request
-            //
             return verifiedToken;
         }
     }

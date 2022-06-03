@@ -36,7 +36,7 @@ export class FakeUserModel {
 
     public static async findOne(userInfo:UserAuthContract):Promise<UserContract | undefined> {
         if (FakeUserModel.collection !== null) {
-            return FakeUserModel.collection.find(u => { return u.username === userInfo.username && u.password === userInfo.password });
+            return FakeUserModel.collection.find(u => { return u.username === userInfo.username });
         }
         LogHelper.warn('FakeUserModel collection is null');
         return undefined;

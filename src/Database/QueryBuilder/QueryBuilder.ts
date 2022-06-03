@@ -9,35 +9,30 @@ export default class QueryBuilder {
      * @param {key:value} query  - Les critère de recherche
      * 
      * Retourne :
-     * @return {object} finalQuery est un objet contenant la totalité des conditions associé à la recherche
+     * @return {object} finalQuery est un objet contenant les conditions de recherche adaptée pour mongo
      */
     static build(query:any) {
 
         const finalQuery = {};
         
-        const prop = Object.keys(query)
-        const value = Object.values(query)
-        for (let i = 0; i <= prop.length; i++)
-        {
-            const p = prop[i];
-            const v = value[i];
+        for (const field in query){
 
             //S'il s'agit d'un id
-            if ( p == "id" )//@ts-ignore
-                finalQuery._id = value;
+            if ( field == "id" )//@ts-ignore
+                finalQuery._id = query[field];
             
             //S'il s'agit d'une date
-            else if ( p == "createdAt" || p == "updatedAt" ){//@ts-ignore
-                if (value.substring(0,1) == '<')//@ts-ignore
-                    finalQuery[p] = { $lte: v.substring(1, v.length) };
+            else if ( field == "createdAt" || field == "updatedAt" ){//@ts-ignore
+                if (query[field].substring(0,1) == '<')//@ts-ignore
+                    finalQuery[field] = { $lte: query[field].substring(1, query[field].length) };
 
-                if (query.createdAt.substring(0,1) == '>')//@ts-ignore
-                    finalQuery[p] = { $gte: v.substring(1, v.length) };
+                if (query[field].substring(0,1) == '>')//@ts-ignore
+                    finalQuery[field] = { $gte: query[field].substring(1, query[field].length) };
             }
 
             //Si ce n'est ni une date ni un Id
             else{ //@ts-ignore
-                finalQuery[p] = { $regex: v , $options : 'i' };
+                finalQuery[field] = { $regex: query[field].toString() , $options : 'i' };
             }
         }
 

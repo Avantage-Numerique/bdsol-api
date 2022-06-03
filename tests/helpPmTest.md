@@ -113,7 +113,7 @@ L'utilisation des variables se fait en ordre d'importance hiérarchique *(si une
 
 `(global --> collection --> environnement --> data --> local)`
 
-- `environment` Manipule les variables de l'environnement actif (Détruit après l'exécution du Runner?).
+- `environment` Manipule les variables de l'environnement actif.
 - `variables` Manipule les variables dans les différent scopes.
 - `collectionVariables` Manipule les variables de collections.
 - `globals` Manipule les variables globales.

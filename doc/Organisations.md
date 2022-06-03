@@ -11,11 +11,19 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 #### structure demandée
 ```json
 {
-  "data": {
-    "nom": "string",
-    "description": "string - long",
-    "url": "string",
-    "contactPoint": "string"
+  "type": "object",
+  "properties": {
+      "data": {
+          "type": "object",
+          "properties": {
+              "nom": { "type": "string" },
+              "description": { "type": "string" },
+              "url": { "type": "string" },
+              "contactPoint": { "type": "string" }
+          },
+          "required": ["nom"]
+      },
+      "required": ["data"]
   }
 }
 ```
@@ -28,15 +36,82 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 #### structure demandée
 ```json
 {
-  "data": {
-    "id": "objectId # ID unique de l'organisation à mettre à jour.",
-    "nom": "string",
-    "description": "string - long",
-    "url": "string",
-    "contactPoint": "string"
+  "type": "object",
+  "properties": {
+      "data": {
+          "type": "object",
+          "properties": {
+              "id": { "type": "objectId" },
+              "nom": { "type": "string" },
+              "description": { "type": "string" },
+              "url": { "type": "string" },
+              "contactPoint": { "type": "string" }
+          },
+          "required": ["id"]
+      },
+      "required": ["data"]
   }
 }
 ```
 
-
 #### Retour
+
+### POST `/organisations/search`
+#### structure demandée
+```json
+{
+  "type": "object",
+  "properties": {
+      "data": {
+          "type": "object",
+          "properties": {
+              "id": { "type": "objectId" },
+              "nom": { "type": "string" },
+              "description": { "type": "string" },
+              "url": { "type": "string" },
+              "contactPoint": { "type": "string" }
+          },
+      },
+      "required": ["data"]
+  }
+}
+```
+
+### POST `/organisations/list`
+#### structure demandée
+```json
+{
+  "type": "object",
+  "properties": {
+      "data": {
+          "type": "object",
+          "properties": {
+              "id": { "type": "objectId" },
+              "nom": { "type": "string" },
+              "description": { "type": "string" },
+              "url": { "type": "string" },
+              "contactPoint": { "type": "string" }
+          },
+      },
+      "required": ["data"]
+  }
+}
+```
+
+### POST `/organisations/delete`
+#### structure demandée
+```json
+{
+  "type": "object",
+  "properties": {
+      "data": {
+          "type": "object",
+          "properties": {
+              "id": { "type": "objectId" }
+          },
+          "required": ["id"]
+      },
+      "required": ["data"]
+  }
+}
+```
