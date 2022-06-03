@@ -14,6 +14,21 @@ export interface UserDocument extends Document {
     role: string;
 }
 
+export interface UserRegistrationRequiredData {
+    username: string;
+    email: string;
+    password: string;
+}
+
+export const UserValidation:any = {
+    username: ["isString", "required", "unique"],
+    email: ["isString", "required", "unique"],
+    password: ["isString", "isUnique"],
+    avatar: ["isString", "isUrl"],
+    name: ["isString"],
+    role: ["isString"]
+};
+
 export class UserSchema {
 
     private _username: string;
@@ -41,7 +56,8 @@ export class UserSchema {
 
         if (UserSchema.documentSchema === undefined) {
 
-            UserSchema.documentSchema = new Schema<UserDocument>({
+            UserSchema.documentSchema = new Schema<UserDocument>(
+                {
                     username: {type: String, required: true, unique: true},
                     email: {type: String, required: true, unique: true},
                     password: {type: String, required: true},
