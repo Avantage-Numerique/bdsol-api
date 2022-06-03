@@ -1,4 +1,4 @@
-import {Str} from "../../src/helpers";
+import {Str} from "../../src/Helpers/Str";
 
 const baseString = "Sur la place et dans le pré-plein de rage à_gagner le temps que j'ai donné _ ou sur la place granger ?";
 console.log("Test Str helper");

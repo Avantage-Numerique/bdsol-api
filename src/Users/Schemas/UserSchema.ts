@@ -79,12 +79,13 @@ export class UserSchema {
      * à relire : https://thecodebarbarian.com/working-with-mongoose-in-typescript.html
      */
     static async registerPreEvents() {
-        if (UserSchema.documentSchema !== undefined) {
+        if (UserSchema.documentSchema !== undefined)
+        {
             LogHelper.debug("Enregistrement de l'événement pre create sur le UserSchema.");
             // CREATE users, we hash the password.
-            await UserSchema.documentSchema.pre('save', async function (next: any): Promise<any> {
+            await UserSchema.documentSchema.pre('save', async function (next: any): Promise<any>
+            {
                 const user: any = this;
-                LogHelper.debug("UserSchema.documentSchema.pre create ", user);
                 if (!user.isModified('password')) {
                     return next();
                 }

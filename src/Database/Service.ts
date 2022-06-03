@@ -220,7 +220,6 @@ export abstract class Service {
 
             wrongElements.forEach((key: string) => {
                 wrongElementsValues += key + " (" + meta.keyValue[key] + ") n'est pas unique";
-                LogHelper.warn("WrongElements loop ", key);
             });
 
             //Peut être CONFLICT=409, UNPROCESSABLE_ENTITY=422
