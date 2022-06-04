@@ -34,6 +34,9 @@ const config = {
             user: process.env.USERS_DB_USER || '',
             password: process.env.USERS_DB_PASSWORD || '',
             name: process.env.USERS_DB_NAME || '',
+        },
+        roles: {
+            default: "default"
         }
     },
     jwt: {

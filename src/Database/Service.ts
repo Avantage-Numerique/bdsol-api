@@ -14,6 +14,12 @@ export abstract class Service {
 
     model: any;//@todo create or find the best type for this.
     connection: any;
+    state:string;
+
+    CREATE_STATE:string = "create";
+    UPDATE_STATE:string = "update";
+    DELETE_STATE:string = "delete";
+    LIST_STATE:string = "list";
 
     constructor(model: any) {
         this.model = model;
@@ -220,7 +226,6 @@ export abstract class Service {
 
             wrongElements.forEach((key: string) => {
                 wrongElementsValues += key + " (" + meta.keyValue[key] + ") n'est pas unique";
-                LogHelper.warn("WrongElements loop ", key);
             });
 
             //Peut être CONFLICT=409, UNPROCESSABLE_ENTITY=422
