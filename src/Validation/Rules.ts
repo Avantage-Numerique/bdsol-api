@@ -12,7 +12,8 @@ class Rules{
         maxLength: "maxLength : dépasse la longueur maximal permise ou n'est pas un string.",
         idValid: "idValid : L'id fournit n'est pas valide (.length != 24).",
         isObject: "isObject : n'est pas un objet (typeof != 'object').",
-        objectNotEmpty: "objectNotEmpty : l'objet à traiter ne contient aucun champs"
+        objectNotEmpty: "objectNotEmpty : l'objet à traiter ne contient aucun champs",
+        isDate: "isDate : n'est pas une date ou du bon format."
     }
 
     /**
@@ -94,6 +95,15 @@ class Rules{
                 return Object.entries(value).length > 0;
             else
                 return false;
+        return true;
+    }
+
+    /**
+     * @method isDate - Vérifie que la valeur est une date
+     */
+    static isDate(value:any):boolean {
+        if (this.isDefined(value))
+            return value instanceof Date;
         return true;
     }
     

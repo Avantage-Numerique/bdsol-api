@@ -24,7 +24,8 @@ class Organisation {
                 nom: {type: String, required: true},
                 description: String,
                 url: String, //String? TODO
-                contactPoint: String //String? TODO
+                contactPoint: String, //String? TODO
+                dateDeFondation: Date
             },
             {
                 timestamps: true
@@ -40,44 +41,55 @@ class Organisation {
                 "label": "Nom",
                 "type": "String",
                 "repeatable": false,
-                "default": "", 
+                "default": "",
                 "placeholder": "",
-                "options": [],    
+                "options": [],
                 "dataFetchingAddress": "",
-                //"rules": []
+                "rules": []
             },
             {
                 "name": "description",
                 "label": "Description",
                 "type": "String",
                 "repeatable": false,
-                "default": "", 
+                "default": "",
                 "placeholder": "",
-                "options": [],    
+                "options": [],
                 "dataFetchingAddress": "",
-                //"rules": []
+                "rules": []
             },
             {
                 "name": "url",
                 "label": "Site internet",
                 "type": "String",
                 "repeatable": false,
-                "default": "", 
+                "default": "",
                 "placeholder": "",
-                "options": [],    
+                "options": [],
                 "dataFetchingAddress": "",
-                //"rules": []
+                "rules": []
             },
             {
                 "name": "contactPoint",
                 "label": "Point de contact",
                 "type": "String",
                 "repeatable": false,
-                "default": "", 
+                "default": "",
                 "placeholder": "",
-                "options": [],    
+                "options": [],
                 "dataFetchingAddress": "",
-                //"rules": []
+                "rules": []
+            },
+            {
+                "name": "dateDeFondation",
+                "label": "Date de fondation",
+                "type": "Date",
+                "repeatable": false,
+                "default": "",
+                "placeholder": "",
+                "options": [],
+                "dataFetchingAddress": "",
+                "rules": []
             }
         ]
     };
@@ -88,31 +100,35 @@ class Organisation {
             "nom":["isDefined", "isString", "minLength:2"],
             "description":["isString"],
             "url":["isString"],
-            "contactPoint":["isString"]
+            "contactPoint":["isString"],
+            "dateDeFondation":["isDate"]
         },
         "update":{
             "id":["isDefined", "idValid"],
             "nom":["isString", "minLength:2"],
             "description":["isString"],
             "url":["isString"],
-            "contactPoint":["isString"]
+            "contactPoint":["isString"],
+            "dateDeFondation":["isDate"]
         },
         "search":{
             "id":["idValid"],
             "nom":["isString"],
             "description":["isString"],
             "url":["isString"],
-            "contactPoint":["isString"]
+            "contactPoint":["isString"],
+            "dateDeFondation":["isDate"]
         },
         "list":{
             "id":["idValid"],
             "nom":["isString"],
             "description":["isString"],
             "url":["isString"],
-            "contactPoint":["isString"]
+            "contactPoint":["isString"],
+            "dateDeFondation":["isDate"]
         },
         "delete":{
-            "id":["isDefined", "idValid"],
+            "id":["isDefined", "idValid"]
         }
     }
 
