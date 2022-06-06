@@ -103,25 +103,12 @@ class OrganisationsController {
      public async search(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la recherche dans la liste");
 
-        if (typeof requestData === undefined || typeof requestData !== 'object')
+        const messageValidate = Validator.validateData(requestData, Organisation.ruleSet.search);
+        if (!messageValidate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
-                "La requête n'est pas un objet. "
-                );
-
-        //Verification data est vide
-        if (requestData.nom === undefined &&
-            requestData.description === undefined &&
-            requestData.url === undefined &&
-            requestData.contactPoint === undefined &&
-            requestData.id === undefined &&
-            requestData.createdAt === undefined &&
-            requestData.updatedAt === undefined)
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "La requête ne peut être vide"
+                messageValidate.message
                 );
 
         //Validation date
@@ -143,13 +130,6 @@ class OrganisationsController {
                 "Le premier caractère de updatedAt doit être '<' ou '>'"
                 );
 
-        //Validation ID
-        if (requestData.id !== undefined && requestData.id.length != 24)
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "id non valide"
-            );  
         const query = QueryBuilder.build(requestData);
 
         return await this.service.get(query);
@@ -167,27 +147,14 @@ class OrganisationsController {
     */
          public async list(requestData:any):Promise<ApiResponseContract> {
             LogHelper.log("Début de la requête d'obtention de la liste de personne");
-            if (typeof requestData === undefined || typeof requestData !== 'object')
+            const messageValidate = Validator.validateData(requestData, Organisation.ruleSet.list);
+            if (!messageValidate.isValid)
                 return ErrorResponse.create(
                     new Error(ReasonPhrases.BAD_REQUEST),
                     StatusCodes.BAD_REQUEST,
-                    "La requête n'est pas un objet. "
+                    messageValidate.message
                     );
-    
-            /*//Verification data est vide
-            if (requestData.nom === undefined &&
-                requestData.prenom === undefined &&
-                requestData.surnom === undefined &&
-                requestData.description === undefined &&
-                requestData.id === undefined &&
-                requestData.createdAt === undefined &&
-                requestData.updatedAt === undefined)
-                    return ErrorResponse.create(
-                        new Error(ReasonPhrases.BAD_REQUEST),
-                        StatusCodes.BAD_REQUEST,
-                        "La requête ne peut être vide"
-                        );*/
-    
+        
             //Validation date
             if (requestData.createdAt !== undefined &&
                 //typeof requestData.createdAt == 'string' &&
@@ -206,17 +173,8 @@ class OrganisationsController {
                     StatusCodes.BAD_REQUEST,
                     "Le premier caractère de updatedAt doit être '<' ou '>'"
                     );
-                
-            //Validation ID
-            if (requestData.id !== undefined && requestData.id.length != 24)
-                return ErrorResponse.create(
-                    new Error(ReasonPhrases.BAD_REQUEST),
-                    StatusCodes.BAD_REQUEST,
-                    "id non valide"
-                );  
     
             const query = QueryBuilder.build(requestData);
-    
             return await this.service.all(query);
         }
 
@@ -242,7 +200,7 @@ class OrganisationsController {
         info.state = requestData.route;
         info.champs.forEach(function(value){
             //@ts-ignore Insère les rules dans le champs ex: Organisation.ruleSet.create.nom
-            value.rules = Organisation.ruleSet["create"]["nom"]
+            value.rules = Organisation.ruleSet[requestData.route][value.name]
         });
         return SuccessResponse.create(info, StatusCodes.OK, ReasonPhrases.OK);
     }

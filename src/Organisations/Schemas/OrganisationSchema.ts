@@ -4,5 +4,6 @@ export interface OrganisationSchema extends Document {
     nom:string;
     description:string;
     url:string;
-    contactPoint:string
+    contactPoint:string;
+    dateDeFondation:Date
 }

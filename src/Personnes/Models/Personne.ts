@@ -45,7 +45,7 @@ class Personne {
                 "placeholder": "",
                 "options": [],    
                 "dataFetchingAddress": "",
-                //"rules": []
+                "rules": []
             },
             {
                 "name": "prenom",
@@ -56,7 +56,7 @@ class Personne {
                 "placeholder": "",
                 "options": [],    
                 "dataFetchingAddress": "",
-                //"rules": []
+                "rules": []
             },
             {
                 "name": "surnom",
@@ -67,7 +67,7 @@ class Personne {
                 "placeholder": "",
                 "options": [],    
                 "dataFetchingAddress": "",
-                //"rules": []
+                "rules": []
             },
             {
                 "name": "description",
@@ -78,7 +78,7 @@ class Personne {
                 "placeholder": "",
                 "options": [],    
                 "dataFetchingAddress": "",
-                //"rules": []
+                "rules": []
             }
         ]
     };

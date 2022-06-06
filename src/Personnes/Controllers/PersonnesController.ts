@@ -223,8 +223,8 @@ class PersonnesController {
         let info = Personne.infoChamp;
         info.state = requestData.route;
         Personne.infoChamp["champs"].forEach(function(value){
-            //Insère les rules dans le champs ex: Personne.ruleSet.create.nom
-            //value.rules = Personne.ruleSet[info.state][value.name]
+            //@ts-ignore Insère les rules dans le champs ex: Organisation.ruleSet.create.nom
+            value.rules = Personne.ruleSet[requestData.route][value.name]
         });
         return SuccessResponse.create(info, StatusCodes.OK, ReasonPhrases.OK);
     }

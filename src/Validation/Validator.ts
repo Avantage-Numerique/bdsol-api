@@ -107,6 +107,11 @@ export default class Validator {
                         isValid = false;
                         message += "\n"+data[field]+" => "+Rules.ruleErrorMsg.isObject;
                     } break;
+                case "isDate" :
+                    if (!Rules.isDate(data[field])){
+                        isValid = false;
+                        message += "\n"+data[field]+" => "+Rules.ruleErrorMsg.isObject;
+                    } break;
                 default:
                     LogHelper.debug("Validator.validate : La règle "+rule+ "n'est pas implémentée.");
                     isValid = false;
