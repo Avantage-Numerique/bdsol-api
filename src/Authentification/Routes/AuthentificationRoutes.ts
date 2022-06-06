@@ -36,6 +36,22 @@ AuthentificationRouter.post('/login',
 
         return res.status(response.code).send(response);
     });
+/**
+ * Post method to return a token if the user is in the DB
+ * requête body en JSON :
+ * username:string
+ * password:string
+ */
+AuthentificationRouter.post('/logout',
+    async (req, res) => {
+
+        const {username} = req.body;
+
+        const controller = new AuthenficationController();
+        const response = await controller.logout(username);
+
+        return res.status(response.code).send(response);
+    });
 
 
 /**
