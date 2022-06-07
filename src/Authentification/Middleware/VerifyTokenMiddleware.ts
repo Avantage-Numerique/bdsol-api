@@ -20,18 +20,19 @@ export class VerifyTokenMiddleware {
 
                 const token = authentificationHeader.split(' ');
                 const userToken = token[1];
-
+                LogHelper.debug(userToken);
                 // Check if no token
                 if (!userToken) {
-
                     LogHelper.error("Token is missing the authentification header. We can't verify the user.");
                     return VerifyTokenMiddleware.unauthorizedResponse(res);
                 }
 
                 try {
-                    req.user = TokenController.verify(userToken);
+                    const isTokenVerify:any = await TokenController.verify(userToken);
                     LogHelper.log("Verifying the token sent for the current request.");
-                    next();
+                    if (isTokenVerify.name === undefined ) {
+                        next();
+                    }
                 }
                 catch (err)
                 {
@@ -46,7 +47,7 @@ export class VerifyTokenMiddleware {
     {
         LogHelper.info("Unauthorized request");
         const unauthorizedRequestError = ErrorResponse.create(
-            new Error("Route need authorization to be access"),
+            new Error("Ce chemin d'accès nécessiste un token pour être utilisé."),
             StatusCodes.UNAUTHORIZED,
             ReasonPhrases.UNAUTHORIZED,
             {}
