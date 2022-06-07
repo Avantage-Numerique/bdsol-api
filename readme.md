@@ -20,7 +20,7 @@ Lorsqu'on interagi avec la base de données à l'extérieur de Docker, dans votr
 ```url
 mongodb://localhost:27018/?readPreference=primary&appname=mongo&directConnection=true&ssl=false
 ```
-### Travailler sur le frontend 
+### Travailler sur le frontend
 [Voir le répertoire pour la bdsol workspace](https://github.com/Avantage-Numerique/bdsol-workspace)
 
 
@@ -79,9 +79,9 @@ Version 0.0.5 : on a décidé d'utiliser Docker pour garder les containers sépa
 ## Plan de travail
 - [X] Établir un environnement reproduisable pour bien testé le front-end et le backend.
 - [X] établir les dépendances et restrictions de versions : **[Node](https://nodejs.org/fr/) 16 pour l'api et l'app**
-  - [X] Ports **`3000` frontend** et **`8000` pour API**
-  - [X] Environnement / Type de serveurs : Node pour les deux, [mongodb](https://www.mongodb.com/fr-fr) pour l'instant comme engin de base de données.
-  - [ ] Gestion des versions et des dépendances à venir pour l'API
+    - [X] Ports **`3000` frontend** et **`8000` pour API**
+    - [X] Environnement / Type de serveurs : Node pour les deux, [mongodb](https://www.mongodb.com/fr-fr) pour l'instant comme engin de base de données.
+    - [ ] Gestion des versions et des dépendances à venir pour l'API
 
 ## Objectifs
 1. Collaborer dans la mise en place de ces dépendances dans tout le `stack` de l'application.
@@ -103,7 +103,7 @@ Une des sources intéressantes sur le sujet : https://medium.com/serverlessguru/
 
 ##### Test suits
 - [Jest](https://jestjs.io/)
-  - [Enzyme](https://enzymejs.github.io/enzyme/) : test components output more easily
+    - [Enzyme](https://enzymejs.github.io/enzyme/) : test components output more easily
 - [Chai](https://www.chaijs.com/)
 - [Mocha](https://mochajs.org/)
 - [Cucumber)(https://www.elliotdenolf.com/posts/cucumberjs-with-typescript/)] Outil plus facile d'accès pour écrire des tests de façon intelligible.
@@ -117,10 +117,10 @@ Une des sources intéressantes sur le sujet : https://medium.com/serverlessguru/
 
 ## À faire
 - [ ] Contrat pour les requêtes aux services
-  - [ ] Abstrait pour fonctionner avec tous les services ?
+    - [ ] Abstrait pour fonctionner avec tous les services ?
 - [ ] Tests à faire API
-  - [ ] Endpoint Login positif, négatif
-  - [ ] Fake db driver
-  - [ ] 
+    - [ ] Endpoint Login positif, négatif
+    - [ ] Fake db driver
+    - [ ] 
 - [ ] Ajout d'un système de traduction pour les strings statique
 - [ ] Ajout d'un système de traduction pour la structure de données.
