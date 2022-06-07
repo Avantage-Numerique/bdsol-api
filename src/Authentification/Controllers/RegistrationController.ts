@@ -1,7 +1,6 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { ApiResponseContract } from "../../Http/Responses/ApiResponse";
 import { ErrorResponse } from "../../Http/Responses/ErrorResponse";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {UsersService, User, UserDocument, UserValidation, UserSchema} from "../../Users/UsersDomain";
 import config from "../../config";
 
@@ -44,21 +43,29 @@ export class RegistrationController {
     public validateData(data:any):any
     {
         let message = "validateData register";
-/*
-//pour appliquer la validation sur les données reçus.
+        /*
+        //pour appliquer la validation sur les données reçus.
         for (let property in UserValidation) {
             const rules:Array<string> = UserValidation[property];
             for (let property of rules) {
 
             }
         }
-*/
-        let isValid = typeof data === 'object';
-        isValid = data.name !== undefined && isValid;
-        isValid = data.username !== undefined && isValid;
-        isValid = data.password !== undefined && isValid;
+        */
+        if (data !== undefined && data !== null) {
+            let isValid = typeof data === 'object';
+            isValid = data.name !== undefined && isValid;
+            isValid = data.username !== undefined && isValid;
+            isValid = data.email !== undefined && isValid;
+            isValid = data.password !== undefined && isValid;
+            isValid = typeof data.name === "string" && isValid;
+            isValid = typeof data.username === "string" && isValid;
+            isValid = typeof data.email === "string" && isValid;
+            isValid = typeof data.password === "string" && isValid;
 
-        return { isValid, message };
+            return { isValid, message };
+        }
+        return false;
     }
 
 

@@ -20,7 +20,7 @@ export class VerifyTokenMiddleware {
 
                 const token = authentificationHeader.split(' ');
                 const userToken = token[1];
-                LogHelper.debug(userToken);
+
                 // Check if no token
                 if (!userToken) {
                     LogHelper.error("Token is missing the authentification header. We can't verify the user.");

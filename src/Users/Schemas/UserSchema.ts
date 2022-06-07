@@ -1,6 +1,5 @@
 import {Schema, Document} from "mongoose"
 import {PasswordsController} from "../../Authentification/Controllers/PasswordsController";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 /**
  *
@@ -42,11 +41,11 @@ export class UserSchema {
 
     constructor(props: any) {
         this.username = props.username || "no username";
-        this.email = props.email || "no username";
-        this.password = props.password || "no username";
-        this.avatar = props.avatar || "no username";
-        this.name = props.name || "no username";
-        this.role = props.role || "no username";
+        this.email = props.email || "no email";
+        this.password = props.password || "no password";
+        this.avatar = props.avatar || "no avatar";
+        this.name = props.name || "no name";
+        this.role = props.role || "no role";
     }
 
     /**
@@ -81,7 +80,6 @@ export class UserSchema {
     static async registerPreEvents() {
         if (UserSchema.documentSchema !== undefined)
         {
-            LogHelper.debug("Enregistrement de l'événement pre create sur le UserSchema.");
             // CREATE users, we hash the password.
             await UserSchema.documentSchema.pre('save', async function (next: any): Promise<any>
             {
