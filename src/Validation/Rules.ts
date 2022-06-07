@@ -1,3 +1,5 @@
+import LogHelper from "../Monitoring/Helpers/LogHelper";
+
 class Rules{
 
     /**
@@ -20,7 +22,7 @@ class Rules{
      * @method isDefined - Vérifie si la valeur est définie ( typeof != undefined )
      */
     static isDefined(value:any):boolean {
-        return typeof value != undefined;
+        return typeof value !== undefined;
     }
 
     /**
@@ -51,29 +53,31 @@ class Rules{
     }
 
     /**
-     * @method minLength - Vérifie si l'objet,length est plus grand ou égal au paramètre
+     * @method minLength - Vérifie si l'objet est string et length est plus grand ou égal au paramètre
      */
     static minLength(value:any, length:number):boolean {
         if (this.isDefined(value))
-            return value.length >= length;
+            return this.isString(value) && value.length >= length;
         return true;
     }
 
     /**
-     * @method maxLength - Vérifie si l'objet.length est plus petit ou égal au paramètre
+     * @method maxLength - Vérifie si l'objet est string et length est plus petit ou égal au paramètre
      */
     static maxLength(value:any, length:number):boolean {
         if (this.isDefined(value))
-            return value.length <= length;
+            return this.isString(value) && value.length <= length;
         return true;
     }
 
     /**
-     * @method maxLength - Vérifie qu'un id est présent et valide
+     * @method idValid - Vérifie qu'un id est présent et valide
      */
     static idValid(value:any):boolean {
-        if (this.isDefined(value))
-            return value.length == 24;
+        LogHelper.warn("idValid : ", value);
+        if (this.isDefined(value) && this.isNotNull(value)){
+            return this.isString(value) && value.length == 24;
+        }
         return true;
     }
 

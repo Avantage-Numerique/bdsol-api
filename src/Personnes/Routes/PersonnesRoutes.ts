@@ -71,7 +71,6 @@ PersonnesRouter.post('/list', async (req, res) => {
     LogHelper.log("List Personne route for ", data);
     const controller = new PersonnesController();
     const response = await controller.list(data);
-    
     return res.status(response.code).send(response);
 });
 

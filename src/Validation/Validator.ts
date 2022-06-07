@@ -55,12 +55,10 @@ export default class Validator {
 
         for (const field in ruleSet) {
             for (rule of ruleSet[field]) { //do we instead => validate(data[field], ruleSet[field].pop())
-                LogHelper.debug("Dans les 2 for loop avec field : "+field+ " et rule : "+rule);
 
                 let param = -1;
                 //Si paramètre à passer
                 if ( rule.indexOf(":") != -1) {
-                    LogHelper.debug("dans indexOf(':')");
                     //ex: minLenght:3  => param = 3, rule = minLength
                     param = rule.substring(rule.indexOf(":")+1, rule.length);
                     rule = rule.substring(0, rule.indexOf(":"));
@@ -70,50 +68,50 @@ export default class Validator {
                 case "isDefined" :
                     if ( !Rules.isDefined(data[field]) ){
                         isValid = false;
-                        message += "\n"+data[field]+" => "+Rules.ruleErrorMsg.isDefined;
+                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isDefined;
                     } break;
                 case "isNotNull" :
                     if ( !Rules.isNotNull(data[field]) ){
                         isValid = false;
-                        message += "\n"+data[field]+" => "+Rules.ruleErrorMsg.isNotNull;
+                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isNotNull;
                     } break;
                 case "isString" :
                     if ( !Rules.isString(data[field]) ){
                         isValid = false;
-                        message += "\n"+data[field]+" => "+Rules.ruleErrorMsg.isString;
+                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isString;
                     } break;
                 case "isNotEmpty" :
                     if ( !Rules.isNotEmpty(data[field]) ){
                         isValid = false;
-                        message += "\n"+data[field]+" => "+Rules.ruleErrorMsg.isNotEmpty;
+                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isNotEmpty;
                     } break;
                 case "minLength" :
                     if ( !Rules.minLength(data[field], param) ){
                         isValid = false;
-                        message += "\n"+data[field]+" => "+Rules.ruleErrorMsg.minLength;
+                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.minLength;
                     } break;
                 case "maxLength" :
                     if ( !Rules.maxLength(data[field], param) ){
                         isValid = false;
-                        message += "\n"+data[field]+" => "+Rules.ruleErrorMsg.maxLength;
+                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.maxLength;
                     } break;
                 case "idValid" :
-                    if ( !Rules.idValid(data[field])){
+                    if ( !Rules.idValid(data[field]) ){
                         isValid = false;
-                        message += "\n"+data[field]+" => "+Rules.ruleErrorMsg.idValid;
+                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.idValid;
                     } break;
                 case "isObject" :
-                    if ( !Rules.isObject(data[field])){
+                    if ( !Rules.isObject(data[field]) ) {
                         isValid = false;
-                        message += "\n"+data[field]+" => "+Rules.ruleErrorMsg.isObject;
+                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isObject;
                     } break;
                 case "isDate" :
-                    if (!Rules.isDate(data[field])){
+                    if ( !Rules.isDate(data[field]) ) {
                         isValid = false;
-                        message += "\n"+data[field]+" => "+Rules.ruleErrorMsg.isObject;
+                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isObject;
                     } break;
                 default:
-                    LogHelper.debug("Validator.validate : La règle "+rule+ "n'est pas implémentée.");
+                    LogHelper.warn("Validator.validate : La règle "+rule+ "n'est pas implémentée.");
                     isValid = false;
                     message += "\nLa règle "+rule+ "n'est pas implémentée."; break;
                     

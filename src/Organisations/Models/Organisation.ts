@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import {Schema} from "mongoose";
 import {OrganisationSchema} from "../Schemas/OrganisationSchema";
 import {DbProvider, DataProvider} from "../../Database/DatabaseDomain";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 
 class Organisation {
@@ -40,96 +41,88 @@ class Organisation {
                 "name": "nom",
                 "label": "Nom",
                 "type": "String",
-                "repeatable": false,
-                "default": "",
-                "placeholder": "",
-                "options": [],
-                "dataFetchingAddress": "",
                 "rules": []
             },
             {
                 "name": "description",
                 "label": "Description",
                 "type": "String",
-                "repeatable": false,
-                "default": "",
-                "placeholder": "",
-                "options": [],
-                "dataFetchingAddress": "",
                 "rules": []
             },
             {
                 "name": "url",
                 "label": "Site internet",
                 "type": "String",
-                "repeatable": false,
-                "default": "",
-                "placeholder": "",
-                "options": [],
-                "dataFetchingAddress": "",
                 "rules": []
             },
             {
                 "name": "contactPoint",
                 "label": "Point de contact",
                 "type": "String",
-                "repeatable": false,
-                "default": "",
-                "placeholder": "",
-                "options": [],
-                "dataFetchingAddress": "",
                 "rules": []
             },
             {
                 "name": "dateDeFondation",
                 "label": "Date de fondation",
                 "type": "Date",
-                "repeatable": false,
-                "default": "",
-                "placeholder": "",
-                "options": [],
-                "dataFetchingAddress": "",
                 "rules": []
             }
         ]
     };
     
     /** @static ruleSet pour la validation du data de personne */
-    static ruleSet = {
-        "create":{
-            "nom":["isDefined", "isString", "minLength:2"],
+    static ruleSet:any = {
+        "default":{
+            "id":["idValid"],
+            "nom":["isString"],
             "description":["isString"],
             "url":["isString"],
             "contactPoint":["isString"],
             "dateDeFondation":["isDate"]
+        },
+        "create":{
+            "nom":["isDefined", "minLength:2"],
         },
         "update":{
-            "id":["isDefined", "idValid"],
-            "nom":["isString", "minLength:2"],
-            "description":["isString"],
-            "url":["isString"],
-            "contactPoint":["isString"],
-            "dateDeFondation":["isDate"]
+            "id":["isDefined"]
         },
         "search":{
-            "id":["idValid"],
-            "nom":["isString"],
-            "description":["isString"],
-            "url":["isString"],
-            "contactPoint":["isString"],
-            "dateDeFondation":["isDate"]
         },
         "list":{
-            "id":["idValid"],
-            "nom":["isString"],
-            "description":["isString"],
-            "url":["isString"],
-            "contactPoint":["isString"],
-            "dateDeFondation":["isDate"]
         },
         "delete":{
-            "id":["isDefined", "idValid"]
+            "id":["isDefined"]
         }
+    }
+
+    /** 
+     * @static @method concatRuleSet
+     * @return Combinaison du ruleSet default et celui spécifié
+     */
+    static concatRuleSet(state:any){
+        const concatRule:any = {};
+        //try{
+        for (const field in this.ruleSet.default){
+
+            //Si le field existe dans le ruleSet[state]
+            if(Object.keys(this.ruleSet[state]).indexOf(field) != -1){
+                concatRule[field] = [
+                    ...this.ruleSet[state][field],
+                    ...this.ruleSet.default[field]
+                ];
+            }
+            //Sinon insérer seulement les règles par défaut.
+            else {
+                concatRule[field] = [...this.ruleSet.default[field]];
+            }
+        }
+        LogHelper.debug("Object concatRule",concatRule);
+        return concatRule;
+        //}
+        //catch(e){
+        //    LogHelper.error(e);
+            //   return e;
+        //}
     }
 
     /**

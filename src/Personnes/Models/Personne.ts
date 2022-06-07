@@ -31,7 +31,7 @@ class Personne {
                 timestamps: true
         });
 
-    /** @static infoChamp pour le retour frontend des champs à créer et règles des attributs d'organisation selon la route */
+    /** @static infoChamp pour le retour frontend des champs à créer et règles des attributs de personne selon la route */
     static infoChamp =
     {
         "state": "",
@@ -40,96 +40,88 @@ class Personne {
                 "name": "nom",
                 "label": "Nom",
                 "type": "String",
-                "repeatable": false,
-                "default": "", 
-                "placeholder": "",
-                "options": [],    
-                "dataFetchingAddress": "",
                 "rules": []
             },
             {
                 "name": "prenom",
                 "label": "Prénom",
                 "type": "String",
-                "repeatable": false,
-                "default": "", 
-                "placeholder": "",
-                "options": [],    
-                "dataFetchingAddress": "",
                 "rules": []
             },
             {
                 "name": "surnom",
                 "label": "Surnom",
                 "type": "String",
-                "repeatable": false,
-                "default": "", 
-                "placeholder": "",
-                "options": [],    
-                "dataFetchingAddress": "",
                 "rules": []
             },
             {
                 "name": "description",
                 "label": "Description",
                 "type": "String",
-                "repeatable": false,
-                "default": "", 
-                "placeholder": "",
-                "options": [],    
-                "dataFetchingAddress": "",
                 "rules": []
             }
         ]
     };
 
     /** @static ruleSet pour la validation du data de personne */
-    static ruleSet = {
-        "create":{
-            "nom":["isDefined", "isString", "minLength:2"],
-            "prenom":["isDefined", "isString", "minLength:2"],
+    static ruleSet:any = {
+        "default":{
+            "id":["idValid"],
+            "nom":["isString"],
+            "prenom":["isString"],
             "surnom":["isString"],
             "description":["isString"]
+        },
+        "create":{
+            "nom":["isDefined", "minLength:2"],
+            "prenom":["isDefined", "minLength:2"],
+            "surnom":[],
+            "description":[]
         },
         "update":{
-            "id":["isDefined", "idValid"],
-            "nom":["isString", "minLength:2"],
-            "prenom":["isString", "minLength:2"],
-            "surnom":["isString"],
-            "description":["isString"]
+            "id":["isDefined"]
         },
         "search":{
-            "id":["idValid"],
-            "nom":["isString"],
-            "prenom":["isString"],
-            "surnom":["isString"],
-            "description":["isString"]
         },
         "list":{
-            "id":["idValid"],
-            "nom":["isString"],
-            "prenom":["isString"],
-            "surnom":["isString"],
-            "description":["isString"]
         },
         "delete":{
-            "id":["isDefined", "idValid"],
+            "id":["isDefined"]
         }
     }
 
-    
-    /**
-     * @method isNomOrPrenomValid Vérifie les conditions d'insertion dans la base de donnée d'un nom ou d'un prénom.
-     * @param {string} nom - Nom ou prénom à valider
-     * @return {boolean} isValid
+    /** 
+     * @static @method concatRuleSet
+     * @return Combinaison du ruleSet default et celui spécifié
      */
-    static isNomOrPrenomValid(nom:string):boolean {
-        return (nom.length >= 2);//nom will always be a string selon mon IDE : typeof nom === "string" &&
+    static concatRuleSet(state:any){
+        const concatRule:any = {};
+        //try{
+            for (const field in this.ruleSet.default){
+
+                //Si le field existe dans le ruleSet[state]
+                if(Object.keys(this.ruleSet[state]).indexOf(field) != -1){
+                    concatRule[field] = [
+                        ...this.ruleSet[state][field],
+                        ...this.ruleSet.default[field]
+                    ];
+                }
+                //Sinon insérer seulement les règles par défaut.
+                else {
+                    concatRule[field] = [...this.ruleSet.default[field]];
+                }
+            }
+            LogHelper.debug("Object concatRule",concatRule);
+            return concatRule;
+        //}
+        //catch(e){
+        //    LogHelper.error(e);
+         //   return e;
+        //}
     }
 
     /**
-     * @static method
-     * @method initSchema
+     * @static @method initSchema
      */
     static initSchema() {
         if (Personne.providerIsSetup()) {
@@ -138,8 +130,7 @@ class Personne {
     }
 
     /**
-     * @static Method
-     * @method getInstance
+     * @static @method getInstance
      * @return model
      */
     static getInstance() {

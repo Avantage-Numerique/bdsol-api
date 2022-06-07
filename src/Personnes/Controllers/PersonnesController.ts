@@ -30,7 +30,7 @@ class PersonnesController {
      *      @return {ApiResponseContract}
     */
     public async create(requestData:any):Promise<ApiResponseContract> {
-        const messageValidate = Validator.validateData(requestData, Personne.ruleSet.create);
+        const messageValidate = Validator.validateData(requestData, Personne.concatRuleSet("create"));
         if (!messageValidate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -213,18 +213,20 @@ class PersonnesController {
      public async getInfo(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la création des informations du champs");
 
-        if (typeof requestData === undefined || typeof requestData !== 'object')
+        if (typeof requestData === undefined || typeof requestData !== 'object' || Object.keys(requestData).length < 1)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 "La requête n'est pas un objet. "
                 );
 
-        let info = Personne.infoChamp;
+        const info:any = Personne.infoChamp;
         info.state = requestData.route;
+
+        const routeRules = Personne.concatRuleSet(requestData.route);
         Personne.infoChamp["champs"].forEach(function(value){
-            //@ts-ignore Insère les rules dans le champs ex: Organisation.ruleSet.create.nom
-            value.rules = Personne.ruleSet[requestData.route][value.name]
+            //Insère les rules dans le champs
+            value.rules = routeRules[value.name];
         });
         return SuccessResponse.create(info, StatusCodes.OK, ReasonPhrases.OK);
     }

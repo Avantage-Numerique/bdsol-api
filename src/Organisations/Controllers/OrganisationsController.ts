@@ -196,11 +196,12 @@ class OrganisationsController {
                 "La requête n'est pas un objet. "
                 );
 
-        let info = Organisation.infoChamp;
+        const info = Organisation.infoChamp;
         info.state = requestData.route;
-        info.champs.forEach(function(value){
-            //@ts-ignore Insère les rules dans le champs ex: Organisation.ruleSet.create.nom
-            value.rules = Organisation.ruleSet[requestData.route][value.name]
+        const routeRules = Organisation.concatRuleSet(requestData.route);
+        Organisation.infoChamp["champs"].forEach(function(value){
+            //Insère les rules dans le champs
+            value.rules = routeRules[value.name];
         });
         return SuccessResponse.create(info, StatusCodes.OK, ReasonPhrases.OK);
     }
