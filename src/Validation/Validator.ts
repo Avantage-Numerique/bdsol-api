@@ -1,5 +1,6 @@
 import Rules from "./Rules"
 import LogHelper from "../Monitoring/Helpers/LogHelper";
+import { LoggerLevel } from "mongodb";
 
 //add isValid - contract to limit used
 // Check if this is overkill
@@ -56,6 +57,8 @@ export default class Validator {
         for (const field in ruleSet) {
             for (rule of ruleSet[field]) { //do we instead => validate(data[field], ruleSet[field].pop())
 
+                LogHelper.warn(field, rule, data[field]);
+
                 let param = -1;
                 //Si paramètre à passer
                 if ( rule.indexOf(":") != -1) {
@@ -97,6 +100,7 @@ export default class Validator {
                     } break;
                 case "idValid" :
                     if ( !Rules.idValid(data[field]) ){
+                        LogHelper.warn("La règle idValid n'est pas valide pour :", data[field]);
                         isValid = false;
                         message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.idValid;
                     } break;
@@ -108,7 +112,7 @@ export default class Validator {
                 case "isDate" :
                     if ( !Rules.isDate(data[field]) ) {
                         isValid = false;
-                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isObject;
+                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isDate;
                     } break;
                 default:
                     LogHelper.warn("Validator.validate : La règle "+rule+ "n'est pas implémentée.");

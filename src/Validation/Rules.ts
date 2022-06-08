@@ -22,7 +22,7 @@ class Rules{
      * @method isDefined - Vérifie si la valeur est définie ( typeof != undefined )
      */
     static isDefined(value:any):boolean {
-        return typeof value !== undefined;
+        return value !== undefined && typeof value !== 'undefined';
     }
 
     /**
@@ -75,6 +75,7 @@ class Rules{
      */
     static idValid(value:any):boolean {
         LogHelper.warn("idValid : ", value);
+        console.log(value);
         if (this.isDefined(value) && this.isNotNull(value)){
             return this.isString(value) && value.length == 24;
         }
@@ -106,8 +107,10 @@ class Rules{
      * @method isDate - Vérifie que la valeur est une date
      */
     static isDate(value:any):boolean {
-        if (this.isDefined(value))
-            return value instanceof Date;
+        if (this.isDefined(value)){
+            const date = new Date(value);
+            return date instanceof Date && !isNaN(date.valueOf());
+        }
         return true;
     }
     

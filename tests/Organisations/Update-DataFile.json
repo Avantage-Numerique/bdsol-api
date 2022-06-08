@@ -2,14 +2,15 @@
     {
         "infoTest":
         {
-            "name":"Update Full",
+            "name":"Update Full + add dateDeFondation",
             "error":false,
             "status":200
         },
         "nom":"Petit théâtre du vieux Noranda",
         "description": "Théâtre et magie",
         "url":"https://petittheatre.org/",
-        "contactPoint":"info@petittheatre.org"
+        "contactPoint":"info@petittheatre.org",
+        "dateDeFondation":"1999-09-10"
     },
     {
         "infoTest":
@@ -59,6 +60,29 @@
         "description": "",
         "url":"",
         "contactPoint":""
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update empty date",
+            "error":true,
+            "status":400
+        },
+        "nom": "Oui permis",
+        "description": "afd",
+        "url":"vda",
+        "contactPoint":"",
+        "dateDeFondation":""
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update wrong date",
+            "error":true,
+            "status":400
+        },
+        "nom": "Oui permis",
+        "dateDeFondation":"fdfija2434df9"
     },
     {
         "infoTest":

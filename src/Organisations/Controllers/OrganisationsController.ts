@@ -32,7 +32,7 @@ class OrganisationsController {
      public async update(requestData:any):Promise<ApiResponseContract> {
         
         //Validation des données
-        const messageValidate = Validator.validateData(requestData, Organisation.ruleSet.update);
+        const messageValidate = Validator.validateData(requestData, Organisation.concatRuleSet("update"));
         if (!messageValidate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -66,7 +66,7 @@ class OrganisationsController {
      *      @return {ServiceResponse}
      */
     public async create(requestData:any):Promise<ApiResponseContract> {
-        const messageValidate = Validator.validateData(requestData, Organisation.ruleSet.create);
+        const messageValidate = Validator.validateData(requestData, Organisation.concatRuleSet("create"));
         if (!messageValidate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -103,7 +103,7 @@ class OrganisationsController {
      public async search(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la recherche dans la liste");
 
-        const messageValidate = Validator.validateData(requestData, Organisation.ruleSet.search);
+        const messageValidate = Validator.validateData(requestData, Organisation.concatRuleSet("search"));
         if (!messageValidate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -147,7 +147,7 @@ class OrganisationsController {
     */
          public async list(requestData:any):Promise<ApiResponseContract> {
             LogHelper.log("Début de la requête d'obtention de la liste de personne");
-            const messageValidate = Validator.validateData(requestData, Organisation.ruleSet.list);
+            const messageValidate = Validator.validateData(requestData, Organisation.concatRuleSet("list"));
             if (!messageValidate.isValid)
                 return ErrorResponse.create(
                     new Error(ReasonPhrases.BAD_REQUEST),
@@ -220,7 +220,8 @@ class OrganisationsController {
             nom: requestData.nom,
             description: requestData.description,
             url: requestData.url,
-            contactPoint: requestData.contactPoint
+            contactPoint: requestData.contactPoint,
+            dateDeFondation: requestData.dateDeFondation
         } as OrganisationSchema;
     }
 

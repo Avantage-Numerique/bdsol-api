@@ -2,7 +2,7 @@
     {
         "infoTest":
         {
-            "name":"Create Full",
+            "name":"Create Full no dateDeFondation",
             "error":false,
             "status":201
         },
@@ -21,7 +21,8 @@
         "nom": "Agora des Arts",
         "description": "Petite église, salle de spectacle sympatoche",
         "url":"http://www.agoradesarts.com/",
-        "contactPoint":"info@agoradesarts.com"
+        "contactPoint":"info@agoradesarts.com",
+        "dateDeFondation":"2022-06-08"
     },
     {
         "infoTest":
@@ -75,5 +76,27 @@
         },
         "nom": "L'alphabet à 9 ans",
         "description": "Garderie"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create empty date",
+            "error":true,
+            "status":400
+        },
+        "nom": "L'iro kals",
+        "description": "Gryt",
+        "dateDeFondation":""
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create wrong date",
+            "error":true,
+            "status":400
+        },
+        "nom": "L'iro kals",
+        "description": "Gryt",
+        "dateDeFondation":"fasver2344"
     }
 ]
