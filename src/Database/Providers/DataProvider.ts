@@ -28,7 +28,7 @@ export class DataProvider extends BaseProvider implements DbProvider {
             LogHelper.log("[BD] DataProvider Connecting to DB");
             await super.connect();
 
-            Personne.connection = this.connection;
+            //Personne.connection = this.connection;
 
             return this.connection;
         }

@@ -4,22 +4,23 @@ import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import { PersonneSchema } from "../Schemas/PersonneSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import {DataProvider} from "../../Database/DatabaseDomain";
+import AbstractModel from "../../Abstract/model"
 
-class Personne {
+class Personne extends AbstractModel {
     
-    /** @static Nom du modèle */
-    static modelName:string = 'Personne';
+    /** @public Nom du modèle */
+    modelName:string = 'Personne';
 
-    /** @static Nom de la collection dans la base de donnée */
-    static collectionName:string = 'personnes';
+    /** @public Nom de la collection dans la base de donnée */
+    collectionName:string = 'personnes';
 
-    /** @static Connection mongoose */
-    static connection:mongoose.Connection;
+    /** @public Connection mongoose */
+    connection:mongoose.Connection;
 
-    static provider:DbProvider;
+    provider:DbProvider;
 
-    /** @static Schéma pour la base de donnée */
-    static schema:Schema =
+    /** @public Schéma pour la base de donnée */
+    schema:Schema =
         new Schema<PersonneSchema>({
 
             nom: { type: String, required: true },
@@ -32,7 +33,7 @@ class Personne {
         });
 
     /** @static infoChamp pour le retour frontend des champs à créer et règles des attributs de personne selon la route */
-    static infoChamp =
+    infoChamp =
     {
         "state": "",
         "champs": [
@@ -64,7 +65,7 @@ class Personne {
     };
 
     /** @static ruleSet pour la validation du data de personne */
-    static ruleSet:any = {
+    ruleSet:any = {
         "default":{
             "id":["idValid"],
             "nom":["isString"],
@@ -88,73 +89,6 @@ class Personne {
         "delete":{
             "id":["isDefined"]
         }
-    }
-
-    /** 
-     * @static @method concatRuleSet
-     * @return Combinaison du ruleSet default et celui spécifié
-     */
-    static concatRuleSet(state:any){
-        const concatRule:any = {};
-        //try{
-            for (const field in this.ruleSet.default){
-
-                //Si le field existe dans le ruleSet[state]
-                if(Object.keys(this.ruleSet[state]).indexOf(field) != -1){
-                    concatRule[field] = [
-                        ...this.ruleSet[state][field],
-                        ...this.ruleSet.default[field]
-                    ];
-                }
-                //Sinon insérer seulement les règles par défaut.
-                else {
-                    concatRule[field] = [...this.ruleSet.default[field]];
-                }
-            }
-            LogHelper.debug("Object concatRule",concatRule);
-            return concatRule;
-        //}
-        //catch(e){
-        //    LogHelper.error(e);
-         //   return e;
-        //}
-    }
-
-    /**
-     * @static @method initSchema
-     */
-    static initSchema() {
-        if (Personne.providerIsSetup()) {
-            Personne.provider.connection.model(Personne.modelName, Personne.schema);
-        }
-    }
-
-    /**
-     * @static @method getInstance
-     * @return model
-     */
-    static getInstance() {
-        Personne.provider = DataProvider.getInstance();//must have
-        if (Personne.providerIsSetup()) {
-            Personne.initSchema();
-            return Personne.provider.connection.model(Personne.modelName);
-        }
-        LogHelper.error("Personne Provider is not setup. Can't get Personne's model",
-            Personne.provider,
-            typeof Personne.provider,
-            Personne.provider.connection,
-            typeof Personne.provider.connection
-        );
-        throw new Error("Personne Provider is not setup. Can't get Personne's model");
-    }
-
-    /**
-     * @static method
-     * @method providerIsSetup
-     * @return {boolean} isSetup
-     */
-    static providerIsSetup():boolean {
-        return Personne.provider !== undefined && Personne.provider.connection !== undefined;
     }
 
     get searchSearchableFields():object {

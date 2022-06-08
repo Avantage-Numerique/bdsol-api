@@ -13,10 +13,12 @@ class PersonnesController {
 
     /** @public PersonneService */
     public service:PersonnesService;
+    public personne:Personne;
 
     /** @constructor */
     constructor() {
-        this.service = new PersonnesService(Personne.getInstance());
+        this.personne = new Personne();
+        this.service = new PersonnesService(this.personne.getInstance());
     }
 
 
@@ -30,7 +32,7 @@ class PersonnesController {
      *      @return {ApiResponseContract}
     */
     public async create(requestData:any):Promise<ApiResponseContract> {
-        const messageValidate = Validator.validateData(requestData, Personne.concatRuleSet("create"));
+        const messageValidate = Validator.validateData(requestData, this.personne.RuleSet("create"));
         if (!messageValidate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -63,9 +65,8 @@ class PersonnesController {
      *      @return {ApiResponseContract} 
      */
     public async update(requestData:any):Promise<ApiResponseContract> {
-        
         //Validation des données
-        const messageUpdate = Validator.validateData(requestData, Personne.ruleSet.update);
+        const messageUpdate = Validator.validateData(requestData, this.personne.RuleSet("update"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -102,7 +103,7 @@ class PersonnesController {
     public async search(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la recherche dans la liste");
 
-        const messageUpdate = Validator.validateData(requestData, Personne.ruleSet.search);
+        const messageUpdate = Validator.validateData(requestData, this.personne.RuleSet("search"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -147,7 +148,7 @@ class PersonnesController {
     public async list(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la requête d'obtention de la liste de personne");
 
-        const messageUpdate = Validator.validateData(requestData, Personne.ruleSet.list);
+        const messageUpdate = Validator.validateData(requestData, this.personne.RuleSet("list"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -191,7 +192,7 @@ class PersonnesController {
      public async delete(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la suppression d'une personne");
 
-        const messageUpdate = Validator.validateData(requestData, Personne.ruleSet.delete);
+        const messageUpdate = Validator.validateData(requestData, this.personne.RuleSet("delete"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -220,11 +221,11 @@ class PersonnesController {
                 "La requête n'est pas un objet. "
                 );
 
-        const info:any = Personne.infoChamp;
+        const info:any = this.personne.infoChamp;
         info.state = requestData.route;
 
-        const routeRules = Personne.concatRuleSet(requestData.route);
-        Personne.infoChamp["champs"].forEach(function(value){
+        const routeRules = this.personne.RuleSet(requestData.route);
+        this.personne.infoChamp.champs.forEach(function(value){
             //Insère les rules dans le champs
             value.rules = routeRules[value.name];
         });
