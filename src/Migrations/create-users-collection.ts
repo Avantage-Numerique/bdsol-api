@@ -1,6 +1,6 @@
 import * as mongoDB from "mongodb";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
-import {fakeUsers} from "../Users/fakeUser";
+import {fakeUser} from "../Users/fakeUser";
 import config from "../config";
 import {MigrationContract} from "../Database/Contracts/Migration";
 
@@ -42,7 +42,7 @@ export default class CreateUsersCollection implements MigrationContract {
 
             let userCount = await this.model.countDocuments();
             if (userCount <= 0) {
-                await this.model.insertMany(fakeUsers);
+                await this.model.insertMany(fakeUser as any);
                 return true
             }
         }

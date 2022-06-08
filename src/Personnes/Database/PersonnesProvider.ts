@@ -4,7 +4,7 @@ import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {DbProvider} from "../../Database/DatabaseDomain";
 import {ConnectOptions} from "mongodb";
 import {User} from "../../Users/UsersDomain";
-import Service from "../../Database/Service";
+import {Service} from "../../Database/Service";
 
 
 export class PersonnesProvider implements DbProvider {
