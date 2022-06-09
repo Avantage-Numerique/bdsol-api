@@ -191,10 +191,7 @@ class PersonnesController {
      *      @return
      */
     public async listAll(requestData:any):Promise<ApiResponseContract> {
-        LogHelper.log("Début de la requête d'obtention de la liste de toutes les personne");
-
-        const query = {};//QueryBuilder.build(requestData);
-        return await this.service.all(query);
+        return await this.service.all({});
     }
 
     /**

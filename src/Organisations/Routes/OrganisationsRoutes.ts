@@ -95,4 +95,21 @@ OrganisationsRouter.post('/update', async (req, res) => {
     return res.status(response.code).send(response);
 });
 
+
+/**
+ * @method POST/LIST Retourne la liste des organisations
+ *
+ * Paramètre :
+ *      @param {object} req : req.body contient {data : { "nom":"Petit théâtre" (*critères de recherche*) }}
+ *
+ * Retourne :
+ *      @return
+ **/
+ OrganisationsRouter.post('/list/all', async (req, res) => {
+    const controller = new OrganisationsController();
+    const response = await controller.listAll({});
+
+    return res.status(response.code).send(response);
+});
+
 export {OrganisationsRouter};

@@ -70,7 +70,7 @@ Retour à la base de [Documention de l'API](documentation-api.md)
               "description": { "type": "string" },
               "url": { "type": "string" },
               "contactPoint": { "type": "string" }
-          },
+          }
       },
       "required": ["data"]
   }
@@ -91,12 +91,22 @@ Retour à la base de [Documention de l'API](documentation-api.md)
               "description": { "type": "string" },
               "url": { "type": "string" },
               "contactPoint": { "type": "string" }
-          },
+          }
       },
       "required": ["data"]
   }
 }
 ```
+
+
+#### Retour
+### POST `/organisations/list/all`
+
+#### structure demandé
+aucun paramètre dans le post est nécessaire.
+
+
+#### Retour
 
 ### POST `/organisations/delete`
 #### structure demandée
