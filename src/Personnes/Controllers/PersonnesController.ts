@@ -179,6 +179,24 @@ class PersonnesController {
         return await this.service.all(query);
     }
 
+
+    /**
+     * @method list permet d'obtenir une liste de personne pouvant être filtré.
+     * @todo La recherche par id n'est pas implémentée
+     *
+     * Paramètres :
+     *      @param {key:value} requestData - { "nom":"Jean" (*Critère de recherche*) }
+     *
+     * Retourne :
+     *      @return
+     */
+    public async listAll(requestData:any):Promise<ApiResponseContract> {
+        LogHelper.log("Début de la requête d'obtention de la liste de toutes les personne");
+
+        const query = {};//QueryBuilder.build(requestData);
+        return await this.service.all(query);
+    }
+
     /**
      * @method delete permet d'effectuer une suppression de la fiche d'une personne dans la base de données.
      * @todo

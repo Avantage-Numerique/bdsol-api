@@ -108,6 +108,13 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 
 
 #### Retour
+### POST `/personnes/list/all`
+
+#### structure demandé
+aucun paramètre dans le post est nécessaire.
+
+
+#### Retour
 
 
 ### POST `/personnes/delete`

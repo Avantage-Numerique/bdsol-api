@@ -73,6 +73,21 @@ PersonnesRouter.post('/list', async (req, res) => {
     const response = await controller.list(data);
     return res.status(response.code).send(response);
 });
+/**
+ * @method POST/LIST Retourne la liste des personnes
+ *
+ * Paramètre :
+ *      @param {object} req : req.body contient {data : { "nom":"Jean-Marc" (*critères de recherche*) }}
+ *
+ * Retourne :
+ *      @return
+ **/
+PersonnesRouter.post('/list/all', async (req, res) => {
+
+    const controller = new PersonnesController();
+    const response = await controller.listAll({});
+    return res.status(response.code).send(response);
+});
 
 /**
  * @method POST/DELETE trouve une personne dans la liste
