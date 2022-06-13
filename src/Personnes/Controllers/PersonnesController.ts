@@ -147,7 +147,7 @@ class PersonnesController {
     public async list(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la requête d'obtention de la liste de personne");
 
-        const messageUpdate = Validator.validateData(requestData, Personne.ruleSet.list);
+        const messageUpdate = Validator.validateData(requestData, Personne.ruleSet.list, true);
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -177,21 +177,6 @@ class PersonnesController {
         const query = QueryBuilder.build(requestData);
 
         return await this.service.all(query);
-    }
-
-
-    /**
-     * @method list permet d'obtenir une liste de personne pouvant être filtré.
-     * @todo La recherche par id n'est pas implémentée
-     *
-     * Paramètres :
-     *      @param {key:value} requestData - { "nom":"Jean" (*Critère de recherche*) }
-     *
-     * Retourne :
-     *      @return
-     */
-    public async listAll(requestData:any):Promise<ApiResponseContract> {
-        return await this.service.all({});
     }
 
     /**

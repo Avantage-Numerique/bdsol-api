@@ -41,23 +41,24 @@ export default class Validator {
      *          @desc isValid (boolean): représentant si les données sont validée
      *          @desc message (string) : décrivant l'échec ou réussite de la validation 
      */
-    static validateData(data:any, ruleSet:any){
+    static validateData(data:any, ruleSet:any, emptyOk:boolean=false){
         //in (key) / of (value)
         //Warning : for in n'effectue pas nécessairement dans l'ordre
         let isValid = true;
         let message = "Erreurs : ";
         let rule;
 
-        if (data == undefined || typeof data != 'object' || Object.entries(data).length == 0){
-            message += "\n L'objet à valider est vide.";
-            isValid = false;
-            return { isValid, message };
+        //Si l'objet ne peux pas être vide
+        if(emptyOk === false){
+            if (data == undefined || typeof data != 'object' || Object.entries(data).length == 0){
+                message += "\n L'objet à valider est vide.";
+                isValid = false;
+                return { isValid, message };
+            }
         }
 
         for (const field in ruleSet) {
             for (rule of ruleSet[field]) { //do we instead => validate(data[field], ruleSet[field].pop())
-
-                LogHelper.warn(field, rule, data[field]);
 
                 let param = -1;
                 //Si paramètre à passer

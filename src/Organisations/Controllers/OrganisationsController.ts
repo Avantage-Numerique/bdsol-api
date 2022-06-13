@@ -146,7 +146,7 @@ class OrganisationsController {
      */
     public async list(requestData: any): Promise<ApiResponseContract> {
         LogHelper.log("Début de la requête d'obtention de la liste de personne");
-        const messageValidate = Validator.validateData(requestData, Organisation.concatRuleSet("list"));
+        const messageValidate = Validator.validateData(requestData, Organisation.concatRuleSet("list"), true);
         if (!messageValidate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -175,20 +175,6 @@ class OrganisationsController {
 
         const query = QueryBuilder.build(requestData);
         return await this.service.all(query);
-    }
-
-    /**
-     * @method list permet d'obtenir une liste de personne pouvant être filtré.
-     *
-     * Paramètres :
-     *      @param {name:value} requestData - { "nom":"Petit théâtre" (*Critère de recherche*) }
-     *
-     * Retourne :
-     *      @return
-     */
-    public async listAll(requestData: any): Promise<ApiResponseContract>
-    {
-        return await this.service.all({});
     }
 
     /**

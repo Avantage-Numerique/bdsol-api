@@ -1,4 +1,3 @@
-import LogHelper from "../Monitoring/Helpers/LogHelper";
 
 class Rules{
 
@@ -74,8 +73,6 @@ class Rules{
      * @method idValid - Vérifie qu'un id est présent et valide
      */
     static idValid(value:any):boolean {
-        LogHelper.warn("idValid : ", value);
-        console.log(value);
         if (this.isDefined(value) && this.isNotNull(value)){
             return this.isString(value) && value.length == 24;
         }

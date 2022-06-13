@@ -101,7 +101,6 @@ class Organisation {
      */
     static concatRuleSet(state:any){
         const concatRule:any = {};
-        //try{
         for (const field in this.ruleSet.default){
 
             //Si le field existe dans le ruleSet[state]
@@ -116,13 +115,8 @@ class Organisation {
                 concatRule[field] = [...this.ruleSet.default[field]];
             }
         }
-        LogHelper.debug("Object concatRule",concatRule);
+        //LogHelper.debug("Object concatRule",concatRule);
         return concatRule;
-        //}
-        //catch(e){
-        //    LogHelper.error(e);
-            //   return e;
-        //}
     }
 
     /**
