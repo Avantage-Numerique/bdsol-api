@@ -4,7 +4,7 @@ import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import { PersonneSchema } from "../Schemas/PersonneSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import {DataProvider} from "../../Database/DatabaseDomain";
-import AbstractModel from "../../Abstract/model"
+import AbstractModel from "../../Abstract/Model"
 
 class Personne extends AbstractModel {
     
@@ -94,6 +94,24 @@ class Personne extends AbstractModel {
     get searchSearchableFields():object {
         //eturn {"nom":{},"prenom":{},"surnom":{},"description":{}};
         return ["nom", "prenom","surnom","description"];
+    }
+
+    /** 
+     * @method formatRequestDataForDocument insère dans le schéma les données de la requête.
+     * 
+     * Paramètres :
+     *      @param {key:value} requestData - attributs de Personne
+     * 
+     * Retourne :
+     *      @return {PersonneSchema} l'interface Schéma contenant les données de la requête
+     */
+    public formatRequestDataForDocument(requestData:any):any {
+        return {
+            nom: requestData.nom,
+            prenom: requestData.prenom,
+            surnom: requestData.surnom,
+            description: requestData.description
+        } as PersonneSchema;
     }
 }
 export default Personne;

@@ -87,6 +87,8 @@ abstract class AbstractModel {
         return concatRule;
     }
 
+    abstract formatRequestDataForDocument(requestData:any):Document;
+
 }
 
 export default AbstractModel;
