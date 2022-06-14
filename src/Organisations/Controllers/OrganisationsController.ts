@@ -39,8 +39,8 @@ class OrganisationsController {
                 messageValidate.message
             );
 
-        const formatedData = this.formatRequestDataForDocument(requestData);
-        const updatedModelResponse: any = await this.service.update(requestData.id, formatedData);
+        const formattedData = this.formatRequestDataForDocument(requestData);
+        const updatedModelResponse: any = await this.service.update(requestData.id, formattedData);
 
         if (updatedModelResponse !== undefined)
             return updatedModelResponse;
@@ -73,8 +73,8 @@ class OrganisationsController {
                 messageValidate.message
             );
 
-        const formatedData = this.formatRequestDataForDocument(requestData);
-        const createdDocumentResponse = await this.service.insert(formatedData);
+        const formattedData = this.formatRequestDataForDocument(requestData);
+        const createdDocumentResponse = await this.service.insert(formattedData);
 
         if (createdDocumentResponse !== undefined)
             return createdDocumentResponse;

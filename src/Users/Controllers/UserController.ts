@@ -6,6 +6,7 @@ import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
 import type {UserDocument} from "../Schemas/UserSchema";
 import {UsersService} from "../Services/UsersService";
 import type {Service} from "../../Database/Service";
+import Validator from "../../Validation/Validator";
 
 /**
  * First pitch, in parallel with fred, for a crud controller.
@@ -25,26 +26,28 @@ export class UserController {
 
     public async create(requestData:any):Promise<ApiResponseContract>
     {
-        if (!this.validateData(requestData))
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "Data non valide"
-            );
-        const formattedData = this.formatRequestDataForDocument(requestData);
-        LogHelper.debug("userController", formattedData);
-        const createdDocumentResponse:ApiResponseContract = await this.service.insert(formattedData);
-        LogHelper.debug("userController", createdDocumentResponse);
-
-        if (createdDocumentResponse !== undefined)
-            return createdDocumentResponse;
-
-        LogHelper.debug("Le code manque de robustesse. Users/create");
+        const messageValidate = Validator.validateData(requestData, User.concatRuleSet("create"));
+        if (!messageValidate.isValid)
         return ErrorResponse.create(
-            new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
-            StatusCodes.INTERNAL_SERVER_ERROR,
-            'Les données semblent être ok, mais la création n\'a pas eu lieu.'
+            new Error(ReasonPhrases.BAD_REQUEST),
+            StatusCodes.BAD_REQUEST,
+            messageValidate.message
             );
+            
+            const formattedData = this.formatRequestDataForDocument(requestData);
+            LogHelper.debug("userController", formattedData);
+            const createdDocumentResponse:ApiResponseContract = await this.service.insert(formattedData);
+            LogHelper.debug("userController", createdDocumentResponse);
+            
+            if (createdDocumentResponse !== undefined)
+                return createdDocumentResponse;
+    
+            LogHelper.debug("Le code manque de robustesse. Users/create");
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
+                StatusCodes.INTERNAL_SERVER_ERROR,
+                'Les données semblent être ok, mais la création n\'a pas eu lieu.'
+                );
     }
 
 
@@ -52,32 +55,24 @@ export class UserController {
      * Update the user information
      * Password shall now be updated this way.
      * @todo add error if password is added here.
-     * @param id the document id of the user.
      * @param requestData the data to update.
      */
-    public async update(id:string, requestData:any):Promise<ApiResponseContract>
+    public async update(requestData:any):Promise<ApiResponseContract>
     {
-        if (!this.validateData(requestData)) {
+        //Validation des données
+        const messageUpdate = Validator.validateData(requestData, User.concatRuleSet("update"));
+        if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
-                "Data non valide"
-            );
-        }
-        if (id === undefined || id.length != 24)
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "id non valide"
-            );
-
+                messageUpdate.message
+                );
 
         const formattedData = this.formatRequestDataForDocument(requestData);
-        const updatedModelResponse:any = await this.service.update(id, formattedData);
+        const updatedModelResponse:any = await this.service.update(requestData.id, formattedData);
 
         if (updatedModelResponse !== undefined)
             return updatedModelResponse;
-
 
         LogHelper.debug("Le code manque de robustesse. Users/update");
         return ErrorResponse.create(
@@ -106,19 +101,4 @@ export class UserController {
             avatar: requestData.avatar
         } as UserDocument;
     }
-
-    public validateData(requestData:any):boolean
-    {
-        // get required data and format data
-        // parsed them
-        // Return if validation passed or not.
-
-        LogHelper.log(`Validating ${typeof requestData}`, requestData);
-        //first test
-        return typeof requestData === 'object' &&
-            requestData.username !== null &&
-            requestData.username !== undefined &&
-            typeof requestData.username === 'string';
-    }
-
 }

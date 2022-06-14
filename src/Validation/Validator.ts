@@ -116,7 +116,7 @@ export default class Validator {
                         message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isDate;
                     } break;
                 default:
-                    LogHelper.warn("Validator.validate : La règle "+rule+ "n'est pas implémentée.");
+                    LogHelper.warn("Validator.validate : La règle "+rule+ " n'est pas implémentée.");
                     isValid = false;
                     message += "\nLa règle "+rule+ "n'est pas implémentée."; break;
                     

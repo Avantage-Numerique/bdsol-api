@@ -38,8 +38,8 @@ class PersonnesController {
                 messageValidate.message
                 );
 
-        const formatedData = this.formatRequestDataForDocument(requestData);
-        const createdDocumentResponse = await this.service.insert(formatedData);
+        const formattedData = this.formatRequestDataForDocument(requestData);
+        const createdDocumentResponse = await this.service.insert(formattedData);
         
         if (createdDocumentResponse !== undefined)
             return createdDocumentResponse;
@@ -65,7 +65,7 @@ class PersonnesController {
     public async update(requestData:any):Promise<ApiResponseContract> {
         
         //Validation des données
-        const messageUpdate = Validator.validateData(requestData, Personne.ruleSet.update);
+        const messageUpdate = Validator.validateData(requestData, Personne.concatRuleSet("update"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -73,8 +73,8 @@ class PersonnesController {
                 messageUpdate.message
                 );
 
-        const formatedData = this.formatRequestDataForDocument(requestData);
-        const updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
+        const formattedData = this.formatRequestDataForDocument(requestData);
+        const updatedModelResponse:any = await this.service.update(requestData.id, formattedData);
 
         if (updatedModelResponse !== undefined)
             return updatedModelResponse;
@@ -102,7 +102,7 @@ class PersonnesController {
     public async search(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la recherche dans la liste");
 
-        const messageUpdate = Validator.validateData(requestData, Personne.ruleSet.search);
+        const messageUpdate = Validator.validateData(requestData, Personne.ruleSet.concatRuleSet("search"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -147,7 +147,7 @@ class PersonnesController {
     public async list(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la requête d'obtention de la liste de personne");
 
-        const messageUpdate = Validator.validateData(requestData, Personne.ruleSet.list, true);
+        const messageUpdate = Validator.validateData(requestData, Personne.concatRuleSet("list"), true);
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -191,7 +191,7 @@ class PersonnesController {
      public async delete(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la suppression d'une personne");
 
-        const messageUpdate = Validator.validateData(requestData, Personne.ruleSet.delete);
+        const messageUpdate = Validator.validateData(requestData, Personne.concatRuleSet("delete"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),

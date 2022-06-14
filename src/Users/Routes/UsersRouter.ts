@@ -23,7 +23,7 @@ UsersRouter.post('/update', async (req, res, ) => {
         LogHelper.info(`Update user id : ${data.id}`);
 
         const controller = new UserController();
-        const response:ApiResponseContract = await controller.update(data.id, data);
+        const response:ApiResponseContract = await controller.update(data);
 
         LogHelper.info(`User id : ${data.id} update response`, response);
 

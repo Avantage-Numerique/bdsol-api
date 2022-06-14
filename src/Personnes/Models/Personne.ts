@@ -75,8 +75,6 @@ class Personne {
         "create":{
             "nom":["isDefined", "minLength:2"],
             "prenom":["isDefined", "minLength:2"],
-            "surnom":[],
-            "description":[]
         },
         "update":{
             "id":["isDefined"]
@@ -94,14 +92,14 @@ class Personne {
      * @static @method concatRuleSet
      * @return Combinaison du ruleSet default et celui spécifié
      */
-    static concatRuleSet(state:any){
+    static concatRuleSet(set:any){
         const concatRule:any = {};
             for (const field in this.ruleSet.default){
 
                 //Si le field existe dans le ruleSet[state]
-                if(Object.keys(this.ruleSet[state]).indexOf(field) != -1){
+                if(Object.keys(this.ruleSet[set]).indexOf(field) != -1){
                     concatRule[field] = [
-                        ...this.ruleSet[state][field],
+                        ...this.ruleSet[set][field],
                         ...this.ruleSet.default[field]
                     ];
                 }
