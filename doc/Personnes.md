@@ -99,19 +99,11 @@ Retour à la base de [Documention de l'API](documentation-api.md)
               "surnom": { "type": "string" },
               "description": { "type": "string" }
           },
-          "required": ["id"]
       },
       "required": ["data"]
   }
 }
 ```
-
-
-#### Retour
-### POST `/personnes/list/all`
-
-#### structure demandé
-aucun paramètre dans le post est nécessaire.
 
 
 #### Retour
