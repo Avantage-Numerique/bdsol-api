@@ -102,7 +102,7 @@ class PersonnesController {
     public async search(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la recherche dans la liste");
 
-        const messageUpdate = Validator.validateData(requestData, Personne.ruleSet.concatRuleSet("search"));
+        const messageUpdate = Validator.validateData(requestData, Personne.concatRuleSet("search"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -110,27 +110,8 @@ class PersonnesController {
                 messageUpdate.message
                 );
 
-        //Validation date
-        if (requestData.createdAt !== undefined &&
-            //typeof requestData.createdAt == 'string' &&
-            ( requestData.createdAt.substring(0,1) != '<' && requestData.createdAt.substring(0,1) != '>' ))
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "Le premier caractère de createdAt doit être '<' ou '>'"
-                );
-
-        if (requestData.updatedAt !== undefined &&
-            //typeof requestData.updatedAt == 'string' &&
-            ( requestData.updatedAt.substring(0,1) != '<' && requestData.updatedAt.substring(0,1) != '>' ))
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "Le premier caractère de updatedAt doit être '<' ou '>'"
-                );
-
         const query = QueryBuilder.build(requestData);
-
+        LogHelper.debug(query);
         return await this.service.get(query);
     }
 
@@ -153,25 +134,6 @@ class PersonnesController {
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 messageUpdate.message
-                );
-
-        //Validation date
-        if (requestData.createdAt !== undefined &&
-            //typeof requestData.createdAt == 'string' &&
-            ( requestData.createdAt.substring(0,1) != '<' && requestData.createdAt.substring(0,1) != '>' ))
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "Le premier caractère de createdAt doit être '<' ou '>'"
-                );
-
-        if (requestData.updatedAt !== undefined &&
-            //typeof requestData.updatedAt == 'string' &&
-            ( requestData.updatedAt.substring(0,1) != '<' && requestData.updatedAt.substring(0,1) != '>' ))
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "Le premier caractère de updatedAt doit être '<' ou '>'"
                 );
 
         const query = QueryBuilder.build(requestData);

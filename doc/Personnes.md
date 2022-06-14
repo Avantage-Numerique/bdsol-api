@@ -59,7 +59,12 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 
 
 ### POST `/personnes/search`
+Il est possible d'utiliser les opérateurs gte (>=) et lte (<=) afin de trouver, par exemple, une date antérieure ou ultérieure à "X". On ajoute à ce moment `gte:` ou `lte:` avant le paramètre.
 
+**Exemple :**
+```json 
+"data":{ "createdAt":"gte:2022-06-14" }
+```
 #### structure demandé
 ```json
 {
@@ -84,7 +89,7 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 #### Retour
 
 ### POST `/personnes/list`
-
+Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/personnes/search`.
 #### structure demandé
 ```json
 {

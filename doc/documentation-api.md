@@ -12,13 +12,6 @@ version 0.0.5
 ## Struture générale de l'object `JSON` à fournir lors d'une requête en `POST`.
 
 ## Structure général des retours de données
-```json
-{
-    "type": "object",
-    "data": {},
-    "required": ["data"]
-}
-```
 
 ```json
 {

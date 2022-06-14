@@ -19,7 +19,8 @@ Retour à la base de [Documention de l'API](documentation-api.md)
               "nom": { "type": "string" },
               "description": { "type": "string" },
               "url": { "type": "string" },
-              "contactPoint": { "type": "string" }
+              "contactPoint": { "type": "string" },
+              "dateDeFondation": {"type": "Date" }
           },
           "required": ["nom"]
       },
@@ -45,7 +46,8 @@ Retour à la base de [Documention de l'API](documentation-api.md)
               "nom": { "type": "string" },
               "description": { "type": "string" },
               "url": { "type": "string" },
-              "contactPoint": { "type": "string" }
+              "contactPoint": { "type": "string" },
+              "dateDeFondation": { "type": "Date" }
           },
           "required": ["id"]
       },
@@ -57,6 +59,12 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 #### Retour
 
 ### POST `/organisations/search`
+Il est possible d'utiliser les opérateurs gte (>=) et lte (<=) afin de trouver, par exemple, une date antérieure ou ultérieure à "X". On ajoute à ce moment `gte:` ou `lte:` avant le paramètre.
+
+**Exemple :**
+```json 
+"data":{ "dateDeFondation":"gte:2022-06-14" }
+```
 #### structure demandée
 ```json
 {
@@ -69,15 +77,18 @@ Retour à la base de [Documention de l'API](documentation-api.md)
               "nom": { "type": "string" },
               "description": { "type": "string" },
               "url": { "type": "string" },
-              "contactPoint": { "type": "string" }
+              "contactPoint": { "type": "string" },
+              "dateDeFondation": { "type": "Date" }
           }
       },
       "required": ["data"]
   }
 }
 ```
+#### Retour
 
 ### POST `/organisations/list`
+Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/organisations/search`.
 #### structure demandée
 ```json
 {
@@ -90,20 +101,14 @@ Retour à la base de [Documention de l'API](documentation-api.md)
               "nom": { "type": "string" },
               "description": { "type": "string" },
               "url": { "type": "string" },
-              "contactPoint": { "type": "string" }
+              "contactPoint": { "type": "string" },
+              "dateDeFondation": { "type": "Date" }
           }
       },
       "required": ["data"]
   }
 }
 ```
-
-
-#### Retour
-### POST `/organisations/list/all`
-
-#### structure demandé
-aucun paramètre dans le post est nécessaire.
 
 
 #### Retour
