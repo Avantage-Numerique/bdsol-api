@@ -43,12 +43,12 @@ export default class Validator {
      */
     static validateData(data:any, ruleSet:any, emptyOk:boolean=false){
         //in (key) / of (value)
-        //Warning : for in n'effectue pas nécessairement dans l'ordre
+        //Warning : "for in" n'effectue pas nécessairement dans l'ordre
         let isValid = true;
         let message = "Erreurs : ";
         let rule;
 
-        //Si l'objet ne peux pas être vide
+        //Si l'objet ne peut pas être vide
         if(emptyOk === false){
             if (data == undefined || typeof data != 'object' || Object.entries(data).length == 0){
                 message += "\n L'objet à valider est vide.";
@@ -57,7 +57,10 @@ export default class Validator {
             }
         }
 
+        //Structure : "nom":["isDefined", ...]
+        //Pour chaque champs dans ruleSet ("nom"...)
         for (const field in ruleSet) {
+            //Pour chaque règles du champs ("isDefined"...)
             for (rule of ruleSet[field]) { //do we instead => validate(data[field], ruleSet[field].pop())
 
                 let param = -1;
@@ -68,6 +71,9 @@ export default class Validator {
                     rule = rule.substring(0, rule.indexOf(":"));
                   }
                 
+                //Possible de le coder comme un handler (chain of responsability. Dans ce cas le "switch" se fait remplacer par une
+                //  création d'instance du handler et une assignation du handler à une chaine, suivi d'un appel à la vérification rule)
+                //  (Possible de créer l'instance une seule fois globalement et de l'utiliser pour vérifier tout les cas)
                 switch (rule){
                 case "isDefined" :
                     if ( !Rules.isDefined(data[field]) ){
