@@ -31,7 +31,8 @@ Code : **200** : lorsque les informations sont OK
             "token": "string",
             "username": "string",
             "avatar": "string:url",
-            "name": "string"
+            "name": "string",
+            "id": "string"
         }
     }
 }
