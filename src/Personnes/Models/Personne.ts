@@ -1,9 +1,7 @@
 import mongoose from "mongoose";
 import {Schema} from "mongoose"
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import { PersonneSchema } from "../Schemas/PersonneSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
-import {DataProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model"
 
 class Personne extends AbstractModel {
@@ -31,6 +29,7 @@ class Personne extends AbstractModel {
             {
                 timestamps: true
         });
+
 
     /** @static infoChamp pour le retour frontend des champs à créer et règles des attributs de personne selon la route */
     infoChamp =

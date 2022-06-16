@@ -1,15 +1,17 @@
 import {Service} from "../../Database/DatabaseDomain";
 import Personne from "../Models/Personne";
+import mongoose from "mongoose";
 
 class PersonnesService extends Service {
-    constructor(model:any=null) {
-        if (model === null) {
-            //il y avait: Personne.getInstance();
-            //new Personne().getInstance;
-            throw new Error("constructor Personne Service n'as pas de model");
-            
-        }
-        super(model);
+    constructor(entity:Personne) {
+        super(entity.schema);
+        //let model;
+        //if (mongoose.models[entity.modelName]=== undefined){
+            //model = entity.getInstance();
+            //super(model);
+        //}
+        //else
+            //super(mongoose.models[entity.modelName]);
     }
 }
 
