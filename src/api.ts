@@ -27,7 +27,7 @@ class Api {
     private _initMiddleware()
     {
         // Add a list of allowed origins.
-        const allowedOrigins = ['http://localhost:3000'],
+        const allowedOrigins = ['http://localhost:3000', 'https://localhost:3000', 'http://localhost', 'https://localhost'],
             options: cors.CorsOptions = {
                 origin: allowedOrigins
             };
