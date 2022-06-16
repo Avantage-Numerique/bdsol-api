@@ -29,7 +29,9 @@ import { LoggerLevel } from "mongodb";
 export default class Validator {
 
     /** 
-     * @method validateData Valide le data contre un ensemble de règle 
+     * @method validateData Valide le data contre un ensemble de règle
+     * @note   si la règle demande un paramètre on ajoute un ":" suivi du paramètre
+     * @note   si le champs à valider contient les opérateurs "gte:" ou "lte:", les valeurs seront validées sans les opérateurs.
      * 
      * Paramètres :
      *      @param {key:value} data - Valeur à valider contre le schéma : { "nom" : "Audet" }
@@ -43,12 +45,12 @@ export default class Validator {
      */
     static validateData(data:any, ruleSet:any, emptyOk:boolean=false){
         //in (key) / of (value)
-        //Warning : for in n'effectue pas nécessairement dans l'ordre
+        //Warning : "for in" n'effectue pas nécessairement dans l'ordre
         let isValid = true;
         let message = "Erreurs : ";
         let rule;
 
-        //Si l'objet ne peux pas être vide
+        //Si l'objet ne peut pas être vide
         if(emptyOk === false){
             if (data == undefined || typeof data != 'object' || Object.entries(data).length == 0){
                 message += "\n L'objet à valider est vide.";
@@ -57,9 +59,22 @@ export default class Validator {
             }
         }
 
+        //Structure : "nom":["isDefined", ...]
+        //Pour chaque champs dans ruleSet ("nom"...)
         for (const field in ruleSet) {
+            //Pour chaque règles du champs ("isDefined"...)
             for (rule of ruleSet[field]) { //do we instead => validate(data[field], ruleSet[field].pop())
 
+                //Set data to validate
+                let dataField = data[field];
+
+                //Remove (gte, lte) operator if needed
+                //NE FONCTIONNE PAS PRÉSENTEMENT AVEC LES NOMBRES PUISQUE JE CONVERTIS LES NOMBRES EN STRING!
+                if(dataField !== undefined){
+                    if (dataField.toString().indexOf("gte:") == 0 || dataField.toString().indexOf("lte:") == 0){
+                        dataField = dataField.toString().substring(4, dataField.toString().length);
+                    }
+                }
                 let param = -1;
                 //Si paramètre à passer
                 if ( rule.indexOf(":") != -1) {
@@ -68,50 +83,52 @@ export default class Validator {
                     rule = rule.substring(0, rule.indexOf(":"));
                   }
                 
+                //Possible de le coder comme un handler (chain of responsability. Dans ce cas le "switch" se fait remplacer par une
+                //  création d'instance du handler et une assignation du handler à une chaine, suivi d'un appel à la vérification rule)
+                //  (Possible de créer l'instance une seule fois globalement et de l'utiliser pour vérifier tout les cas)
                 switch (rule){
                 case "isDefined" :
-                    if ( !Rules.isDefined(data[field]) ){
+                    if ( !Rules.isDefined(dataField) ){
                         isValid = false;
                         message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isDefined;
                     } break;
                 case "isNotNull" :
-                    if ( !Rules.isNotNull(data[field]) ){
+                    if ( !Rules.isNotNull(dataField) ){
                         isValid = false;
                         message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isNotNull;
                     } break;
                 case "isString" :
-                    if ( !Rules.isString(data[field]) ){
+                    if ( !Rules.isString(dataField) ){
                         isValid = false;
                         message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isString;
                     } break;
                 case "isNotEmpty" :
-                    if ( !Rules.isNotEmpty(data[field]) ){
+                    if ( !Rules.isNotEmpty(dataField) ){
                         isValid = false;
                         message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isNotEmpty;
                     } break;
                 case "minLength" :
-                    if ( !Rules.minLength(data[field], param) ){
+                    if ( !Rules.minLength(dataField, param) ){
                         isValid = false;
                         message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.minLength;
                     } break;
                 case "maxLength" :
-                    if ( !Rules.maxLength(data[field], param) ){
+                    if ( !Rules.maxLength(dataField, param) ){
                         isValid = false;
                         message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.maxLength;
                     } break;
                 case "idValid" :
-                    if ( !Rules.idValid(data[field]) ){
-                        LogHelper.warn("La règle idValid n'est pas valide pour :", data[field]);
+                    if ( !Rules.idValid(dataField) ){
                         isValid = false;
                         message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.idValid;
                     } break;
                 case "isObject" :
-                    if ( !Rules.isObject(data[field]) ) {
+                    if ( !Rules.isObject(dataField) ) {
                         isValid = false;
                         message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isObject;
                     } break;
                 case "isDate" :
-                    if ( !Rules.isDate(data[field]) ) {
+                    if ( !Rules.isDate(dataField) ) {
                         isValid = false;
                         message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isDate;
                     } break;

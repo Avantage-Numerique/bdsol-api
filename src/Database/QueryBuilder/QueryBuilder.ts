@@ -1,3 +1,4 @@
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 
 export default class QueryBuilder {
@@ -13,25 +14,26 @@ export default class QueryBuilder {
      */
     static build(query:any) {
 
-        const finalQuery = {};
+        const finalQuery:any = {};
         
         for (const field in query){
 
             //S'il s'agit d'un id
-            if ( field == "id" )//@ts-ignore
+            if ( field == "id" )
                 finalQuery._id = query[field];
             
-            //S'il s'agit d'une date
-            else if ( field == "createdAt" || field == "updatedAt" ){//@ts-ignore
-                if (query[field].substring(0,1) == '<')//@ts-ignore
-                    finalQuery[field] = { $lte: query[field].substring(1, query[field].length) };
-
-                if (query[field].substring(0,1) == '>')//@ts-ignore
-                    finalQuery[field] = { $gte: query[field].substring(1, query[field].length) };
+            //NE FONCTIONNE PAS PRÉSENTEMENT AVEC LES NOMBRES PUISQUE JE CONVERTIS LES NOMBRES EN STRING!
+            //S'il s'agit d'une donnée où tente d'applique un ">=" (gte)
+            else if ( query[field].toString().indexOf("gte:") == 0 ){
+                finalQuery[field] = { $gte: query[field].toString().substring(4, query[field].length) };
+            }
+            //S'il s'agit d'une donnée où on applique un "<=" (lte)
+            else if ( query[field].toString().indexOf("lte:") == 0 ){
+                finalQuery[field] = { $lte: query[field].toString().substring(4, query[field].length) };
             }
 
-            //Si ce n'est ni une date ni un Id
-            else{ //@ts-ignore
+            //Si ce n'est pas un Id ou si on cherche une date précise (field == date).
+            else{
                 finalQuery[field] = { $regex: query[field].toString() , $options : 'i' };
             }
         }
