@@ -37,7 +37,9 @@ class Api {
                 'http://51.222.24.157:3000',
                 'https://51.222.24.157:3000',
                 'http://bdsol.avantagenumerique.org',
-                'https://bdsol.avantagenumerique.org'
+                'https://bdsol.avantagenumerique.org',
+                'http://bdsol.avantagenumerique.org:3000',
+                'https://bdsol.avantagenumerique.org:3000'
             ],
             options: cors.CorsOptions = {
                 origin: allowedOrigins
