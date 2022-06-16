@@ -9,4 +9,11 @@ HealthCheckRouter.get("/ping", async (_req, res) => {
     return res.status(200).send(response);
 });
 
+HealthCheckRouter.get("/authors", async (_req, res) => {
+    const response = {
+        message: "You and me <3",
+    };
+    return res.status(200).send(response);
+});
+
 export {HealthCheckRouter};

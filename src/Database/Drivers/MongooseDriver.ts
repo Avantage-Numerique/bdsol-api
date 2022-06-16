@@ -43,11 +43,25 @@ export class MongooseDBDriver implements DBDriver {
     public async initDb() {
         //await this.initMongoose();
 
-        LogHelper.info(`[BD] Connexion à la base de données utilisateurs ...`);
-        await this.providers.users.connect();
+        try
+        {
+            LogHelper.info(`[BD] Connexion à la base de données utilisateurs ...`);
+            await this.providers.users.connect();
+        }
+        catch (error:any)
+        {
+            throw error;
+        }
 
-        LogHelper.info(`[BD] Connexion à la base de données structurée, ouverte et liée ...`);
-        await this.providers.data.connect();
+        try
+        {
+            LogHelper.info(`[BD] Connexion à la base de données structurée, ouverte et liée ...`);
+            await this.providers.data.connect();
+        }
+        catch (error:any)
+        {
+            throw error;
+        }
 
         await this.generateFakeUsers();
     }

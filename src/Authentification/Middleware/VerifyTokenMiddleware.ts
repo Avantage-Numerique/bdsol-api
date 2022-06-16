@@ -29,8 +29,8 @@ export class VerifyTokenMiddleware {
 
                 try {
                     const isTokenVerify:any = await TokenController.verify(userToken);
-                    LogHelper.log("Verifying the token sent for the current request.");
-                    if (isTokenVerify.name === undefined ) {
+                    LogHelper.log("Verifying the token sent for the current request.", isTokenVerify);
+                    if (isTokenVerify.name === undefined) {
                         next();
                     }
                 }
