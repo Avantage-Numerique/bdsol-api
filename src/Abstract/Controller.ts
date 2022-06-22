@@ -18,35 +18,40 @@ abstract class AbstractController {
      * @method create permet de créer et d'insérer une nouvelle entité "Personne" dans la base de donnée à partir de la requête.
      * 
      * Paramètres : 
-     *      @param {key:value} requestData - attributs requis à la création d'une personne
-     * 
+     * @param {any} req requête d'expressjs
+     * @param {any} res response pour expressjs.
+     *
      * Retourne :
-     *      @return {ApiResponseContract}
+     * @return {ApiResponseContract} en Promise
     */
     public async create(req:any, res:any):Promise<ApiResponseContract> {
 
         const {data} = req.body;
+
         const messageValidate = Validator.validateData(data, this.entity.RuleSet("create"));
+
         if (!messageValidate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 messageValidate.message
-                );
+            );
 
         //Can I just :  formatedData = {requestData}:Xschema
         const formatedData = this.entity.formatRequestDataForDocument(data);
+
         const createdDocumentResponse = await this.service.insert(formatedData);
-        
+
         if (createdDocumentResponse !== undefined)
             return createdDocumentResponse;
 
-        LogHelper.debug("Le code manque de robustesse. Entity/create");
+
+        LogHelper.debug("La réponse à la méthode insert est undefined");
         return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
             StatusCodes.INTERNAL_SERVER_ERROR,
-            'Les données semblent être ok, mais la création n\'a pas eu lieu.'
-            );
+            'Le service. instert a retourné une réponse undefined'
+        );
 
         //return res.status(response.code).send(response);
     }

@@ -4,7 +4,7 @@ import {ApiRouter} from "./routes";
 import {HealthCheckRouter} from "./Healthcheck/Routes/HealthCheckRoutes";
 import {AuthentificationRouter} from "./Authentification/Routes/AuthentificationRoutes";
 import {UsersRouter} from "./Users/Routes/UsersRouter";
-import {PersonnesRouter} from './Personnes/Routes/PersonnesRoutes';
+import {PersonnesRoutes} from './Personnes/Routes/PersonnesRoutes';
 import {OrganisationsRouter} from './Organisations/Routes/OrganisationsRoutes'
 import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
 import {RegistrationRouter} from "./Authentification/Routes/RegistrationRoutes";
@@ -65,8 +65,6 @@ export default class Api {
 
         //Tools the manage the health of the API
         this.express.use("/", HealthCheckRouter);
-
-        this.express.use("/users", UsersRouter);
     }
 
     private _needAuthentificationRoutes()
@@ -74,10 +72,12 @@ export default class Api {
         // Users Routes
 
         //Personnes Routes
-        this.express.use("/personne", PersonnesRouter);
-        this.express.use("/personnes", PersonnesRouter);
+        const PersonnesRouter = new PersonnesRoutes();
+        this.express.use("/personnes", PersonnesRouter.setupRoutes());
 
         //Organisations Routes
         this.express.use("/organisations", OrganisationsRouter);
+
+        this.express.use("/users", UsersRouter);
     }
 }
