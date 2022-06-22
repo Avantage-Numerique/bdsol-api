@@ -12,7 +12,7 @@
     "dev-old": "npx ts-node-dev --respawn --transpile-only --debug --watch src src/server.ts",
     "prod": "tsc && node ./build/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "test-helpers":"npx ts-node ./src/helpers.ts",
+    "test-helpers": "npx ts-node ./src/helpers.ts",
     "lint": "eslint . --ext .ts",
     "generate-keys": "ssh-keygen -t rsa -b 4096 -C bdsol-api -f bdsolapi"
   },

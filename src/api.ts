@@ -27,7 +27,20 @@ class Api {
     private _initMiddleware()
     {
         // Add a list of allowed origins.
-        const allowedOrigins = ['http://localhost:3000'],
+        const allowedOrigins = [
+                'http://localhost:3000',
+                'https://localhost:3000',
+                'http://localhost',
+                'https://localhost',
+                'http://51.222.24.157',
+                'https://51.222.24.157',
+                'http://51.222.24.157:3000',
+                'https://51.222.24.157:3000',
+                'http://bdsol.avantagenumerique.org',
+                'https://bdsol.avantagenumerique.org',
+                'http://bdsol.avantagenumerique.org:3000',
+                'https://bdsol.avantagenumerique.org:3000'
+            ],
             options: cors.CorsOptions = {
                 origin: allowedOrigins
             };

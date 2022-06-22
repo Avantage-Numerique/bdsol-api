@@ -1,14 +1,23 @@
 import {Service} from "../../Database/Service";
 import type {ApiEndPointsControllerContract} from "../Contracts/ApiEndPointsControllerContract";
 import {ApiResponseContract} from "../Responses/ApiResponse";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import {PersonnesController} from "../../Personnes/Controllers/PersonnesController";
+import Validator from "../../Validation/Validator";
+import Personne from "../../Personnes/Models/Personne";
+import {ErrorResponse} from "../Responses/ErrorResponse";
+import {ReasonPhrases, StatusCodes} from "http-status-codes";
 
 /**
  * This is setup to implement and dry the Controllers of authenfication and deep API mecanisms.
- * This should call a controller method
+ * This would call the controller method directly in the route definition to have like :
+ * UsersRouter.post('/update', UsersController.updateEndpoint);
  */
 abstract class ApiEndPointsController implements ApiEndPointsControllerContract {
 
     public service:Service|any;
+    public controler:any;//ControllerContract
+    public entity:any;//EntityContract;
 
     constructor(service:Service|any) {
         this.service = service;
@@ -28,6 +37,18 @@ abstract class ApiEndPointsController implements ApiEndPointsControllerContract 
     }
 
     abstract setupRoutes():void;
+
+    //seulement au scope de la classe abstraite.
+    public routeHandler(Req:any, res:any):any {
+        ///const {data} = req.body;
+        //const response:any = await methode(data);
+        //return res.status(response.code).send(response);
+    }
+
+    async entityCreate(data:any):Promise<any> {
+        //as the PersonneController avec les appels au service.
+        return data;
+    }
 
 
     /**
@@ -54,4 +75,6 @@ abstract class ApiEndPointsController implements ApiEndPointsControllerContract 
 
     //this must be async too.
     abstract create(requestData:any):any;//response ?
+    abstract delete(requestData:any):any;//response ?
+    //etc.
 }
