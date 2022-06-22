@@ -15,6 +15,7 @@ import Validator from "../../Validation/Validator";
 export class UserController {
 
     public service:Service;
+    public validator = new Validator();
 
     constructor()
     {
@@ -26,7 +27,7 @@ export class UserController {
 
     public async create(requestData:any):Promise<ApiResponseContract>
     {
-        const messageValidate = Validator.validateData(requestData, User.concatRuleSet("create"));
+        const messageValidate = this.validator.validateData(requestData, User.concatRuleSet("create"));
         if (!messageValidate.isValid)
         return ErrorResponse.create(
             new Error(ReasonPhrases.BAD_REQUEST),
@@ -60,7 +61,7 @@ export class UserController {
     public async update(requestData:any):Promise<ApiResponseContract>
     {
         //Validation des données
-        const messageUpdate = Validator.validateData(requestData, User.concatRuleSet("update"));
+        const messageUpdate = this.validator.validateData(requestData, User.concatRuleSet("update"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
