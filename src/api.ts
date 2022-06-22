@@ -13,12 +13,13 @@ import {RegistrationRouter} from "./Authentification/Routes/RegistrationRoutes";
  * Main class for the API
  * Use the express instance as public property.
  */
-class Api {
+export default class Api {
     public express: express.Application = express();
     public authRouters:any;
 
-    constructor()
-    {
+    //constructor() {}
+
+    public start() {
         this._initMiddleware();
         this._initRouter();
     }
@@ -72,7 +73,6 @@ class Api {
     {
         // Users Routes
 
-
         //Personnes Routes
         this.express.use("/personne", PersonnesRouter);
         this.express.use("/personnes", PersonnesRouter);
@@ -81,8 +81,3 @@ class Api {
         this.express.use("/organisations", OrganisationsRouter);
     }
 }
-
-/**
- * Export an instance of the main API class and pass the Express.
- */
-export default new Api().express;
