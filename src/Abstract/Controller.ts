@@ -17,11 +17,10 @@ abstract class AbstractController {
     abstract entity:AbstractModel;
 
     /**
-     * @method create permet de créer et d'insérer une nouvelle entité "Personne" dans la base de donnée à partir de la requête.
+     * @method create permet de créer et d'insérer une nouvelle entité dans la base de donnée à partir de la requête.
      * 
      * Paramètres : 
-     * @param {any} req requête d'expressjs
-     * @param {any} res response pour expressjs.
+     * @param {any} requestData - L'objet data contenant les informations de la création d'entité
      *
      * Retourne :
      * @return {ApiResponseContract} en Promise
@@ -56,13 +55,13 @@ abstract class AbstractController {
 
 
     /** 
-     * @method update permet de modifier et mettre à jour les attributs d'une personne dans la base de donnée.
+     * @method update permet de modifier et mettre à jour les attributs d'une entité dans la base de donnée.
      * 
      * Paramètres :
-     *      @param {key:value} requestData - id et attributs à modifier.
+     *      @param {key:value} requestData - id et attributs de l'entité à modifier.
      * 
      * Retourne :
-     *      @return {ApiResponseContract} 
+     *      @return {ApiResponseContract}  en Promise
      */
     public async update(requestData:any):Promise<ApiResponseContract> {
         
@@ -91,10 +90,10 @@ abstract class AbstractController {
     }
 
     /**
-     * @method search permet d'effectuer une recherche afin de retourner la première personne répondant au critère de recherche.
+     * @method search permet d'effectuer une recherche afin de retourner la première entité répondant au critère de recherche.
      * 
      * Paramètre : 
-     *      @param {key:value} requestData - { "nom":"Jean" (*Critère de recherche*) }
+     *      @param {key:value} requestData - critère de recherche { "nom":"Jean" }
      * 
      * Retourne : 
      *      @default critères vide: Retourne le premier résultat
@@ -138,11 +137,10 @@ abstract class AbstractController {
 
 
     /**
-     * @method list permet d'obtenir une liste de personne pouvant être filtré.
-     * @todo La recherche par id n'est pas implémentée
+     * @method list permet d'obtenir une liste des entités selon les crières de recherche.
      * 
      * Paramètres : 
-     *      @param {key:value} requestData - { "nom":"Jean" (*Critère de recherche*) }
+     *      @param {key:value} requestData - critère de recherche { "nom":"Jean" }
      * 
      * Retourne : 
      *      @return 
@@ -185,10 +183,9 @@ abstract class AbstractController {
 
 
     /**
-     * @method delete permet d'effectuer une suppression de la fiche d'une personne dans la base de données.
-     * @todo
+     * @method delete permet d'effectuer une suppression de la fiche d'une entité dans la base de données.
      * Paramètres : 
-     *      @param {object} requestData contient le id de la personne à supprimer.
+     *      @param {object} requestData contient le id de l'entité à supprimer.
      * 
      * Retourne : 
      *      @return 
@@ -211,7 +208,7 @@ abstract class AbstractController {
     /**
      * @method getInfo renvoi la liste des informations des champs de l'entité et les règle de validation de chaque champs.
      * Paramètres : 
-     *      @param {object} requestData - contient "route" qui spécifie le retour des règles approprié
+     *      @param {object} requestData - contient "route":"___" qui spécifie les règles de validation à envoyer selon la route voulue.
      * 
      * Retourne : 
      *      @return 
