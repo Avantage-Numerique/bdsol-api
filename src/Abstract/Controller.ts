@@ -1,6 +1,8 @@
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 import {ApiResponseContract} from "../Http/Responses/ApiResponse";
 import {StatusCodes, ReasonPhrases} from "http-status-codes";
+
+
 import {ErrorResponse} from "../Http/Responses/ErrorResponse";
 import Validator from "../Validation/Validator";
 import AbstractModel from "./Model";
@@ -11,8 +13,15 @@ import {SuccessResponse} from "../Http/Responses/SuccessResponse";
 
 abstract class AbstractController {
 
+
+
     abstract service:Service;
     abstract entity:AbstractModel;
+
+    public responseReturn(status:ApiResponseContract, res:any){
+        const response = status;
+        return res.status(response.code).send(response);
+    }
 
     /**
      * @method create permet de créer et d'insérer une nouvelle entité "Personne" dans la base de donnée à partir de la requête.
@@ -28,27 +37,25 @@ abstract class AbstractController {
         const {data} = req.body;
         const messageValidate = Validator.validateData(data, this.entity.RuleSet("create"));
         if (!messageValidate.isValid)
-            return ErrorResponse.create(
+            return this.responseReturn(ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 messageValidate.message
-                );
+                ), res);
 
         //Can I just :  formatedData = {requestData}:Xschema
         const formatedData = this.entity.formatRequestDataForDocument(data);
         const createdDocumentResponse = await this.service.insert(formatedData);
         
         if (createdDocumentResponse !== undefined)
-            return createdDocumentResponse;
+            return this.responseReturn(createdDocumentResponse,res);
 
         LogHelper.debug("Le code manque de robustesse. Entity/create");
-        return ErrorResponse.create(
+        return this.responseReturn(ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
             StatusCodes.INTERNAL_SERVER_ERROR,
             'Les données semblent être ok, mais la création n\'a pas eu lieu.'
-            );
-
-        //return res.status(response.code).send(response);
+            ),res);
     }
 
 
@@ -66,24 +73,24 @@ abstract class AbstractController {
         //Validation des données
         const messageUpdate = Validator.validateData(data, this.entity.RuleSet("update"));
         if (!messageUpdate.isValid)
-            return ErrorResponse.create(
+            return this.responseReturn(ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 messageUpdate.message
-                );
+                ),res);
 
         const formatedData = this.entity.formatRequestDataForDocument(data);
         const updatedModelResponse:any = await this.service.update(data.id, formatedData);
 
         if (updatedModelResponse !== undefined)
-            return updatedModelResponse;
+            return this.responseReturn(updatedModelResponse, res);
 
         LogHelper.debug("Le code manque de robustesse. Personnes/update");
-        return ErrorResponse.create(
+        return this.responseReturn(ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
             StatusCodes.INTERNAL_SERVER_ERROR,
             'Les données semblent être ok, mais la mise à jour n\'a pas eu lieu.'
-            );
+            ),res);
     
     }
 
@@ -103,34 +110,35 @@ abstract class AbstractController {
 
         const messageUpdate = Validator.validateData(data, this.entity.RuleSet("search"));
         if (!messageUpdate.isValid)
-            return ErrorResponse.create(
+            return this.responseReturn(ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 messageUpdate.message
-                );
+            ),res);
 
         //Validation date
         if (data.createdAt !== undefined &&
             //typeof data.createdAt == 'string' &&
             ( data.createdAt.substring(0,1) != '<' && data.createdAt.substring(0,1) != '>' ))
-            return ErrorResponse.create(
+            return this.responseReturn(ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 "Le premier caractère de createdAt doit être '<' ou '>'"
-                );
+                ),res);
 
         if (data.updatedAt !== undefined &&
             //typeof data.updatedAt == 'string' &&
             ( data.updatedAt.substring(0,1) != '<' && data.updatedAt.substring(0,1) != '>' ))
-            return ErrorResponse.create(
+            return this.responseReturn(ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 "Le premier caractère de updatedAt doit être '<' ou '>'"
-                );
+                ),res);
 
         const query = QueryBuilder.build(data);
 
-        return await this.service.get(query);
+        const response = await this.service.get(query);
+        return this.responseReturn(response, res);
     }
 
 
@@ -150,34 +158,35 @@ abstract class AbstractController {
 
         const messageUpdate = Validator.validateData(data, this.entity.RuleSet("list"));
         if (!messageUpdate.isValid)
-            return ErrorResponse.create(
+            return this.responseReturn(ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 messageUpdate.message
-                );
+                ),res);
 
         //Validation date
         if (data.createdAt !== undefined &&
             //typeof data.createdAt == 'string' &&
             ( data.createdAt.substring(0,1) != '<' && data.createdAt.substring(0,1) != '>' ))
-            return ErrorResponse.create(
+            return this.responseReturn(ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 "Le premier caractère de createdAt doit être '<' ou '>'"
-                );
+                ),res);
 
         if (data.updatedAt !== undefined &&
             //typeof data.updatedAt == 'string' &&
             ( data.updatedAt.substring(0,1) != '<' && data.updatedAt.substring(0,1) != '>' ))
-            return ErrorResponse.create(
+            return this.responseReturn(ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 "Le premier caractère de updatedAt doit être '<' ou '>'"
-                );
+                ),res);
 
         const query = QueryBuilder.build(data);
 
-        return await this.service.all(query);
+        const response = await this.service.all(query);
+        return res.status(response.code).send(response);
     }
 
 
@@ -200,9 +209,9 @@ abstract class AbstractController {
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 messageUpdate.message
-                ); 
-        
-        return await this.service.delete(data.id);
+                );
+        const response = await this.service.delete(data.id);
+        return res.status(response.code).send(response);
     }
 
 
@@ -219,11 +228,11 @@ abstract class AbstractController {
         const {data} = req.body;
         
         if (typeof data === undefined || typeof data !== 'object' || Object.keys(data).length < 1)
-            return ErrorResponse.create(
+            return this.responseReturn(ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 "La requête n'est pas un objet. "
-                );
+                ),res);
 
         const info:any = this.entity.infoChamp;
         info.state = data.route;
@@ -233,7 +242,7 @@ abstract class AbstractController {
             //Insère les rules dans le champs
             value.rules = routeRules[value.name];
         });
-        return SuccessResponse.create(info, StatusCodes.OK, ReasonPhrases.OK);
+        return this.responseReturn(SuccessResponse.create(info, StatusCodes.OK, ReasonPhrases.OK),res);
     }
 
 

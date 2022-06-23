@@ -1,6 +1,5 @@
 import Rules from "./Rules"
 import LogHelper from "../Monitoring/Helpers/LogHelper";
-import { LoggerLevel } from "mongodb";
 
 //add isValid - contract to limit used
 // Check if this is overkill
@@ -65,7 +64,7 @@ export default class Validator {
                     //ex: minLenght:3  => param = 3, rule = minLength
                     param = rule.substring(rule.indexOf(":")+1, rule.length);
                     rule = rule.substring(0, rule.indexOf(":"));
-                  }
+                }
                 
                 switch (rule){
                 case "isDefined" :
