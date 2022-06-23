@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import {Schema} from "mongoose";
 import {OrganisationSchema} from "../Schemas/OrganisationSchema";
 import {DbProvider, DataProvider} from "../../Database/DatabaseDomain";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 
 class Organisation {

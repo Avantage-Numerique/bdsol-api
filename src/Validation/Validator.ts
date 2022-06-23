@@ -1,7 +1,5 @@
-import { isJSDocDeprecatedTag } from "typescript";
-import LogHelper from "../Monitoring/Helpers/LogHelper";
-import { isDefined, isNotNull, isString, isNotEmpty, minLength,
-        maxLength, idValid, isObject, objectNotEmpty, isDate } from "./Rules";
+
+import * as Rules from "./Rules";
 //add isValid - contract to limit used
 // Check if this is overkill
 
@@ -29,16 +27,16 @@ import { isDefined, isNotNull, isString, isNotEmpty, minLength,
 export default class Validator {
 
     //Instantiate de rules handler
-    public isdefined = new isDefined();
-    private isnotnull = new isNotNull();
-    private isstring = new isString();
-    private isnotempty = new isNotEmpty();
-    private minlenght = new minLength();
-    private maxlength = new maxLength();
-    private idvalid = new idValid();
-    private isobject = new isObject();
-    private objectnotempty = new objectNotEmpty();
-    private isdate = new isDate();
+    public isdefined = new Rules.isDefined();
+    private isnotnull = new Rules.isNotNull();
+    private isstring = new Rules.isString();
+    private isnotempty = new Rules.isNotEmpty();
+    private minlenght = new Rules.minLength();
+    private maxlength = new Rules.maxLength();
+    private idvalid = new Rules.idValid();
+    private isobject = new Rules.isObject();
+    private objectnotempty = new Rules.objectNotEmpty();
+    private isdate = new Rules.isDate();
 
 
     /** 
@@ -109,90 +107,6 @@ export default class Validator {
                         isValid = false;
                     }
                 }
-
-                  
-                //Possible de le coder comme un handler (chain of responsability. Dans ce cas le "switch" se fait remplacer par une
-                //  création d'instance du handler et une assignation du handler à une chaine, suivi d'un appel à la vérification rule)
-                //  (Possible de créer l'instance une seule fois globalement et de l'utiliser pour vérifier tout les cas)
-                /*
-                switch (rule){
-                case "isDefined" :
-                    if ( !Rules.isDefined(dataField) ){
-                        isValid = false;
-                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isDefined;
-                    } break;
-                case "isNotNull" :
-                    if ( !Rules.isNotNull(dataField) ){
-                        isValid = false;
-                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isNotNull;
-                    } break;
-                case "isString" :
-                    if ( !Rules.isString(dataField) ){
-                        isValid = false;
-                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isString;
-                    } break;
-                case "isNotEmpty" :
-                    if ( !Rules.isNotEmpty(dataField) ){
-                        isValid = false;
-                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isNotEmpty;
-                    } break;
-                case "minLength" :
-                    if ( !Rules.minLength(dataField, param) ){
-                        isValid = false;
-                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.minLength;
-                    } break;
-                case "maxLength" :
-                    if ( !Rules.maxLength(dataField, param) ){
-                        isValid = false;
-                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.maxLength;
-                    } break;
-                case "idValid" :
-                    if ( !Rules.idValid(dataField) ){
-                        isValid = false;
-                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.idValid;
-                    } break;
-                case "isObject" :
-                    if ( !Rules.isObject(dataField) ) {
-                        isValid = false;
-                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isObject;
-                    } break;
-                case "isDate" :
-                    if ( !Rules.isDate(dataField) ) {
-                        isValid = false;
-                        message += "\n"+field + " : " +data[field]+" => "+Rules.ruleErrorMsg.isDate;
-                    } break;
-                default:
-                    LogHelper.warn("Validator.validate : La règle "+rule+ " n'est pas implémentée.");
-                    isValid = false;
-                    message += "\nLa règle "+rule+ "n'est pas implémentée."; break;
-                    
-                }
-                /*
-                //Si la règle existe
-                if(Rules[rule]() != undefined){
-                    LogHelper.debug("Entré dans si la regle existe");
-                    //Si param est défini, appel fonction avec param
-                    if ( param != -1){
-                        if (!Rules[rule](data[field], param)){
-                            //Si la valeur n'est pas valide
-                            isValid = false;
-                            message += "\n"+Rules.ruleErrorMsg[rule];
-                        }
-                    }
-                    //Si param non défini, appel fonction sans param
-                    else{
-                        if ( !Rules[rule](data[field]) ) {
-                            //Si la valeur n'est pas valide
-                            isValid = false;
-                            message += "\n"+Rules.ruleErrorMsg[rule];
-                        }
-                    }
-                }
-                else {
-                    LogHelper.debug("Validator.validate : La règle "+rule+ "n'est pas implémentée.");
-                    isValid = false;
-                    message += "\nLa règle "+rule+ "n'est pas implémentée.";
-                }*/
             }
         }
         if (isValid)
@@ -202,77 +116,3 @@ export default class Validator {
     }
 
 }
-
-//"Nom" : ["notEmpty", "notNull", "notUndefined"]//Rules
-
-
-/*
-const
-    //(response).
-    data {
-        champs = [
-            {
-                "name": "nom",
-                "label": "Nom",
-                "type": "string",//Rich? //Longtext ?
-                "reapeatable": true,
-                "rules": ["required", "notEmpty", "notNull", "notUndefined"]
-            }
-        ]
-    }
-};*/
-
-/*
-//Dans la classe Personne:
-static validatorSchema =
-    {
-        "variables":["nom", "prenom", "surnom", "description"],
-        "notEmpty":["nom","prenom"],
-        "isSet":["nom","prenom"],
-        "notNull":["nom","prenom"],
-        "notUndefined":["nom","prenom"],
-        "minLenght":[{"nom":"2"},{"prenom":"2"}],
-        "comporte 3 voyelle":[],
-        "autre règle quelconque":[]
-    }
-
-//Dans la classe validator
-class Validator {
-    constructor(){};
-    static Validator(collection:string, requestData:any)
-    {
-        let validSchema;
-        switch(collection){
-            case "personnes":
-                validSchema = Personne.validatorSchema; break;
-            case "users":
-                validSchema = Users.validatorSchema; break;
-            default: validSchema = null;
-        }
-        if(validSchema === null)
-            return;//erreur pas de schéma
-
-        //rules
-        let isValid = true;
-        let message = "";
-        message += Validator.notEmpty(validSchema.variables, validSchema.notEmpty, requestData)
-        message += Validator.isSet(validSchema.isSet, requestData)
-
-        //Si il y a un message, alors pas valide.
-        if(message !== "")
-            isValid = false;
-
-        return {message, isValid};
-    }
-    private notEmpty(variables:any, schema:any, data:any):string
-    {
-        //Exemple :    schema= {"notEmpty":["nom","prenom"]}
-
-        //For each element in schema (schema = "notEmpty":[nom, prénom]),
-            //si requestData.(variables[0,1,2,3....]) contient l'élément (notEmpty => [nom, prenom])
-                //faire la vérif notEmpty sur l'élément
-                    //si erreur, message += l'élément est fautif
-        //return message;
-    }
-}
- */
