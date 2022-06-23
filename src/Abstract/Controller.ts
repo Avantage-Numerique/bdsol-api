@@ -13,8 +13,6 @@ import {SuccessResponse} from "../Http/Responses/SuccessResponse";
 
 abstract class AbstractController {
 
-
-
     abstract service:Service;
     abstract entity:AbstractModel;
 
@@ -28,11 +26,9 @@ abstract class AbstractController {
      * Retourne :
      * @return {ApiResponseContract} en Promise
     */
-    public async create(req:any, res:any):Promise<ApiResponseContract> {
+    public async create(requestData:any):Promise<ApiResponseContract> {
 
-        const {data} = req.body;
-
-        const messageValidate = Validator.validateData(data, this.entity.RuleSet("create"));
+        const messageValidate = Validator.validateData(requestData, this.entity.RuleSet("create"));
 
         if (!messageValidate.isValid)
             return ErrorResponse.create(
@@ -42,7 +38,7 @@ abstract class AbstractController {
             );
 
         //Can I just :  formatedData = {requestData}:Xschema
-        const formatedData = this.entity.formatRequestDataForDocument(data);
+        const formatedData = this.entity.formatRequestDataForDocument(requestData);
 
         const createdDocumentResponse = await this.service.insert(formatedData);
 
@@ -68,10 +64,10 @@ abstract class AbstractController {
      * Retourne :
      *      @return {ApiResponseContract} 
      */
-    public async update(req:any, res:any):Promise<ApiResponseContract> {
-        const {data} = req.body;
+    public async update(requestData:any):Promise<ApiResponseContract> {
+        
         //Validation des données
-        const messageUpdate = Validator.validateData(data, this.entity.RuleSet("update"));
+        const messageUpdate = Validator.validateData(requestData, this.entity.RuleSet("update"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -79,8 +75,8 @@ abstract class AbstractController {
                 messageUpdate.message
                 );
 
-        const formatedData = this.entity.formatRequestDataForDocument(data);
-        const updatedModelResponse:any = await this.service.update(data.id, formatedData);
+        const formatedData = this.entity.formatRequestDataForDocument(requestData);
+        const updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
 
         if (updatedModelResponse !== undefined)
             return updatedModelResponse;
@@ -104,11 +100,11 @@ abstract class AbstractController {
      *      @default critères vide: Retourne le premier résultat
      *      @return {ApiResponseContract}
     */
-    public async search(req:any, res:any):Promise<ApiResponseContract> {
+    public async search(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la recherche dans la liste");
-        const {data} = req.body;
+        
 
-        const messageUpdate = Validator.validateData(data, this.entity.RuleSet("search"));
+        const messageUpdate = Validator.validateData(requestData, this.entity.RuleSet("search"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -117,25 +113,25 @@ abstract class AbstractController {
             );
 
         //Validation date
-        if (data.createdAt !== undefined &&
+        if (requestData.createdAt !== undefined &&
             //typeof data.createdAt == 'string' &&
-            ( data.createdAt.substring(0,1) != '<' && data.createdAt.substring(0,1) != '>' ))
+            ( requestData.createdAt.substring(0,1) != '<' && requestData.createdAt.substring(0,1) != '>' ))
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 "Le premier caractère de createdAt doit être '<' ou '>'"
                 );
 
-        if (data.updatedAt !== undefined &&
+        if (requestData.updatedAt !== undefined &&
             //typeof data.updatedAt == 'string' &&
-            ( data.updatedAt.substring(0,1) != '<' && data.updatedAt.substring(0,1) != '>' ))
+            ( requestData.updatedAt.substring(0,1) != '<' && requestData.updatedAt.substring(0,1) != '>' ))
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 "Le premier caractère de updatedAt doit être '<' ou '>'"
                 );
 
-        const query = QueryBuilder.build(data);
+        const query = QueryBuilder.build(requestData);
 
         return await this.service.get(query);
     }
@@ -151,11 +147,11 @@ abstract class AbstractController {
      * Retourne : 
      *      @return 
     */
-    public async list(req:any, res:any):Promise<ApiResponseContract> {
+    public async list(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la requête d'obtention de la liste de personne");
-        const {data} = req.body;
+        
 
-        const messageUpdate = Validator.validateData(data, this.entity.RuleSet("list"));
+        const messageUpdate = Validator.validateData(requestData, this.entity.RuleSet("list"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -164,25 +160,25 @@ abstract class AbstractController {
                 );
 
         //Validation date
-        if (data.createdAt !== undefined &&
+        if (requestData.createdAt !== undefined &&
             //typeof data.createdAt == 'string' &&
-            ( data.createdAt.substring(0,1) != '<' && data.createdAt.substring(0,1) != '>' ))
+            ( requestData.createdAt.substring(0,1) != '<' && requestData.createdAt.substring(0,1) != '>' ))
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 "Le premier caractère de createdAt doit être '<' ou '>'"
                 );
 
-        if (data.updatedAt !== undefined &&
+        if (requestData.updatedAt !== undefined &&
             //typeof data.updatedAt == 'string' &&
-            ( data.updatedAt.substring(0,1) != '<' && data.updatedAt.substring(0,1) != '>' ))
+            ( requestData.updatedAt.substring(0,1) != '<' && requestData.updatedAt.substring(0,1) != '>' ))
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 "Le premier caractère de updatedAt doit être '<' ou '>'"
                 );
 
-        const query = QueryBuilder.build(data);
+        const query = QueryBuilder.build(requestData);
 
         return await this.service.all(query);
     }
@@ -197,18 +193,18 @@ abstract class AbstractController {
      * Retourne : 
      *      @return 
     */
-    public async delete(req:any, res:any):Promise<ApiResponseContract> {
+    public async delete(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la suppression d'une personne");
-        const {data} = req.body;
+        
 
-        const messageUpdate = Validator.validateData(data, this.entity.RuleSet("delete"));
+        const messageUpdate = Validator.validateData(requestData, this.entity.RuleSet("delete"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 messageUpdate.message
                 );
-        return await this.service.delete(data.id);
+        return await this.service.delete(requestData.id);
     }
 
 
@@ -220,11 +216,11 @@ abstract class AbstractController {
      * Retourne : 
      *      @return 
     */
-    public async getInfo(req:any, res:any):Promise<ApiResponseContract> {
+    public async getInfo(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la création des informations du champs");
-        const {data} = req.body;
         
-        if (typeof data === undefined || typeof data !== 'object' || Object.keys(data).length < 1)
+        
+        if (typeof requestData === undefined || typeof requestData !== 'object' || Object.keys(requestData).length < 1)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
@@ -232,9 +228,9 @@ abstract class AbstractController {
                 );
 
         const info:any = this.entity.infoChamp;
-        info.state = data.route;
+        info.state = requestData.route;
 
-        const routeRules = this.entity.RuleSet(data.route);
+        const routeRules = this.entity.RuleSet(requestData.route);
         this.entity.infoChamp.champs.forEach(function(value:any){
             //Insère les rules dans le champs
             value.rules = routeRules[value.name];

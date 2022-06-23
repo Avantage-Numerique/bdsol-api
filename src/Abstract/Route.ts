@@ -23,37 +23,45 @@ abstract class AbstractRoute
 
     public async createHandler(req: any, res: any): Promise<ApiResponseContract>
     {
-        return await this.controllerInstance.create(req, res);
+        const response = await this.controllerInstance.create(req.body.data);
+        return res.status(response.code).send(response);
     }
 
 
     public async updateHandler(req: any, res: any): Promise<ApiResponseContract>
     {
-        return await this.controllerInstance.update(req, res);
+        const response = await this.controllerInstance.update(req.body.data);
+        return res.status(response.code).send(response);
     }
 
 
     public async searchHandler(req: any, res: any): Promise<ApiResponseContract>
     {
-        return await this.controllerInstance.update(req, res);
+        const response = await this.controllerInstance.update(req.body.data);
+        return res.status(response.code).send(response);
     }
 
 
     public async listHandler(req: any, res: any): Promise<ApiResponseContract>
     {
-        return await this.controllerInstance.update(req, res);
+        const response = await this.controllerInstance.update(req.body.data);
+        return res.status(response.code).send(response);
+
     }
 
 
     public async deleteHandler(req: any, res: any): Promise<ApiResponseContract>
     {
-        return await this.controllerInstance.delete(req, res);
+        const response = await this.controllerInstance.delete(req.body.data);
+        return res.status(response.code).send(response);
+
     }
 
 
     public async getInfoHandler(req: any, res: any): Promise<ApiResponseContract>
     {
-        return await this.controllerInstance.getInfo(req, res);
+        const response = await this.controllerInstance.getInfo(req.body.data);
+        return res.status(response.code).send(response);
     }
 }
 
