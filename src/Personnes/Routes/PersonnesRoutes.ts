@@ -1,9 +1,14 @@
 import express from "express";
 import {PersonnesController} from "../Controllers/PersonnesController";
+import AbstractRoute from "../../Abstract/Route";
+import AbstractController from "../../Abstract/Controller";
 
-const PersonnesRouter = express.Router();
-const controller = new PersonnesController();
+class PersonnesRoutes extends AbstractRoute {
+    controllerInstance: AbstractController = PersonnesController.getInstance();
+    routerInstance: express.Router = express.Router();
+}
 
+//const personneController = PersonnesController.getInstance();
 /**
  * @method POST/UPDATE Demande la mise à jour des données d'une personne de la base de données.
  * 
@@ -22,12 +27,4 @@ const controller = new PersonnesController();
     //return res.status(response.code).send(response); //Ceci doit être retourné par la f(x) du controller.
 //});
 
-PersonnesRouter.post('/create', controller.create);
-PersonnesRouter.post('/update', controller.update);
-PersonnesRouter.post('/search', controller.search);
-PersonnesRouter.post('/list', controller.list);
-PersonnesRouter.post('/delete', controller.delete);
-PersonnesRouter.post('/getinfo', controller.getInfo);
-
-
-export {PersonnesRouter};
+export {PersonnesRoutes};

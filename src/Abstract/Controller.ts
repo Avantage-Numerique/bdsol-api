@@ -18,44 +18,44 @@ abstract class AbstractController {
     abstract service:Service;
     abstract entity:AbstractModel;
 
-    public responseReturn(status:ApiResponseContract, res:any){
-        const response = status;
-        return res.status(response.code).send(response);
-    }
-
     /**
      * @method create permet de créer et d'insérer une nouvelle entité "Personne" dans la base de donnée à partir de la requête.
      * 
      * Paramètres : 
-     *      @param {key:value} requestData - attributs requis à la création d'une personne
-     * 
+     * @param {any} req requête d'expressjs
+     * @param {any} res response pour expressjs.
+     *
      * Retourne :
-     *      @return {ApiResponseContract}
+     * @return {ApiResponseContract} en Promise
     */
     public async create(req:any, res:any):Promise<ApiResponseContract> {
 
         const {data} = req.body;
+
         const messageValidate = Validator.validateData(data, this.entity.RuleSet("create"));
+
         if (!messageValidate.isValid)
-            return this.responseReturn(ErrorResponse.create(
+            return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 messageValidate.message
-                ), res);
+            );
 
         //Can I just :  formatedData = {requestData}:Xschema
         const formatedData = this.entity.formatRequestDataForDocument(data);
-        const createdDocumentResponse = await this.service.insert(formatedData);
-        
-        if (createdDocumentResponse !== undefined)
-            return this.responseReturn(createdDocumentResponse,res);
 
-        LogHelper.debug("Le code manque de robustesse. Entity/create");
-        return this.responseReturn(ErrorResponse.create(
+        const createdDocumentResponse = await this.service.insert(formatedData);
+
+        if (createdDocumentResponse !== undefined)
+            return createdDocumentResponse;
+
+
+        LogHelper.debug("La réponse à la méthode insert est undefined");
+        return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
             StatusCodes.INTERNAL_SERVER_ERROR,
-            'Les données semblent être ok, mais la création n\'a pas eu lieu.'
-            ),res);
+            'Le service. instert a retourné une réponse undefined'
+        );
     }
 
 
@@ -73,24 +73,24 @@ abstract class AbstractController {
         //Validation des données
         const messageUpdate = Validator.validateData(data, this.entity.RuleSet("update"));
         if (!messageUpdate.isValid)
-            return this.responseReturn(ErrorResponse.create(
+            return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 messageUpdate.message
-                ),res);
+                );
 
         const formatedData = this.entity.formatRequestDataForDocument(data);
         const updatedModelResponse:any = await this.service.update(data.id, formatedData);
 
         if (updatedModelResponse !== undefined)
-            return this.responseReturn(updatedModelResponse, res);
+            return updatedModelResponse;
 
         LogHelper.debug("Le code manque de robustesse. Personnes/update");
-        return this.responseReturn(ErrorResponse.create(
+        return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
             StatusCodes.INTERNAL_SERVER_ERROR,
             'Les données semblent être ok, mais la mise à jour n\'a pas eu lieu.'
-            ),res);
+            );
     
     }
 
@@ -110,35 +110,34 @@ abstract class AbstractController {
 
         const messageUpdate = Validator.validateData(data, this.entity.RuleSet("search"));
         if (!messageUpdate.isValid)
-            return this.responseReturn(ErrorResponse.create(
+            return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 messageUpdate.message
-            ),res);
+            );
 
         //Validation date
         if (data.createdAt !== undefined &&
             //typeof data.createdAt == 'string' &&
             ( data.createdAt.substring(0,1) != '<' && data.createdAt.substring(0,1) != '>' ))
-            return this.responseReturn(ErrorResponse.create(
+            return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 "Le premier caractère de createdAt doit être '<' ou '>'"
-                ),res);
+                );
 
         if (data.updatedAt !== undefined &&
             //typeof data.updatedAt == 'string' &&
             ( data.updatedAt.substring(0,1) != '<' && data.updatedAt.substring(0,1) != '>' ))
-            return this.responseReturn(ErrorResponse.create(
+            return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 "Le premier caractère de updatedAt doit être '<' ou '>'"
-                ),res);
+                );
 
         const query = QueryBuilder.build(data);
 
-        const response = await this.service.get(query);
-        return this.responseReturn(response, res);
+        return await this.service.get(query);
     }
 
 
@@ -158,35 +157,34 @@ abstract class AbstractController {
 
         const messageUpdate = Validator.validateData(data, this.entity.RuleSet("list"));
         if (!messageUpdate.isValid)
-            return this.responseReturn(ErrorResponse.create(
+            return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 messageUpdate.message
-                ),res);
+                );
 
         //Validation date
         if (data.createdAt !== undefined &&
             //typeof data.createdAt == 'string' &&
             ( data.createdAt.substring(0,1) != '<' && data.createdAt.substring(0,1) != '>' ))
-            return this.responseReturn(ErrorResponse.create(
+            return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 "Le premier caractère de createdAt doit être '<' ou '>'"
-                ),res);
+                );
 
         if (data.updatedAt !== undefined &&
             //typeof data.updatedAt == 'string' &&
             ( data.updatedAt.substring(0,1) != '<' && data.updatedAt.substring(0,1) != '>' ))
-            return this.responseReturn(ErrorResponse.create(
+            return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 "Le premier caractère de updatedAt doit être '<' ou '>'"
-                ),res);
+                );
 
         const query = QueryBuilder.build(data);
 
-        const response = await this.service.all(query);
-        return res.status(response.code).send(response);
+        return await this.service.all(query);
     }
 
 
@@ -210,8 +208,7 @@ abstract class AbstractController {
                 StatusCodes.BAD_REQUEST,
                 messageUpdate.message
                 );
-        const response = await this.service.delete(data.id);
-        return res.status(response.code).send(response);
+        return await this.service.delete(data.id);
     }
 
 
@@ -228,11 +225,11 @@ abstract class AbstractController {
         const {data} = req.body;
         
         if (typeof data === undefined || typeof data !== 'object' || Object.keys(data).length < 1)
-            return this.responseReturn(ErrorResponse.create(
+            return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 "La requête n'est pas un objet. "
-                ),res);
+                );
 
         const info:any = this.entity.infoChamp;
         info.state = data.route;
@@ -242,7 +239,7 @@ abstract class AbstractController {
             //Insère les rules dans le champs
             value.rules = routeRules[value.name];
         });
-        return this.responseReturn(SuccessResponse.create(info, StatusCodes.OK, ReasonPhrases.OK),res);
+        return SuccessResponse.create(info, StatusCodes.OK, ReasonPhrases.OK);
     }
 
 

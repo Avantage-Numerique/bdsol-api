@@ -1,8 +1,10 @@
 import ApiResponse, {ApiResponseContract} from "./ApiResponse";
 
-export class ErrorResponse extends ApiResponse {
+export class ErrorResponse extends ApiResponse
+{
 
-    constructor(response:ApiResponseContract) {
+    constructor(response:ApiResponseContract)
+    {
         super(response);
         this.error = true;
     }

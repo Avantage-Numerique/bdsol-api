@@ -4,7 +4,7 @@ import {ApiRouter} from "./routes";
 import {HealthCheckRouter} from "./Healthcheck/Routes/HealthCheckRoutes";
 import {AuthentificationRouter} from "./Authentification/Routes/AuthentificationRoutes";
 import {UsersRouter} from "./Users/Routes/UsersRouter";
-import {PersonnesRouter} from './Personnes/Routes/PersonnesRoutes';
+import {PersonnesRoutes} from './Personnes/Routes/PersonnesRoutes';
 import {OrganisationsRouter} from './Organisations/Routes/OrganisationsRoutes'
 import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
 import {RegistrationRouter} from "./Authentification/Routes/RegistrationRoutes";
@@ -13,12 +13,13 @@ import {RegistrationRouter} from "./Authentification/Routes/RegistrationRoutes";
  * Main class for the API
  * Use the express instance as public property.
  */
-class Api {
+export default class Api {
     public express: express.Application = express();
     public authRouters:any;
 
-    constructor()
-    {
+    //constructor() {}
+
+    public start() {
         this._initMiddleware();
         this._initRouter();
     }
@@ -64,25 +65,19 @@ class Api {
 
         //Tools the manage the health of the API
         this.express.use("/", HealthCheckRouter);
-
-        this.express.use("/users", UsersRouter);
     }
 
     private _needAuthentificationRoutes()
     {
         // Users Routes
 
-
         //Personnes Routes
-        this.express.use("/personne", PersonnesRouter);
-        this.express.use("/personnes", PersonnesRouter);
+        const PersonnesRouter = new PersonnesRoutes();
+        this.express.use("/personnes", PersonnesRouter.setupRoutes());
 
         //Organisations Routes
         this.express.use("/organisations", OrganisationsRouter);
+
+        this.express.use("/users", UsersRouter);
     }
 }
-
-/**
- * Export an instance of the main API class and pass the Express.
- */
-export default new Api().express;

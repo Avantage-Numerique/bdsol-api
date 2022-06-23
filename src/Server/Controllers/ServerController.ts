@@ -1,4 +1,3 @@
-import express from 'express';
 import * as http from "http";
 import config from "../../config";
 
@@ -10,6 +9,7 @@ import {
 
 import {ReasonPhrases,StatusCodes} from 'http-status-codes';
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import Api from "../../api";
 
 /**
  * Manage all the serveur actions and connect the app to the ROUTE.
@@ -19,7 +19,7 @@ export default class ServerController {
     static database: DBDriver;
 
     server: http.Server;
-    api: express.Application;
+    api: Api;
 
     static _singleton:ServerController;
 
@@ -27,10 +27,10 @@ export default class ServerController {
      * Create an instance of ServerController with the express app.
      * @param api express.Application
      */
-    constructor(api: express.Application)
+    constructor(api:Api)
     {
         this.api = api;
-        this.server = http.createServer(this.api);
+        //this.server = http.createServer(this.api);
 
         //this.api.serverController = this;
         LogHelper.log('Départ de la configuration du serveur pour l\'API');
@@ -41,7 +41,7 @@ export default class ServerController {
      * Le singleton du ServerController qu'on veut avoir seulement une instance.
      * @param api express.Application Pour initié et associé l'application express au projet.
      */
-    static getInstance(api:express.Application)
+    static getInstance(api:Api)
     {
         if (ServerController._singleton === undefined) {
             ServerController._singleton = new ServerController(api);
@@ -73,7 +73,7 @@ export default class ServerController {
      */
     public async start() {
 
-        this.server = http.createServer(this.api);
+        this.server = http.createServer(this.api.express);
 
         this.server.on("error", this.onError);
         this.server.on("listening", this.onListening);
@@ -85,6 +85,9 @@ export default class ServerController {
             LogHelper.error("Database connection failed", error);
             process.exit(StatusCodes.INTERNAL_SERVER_ERROR);
         }
+
+        LogHelper.info("Démarrage de l'API");
+        this.api.start();
 
         LogHelper.log('Configuration terminée, départ de l\'écoute sur le serveur');
         this.server.listen(config.port);

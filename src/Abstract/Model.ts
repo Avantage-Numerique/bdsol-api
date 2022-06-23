@@ -12,16 +12,15 @@ abstract class AbstractModel {
     abstract collectionName:string;
 
     abstract connection:mongoose.Connection;
-
     abstract provider:DbProvider;
-
     abstract schema:Schema;
 
     abstract infoChamp:any;
 
     abstract ruleSet:any;
 
-    public initSchema(){
+    public initSchema()
+    {
         if (this.providerIsSetup()){
             this.provider.connection.model(this.modelName, this.schema);
         }
@@ -31,7 +30,8 @@ abstract class AbstractModel {
      * @public @method getInstance
      * @return model
      */
-    public getInstance() {
+    public getInstance()
+    {
         this.provider = DataProvider.getInstance();//must have
         if (this.providerIsSetup()) {
             this.initSchema();
@@ -50,7 +50,8 @@ abstract class AbstractModel {
      * @public @method providerIsSetup
      * @return {boolean} isSetup
     */
-    public providerIsSetup():boolean {
+    public providerIsSetup():boolean
+    {
         return this.provider !== undefined && this.provider.connection !== undefined;
     }
     
@@ -63,7 +64,8 @@ abstract class AbstractModel {
      * @public @method RuleSet
      * @return Combinaison du ruleSet default et celui spécifié en string (ex :"create")
     */
-    public RuleSet(route?:string){
+    public RuleSet(route?:string)
+    {
         //Si vide, renvoie les règles par défaut.
         if(route === undefined){
             return this.ruleSet.default;
