@@ -5,6 +5,7 @@ import {StatusCodes, ReasonPhrases} from "http-status-codes";
 import {SuccessResponse} from "../Http/Responses/SuccessResponse";
 import {ErrorResponse} from "../Http/Responses/ErrorResponse";
 import type {ApiResponseContract} from "../Http/Responses/ApiResponse";
+import AbstractModel from "../Abstract/Model";
 
 /**
  * Give ability to query and CRUD on collections and its documents.
@@ -21,8 +22,8 @@ export abstract class Service {
     DELETE_STATE:string = "delete";
     LIST_STATE:string = "list";
 
-    constructor(model: any) {
-        this.model = model;
+    constructor(model: AbstractModel) {
+        this.model = model.connect();
     }
 
     /**
@@ -102,14 +103,17 @@ export abstract class Service {
         try {
             //let item = await this.model.create(data);
             // UpdateOne
+            LogHelper.debug("insert begin", this.model, this.model.create);
             const meta = await this.model.create(data)
                 .then((model: any) => {
                     return model;
                 })
                 .catch((e: any) => {
+                    LogHelper.debug("model.create", e);
                     return e;
                 });
 
+            LogHelper.debug("insert", meta);
             return this.parseResult(meta, 'Création');
 
         } catch (insertError: any) {

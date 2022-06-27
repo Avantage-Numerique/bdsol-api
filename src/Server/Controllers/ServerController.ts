@@ -61,10 +61,6 @@ export default class ServerController {
             ServerController.database = new MongooseDBDriver();
             return;
         }
-        if (config.db.driver === 'fakeusers') {
-            ServerController.database = new FakeUserDBDriver();
-            return;
-        }
     }
 
     /**

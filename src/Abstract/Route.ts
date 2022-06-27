@@ -14,8 +14,16 @@ abstract class AbstractRoute
         this.routerInstance.post('/create', this.createHandler.bind(this));
         this.routerInstance.post('/update', this.updateHandler.bind(this));
         this.routerInstance.post('/search', this.searchHandler.bind(this));
+        //this.routerInstance.post('/list', this.listHandler.bind(this));
+        //this.routerInstance.post('/delete', this.deleteHandler.bind(this));
+        this.routerInstance.post('/getinfo', this.getInfoHandler.bind(this));
+        return this.routerInstance;
+    }
+
+    public setupPublicRoutes()
+    {
+        this.routerInstance.post('/search', this.searchHandler.bind(this));
         this.routerInstance.post('/list', this.listHandler.bind(this));
-        this.routerInstance.post('/delete', this.deleteHandler.bind(this));
         this.routerInstance.post('/getinfo', this.getInfoHandler.bind(this));
         return this.routerInstance;
     }

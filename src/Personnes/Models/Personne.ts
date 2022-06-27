@@ -5,7 +5,19 @@ import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model"
 
 class Personne extends AbstractModel {
-    
+
+    //  Singleton.
+    protected static _instance:Personne;
+
+    public static getInstance():Personne
+    {
+        if (Personne._instance === undefined) {
+            Personne._instance = new Personne();
+            Personne._instance.initSchema();
+        }
+        return Personne._instance;
+    }
+
     /** @public Nom du modèle */
     modelName:string = 'Personne';
 
@@ -16,6 +28,9 @@ class Personne extends AbstractModel {
     connection:mongoose.Connection;
 
     provider:DbProvider;
+
+    mongooseModel:mongoose.Model<any>;
+
 
     /** @public Schéma pour la base de donnée */
     schema:Schema =
@@ -111,6 +126,15 @@ class Personne extends AbstractModel {
             surnom: requestData.surnom,
             description: requestData.description
         } as PersonneSchema;
+    }
+
+    public dataTransfertObject(document: any) {
+        return {
+            nom: document.nom,
+            prenom: document.prenom,
+            surnom: document.surnom,
+            description: document.description,
+        }
     }
 }
 export default Personne;

@@ -38,7 +38,7 @@ abstract class AbstractController {
 
         //Can I just :  formatedData = {requestData}:Xschema
         const formatedData = this.entity.formatRequestDataForDocument(requestData);
-
+        LogHelper.debug("create", requestData);
         const createdDocumentResponse = await this.service.insert(formatedData);
 
         if (createdDocumentResponse !== undefined)

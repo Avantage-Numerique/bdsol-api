@@ -14,51 +14,78 @@ abstract class AbstractModel {
     abstract connection:mongoose.Connection;
     abstract provider:DbProvider;
     abstract schema:Schema;
+    abstract mongooseModel:mongoose.Model<any>;
 
     abstract infoChamp:any;
 
     abstract ruleSet:any;
 
-    public initSchema()
-    {
-        if (this.providerIsSetup()){
-            this.provider.connection.model(this.modelName, this.schema);
-        }
-    }
-
     /**
      * @public @method getInstance
      * @return model
      */
-    public getInstance()
+    public connect()
     {
-        this.provider = DataProvider.getInstance();//must have
-        if (this.providerIsSetup()) {
+        //this.provider = DataProvider.getInstance();
+        if (this.providerIsSetup() && this.connectionIsSetup())
+        {
             this.initSchema();
-            return this.provider.connection.model(this.modelName);
+            return this.mongooseModel = this.provider.connection.model(this.modelName);
         }
+
         LogHelper.error("this Provider is not setup. Can't get this's model",
             this.provider,
-            typeof this.provider,
-            this.provider.connection,
-            typeof this.provider.connection
+            typeof this.provider
         );
+        /**
+         * ,
+         this.provider.connection,
+         typeof this.provider.connection
+         */
         throw new Error("this Provider is not setup. Can't get this's model");
     }
-    
+
+
+    public initSchema()
+    {
+        if (this.providerIsSetup() &&
+            this.connectionIsSetup()){
+            this.provider.connection.model(this.modelName, this.schema);
+        }
+    }
+
+
     /**
+     * Setter the provider
+     * @param provider
+     */
+    public setProvider(provider:DbProvider)
+    {
+        this.provider = provider;
+    }
+
+
+    /**
+     * Return if the provider have a value.
      * @public @method providerIsSetup
      * @return {boolean} isSetup
     */
     public providerIsSetup():boolean
     {
-        return this.provider !== undefined && this.provider.connection !== undefined;
+        return this.provider !== undefined &&
+            this.provider !== null;
     }
-    
-    //get searchSearchableFields():object {
-    //    //eturn {"nom":{},"prenom":{},"surnom":{},"description":{}};
-    //    return ["nom", "prenom","surnom","description"];
-    //}
+
+    /**
+     * Check if the connection have a value in the model.
+     * @return {boolean} if the connection have a valid value.
+     */
+    public connectionIsSetup():boolean
+    {
+        return this.connection !== undefined &&
+            this.connection !== null;
+    }
+
 
     /** 
      * @public @method RuleSet
@@ -75,14 +102,16 @@ abstract class AbstractModel {
         for (const field in this.ruleSet.default){
 
             //Si le field existe dans le ruleSet[route]
-            if(Object.keys(this.ruleSet[route]).indexOf(field) != -1){
+            if(Object.keys(this.ruleSet[route]).indexOf(field) != -1)
+            {
                 concatRule[field] = [
                     ...this.ruleSet[route][field],
                     ...this.ruleSet.default[field]
                 ];
             }
-            //Sinon insérer seulement les règles par défaut.
-            else {
+            //Insert default Rules there.
+            else
+            {
                 concatRule[field] = [...this.ruleSet.default[field]];
             }
         }
@@ -90,6 +119,7 @@ abstract class AbstractModel {
     }
 
     abstract formatRequestDataForDocument(requestData:any):Document;
+    abstract dataTransfertObject(document: any):any;
 
 }
 

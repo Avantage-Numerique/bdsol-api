@@ -4,16 +4,19 @@ import Personne from "../Models/Personne";
 class PersonnesService extends Service
 {
 
+    private static _instance:PersonnesService;
+
     constructor(entity:Personne)
     {
-        super(entity.schema);
-        //let model;
-        //if (mongoose.models[entity.modelName]=== undefined){
-            //model = entity.getInstance();
-            //super(model);
-        //}
-        //else
-            //super(mongoose.models[entity.modelName]);
+        super(entity);
+    }
+
+    public static getInstance(model:any):PersonnesService
+    {
+        if (PersonnesService._instance === undefined) {
+            PersonnesService._instance = new PersonnesService(model);
+        }
+        return PersonnesService._instance;
     }
 }
 

@@ -19,7 +19,8 @@ export default class CreateDbAndUsersMongoose implements MigrationContract {
     public async conditions():Promise<boolean> {
         if (this.provider !== null)
         {
-            const userCount:number = await this.provider.connection.collection(User.collectionName).count();
+            const userModel:User = User.getInstance();
+            const userCount:number = await this.provider.connection.collection(userModel.collectionName).count();
 
             LogHelper.info(`Conditions for Migration ${CreateDbAndUsersMongoose.name} checks`, "usercount", userCount);
             return config.environnement === 'development' &&

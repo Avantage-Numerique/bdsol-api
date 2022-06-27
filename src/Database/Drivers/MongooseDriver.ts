@@ -8,6 +8,7 @@ import {DataProvider} from "../Providers/DataProvider";
 import {User} from "../../Users/UsersDomain";
 
 import CreateDbAndUsersMongoose from "../../Migrations/create-db-and-users-mongoose";
+import Personne from "../../Personnes/Models/Personne";
 
 export class MongooseDBDriver implements DBDriver {
 
@@ -45,9 +46,14 @@ export class MongooseDBDriver implements DBDriver {
 
         LogHelper.info(`[BD] Connexion à la base de données utilisateurs ...`);
         await this.providers.users.connect();
+        this.providers.users.assign(User.getInstance());
+
+
 
         LogHelper.info(`[BD] Connexion à la base de données structurée, ouverte et liée ...`);
         await this.providers.data.connect();
+
+        this.providers.data.assign(Personne.getInstance());
 
         await this.generateFakeUsers();
     }

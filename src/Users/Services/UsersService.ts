@@ -8,9 +8,6 @@ export class UsersService extends Service {
 
     //this should received the connection.
     constructor(model:any=null) {
-        if (model === null) {
-            model = User.getInstance();
-        }
         super(model);
     }
 

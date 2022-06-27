@@ -19,11 +19,12 @@ export default class Api {
 
     //constructor() {}
 
+    public PersonnesRouter:PersonnesRoutes;
+
     public start() {
         this._initMiddleware();
         this._initRouter();
     }
-
 
     private _initMiddleware()
     {
@@ -32,6 +33,7 @@ export default class Api {
             options: cors.CorsOptions = {
                 origin: allowedOrigins
             };
+
         this.express.use(cors(options));
 
         // parse application/x-www-form-urlencoded
@@ -66,6 +68,10 @@ export default class Api {
 
         //Tools the manage the health of the API
         this.express.use("/", HealthCheckRouter);
+
+
+        const PersonnesRouter = new PersonnesRoutes();
+        this.express.use("/personnes", PersonnesRouter.setupPublicRoutes());
     }
 
 

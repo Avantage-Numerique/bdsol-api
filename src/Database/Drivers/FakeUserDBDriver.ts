@@ -2,6 +2,10 @@ import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import type {DBDriver} from "./DBDriver";
 import {FakeUserModel, fakeUser} from "../../Users/UsersDomain";
 
+/**
+ * @Deprecated
+ * This serve before mongo was implemented. Now it become a burden. So deprecated.
+ */
 export class FakeUserDBDriver implements DBDriver {
 
     public driverPrefix: string;
