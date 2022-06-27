@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import {Schema} from "mongoose";
 import {OrganisationSchema} from "../Schemas/OrganisationSchema";
 import {DbProvider, DataProvider} from "../../Database/DatabaseDomain";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 
 class Organisation {
@@ -116,13 +115,7 @@ class Organisation {
                 concatRule[field] = [...this.ruleSet.default[field]];
             }
         }
-        LogHelper.debug("Object concatRule",concatRule);
         return concatRule;
-        //}
-        //catch(e){
-        //    LogHelper.error(e);
-            //   return e;
-        //}
     }
 
     /**
