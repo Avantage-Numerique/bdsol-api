@@ -65,15 +65,20 @@ export default class Api {
 
         //Tools the manage the health of the API
         this.express.use("/", HealthCheckRouter);
+
+        //Personnes Public Routes
+        const PersonnesRouter = new PersonnesRoutes();
+        this.express.use("/personnes", PersonnesRouter.setupPublicRoutes());
+
     }
 
     private _needAuthentificationRoutes()
     {
         // Users Routes
 
-        //Personnes Routes
+        //Personnes Private Routes
         const PersonnesRouter = new PersonnesRoutes();
-        this.express.use("/personnes", PersonnesRouter.setupRoutes());
+        this.express.use("/personnes", PersonnesRouter.setupPrivateRoutes());
 
         //Organisations Routes
         this.express.use("/organisations", OrganisationsRouter);
