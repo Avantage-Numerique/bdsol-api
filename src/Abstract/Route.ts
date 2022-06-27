@@ -23,7 +23,8 @@ abstract class AbstractRoute
 
     public async createHandler(req: any, res: any): Promise<ApiResponseContract>
     {
-        return await this.controllerInstance.create(req, res);
+        const {data} = req.body;
+        return await this.controllerInstance.create(data);
     }
 
 

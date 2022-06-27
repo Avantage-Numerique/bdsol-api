@@ -24,9 +24,9 @@ abstract class AbstractController {
      * Retourne :
      * @return {ApiResponseContract} en Promise
     */
-    public async create(req:any, res:any):Promise<ApiResponseContract> {
+    public async create(data:any):Promise<ApiResponseContract> {//req:any, res:any
 
-        const {data} = req.body;
+        //const {data} = req.body;
 
         const messageValidate = Validator.validateData(data, this.entity.RuleSet("create"));
 

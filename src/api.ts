@@ -41,8 +41,8 @@ export default class Api {
         this.express.use(express.json());
     }
 
-    // check for migration to trigger ?
 
+    // check for migration to trigger ?
     private _initRouter()
     {
         this._initPublicRoutes();
@@ -53,6 +53,7 @@ export default class Api {
         //Everything under here will need authorization token present in the request Header.
         this._needAuthentificationRoutes();
     }
+
 
     private _initPublicRoutes()
     {
@@ -67,6 +68,7 @@ export default class Api {
         this.express.use("/", HealthCheckRouter);
     }
 
+
     private _needAuthentificationRoutes()
     {
         // Users Routes
@@ -80,4 +82,5 @@ export default class Api {
 
         this.express.use("/users", UsersRouter);
     }
+
 }
