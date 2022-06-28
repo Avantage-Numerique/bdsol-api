@@ -3,7 +3,7 @@ import cors from "cors";
 import {ApiRouter} from "./routes";
 import {HealthCheckRouter} from "./Healthcheck/Routes/HealthCheckRoutes";
 import {AuthentificationRouter} from "./Authentification/Routes/AuthentificationRoutes";
-import {UsersRouter} from "./Users/Routes/UsersRouter";
+import {UsersRoutes} from "./Users/Routes/UsersRouter";
 import {PersonnesRoutes} from './Personnes/Routes/PersonnesRoutes';
 import {OrganisationsRouter} from './Organisations/Routes/OrganisationsRoutes'
 import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
@@ -17,15 +17,18 @@ export default class Api {
     public express: express.Application = express();
     public authRouters:any;
 
-    //constructor() {}
-
-    public PersonnesRouter:PersonnesRoutes;
+    public entitiesRoutes:Array<any>;
 
     public start() {
+        this._initEntitiesRouters();
         this._initMiddleware();
         this._initRouter();
     }
 
+    /**
+     * Assign middlewares to express
+     * @private
+     */
     private _initMiddleware()
     {
         // Add a list of allowed origins.
@@ -43,20 +46,45 @@ export default class Api {
         this.express.use(express.json());
     }
 
+    /**
+     * Initiate the manager for the routes in one place and defined the route that will be used by express for them.
+     * @private
+     */
+    private _initEntitiesRouters() {
+        this.entitiesRoutes = [
+            {
+                baseRoute: "/personnes",
+                manager: new PersonnesRoutes()
+            },
+            {
+                baseRoute: "/users",
+                manager: new UsersRoutes()
+            }
+        ];
+    }
 
-    // check for migration to trigger ?
+
+    /**
+     * Main function that start all the routes and their manager.
+     * For public or connected one.
+     * @private
+     */
     private _initRouter()
     {
         this._initPublicRoutes();
 
         // @ts-ignore
-        this.express.use("/", VerifyTokenMiddleware.middlewareFunction());//@todo fix the middleware from a class bug with return and params types.
+        this.express.use("/", VerifyTokenMiddleware.middlewareFunction());
 
         //Everything under here will need authorization token present in the request Header.
         this._needAuthentificationRoutes();
     }
 
 
+    /**
+     * Define the manager for each public routes.
+     * @private
+     */
     private _initPublicRoutes()
     {
         //Auth Routes
@@ -69,24 +97,38 @@ export default class Api {
         //Tools the manage the health of the API
         this.express.use("/", HealthCheckRouter);
 
+        /**
+         * Init all the entities routes from theirs managers.
+         */
+        for (let route of this.entitiesRoutes)
+        {
+            this.express.use(
+                route.baseRoute,
+                route.manager.setupPublicRoutes()
+            );
+        }
 
-        const PersonnesRouter = new PersonnesRoutes();
-        this.express.use("/personnes", PersonnesRouter.setupPublicRoutes());
     }
 
-
+    /**
+     * Define the routes that will need authentification for.
+     * @private
+     */
     private _needAuthentificationRoutes()
     {
-        // Users Routes
-
-        //Personnes Routes
-        const PersonnesRouter = new PersonnesRoutes();
-        this.express.use("/personnes", PersonnesRouter.setupRoutes());
-
-        //Organisations Routes
+        //@todo migrate the Organisations Routes
         this.express.use("/organisations", OrganisationsRouter);
 
-        this.express.use("/users", UsersRouter);
+        /**
+         * Init all the entities routes from theirs managers.
+         */
+        for (let route of this.entitiesRoutes)
+        {
+            this.express.use(
+                route.baseRoute,
+                route.manager.setupRoutes()
+            );
+        }
     }
 
 }

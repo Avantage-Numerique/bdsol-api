@@ -4,7 +4,7 @@ import LoginResponse from "../Responses/LoginResponse";
 import {LogoutResponse} from "../Responses/LogoutResponse";
 import UserAuthContract from "../Contracts/UserAuthContract";
 import {TokenController} from "./TokenController";
-import {UsersService, User, FakeUserModel, UserSchema} from "../../Users/UsersDomain";
+import {UsersService, User} from "../../Users/UsersDomain";
 
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
@@ -17,18 +17,24 @@ class AuthentificationController
 {
 
     public static service:UsersService;
+    public static userModel:User;
     //user provider.
 
     constructor()
     {
-        AuthentificationController.service = UsersService.getInstance(User.getInstance());
+        AuthentificationController.userModel = User.getInstance();
+        AuthentificationController.service = UsersService.getInstance(AuthentificationController.userModel);
 
         if (AuthentificationController.service === undefined) {
             LogHelper.error("[AuthentificationController] Service is null in Authentification");
         }
     }
 
-
+    /**
+     * Login method that is use directly in the auth route
+     * @param username {string}
+     * @param password {string}
+     */
     public async login(username:string, password:string): Promise<LoginResponse>
     {
         // add encryption on send form till checking here.
@@ -45,10 +51,14 @@ class AuthentificationController
             LogHelper.log(`Les information de ${targetUser.data.username} fonctionnent, génération du token JW ...`);
 
             // Generate an access token
-            const data:any = UserSchema.dataTransfertObject(targetUser.data);
+            const data:any = AuthentificationController.userModel.dataTransfertObject(targetUser.data);
             data.token = this.generateToken(targetUser.data);
 
-            return  SuccessResponse.create({ user: data }, StatusCodes.OK, ReasonPhrases.OK);
+            return  SuccessResponse.create(
+                { user: data },
+                StatusCodes.OK,
+                ReasonPhrases.OK
+            );
         }
 
         return ErrorResponse.create(
@@ -58,7 +68,10 @@ class AuthentificationController
         );
     }
 
-
+    /**
+     * Fake logout since we can't invalidate the token.
+     * @param username
+     */
     public async logout(username:string): Promise<LogoutResponse>
     {
         //réponse uniform
@@ -69,6 +82,10 @@ class AuthentificationController
         );
     }
 
+    /**
+     * Token verification method, use in the authentification middleware.
+     * @param token {string}
+     */
     public async verifyToken(token:string): Promise<ApiResponseContract>
     {
         if (ServerController.database.driverPrefix === 'mongodb')
@@ -94,8 +111,8 @@ class AuthentificationController
 
 
     /**
-     *
-     * @param user
+     * Generete a token form user data.
+     * @param user {any} must have _id, username and role setup though.
      * @private
      */
     private generateToken(user:any):string
@@ -120,7 +137,8 @@ class AuthentificationController
             username: username
         } as UserAuthContract;
 
-        try {
+        try
+        {
             LogHelper.info(`Vérification des informations fournis par ${username} ...`);
             if (ServerController.database.driverPrefix === 'mongodb')
             {
@@ -134,12 +152,6 @@ class AuthentificationController
                     }
                 }
                 return ErrorResponse.create(new Error("Connection refusée"), StatusCodes.UNAUTHORIZED);
-            }
-
-            // If we need to develop directly in node serveur running outside of docker.
-            if (ServerController.database.driverPrefix === 'fakeusers')
-            {
-                return await FakeUserModel.findOne(targetUser);
             }
         }
         catch (errors: any)

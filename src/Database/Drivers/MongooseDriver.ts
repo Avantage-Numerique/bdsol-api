@@ -49,7 +49,6 @@ export class MongooseDBDriver implements DBDriver {
         this.providers.users.assign(User.getInstance());
 
 
-
         LogHelper.info(`[BD] Connexion à la base de données structurée, ouverte et liée ...`);
         await this.providers.data.connect();
 

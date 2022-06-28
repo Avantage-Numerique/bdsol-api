@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import type {Service} from "../Service";
-import {ConnectOptions} from "mongodb";
 import AbstractModel from "../../Abstract/Model";
 
 
@@ -29,8 +28,7 @@ export abstract class BaseProvider implements DbProvider {
     protected _url:string;
     protected _databaseName:string;
 
-    //do we need to keep trace of active models there ?
-    //protected _models:array<AbstractModel>;
+    abstract _models:Array<AbstractModel>;
 
 
     constructor(name='') {
@@ -40,6 +38,10 @@ export abstract class BaseProvider implements DbProvider {
     }
 
 
+    /**
+     * Singleton getter in the scope of the concrete provider.
+     * @return {DbProvider}
+     */
     public async connect():Promise<mongoose.Connection|undefined>
     {
         LogHelper.log("Connect to url : ", this.url);
@@ -61,7 +63,25 @@ export abstract class BaseProvider implements DbProvider {
         return undefined;
     }
 
+    /**
+     * @abstract
+     * Assign models to the provider and stocks models in an array.
+     * @param model
+     */
     abstract assign(model:AbstractModel):void;
+
+
+    /**
+     * This is the models
+     * @param model
+     */
+    public addModel(model:AbstractModel)
+    {
+        if (this._models === undefined && typeof this._models === "undefined") {
+            this._models = [];
+        }
+        this._models.push(model);
+    }
 
 
     //  GETTER / SETTER

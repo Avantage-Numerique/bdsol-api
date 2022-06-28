@@ -3,7 +3,6 @@ import config from "../../config";
 
 import {
     DBDriver,
-    FakeUserDBDriver,
     MongooseDBDriver
 } from "../../Database/DatabaseDomain";
 
@@ -67,8 +66,8 @@ export default class ServerController {
      * Create an HTTP server from node.http, listence on error and on config.port.
      * Connect to the database
      */
-    public async start() {
-
+    public async start()
+    {
         this.server = http.createServer(this.api.express);
 
         this.server.on("error", this.onError);
@@ -93,8 +92,10 @@ export default class ServerController {
      * When the API got and error. Will exit and
      * @param error
      */
-    public onError(error: any) {
-        if (error.syscall !== "listen") {
+    public onError(error: any)
+    {
+        if (error.syscall !== "listen")
+        {
             throw error;
         }
 
@@ -119,7 +120,8 @@ export default class ServerController {
      * Event listener for HTTP server "listening" on target port.
      * port is setup in the .env file.
      */
-    public onListening() {
+    public onListening()
+    {
         LogHelper.log(`${config.appName} (version ${config.version}) répond sur le port: ${config.port}`);
     }
 
@@ -128,7 +130,8 @@ export default class ServerController {
      * @param errorCode
      * @param message
      */
-    public exitApi(errorCode:any, message:string) {
+    public exitApi(errorCode:any, message:string)
+    {
         LogHelper.error(message);
         process.exit(errorCode);
     }

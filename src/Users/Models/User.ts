@@ -1,26 +1,17 @@
 
 import mongoose, {Schema} from "mongoose";
 import type {DbProvider} from "../../Database/DatabaseDomain";
-import {UserSchema} from "../Schemas/UserSchema";
+import {UserContract} from "../Contracts/UserContract";
 import AbstractModel from "../../Abstract/Model";
 import {PersonneSchema} from "../../Personnes/Schemas/PersonneSchema";
+import {PasswordsController} from "../../Authentification/Controllers/PasswordsController";
 
-/**
- *
- */
-export interface UserContract {
-    username:string;
-    email:string;
-    password:string;
-    avatar:string;
-    name:string;
-    role: string;
-}
 
 /**
  * Model User
  */
-export class User extends AbstractModel {
+export class User extends AbstractModel
+{
 
     //  Singleton.
     protected static _instance:User;
@@ -30,25 +21,50 @@ export class User extends AbstractModel {
         if (User._instance === undefined) {
             User._instance = new User();
             User._instance.initSchema();
+            User._instance.registerPreEvents();
         }
         return User._instance;
     }
 
-    /** @public Nom du modèle */
+    constructor() {
+        super();
+    }
+
+    /**
+     * @public
+     * The model name.
+     */
     modelName:string = 'User';
 
-    /** @public Nom de la collection dans la base de donnée */
+    /**
+     * @public
+     * Nom de la collection dans la base de donnée
+     */
     collectionName:string = 'users';
 
-    /** @public Connection mongoose */
+    /**
+     * @public
+     * Connection mongoose
+     */
     connection:mongoose.Connection;
 
+    /**
+     * @public
+     * The provider for this model.
+     */
     provider:DbProvider;
 
+    /**
+     * @public
+     * The mongoose Model of this API Model.
+     */
     mongooseModel:mongoose.Model<any>;
 
 
-    /** @public Schéma pour la base de donnée */
+    /**
+     * @public
+     * Schema Mongoose for the User.
+     * */
     schema:Schema =
         new Schema<UserContract>({
                 username: {type: String, required: true, unique: true},
@@ -63,45 +79,51 @@ export class User extends AbstractModel {
             });
 
 
-    /** @static infoChamp pour le retour frontend des champs à créer et règles des attributs de personne selon la route */
-    infoChamp =
-        {
-            "state": "",
-            "champs": [
-                {
-                    "name": "username",
-                    "label": "Nom d'utilisateur",
-                    "type": "String",
-                    "rules": []
-                },
-                {
-                    "name": "email",
-                    "label": "Votre courriel",
-                    "type": "String",
-                    "rules": []
-                },
-                {
-                    "name": "password",
-                    "label": "Mot de passe",
-                    "type": "String",
-                    "rules": []
-                },
-                {
-                    "name": "avatar",
-                    "label": "Votre avatar hébergé sur le web",
-                    "type": "String",
-                    "rules": []
-                },
-                {
-                    "name": "name",
-                    "label": "Votre nom (qui sera afficher et assigné à vos publications et modification publique",
-                    "type": "String",
-                    "rules": []
-                }
-                //no role : C'est une option pour l'API.
-            ]
-        };
+    /**
+     * @public
+     * infoChamp pour le retour frontend des champs à créer et règles des attributs de personne selon la route
+     * */
+    infoChamp = {
+        "state": "",
+        "champs": [
+            {
+                "name": "username",
+                "label": "Nom d'utilisateur",
+                "type": "String",
+                "rules": []
+            },
+            {
+                "name": "email",
+                "label": "Votre courriel",
+                "type": "String",
+                "rules": []
+            },
+            {
+                "name": "password",
+                "label": "Mot de passe",
+                "type": "String",
+                "rules": []
+            },
+            {
+                "name": "avatar",
+                "label": "Votre avatar hébergé sur le web",
+                "type": "String",
+                "rules": []
+            },
+            {
+                "name": "name",
+                "label": "Votre nom (qui sera afficher et assigné à vos publications et modification publique",
+                "type": "String",
+                "rules": []
+            }
+            //no role : C'est une option pour l'API.
+        ]
+    };
 
+    /**
+     * @public
+     * The ruleSet of this model validation.
+     */
     ruleSet:any = {
         "default":{
             "id":["idValid"],
@@ -130,7 +152,10 @@ export class User extends AbstractModel {
         }
     }
 
-
+    /**
+     * Format the date before validation
+     * @param requestData
+     */
     public formatRequestDataForDocument(requestData:any):any {
         return {
             nom: requestData.nom,
@@ -140,42 +165,38 @@ export class User extends AbstractModel {
         } as PersonneSchema;
     }
 
-
-    /** ----- */
-/*
-    public static initSchema()
-    {
-        User.connection.model(User.modelName, UserSchema.schema());
-    }
-
-    public static getInstance()
-    {
-        if (User.connectionIsSetup()) {
-            User.initSchema();
-            return User.connection.model(User.modelName);
-        }
-        return null;
-    }
-
-    public static connectionIsSetup():boolean
-    {
-        return User.connection !== undefined &&
-            User.connection !== null;
-    }
-
-    public static providerIsSetup():boolean
-    {
-        return User.provider !== undefined &&
-            User.provider !== null &&
-            User.provider.connection !== undefined;
-    }
-*/
-
-    public dataTransfertObject(document: any) {
+    /**
+     * Format the date for the return on public routes.
+     * @param document
+     * @return {any}
+     */
+    public dataTransfertObject(document: any):any {
         return {
             username: document.username,
             avatar: document.avatar,
             name: document.name,
+        }
+    }
+
+
+    public async registerPreEvents()
+    {
+        if (this.schema !== undefined)
+        {
+            // CREATE users, we hash the password.
+            await this.schema.pre('save', async function (next: any): Promise<any>
+            {
+                const user: any = this;
+                if (!user.isModified('password')) {
+                    return next();
+                }
+                try {
+                    user.password = await PasswordsController.hash(user.password);
+                } catch (error: any) {
+                    throw error;
+                }
+                return next();
+            });
         }
     }
 

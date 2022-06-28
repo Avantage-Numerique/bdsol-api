@@ -4,6 +4,7 @@ import { PersonneSchema } from "../Schemas/PersonneSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model"
 
+
 class Personne extends AbstractModel {
 
     //  Singleton.
@@ -18,13 +19,22 @@ class Personne extends AbstractModel {
         return Personne._instance;
     }
 
-    /** @public Nom du modèle */
+    /**
+     * Nom du modèle
+     * @public
+     */
     modelName:string = 'Personne';
 
-    /** @public Nom de la collection dans la base de donnée */
+    /**
+     * Nom de la collection dans la base de donnée
+     * @public
+     */
     collectionName:string = 'personnes';
 
-    /** @public Connection mongoose */
+    /**
+     * The active connection to the mongoose/mongodb
+     * @public Connection mongoose
+     */
     connection:mongoose.Connection;
 
     provider:DbProvider;
@@ -105,6 +115,10 @@ class Personne extends AbstractModel {
         }
     }
 
+    /**
+     * Get the field that are searchable.
+     * @return {Object} the field slug/names.
+     */
     get searchSearchableFields():object {
         //eturn {"nom":{},"prenom":{},"surnom":{},"description":{}};
         return ["nom", "prenom","surnom","description"];
@@ -112,12 +126,9 @@ class Personne extends AbstractModel {
 
     /** 
      * @method formatRequestDataForDocument insère dans le schéma les données de la requête.
-     * 
-     * Paramètres :
-     *      @param {key:value} requestData - attributs de Personne
-     * 
-     * Retourne :
-     *      @return {PersonneSchema} l'interface Schéma contenant les données de la requête
+     *
+     * @param {key:value} requestData - attributs de Personne
+     * @return {PersonneSchema} l'interface Schéma contenant les données de la requête
      */
     public formatRequestDataForDocument(requestData:any):any {
         return {

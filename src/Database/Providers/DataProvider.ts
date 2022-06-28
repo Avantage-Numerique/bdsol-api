@@ -3,22 +3,29 @@ import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import type {DbProvider} from "./DbProvider";
 import {BaseProvider} from "./DbProvider";
-import Personne from "../../Personnes/Models/Personne";
 import AbstractModel from "../../Abstract/Model";
-import PersonnesService from "../../Personnes/Services/PersonnesService";
 
-
-export class DataProvider extends BaseProvider implements DbProvider {
-
+/**
+ *  The Data provider allow entities to interact with the DB via the MongooseDriver.
+ */
+export class DataProvider extends BaseProvider implements DbProvider
+{
     private static _singleton:DataProvider;
+    _models:Array<AbstractModel>;
 
-    private _models:Array<AbstractModel>;
-
+    /**
+     * contructor
+     * @param name
+     */
     constructor(name='data') {
         super(name);
         this.urlPrefix = "mongodb";
     }
 
+    /**
+     * Singleton getter in the scope of the concrete provider.
+     * @return {DbProvider}
+     */
     public static getInstance():DbProvider {
         if (DataProvider._singleton === undefined) {
             DataProvider._singleton = new DataProvider(config.db.name);
@@ -26,16 +33,15 @@ export class DataProvider extends BaseProvider implements DbProvider {
         return DataProvider._singleton;
     }
 
-
+    /**
+     * @async
+     * Connect the provider to mongo via mongoose.Connection.
+     * @return {mongoose.Connection}
+     */
     public async connect():Promise<mongoose.Connection|undefined> {
         try {
             LogHelper.log("[BD] DataProvider Connecting to DB");
             await super.connect();
-
-            //Personne.connection = this.connection;
-
-            //const modelInstance = this.assign(Personne.getInstance());
-            //this.service = PersonnesService.getInstance(modelInstance);
 
             return this.connection;
         }
@@ -45,21 +51,11 @@ export class DataProvider extends BaseProvider implements DbProvider {
         return undefined;
     }
 
-    public addModel(model:AbstractModel)
-    {
-        /*
-        for (model of this._models) {
-            instance = model.getInstance();
-        }
-        let model:AbstractModel,
-            instance:AbstractModel;
-         */
-        if (this._models === undefined && typeof this._models === "undefined") {
-            this._models = [];
-        }
-        this._models.push(model);
-    }
 
+    /**
+     * Assign a model to this provider.
+     * @param model
+     */
     public assign(model:AbstractModel) {
         this.addModel(model);
         model.connection = this.connection;

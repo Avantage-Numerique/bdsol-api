@@ -1,9 +1,9 @@
 import {Service} from "../../Database/DatabaseDomain";
 import Personne from "../Models/Personne";
 
+
 class PersonnesService extends Service
 {
-
     private static _instance:PersonnesService;
 
     constructor(entity:Personne)

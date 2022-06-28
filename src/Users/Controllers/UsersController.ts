@@ -1,17 +1,49 @@
 import {User} from "../Models/User";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import type {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import {UsersService} from "../Services/UsersService";
+
+//@deprecated
+import type {UserDocument} from "../Schemas/UserSchema";
+import type {Service} from "../../Database/Service";
 import {StatusCodes, ReasonPhrases} from "http-status-codes";
 import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
-import type {UserDocument} from "../Schemas/UserSchema";
-import {UsersService} from "../Services/UsersService";
-import type {Service} from "../../Database/Service";
+import type {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
+
+import AbstractController from "../../Abstract/Controller";
+
+
+class UsersController extends AbstractController {
+
+    private static _instance:AbstractController;
+
+    public service:UsersService;
+    entity:User;
+
+    constructor()
+    {
+        super();
+        this.entity = User.getInstance();
+        this.service = new UsersService(this.entity);
+    }
+
+    public static getInstance():AbstractController
+    {
+        if (UsersController._instance === undefined) {
+            UsersController._instance = new UsersController();
+        }
+        return UsersController._instance;
+    }
+}
+
+export {UsersController};
+
+
 
 /**
  * First pitch, in parallel with fred, for a crud controller.
  * Next step will be to create a CrudController, to abstract the core that will be designed here.
  */
-export class UserController {
+export class Dep_UsersController {
 
     public service:Service;
 

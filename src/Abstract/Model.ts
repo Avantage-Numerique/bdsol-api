@@ -1,14 +1,12 @@
 import {Schema} from "mongoose"
 import mongoose from "mongoose";
 import { DbProvider } from "../Database/DatabaseDomain";
-import {DataProvider} from "../Database/DatabaseDomain";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 
 
-abstract class AbstractModel {
-
+abstract class AbstractModel
+{
     abstract modelName:string;
-
     abstract collectionName:string;
 
     abstract connection:mongoose.Connection;
@@ -17,10 +15,10 @@ abstract class AbstractModel {
     abstract mongooseModel:mongoose.Model<any>;
 
     abstract infoChamp:any;
-
     abstract ruleSet:any;
 
     /**
+     * Connect the model to mongo and return that mongooseModel.
      * @public @method getInstance
      * @return model
      */
@@ -38,18 +36,21 @@ abstract class AbstractModel {
             typeof this.provider
         );
         /**
-         * ,
-         this.provider.connection,
-         typeof this.provider.connection
+         * this.provider.connection
+         * typeof this.provider.connection
          */
         throw new Error("this Provider is not setup. Can't get this's model");
     }
 
 
-    public initSchema()
+    /**
+     * Associate the mongo Schema to the connection.
+     */
+    public initSchema():void
     {
         if (this.providerIsSetup() &&
-            this.connectionIsSetup()){
+            this.connectionIsSetup())
+        {
             this.provider.connection.model(this.modelName, this.schema);
         }
     }
@@ -76,6 +77,7 @@ abstract class AbstractModel {
             this.provider !== null;
     }
 
+
     /**
      * Check if the connection have a value in the model.
      * @return {boolean} if the connection have a valid value.
@@ -93,15 +95,16 @@ abstract class AbstractModel {
     */
     public RuleSet(route?:string)
     {
-        //Si vide, renvoie les règles par défaut.
-        if(route === undefined){
+        //If the route is empty, return the default ruleset right away
+        if(route === undefined)
+        {
             return this.ruleSet.default;
         }
         
         const concatRule:any = {};
-        for (const field in this.ruleSet.default){
-
-            //Si le field existe dans le ruleSet[route]
+        for (const field in this.ruleSet.default)
+        {
+            //If the field exist in the Route's ruleSet.
             if(Object.keys(this.ruleSet[route]).indexOf(field) != -1)
             {
                 concatRule[field] = [
@@ -118,7 +121,18 @@ abstract class AbstractModel {
         return concatRule;
     }
 
+    /**
+     * Format the document to be validated
+     * @param requestData
+     * @return {Document} the mongo document.
+     */
     abstract formatRequestDataForDocument(requestData:any):Document;
+
+    /**
+     * Format the document for the public return.
+     * @param document
+     * @return {any} Most of the time it's a simple Object.
+     */
     abstract dataTransfertObject(document: any):any;
 
 }

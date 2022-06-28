@@ -7,8 +7,18 @@ import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
 
 export class VerifyTokenMiddleware {
 
+    /**
+     * Getter for the anonumous function that will act as the middleware, with the parameters and the next() call.
+     */
     public static middlewareFunction()
     {
+        /**
+         * The VerifyTokenMIddleware anonymous function.
+         * @param req {AuthRequest}
+         * @param res {Response}
+         * @param next {NextFunction}
+         * @return Promise<Response<any, Record<string, any>> | undefined>
+         */
         return async function (req: AuthRequest, res: Response, next: NextFunction):Promise<Response<any, Record<string, any>> | undefined> {
             // Get token from header
             const headers = req.headers;
@@ -43,6 +53,11 @@ export class VerifyTokenMiddleware {
         }
     }
 
+    /**
+     * Centralized response for when the call isn't authorized.
+     * @param res
+     * @protected
+     */
     protected static unauthorizedResponse(res:Response):Response
     {
         LogHelper.info("Unauthorized request");
