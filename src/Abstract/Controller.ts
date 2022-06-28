@@ -1,8 +1,6 @@
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 import {ApiResponseContract} from "../Http/Responses/ApiResponse";
 import {StatusCodes, ReasonPhrases} from "http-status-codes";
-
-
 import {ErrorResponse} from "../Http/Responses/ErrorResponse";
 import Validator from "../Validation/Validator";
 import AbstractModel from "./Model";
@@ -15,6 +13,7 @@ abstract class AbstractController {
 
     abstract service:Service;
     abstract entity:AbstractModel;
+    static validator:Validator = new Validator();
 
     /**
      * @method create permet de créer et d'insérer une nouvelle entité dans la base de donnée à partir de la requête.
@@ -27,7 +26,7 @@ abstract class AbstractController {
     */
     public async create(requestData:any):Promise<ApiResponseContract> {
 
-        const messageValidate = Validator.validateData(requestData, this.entity.RuleSet("create"));
+        const messageValidate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("create"));
 
         if (!messageValidate.isValid)
             return ErrorResponse.create(
@@ -66,7 +65,7 @@ abstract class AbstractController {
     public async update(requestData:any):Promise<ApiResponseContract> {
         
         //Validation des données
-        const messageUpdate = Validator.validateData(requestData, this.entity.RuleSet("update"));
+        const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("update"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -103,7 +102,7 @@ abstract class AbstractController {
         LogHelper.log("Début de la recherche dans la liste");
         
 
-        const messageUpdate = Validator.validateData(requestData, this.entity.RuleSet("search"));
+        const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("search"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -149,7 +148,7 @@ abstract class AbstractController {
         LogHelper.log("Début de la requête d'obtention de la liste de personne");
         
 
-        const messageUpdate = Validator.validateData(requestData, this.entity.RuleSet("list"));
+        const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("list"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -194,7 +193,7 @@ abstract class AbstractController {
         LogHelper.log("Début de la suppression d'une personne");
         
 
-        const messageUpdate = Validator.validateData(requestData, this.entity.RuleSet("delete"));
+        const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("delete"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),

@@ -100,8 +100,6 @@ class Personne extends AbstractModel {
         "create":{
             "nom":["isDefined", "minLength:2"],
             "prenom":["isDefined", "minLength:2"],
-            "surnom":[],
-            "description":[]
         },
         "update":{
             "id":["isDefined"]

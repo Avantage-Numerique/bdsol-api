@@ -3,9 +3,13 @@ version 0.0.5
 
 ## Table des matières
 - [Authentification](Authentification.md)
+- [Registration](Registration.md)
 - [Utilisateurs](Users.md)
 - [Personnes](Personnes.md)
+- [Organisations](Organisations.md)
 
+
+## Struture générale de l'object `JSON` à fournir lors d'une requête en `POST`.
 
 ## Structure général des retours de données
 
@@ -19,15 +23,13 @@ version 0.0.5
         "errors": { "type": "array" },
         "data": {
             "type": "object",
-            "properties": {
-
-            },
+            "properties": {}
         }
     },
     "required": ["error", "code", "message", "errors", "data"]
 }
-
 ```
+
 - `error`: Boolean : true == il y a une erreur, false == Il n'a pas d'erreur. Data contient ce qui a été demandé.
 - `code`: int : Code http du retour
 - `message`: string : message

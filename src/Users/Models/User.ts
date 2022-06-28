@@ -26,10 +26,6 @@ export class User extends AbstractModel
         return User._instance;
     }
 
-    constructor() {
-        super();
-    }
-
     /**
      * @public
      * The model name.
@@ -136,7 +132,7 @@ export class User extends AbstractModel
         "create":{
             "username":["isDefined", "minLength:2", "maxLength:15"],
             "email":["isDefined", "minLength:2"],
-            "password":["isDefined", "minLength:8"],
+            "password":["isDefined", "minLength:4"],
             "avatar":[],
             "name":[]
         },

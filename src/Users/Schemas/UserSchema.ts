@@ -97,7 +97,39 @@ export class UserSchema {
                 }
                 return next();
             });
+
+            // UpdateOne users, we hash the password.
+            //await UserSchema.documentSchema.pre('UpdateOne', UserSchema.hashPasswordBeforeSaving);
+            //await UserSchema.documentSchema.pre('save', UserSchema.hashPasswordBeforeSaving);
+            await UserSchema.documentSchema.pre('UpdateOne', async function (next: any): Promise<any>
+            {
+                const user: any = this;
+                if (!user.isModified('password')) {
+                    return next();
+                }
+                try {
+                    user.password = await PasswordsController.hash(user.password);
+                } catch (error: any) {
+                    throw error;
+                }
+                return next();
+            });
         }
+    }
+
+    // hashPasswordBeforeSaving
+    static async hashPasswordBeforeSaving(next:any):Promise<any>
+    {
+        const user: any = this;
+        if (!user.isModified('password')) {
+            return next();
+        }
+        try {
+            user.password = await PasswordsController.hash(user.password);
+        } catch (error: any) {
+            throw error;
+        }
+        return next();
     }
 
 
@@ -109,6 +141,7 @@ export class UserSchema {
             username: document.username,
             avatar: document.avatar,
             name: document.name,
+            id: document._id
         }
     }
 

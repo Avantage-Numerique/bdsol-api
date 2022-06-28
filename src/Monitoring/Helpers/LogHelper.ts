@@ -71,8 +71,7 @@ export default class LogHelper
                     console.log("\x1b[90;4m%s\x1b[0;90m%j\x1b[0m", "[INFO]", toLog); break;
                 }
                 case 'debug': {
-                    console.log("\x1b[36;4m[DEBUG]\x1b[36;0m", "\x1b[96", toLog); break;
-                    //console.log("\x1b[36;4m%s\x1b[0;36m%j\x1b[0m", "[DEBUG]", toLog); break;
+                    console.log("\x1b[36;4m%s\x1b[0;36m%j\x1b[0m", "[DEBUG]", toLog); break;
                 }
             }
         }
