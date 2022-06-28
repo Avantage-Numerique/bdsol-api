@@ -1,4 +1,3 @@
-
 export interface DBDriver {
     driverPrefix: string;
     client: any;

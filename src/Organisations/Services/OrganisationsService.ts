@@ -1,14 +1,22 @@
-
 import {Service} from "../../Database/DatabaseDomain";
 import Organisation from "../Models/Organisation";
+import Personne from "../../Personnes/Models/Personne";
 
-class OrganisationsService extends Service {
-    //this should received the connection.
-    constructor(model:any=null) {
-        if (model === null) {
-            Organisation.getInstance();
+class OrganisationsService extends Service
+{
+    private static _instance:OrganisationsService;
+
+    constructor(entity:Organisation)
+    {
+        super(entity);
+    }
+
+    public static getInstance(model:any):OrganisationsService
+    {
+        if (OrganisationsService._instance === undefined) {
+            OrganisationsService._instance = new OrganisationsService(model);
         }
-        super(model);
+        return OrganisationsService._instance;
     }
 }
 

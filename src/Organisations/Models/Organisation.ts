@@ -1,25 +1,40 @@
 import mongoose from "mongoose";
 import {Schema} from "mongoose";
 import {OrganisationSchema} from "../Schemas/OrganisationSchema";
-import {DbProvider, DataProvider} from "../../Database/DatabaseDomain";
+import {DbProvider} from "../../Database/DatabaseDomain";
+import AbstractModel from "../../Abstract/Model";
+
+class Organisation extends AbstractModel {
 
 
-class Organisation {
+    //  Singleton.
+    protected static _instance:Organisation;
 
-    /** @static Nom du modèle */
-    static modelName: string = "Organisation";
+    public static getInstance():Organisation
+    {
+        if (Organisation._instance === undefined) {
+            Organisation._instance = new Organisation();
+            Organisation._instance.initSchema();
+        }
+        return Organisation._instance;
+    }
 
-    /** @static Nom de la collection dans la base de données */
-    static collectionName: string = 'organisations';
+    /** @public Nom du modèle */
+    modelName: string = "Organisation";
 
-    /** @static Connection mongoose */
-    static connection: mongoose.Connection;
+    mongooseModel:mongoose.Model<any>;
 
-    /** @static Provider */
-    static provider: DbProvider;
+    /** @public Nom de la collection dans la base de données */
+    collectionName: string = 'organisations';
 
-    /** @static Schéma pour la base de donnée */
-    static schema: Schema =
+    /** @public Connection mongoose */
+    connection: mongoose.Connection;
+
+    /** @public Provider */
+    provider: DbProvider;
+
+    /** @public Schéma pour la base de donnée */
+    schema: Schema =
         new Schema<OrganisationSchema>({
                 nom: {type: String, required: true},
                 description: String,
@@ -31,8 +46,8 @@ class Organisation {
                 timestamps: true
             });
     
-    /** @static infoChamp pour le retour frontend des champs à créer et règles des attributs d'organisation selon la route */
-    static infoChamp =
+    /** @public infoChamp pour le retour frontend des champs à créer et règles des attributs d'organisation selon la route */
+    infoChamp =
     {
         "state": "",
         "champs": [
@@ -69,8 +84,8 @@ class Organisation {
         ]
     };
     
-    /** @static ruleSet pour la validation du data de personne */
-    static ruleSet:any = {
+    /** @public ruleSet pour la validation du data de organisation */
+    ruleSet:any = {
         "default":{
             "id":["idValid"],
             "nom":["isString"],
@@ -95,60 +110,40 @@ class Organisation {
     }
 
     /** 
-     * @static @method concatRuleSet
-     * @return Combinaison du ruleSet default et celui spécifié
+     * @method formatRequestDataForDocument insère dans le schéma les données de la requête.
+     * 
+     * Paramètres :
+     *      @param {key:value} requestData - attributs de l'organisation
+     * 
+     * Retourne :
+     *      @return {OrganisationSchema} l'interface Schéma contenant les données de la requête
      */
-    static concatRuleSet(state:any){
-        const concatRule:any = {};
-        for (const field in this.ruleSet.default){
-
-            //Si le field existe dans le ruleSet[state]
-            if(Object.keys(this.ruleSet[state]).indexOf(field) != -1){
-                concatRule[field] = [
-                    ...this.ruleSet[state][field],
-                    ...this.ruleSet.default[field]
-                ];
-            }
-            //Sinon insérer seulement les règles par défaut.
-            else {
-                concatRule[field] = [...this.ruleSet.default[field]];
-            }
-        }
-        //LogHelper.debug("Object concatRule",concatRule);
-        return concatRule;
+     public formatRequestDataForDocument(requestData:any):any {
+        return {
+            nom: requestData.nom,
+            description: requestData.description,
+            url: requestData.url,
+            contactPoint: requestData.contactPoint,
+            dateDeFondation: requestData.dateDeFondation
+        } as OrganisationSchema;
     }
+
 
     /**
-     * @static method
-     * @method initSchema
+     * Format the date for the return on public routes.
+     * @param document
+     * @return {any}
      */
-    static initSchema() {
-        if (Organisation.providerIsSetup()) {
-            Organisation.provider.connection.model(Organisation.modelName, Organisation.schema);
+    public dataTransfertObject(document: any):any {
+        return {
+            nom: document.nom,
+            description: document.description,
+            url: document.url,
+            contactPoint: document.contactPoint,
+            dateDeFondation: document.dateDeFondation
         }
     }
 
-    /**
-     * @static method
-     * @method getInstance
-     */
-    static getInstance() {
-        Organisation.provider = DataProvider.getInstance();//must have
-        if (Organisation.providerIsSetup()) {
-            Organisation.initSchema();
-            return Organisation.provider.connection.model(Organisation.modelName);
-        }
-        throw new Error("Organisation Provider is not setup. Can't get Organisation's model");
-    }
-
-    /**
-     * @static method
-     * @method providerIsSetup
-     * @return {boolean} isSetup
-     */
-    static providerIsSetup(): boolean {
-        return Organisation.provider !== undefined && Organisation.provider.connection !== undefined;
-    }
 }
 
 export default Organisation;

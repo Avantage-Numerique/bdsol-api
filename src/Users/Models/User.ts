@@ -1,33 +1,85 @@
 
-import mongoose from "mongoose";
+import mongoose, {Schema} from "mongoose";
 import type {DbProvider} from "../../Database/DatabaseDomain";
-import {UserSchema} from "../Schemas/UserSchema";
+import {UserContract} from "../Contracts/UserContract";
+import AbstractModel from "../../Abstract/Model";
+import {PersonneSchema} from "../../Personnes/Schemas/PersonneSchema";
+import {PasswordsController} from "../../Authentification/Controllers/PasswordsController";
 
-/**
- *
- */
-export interface UserContract {
-    username:string;
-    email:string;
-    password:string;
-    name:string;
-    role: string;
-}
 
 /**
  * Model User
  */
-export class User {
+export class User extends AbstractModel
+{
 
-    static collectionName:string = 'users';
-    static modelName:string = 'User';
-    static connection:mongoose.Connection;
-    static provider:DbProvider|undefined;
+    //  Singleton.
+    protected static _instance:User;
 
-
-    /** @static infoChamp pour le retour frontend des champs à créer et règles des attributs de personne selon la route */
-    static infoChamp =
+    public static getInstance():User
     {
+        if (User._instance === undefined) {
+            User._instance = new User();
+            User._instance.initSchema();
+            User._instance.registerPreEvents();
+        }
+        return User._instance;
+    }
+
+    /**
+     * @public
+     * The model name.
+     */
+    modelName:string = 'User';
+
+    /**
+     * @public
+     * Nom de la collection dans la base de donnée
+     */
+    collectionName:string = 'users';
+
+    /**
+     * @public
+     * Connection mongoose
+     */
+    connection:mongoose.Connection;
+
+    /**
+     * @public
+     * The provider for this model.
+     */
+    provider:DbProvider;
+
+    /**
+     * @public
+     * The mongoose Model of this API Model.
+     */
+    mongooseModel:mongoose.Model<any>;
+
+
+    /**
+     * @public
+     * Schema Mongoose for the User.
+     * */
+    schema:Schema =
+        new Schema<UserContract>({
+                username: {type: String, required: true, unique: true},
+                email: {type: String, required: true, unique: true},
+                password: {type: String, required: true},
+                avatar: String,
+                name: String,
+                role: String
+            },
+            {
+                timestamps: true
+            });
+
+
+    /**
+     * @public
+     * infoChamp pour le retour frontend des champs à créer et règles des attributs de personne selon la route
+     * */
+    infoChamp = {
         "state": "",
         "champs": [
             {
@@ -38,7 +90,7 @@ export class User {
             },
             {
                 "name": "email",
-                "label": "Courriel",
+                "label": "Votre courriel",
                 "type": "String",
                 "rules": []
             },
@@ -50,99 +102,98 @@ export class User {
             },
             {
                 "name": "avatar",
-                "label": "Avatar",
+                "label": "Votre avatar hébergé sur le web",
                 "type": "String",
                 "rules": []
             },
             {
                 "name": "name",
-                "label": "Nom",
-                "type": "String",
-                "rules": []
-            },
-            {
-                "name": "role",
-                "label": "Rôle",
+                "label": "Votre nom (qui sera afficher et assigné à vos publications et modification publique",
                 "type": "String",
                 "rules": []
             }
+            //no role : C'est une option pour l'API.
         ]
     };
 
-    /** @static ruleSet pour la validation du data de personne */
-    static ruleSet:any = {
+    /**
+     * @public
+     * The ruleSet of this model validation.
+     */
+    ruleSet:any = {
         "default":{
             "id":["idValid"],
-            "username":["isString"],
-            "email":["isString"],
+            "username":["isString"],//maxLength
+            "email":["isString"],//isEmail
             "password":["isString"],
-            "avatar":["isString"],
-            "name":["isString"],
-            "role":["isString"]
+            "avatar":["isString"],//isUrl
+            "name":["isString"]//maxLength
         },
         "create":{
-            "username":["isDefined", "minLength:2"],
+            "username":["isDefined", "minLength:2", "maxLength:15"],
             "email":["isDefined", "minLength:2"],
-            "password":["isDefined","minLength:2"],
+            "password":["isDefined", "minLength:4"],
+            "avatar":[],
+            "name":[]
         },
         "update":{
             "id":["isDefined"]
+        },
+        "search":{
+        },
+        "list":{
         },
         "delete":{
             "id":["isDefined"]
         }
     }
 
-    /** 
-     * @static @method concatRuleSet
-     * @return Combinaison du ruleSet default et celui spécifié
+    /**
+     * Format the date before validation
+     * @param requestData
      */
-    static concatRuleSet(state:any){
-        const concatRule:any = {};
-            for (const field in this.ruleSet.default){
-
-                //Si le field existe dans le ruleSet[state]
-                if(Object.keys(this.ruleSet[state]).indexOf(field) != -1){
-                    concatRule[field] = [
-                        ...this.ruleSet[state][field],
-                        ...this.ruleSet.default[field]
-                    ];
-                }
-                //Sinon insérer seulement les règles par défaut.
-                else {
-                    concatRule[field] = [...this.ruleSet.default[field]];
-                }
-            }
-            //LogHelper.debug("Object concatRule",concatRule);
-            return concatRule;
+    public formatRequestDataForDocument(requestData:any):any {
+        return {
+            nom: requestData.nom,
+            prenom: requestData.prenom,
+            surnom: requestData.surnom,
+            description: requestData.description
+        } as PersonneSchema;
     }
 
-
-    public static initSchema()
-    {
-        User.connection.model(User.modelName, UserSchema.schema());
-    }
-
-    public static getInstance()
-    {
-        if (User.connectionIsSetup()) {
-            User.initSchema();
-            return User.connection.model(User.modelName);
+    /**
+     * Format the date for the return on public routes.
+     * @param document
+     * @return {any}
+     */
+    public dataTransfertObject(document: any):any {
+        return {
+            username: document.username,
+            avatar: document.avatar,
+            name: document.name,
         }
-        return null;
     }
 
-    public static connectionIsSetup():boolean
-    {
-        return User.connection !== undefined &&
-            User.connection !== null;
-    }
 
-    public static providerIsSetup():boolean
+    public async registerPreEvents()
     {
-        return User.provider !== undefined &&
-            User.provider !== null &&
-            User.provider.connection !== undefined;
+        if (this.schema !== undefined)
+        {
+            // CREATE users, we hash the password.
+            await this.schema.pre('save', async function (next: any): Promise<any>
+            {
+                const user: any = this;
+                if (!user.isModified('password')) {
+                    return next();
+                }
+                try {
+                    user.password = await PasswordsController.hash(user.password);
+                } catch (error: any) {
+                    throw error;
+                }
+                return next();
+            });
+        }
     }
 
 }

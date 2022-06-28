@@ -28,6 +28,9 @@ export const UserValidation:any = {
     role: ["isString"]
 };
 
+/**
+ * @deprecated
+ */
 export class UserSchema {
 
     private _username: string;

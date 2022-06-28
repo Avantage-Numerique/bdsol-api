@@ -1,7 +1,7 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { ApiResponseContract } from "../../Http/Responses/ApiResponse";
 import { ErrorResponse } from "../../Http/Responses/ErrorResponse";
-import {UsersService, User, UserDocument, UserValidation, UserSchema} from "../../Users/UsersDomain";
+import {UsersService, User, UserContract} from "../../Users/UsersDomain";
 import config from "../../config";
 
 
@@ -9,10 +9,12 @@ export class RegistrationController {
 
     /** @public PersonneService */
     public service:UsersService;
+    public userModel:User;
 
     /** @constructor */
     constructor() {
         this.service = new UsersService(User.getInstance());
+        this.userModel = User.getInstance();
     }
 
 
@@ -32,7 +34,7 @@ export class RegistrationController {
 
 
         if (!createdDocumentResponse.error) {
-            createdDocumentResponse.data = UserSchema.dataTransfertObject(createdDocumentResponse.data);
+            createdDocumentResponse.data = this.userModel.dataTransfertObject(createdDocumentResponse.data);
             //generate un token ? direct ?
             // ou on fait connecter l'utilisateur ?
             // Il faut faire le flow post inscription.
@@ -69,7 +71,7 @@ export class RegistrationController {
     }
 
 
-    public formatRequestDataForDocument(data:any):UserDocument {
+    public formatRequestDataForDocument(data:any):UserContract {
         return {
             name: data.name,
             email: data.email,
@@ -77,6 +79,6 @@ export class RegistrationController {
             password: data.password,
             avatar: data.avatar,
             role: config.users.roles.default
-        } as UserDocument;
+        } as UserContract;
     }
 }

@@ -1,11 +1,12 @@
 
 // Database connection.
 import UserAuthContract from "../../Authentification/Contracts/UserAuthContract";
-import {UserContract} from "./User";
+import {UserContract} from "../Contracts/UserContract";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 
 /**
+ * @deprecated
  *  User to get in fakeuser to test authenfication wihtout have to run mongodb serveur aside. That help develop without docker.
  */
 export class FakeUserModel {

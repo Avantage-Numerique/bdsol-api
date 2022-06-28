@@ -1,25 +1,49 @@
 import mongoose from "mongoose";
 import {Schema} from "mongoose"
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import { PersonneSchema } from "../Schemas/PersonneSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
-import {DataProvider} from "../../Database/DatabaseDomain";
+import AbstractModel from "../../Abstract/Model"
 
-class Personne {
-    
-    /** @static Nom du modèle */
-    static modelName:string = 'Personne';
 
-    /** @static Nom de la collection dans la base de donnée */
-    static collectionName:string = 'personnes';
+class Personne extends AbstractModel {
 
-    /** @static Connection mongoose */
-    static connection:mongoose.Connection;
+    //Singleton.
+    protected static _instance:Personne;
 
-    static provider:DbProvider;
+    public static getInstance():Personne
+    {
+        if (Personne._instance === undefined) {
+            Personne._instance = new Personne();
+            Personne._instance.initSchema();
+        }
+        return Personne._instance;
+    }
 
-    /** @static Schéma pour la base de donnée */
-    static schema:Schema =
+    /**
+     * Nom du modèle
+     * @public
+     */
+    modelName:string = 'Personne';
+
+    /**
+     * Nom de la collection dans la base de donnée
+     * @public
+     */
+    collectionName:string = 'personnes';
+
+    /**
+     * The active connection to the mongoose/mongodb
+     * @public Connection mongoose
+     */
+    connection:mongoose.Connection;
+
+    provider:DbProvider;
+
+    mongooseModel:mongoose.Model<any>;
+
+
+    /** @public Schéma pour la base de donnée */
+    schema:Schema =
         new Schema<PersonneSchema>({
 
             nom: { type: String, required: true },
@@ -31,8 +55,9 @@ class Personne {
                 timestamps: true
         });
 
+
     /** @static infoChamp pour le retour frontend des champs à créer et règles des attributs de personne selon la route */
-    static infoChamp =
+    infoChamp =
     {
         "state": "",
         "champs": [
@@ -64,7 +89,7 @@ class Personne {
     };
 
     /** @static ruleSet pour la validation du data de personne */
-    static ruleSet:any = {
+    ruleSet:any = {
         "default":{
             "id":["idValid"],
             "nom":["isString"],
@@ -88,70 +113,37 @@ class Personne {
         }
     }
 
-    /** 
-     * @static @method concatRuleSet
-     * @return Combinaison du ruleSet default et celui spécifié
-     */
-    static concatRuleSet(set:any){
-        const concatRule:any = {};
-            for (const field in this.ruleSet.default){
-
-                //Si le field existe dans le ruleSet[state]
-                if(Object.keys(this.ruleSet[set]).indexOf(field) != -1){
-                    concatRule[field] = [
-                        ...this.ruleSet[set][field],
-                        ...this.ruleSet.default[field]
-                    ];
-                }
-                //Sinon insérer seulement les règles par défaut.
-                else {
-                    concatRule[field] = [...this.ruleSet.default[field]];
-                }
-            }
-            //LogHelper.debug("Object concatRule",concatRule);
-            return concatRule;
-    }
-
     /**
-     * @static @method initSchema
+     * Get the field that are searchable.
+     * @return {Object} the field slug/names.
      */
-    static initSchema() {
-        if (Personne.providerIsSetup()) {
-            Personne.provider.connection.model(Personne.modelName, Personne.schema);
-        }
-    }
-
-    /**
-     * @static @method getInstance
-     * @return model
-     */
-    static getInstance() {
-        Personne.provider = DataProvider.getInstance();//must have
-        if (Personne.providerIsSetup()) {
-            Personne.initSchema();
-            return Personne.provider.connection.model(Personne.modelName);
-        }
-        LogHelper.error("Personne Provider is not setup. Can't get Personne's model",
-            Personne.provider,
-            typeof Personne.provider,
-            Personne.provider.connection,
-            typeof Personne.provider.connection
-        );
-        throw new Error("Personne Provider is not setup. Can't get Personne's model");
-    }
-
-    /**
-     * @static method
-     * @method providerIsSetup
-     * @return {boolean} isSetup
-     */
-    static providerIsSetup():boolean {
-        return Personne.provider !== undefined && Personne.provider.connection !== undefined;
-    }
-
     get searchSearchableFields():object {
         //eturn {"nom":{},"prenom":{},"surnom":{},"description":{}};
         return ["nom", "prenom","surnom","description"];
+    }
+
+    /** 
+     * @method formatRequestDataForDocument insère dans le schéma les données de la requête.
+     *
+     * @param {key:value} requestData - attributs de Personne
+     * @return {PersonneSchema} l'interface Schéma contenant les données de la requête
+     */
+    public formatRequestDataForDocument(requestData:any):any {
+        return {
+            nom: requestData.nom,
+            prenom: requestData.prenom,
+            surnom: requestData.surnom,
+            description: requestData.description
+        } as PersonneSchema;
+    }
+
+    public dataTransfertObject(document: any) {
+        return {
+            nom: document.nom,
+            prenom: document.prenom,
+            surnom: document.surnom,
+            description: document.description,
+        }
     }
 }
 export default Personne;

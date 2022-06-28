@@ -1,4 +1,3 @@
-
 import * as Rules from "./Rules";
 //add isValid - contract to limit used
 // Check if this is overkill
@@ -56,8 +55,17 @@ export default class Validator {
      *          @desc message (string) : décrivant l'échec ou réussite de la validation 
      */
     public validateData(data:any, ruleSet:any, emptyOk:boolean=false){
-        this.isdefined.setNext(this.isnotnull).setNext(this.isstring).setNext(this.isnotempty).setNext(this.minlenght)
-        .setNext(this.maxlength).setNext(this.idvalid).setNext(this.isobject).setNext(this.objectnotempty).setNext(this.isdate);
+        this.isdefined
+        .setNext(this.isnotnull)
+        .setNext(this.isstring)
+        .setNext(this.isnotempty)
+        .setNext(this.minlenght)
+        .setNext(this.maxlength)
+        .setNext(this.idvalid)
+        .setNext(this.isobject)
+        .setNext(this.objectnotempty)
+        .setNext(this.isdate);
+
         //in (key) / of (value)
         //Warning : "for in" n'effectue pas nécessairement dans l'ordre
         let isValid = true;
@@ -95,7 +103,7 @@ export default class Validator {
                     //ex: minLenght:3  => param = 3, rule = minLength
                     param = rule.substring(rule.indexOf(":")+1, rule.length);
                     rule = rule.substring(0, rule.indexOf(":"));
-                  }
+                }
                 
                 //Vérifier les règles si la donnée est là |OU| si la donnée est pas là mais devrait l'être (isDefined) 
                 if((dataField !== undefined && typeof dataField !== 'undefined') ||

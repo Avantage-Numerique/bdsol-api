@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import type {Service} from "../Service";
-import {ConnectOptions} from "mongodb";
+import AbstractModel from "../../Abstract/Model";
 
 
 export interface DbProvider {
@@ -13,7 +13,7 @@ export interface DbProvider {
     databaseName:string;
 
     connect():Promise<mongoose.Connection|undefined>;
-    getInstance():DbProvider|undefined;
+    assign: (model:AbstractModel) => void;
 }
 
 /**
@@ -28,6 +28,8 @@ export abstract class BaseProvider implements DbProvider {
     protected _url:string;
     protected _databaseName:string;
 
+    abstract _models:Array<AbstractModel>;
+
 
     constructor(name='') {
         if (name !== "") {
@@ -36,29 +38,49 @@ export abstract class BaseProvider implements DbProvider {
     }
 
 
+    /**
+     * Singleton getter in the scope of the concrete provider.
+     * @return {DbProvider}
+     */
     public async connect():Promise<mongoose.Connection|undefined>
     {
-
         LogHelper.log("Connect to url : ", this.url);
         try {
-            this.connection = await mongoose.createConnection(this.url, {
+            const connectionOptions:any = {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
-            } as ConnectOptions);
+            };
+            this.connection = await mongoose.createConnection(this.url, connectionOptions as mongoose.ConnectOptions);//
 
             return this.connection;
         }
-        catch (error:any) {
+        catch (error:any)
+        {
             LogHelper.error("Can't connect to db in provider");
+            throw error;
         }
+
         return undefined;
     }
 
+    /**
+     * @abstract
+     * Assign models to the provider and stocks models in an array.
+     * @param model
+     */
+    abstract assign(model:AbstractModel):void;
 
-    public getInstance(): DbProvider|undefined
+
+    /**
+     * This is the models
+     * @param model
+     */
+    public addModel(model:AbstractModel)
     {
-        //to overwrite.
-        return undefined;
+        if (this._models === undefined && typeof this._models === "undefined") {
+            this._models = [];
+        }
+        this._models.push(model);
     }
 
 

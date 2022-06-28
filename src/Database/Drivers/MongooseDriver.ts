@@ -8,6 +8,9 @@ import {DataProvider} from "../Providers/DataProvider";
 import {User} from "../../Users/UsersDomain";
 
 import CreateDbAndUsersMongoose from "../../Migrations/create-db-and-users-mongoose";
+import Personne from "../../Personnes/Models/Personne";
+import Organisation from "../../Organisations/Models/Organisation";
+import Occupation from "../../Taxonomie/Occupation/Models/Occupation";
 
 export class MongooseDBDriver implements DBDriver {
 
@@ -43,25 +46,17 @@ export class MongooseDBDriver implements DBDriver {
     public async initDb() {
         //await this.initMongoose();
 
-        try
-        {
-            LogHelper.info(`[BD] Connexion à la base de données utilisateurs ...`);
-            await this.providers.users.connect();
-        }
-        catch (error:any)
-        {
-            throw error;
-        }
+        LogHelper.info(`[BD] Connexion à la base de données utilisateurs ...`);
+        await this.providers.users.connect();
 
-        try
-        {
-            LogHelper.info(`[BD] Connexion à la base de données structurée, ouverte et liée ...`);
-            await this.providers.data.connect();
-        }
-        catch (error:any)
-        {
-            throw error;
-        }
+        LogHelper.info(`[BD] Connexion à la base de données structurée, ouverte et liée ...`);
+        await this.providers.data.connect();
+
+
+        this.providers.users.assign(User.getInstance());
+        this.providers.data.assign(Personne.getInstance());
+        this.providers.data.assign(Organisation.getInstance());
+        this.providers.data.assign(Occupation.getInstance());
 
         await this.generateFakeUsers();
     }
