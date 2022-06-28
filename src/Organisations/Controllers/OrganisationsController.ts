@@ -12,7 +12,7 @@ class OrganisationsController extends AbstractController {
     constructor()
     {
         super();
-        this.entity = new Organisation();
+        this.entity = Organisation.getInstance();
         this.service = new OrganisationsService(this.entity);
     }
 

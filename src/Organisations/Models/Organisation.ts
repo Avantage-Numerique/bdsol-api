@@ -6,8 +6,23 @@ import AbstractModel from "../../Abstract/Model";
 
 class Organisation extends AbstractModel {
 
+
+    //  Singleton.
+    protected static _instance:Organisation;
+
+    public static getInstance():Organisation
+    {
+        if (Organisation._instance === undefined) {
+            Organisation._instance = new Organisation();
+            Organisation._instance.initSchema();
+        }
+        return Organisation._instance;
+    }
+
     /** @public Nom du modèle */
     modelName: string = "Organisation";
+
+    mongooseModel:mongoose.Model<any>;
 
     /** @public Nom de la collection dans la base de données */
     collectionName: string = 'organisations';
@@ -111,6 +126,22 @@ class Organisation extends AbstractModel {
             contactPoint: requestData.contactPoint,
             dateDeFondation: requestData.dateDeFondation
         } as OrganisationSchema;
+    }
+
+
+    /**
+     * Format the date for the return on public routes.
+     * @param document
+     * @return {any}
+     */
+    public dataTransfertObject(document: any):any {
+        return {
+            nom: document.nom,
+            description: document.description,
+            url: document.url,
+            contactPoint: document.contactPoint,
+            dateDeFondation: document.dateDeFondation
+        }
     }
 
 }

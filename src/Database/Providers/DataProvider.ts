@@ -26,7 +26,8 @@ export class DataProvider extends BaseProvider implements DbProvider
      * Singleton getter in the scope of the concrete provider.
      * @return {DbProvider}
      */
-    public static getInstance():DbProvider {
+    public static getInstance():DbProvider
+    {
         if (DataProvider._singleton === undefined) {
             DataProvider._singleton = new DataProvider(config.db.name);
         }

@@ -5,7 +5,7 @@ import {HealthCheckRouter} from "./Healthcheck/Routes/HealthCheckRoutes";
 import {AuthentificationRouter} from "./Authentification/Routes/AuthentificationRoutes";
 import {UsersRoutes} from "./Users/Routes/UsersRouter";
 import {PersonnesRoutes} from './Personnes/Routes/PersonnesRoutes';
-import {OrganisationsRouter} from './Organisations/Routes/OrganisationsRoutes'
+import {OrganisationsRoutes} from './Organisations/Routes/OrganisationsRoutes'
 import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
 import {RegistrationRouter} from "./Authentification/Routes/RegistrationRoutes";
 
@@ -59,6 +59,10 @@ export default class Api {
             {
                 baseRoute: "/users",
                 manager: new UsersRoutes()
+            },
+            {
+                baseRoute: "/organisations",
+                manager: new OrganisationsRoutes()
             }
         ];
     }
@@ -116,9 +120,6 @@ export default class Api {
      */
     private _needAuthentificationRoutes()
     {
-        //@todo migrate the Organisations Routes
-        this.express.use("/organisations", OrganisationsRouter);
-
         /**
          * Init all the entities routes from theirs managers.
          */

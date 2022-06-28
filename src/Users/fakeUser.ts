@@ -1,4 +1,4 @@
-import type {UserContract} from "./Models/User";
+import type {UserContract} from "./Contracts/UserContract";
 
 export const fakeUser:UserContract = {
     username: 'datageek',
