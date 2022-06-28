@@ -6,16 +6,39 @@ import AbstractModel from "../../../Abstract/Model"
 
 class Occupation extends AbstractModel {
 
-    /** @public Nom du modèle */
+    //Singleton
+    protected static _instance:Occupation;
+
+    public static getInstance():Occupation {
+        if (Occupation._instance === undefined) {
+            Occupation._instance = new Occupation();
+            Occupation._instance.initSchema();
+        }
+        return Occupation._instance;
+    }
+
+    /**
+     * Nom du modèle
+     * @public
+     */
     modelName:string = 'Occupation';
 
-    /** @public Nom de la collection dans la base de donnée */
+    /**
+     * Nom de la collection dans la base de donnée
+     * @public
+     */
     collectionName:string = 'taxo-occupations';
 
-    /** @public Connection mongoose */
+    /**
+     * The active connection to the mongoose/mongodb
+     * @public Connection mongoose
+     */
     connection:mongoose.Connection;
 
     provider:DbProvider;
+
+    mongooseModel:mongoose.Model<any>;
+
 
     /** @public Schéma pour la base de donnée */
     schema:Schema =
@@ -106,6 +129,14 @@ class Occupation extends AbstractModel {
             description: requestData.description,
             sousTaxonomie: requestData.sousTaxonomie
         } as OccupationSchema;
+    }
+
+    public dataTransfertObject(document: any) {
+        return {
+            nom: document.nom,
+            description: document.description,
+            sousTaxonomie: document.sousTaxonomie,
+        }
     }
 
 }

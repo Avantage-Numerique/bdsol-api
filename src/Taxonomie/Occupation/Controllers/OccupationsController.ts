@@ -12,7 +12,7 @@ class OccupationsController extends AbstractController {
     constructor()
     {
         super();
-        this.entity = new Occupation();
+        this.entity = Occupation.getInstance();
         this.service = new OccupationsService(this.entity);
     }
 

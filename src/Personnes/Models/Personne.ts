@@ -7,7 +7,7 @@ import AbstractModel from "../../Abstract/Model"
 
 class Personne extends AbstractModel {
 
-    //  Singleton.
+    //Singleton.
     protected static _instance:Personne;
 
     public static getInstance():Personne
