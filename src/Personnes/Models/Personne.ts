@@ -99,10 +99,10 @@ class Personne extends AbstractModel {
      * @method formatRequestDataForDocument insère dans le schéma les données de la requête.
      * 
      * Paramètres :
-     *      @param {key:value} requestData - attributs de Personne
+     *      @param {key:value} requestData - attributs d'organisation
      * 
      * Retourne :
-     *      @return {PersonneSchema} l'interface Schéma contenant les données de la requête
+     *      @return {OrganisationSchema} l'interface Schéma contenant les données de la requête
      */
     public formatRequestDataForDocument(requestData:any):any {
         return {

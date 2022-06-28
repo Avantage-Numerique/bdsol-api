@@ -23,6 +23,7 @@ class Occupation extends AbstractModel {
 
             nom: { type: String, required: true },
             description: String,
+            category:String,
             sousTaxonomie:String
         },
             {
@@ -48,6 +49,12 @@ class Occupation extends AbstractModel {
                 "rules": []
             },
             {
+                "name": "category",
+                "label": "Catégorie",
+                "type": "String",
+                "rules": []
+            },
+            {
                 "name": "sousTaxonomie",
                 "label": "Sous-Taxonomie lié",
                 "type": "String",
@@ -62,6 +69,7 @@ class Occupation extends AbstractModel {
             "id":["idValid"],
             "nom":["isString"],
             "description":["isString"],
+            "category":["isString"],
             "sousTaxonomie":["isString"]
         },
         "create":{
@@ -80,7 +88,7 @@ class Occupation extends AbstractModel {
     }
 
     get searchSearchableFields():object {
-        return ["nom", "description", "sous-taxonomie"];
+        return ["nom", "description", "category", "sous-taxonomie"];
     }
 
     /** 
