@@ -8,8 +8,6 @@ abstract class AbstractRoute
     abstract controllerInstance: AbstractController;
     abstract routerInstance: express.Router;
 
-    constructor() {}
-
     public setupRoutes()
     {
         this.routerInstance.post('/create', this.createHandler.bind(this));

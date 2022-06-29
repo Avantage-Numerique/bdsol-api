@@ -8,6 +8,7 @@ import {PersonnesRoutes} from './Personnes/Routes/PersonnesRoutes';
 import {OrganisationsRoutes} from './Organisations/Routes/OrganisationsRoutes'
 import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
 import {RegistrationRouter} from "./Authentification/Routes/RegistrationRoutes";
+import { OccupationsRoutes } from "./Taxonomie/Occupation/Routes/OccupationsRoutes";
 
 /**
  * Main class for the API
@@ -76,7 +77,12 @@ export default class Api {
             {
                 baseRoute: "/organisations",
                 manager: new OrganisationsRoutes()
+            },
+            {
+                baseRoute: "/occupations",
+                manager: new OccupationsRoutes()
             }
+
         ];
     }
 

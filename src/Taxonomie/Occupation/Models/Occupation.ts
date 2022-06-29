@@ -46,8 +46,7 @@ class Occupation extends AbstractModel {
 
             nom: { type: String, required: true },
             description: String,
-            category:String,
-            sousTaxonomie:String
+            subTaxonomy:String
         },
             {
                 timestamps: true
@@ -72,13 +71,7 @@ class Occupation extends AbstractModel {
                 "rules": []
             },
             {
-                "name": "category",
-                "label": "Catégorie",
-                "type": "String",
-                "rules": []
-            },
-            {
-                "name": "sousTaxonomie",
+                "name": "subTaxonomy",
                 "label": "Sous-Taxonomie lié",
                 "type": "String",
                 "rules": []
@@ -92,8 +85,7 @@ class Occupation extends AbstractModel {
             "id":["idValid"],
             "nom":["isString"],
             "description":["isString"],
-            "category":["isString"],
-            "sousTaxonomie":["isString"]
+            "subTaxonomy":["isString"]
         },
         "create":{
             "nom":["isDefined", "minLength:2"]
@@ -111,7 +103,7 @@ class Occupation extends AbstractModel {
     }
 
     get searchSearchableFields():object {
-        return ["nom", "description", "category", "sous-taxonomie"];
+        return ["nom", "description", "sous-taxonomie"];
     }
 
     /** 
@@ -127,7 +119,7 @@ class Occupation extends AbstractModel {
         return {
             nom: requestData.nom,
             description: requestData.description,
-            sousTaxonomie: requestData.sousTaxonomie
+            subTaxonomy: requestData.subTaxonomy
         } as OccupationSchema;
     }
 
@@ -135,7 +127,7 @@ class Occupation extends AbstractModel {
         return {
             nom: document.nom,
             description: document.description,
-            sousTaxonomie: document.sousTaxonomie,
+            subTaxonomy: document.subTaxonomy,
         }
     }
 
