@@ -45,7 +45,6 @@ class Personne extends AbstractModel {
     /** @public Schéma pour la base de donnée */
     schema:Schema =
         new Schema<PersonneSchema>({
-
             nom: { type: String, required: true },
             prenom: { type: String, required: true },
             surnom: String,

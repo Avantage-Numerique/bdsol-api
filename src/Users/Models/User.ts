@@ -5,6 +5,7 @@ import {UserContract} from "../Contracts/UserContract";
 import AbstractModel from "../../Abstract/Model";
 import {PersonneSchema} from "../../Personnes/Schemas/PersonneSchema";
 import {PasswordsController} from "../../Authentification/Controllers/PasswordsController";
+import { UserDocument } from "../Schemas/UserSchema";
 
 
 /**
@@ -154,11 +155,12 @@ export class User extends AbstractModel
      */
     public formatRequestDataForDocument(requestData:any):any {
         return {
-            nom: requestData.nom,
-            prenom: requestData.prenom,
-            surnom: requestData.surnom,
-            description: requestData.description
-        } as PersonneSchema;
+            username: requestData.username,
+            email: requestData.email,
+            password: requestData.password,
+            avatar: requestData.avatar,
+            name: requestData.name
+        } as UserDocument;
     }
 
     /**
