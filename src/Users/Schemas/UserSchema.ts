@@ -52,30 +52,6 @@ export class UserSchema {
     }
 
     /**
-     * Mongoose schema getter as a singleton.
-     */
-    static schema(): Schema<UserDocument> {
-
-        if (UserSchema.documentSchema === undefined) {
-
-            UserSchema.documentSchema = new Schema<UserDocument>(
-                {
-                    username: {type: String, required: true, unique: true},
-                    email: {type: String, required: true, unique: true},
-                    password: {type: String, required: true},
-                    avatar: String,
-                    name: String,
-                    role: String
-                },
-                {
-                    timestamps: true
-                });
-            UserSchema.registerPreEvents();
-        }
-        return UserSchema.documentSchema;
-    }
-
-    /**
      * Set the event to adjust data to the current document on Pre.
      * doc : https://mongoosejs.com/docs/typescript/schemas.html
      * à relire : https://thecodebarbarian.com/working-with-mongoose-in-typescript.html
