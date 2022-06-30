@@ -2,12 +2,11 @@ import {User} from "../Models/User";
 import {UsersService} from "../Services/UsersService";
 import AbstractController from "../../Abstract/Controller";
 
-
 class UsersController extends AbstractController {
 
     private static _instance:AbstractController;
 
-    public service:UsersService;
+    service:UsersService;
     entity:User;
 
     constructor()

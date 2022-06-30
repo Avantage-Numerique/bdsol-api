@@ -1,12 +1,13 @@
 import Personne from "../Models/Personne"
 import PersonnesService from "../Services/PersonnesService";
 import AbstractController from "../../Abstract/Controller"
+import Validator from "../../Validation/Validator";
 
 class PersonnesController extends AbstractController {
 
     private static _instance:AbstractController;
     /** @public PersonneService */
-    public service:PersonnesService;
+    service:PersonnesService;
     entity:Personne;
 
     constructor()

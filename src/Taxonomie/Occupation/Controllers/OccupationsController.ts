@@ -6,7 +6,7 @@ class OccupationsController extends AbstractController {
 
     private static _instance:AbstractController;
     /** @public PersonneService */
-    public service:OccupationsService;
+    service:OccupationsService;
     entity:Occupation;
 
     constructor()

@@ -37,18 +37,16 @@ abstract class AbstractController {
 
         //Can I just :  formatedData = {requestData}:Xschema
         const formatedData = this.entity.formatRequestDataForDocument(requestData);
-        LogHelper.debug("create", requestData);
         const createdDocumentResponse = await this.service.insert(formatedData);
 
         if (createdDocumentResponse !== undefined)
             return createdDocumentResponse;
 
-
         LogHelper.debug("La réponse à la méthode insert est undefined");
         return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
             StatusCodes.INTERNAL_SERVER_ERROR,
-            'Le service. instert a retourné une réponse undefined'
+            'Le service. insert a retourné une réponse undefined'
         );
     }
 
@@ -64,7 +62,6 @@ abstract class AbstractController {
      */
     public async update(requestData:any):Promise<ApiResponseContract> {
         
-        //Validation des données
         const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("update"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
@@ -101,7 +98,6 @@ abstract class AbstractController {
     public async search(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la recherche dans la liste");
         
-
         const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("search"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
@@ -109,25 +105,6 @@ abstract class AbstractController {
                 StatusCodes.BAD_REQUEST,
                 messageUpdate.message
             );
-
-        //Validation date
-        if (requestData.createdAt !== undefined &&
-            //typeof data.createdAt == 'string' &&
-            ( requestData.createdAt.substring(0,1) != '<' && requestData.createdAt.substring(0,1) != '>' ))
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "Le premier caractère de createdAt doit être '<' ou '>'"
-                );
-
-        if (requestData.updatedAt !== undefined &&
-            //typeof data.updatedAt == 'string' &&
-            ( requestData.updatedAt.substring(0,1) != '<' && requestData.updatedAt.substring(0,1) != '>' ))
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "Le premier caractère de updatedAt doit être '<' ou '>'"
-                );
 
         const query = QueryBuilder.build(requestData);
 
@@ -146,33 +123,13 @@ abstract class AbstractController {
     */
     public async list(requestData:any):Promise<ApiResponseContract> {
         LogHelper.log("Début de la requête d'obtention de la liste de personne");
-        
 
-        const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("list"));
+        const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("list"), true);
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
                 messageUpdate.message
-                );
-
-        //Validation date
-        if (requestData.createdAt !== undefined &&
-            //typeof data.createdAt == 'string' &&
-            ( requestData.createdAt.substring(0,1) != '<' && requestData.createdAt.substring(0,1) != '>' ))
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "Le premier caractère de createdAt doit être '<' ou '>'"
-                );
-
-        if (requestData.updatedAt !== undefined &&
-            //typeof data.updatedAt == 'string' &&
-            ( requestData.updatedAt.substring(0,1) != '<' && requestData.updatedAt.substring(0,1) != '>' ))
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "Le premier caractère de updatedAt doit être '<' ou '>'"
                 );
 
         const query = QueryBuilder.build(requestData);

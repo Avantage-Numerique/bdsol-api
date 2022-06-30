@@ -6,7 +6,7 @@ class OrganisationsController extends AbstractController {
 
     private static _instance:AbstractController;
     /** @public OrganisationService */
-    public service:OrganisationsService;
+    service:OrganisationsService;
     entity:Organisation;
 
     constructor()
