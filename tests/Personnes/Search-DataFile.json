@@ -7,9 +7,9 @@
             "status":400
         },
         "id":"",
-        "nom": "",
-        "prenom": "",
-        "surnom": "",
+        "lastName": "",
+        "firstName": "",
+        "nickname": "",
         "description": ""
     },
     {
@@ -28,7 +28,7 @@
             "status":400
         },
         "id":"",
-        "nom":""
+        "lastName":""
     },
     {
         "infoTest":
@@ -51,39 +51,39 @@
     {
         "infoTest":
         {
-            "name":"Search only nom",
+            "name":"Search only lastName",
             "error":false,
             "status":200
         },
-        "nom": "trem"
+        "lastName": "trem"
     },
     {
         "infoTest":
         {
-            "name":"Search only prenom",
+            "name":"Search only firstName",
             "error":false,
             "status":200
         },
-        "prenom": "Sarah"
+        "firstName": "Sarah"
     },
     {
         "infoTest":
         {
-            "name":"Search nom&prenom",
+            "name":"Search lastName&firstName",
             "error":false,
             "status":200
         },
-        "nom": "Neut",
-        "prenom": "jimm"
+        "lastName": "Neut",
+        "firstName": "jimm"
     },
     {
         "infoTest":
         {
-            "name":"Search only surnom",
+            "name":"Search only nickname",
             "error":false,
             "status":200
         },
-        "surnom": "dj"
+        "nickname": "dj"
     },
     {
         "infoTest":
@@ -106,21 +106,21 @@
     {
         "infoTest":
         {
-            "name":"Search id+nom = 0",
+            "name":"Search id+lastName = 0",
             "error":false,
             "status":404,
             "setId":true
         },
-        "nom":"fasdgb"
+        "lastName":"fasdgb"
     },
     {
         "infoTest":
         {
-            "name":"Search id+nom = 1",
+            "name":"Search id+lastName = 1",
             "error":false,
             "status":200,
             "setId":true
         },
-        "nom":"Laval"
+        "lastName":"Laval"
     }
 ]

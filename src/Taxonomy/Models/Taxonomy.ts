@@ -1,29 +1,28 @@
 import mongoose from "mongoose";
 import {Schema} from "mongoose"
-import { PersonneSchema } from "../Schemas/PersonneSchema";
+import { TaxonomySchema } from "../Schemas/TaxonomySchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model"
 
+class Taxonomy extends AbstractModel {
 
-class Personne extends AbstractModel {
-
-    /** @protected @static Singleton instance */
-    protected static _instance:Personne;
+    /** @protected @static Singleton instance of model Taxonomy */
+    protected static _instance:Taxonomy;
 
     /** @public @static Model singleton instance constructor */
-    public static getInstance():Personne {
-        if (Personne._instance === undefined) {
-            Personne._instance = new Personne();
-            Personne._instance.initSchema();
+    public static getInstance():Taxonomy {
+        if (Taxonomy._instance === undefined) {
+            Taxonomy._instance = new Taxonomy();
+            Taxonomy._instance.initSchema();
         }
-        return Personne._instance;
+        return Taxonomy._instance;
     }
 
-    /** @public Model lastName */
-    modelName:string = 'Personne';
+    /** @public Model name */
+    modelName:string = 'Taxonomy';
 
-    /** @public Collection lastName in database*/
-    collectionName:string = 'personnes';
+    /** @public Collection name in database */
+    collectionName:string = 'taxonomy';
 
     /** @public Connection mongoose */
     connection:mongoose.Connection;
@@ -32,11 +31,11 @@ class Personne extends AbstractModel {
 
     /** @public Database schema */
     schema:Schema =
-        new Schema<PersonneSchema>({
-            lastName: { type: String, required: true },
-            firstName: { type: String, required: true },
-            nickname: String,
-            description: String
+        new Schema<TaxonomySchema>({
+
+            name: { type: String, required: true },
+            description: String,
+            subTaxonomy:String
         },
             {
                 timestamps: true
@@ -46,29 +45,23 @@ class Personne extends AbstractModel {
     /** @public Used to return attributes and rules for each field of this entity. */
     fieldInfo =
     {
-        "route": "",
+        "state": "",
         "field": [
             {
-                "name": "lastName",
-                "label": "Nom ",
-                "type": "String",
-                "rules": []
-            },
-            {
-                "name": "firstName",
-                "label": "Prénom",
-                "type": "String",
-                "rules": []
-            },
-            {
-                "name": "nickname",
-                "label": "Surnom",
+                "name": "name",
+                "label": "Nom",
                 "type": "String",
                 "rules": []
             },
             {
                 "name": "description",
                 "label": "Description",
+                "type": "String",
+                "rules": []
+            },
+            {
+                "name": "subTaxonomy",
+                "label": "Sous-Taxonomie lié",
                 "type": "String",
                 "rules": []
             }
@@ -79,14 +72,12 @@ class Personne extends AbstractModel {
     ruleSet:any = {
         "default":{
             "id":["idValid"],
-            "lastName":["isString"],
-            "firstName":["isString"],
-            "nickname":["isString"],
-            "description":["isString"]
+            "name":["isString"],
+            "description":["isString"],
+            "subTaxonomy":["isString"]
         },
         "create":{
-            "lastName":["isDefined", "minLength:2"],
-            "firstName":["isDefined", "minLength:2"],
+            "name":["isDefined", "minLength:2"]
         },
         "update":{
             "id":["isDefined"]
@@ -105,7 +96,7 @@ class Personne extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields():object {
-        return ["lastName", "firstName","nickname","description"];
+        return ["name", "description", "subtaxonomy"];
     }
 
     /**
@@ -115,11 +106,10 @@ class Personne extends AbstractModel {
      */
     public formatRequestDataForDocument(requestData:any):any {
         return {
-            lastName: requestData.lastName,
-            firstName: requestData.firstName,
-            nickname: requestData.nickname,
-            description: requestData.description
-        } as PersonneSchema;
+            name: requestData.name,
+            description: requestData.description,
+            subTaxonomy: requestData.subTaxonomy
+        } as TaxonomySchema;
     }
 
     /**
@@ -129,11 +119,10 @@ class Personne extends AbstractModel {
      */
     public dataTransfertObject(document: any) {
         return {
-            lastName: document.lastName,
-            firstName: document.firstName,
-            nickname: document.nickname,
+            name: document.name,
             description: document.description,
+            subTaxonomy: document.subTaxonomy,
         }
     }
 }
-export default Personne;
+export default Taxonomy;

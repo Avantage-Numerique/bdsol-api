@@ -1,5 +1,3 @@
-
-
 export interface UserContract {
     username:string;
     email:string;

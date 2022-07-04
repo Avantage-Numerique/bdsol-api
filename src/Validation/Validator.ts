@@ -39,20 +39,16 @@ export default class Validator {
 
 
     /** 
-     * @method validateData Valide le data contre un ensemble de règle
-     * @note   si la règle demande un paramètre on ajoute un ":" suivi du paramètre
-     * @note   si le champs à valider contient les opérateurs "gte:" ou "lte:", les valeurs seront validées sans les opérateurs.
-     * 
-     * Paramètres :
-     *      @param {key:value} data - Valeur à valider contre le schéma : { "nom" : "Audet" }
-     *      @param {key:value[]} ruleSet - Ensemble de règle pour chaque valeur à vérifier: { "nom":["isDefined", "isSet" ...], "prenom":[...] }
-     *      @param {boolean} emptyOk - Demande ou non la vérification à savoir si l'objet passé est vide
-     *      @note ruleSet se trouve en général dans le model de l'entité
-     * 
-     * Retourne :
-     *      @return {object} - { isValid, message } :
-     *          @desc isValid (boolean): représentant si les données sont validée
-     *          @desc message (string) : décrivant l'échec ou réussite de la validation 
+     * @method validateData Validate data against a rule set
+     * @note   if a rule is followed by ":" the next thing is a parameter to pass to the method
+     * @note   if fields to validate contains "gte:" or "lte:" in their beginning, values will be evaluated without it.
+     * @param {any} data - Value to validate : { "nom" : "Audet" }
+     * @param {any} ruleSet - set of rule to check for each field: { "nom":["isDefined", "isSet" ...], "prenom":[...] }
+     * @param {boolean} emptyOk - when false, Return error if object is empty 
+     * @note ruleSet is in entity model
+     * @return {object} - { isValid, message } :
+     * @desc isValid (boolean): Passed the ruleSet or not.
+     * @desc message (string) : Error or success message 
      */
     public validateData(data:any, ruleSet:any, emptyOk:boolean=false){
         this.isdefined
@@ -67,12 +63,12 @@ export default class Validator {
         .setNext(this.isdate);
 
         //in (key) / of (value)
-        //Warning : "for in" n'effectue pas nécessairement dans l'ordre
+        //Warning : "for in" not neccesarily proceed in order
         let isValid = true;
         let message = "Erreurs : ";
         let rule;
 
-        //Si l'objet ne peut pas être vide
+        //Object empty check
         if(emptyOk === false) {
             if (data == undefined || typeof data != 'object' || Object.entries(data).length == 0){
                 message += "\n L'objet à valider est vide.";
@@ -82,15 +78,14 @@ export default class Validator {
         }
 
         //Structure : "nom":["isDefined", ...]
-        //Pour chaque champs dans ruleSet ("nom"...)
+        //For each field in ruleSet ("nom"...)
         for (const field in ruleSet) {
-            //Pour chaque règles du champs ("isDefined"...)
+            //For each rule of those field ("isDefined"...)
             for (rule of ruleSet[field]) { //do we instead => validate(data[field], ruleSet[field].pop())
                 //Set data to validate
                 let dataField = data[field];
 
                 //Remove (gte, lte) operator if needed (those are for QueryBuilder)
-                //NE FONCTIONNE PAS PRÉSENTEMENT AVEC LES NOMBRES PUISQUE JE CONVERTIS LES NOMBRES EN STRING!
                 if(dataField !== undefined){
                     if (dataField.toString().indexOf("gte:") == 0 || dataField.toString().indexOf("lte:") == 0){
                         dataField = dataField.toString().substring(4, dataField.toString().length);
@@ -98,14 +93,14 @@ export default class Validator {
                 }
 
                 let param = -1;
-                //Si paramètre à passer
+                //If param is passed
                 if ( rule.indexOf(":") != -1) {
                     //ex: minLenght:3  => param = 3, rule = minLength
                     param = rule.substring(rule.indexOf(":")+1, rule.length);
                     rule = rule.substring(0, rule.indexOf(":"));
                 }
                 
-                //Vérifier les règles si la donnée est là |OU| si la donnée est pas là mais devrait l'être (isDefined) 
+                //Verify rule if data is there |OR| if data is not but should be (isDefined) 
                 if((dataField !== undefined && typeof dataField !== 'undefined') ||
                     ((dataField == undefined || typeof dataField == 'undefined') && ruleSet[field].includes("isDefined"))){
 

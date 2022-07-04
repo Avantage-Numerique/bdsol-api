@@ -10,7 +10,7 @@ import {User} from "../../Users/UsersDomain";
 import CreateDbAndUsersMongoose from "../../Migrations/create-db-and-users-mongoose";
 import Personne from "../../Personnes/Models/Personne";
 import Organisation from "../../Organisations/Models/Organisation";
-import Occupation from "../../Taxonomie/Occupation/Models/Occupation";
+import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 
 export class MongooseDBDriver implements DBDriver {
 
@@ -56,7 +56,7 @@ export class MongooseDBDriver implements DBDriver {
         this.providers.users.assign(User.getInstance());
         this.providers.data.assign(Personne.getInstance());
         this.providers.data.assign(Organisation.getInstance());
-        this.providers.data.assign(Occupation.getInstance());
+        this.providers.data.assign(Taxonomy.getInstance());
 
         await this.generateFakeUsers();
     }

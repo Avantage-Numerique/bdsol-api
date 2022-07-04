@@ -3,22 +3,16 @@ import mongoose, {Schema} from "mongoose";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import {UserContract} from "../Contracts/UserContract";
 import AbstractModel from "../../Abstract/Model";
-import {PersonneSchema} from "../../Personnes/Schemas/PersonneSchema";
 import {PasswordsController} from "../../Authentification/Controllers/PasswordsController";
 import { UserDocument } from "../Schemas/UserSchema";
 
+export class User extends AbstractModel {
 
-/**
- * Model User
- */
-export class User extends AbstractModel
-{
-
-    //  Singleton.
+    /** @protected @static Singleton instance of model User */
     protected static _instance:User;
 
-    public static getInstance():User
-    {
+    /** @public @static Model singleton instance constructor */
+    public static getInstance():User {
         if (User._instance === undefined) {
             User._instance = new User();
             User._instance.initSchema();
@@ -27,41 +21,18 @@ export class User extends AbstractModel
         return User._instance;
     }
 
-    /**
-     * @public
-     * The model name.
-     */
+    /** @public Model name */
     modelName:string = 'User';
 
-    /**
-     * @public
-     * Nom de la collection dans la base de donnée
-     */
+    /** @public Collection name in database */
     collectionName:string = 'users';
 
-    /**
-     * @public
-     * Connection mongoose
-     */
+    /** @public Connection mongoose */
     connection:mongoose.Connection;
-
-    /**
-     * @public
-     * The provider for this model.
-     */
     provider:DbProvider;
-
-    /**
-     * @public
-     * The mongoose Model of this API Model.
-     */
     mongooseModel:mongoose.Model<any>;
 
-
-    /**
-     * @public
-     * Schema Mongoose for the User.
-     * */
+    /** @public Database schema */
     schema:Schema =
         new Schema<UserContract>({
                 username: {type: String, required: true, unique: true},
@@ -76,13 +47,10 @@ export class User extends AbstractModel
             });
 
 
-    /**
-     * @public
-     * infoChamp pour le retour frontend des champs à créer et règles des attributs de personne selon la route
-     * */
-    infoChamp = {
-        "state": "",
-        "champs": [
+    /** @public Used to return attributes and rules for each field of this entity. */
+    fieldInfo = {
+        "route": "",
+        "field": [
             {
                 "name": "username",
                 "label": "Nom d'utilisateur",
@@ -113,14 +81,11 @@ export class User extends AbstractModel
                 "type": "String",
                 "rules": []
             }
-            //no role : C'est une option pour l'API.
+            //no role : It's an api option
         ]
     };
 
-    /**
-     * @public
-     * The ruleSet of this model validation.
-     */
+    /** @public Rule set for every field of this entity for each route */
     ruleSet:any = {
         "default":{
             "id":["idValid"],
@@ -150,8 +115,17 @@ export class User extends AbstractModel
     }
 
     /**
-     * Format the date before validation
-     * @param requestData
+     * @get the field that are searchable.
+     * @return {Object} the field slug/names.
+     */
+    get searchSearchableFields():object {
+        return ["To be completed"];
+    }
+
+    /**
+     * @public @method formatRequestDataForDocument Format the data for this entity
+     * @param {any} requestData - Data to format
+     * @return {UserDocument} The entity formated to schema
      */
     public formatRequestDataForDocument(requestData:any):any {
         return {
@@ -164,7 +138,7 @@ export class User extends AbstractModel
     }
 
     /**
-     * Format the date for the return on public routes.
+     * @public @method dataTransfertObject Format the document for the public return.
      * @param document
      * @return {any}
      */
@@ -175,7 +149,6 @@ export class User extends AbstractModel
             name: document.name,
         }
     }
-
 
     public async registerPreEvents()
     {

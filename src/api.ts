@@ -1,4 +1,4 @@
-import express, {NextFunction, Response} from "express";
+import express from "express";
 import cors from "cors";
 import {ApiRouter} from "./routes";
 import {HealthCheckRouter} from "./Healthcheck/Routes/HealthCheckRoutes";
@@ -8,27 +8,22 @@ import {PersonnesRoutes} from './Personnes/Routes/PersonnesRoutes';
 import {OrganisationsRoutes} from './Organisations/Routes/OrganisationsRoutes'
 import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
 import {RegistrationRouter} from "./Authentification/Routes/RegistrationRoutes";
-import { OccupationsRoutes } from "./Taxonomie/Occupation/Routes/OccupationsRoutes";
-import AuthRequest from "./Authentification/Types/AuthRequest";
-import LogHelper from "./Monitoring/Helpers/LogHelper";
+import { TaxonomyRoutes } from "./Taxonomy/Routes/TaxonomyRoutes";
 
 /**
  * Main class for the API
  * Use the express instance as public property.
  */
-export default class Api
-{
+export default class Api {
     public express: express.Application = express();
     public authRouters:any;
 
     public entitiesRoutes:Array<any>;
 
     public start() {
-        this._initMiddleware();
         this._initEntitiesRouters();
+        this._initMiddleware();
         this._initRouter();
-
-
     }
 
     /**
@@ -52,12 +47,10 @@ export default class Api
                 'http://bdsol.avantagenumerique.org:3000',
                 'https://bdsol.avantagenumerique.org:3000'
             ],
-            allowedOrigins2 = 'http://localhost:3000',
             options: cors.CorsOptions = {
                 origin: allowedOrigins
             };
 
-        //this enable all preflight cross origin check.
         this.express.use(cors(options));
 
         // parse application/x-www-form-urlencoded
@@ -86,8 +79,8 @@ export default class Api
                 manager: new OrganisationsRoutes()
             },
             {
-                baseRoute: "/occupations",
-                manager: new OccupationsRoutes()
+                baseRoute: "/taxonomy",
+                manager: new TaxonomyRoutes()
             }
 
         ];
@@ -101,7 +94,6 @@ export default class Api
      */
     private _initRouter()
     {
-
         this._initPublicRoutes();
 
         // @ts-ignore
@@ -154,7 +146,7 @@ export default class Api
         {
             this.express.use(
                 route.baseRoute,
-                route.manager.setupRoutes()
+                route.manager.setupAuthRoutes()
             );
         }
     }

@@ -1,9 +1,9 @@
 import {Document} from "mongoose"
 
 export interface OrganisationSchema extends Document {
-    nom:string;
+    name:string;
     description:string;
     url:string;
     contactPoint:string;
-    dateDeFondation:Date
+    fondationDate:Date
 }

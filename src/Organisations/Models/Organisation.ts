@@ -6,12 +6,11 @@ import AbstractModel from "../../Abstract/Model";
 
 class Organisation extends AbstractModel {
 
-
-    //  Singleton.
+    /** @protected @static Singleton instance of model Organisation */
     protected static _instance:Organisation;
 
-    public static getInstance():Organisation
-    {
+    /** @public @static Model singleton instance constructor */
+    public static getInstance():Organisation {
         if (Organisation._instance === undefined) {
             Organisation._instance = new Organisation();
             Organisation._instance.initSchema();
@@ -19,41 +18,38 @@ class Organisation extends AbstractModel {
         return Organisation._instance;
     }
 
-    /** @public Nom du modèle */
+    /** @public Model name */
     modelName: string = "Organisation";
 
-    mongooseModel:mongoose.Model<any>;
-
-    /** @public Nom de la collection dans la base de données */
+    /** @public Collection name in database */
     collectionName: string = 'organisations';
-
+    
     /** @public Connection mongoose */
     connection: mongoose.Connection;
-
-    /** @public Provider */
+    mongooseModel:mongoose.Model<any>;
     provider: DbProvider;
 
-    /** @public Schéma pour la base de donnée */
+    /** @public Database schema */
     schema: Schema =
         new Schema<OrganisationSchema>({
-                nom: {type: String, required: true},
+                name: {type: String, required: true},
                 description: String,
                 url: String, //String? TODO
                 contactPoint: String, //String? TODO
-                dateDeFondation: Date
+                fondationDate: Date
             },
             {
                 timestamps: true
             });
     
-    /** @public infoChamp pour le retour frontend des champs à créer et règles des attributs d'organisation selon la route */
-    infoChamp =
+    /** @public Used to return attributes and rules for each field of this entity. */
+    fieldInfo =
     {
-        "state": "",
-        "champs": [
+        "route": "",
+        "field": [
             {
-                "name": "nom",
-                "label": "Nom",
+                "name": "name",
+                "label": "name",
                 "type": "String",
                 "rules": []
             },
@@ -76,7 +72,7 @@ class Organisation extends AbstractModel {
                 "rules": []
             },
             {
-                "name": "dateDeFondation",
+                "name": "fondationDate",
                 "label": "Date de fondation",
                 "type": "Date",
                 "rules": []
@@ -84,18 +80,18 @@ class Organisation extends AbstractModel {
         ]
     };
     
-    /** @public ruleSet pour la validation du data de organisation */
+    /** @public Rule set for every field of this entity for each route */
     ruleSet:any = {
         "default":{
             "id":["idValid"],
-            "nom":["isString"],
+            "name":["isString"],
             "description":["isString"],
             "url":["isString"],
             "contactPoint":["isString"],
-            "dateDeFondation":["isDate"]
+            "fondationDate":["isDate"]
         },
         "create":{
-            "nom":["isDefined", "minLength:2"],
+            "name":["isDefined", "minLength:2"],
         },
         "update":{
             "id":["isDefined"]
@@ -109,41 +105,42 @@ class Organisation extends AbstractModel {
         }
     }
 
-    /** 
-     * @method formatRequestDataForDocument insère dans le schéma les données de la requête.
-     * 
-     * Paramètres :
-     *      @param {key:value} requestData - attributs de l'organisation
-     * 
-     * Retourne :
-     *      @return {OrganisationSchema} l'interface Schéma contenant les données de la requête
+    /**
+     * @get the field that are searchable.
+     * @return {Object} the field slug/names.
+     */
+    get searchSearchableFields():object {
+        return ["name", "description","url","contactPoint", "fondationDate"];
+    }
+
+    /**
+     * @public @method formatRequestDataForDocument Format the data for this entity
+     * @param {any} requestData - Data to format
+     * @return {OrganisationSchema} The entity formated to schema
      */
      public formatRequestDataForDocument(requestData:any):any {
         return {
-            nom: requestData.nom,
+            name: requestData.name,
             description: requestData.description,
             url: requestData.url,
             contactPoint: requestData.contactPoint,
-            dateDeFondation: requestData.dateDeFondation
+            fondationDate: requestData.fondationDate
         } as OrganisationSchema;
     }
 
-
     /**
-     * Format the date for the return on public routes.
+     * @public @method dataTransfertObject Format the document for the public return.
      * @param document
      * @return {any}
      */
     public dataTransfertObject(document: any):any {
         return {
-            nom: document.nom,
+            name: document.name,
             description: document.description,
             url: document.url,
             contactPoint: document.contactPoint,
-            dateDeFondation: document.dateDeFondation
+            fondationDate: document.fondationDate
         }
     }
-
 }
-
 export default Organisation;
