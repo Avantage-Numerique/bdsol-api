@@ -16,12 +16,12 @@ Retour à la base de [Documention de l'API](documentation-api.md)
       "data": {
           "type": "object",
           "properties": {
-              "nom": { "type": "string" },
-              "prenom": { "type": "string" },
-              "surnom": { "type": "string" },
+              "lastName": { "type": "string" },
+              "firstName": { "type": "string" },
+              "nickname": { "type": "string" },
               "description": { "type": "string" }
           },
-          "required": ["nom","prenom"]
+          "required": ["lastName","firstName"]
       },
       "required": ["data"]
   }
@@ -42,9 +42,9 @@ Retour à la base de [Documention de l'API](documentation-api.md)
           "type": "object",
           "properties": {
               "id":{ "type": "objectID" },
-              "nom": { "type": "string" },
-              "prenom": { "type": "string" },
-              "surnom": { "type": "string" },
+              "lastName": { "type": "string" },
+              "firstName": { "type": "string" },
+              "nickname": { "type": "string" },
               "description": { "type": "string" }
           },
           "required": ["id"]
@@ -74,9 +74,9 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte (<=) afin de trouver,
           "type": "object",
           "properties": {
               "id":{ "type": "objectID" },
-              "nom": { "type": "string" },
-              "prenom": { "type": "string" },
-              "surnom": { "type": "string" },
+              "lastName": { "type": "string" },
+              "firstName": { "type": "string" },
+              "nickname": { "type": "string" },
               "description": { "type": "string" }
           }
       },
@@ -99,9 +99,9 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/personnes/sea
           "type": "object",
           "properties": {
               "id":{ "type": "objectID" },
-              "nom": { "type": "string" },
-              "prenom": { "type": "string" },
-              "surnom": { "type": "string" },
+              "lastName": { "type": "string" },
+              "firstName": { "type": "string" },
+              "nickname": { "type": "string" },
               "description": { "type": "string" }
           },
       },
