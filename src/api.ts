@@ -1,4 +1,4 @@
-import express from "express";
+import express, {NextFunction, Response} from "express";
 import cors from "cors";
 import {ApiRouter} from "./routes";
 import {HealthCheckRouter} from "./Healthcheck/Routes/HealthCheckRoutes";
@@ -9,21 +9,26 @@ import {OrganisationsRoutes} from './Organisations/Routes/OrganisationsRoutes'
 import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
 import {RegistrationRouter} from "./Authentification/Routes/RegistrationRoutes";
 import { OccupationsRoutes } from "./Taxonomie/Occupation/Routes/OccupationsRoutes";
+import AuthRequest from "./Authentification/Types/AuthRequest";
+import LogHelper from "./Monitoring/Helpers/LogHelper";
 
 /**
  * Main class for the API
  * Use the express instance as public property.
  */
-export default class Api {
+export default class Api
+{
     public express: express.Application = express();
     public authRouters:any;
 
     public entitiesRoutes:Array<any>;
 
     public start() {
-        this._initEntitiesRouters();
         this._initMiddleware();
+        this._initEntitiesRouters();
         this._initRouter();
+
+
     }
 
     /**
@@ -47,10 +52,12 @@ export default class Api {
                 'http://bdsol.avantagenumerique.org:3000',
                 'https://bdsol.avantagenumerique.org:3000'
             ],
+            allowedOrigins2 = 'http://localhost:3000',
             options: cors.CorsOptions = {
                 origin: allowedOrigins
             };
 
+        //this enable all preflight cross origin check.
         this.express.use(cors(options));
 
         // parse application/x-www-form-urlencoded
@@ -94,6 +101,7 @@ export default class Api {
      */
     private _initRouter()
     {
+
         this._initPublicRoutes();
 
         // @ts-ignore

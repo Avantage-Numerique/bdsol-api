@@ -36,6 +36,7 @@ AuthentificationRouter.post('/login',
 
         return res.status(response.code).send(response);
     });
+
 /**
  * Post method to return a token if the user is in the DB
  * requête body en JSON :
