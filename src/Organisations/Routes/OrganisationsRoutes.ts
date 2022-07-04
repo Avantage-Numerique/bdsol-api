@@ -7,5 +7,4 @@ class OrganisationsRoutes extends AbstractRoute {
     controllerInstance: AbstractController = OrganisationsController.getInstance();
     routerInstance: express.Router = express.Router();
 }
-
 export {OrganisationsRoutes};

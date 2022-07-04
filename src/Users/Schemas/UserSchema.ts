@@ -110,6 +110,7 @@ export class UserSchema {
 
 
     /**
+     * @deprecated ???
      * Premier jet de retour de données public, versus privé.
      **/
     public static dataTransfertObject(document: any) {

@@ -1,48 +1,37 @@
 import mongoose from "mongoose";
 import {Schema} from "mongoose"
-import { OccupationSchema } from "../Schemas/OccupationsSchema";
-import type {DbProvider} from "../../../Database/DatabaseDomain";
-import AbstractModel from "../../../Abstract/Model"
+import { TaxonomySchema } from "../Schemas/TaxonomySchema";
+import type {DbProvider} from "../../Database/DatabaseDomain";
+import AbstractModel from "../../Abstract/Model"
 
-class Occupation extends AbstractModel {
+class Taxonomy extends AbstractModel {
 
-    //Singleton
-    protected static _instance:Occupation;
+    /** @protected @static Singleton instance of model Taxonomy */
+    protected static _instance:Taxonomy;
 
-    public static getInstance():Occupation {
-        if (Occupation._instance === undefined) {
-            Occupation._instance = new Occupation();
-            Occupation._instance.initSchema();
+    /** @public @static Model singleton instance constructor */
+    public static getInstance():Taxonomy {
+        if (Taxonomy._instance === undefined) {
+            Taxonomy._instance = new Taxonomy();
+            Taxonomy._instance.initSchema();
         }
-        return Occupation._instance;
+        return Taxonomy._instance;
     }
 
-    /**
-     * Nom du modèle
-     * @public
-     */
-    modelName:string = 'Occupation';
+    /** @public Model name */
+    modelName:string = 'Taxonomy';
 
-    /**
-     * Nom de la collection dans la base de donnée
-     * @public
-     */
-    collectionName:string = 'taxo-occupations';
+    /** @public Collection name in database */
+    collectionName:string = 'taxonomy';
 
-    /**
-     * The active connection to the mongoose/mongodb
-     * @public Connection mongoose
-     */
+    /** @public Connection mongoose */
     connection:mongoose.Connection;
-
     provider:DbProvider;
-
     mongooseModel:mongoose.Model<any>;
 
-
-    /** @public Schéma pour la base de donnée */
+    /** @public Database schema */
     schema:Schema =
-        new Schema<OccupationSchema>({
+        new Schema<TaxonomySchema>({
 
             nom: { type: String, required: true },
             description: String,
@@ -53,11 +42,11 @@ class Occupation extends AbstractModel {
         });
 
 
-    /** @static infoChamp pour le retour frontend des champs à créer et règles des attributs de occupation selon la route */
-    infoChamp =
+    /** @public Used to return attributes and rules for each field of this entity. */
+    fieldInfo =
     {
         "state": "",
-        "champs": [
+        "field": [
             {
                 "name": "nom",
                 "label": "Nom",
@@ -79,7 +68,7 @@ class Occupation extends AbstractModel {
         ]
     };
 
-    /** @static ruleSet pour la validation du data d'occupation */
+    /** @public Rule set for every field of this entity for each route */
     ruleSet:any = {
         "default":{
             "id":["idValid"],
@@ -102,27 +91,32 @@ class Occupation extends AbstractModel {
         }
     }
 
+    /**
+     * @get the field that are searchable.
+     * @return {Object} the field slug/names.
+     */
     get searchSearchableFields():object {
-        return ["nom", "description", "sous-taxonomie"];
+        return ["nom", "description", "subtaxonomy"];
     }
 
-    /** 
-     * @method formatRequestDataForDocument insère dans le schéma les données de la requête.
-     * 
-     * Paramètres :
-     *      @param {key:value} requestData - attributs de Occupation
-     * 
-     * Retourne :
-     *      @return {PersonneSchema} l'interface Schéma contenant les données de la requête
+    /**
+     * @public @method formatRequestDataForDocument Format the data for this entity
+     * @param {any} requestData - Data to format
+     * @return {OrganisationSchema} The entity formated to schema
      */
     public formatRequestDataForDocument(requestData:any):any {
         return {
             nom: requestData.nom,
             description: requestData.description,
             subTaxonomy: requestData.subTaxonomy
-        } as OccupationSchema;
+        } as TaxonomySchema;
     }
 
+    /**
+     * @public @method dataTransfertObject Format the document for the public return.
+     * @param document
+     * @return {any}
+     */
     public dataTransfertObject(document: any) {
         return {
             nom: document.nom,
@@ -130,7 +124,5 @@ class Occupation extends AbstractModel {
             subTaxonomy: document.subTaxonomy,
         }
     }
-
 }
-
-export default Occupation;
+export default Taxonomy;

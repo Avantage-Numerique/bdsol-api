@@ -6,6 +6,3 @@ export interface PersonneSchema extends Document {
     surnom:string;
     description:string
 }
-
-
-

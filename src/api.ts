@@ -8,7 +8,7 @@ import {PersonnesRoutes} from './Personnes/Routes/PersonnesRoutes';
 import {OrganisationsRoutes} from './Organisations/Routes/OrganisationsRoutes'
 import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
 import {RegistrationRouter} from "./Authentification/Routes/RegistrationRoutes";
-import { OccupationsRoutes } from "./Taxonomie/Occupation/Routes/OccupationsRoutes";
+import { TaxonomyRoutes } from "./Taxonomy/Routes/TaxonomyRoutes";
 
 /**
  * Main class for the API
@@ -79,8 +79,8 @@ export default class Api {
                 manager: new OrganisationsRoutes()
             },
             {
-                baseRoute: "/occupations",
-                manager: new OccupationsRoutes()
+                baseRoute: "/taxonomy",
+                manager: new TaxonomyRoutes()
             }
 
         ];
@@ -146,7 +146,7 @@ export default class Api {
         {
             this.express.use(
                 route.baseRoute,
-                route.manager.setupRoutes()
+                route.manager.setupAuthRoutes()
             );
         }
     }

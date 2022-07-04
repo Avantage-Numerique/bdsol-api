@@ -7,11 +7,11 @@ import AbstractModel from "../../Abstract/Model"
 
 class Personne extends AbstractModel {
 
-    //Singleton.
+    /** @protected @static Singleton instance */
     protected static _instance:Personne;
 
-    public static getInstance():Personne
-    {
+    /** @public @static Model singleton instance constructor */
+    public static getInstance():Personne {
         if (Personne._instance === undefined) {
             Personne._instance = new Personne();
             Personne._instance.initSchema();
@@ -19,30 +19,18 @@ class Personne extends AbstractModel {
         return Personne._instance;
     }
 
-    /**
-     * Nom du modèle
-     * @public
-     */
+    /** @public Model name */
     modelName:string = 'Personne';
 
-    /**
-     * Nom de la collection dans la base de donnée
-     * @public
-     */
+    /** @public Collection name in database*/
     collectionName:string = 'personnes';
 
-    /**
-     * The active connection to the mongoose/mongodb
-     * @public Connection mongoose
-     */
+    /** @public Connection mongoose */
     connection:mongoose.Connection;
-
     provider:DbProvider;
-
     mongooseModel:mongoose.Model<any>;
 
-
-    /** @public Schéma pour la base de donnée */
+    /** @public Database schema */
     schema:Schema =
         new Schema<PersonneSchema>({
             nom: { type: String, required: true },
@@ -55,11 +43,11 @@ class Personne extends AbstractModel {
         });
 
 
-    /** @static infoChamp pour le retour frontend des champs à créer et règles des attributs de personne selon la route */
-    infoChamp =
+    /** @public Used to return attributes and rules for each field of this entity. */
+    fieldInfo =
     {
-        "state": "",
-        "champs": [
+        "route": "",
+        "field": [
             {
                 "name": "nom",
                 "label": "Nom",
@@ -87,7 +75,7 @@ class Personne extends AbstractModel {
         ]
     };
 
-    /** @static ruleSet pour la validation du data de personne */
+    /** @public Rule set for every field of this entity for each route */
     ruleSet:any = {
         "default":{
             "id":["idValid"],
@@ -113,19 +101,17 @@ class Personne extends AbstractModel {
     }
 
     /**
-     * Get the field that are searchable.
+     * @get the field that are searchable.
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields():object {
-        //eturn {"nom":{},"prenom":{},"surnom":{},"description":{}};
         return ["nom", "prenom","surnom","description"];
     }
 
-    /** 
-     * @method formatRequestDataForDocument insère dans le schéma les données de la requête.
-     *
-     * @param {key:value} requestData - attributs de Personne
-     * @return {PersonneSchema} l'interface Schéma contenant les données de la requête
+    /**
+     * @public @method formatRequestDataForDocument Format the data for this entity
+     * @param {any} requestData - Data to format
+     * @return {OrganisationSchema} The entity formated to schema
      */
     public formatRequestDataForDocument(requestData:any):any {
         return {
@@ -136,6 +122,11 @@ class Personne extends AbstractModel {
         } as PersonneSchema;
     }
 
+    /**
+     * @public @method dataTransfertObject Format the document for the public return.
+     * @param document
+     * @return {any}
+     */
     public dataTransfertObject(document: any) {
         return {
             nom: document.nom,

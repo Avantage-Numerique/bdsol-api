@@ -4,27 +4,37 @@ import { DbProvider } from "../Database/DatabaseDomain";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 
 
-abstract class AbstractModel
-{
+abstract class AbstractModel {
+    
+    //Can we do this and make it not static?
+    //abstract getInstance():any;
+
+    /** @abstract Model name. */
     abstract modelName:string;
+
+    /** @abstract Collection name in database. */
     abstract collectionName:string;
 
+    /**
+     * The active connections to the mongoose/mongodb.
+     * @abstract Connection mongoose.
+     */
     abstract connection:mongoose.Connection;
     abstract provider:DbProvider;
-    abstract schema:Schema;
     abstract mongooseModel:mongoose.Model<any>;
+    
+    /** @abstract Schema in the database. */
+    abstract schema:Schema;
 
-    abstract infoChamp:any;
+    /** @abstract Used to return attributes and rules for each field of this entity. */
+    abstract fieldInfo:any;
+
+    /** @abstract Set of rules that are verified for every field of this entity. */
     abstract ruleSet:any;
 
-    /**
-     * Connect the model to mongo and return that mongooseModel.
-     * @public @method getInstance
-     * @return model
-     */
+    /** @public @method connect Connect to database. */
     public connect()
     {
-        //this.provider = DataProvider.getInstance();
         if (this.providerIsSetup() && this.connectionIsSetup())
         {
             this.initSchema();
@@ -35,17 +45,12 @@ abstract class AbstractModel
             this.provider,
             typeof this.provider
         );
-        /**
-         * this.provider.connection
-         * typeof this.provider.connection
-         */
+
         throw new Error("this Provider is not setup. Can't get this's model");
     }
 
 
-    /**
-     * Associate the mongo Schema to the connection.
-     */
+    /** @public @method initSchema Associate the mongo Schema to the connection. */
     public initSchema():void
     {
         if (this.providerIsSetup() &&
@@ -55,20 +60,14 @@ abstract class AbstractModel
         }
     }
 
-
-    /**
-     * Setter the provider
-     * @param provider
-     */
+    /** @deprecated Setter for provider */
     public setProvider(provider:DbProvider)
     {
         this.provider = provider;
     }
 
-
     /**
-     * Return if the provider have a value.
-     * @public @method providerIsSetup
+     * @public @method providerIsSetup Return if the provider have a value.
      * @return {boolean} isSetup
     */
     public providerIsSetup():boolean
@@ -77,9 +76,8 @@ abstract class AbstractModel
             this.provider !== null;
     }
 
-
     /**
-     * Check if the connection have a value in the model.
+     * @public @method connectionIsSetup Check if the connection have a value in the model.
      * @return {boolean} if the connection have a valid value.
      */
     public connectionIsSetup():boolean
@@ -88,22 +86,19 @@ abstract class AbstractModel
             this.connection !== null;
     }
 
-
     /** 
-     * @public @method RuleSet
-     * @return Combinaison du ruleSet default et celui spécifié en string (ex :"create")
+     * @public @method RuleSet Combine default rules and route specific rules for each field of an entity.
+     * @default emptyRoute : return the default rule set.
+     * @return Combination of default and specified route rule set.
     */
     public RuleSet(route?:string)
     {
-        //If the route is empty, return the default ruleset right away
+        //If route is undefined, return the default ruleset right away
         if(route === undefined)
-        {
             return this.ruleSet.default;
-        }
         
         const concatRule:any = {};
-        for (const field in this.ruleSet.default)
-        {
+        for (const field in this.ruleSet.default) {
             //If the field exist in the Route's ruleSet.
             if(Object.keys(this.ruleSet[route]).indexOf(field) != -1)
             {
@@ -113,8 +108,7 @@ abstract class AbstractModel
                 ];
             }
             //Insert default Rules there.
-            else
-            {
+            else {
                 concatRule[field] = [...this.ruleSet.default[field]];
             }
         }
@@ -122,19 +116,23 @@ abstract class AbstractModel
     }
 
     /**
-     * Format the document to be validated
-     * @param requestData
+     * Get the field that are searchable.
+     * @return {Object} the field slug/names.
+     */
+     abstract get searchSearchableFields():object;
+
+    /**
+     * @abstract @method formatRequestDataForDocument Format the document to be validated
+     * @param requestData - Data to format
      * @return {Document} the mongo document.
      */
     abstract formatRequestDataForDocument(requestData:any):Document;
 
     /**
-     * Format the document for the public return.
+     * @abstract @method dataTransfertObject Format the document for the public return.
      * @param document
      * @return {any} Most of the time it's a simple Object.
      */
     abstract dataTransfertObject(document: any):any;
-
 }
-
 export default AbstractModel;

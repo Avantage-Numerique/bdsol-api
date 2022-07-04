@@ -11,23 +11,22 @@ import {SuccessResponse} from "../Http/Responses/SuccessResponse";
 
 abstract class AbstractController {
 
+    /** @abstract Service of a specific entity */
     abstract service:Service;
+
+    /** @abstract Model of a specific entity */
     abstract entity:AbstractModel;
+
+    /** @static Instance of the validator */
     static validator:Validator = new Validator();
 
     /**
-     * @method create permet de créer et d'insérer une nouvelle entité dans la base de donnée à partir de la requête.
-     * 
-     * Paramètres : 
-     * @param {any} requestData - L'objet data contenant les informations de la création d'entité
-     *
-     * Retourne :
-     * @return {ApiResponseContract} en Promise
+     * @method create Create a new entity in de database based on the request.
+     * @param {any} requestData - Containing information for the create
+     * @return {ApiResponseContract} Promise
     */
     public async create(requestData:any):Promise<ApiResponseContract> {
-
         const messageValidate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("create"));
-
         if (!messageValidate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -35,33 +34,27 @@ abstract class AbstractController {
                 messageValidate.message
             );
 
-        //Can I just :  formatedData = {requestData}:Xschema
         const formatedData = this.entity.formatRequestDataForDocument(requestData);
         const createdDocumentResponse = await this.service.insert(formatedData);
 
         if (createdDocumentResponse !== undefined)
             return createdDocumentResponse;
 
-        LogHelper.debug("La réponse à la méthode insert est undefined");
+        LogHelper.debug("Service response from insert is undefined");
         return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
             StatusCodes.INTERNAL_SERVER_ERROR,
-            'Le service. insert a retourné une réponse undefined'
+            'Service returned an undefined response from insert'
         );
     }
 
 
     /** 
-     * @method update permet de modifier et mettre à jour les attributs d'une entité dans la base de donnée.
-     * 
-     * Paramètres :
-     *      @param {key:value} requestData - id et attributs de l'entité à modifier.
-     * 
-     * Retourne :
-     *      @return {ApiResponseContract}  en Promise
+     * @method update Update the attributes of an entity in the database.
+     * @param {any} requestData - id and attributs to modify.
+     * @return {ApiResponseContract} Promise
      */
     public async update(requestData:any):Promise<ApiResponseContract> {
-        
         const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("update"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
@@ -76,29 +69,23 @@ abstract class AbstractController {
         if (updatedModelResponse !== undefined)
             return updatedModelResponse;
 
-        LogHelper.debug("Le code manque de robustesse. Personnes/update");
+        LogHelper.debug("Service response from update is undefined");
         return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
             StatusCodes.INTERNAL_SERVER_ERROR,
-            'Les données semblent être ok, mais la mise à jour n\'a pas eu lieu.'
+            'Service returned an undefined response from update'
             );
     
     }
 
     /**
-     * @method search permet d'effectuer une recherche afin de retourner la première entité répondant au critère de recherche.
-     * 
-     * Paramètre : 
-     *      @param {key:value} requestData - critère de recherche { "nom":"Jean" }
-     * 
-     * Retourne : 
-     *      @default critères vide: Retourne le premier résultat
-     *      @return {ApiResponseContract}
+     * @method search Search for a single entity document with research terms from database.
+     * @param {any} requestData - Research terms e.g. { "name":"Jean" }
+     * @default emptyRequest : Return the first document.
+     * @return {ApiResponseContract} Promise containing search document
     */
-    public async search(requestData:any):Promise<ApiResponseContract> {
-        LogHelper.log("Début de la recherche dans la liste");
-        
-        const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("search"));
+    public async search(requestData:any):Promise<ApiResponseContract> {  
+        const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("search"), true);
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -107,23 +94,16 @@ abstract class AbstractController {
             );
 
         const query = QueryBuilder.build(requestData);
-
         return await this.service.get(query);
     }
 
 
     /**
-     * @method list permet d'obtenir une liste des entités selon les crières de recherche.
-     * 
-     * Paramètres : 
-     *      @param {key:value} requestData - critère de recherche { "nom":"Jean" }
-     * 
-     * Retourne : 
-     *      @return 
+     * @method list List entity documents with research terms from database
+     * @param {any} requestData - Research terms { "nom":"Jean" }
+     * @return {ApiResponseContract} Promise containing a list of documents
     */
     public async list(requestData:any):Promise<ApiResponseContract> {
-        LogHelper.log("Début de la requête d'obtention de la liste de personne");
-
         const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("list"), true);
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
@@ -133,23 +113,16 @@ abstract class AbstractController {
                 );
 
         const query = QueryBuilder.build(requestData);
-
         return await this.service.all(query);
     }
 
 
     /**
-     * @method delete permet d'effectuer une suppression de la fiche d'une entité dans la base de données.
-     * Paramètres : 
-     *      @param {object} requestData contient le id de l'entité à supprimer.
-     * 
-     * Retourne : 
-     *      @return 
+     * @method delete Delete an entity document from the database.
+     * @param {any} requestData - contains the id of the document to delete
+     * @return {ApiResponseContract} Promise
     */
     public async delete(requestData:any):Promise<ApiResponseContract> {
-        LogHelper.log("Début de la suppression d'une personne");
-        
-
         const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("delete"));
         if (!messageUpdate.isValid)
             return ErrorResponse.create(
@@ -162,17 +135,12 @@ abstract class AbstractController {
 
 
     /**
-     * @method getInfo renvoi la liste des informations des champs de l'entité et les règle de validation de chaque champs.
-     * Paramètres : 
-     *      @param {object} requestData - contient "route":"___" qui spécifie les règles de validation à envoyer selon la route voulue.
-     * 
-     * Retourne : 
-     *      @return 
+     * @method getInfo Obtain information list of rules and attributes for every field of the entity.
+     * @param {object} requestData - Contains value "route" which specify the rule set to return with the attributes.
+     * @default emptyRoute : Return only the default rule set with all attributes.
+     * @return {ApiResponseContract} Promise containing rules and attributes for every field of the entity
     */
     public async getInfo(requestData:any):Promise<ApiResponseContract> {
-        LogHelper.log("Début de la création des informations du champs");
-        
-        
         if (typeof requestData === undefined || typeof requestData !== 'object' || Object.keys(requestData).length < 1)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
@@ -180,17 +148,15 @@ abstract class AbstractController {
                 "La requête n'est pas un objet. "
                 );
 
-        const info:any = this.entity.infoChamp;
-        info.state = requestData.route;
+        const info:any = this.entity.fieldInfo;
+        info.route = requestData.route;
 
         const routeRules = this.entity.RuleSet(requestData.route);
-        this.entity.infoChamp.champs.forEach(function(value:any){
-            //Insère les rules dans le champs
+        this.entity.fieldInfo.field.forEach(function(value:any){
+            //Insert rules into each field array 
             value.rules = routeRules[value.name];
         });
         return SuccessResponse.create(info, StatusCodes.OK, ReasonPhrases.OK);
     }
-
-
 }
 export default AbstractController;
