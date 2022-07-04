@@ -33,7 +33,7 @@ class Taxonomy extends AbstractModel {
     schema:Schema =
         new Schema<TaxonomySchema>({
 
-            nom: { type: String, required: true },
+            name: { type: String, required: true },
             description: String,
             subTaxonomy:String
         },
@@ -48,7 +48,7 @@ class Taxonomy extends AbstractModel {
         "state": "",
         "field": [
             {
-                "name": "nom",
+                "name": "name",
                 "label": "Nom",
                 "type": "String",
                 "rules": []
@@ -72,12 +72,12 @@ class Taxonomy extends AbstractModel {
     ruleSet:any = {
         "default":{
             "id":["idValid"],
-            "nom":["isString"],
+            "name":["isString"],
             "description":["isString"],
             "subTaxonomy":["isString"]
         },
         "create":{
-            "nom":["isDefined", "minLength:2"]
+            "name":["isDefined", "minLength:2"]
         },
         "update":{
             "id":["isDefined"]
@@ -96,7 +96,7 @@ class Taxonomy extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields():object {
-        return ["nom", "description", "subtaxonomy"];
+        return ["name", "description", "subtaxonomy"];
     }
 
     /**
@@ -106,7 +106,7 @@ class Taxonomy extends AbstractModel {
      */
     public formatRequestDataForDocument(requestData:any):any {
         return {
-            nom: requestData.nom,
+            name: requestData.name,
             description: requestData.description,
             subTaxonomy: requestData.subTaxonomy
         } as TaxonomySchema;
@@ -119,7 +119,7 @@ class Taxonomy extends AbstractModel {
      */
     public dataTransfertObject(document: any) {
         return {
-            nom: document.nom,
+            name: document.name,
             description: document.description,
             subTaxonomy: document.subTaxonomy,
         }

@@ -1,8 +1,8 @@
 import {Document} from "mongoose"
 
 export interface PersonneSchema extends Document {
-    nom:string;
-    prenom:string;
-    surnom:string;
+    lastName:string;
+    firstName:string;
+    nickname:string;
     description:string
 }

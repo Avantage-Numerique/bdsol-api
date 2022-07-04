@@ -7,7 +7,7 @@
             "status":400
         },
         "id":"",
-        "nom": "",
+        "name": "",
         "prenom": "",
         "surnom": "",
         "description": ""
@@ -28,16 +28,16 @@
             "status":400
         },
         "id":"",
-        "nom":""
+        "name":""
     },
     {
         "infoTest":
         {
-            "name":"List only nom",
+            "name":"List only name",
             "error":false,
             "status":200
         },
-        "nom": "a"
+        "name": "a"
     },
     {
         "infoTest":
@@ -51,11 +51,11 @@
     {
         "infoTest":
         {
-            "name":"List nom&description",
+            "name":"List name&description",
             "error":false,
             "status":200
         },
-        "nom": "syn",
+        "name": "syn",
         "description": "ré"
     },
     {
@@ -70,22 +70,22 @@
     {
         "infoTest":
         {
-            "name":"List id+nom = 0",
+            "name":"List id+name = 0",
             "error":false,
             "status":404,
             "setId":true
         },
-        "nom": "fsdga"
+        "name": "fsdga"
     },
     {
         "infoTest":
         {
-            "name":"List id+nom = 1",
+            "name":"List id+name = 1",
             "error":false,
             "status":200,
             "setId":true
         },
-        "nom": "Petit"
+        "name": "Petit"
     }
 
 ]

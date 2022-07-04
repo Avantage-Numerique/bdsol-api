@@ -32,11 +32,11 @@ class Organisation extends AbstractModel {
     /** @public Database schema */
     schema: Schema =
         new Schema<OrganisationSchema>({
-                nom: {type: String, required: true},
+                name: {type: String, required: true},
                 description: String,
                 url: String, //String? TODO
                 contactPoint: String, //String? TODO
-                dateDeFondation: Date
+                fondationDate: Date
             },
             {
                 timestamps: true
@@ -48,8 +48,8 @@ class Organisation extends AbstractModel {
         "route": "",
         "field": [
             {
-                "name": "nom",
-                "label": "Nom",
+                "name": "name",
+                "label": "name",
                 "type": "String",
                 "rules": []
             },
@@ -72,7 +72,7 @@ class Organisation extends AbstractModel {
                 "rules": []
             },
             {
-                "name": "dateDeFondation",
+                "name": "fondationDate",
                 "label": "Date de fondation",
                 "type": "Date",
                 "rules": []
@@ -84,14 +84,14 @@ class Organisation extends AbstractModel {
     ruleSet:any = {
         "default":{
             "id":["idValid"],
-            "nom":["isString"],
+            "name":["isString"],
             "description":["isString"],
             "url":["isString"],
             "contactPoint":["isString"],
-            "dateDeFondation":["isDate"]
+            "fondationDate":["isDate"]
         },
         "create":{
-            "nom":["isDefined", "minLength:2"],
+            "name":["isDefined", "minLength:2"],
         },
         "update":{
             "id":["isDefined"]
@@ -110,7 +110,7 @@ class Organisation extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields():object {
-        return ["nom", "description","url","contactPoint", "dateDeFondation"];
+        return ["name", "description","url","contactPoint", "fondationDate"];
     }
 
     /**
@@ -120,11 +120,11 @@ class Organisation extends AbstractModel {
      */
      public formatRequestDataForDocument(requestData:any):any {
         return {
-            nom: requestData.nom,
+            name: requestData.name,
             description: requestData.description,
             url: requestData.url,
             contactPoint: requestData.contactPoint,
-            dateDeFondation: requestData.dateDeFondation
+            fondationDate: requestData.fondationDate
         } as OrganisationSchema;
     }
 
@@ -135,11 +135,11 @@ class Organisation extends AbstractModel {
      */
     public dataTransfertObject(document: any):any {
         return {
-            nom: document.nom,
+            name: document.name,
             description: document.description,
             url: document.url,
             contactPoint: document.contactPoint,
-            dateDeFondation: document.dateDeFondation
+            fondationDate: document.fondationDate
         }
     }
 }

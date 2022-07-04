@@ -19,10 +19,10 @@ class Personne extends AbstractModel {
         return Personne._instance;
     }
 
-    /** @public Model name */
+    /** @public Model lastName */
     modelName:string = 'Personne';
 
-    /** @public Collection name in database*/
+    /** @public Collection lastName in database*/
     collectionName:string = 'personnes';
 
     /** @public Connection mongoose */
@@ -33,9 +33,9 @@ class Personne extends AbstractModel {
     /** @public Database schema */
     schema:Schema =
         new Schema<PersonneSchema>({
-            nom: { type: String, required: true },
-            prenom: { type: String, required: true },
-            surnom: String,
+            lastName: { type: String, required: true },
+            firstName: { type: String, required: true },
+            nickname: String,
             description: String
         },
             {
@@ -49,19 +49,19 @@ class Personne extends AbstractModel {
         "route": "",
         "field": [
             {
-                "name": "nom",
-                "label": "Nom",
+                "name": "lastName",
+                "label": "Nom ",
                 "type": "String",
                 "rules": []
             },
             {
-                "name": "prenom",
+                "name": "firstName",
                 "label": "Prénom",
                 "type": "String",
                 "rules": []
             },
             {
-                "name": "surnom",
+                "name": "nickname",
                 "label": "Surnom",
                 "type": "String",
                 "rules": []
@@ -79,14 +79,14 @@ class Personne extends AbstractModel {
     ruleSet:any = {
         "default":{
             "id":["idValid"],
-            "nom":["isString"],
-            "prenom":["isString"],
-            "surnom":["isString"],
+            "lastName":["isString"],
+            "firstName":["isString"],
+            "nickname":["isString"],
             "description":["isString"]
         },
         "create":{
-            "nom":["isDefined", "minLength:2"],
-            "prenom":["isDefined", "minLength:2"],
+            "lastName":["isDefined", "minLength:2"],
+            "firstName":["isDefined", "minLength:2"],
         },
         "update":{
             "id":["isDefined"]
@@ -105,7 +105,7 @@ class Personne extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields():object {
-        return ["nom", "prenom","surnom","description"];
+        return ["lastName", "firstName","nickname","description"];
     }
 
     /**
@@ -115,9 +115,9 @@ class Personne extends AbstractModel {
      */
     public formatRequestDataForDocument(requestData:any):any {
         return {
-            nom: requestData.nom,
-            prenom: requestData.prenom,
-            surnom: requestData.surnom,
+            lastName: requestData.lastName,
+            firstName: requestData.firstName,
+            nickname: requestData.nickname,
             description: requestData.description
         } as PersonneSchema;
     }
@@ -129,9 +129,9 @@ class Personne extends AbstractModel {
      */
     public dataTransfertObject(document: any) {
         return {
-            nom: document.nom,
-            prenom: document.prenom,
-            surnom: document.surnom,
+            lastName: document.lastName,
+            firstName: document.firstName,
+            nickname: document.nickname,
             description: document.description,
         }
     }

@@ -7,7 +7,7 @@
             "status":400
         },
         "id":"",
-        "nom": "",
+        "name": "",
         "prenom": "",
         "surnom": "",
         "description": ""
@@ -28,7 +28,7 @@
             "status":400
         },
         "id":"",
-        "nom":""
+        "name":""
     },
     {
         "infoTest":
@@ -51,11 +51,11 @@
     {
         "infoTest":
         {
-            "name":"Search only nom",
+            "name":"Search only name",
             "error":false,
             "status":200
         },
-        "nom": "arts"
+        "name": "arts"
     },
     {
         "infoTest":
@@ -69,11 +69,11 @@
     {
         "infoTest":
         {
-            "name":"Search nom&prenom",
+            "name":"Search name&prenom",
             "error":false,
             "status":200
         },
-        "nom": "alph",
+        "name": "alph",
         "description": "gard"
     },
     {
@@ -106,21 +106,21 @@
     {
         "infoTest":
         {
-            "name":"Search id+nom = 0",
+            "name":"Search id+name = 0",
             "error":false,
             "status":404,
             "setId":true
         },
-        "nom":"fasdgb"
+        "name":"fasdgb"
     },
     {
         "infoTest":
         {
-            "name":"Search id+nom = 1",
+            "name":"Search id+name = 1",
             "error":false,
             "status":200,
             "setId":true
         },
-        "nom":"Noranda"
+        "name":"Noranda"
     }
 ]

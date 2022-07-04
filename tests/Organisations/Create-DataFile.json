@@ -2,11 +2,11 @@
     {
         "infoTest":
         {
-            "name":"Create Full no dateDeFondation",
+            "name":"Create Full no fondationDate",
             "error":false,
             "status":201
         },
-        "nom": "Petit f",
+        "name": "Petit f",
         "description": "Théâtre et f",
         "url":"https://f.org/",
         "contactPoint":"info@f.org"
@@ -18,11 +18,11 @@
             "error":false,
             "status":201
         },
-        "nom": "Agora des Arts",
+        "name": "Agora des Arts",
         "description": "Petite église, salle de spectacle sympatoche",
         "url":"http://www.agoradesarts.com/",
         "contactPoint":"info@agoradesarts.com",
-        "dateDeFondation":"2022-06-08"
+        "fondationDate":"2022-06-08"
     },
     {
         "infoTest":
@@ -35,7 +35,7 @@
     {
         "infoTest":
         {
-            "name":"Create no nom",
+            "name":"Create no name",
             "error":true,
             "status":400
         },
@@ -46,11 +46,11 @@
     {
         "infoTest":
         {
-            "name":"Create empty nom",
+            "name":"Create empty name",
             "error":true,
             "status":400
         },
-        "nom": "",
+        "name": "",
         "description": "Culturama sse-toi",
         "url":"http://www.culturamassetoi.com/",
         "contactPoint":"info@ramasse.png"
@@ -62,7 +62,7 @@
             "error":false,
             "status":201
         },
-        "nom": "Synvain Rénove",
+        "name": "Synvain Rénove",
         "description": "Rénovation de tout genre",
         "url":"",
         "contactPoint":""
@@ -74,7 +74,7 @@
             "error":false,
             "status":201
         },
-        "nom": "L'alphabet à 9 ans",
+        "name": "L'alphabet à 9 ans",
         "description": "Garderie"
     },
     {
@@ -84,9 +84,9 @@
             "error":true,
             "status":400
         },
-        "nom": "L'iro kals",
+        "name": "L'iro kals",
         "description": "Gryt",
-        "dateDeFondation":""
+        "fondationDate":""
     },
     {
         "infoTest":
@@ -95,8 +95,8 @@
             "error":true,
             "status":400
         },
-        "nom": "L'iro kals",
+        "name": "L'iro kals",
         "description": "Gryt",
-        "dateDeFondation":"fasver2344"
+        "fondationDate":"fasver2344"
     }
 ]
