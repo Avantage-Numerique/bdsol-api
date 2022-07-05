@@ -31,7 +31,7 @@ export class isDefined extends AbstractRuleHandler {
         if (rule === "isDefined") {
             if (value !== undefined && typeof value !== 'undefined')
                 return "OK";
-            return this.errMsg;
+            return "Valeur : "+value+" rule "+this.errMsg;
         }
         return super.handle(rule, value, param);
     }
@@ -43,7 +43,7 @@ export class isNotNull extends AbstractRuleHandler {
         if (rule === "isNotNull") {
             if (value !== null)
                 return "OK";
-            return this.errMsg;
+            return "Valeur : "+value+" rule "+this.errMsg;
         }
         return super.handle(rule, value, param);
     }
@@ -55,7 +55,7 @@ export class isString extends AbstractRuleHandler {
         if (rule === "isString") {
             if (typeof value == "string")
                 return "OK";
-            return this.errMsg;
+            return "Valeur : "+value+" rule "+this.errMsg;
         }
         return super.handle(rule, value, param);
     }
@@ -67,7 +67,7 @@ export class isNotEmpty extends AbstractRuleHandler {
         if (rule === "isNotEmpty") {
             if (typeof value == "string" && value != "")
                 return "OK";
-            return this.errMsg;
+            return "Valeur : "+value+" rule "+this.errMsg;
         }
         return super.handle(rule, value, param);
     }
@@ -79,7 +79,7 @@ export class minLength extends AbstractRuleHandler {
         if (rule === "minLength") {
             if (typeof value == "string" && value.length >= param)
                 return "OK";
-            return this.errMsg;
+            return "Valeur : "+value+" rule "+this.errMsg;
         }
         return super.handle(rule, value, param);
     }
@@ -91,7 +91,7 @@ export class maxLength extends AbstractRuleHandler {
         if (rule === "maxLength") {
             if (typeof value == "string" && value.length <= param)
                 return "OK";
-            return this.errMsg;
+            return "Valeur : "+value+" rule "+this.errMsg;
         }
         return super.handle(rule, value, param);
     }
@@ -103,7 +103,7 @@ export class idValid extends AbstractRuleHandler {
         if (rule === "idValid") {
             if (typeof value == "string" && value.length == 24)
                 return "OK"
-            return this.errMsg;
+            return "Valeur : "+value+" rule "+this.errMsg;
         }
         return super.handle(rule, value, param);
     }
@@ -115,7 +115,7 @@ export class isObject extends AbstractRuleHandler {
         if (rule === "isObject") {
             if (typeof value == 'object')
                 return "OK"
-            return this.errMsg;
+            return "Valeur : "+value+" rule "+this.errMsg;
         }
         return super.handle(rule, value, param);
     }
@@ -127,7 +127,7 @@ export class objectNotEmpty extends AbstractRuleHandler {
         if (rule === "objectNotEmpty") {
             if (value !== undefined && typeof value !== 'undefined')
                 return "OK";
-            return this.errMsg;
+            return "Valeur : "+value+" rule "+this.errMsg;
         }
         return super.handle(rule, value, param);
     }
@@ -140,7 +140,7 @@ export class isDate extends AbstractRuleHandler {
             const date = new Date(value);
             if (date instanceof Date && !isNaN(date.valueOf()))
                 return "OK"
-            return this.errMsg;
+            return "Valeur : "+value+" rule "+this.errMsg;
         }
         return super.handle(rule, value, param);
     }

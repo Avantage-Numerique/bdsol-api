@@ -16,13 +16,13 @@ Retour à la base de [Documention de l'API](documentation-api.md)
       "data": {
           "type": "object",
           "properties": {
-              "nom": { "type": "string" },
+              "name": { "type": "string" },
               "description": { "type": "string" },
               "url": { "type": "string" },
               "contactPoint": { "type": "string" },
-              "dateDeFondation": {"type": "Date" }
+              "fondationDate": {"type": "Date" }
           },
-          "required": ["nom"]
+          "required": ["name"]
       },
       "required": ["data"]
   }
@@ -43,11 +43,11 @@ Retour à la base de [Documention de l'API](documentation-api.md)
           "type": "object",
           "properties": {
               "id": { "type": "objectId" },
-              "nom": { "type": "string" },
+              "name": { "type": "string" },
               "description": { "type": "string" },
               "url": { "type": "string" },
               "contactPoint": { "type": "string" },
-              "dateDeFondation": { "type": "Date" }
+              "fondationDate": { "type": "Date" }
           },
           "required": ["id"]
       },
@@ -63,7 +63,7 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte (<=) afin de trouver,
 
 **Exemple :**
 ```json 
-"data":{ "dateDeFondation":"gte:2022-06-14" }
+"data":{ "fondationDate":"gte:2022-06-14" }
 ```
 #### structure demandée
 ```json
@@ -74,11 +74,11 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte (<=) afin de trouver,
           "type": "object",
           "properties": {
               "id": { "type": "objectId" },
-              "nom": { "type": "string" },
+              "name": { "type": "string" },
               "description": { "type": "string" },
               "url": { "type": "string" },
               "contactPoint": { "type": "string" },
-              "dateDeFondation": { "type": "Date" }
+              "fondationDate": { "type": "Date" }
           }
       },
       "required": ["data"]
@@ -98,11 +98,11 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/organisations
           "type": "object",
           "properties": {
               "id": { "type": "objectId" },
-              "nom": { "type": "string" },
+              "name": { "type": "string" },
               "description": { "type": "string" },
               "url": { "type": "string" },
               "contactPoint": { "type": "string" },
-              "dateDeFondation": { "type": "Date" }
+              "fondationDate": { "type": "Date" }
           }
       },
       "required": ["data"]

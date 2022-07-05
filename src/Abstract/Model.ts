@@ -60,12 +60,6 @@ abstract class AbstractModel {
         }
     }
 
-    /** @deprecated Setter for provider */
-    public setProvider(provider:DbProvider)
-    {
-        this.provider = provider;
-    }
-
     /**
      * @public @method providerIsSetup Return if the provider have a value.
      * @return {boolean} isSetup
