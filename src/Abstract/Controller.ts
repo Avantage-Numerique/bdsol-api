@@ -141,13 +141,10 @@ abstract class AbstractController {
      * @return {ApiResponseContract} Promise containing rules and attributes for every field of the entity
     */
     public async getInfo(requestData:any):Promise<ApiResponseContract> {
-        if (typeof requestData === undefined || typeof requestData !== 'object' || Object.keys(requestData).length < 1)
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "La requête n'est pas un objet. "
-                );
-
+        const routes = ["create","update","list","search","delete","getinfo"]
+        if(!routes.includes(requestData.route)) {
+            requestData.route = "default";
+        }
         const info:any = this.entity.fieldInfo;
         info.route = requestData.route;
 

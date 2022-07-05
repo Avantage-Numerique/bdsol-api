@@ -28,9 +28,6 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 }
 ```
 
-#### Retour
-
-
 ### POST `/personnes/update`
 
 #### structure demandé
@@ -53,9 +50,6 @@ Retour à la base de [Documention de l'API](documentation-api.md)
   }
 }
 ```
-
-
-#### Retour
 
 
 ### POST `/personnes/search`
@@ -85,9 +79,6 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte (<=) afin de trouver,
 }
 ```
 
-
-#### Retour
-
 ### POST `/personnes/list`
 Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/personnes/search`.
 #### structure demandé
@@ -110,10 +101,6 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/personnes/sea
 }
 ```
 
-
-#### Retour
-
-
 ### POST `/personnes/delete`
 #### structure demandé
 ```json
@@ -126,6 +113,27 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/personnes/sea
               "id":{ "type": "objectID" }
           },
           "required": ["id"]
+      },
+      "required": ["data"]
+  }
+}
+```
+
+### POST `/personnes/getinfo`
+Si une route est spécifiée (create, update, search, list, delete), les informations des champs seront retournée avec les règles de vérification des champs spécifique à la route, ainsi que les règles par défaut.
+Sinon, les champs n'auront que les règles par défaut.
+#### structure demandée
+```json
+{
+  "type": "object",
+  "properties": {
+      "data": {
+          "type": "object",
+          "properties": {
+              "route": { "type": "string",
+                         "enum": ["create", "update", "list", "search", "delete"]
+              }
+          }
       },
       "required": ["data"]
   }

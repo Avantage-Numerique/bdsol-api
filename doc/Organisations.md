@@ -29,9 +29,6 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 }
 ```
 
-#### Retour
-
-
 ### POST `/organisations/update`
 
 #### structure demandée
@@ -56,7 +53,6 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 }
 ```
 
-#### Retour
 
 ### POST `/organisations/search`
 Il est possible d'utiliser les opérateurs gte (>=) et lte (<=) afin de trouver, par exemple, une date antérieure ou ultérieure à "X". On ajoute à ce moment `gte:` ou `lte:` avant le paramètre.
@@ -85,7 +81,6 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte (<=) afin de trouver,
   }
 }
 ```
-#### Retour
 
 ### POST `/organisations/list`
 Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/organisations/search`.
@@ -110,9 +105,6 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/organisations
 }
 ```
 
-
-#### Retour
-
 ### POST `/organisations/delete`
 #### structure demandée
 ```json
@@ -125,6 +117,27 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/organisations
               "id": { "type": "objectId" }
           },
           "required": ["id"]
+      },
+      "required": ["data"]
+  }
+}
+```
+
+### POST `/organisations/getinfo`
+Si une route est spécifiée (create, update, search, list, delete), les informations des champs seront retournée avec les règles de vérification des champs spécifique à la route, ainsi que les règles par défaut.
+Sinon, les champs n'auront que les règles par défaut.
+#### structure demandée
+```json
+{
+  "type": "object",
+  "properties": {
+      "data": {
+          "type": "object",
+          "properties": {
+              "route": { "type": "string",
+                         "enum": ["create", "update", "list", "search", "delete"]
+              }
+          }
       },
       "required": ["data"]
   }
