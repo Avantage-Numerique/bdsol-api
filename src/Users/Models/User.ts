@@ -98,9 +98,7 @@ export class User extends AbstractModel {
         "create":{
             "username":["isDefined", "minLength:2", "maxLength:15"],
             "email":["isDefined", "minLength:2"],
-            "password":["isDefined", "minLength:4"],
-            "avatar":[],
-            "name":[]
+            "password":["isDefined", "minLength:4"]
         },
         "update":{
             "id":["isDefined"]

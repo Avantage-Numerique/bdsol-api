@@ -29,9 +29,6 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 }
 ```
 
-#### Retour
-
-
 ### POST `/users/update`
 
 #### structure demandé
@@ -58,5 +55,23 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 }
 ```
 
-
-#### Retour
+### POST `/users/getinfo`
+Si une route est spécifiée (create, update, search, list, delete), les informations des champs seront retournée avec les règles de vérification des champs spécifique à la route, ainsi que les règles par défaut.
+Sinon, les champs n'auront que les règles par défaut.
+#### structure demandée
+```json
+{
+  "type": "object",
+  "properties": {
+      "data": {
+          "type": "object",
+          "properties": {
+              "route": { "type": "string",
+                         "enum": ["create", "update", "list", "search", "delete"]
+              }
+          }
+      },
+      "required": ["data"]
+  }
+}
+```
