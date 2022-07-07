@@ -29,6 +29,7 @@ abstract class AbstractRoute
         this.routerInstance.post('/search', this.searchHandler.bind(this));
         this.routerInstance.post('/list', this.listHandler.bind(this));
         this.routerInstance.post('/getinfo', this.getInfoHandler.bind(this));
+        this.routerInstance.get('/getdoc', this.getDoc.bind(this));
         return this.routerInstance;
     }
 
@@ -60,6 +61,12 @@ abstract class AbstractRoute
     public async getInfoHandler(req: any, res: any): Promise<ApiResponseContract> {
         const response = await this.controllerInstance.getInfo(req.body.data);
         return res.status(response.code).send(response);
+    }
+
+    public async getDoc(req: any, res: any): Promise<ApiResponseContract> {
+        const response = await this.controllerInstance.getDoc();
+        const style = '<style> body {white-space : pre; background-color : #22211f; color : white}</style>'
+        return res.send(style+response);
     }
 }
 export default AbstractRoute;

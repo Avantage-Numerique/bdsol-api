@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
-import {Schema} from "mongoose"
+import {Schema} from "mongoose";
 import { PersonneSchema } from "../Schemas/PersonneSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
-import AbstractModel from "../../Abstract/Model"
+import AbstractModel from "../../Abstract/Model";
+import * as fs from 'fs';
 
 
 class Personne extends AbstractModel {
@@ -135,5 +136,10 @@ class Personne extends AbstractModel {
             description: document.description,
         }
     }
+
+    public async documentation():Promise<any>{
+        const response =  fs.readFileSync('/api/doc/Personnes.md', 'utf-8');
+        return response;
+   }
 }
 export default Personne;

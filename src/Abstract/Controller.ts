@@ -155,5 +155,9 @@ abstract class AbstractController {
         });
         return SuccessResponse.create(info, StatusCodes.OK, ReasonPhrases.OK);
     }
+
+    public async getDoc():Promise<any> {
+        return this.entity.documentation();
+    }
 }
 export default AbstractController;

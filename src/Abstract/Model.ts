@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 import { DbProvider } from "../Database/DatabaseDomain";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 
-
 abstract class AbstractModel {
     
     //Can we do this and make it not static?
@@ -129,5 +128,7 @@ abstract class AbstractModel {
      * @return {any} Most of the time it's a simple Object.
      */
     abstract dataTransfertObject(document: any):any;
+
+    abstract documentation():Promise<any>;
 }
 export default AbstractModel;

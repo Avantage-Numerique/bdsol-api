@@ -5,6 +5,7 @@ import {UserContract} from "../Contracts/UserContract";
 import AbstractModel from "../../Abstract/Model";
 import {PasswordsController} from "../../Authentification/Controllers/PasswordsController";
 import { UserDocument } from "../Schemas/UserSchema";
+import * as fs from 'fs';
 
 export class User extends AbstractModel {
 
@@ -147,6 +148,11 @@ export class User extends AbstractModel {
             name: document.name,
         }
     }
+
+    public async documentation():Promise<any>{
+        const response =  fs.readFileSync('/api/doc/Users.md', 'utf-8');
+        return response;
+   }
 
     public async registerPreEvents()
     {
