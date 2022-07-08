@@ -124,5 +124,9 @@ class Taxonomy extends AbstractModel {
             subTaxonomy: document.subTaxonomy,
         }
     }
+
+    public async documentation():Promise<any>{
+        return 'not implemented';
+   }
 }
 export default Taxonomy;

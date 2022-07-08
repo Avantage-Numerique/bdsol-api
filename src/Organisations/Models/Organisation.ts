@@ -3,6 +3,7 @@ import {Schema} from "mongoose";
 import {OrganisationSchema} from "../Schemas/OrganisationSchema";
 import {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
+import * as fs from 'fs';
 
 class Organisation extends AbstractModel {
 
@@ -142,5 +143,10 @@ class Organisation extends AbstractModel {
             fondationDate: document.fondationDate
         }
     }
+
+    public async documentation():Promise<any>{
+        const response =  fs.readFileSync('/api/doc/Organisations.md', 'utf-8');
+        return response;
+   }
 }
 export default Organisation;
