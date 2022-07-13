@@ -122,21 +122,6 @@ export class User extends AbstractModel {
     }
 
     /**
-     * @public @method formatRequestDataForDocument Format the data for this entity
-     * @param {any} requestData - Data to format
-     * @return {UserDocument} The entity formated to schema
-     */
-    public formatRequestDataForDocument(requestData:any):any {
-        return {
-            username: requestData.username,
-            email: requestData.email,
-            password: requestData.password,
-            avatar: requestData.avatar,
-            name: requestData.name
-        } as UserDocument;
-    }
-
-    /**
      * @public @method dataTransfertObject Format the document for the public return.
      * @param document
      * @return {any}

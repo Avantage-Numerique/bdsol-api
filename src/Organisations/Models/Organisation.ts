@@ -115,21 +115,6 @@ class Organisation extends AbstractModel {
     }
 
     /**
-     * @public @method formatRequestDataForDocument Format the data for this entity
-     * @param {any} requestData - Data to format
-     * @return {OrganisationSchema} The entity formated to schema
-     */
-     public formatRequestDataForDocument(requestData:any):any {
-        return {
-            name: requestData.name,
-            description: requestData.description,
-            url: requestData.url,
-            contactPoint: requestData.contactPoint,
-            fondationDate: requestData.fondationDate
-        } as OrganisationSchema;
-    }
-
-    /**
      * @public @method dataTransfertObject Format the document for the public return.
      * @param document
      * @return {any}

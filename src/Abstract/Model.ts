@@ -116,13 +116,6 @@ abstract class AbstractModel {
      abstract get searchSearchableFields():object;
 
     /**
-     * @abstract @method formatRequestDataForDocument Format the document to be validated
-     * @param requestData - Data to format
-     * @return {Document} the mongo document.
-     */
-    abstract formatRequestDataForDocument(requestData:any):Document;
-
-    /**
      * @abstract @method dataTransfertObject Format the document for the public return.
      * @param document
      * @return {any} Most of the time it's a simple Object.

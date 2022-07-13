@@ -26,16 +26,8 @@ abstract class AbstractController {
      * @return {ApiResponseContract} Promise
     */
     public async create(requestData:any):Promise<ApiResponseContract> {
-        const messageValidate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("create"));
-        if (!messageValidate.isValid)
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                messageValidate.message
-            );
-
-        const formatedData = this.entity.formatRequestDataForDocument(requestData);
-        const createdDocumentResponse = await this.service.insert(formatedData);
+        LogHelper.log("Controller create : ", requestData);
+        const createdDocumentResponse = await this.service.insert(requestData);
 
         if (createdDocumentResponse !== undefined)
             return createdDocumentResponse;
@@ -55,16 +47,8 @@ abstract class AbstractController {
      * @return {ApiResponseContract} Promise
      */
     public async update(requestData:any):Promise<ApiResponseContract> {
-        const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("update"));
-        if (!messageUpdate.isValid)
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                messageUpdate.message
-                );
-
-        const formatedData = this.entity.formatRequestDataForDocument(requestData);
-        const updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
+        LogHelper.log("Controller update : ", requestData);
+        const updatedModelResponse:any = await this.service.update(requestData);
 
         if (updatedModelResponse !== undefined)
             return updatedModelResponse;
@@ -84,15 +68,8 @@ abstract class AbstractController {
      * @default emptyRequest : Return the first document.
      * @return {ApiResponseContract} Promise containing search document
     */
-    public async search(requestData:any):Promise<ApiResponseContract> {  
-        const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("search"), true);
-        if (!messageUpdate.isValid)
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                messageUpdate.message
-            );
-
+    public async search(requestData:any):Promise<ApiResponseContract> {
+        LogHelper.log("Controller search : ", requestData);
         const query = QueryBuilder.build(requestData);
         return await this.service.get(query);
     }
@@ -104,14 +81,7 @@ abstract class AbstractController {
      * @return {ApiResponseContract} Promise containing a list of documents
     */
     public async list(requestData:any):Promise<ApiResponseContract> {
-        const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("list"), true);
-        if (!messageUpdate.isValid)
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                messageUpdate.message
-                );
-
+        LogHelper.log("Controller list : ", requestData);
         const query = QueryBuilder.build(requestData);
         return await this.service.all(query);
     }
@@ -123,13 +93,7 @@ abstract class AbstractController {
      * @return {ApiResponseContract} Promise
     */
     public async delete(requestData:any):Promise<ApiResponseContract> {
-        const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("delete"));
-        if (!messageUpdate.isValid)
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                messageUpdate.message
-                );
+        LogHelper.log("Controller delete : ", requestData);
         return await this.service.delete(requestData.id);
     }
 
@@ -141,6 +105,7 @@ abstract class AbstractController {
      * @return {ApiResponseContract} Promise containing rules and attributes for every field of the entity
     */
     public async getInfo(requestData:any):Promise<ApiResponseContract> {
+        LogHelper.log("Controller getInfo : ", requestData);
         const routes = ["create","update","list","search","delete","getinfo"]
         if(!routes.includes(requestData.route)) {
             requestData.route = "default";
@@ -157,6 +122,7 @@ abstract class AbstractController {
     }
 
     public async getDoc():Promise<any> {
+        LogHelper.log("Route getDoc : ");
         return this.entity.documentation();
     }
 }

@@ -51,7 +51,7 @@ class Personne extends AbstractModel {
         "field": [
             {
                 "name": "lastName",
-                "label": "Nom ",
+                "label": "Nom",
                 "type": "String",
                 "rules": []
             },
@@ -107,20 +107,6 @@ class Personne extends AbstractModel {
      */
     get searchSearchableFields():object {
         return ["lastName", "firstName","nickname","description"];
-    }
-
-    /**
-     * @public @method formatRequestDataForDocument Format the data for this entity
-     * @param {any} requestData - Data to format
-     * @return {OrganisationSchema} The entity formated to schema
-     */
-    public formatRequestDataForDocument(requestData:any):any {
-        return {
-            lastName: requestData.lastName,
-            firstName: requestData.firstName,
-            nickname: requestData.nickname,
-            description: requestData.description
-        } as PersonneSchema;
     }
 
     /**

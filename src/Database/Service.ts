@@ -39,7 +39,9 @@ export abstract class Service {
         }
 
         try {
-            const item = await this.model.findOne(query);
+            const item = await this.model.findOne(query).
+            setOptions({ sanitizeFilter: true });
+          
 
             if (item !== null) {
                 return SuccessResponse.create(item, StatusCodes.OK, ReasonPhrases.OK);
@@ -128,13 +130,14 @@ export abstract class Service {
 
     /**
      * With modify the target document.
-     * @param id string
-     * @param data any document data
+     * @param data any document data containing id
      * @note error 11000 //error = not unique {"index":0,"code":11000,"keyPattern":{"username":1},"keyValue":{"username":"mamilidasdasdasd"}}
      */
-    async update(id: string, data: any): Promise<ApiResponseContract> {
+    async update(data: any): Promise<ApiResponseContract> {
 
         try {
+            const id = data.id;
+            delete data.id; //Remove id from data
             // UpdateOne
             const meta = await this.model.updateOne({_id: id}, data, {new: true})
                 .catch((e: any) => {
@@ -240,6 +243,19 @@ export abstract class Service {
                 },
                 StatusCodes.CONFLICT,
                 wrongElementsValues);
+        }
+
+        // Erreur MongooseError
+        if (meta.name === "MongooseError") {
+
+            LogHelper.error(StatusCodes.INTERNAL_SERVER_ERROR);
+
+            return ErrorResponse.create({
+                    name: "Erreur de service : " + meta.name,
+                    message: meta.message
+                },
+                StatusCodes.INTERNAL_SERVER_ERROR,
+                meta.msg);
         }
 
         // RESULTS
