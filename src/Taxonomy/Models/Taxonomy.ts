@@ -33,26 +33,29 @@ class Taxonomy extends AbstractModel {
     schema:Schema =
         new Schema<TaxonomySchema>({
             category: {
-                        type: String,
-                        required: [true, 'Required category (occupation, ...)'],
-                        enum: ['occupation', 'skill'],
-                        lowercase: true,
-                        trim: true,
-                        index: true
+                type: String,
+                required: [true, 'Required category (occupation, ...)'],
+                enum: ['occupation', 'skill', 'domaine', 'competence'],
+                lowercase: true,
+                trim: true,
+                index: true
             },
             name: {
-                    type: String,
-                    required: [true, 'Name required'],
-                    minlength:[2, 'MinLength 2'],
-                    alias: 'nom'
+                type: String,
+                required: [true, 'Name required'],
+                minlength:[2, 'MinLength 2'],
+                alias: 'nom'
             },
             slug: {
-                    type: String,
-                    required: true,
-                    index: true,
-                    unique: true
+                type: String,
+                required: true,
+                index: true,
+                unique: true
             },
-            description: { type: String, alias:'desc' },
+            description: {
+                type: String,
+                alias:'desc'
+            },
             source: { type: String }
         },
             {

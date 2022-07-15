@@ -4,6 +4,7 @@ import { PersonneSchema } from "../Schemas/PersonneSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
+import { ObjectId } from "mongodb";
 
 
 class Personne extends AbstractModel {
@@ -34,10 +35,26 @@ class Personne extends AbstractModel {
     /** @public Database schema */
     schema:Schema =
         new Schema<PersonneSchema>({
-            lastName: { type: String, required: true },
-            firstName: { type: String, required: true },
-            nickname: String,
-            description: String
+            lastName: {
+                type: String,
+                required: true,
+                alias: 'nom'
+            },
+            firstName: {
+                type: String,
+                required: true,
+                alias: 'prenom'
+            },
+            nickname: {
+                type: String,
+                alias: 'surnom'
+            },
+            description: String,
+            occupation: {
+                type: [mongoose.Types.ObjectId],
+                default:undefined,
+                ref: 'taxonomies'
+            }
         },
             {
                 timestamps: true
