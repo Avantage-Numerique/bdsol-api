@@ -41,7 +41,7 @@ export abstract class Service {
         try {
             const item = await this.model.findOne(query).
             setOptions({ sanitizeFilter: true });
-          
+
 
             if (item !== null) {
                 return SuccessResponse.create(item, StatusCodes.OK, ReasonPhrases.OK);

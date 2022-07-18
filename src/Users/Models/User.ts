@@ -4,7 +4,6 @@ import type {DbProvider} from "../../Database/DatabaseDomain";
 import {UserContract} from "../Contracts/UserContract";
 import AbstractModel from "../../Abstract/Model";
 import {PasswordsController} from "../../Authentification/Controllers/PasswordsController";
-import { UserDocument } from "../Schemas/UserSchema";
 import * as fs from 'fs';
 
 export class User extends AbstractModel {

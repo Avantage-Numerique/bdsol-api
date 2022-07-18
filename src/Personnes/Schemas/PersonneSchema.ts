@@ -6,5 +6,5 @@ export interface PersonneSchema extends Document {
     firstName:string;
     nickname:string;
     description:string;
-    occupation:[mongoose.Types.ObjectId];
+    occupation:[mongoose.ObjectId];
 }

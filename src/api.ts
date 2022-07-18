@@ -9,6 +9,7 @@ import {OrganisationsRoutes} from './Organisations/Routes/OrganisationsRoutes'
 import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
 import {RegistrationRouter} from "./Authentification/Routes/RegistrationRoutes";
 import { TaxonomyRoutes } from "./Taxonomy/Routes/TaxonomyRoutes";
+import { UsersHistoryRoutes } from "./UserHistory/Routes/UsersHistoryRoutes";
 
 /**
  * Main class for the API
@@ -81,6 +82,10 @@ export default class Api {
             {
                 baseRoute: "/taxonomy",
                 manager: new TaxonomyRoutes()
+            },
+            {
+                baseRoute: "/userhistory",
+                manager: new UsersHistoryRoutes()
             }
 
         ];

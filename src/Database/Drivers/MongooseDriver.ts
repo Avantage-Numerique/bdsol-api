@@ -11,6 +11,7 @@ import CreateDbAndUsersMongoose from "../../Migrations/create-db-and-users-mongo
 import Personne from "../../Personnes/Models/Personne";
 import Organisation from "../../Organisations/Models/Organisation";
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
+import UserHistory from "../../UserHistory/Models/UserHistory";
 
 export class MongooseDBDriver implements DBDriver {
 
@@ -57,6 +58,7 @@ export class MongooseDBDriver implements DBDriver {
         this.providers.data.assign(Personne.getInstance());
         this.providers.data.assign(Organisation.getInstance());
         this.providers.data.assign(Taxonomy.getInstance());
+        this.providers.data.assign(UserHistory.getInstance());
 
         await this.generateFakeUsers();
     }
