@@ -35,11 +35,13 @@ abstract class AbstractRoute
 
     public async createHandler(req: any, res: any): Promise<ApiResponseContract> {
         const response = await this.controllerInstance.create(req.body.data);
+        this.controllerInstance.createHistory();
         return res.status(response.code).send(response);
     }
 
     public async updateHandler(req: any, res: any): Promise<ApiResponseContract> {
         const response = await this.controllerInstance.update(req.body.data);
+        this.controllerInstance.createHistory();
         return res.status(response.code).send(response);
     }
 
@@ -55,6 +57,7 @@ abstract class AbstractRoute
 
     public async deleteHandler(req: any, res: any): Promise<ApiResponseContract> {
         const response = await this.controllerInstance.delete(req.body.data);
+        this.controllerInstance.createHistory();
         return res.status(response.code).send(response);
     }
 

@@ -125,5 +125,19 @@ abstract class AbstractController {
         LogHelper.log("Route getDoc : ");
         return this.entity.documentation();
     }
+
+    public createHistory():boolean {
+        LogHelper.log("Create UserHistory");
+        //Savoir si la requête a réussie dans la bd =>
+
+            //Savoir quel est le ID user
+            //Savoir le IP Address
+            //Savoir le id de l'entité modifiée
+            //Savoir l'opération qui a été faite (/create)
+            //Savoir quel champs ont été modifié
+
+            //Inscrire dans l'historique du user les info
+        return true;
+    }
 }
 export default AbstractController;

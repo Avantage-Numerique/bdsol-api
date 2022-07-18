@@ -33,11 +33,29 @@ class Organisation extends AbstractModel {
     /** @public Database schema */
     schema: Schema =
         new Schema<OrganisationSchema>({
-                name: {type: String, required: true},
-                description: String,
-                url: String, //String? TODO
-                contactPoint: String, //String? TODO
-                fondationDate: Date
+                name: {
+                    type: String,
+                    required: true,
+                    alias: 'nom'
+                },
+                description: {
+                    type: String,
+                    alias: 'desc'
+                },
+                url: {
+                    type: String,
+                },
+                contactPoint: {
+                    type: String,
+                },
+                fondationDate: {
+                    type: Date,
+                },
+                offer: {
+                    type: [mongoose.Types.ObjectId],
+                    default: undefined,
+                    ref: 'taxonomies'
+                }
             },
             {
                 timestamps: true
