@@ -12,7 +12,8 @@ abstract class AbstractRoute {
     /** @abstract router of a specific entity. */
     abstract routerInstance: express.Router;
 
-    abstract middlewares:Array<any>;
+    //abstract middlewares:Array<any>;
+    //abstract entity ?
 
     /**
      * @public @method setupAuthRoutes Setup routes that need user authentication.
@@ -43,29 +44,30 @@ abstract class AbstractRoute {
      * @return {express.Router} router
      */
     public setupPublicRoutes() {
+        const defaultEntity:String = "entity";
         //  Search
         this.routerInstance.post('/search', [
-            CrudSchemaSanitizer.middlewareFunction(),
+            CrudSchemaSanitizer.middlewareFunction(defaultEntity),
             this.searchHandler.bind(this)
         ]);
 
         //  List
         this.routerInstance.post('/list', [
-                CrudSchemaSanitizer.middlewareFunction(),
+                CrudSchemaSanitizer.middlewareFunction(defaultEntity),
                 this.listHandler.bind(this)
             ]
         );
 
         //getinfo the form builder get information about that route.
         this.routerInstance.post('/getinfo', [
-                CrudSchemaSanitizer.middlewareFunction(),
+                CrudSchemaSanitizer.middlewareFunction(defaultEntity),
                 this.getInfoHandler.bind(this)
             ]
         );
 
         //  Get the documentation.
         this.routerInstance.get('/', [
-                CrudSchemaSanitizer.middlewareFunction(),
+                CrudSchemaSanitizer.middlewareFunction(defaultEntity),
                 this.getDoc.bind(this)
             ]
         );//add this, since the API will only use show documentation for now.
