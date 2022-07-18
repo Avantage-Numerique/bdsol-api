@@ -6,7 +6,6 @@ import {AuthentificationRouter} from "./Authentification/Routes/Authentification
 import {UsersRoutes} from "./Users/Routes/UsersRouter";
 import {PersonnesRoutes} from './Personnes/Routes/PersonnesRoutes';
 import {OrganisationsRoutes} from './Organisations/Routes/OrganisationsRoutes'
-import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
 import {RegistrationRouter} from "./Authentification/Routes/RegistrationRoutes";
 import { TaxonomyRoutes } from "./Taxonomy/Routes/TaxonomyRoutes";
 
@@ -94,10 +93,8 @@ export default class Api {
      */
     private _initRouter()
     {
+        //Setup the public route for all the entities setup in _initEntitiesRouters
         this._initPublicRoutes();
-
-        // @ts-ignore
-        this.express.use("/", VerifyTokenMiddleware.middlewareFunction());
 
         //Everything under here will need authorization token present in the request Header.
         this._needAuthentificationRoutes();

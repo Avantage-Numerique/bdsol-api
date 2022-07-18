@@ -1,23 +1,40 @@
+import express from "express";
 import {ApiResponseContract} from "../Http/Responses/ApiResponse";
 import AbstractController from "./Controller";
-import express from "express";
+import {NeedAuthRouteMiddlewares} from "../Authentification/Middleware/NeedAuthRouteMiddlewares";
+import {CrudSchemaSanitizer} from "../Security/Middlewares/CrudSchemaSanitizer";
 
 
-abstract class AbstractRoute
-{
+abstract class AbstractRoute {
     /** @abstract Controller of a specific entity. */
     abstract controllerInstance: AbstractController;
 
     /** @abstract router of a specific entity. */
     abstract routerInstance: express.Router;
 
+    abstract middlewares:Array<any>;
+
     /**
      * @public @method setupAuthRoutes Setup routes that need user authentication.
      * @return {express.Router} router
      */
     public setupAuthRoutes() {
-        this.routerInstance.post('/create', this.createHandler.bind(this));
-        this.routerInstance.post('/update', this.updateHandler.bind(this));
+        const defaultEntity:String = "entity";
+        //  Create
+        this.routerInstance.post('/create', [
+                //add all the needed middlewares for auth routes.
+                ...NeedAuthRouteMiddlewares.middlewares,
+                //get the crud middleware to sanitize all the body values
+                CrudSchemaSanitizer.middlewareFunction(defaultEntity),
+                this.createHandler.bind(this)
+            ]
+        );
+
+        //  Update
+        this.routerInstance.post('/update', [
+            ...NeedAuthRouteMiddlewares.middlewares,//add all the need middlewares for auth routes.
+            this.updateHandler.bind(this)
+        ]);
         return this.routerInstance;
     }
 
@@ -26,10 +43,33 @@ abstract class AbstractRoute
      * @return {express.Router} router
      */
     public setupPublicRoutes() {
-        this.routerInstance.post('/search', this.searchHandler.bind(this));
-        this.routerInstance.post('/list', this.listHandler.bind(this));
-        this.routerInstance.post('/getinfo', this.getInfoHandler.bind(this));
-        this.routerInstance.get('/getdoc', this.getDoc.bind(this));
+        //  Search
+        this.routerInstance.post('/search', [
+            CrudSchemaSanitizer.middlewareFunction(),
+            this.searchHandler.bind(this)
+        ]);
+
+        //  List
+        this.routerInstance.post('/list', [
+                CrudSchemaSanitizer.middlewareFunction(),
+                this.listHandler.bind(this)
+            ]
+        );
+
+        //getinfo the form builder get information about that route.
+        this.routerInstance.post('/getinfo', [
+                CrudSchemaSanitizer.middlewareFunction(),
+                this.getInfoHandler.bind(this)
+            ]
+        );
+
+        //  Get the documentation.
+        this.routerInstance.get('/', [
+                CrudSchemaSanitizer.middlewareFunction(),
+                this.getDoc.bind(this)
+            ]
+        );//add this, since the API will only use show documentation for now.
+
         return this.routerInstance;
     }
 
@@ -66,7 +106,8 @@ abstract class AbstractRoute
     public async getDoc(req: any, res: any): Promise<ApiResponseContract> {
         const response = await this.controllerInstance.getDoc();
         const style = '<style> body {white-space : pre; background-color : #22211f; color : white}</style>'
-        return res.send(style+response);
+        return res.send(style + response);
     }
 }
+
 export default AbstractRoute;

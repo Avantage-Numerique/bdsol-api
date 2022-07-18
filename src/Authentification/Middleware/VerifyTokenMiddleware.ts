@@ -5,6 +5,9 @@ import {StatusCodes, ReasonPhrases} from "http-status-codes";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
 
+/**
+ * Express JS middleware for verifying the token.
+ */
 export class VerifyTokenMiddleware {
 
     /**
@@ -19,7 +22,8 @@ export class VerifyTokenMiddleware {
          * @param next {NextFunction}
          * @return Promise<Response<any, Record<string, any>> | undefined>
          */
-        return async function (req: AuthRequest, res: Response, next: NextFunction):Promise<Response<any, Record<string, any>> | undefined> {
+        //return async function (req: AuthRequest, res: Response, next: NextFunction):Promise<Response<any, Record<string, any>> | undefined> {
+        return async function (req: AuthRequest, res: Response, next: NextFunction) {
             // Get token from header
             const headers = req.headers;
 
@@ -39,8 +43,8 @@ export class VerifyTokenMiddleware {
 
                 try {
                     const isTokenVerify:any = await TokenController.verify(userToken);
-                    LogHelper.log("Verifying the token sent for the current request.", isTokenVerify);
-                    if (isTokenVerify.name === undefined) {
+                    LogHelper.debug("Verifying the token sent for the current request.", isTokenVerify);
+                    if (isTokenVerify.name !== undefined) {
                         next();
                     }
                 }
