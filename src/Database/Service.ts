@@ -30,7 +30,8 @@ export abstract class Service {
      * Get all the documents from a collection that fits the query.
      * @param query any Should be an object with the document's
      */
-    async get(query: any): Promise<ApiResponseContract> {
+    async get(query: any): Promise<ApiResponseContract>
+    {
         if (config.db.config.createObjectIdForQuery) {
             query._id = Service.transformToObjectId(query._id);
             if (query._id.error) {
@@ -56,7 +57,8 @@ export abstract class Service {
      * Get all the documents from a collection that fits the query.
      * @param query
      */
-    async all(query: any): Promise<ApiResponseContract> {
+    async all(query: any): Promise<ApiResponseContract>
+    {
 
         //set and dry parameters passed via query, but for preheating purposes.
         let {skip, limit} = query;

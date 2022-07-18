@@ -52,6 +52,9 @@ export class MongooseDBDriver implements DBDriver {
         LogHelper.info(`[BD] Connexion à la base de données structurée, ouverte et liée ...`);
         await this.providers.data.connect();
 
+        //activate the sanitizerOption by default
+        LogHelper.info(`[BD] activation du sanitizeFilter complété`);
+        mongoose.set('sanitizeFilter', true);
 
         this.providers.users.assign(User.getInstance());
         this.providers.data.assign(Personne.getInstance());
