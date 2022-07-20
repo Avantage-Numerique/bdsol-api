@@ -87,6 +87,12 @@ class Personne extends AbstractModel {
                 "label": "Description",
                 "type": "String",
                 "rules": []
+            },
+            {
+                "name": "occupation",
+                "label": "Occupation",
+                "type": "ObjectId",
+                "rules": []
             }
         ]
     };
@@ -121,7 +127,7 @@ class Personne extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields():object {
-        return ["lastName", "firstName","nickname","description"];
+        return ["lastName", "firstName","nickname","description", "occupation"];
     }
 
     /**
@@ -135,6 +141,7 @@ class Personne extends AbstractModel {
             firstName: document.firstName,
             nickname: document.nickname,
             description: document.description,
+            occupation: document.occupation
         }
     }
 

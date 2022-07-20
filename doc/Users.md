@@ -1,6 +1,5 @@
 Retour à la base de [Documention de l'API](documentation-api.md)
 
----
 # Utilisateurs (users)
 
 ## URL définies

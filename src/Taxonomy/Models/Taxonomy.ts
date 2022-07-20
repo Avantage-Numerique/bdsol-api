@@ -56,7 +56,9 @@ class Taxonomy extends AbstractModel {
                 type: String,
                 alias:'desc'
             },
-            source: { type: String }
+            source: {
+                type: String
+            }
         },
             {
                 timestamps: true,
@@ -131,7 +133,7 @@ class Taxonomy extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields():object {
-        return ["_id", "category", "name", "slug", "description", "source"];
+        return ["category", "name", "slug", "description", "source"];
     }
 
     /**

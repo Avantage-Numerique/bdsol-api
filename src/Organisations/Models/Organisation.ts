@@ -95,11 +95,19 @@ class Organisation extends AbstractModel {
                 "label": "Date de fondation",
                 "type": "Date",
                 "rules": []
+            },
+            {
+                "name": "offer",
+                "label": "Offre de service",
+                "type": "ObjectId",
+                "rules": []
             }
         ]
     };
     
-    /** @public Rule set for every field of this entity for each route */
+    /**
+     * @public Rule set for every field of this entity for each route
+     * @deprecated*/
     ruleSet:any = {
         "default":{
             "id":["idValid"],
@@ -129,7 +137,7 @@ class Organisation extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields():object {
-        return ["name", "description","url","contactPoint", "fondationDate"];
+        return ["name", "description","url","contactPoint", "fondationDate", "offer"];
     }
 
     /**
@@ -143,7 +151,8 @@ class Organisation extends AbstractModel {
             description: document.description,
             url: document.url,
             contactPoint: document.contactPoint,
-            fondationDate: document.fondationDate
+            fondationDate: document.fondationDate,
+            offer: document.offer
         }
     }
 

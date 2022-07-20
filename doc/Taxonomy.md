@@ -1,12 +1,12 @@
 Retour à la base de [Documention de l'API](documentation-api.md)
 
-# Organisations
+# Personnes
 
 ## URL définies
 
-### POST `/organisations/create`
+### POST `/taxonomy/create`
 
-#### structure demandée
+#### structure demandé
 ```json
 {
   "type": "object",
@@ -14,23 +14,22 @@ Retour à la base de [Documention de l'API](documentation-api.md)
       "data": {
           "type": "object",
           "properties": {
+              "category": { "type": "string" },
               "name": { "type": "string" },
+              "slug": { "type": "string" },
               "description": { "type": "string" },
-              "url": { "type": "string" },
-              "contactPoint": { "type": "string" },
-              "fondationDate": { "type": "Date" },
-              "offer": { "type": ["ObjectId"] }
+              "source": { "type": "string" }
           },
-          "required": ["name"]
+          "required": ["category", "name", "slug"]
       },
       "required": ["data"]
   }
 }
 ```
 
-### POST `/organisations/update`
+### POST `/taxonomy/update`
 
-#### structure demandée
+#### structure demandé
 ```json
 {
   "type": "object",
@@ -38,13 +37,12 @@ Retour à la base de [Documention de l'API](documentation-api.md)
       "data": {
           "type": "object",
           "properties": {
-              "id": { "type": "ObjectId" },
+              "id":{ "type": "ObjectId" },
+              "category": { "type": "string" },
               "name": { "type": "string" },
+              "slug": { "type": "string" },
               "description": { "type": "string" },
-              "url": { "type": "string" },
-              "contactPoint": { "type": "string" },
-              "fondationDate": { "type": "Date" },
-              "offer": { "type": ["ObjectId"] }
+              "source": { "type": "string" }
           },
           "required": ["id"]
       },
@@ -53,15 +51,9 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 }
 ```
 
+### POST `/taxonomy/search`
 
-### POST `/organisations/search`
-Il est possible d'utiliser les opérateurs gte (>=) et lte (<=) afin de trouver, par exemple, une date antérieure ou ultérieure à "X". On ajoute à ce moment `gte:` ou `lte:` avant le paramètre.
-
-**Exemple :**
-```json 
-"data":{ "fondationDate":"gte:2022-06-14" }
-```
-#### structure demandée
+#### structure demandé
 ```json
 {
   "type": "object",
@@ -69,23 +61,22 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte (<=) afin de trouver,
       "data": {
           "type": "object",
           "properties": {
-              "id": { "type": "ObjectId" },
+              "id":{ "type": "ObjectId" },
+              "category": { "type": "string" },
               "name": { "type": "string" },
+              "slug": { "type": "string" },
               "description": { "type": "string" },
-              "url": { "type": "string" },
-              "contactPoint": { "type": "string" },
-              "fondationDate": { "type": "Date" },
-              "offer": { "type": ["ObjectId"] }
-          }
+              "source": { "type": "string" }
+          },
       },
       "required": ["data"]
   }
 }
 ```
 
-### POST `/organisations/list`
-Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/organisations/search`.
-#### structure demandée
+### POST `/taxonomy/list`
+
+#### structure demandé
 ```json
 {
   "type": "object",
@@ -93,22 +84,21 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/organisations
       "data": {
           "type": "object",
           "properties": {
-              "id": { "type": "ObjectId" },
+              "id":{ "type": "ObjectId" },
+              "category": { "type": "string" },
               "name": { "type": "string" },
+              "slug": { "type": "string" },
               "description": { "type": "string" },
-              "url": { "type": "string" },
-              "contactPoint": { "type": "string" },
-              "fondationDate": { "type": "Date" },
-              "offer": { "type": ["ObjectId"] }
-          }
+              "source": { "type": "string" }
+          },
       },
       "required": ["data"]
   }
 }
 ```
 
-### POST `/organisations/delete`
-#### structure demandée
+### POST `/taxonomy/delete`
+#### structure demandé
 ```json
 {
   "type": "object",
@@ -116,7 +106,7 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/organisations
       "data": {
           "type": "object",
           "properties": {
-              "id": { "type": "ObjectId" }
+              "id":{ "type": "ObjectID" }
           },
           "required": ["id"]
       },
@@ -125,7 +115,7 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/organisations
 }
 ```
 
-### POST `/organisations/getinfo`
+### POST `/taxonomy/getinfo`
 
 Si une route est spécifiée (create, update, search, list, delete), les informations des champs seront retournée avec les règles de vérification des champs spécifique à la route, ainsi que les règles par défaut.
 Sinon, les champs n'auront que les règles par défaut.
@@ -148,5 +138,5 @@ Sinon, les champs n'auront que les règles par défaut.
 }
 ```
 
-### GET `/organisations/getdoc`
+### GET `/taxonomy/getdoc`
 Renvoie ce fichier de documentation
