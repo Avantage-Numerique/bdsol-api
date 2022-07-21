@@ -1,7 +1,7 @@
 import {VerifyTokenMiddleware} from "./VerifyTokenMiddleware";
 
 
-export class NeedAuthRouteMiddlewares {
+export class AuthRouteMiddlewares {
 
     public static middlewares:Array<any> = [
         VerifyTokenMiddleware.middlewareFunction()
