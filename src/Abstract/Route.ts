@@ -1,7 +1,7 @@
 import express from "express";
 import {ApiResponseContract} from "../Http/Responses/ApiResponse";
 import AbstractController from "./Controller";
-import {NeedAuthRouteMiddlewares} from "../Authentification/Middleware/NeedAuthRouteMiddlewares";
+import {AuthRouteMiddlewares} from "../Authentification/Middleware/AuthRouteMiddlewares";
 import {CrudSchemaSanitizer} from "../Security/Middlewares/CrudSchemaSanitizer";
 
 
@@ -24,7 +24,7 @@ abstract class AbstractRoute {
         //  Create
         this.routerInstance.post('/create', [
                 //add all the needed middlewares for auth routes.
-                ...NeedAuthRouteMiddlewares.middlewares,
+                ...AuthRouteMiddlewares.middlewares,
                 //get the crud middleware to sanitize all the body values
                 CrudSchemaSanitizer.middlewareFunction(defaultEntity),
                 this.createHandler.bind(this)
@@ -33,7 +33,7 @@ abstract class AbstractRoute {
 
         //  Update
         this.routerInstance.post('/update', [
-            ...NeedAuthRouteMiddlewares.middlewares,//add all the need middlewares for auth routes.
+            ...AuthRouteMiddlewares.middlewares,//add all the need middlewares for auth routes.
             this.updateHandler.bind(this)
         ]);
         return this.routerInstance;
