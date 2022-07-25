@@ -59,7 +59,10 @@ export class UserSchema {
     static async registerPreEvents() {
         if (UserSchema.documentSchema !== undefined)
         {
-            // CREATE users, we hash the password.
+            UserSchema.documentSchema.pre('save', UserSchema.hashPasswordBeforeSaving);
+            UserSchema.documentSchema.pre('UpdateOne', UserSchema.hashPasswordBeforeSaving);
+
+            /*// CREATE users, we hash the password.
             await UserSchema.documentSchema.pre('save', async function (next: any): Promise<any>
             {
                 const user: any = this;
@@ -89,7 +92,7 @@ export class UserSchema {
                     throw error;
                 }
                 return next();
-            });
+            });*/
         }
     }
 
@@ -171,43 +174,3 @@ export class UserSchema {
         this._role = role;
     }
 }
-
-
-/*
-    private RestrictAccessToUnderscoreVarsFromExternalScope(obj) {
-        return new Proxy(obj, {
-            get(target, prop, receiver) {
-                if (typeof (target[prop]) !== "function" &&
-                    prop.startsWith("_"))
-                    return;
-
-                if (typeof (target[prop]) === "function")
-                    return target[prop].bind(target);
-
-                return target[prop];
-            },
-
-            set(target, prop, value, receiver) {
-                if (prop.startsWith("_"))
-                    return false;
-
-                target[prop] = value;
-            }
-        });
-    }
-
-    private initGetterSetter() {
-
-        const proxy = new Proxy(this, {
-            get(target, name, receiver) {
-                return Reflect.get(target, "_"+name, receiver);
-            },
-            set(target, name, value, receiver) {
-                if (!Reflect.has(target, "_"+name)) {
-                    console.log(`Setting non-existent property '${String(name)}', initial value: ${value}`);
-                }
-                return Reflect.set(target, name, value, receiver);
-            }
-        });
-    }
-*/

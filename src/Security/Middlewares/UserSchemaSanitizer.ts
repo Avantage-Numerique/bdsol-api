@@ -32,9 +32,12 @@ export class UserSchemaSanitizer {
             },
             errorMessage: 'Email isn\'t correctly formed',
             isString: true,
+
             // Sanitizers can go here as well
             toString: true,
+            toLowerCase: true,
             normalizeEmail: true,
+            trim: true,
         },
         'data.password': {
             in: ['body'],
@@ -43,23 +46,40 @@ export class UserSchemaSanitizer {
                 // Multiple options would be expressed as an array
                 options: { min: 7 },
             },
+            trim: true,
         },
         'data.username': {
+            in: ['body'],
             isUppercase: {
                 // To negate a validator
                 negated: true,
             },
-            rtrim: {
-                // Options as an array
-                options: [[' ', '-']],
-            },
+
+            //sanitizer
+            trim: true
         },
-        // Support bail functionality in schemas
-        email: {
-            isEmail: {
-                bail: true,
+        'data.description': {
+            in: ['body'],
+            optional: true,
+            isString: true,
+            //sanitizer
+            trim: true,
+            customSanitizer: {
+                /*options: (value, { req, location, path }) => {
+                    let sanitizedValue;
+
+                    if (req.body.foo && location && path) {
+                        sanitizedValue = parseInt(value);
+                    } else {
+                        sanitizedValue = 0;
+                    }
+
+                    return sanitizedValue;
+                },*/
             },
-        },
+            escape: true,
+
+        }
     }
 
     /**
