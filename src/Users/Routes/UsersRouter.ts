@@ -6,5 +6,6 @@ import AbstractController from "../../Abstract/Controller";
 class UsersRoutes extends AbstractRoute {
     controllerInstance: AbstractController = UsersController.getInstance();
     routerInstance: express.Router = express.Router();
+    routerInstanceAuthentification: express.Router = express.Router();
 }
 export {UsersRoutes};

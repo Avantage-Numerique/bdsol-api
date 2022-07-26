@@ -33,6 +33,7 @@ abstract class AbstractController {
             return createdDocumentResponse;
 
         LogHelper.debug("Service response from insert is undefined");
+
         return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
             StatusCodes.INTERNAL_SERVER_ERROR,

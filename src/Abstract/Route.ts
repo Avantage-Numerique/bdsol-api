@@ -1,6 +1,9 @@
 import {ApiResponseContract} from "../Http/Responses/ApiResponse";
+import {Request} from "express";
 import AbstractController from "./Controller";
 import express from "express";
+import LogHelper from "../Monitoring/Helpers/LogHelper";
+//import {AuthRequest} from "../Authentification/Types/AuthRequest";
 
 
 abstract class AbstractRoute
@@ -10,15 +13,16 @@ abstract class AbstractRoute
 
     /** @abstract router of a specific entity. */
     abstract routerInstance: express.Router;
+    abstract routerInstanceAuthentification: express.Router;
 
     /**
      * @public @method setupAuthRoutes Setup routes that need user authentication.
      * @return {express.Router} router
      */
     public setupAuthRoutes() {
-        this.routerInstance.post('/create', this.createHandler.bind(this));
-        this.routerInstance.post('/update', this.updateHandler.bind(this));
-        return this.routerInstance;
+        this.routerInstanceAuthentification.post('/create', this.createHandler.bind(this));
+        this.routerInstanceAuthentification.post('/update', this.updateHandler.bind(this));
+        return this.routerInstanceAuthentification;
     }
 
     /**
@@ -33,14 +37,16 @@ abstract class AbstractRoute
         return this.routerInstance;
     }
 
-    public async createHandler(req: any, res: any): Promise<ApiResponseContract> {
-        const response = await this.controllerInstance.create(req.body.data);
+    public async createHandler(req: Request, res: any): Promise<ApiResponseContract> {
+        const response:ApiResponseContract = await this.controllerInstance.create(req.body.data);
+        LogHelper.debug("createHandler", req.user);
         this.controllerInstance.createHistory();
         return res.status(response.code).send(response);
     }
 
-    public async updateHandler(req: any, res: any): Promise<ApiResponseContract> {
+    public async updateHandler(req: Request, res: any): Promise<ApiResponseContract> {
         const response = await this.controllerInstance.update(req.body.data);
+        LogHelper.debug("updateHandler", req.user);
         this.controllerInstance.createHistory();
         return res.status(response.code).send(response);
     }

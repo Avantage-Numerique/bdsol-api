@@ -127,15 +127,16 @@ export class User extends AbstractModel {
      */
     public dataTransfertObject(document: any):any {
         return {
+            id: document._id,
             username: document.username,
             avatar: document.avatar,
             name: document.name,
+            email: document.email,
         }
     }
 
     public async documentation():Promise<any>{
-        const response =  fs.readFileSync('/api/doc/Users.md', 'utf-8');
-        return response;
+        return fs.readFileSync('/api/doc/Users.md', 'utf-8');
    }
 
     public async registerPreEvents()

@@ -1,9 +1,7 @@
-import {NextFunction, Response} from "express";
-import AuthRequest from "../Types/AuthRequest";
+import {NextFunction, Response, Request} from "express";
 import {TokenController} from "../Controllers/TokenController";
-import {StatusCodes, ReasonPhrases} from "http-status-codes";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
+import HttpError from "../../Error/HttpError";
 
 export class VerifyTokenMiddleware {
 
@@ -12,64 +10,60 @@ export class VerifyTokenMiddleware {
      */
     public static middlewareFunction()
     {
+        LogHelper.debug("VerifyTokenMiddleware middlewareFunction called, return the middleware.");
         /**
          * The VerifyTokenMIddleware anonymous function.
-         * @param req {AuthRequest}
+         * @param req {Request}
          * @param res {Response}
          * @param next {NextFunction}
          * @return Promise<Response<any, Record<string, any>> | undefined>
          */
-        return async function (req: AuthRequest, res: Response, next: NextFunction):Promise<Response<any, Record<string, any>> | undefined> {
-            // Get token from header
-            const headers = req.headers;
+        return async function (req: Request, res: Response, next: NextFunction)
+        {
+            LogHelper.info("VerifyTokenMiddleware Verifying the token sent for the current request.");
 
-            if (headers &&
-                headers.authorization)
+            // Get token from header
+            //const headers = req.headers;
+            if (req.headers &&
+                req.headers.authorization)
             {
-                const authentificationHeader = headers.authorization;
+                const authentificationHeader = req.headers.authorization;
 
                 const token = authentificationHeader.split(' ');
                 const userToken = token[1];
 
+                LogHelper.info("A Token is sent via the header authorization.", userToken);
+
                 // Check if no token
                 if (!userToken) {
-                    LogHelper.error("Token is missing the authentification header. We can't verify the user.");
-                    return VerifyTokenMiddleware.unauthorizedResponse(res);
+                    next(HttpError.Unauthorized("Token is missing the authentification header. We can't verify the user."));
+                    return;
                 }
 
-                try {
-                    const isTokenVerify:any = await TokenController.verify(userToken);
-                    LogHelper.log("Verifying the token sent for the current request.", isTokenVerify);
-                    if (isTokenVerify.name === undefined) {
+                try
+                {
+                    const verifiedToken:any = await TokenController.verify(userToken);
+
+                    if (verifiedToken.validated === true) {
+                        // Set the user in the request, for the last middlewares and endpoints.
+                        req.user = verifiedToken;
+
+                        LogHelper.log("User's token verified, next going to url "+req.originalUrl);
+                        // Here is the only reason why we allow the request to do the next() function.
                         next();
+                        return;//prevent the head from going into the end of the function.
                     }
                 }
                 catch (err)
                 {
-                    LogHelper.error("Token verification failed.");
-                    VerifyTokenMiddleware.unauthorizedResponse(res);
+                    next(HttpError.Unauthorized("Token verification error catched."));
+                    return;
                 }
             }
+
+            next(HttpError.Unauthorized("Token verification failed."));
+            return;
         }
     }
 
-    /**
-     * Centralized response for when the call isn't authorized.
-     * @param res
-     * @protected
-     */
-    protected static unauthorizedResponse(res:Response):Response
-    {
-        LogHelper.info("Unauthorized request");
-        const unauthorizedRequestError = ErrorResponse.create(
-            new Error("Ce chemin d'accès nécessiste un token pour être utilisé."),
-            StatusCodes.UNAUTHORIZED,
-            ReasonPhrases.UNAUTHORIZED,
-            {}
-        );
-        return res
-            .status(StatusCodes.UNAUTHORIZED)
-            .json(unauthorizedRequestError)
-            .end();
-    }
 }
