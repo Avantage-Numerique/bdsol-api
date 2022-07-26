@@ -103,6 +103,7 @@ export default class Api {
      */
     private _initRouter()
     {
+        LogHelper.info("Configuration des routes de l'API ...");
         //this seeem to be a "branch" independant. Middle ware pass here, and error handling are only manage into the same "router's hierarchy" may I labled.
         this.mainRouter = express.Router();
 
@@ -130,7 +131,6 @@ export default class Api {
      */
     private _initPublicRoutes()
     {
-        LogHelper.debug("Configuration des routes publiques");
         //Auth Routes
         this.mainRouter.use("/", AuthentificationRouter);
         this.mainRouter.use("/", RegistrationRouter);
@@ -160,7 +160,6 @@ export default class Api {
      */
     private _needAuthentificationRoutes()
     {
-        LogHelper.debug("Configuration des routes connectées");
         /**
          * Init all the entities routes from theirs managers.
          */

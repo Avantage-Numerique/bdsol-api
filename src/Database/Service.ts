@@ -116,6 +116,9 @@ export abstract class Service {
                 });
 
             LogHelper.debug("insert", meta);
+
+            //Insert in userHistory
+
             return this.parseResult(meta, 'Création');
 
         } catch (insertError: any) {
@@ -148,6 +151,7 @@ export abstract class Service {
             LogHelper.info("UpdateOne return after the catch :", meta);
             // if method updateOne fail, it returns a mongo error with a code and a message. // was method findByIdAndUpdate used.
 
+            //Insert in userHistory
             return this.parseResult(meta, 'Mise à jour');
 
         } catch (updateError: any) {

@@ -3,10 +3,9 @@ import {Document} from "mongoose"
 
 export interface UserHistorySchema extends Document {
     user: mongoose.ObjectId;
-    token: string;
     ipAddress: string;
     modifDate: Date;
-    modifiedEntity: mongoose.ObjectId;
     action: string;
+    modifiedEntity: mongoose.ObjectId;
     fields: object;
 }

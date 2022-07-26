@@ -53,10 +53,11 @@ export class MongooseDBDriver implements DBDriver {
         LogHelper.info(`[BD] Connexion à la base de données structurée, ouverte et liée ...`);
         await this.providers.data.connect();
 
-
         this.providers.users.assign(User.getInstance());
+
         this.providers.data.assign(Personne.getInstance());
         this.providers.data.assign(Organisation.getInstance());
+
         this.providers.data.assign(Taxonomy.getInstance());
         this.providers.data.assign(UserHistory.getInstance());
 
@@ -91,12 +92,14 @@ export class MongooseDBDriver implements DBDriver {
         return null;
     }
 
+
     public getModel(name: string): any {
         if (this.db !== null && name === 'users') {
             return User.getInstance();
         }
         return null;
     }
+
 
     public onDbError(error: any) {
         LogHelper.error(error);

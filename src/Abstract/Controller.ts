@@ -2,23 +2,31 @@ import LogHelper from "../Monitoring/Helpers/LogHelper";
 import {ApiResponseContract} from "../Http/Responses/ApiResponse";
 import {StatusCodes, ReasonPhrases} from "http-status-codes";
 import {ErrorResponse} from "../Http/Responses/ErrorResponse";
-import Validator from "../Validation/Validator";
 import AbstractModel from "./Model";
 import { Service } from "../Database/Service";
 import QueryBuilder from "../Database/QueryBuilder/QueryBuilder";
 import {SuccessResponse} from "../Http/Responses/SuccessResponse";
+import UsersHistoryService from "../UserHistory/Services/UsersHistoryService";
+import UserHistory from "../UserHistory/Models/UserHistory";
+import { UserHistorySchema } from "../UserHistory/Schemas/UserHistorySchema";
+import mongoose from "mongoose";
 
-
+/**
+ * AbstractController
+ * Endpoint method for target entity that handle : create, update, delete, list, search, getInfo and getDoc.
+ */
 abstract class AbstractController {
 
     /** @abstract Service of a specific entity */
     abstract service:Service;
 
+    /** @static UserHistory Service */
+    // this is too soon. thi
+    //static userHistory:UserHistory = UserHistory.getInstance();
+    //static userHistoryService:UsersHistoryService = UsersHistoryService.getInstance(AbstractController.userHistory);
+
     /** @abstract Model of a specific entity */
     abstract entity:AbstractModel;
-
-    /** @static Instance of the validator */
-    static validator:Validator = new Validator();
 
     /**
      * @method create Create a new entity in de database based on the request.
@@ -60,7 +68,6 @@ abstract class AbstractController {
             StatusCodes.INTERNAL_SERVER_ERROR,
             'Service returned an undefined response from update'
             );
-    
     }
 
     /**
@@ -127,17 +134,51 @@ abstract class AbstractController {
         return this.entity.documentation();
     }
 
-    public createHistory():boolean {
+    public async createUserHistory(req:any, res:any, response:any, action:string):Promise<boolean> {
+
+        const userHistoryService:UsersHistoryService = UsersHistoryService.getInstance(UserHistory.getInstance());
+
         LogHelper.log("Create UserHistory");
-        //Savoir si la requête a réussie dans la bd =>
 
-            //Savoir quel est le ID user
-            //Savoir le IP Address
-            //Savoir le id de l'entité modifiée
-            //Savoir l'opération qui a été faite (/create)
-            //Savoir quel champs ont été modifié
+        //User id
+        const user:mongoose.ObjectId = req.user.id;
 
-            //Inscrire dans l'historique du user les info
+        //IP Address
+        const ipAddress = "IpAdress Bidon"
+
+        //Modification date
+        const modifDate = new Date();
+
+        //Modified entity id
+        const modifiedEntity = response._id;
+
+        //Action on the data
+        //action <---
+
+        //Set modified fields
+        let fields;
+        if (action == 'update') {
+            fields = this.entity.dataTransfertObject(req.data);
+        }
+        else {
+            fields = response.data;
+            delete fields._id;
+            delete fields.createdAt;
+            delete fields.updatedAt;
+            delete fields.__v;
+        }
+
+        const history:UserHistorySchema = {
+            "user": user,
+            "ipAddress": ipAddress,
+            "modifDate": modifDate,
+            "modifiedEntity": modifiedEntity,
+            "action": action,
+            "fields": fields,
+        } as UserHistorySchema;
+
+        //Service call to add UserHistory
+        userHistoryService.insert(history);
         return true;
     }
 }
