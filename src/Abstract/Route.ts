@@ -18,6 +18,7 @@ abstract class AbstractRoute
     public setupAuthRoutes() {
         this.routerInstance.post('/create', this.createHandler.bind(this));
         this.routerInstance.post('/update', this.updateHandler.bind(this));
+        this.routerInstance.post('/delete', this.deleteHandler.bind(this));
         return this.routerInstance;
     }
 
@@ -35,13 +36,15 @@ abstract class AbstractRoute
 
     public async createHandler(req: any, res: any): Promise<ApiResponseContract> {
         const response = await this.controllerInstance.create(req.body.data);
-        this.controllerInstance.createHistory();
+        if(response.error == false)
+            this.controllerInstance.createUserHistory(req, res, response, 'create');
         return res.status(response.code).send(response);
     }
 
     public async updateHandler(req: any, res: any): Promise<ApiResponseContract> {
         const response = await this.controllerInstance.update(req.body.data);
-        this.controllerInstance.createHistory();
+        if(response.error == false)
+            this.controllerInstance.createUserHistory(req, res, response, 'update');
         return res.status(response.code).send(response);
     }
 
@@ -57,7 +60,8 @@ abstract class AbstractRoute
 
     public async deleteHandler(req: any, res: any): Promise<ApiResponseContract> {
         const response = await this.controllerInstance.delete(req.body.data);
-        this.controllerInstance.createHistory();
+        if(response.error == false)
+            this.controllerInstance.createUserHistory(req, res, response, 'delete');
         return res.status(response.code).send(response);
     }
 

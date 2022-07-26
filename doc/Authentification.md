@@ -29,7 +29,7 @@ Code : **200** : lorsque les informations sont OK
             "username": "string",
             "avatar": "string:url",
             "name": "string",
-            "id": "string"
+            "id": "ObjectId"
         }
     }
 }

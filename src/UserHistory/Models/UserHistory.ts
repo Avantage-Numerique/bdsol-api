@@ -47,13 +47,13 @@ class UserHistory extends AbstractModel {
                 default: Date.now,
                 required: true
             },
-            modifiedEntity: {
-                type: mongoose.Types.ObjectId,
-                required: true
-            },
             action: {
                 type: String,
                 enum: ['create', 'update', 'delete'],
+                required: true
+            },
+            modifiedEntity: {
+                type: mongoose.Types.ObjectId,
                 required: true
             },
             fields: {
