@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import {Document} from "mongoose"
 
 export interface OrganisationSchema extends Document {
@@ -5,5 +6,6 @@ export interface OrganisationSchema extends Document {
     description:string;
     url:string;
     contactPoint:string;
-    fondationDate:Date
+    fondationDate:Date;
+    offer:mongoose.ObjectId
 }

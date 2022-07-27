@@ -7,6 +7,7 @@ version 0.0.5
 - [Utilisateurs](Users.md)
 - [Personnes](Personnes.md)
 - [Organisations](Organisations.md)
+- [Taxonomy](Taxonomy.md)
 
 
 ## Struture générale de l'object `JSON` à fournir lors d'une requête en `POST`.

@@ -9,6 +9,10 @@ import {OrganisationsRoutes} from './Organisations/Routes/OrganisationsRoutes'
 import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
 import {RegistrationRouter} from "./Authentification/Routes/RegistrationRoutes";
 import { TaxonomyRoutes } from "./Taxonomy/Routes/TaxonomyRoutes";
+import { UsersHistoryRoutes } from "./UserHistory/Routes/UsersHistoryRoutes";
+import {PublicUserRequest} from "./Authentification/Middleware/PublicUserRequest";
+import LogHelper from "./Monitoring/Helpers/LogHelper";
+import {ApiErrorHandler} from "./Error/Middlewares/ApiErrorHandler";
 
 /**
  * Main class for the API
@@ -16,6 +20,7 @@ import { TaxonomyRoutes } from "./Taxonomy/Routes/TaxonomyRoutes";
  */
 export default class Api {
     public express: express.Application = express();
+    public mainRouter: express.Router;
     public authRouters:any;
 
     public entitiesRoutes:Array<any>;
@@ -81,6 +86,10 @@ export default class Api {
             {
                 baseRoute: "/taxonomy",
                 manager: new TaxonomyRoutes()
+            },
+            {
+                baseRoute: "/userhistory",
+                manager: new UsersHistoryRoutes()
             }
 
         ];
@@ -94,13 +103,25 @@ export default class Api {
      */
     private _initRouter()
     {
+        LogHelper.info("Configuration des routes de l'API ...");
+        //this seeem to be a "branch" independant. Middle ware pass here, and error handling are only manage into the same "router's hierarchy" may I labled.
+        this.mainRouter = express.Router();
+
+        // Set an empty user property in Request there. Would be possible to feed with more default info.
+        this.mainRouter.use(PublicUserRequest.middlewareFunction());
+
+        // All public routes
         this._initPublicRoutes();
 
-        // @ts-ignore
-        this.express.use("/", VerifyTokenMiddleware.middlewareFunction());
-
-        //Everything under here will need authorization token present in the request Header.
+        // All authentification routes.
         this._needAuthentificationRoutes();
+
+        //Error handler. Catch error throwned and return a standardized json response about it, to be able to just throw error in between, and avoid managing json response everywhere.
+        this.mainRouter.use(ApiErrorHandler.middlewareFunction());
+
+        //assign all these routes to the app.
+        this.express.use(this.mainRouter);
+        LogHelper.info("Configuration des routes terminés");
     }
 
 
@@ -111,21 +132,21 @@ export default class Api {
     private _initPublicRoutes()
     {
         //Auth Routes
-        this.express.use("/", AuthentificationRouter);
-        this.express.use("/", RegistrationRouter);
+        this.mainRouter.use("/", AuthentificationRouter);
+        this.mainRouter.use("/", RegistrationRouter);
 
         //main log and feedback from the API
-        this.express.use("/", ApiRouter);
+        this.mainRouter.use("/", ApiRouter);
 
         //Tools the manage the health of the API
-        this.express.use("/", HealthCheckRouter);
+        this.mainRouter.use("/", HealthCheckRouter);
 
         /**
          * Init all the entities routes from theirs managers.
          */
         for (const route of this.entitiesRoutes)
         {
-            this.express.use(
+            this.mainRouter.use(
                 route.baseRoute,
                 route.manager.setupPublicRoutes()
             );
@@ -144,7 +165,8 @@ export default class Api {
          */
         for (const route of this.entitiesRoutes)
         {
-            this.express.use(
+            route.manager.routerInstanceAuthentification.use(VerifyTokenMiddleware.middlewareFunction());
+            this.mainRouter.use(
                 route.baseRoute,
                 route.manager.setupAuthRoutes()
             );

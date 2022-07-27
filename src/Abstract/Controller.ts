@@ -2,23 +2,31 @@ import LogHelper from "../Monitoring/Helpers/LogHelper";
 import {ApiResponseContract} from "../Http/Responses/ApiResponse";
 import {StatusCodes, ReasonPhrases} from "http-status-codes";
 import {ErrorResponse} from "../Http/Responses/ErrorResponse";
-import Validator from "../Validation/Validator";
 import AbstractModel from "./Model";
 import { Service } from "../Database/Service";
 import QueryBuilder from "../Database/QueryBuilder/QueryBuilder";
 import {SuccessResponse} from "../Http/Responses/SuccessResponse";
+import UsersHistoryService from "../UserHistory/Services/UsersHistoryService";
+import UserHistory from "../UserHistory/Models/UserHistory";
+import { UserHistorySchema } from "../UserHistory/Schemas/UserHistorySchema";
+import mongoose from "mongoose";
 
-
+/**
+ * AbstractController
+ * Endpoint method for target entity that handle : create, update, delete, list, search, getInfo and getDoc.
+ */
 abstract class AbstractController {
 
     /** @abstract Service of a specific entity */
     abstract service:Service;
 
+    /** @static UserHistory Service */
+    // this is too soon. thi
+    //static userHistory:UserHistory = UserHistory.getInstance();
+    //static userHistoryService:UsersHistoryService = UsersHistoryService.getInstance(AbstractController.userHistory);
+
     /** @abstract Model of a specific entity */
     abstract entity:AbstractModel;
-
-    /** @static Instance of the validator */
-    static validator:Validator = new Validator();
 
     /**
      * @method create Create a new entity in de database based on the request.
@@ -26,21 +34,14 @@ abstract class AbstractController {
      * @return {ApiResponseContract} Promise
     */
     public async create(requestData:any):Promise<ApiResponseContract> {
-        const messageValidate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("create"));
-        if (!messageValidate.isValid)
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                messageValidate.message
-            );
-
-        const formatedData = this.entity.formatRequestDataForDocument(requestData);
-        const createdDocumentResponse = await this.service.insert(formatedData);
+        LogHelper.log("Controller create : ", requestData);
+        const createdDocumentResponse = await this.service.insert(requestData);
 
         if (createdDocumentResponse !== undefined)
             return createdDocumentResponse;
 
         LogHelper.debug("Service response from insert is undefined");
+
         return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
             StatusCodes.INTERNAL_SERVER_ERROR,
@@ -55,16 +56,8 @@ abstract class AbstractController {
      * @return {ApiResponseContract} Promise
      */
     public async update(requestData:any):Promise<ApiResponseContract> {
-        const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("update"));
-        if (!messageUpdate.isValid)
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                messageUpdate.message
-                );
-
-        const formatedData = this.entity.formatRequestDataForDocument(requestData);
-        const updatedModelResponse:any = await this.service.update(requestData.id, formatedData);
+        LogHelper.log("Controller update : ", requestData);
+        const updatedModelResponse:any = await this.service.update(requestData);
 
         if (updatedModelResponse !== undefined)
             return updatedModelResponse;
@@ -75,7 +68,6 @@ abstract class AbstractController {
             StatusCodes.INTERNAL_SERVER_ERROR,
             'Service returned an undefined response from update'
             );
-    
     }
 
     /**
@@ -84,15 +76,8 @@ abstract class AbstractController {
      * @default emptyRequest : Return the first document.
      * @return {ApiResponseContract} Promise containing search document
     */
-    public async search(requestData:any):Promise<ApiResponseContract> {  
-        const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("search"), true);
-        if (!messageUpdate.isValid)
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                messageUpdate.message
-            );
-
+    public async search(requestData:any):Promise<ApiResponseContract> {
+        LogHelper.log("Controller search : ", requestData);
         const query = QueryBuilder.build(requestData);
         return await this.service.get(query);
     }
@@ -104,14 +89,7 @@ abstract class AbstractController {
      * @return {ApiResponseContract} Promise containing a list of documents
     */
     public async list(requestData:any):Promise<ApiResponseContract> {
-        const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("list"), true);
-        if (!messageUpdate.isValid)
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                messageUpdate.message
-                );
-
+        LogHelper.log("Controller list : ", requestData);
         const query = QueryBuilder.build(requestData);
         return await this.service.all(query);
     }
@@ -123,13 +101,7 @@ abstract class AbstractController {
      * @return {ApiResponseContract} Promise
     */
     public async delete(requestData:any):Promise<ApiResponseContract> {
-        const messageUpdate = AbstractController.validator.validateData(requestData, this.entity.RuleSet("delete"));
-        if (!messageUpdate.isValid)
-            return ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                messageUpdate.message
-                );
+        LogHelper.log("Controller delete : ", requestData);
         return await this.service.delete(requestData.id);
     }
 
@@ -141,6 +113,7 @@ abstract class AbstractController {
      * @return {ApiResponseContract} Promise containing rules and attributes for every field of the entity
     */
     public async getInfo(requestData:any):Promise<ApiResponseContract> {
+        LogHelper.log("Controller getInfo : ", requestData);
         const routes = ["create","update","list","search","delete","getinfo"]
         if(!routes.includes(requestData.route)) {
             requestData.route = "default";
@@ -157,7 +130,56 @@ abstract class AbstractController {
     }
 
     public async getDoc():Promise<any> {
+        LogHelper.log("Route getDoc : ");
         return this.entity.documentation();
+    }
+
+    public async createUserHistory(req:any, res:any, response:any, action:string):Promise<boolean> {
+
+        const userHistoryService:UsersHistoryService = UsersHistoryService.getInstance(UserHistory.getInstance());
+
+        LogHelper.log("Create UserHistory");
+
+        //User id
+        const user:mongoose.ObjectId = req.user.id;
+
+        //IP Address
+        const ipAddress = "IpAdress Bidon"
+
+        //Modification date
+        const modifDate = new Date();
+
+        //Modified entity id
+        const modifiedEntity = response._id;
+
+        //Action on the data
+        //action <---
+
+        //Set modified fields
+        let fields;
+        if (action == 'update') {
+            fields = this.entity.dataTransfertObject(req.data);
+        }
+        else {
+            fields = response.data;
+            delete fields._id;
+            delete fields.createdAt;
+            delete fields.updatedAt;
+            delete fields.__v;
+        }
+
+        const history:UserHistorySchema = {
+            "user": user,
+            "ipAddress": ipAddress,
+            "modifDate": modifDate,
+            "modifiedEntity": modifiedEntity,
+            "action": action,
+            "fields": fields,
+        } as UserHistorySchema;
+
+        //Service call to add UserHistory
+        userHistoryService.insert(history);
+        return true;
     }
 }
 export default AbstractController;

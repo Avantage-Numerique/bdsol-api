@@ -1,7 +1,5 @@
 Retour à la base de [Documention de l'API](documentation-api.md)
 
----
-
 # Personnes
 
 ## URL définies
@@ -19,7 +17,8 @@ Retour à la base de [Documention de l'API](documentation-api.md)
               "lastName": { "type": "string" },
               "firstName": { "type": "string" },
               "nickname": { "type": "string" },
-              "description": { "type": "string" }
+              "description": { "type": "string" },
+              "occupation": { "type": ["ObjectId"] }
           },
           "required": ["lastName","firstName"]
       },
@@ -38,11 +37,12 @@ Retour à la base de [Documention de l'API](documentation-api.md)
       "data": {
           "type": "object",
           "properties": {
-              "id":{ "type": "objectID" },
+              "id":{ "type": "ObjectId" },
               "lastName": { "type": "string" },
               "firstName": { "type": "string" },
               "nickname": { "type": "string" },
-              "description": { "type": "string" }
+              "description": { "type": "string" },
+              "occupation": { "type": ["ObjectId"] }
           },
           "required": ["id"]
       },
@@ -67,11 +67,12 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte (<=) afin de trouver,
       "data": {
           "type": "object",
           "properties": {
-              "id":{ "type": "objectID" },
+              "id":{ "type": "ObjectId" },
               "lastName": { "type": "string" },
               "firstName": { "type": "string" },
               "nickname": { "type": "string" },
-              "description": { "type": "string" }
+              "description": { "type": "string" },
+              "occupation": { "type": ["ObjectId"] }
           }
       },
       "required": ["data"]
@@ -89,11 +90,12 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/personnes/sea
       "data": {
           "type": "object",
           "properties": {
-              "id":{ "type": "objectID" },
+              "id":{ "type": "ObjectId" },
               "lastName": { "type": "string" },
               "firstName": { "type": "string" },
               "nickname": { "type": "string" },
-              "description": { "type": "string" }
+              "description": { "type": "string" },
+              "occupation": { "type": ["ObjectId"] }
           },
       },
       "required": ["data"]
@@ -110,7 +112,7 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/personnes/sea
       "data": {
           "type": "object",
           "properties": {
-              "id":{ "type": "objectID" }
+              "id":{ "type": "ObjectID" }
           },
           "required": ["id"]
       },
@@ -120,8 +122,10 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/personnes/sea
 ```
 
 ### POST `/personnes/getinfo`
+
 Si une route est spécifiée (create, update, search, list, delete), les informations des champs seront retournée avec les règles de vérification des champs spécifique à la route, ainsi que les règles par défaut.
 Sinon, les champs n'auront que les règles par défaut.
+
 #### structure demandée
 ```json
 {
@@ -139,3 +143,6 @@ Sinon, les champs n'auront que les règles par défaut.
   }
 }
 ```
+
+### GET `/personnes/getdoc`
+Renvoie ce fichier de documentation

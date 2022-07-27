@@ -4,7 +4,6 @@ import type {DbProvider} from "../../Database/DatabaseDomain";
 import {UserContract} from "../Contracts/UserContract";
 import AbstractModel from "../../Abstract/Model";
 import {PasswordsController} from "../../Authentification/Controllers/PasswordsController";
-import { UserDocument } from "../Schemas/UserSchema";
 import * as fs from 'fs';
 
 export class User extends AbstractModel {
@@ -119,21 +118,6 @@ export class User extends AbstractModel {
      */
     get searchSearchableFields():object {
         return ["To be completed"];
-    }
-
-    /**
-     * @public @method formatRequestDataForDocument Format the data for this entity
-     * @param {any} requestData - Data to format
-     * @return {UserDocument} The entity formated to schema
-     */
-    public formatRequestDataForDocument(requestData:any):any {
-        return {
-            username: requestData.username,
-            email: requestData.email,
-            password: requestData.password,
-            avatar: requestData.avatar,
-            name: requestData.name
-        } as UserDocument;
     }
 
     /**

@@ -1,10 +1,6 @@
 import {Service} from "../../Database/DatabaseDomain";
 import Personne from "../Models/Personne";
 
-
-/**
- * Manage the interaction with the DB for personne. And singleton management in this scope.
- */
 class PersonnesService extends Service
 {
     /** @private @static Singleton instance */

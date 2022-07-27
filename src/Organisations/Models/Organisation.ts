@@ -33,11 +33,29 @@ class Organisation extends AbstractModel {
     /** @public Database schema */
     schema: Schema =
         new Schema<OrganisationSchema>({
-                name: {type: String, required: true},
-                description: String,
-                url: String, //String? TODO
-                contactPoint: String, //String? TODO
-                fondationDate: Date
+                name: {
+                    type: String,
+                    required: true,
+                    alias: 'nom'
+                },
+                description: {
+                    type: String,
+                    alias: 'desc'
+                },
+                url: {
+                    type: String,
+                },
+                contactPoint: {
+                    type: String,
+                },
+                fondationDate: {
+                    type: Date,
+                },
+                offer: {
+                    type: [mongoose.Types.ObjectId],
+                    default: undefined,
+                    ref: 'taxonomies'
+                }
             },
             {
                 timestamps: true
@@ -77,11 +95,19 @@ class Organisation extends AbstractModel {
                 "label": "Date de fondation",
                 "type": "Date",
                 "rules": []
+            },
+            {
+                "name": "offer",
+                "label": "Offre de service",
+                "type": "ObjectId",
+                "rules": []
             }
         ]
     };
     
-    /** @public Rule set for every field of this entity for each route */
+    /**
+     * @public Rule set for every field of this entity for each route
+     * @deprecated*/
     ruleSet:any = {
         "default":{
             "id":["idValid"],
@@ -111,22 +137,7 @@ class Organisation extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields():object {
-        return ["name", "description","url","contactPoint", "fondationDate"];
-    }
-
-    /**
-     * @public @method formatRequestDataForDocument Format the data for this entity
-     * @param {any} requestData - Data to format
-     * @return {OrganisationSchema} The entity formated to schema
-     */
-     public formatRequestDataForDocument(requestData:any):any {
-        return {
-            name: requestData.name,
-            description: requestData.description,
-            url: requestData.url,
-            contactPoint: requestData.contactPoint,
-            fondationDate: requestData.fondationDate
-        } as OrganisationSchema;
+        return ["name", "description","url","contactPoint", "fondationDate", "offer"];
     }
 
     /**
@@ -140,7 +151,8 @@ class Organisation extends AbstractModel {
             description: document.description,
             url: document.url,
             contactPoint: document.contactPoint,
-            fondationDate: document.fondationDate
+            fondationDate: document.fondationDate,
+            offer: document.offer
         }
     }
 

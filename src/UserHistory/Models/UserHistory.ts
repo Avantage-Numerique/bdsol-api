@@ -1,29 +1,29 @@
 import mongoose from "mongoose";
 import {Schema} from "mongoose";
-import { PersonneSchema } from "../Schemas/PersonneSchema";
+import { UserHistorySchema } from "../Schemas/UserHistorySchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
-import * as fs from 'fs';
 
-class Personne extends AbstractModel {
+
+class UserHistory extends AbstractModel {
 
     /** @protected @static Singleton instance */
-    protected static _instance:Personne;
+    protected static _instance:UserHistory;
 
     /** @public @static Model singleton instance constructor */
-    public static getInstance():Personne {
-        if (Personne._instance === undefined) {
-            Personne._instance = new Personne();
-            Personne._instance.initSchema();
+    public static getInstance():UserHistory {
+        if (UserHistory._instance === undefined) {
+            UserHistory._instance = new UserHistory();
+            UserHistory._instance.initSchema();
         }
-        return Personne._instance;
+        return UserHistory._instance;
     }
 
     /** @public Model lastName */
-    modelName:string = 'Personne';
+    modelName:string = 'UserHistory';
 
     /** @public Collection lastName in database*/
-    collectionName:string = 'personnes';
+    collectionName:string = 'userHistories';
 
     /** @public Connection mongoose */
     connection:mongoose.Connection;
@@ -32,26 +32,33 @@ class Personne extends AbstractModel {
 
     /** @public Database schema */
     schema:Schema =
-        new Schema<PersonneSchema>({
-            lastName: {
-                type: String,
+        new Schema<UserHistorySchema>({
+            user: {
+                type: mongoose.Types.ObjectId,
                 required: true,
-                alias: 'nom'
+                //ref: 'users' //Note, c'est dans une autre bd ?
             },
-            firstName: {
+            ipAddress: {
                 type: String,
-                required: true,
-                alias: 'prenom'
+                required: true
             },
-            nickname: {
+            modifDate: {
+                type: Date,
+                default: Date.now,
+                required: true
+            },
+            action: {
                 type: String,
-                alias: 'surnom'
+                enum: ['create', 'update', 'delete'],
+                required: true
             },
-            description: String,
-            occupation: {
-                type: [mongoose.Types.ObjectId],
-                default:undefined,
-                ref: 'taxonomies'
+            modifiedEntity: {
+                type: mongoose.Types.ObjectId,
+                required: true
+            },
+            fields: {
+                type: Object,
+                required: true
             }
         },
             {
@@ -65,35 +72,41 @@ class Personne extends AbstractModel {
         "route": "",
         "field": [
             {
-                "name": "lastName",
-                "label": "Nom",
-                "type": "String",
-                "rules": []
-            },
-            {
-                "name": "firstName",
-                "label": "Prénom",
-                "type": "String",
-                "rules": []
-            },
-            {
-                "name": "nickname",
-                "label": "Surnom",
-                "type": "String",
-                "rules": []
-            },
-            {
-                "name": "description",
-                "label": "Description",
-                "type": "String",
-                "rules": []
-            },
-            {
-                "name": "occupation",
-                "label": "Occupation",
+                "name": "user",
+                "label": "Utilisateur",
                 "type": "ObjectId",
                 "rules": []
-            }
+            },
+            {
+                "name": "token",
+                "label": "Jeton",
+                "type": "String",
+                "rules": []
+            },
+            {
+                "name": "ipAddress",
+                "label": "Adresse IP",
+                "type": "String",
+                "rules": []
+            },
+            {
+                "name": "modifDate",
+                "label": "Date de modification",
+                "type": "Date",
+                "rules": []
+            },
+            {
+                "name": "modifiedEntity",
+                "label": "Entité modifiée",
+                "type": "ObjectId",
+                "rules": []
+            },
+            {
+                "name": "fields",
+                "label": "Champs modifiés",
+                "type": "[Object]",
+                "rules": []
+            },
         ]
     };
 
@@ -127,7 +140,7 @@ class Personne extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields():object {
-        return ["lastName", "firstName","nickname","description", "occupation"];
+        return ["not implemented"];
     }
 
     /**
@@ -137,17 +150,13 @@ class Personne extends AbstractModel {
      */
     public dataTransfertObject(document: any) {
         return {
-            lastName: document.lastName,
-            firstName: document.firstName,
-            nickname: document.nickname,
-            description: document.description,
-            occupation: document.occupation
+            "not":"implemented"
         }
     }
 
     public async documentation():Promise<any>{
-        const response =  fs.readFileSync('/api/doc/Personnes.md', 'utf-8');
-        return response;
+        //const response =  fs.readFileSync('/api/doc/Personnes.md', 'utf-8');
+        return 'Not implemented';
    }
 }
-export default Personne;
+export default UserHistory;
