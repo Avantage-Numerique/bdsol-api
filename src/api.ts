@@ -8,8 +8,8 @@ import {PersonnesRoutes} from './Personnes/Routes/PersonnesRoutes';
 import {OrganisationsRoutes} from './Organisations/Routes/OrganisationsRoutes'
 import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
 import {RegistrationRouter} from "./Authentification/Routes/RegistrationRoutes";
-import { TaxonomyRoutes } from "./Taxonomy/Routes/TaxonomyRoutes";
-import { UsersHistoryRoutes } from "./UserHistory/Routes/UsersHistoryRoutes";
+import {TaxonomyRoutes} from "./Taxonomy/Routes/TaxonomyRoutes";
+import {UsersHistoryRoutes} from "./UserHistory/Routes/UsersHistoryRoutes";
 import {PublicUserRequest} from "./Authentification/Middleware/PublicUserRequest";
 import LogHelper from "./Monitoring/Helpers/LogHelper";
 import {ApiErrorHandler} from "./Error/Middlewares/ApiErrorHandler";

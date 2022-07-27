@@ -16,7 +16,7 @@ export class PublicUserRequest {
          * @return Promise<Response<any, Record<string, any>> | undefined>
          */
         return async function (req: Request, res: Response, next: NextFunction) {
-            LogHelper.debug('PublicUserRequest add default user in request');
+            LogHelper.info(`Public user (${req.ip}) requested : ${req.originalUrl}`);
             req.user = {
                 id: "",
                 username: "",
@@ -24,6 +24,15 @@ export class PublicUserRequest {
                 avatar: "",
                 name: "public",
                 role: "public",
+                ip: req.ip,
+                session: {
+                    ip: req.ip,
+                    ips: req.ips,
+                    originalUrl: req.originalUrl,
+                    http: req.httpVersion,
+                    httpMajor: req.httpVersionMajor,
+                    httpMinor: req.httpVersionMinor
+                }
             };
             next();
         }
