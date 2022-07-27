@@ -75,7 +75,7 @@ export class TokenController {
      * @param decoded {JwtPayload|null}
      * @protected
      */
-    protected static onVerifyToken(err:VerifyErrors|null, decoded:string|JwtPayload|undefined)
+    protected static onVerifyToken(err:VerifyErrors|null, decoded:any|JwtPayload|undefined)
     {
         if (err)
         {
@@ -86,6 +86,8 @@ export class TokenController {
         if (TokenController.isValid(decoded) &&
             TokenController.isActive(decoded))
         {
+            // we assume here,it will be an Object that we can deconstructed.
+            decoded.validated = true;
             return decoded;
         }
         throw new Error('Token format is wrong.');

@@ -54,7 +54,7 @@ export default class ServerController {
      */
     private static _setDBDriver()
     {
-        LogHelper.log(`Initiation du driver ${config.db.driver} de la base de données.`);
+        LogHelper.info(`Initiation du driver ${config.db.driver} de la base de données.`);
 
         if (config.db.driver === 'mongodb') {
             ServerController.database = new MongooseDBDriver();
@@ -84,7 +84,7 @@ export default class ServerController {
         LogHelper.info("Démarrage de l'API");
         this.api.start();
 
-        LogHelper.log('Configuration terminée, départ de l\'écoute sur le serveur');
+        LogHelper.info('Configuration terminée, départ de l\'écoute sur le serveur');
         this.server.listen(config.port);
     }
 

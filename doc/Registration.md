@@ -1,10 +1,8 @@
 Retour à la base de [Documention de l'API](documentation-api.md)
 
----
 
 # Registration
 
----
 ## POST `/register`
 
 ### structure demandé

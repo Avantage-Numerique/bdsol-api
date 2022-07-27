@@ -37,7 +37,6 @@ export default class Validator {
     private objectnotempty = new Rules.objectNotEmpty();
     private isdate = new Rules.isDate();
 
-
     /** 
      * @method validateData Validate data against a rule set
      * @note   if a rule is followed by ":" the next thing is a parameter to pass to the method
@@ -69,7 +68,7 @@ export default class Validator {
         let rule;
 
         //Object empty check
-        if(emptyOk === false) {
+        if(!emptyOk) {
             if (data == undefined || typeof data != 'object' || Object.entries(data).length == 0){
                 message += "\n L'objet à valider est vide.";
                 isValid = false;

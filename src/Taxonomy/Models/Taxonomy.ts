@@ -22,7 +22,7 @@ class Taxonomy extends AbstractModel {
     modelName:string = 'Taxonomy';
 
     /** @public Collection name in database */
-    collectionName:string = 'taxonomy';
+    collectionName:string = 'taxonomies';
 
     /** @public Connection mongoose */
     connection:mongoose.Connection;
@@ -32,13 +32,38 @@ class Taxonomy extends AbstractModel {
     /** @public Database schema */
     schema:Schema =
         new Schema<TaxonomySchema>({
-
-            name: { type: String, required: true },
-            description: String,
-            subTaxonomy:String
+            category: {
+                type: String,
+                required: [true, 'Required category (occupation, ...)'],
+                enum: ['occupation', 'skill', 'domaine', 'competence'],
+                lowercase: true,
+                trim: true,
+                index: true
+            },
+            name: {
+                type: String,
+                required: [true, 'Name required'],
+                minlength:[2, 'MinLength 2'],
+                alias: 'nom'
+            },
+            slug: {
+                type: String,
+                required: true,
+                index: true,
+                unique: true
+            },
+            description: {
+                type: String,
+                alias:'desc'
+            },
+            source: {
+                type: String
+            }
         },
             {
-                timestamps: true
+                timestamps: true,
+                strict: true,
+                collation: { locale: 'fr_CA' }
         });
 
 
@@ -48,8 +73,20 @@ class Taxonomy extends AbstractModel {
         "state": "",
         "field": [
             {
+                "name": "category",
+                "label": "Catégorie",
+                "type": "String",
+                "rules": []
+            },
+            {
                 "name": "name",
                 "label": "Nom",
+                "type": "String",
+                "rules": []
+            },
+            {
+                "name": "slug",
+                "label": "Slug",
                 "type": "String",
                 "rules": []
             },
@@ -60,7 +97,7 @@ class Taxonomy extends AbstractModel {
                 "rules": []
             },
             {
-                "name": "subTaxonomy",
+                "name": "source",
                 "label": "Sous-Taxonomie lié",
                 "type": "String",
                 "rules": []
@@ -96,20 +133,7 @@ class Taxonomy extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields():object {
-        return ["name", "description", "subtaxonomy"];
-    }
-
-    /**
-     * @public @method formatRequestDataForDocument Format the data for this entity
-     * @param {any} requestData - Data to format
-     * @return {OrganisationSchema} The entity formated to schema
-     */
-    public formatRequestDataForDocument(requestData:any):any {
-        return {
-            name: requestData.name,
-            description: requestData.description,
-            subTaxonomy: requestData.subTaxonomy
-        } as TaxonomySchema;
+        return ["category", "name", "slug", "description", "source"];
     }
 
     /**
@@ -119,9 +143,10 @@ class Taxonomy extends AbstractModel {
      */
     public dataTransfertObject(document: any) {
         return {
+            category: document.category,
             name: document.name,
-            description: document.description,
-            subTaxonomy: document.subTaxonomy,
+            slug: document.slug,
+            description: document.description
         }
     }
 

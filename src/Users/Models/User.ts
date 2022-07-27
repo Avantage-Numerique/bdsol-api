@@ -3,8 +3,6 @@ import mongoose, {Schema} from "mongoose";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import {UserContract} from "../Contracts/UserContract";
 import AbstractModel from "../../Abstract/Model";
-import {PasswordsController} from "../../Authentification/Controllers/PasswordsController";
-import { UserDocument } from "../Schemas/UserSchema";
 import * as fs from 'fs';
 import {HashingMiddleware} from "../../Authentification/Middleware/HashingMiddleware";
 
@@ -123,32 +121,20 @@ export class User extends AbstractModel {
     }
 
     /**
-     * @public @method formatRequestDataForDocument Format the data for this entity
-     * @param {any} requestData - Data to format
-     * @return {UserDocument} The entity formated to schema
-     */
-    public formatRequestDataForDocument(requestData:any):any {
-        return {
-            username: requestData.username,
-            email: requestData.email,
-            password: requestData.password,
-            avatar: requestData.avatar,
-            name: requestData.name
-        } as UserDocument;
-    }
-
-    /**
      * @public @method dataTransfertObject Format the document for the public return.
      * @param document
      * @return {any}
      */
     public dataTransfertObject(document: any):any {
         return {
+            id: document._id,
             username: document.username,
             avatar: document.avatar,
             name: document.name,
+            email: document.email,
         }
     }
+
 
     public async documentation():Promise<any> {
         return fs.readFileSync('/api/doc/Users.md', 'utf-8');

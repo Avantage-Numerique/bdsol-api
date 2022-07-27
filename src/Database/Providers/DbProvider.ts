@@ -44,7 +44,7 @@ export abstract class BaseProvider implements DbProvider {
      */
     public async connect():Promise<mongoose.Connection|undefined>
     {
-        LogHelper.log("Connect to url : ", this.url);
+        LogHelper.info("Connect to url : ", this.url);
         try {
             const connectionOptions:any = {
                 useNewUrlParser: true,
