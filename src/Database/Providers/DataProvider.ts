@@ -41,7 +41,7 @@ export class DataProvider extends BaseProvider implements DbProvider
      */
     public async connect():Promise<mongoose.Connection|undefined> {
         try {
-            LogHelper.log("[BD] DataProvider Connecting to DB");
+            LogHelper.info("[BD] DataProvider Connecting to DB");
             await super.connect();
 
             return this.connection;

@@ -41,7 +41,7 @@ export class UsersProvider extends BaseProvider implements DbProvider
      */
     public async connect():Promise<mongoose.Connection|undefined>
     {
-        LogHelper.log("UserProvider Connecting to DB");
+        LogHelper.info("UserProvider Connecting to DB");
         await super.connect();
 
         return this.connection;
