@@ -43,7 +43,7 @@ abstract class AbstractRoute
         const response:ApiResponseContract = await this.controllerInstance.create(req.body.data);
         LogHelper.debug("createHandler", req.user);
         
-        if(!response)
+        if(!response.error)
             this.controllerInstance.createUserHistory(req, res, response, 'create');
 
         return res.status(response.code).send(response);

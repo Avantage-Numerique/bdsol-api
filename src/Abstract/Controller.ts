@@ -141,7 +141,10 @@ abstract class AbstractController {
         LogHelper.log("Create UserHistory");
 
         //User id
-        const user:mongoose.ObjectId = req.user.id;
+        LogHelper.warn("User id :");
+        const user:mongoose.ObjectId = req.user.user_id;
+        LogHelper.warn(user);
+        console.log(req);
 
         //IP Address
         const ipAddress = "IpAdress Bidon"
@@ -150,23 +153,17 @@ abstract class AbstractController {
         const modifDate = new Date();
 
         //Modified entity id
-        const modifiedEntity = response._id;
+        const modifiedEntity = response.data._id;
 
         //Action on the data
         //action <---
 
         //Set modified fields
-        let fields;
-        if (action == 'update') {
-            fields = this.entity.dataTransfertObject(req.data);
-        }
-        else {
-            fields = response.data;
-            delete fields._id;
-            delete fields.createdAt;
-            delete fields.updatedAt;
-            delete fields.__v;
-        }
+        const fields = response.data;
+        delete fields._id;
+        delete fields.createdAt;
+        delete fields.updatedAt;
+        delete fields.__v;
 
         const history:UserHistorySchema = {
             "user": user,
@@ -177,6 +174,7 @@ abstract class AbstractController {
             "fields": fields,
         } as UserHistorySchema;
 
+        LogHelper.warn(history);
         //Service call to add UserHistory
         userHistoryService.insert(history);
         return true;
