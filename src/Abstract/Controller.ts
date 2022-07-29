@@ -141,13 +141,10 @@ abstract class AbstractController {
         LogHelper.log("Create UserHistory");
 
         //User id
-        LogHelper.warn("User id :");
         const user:mongoose.ObjectId = req.user.user_id;
-        LogHelper.warn(user);
-        console.log(req);
 
         //IP Address
-        const ipAddress = "IpAdress Bidon"
+        const ipAddress = req.ip;
 
         //Modification date
         const modifDate = new Date();
@@ -159,12 +156,13 @@ abstract class AbstractController {
         //action <---
 
         //Set modified fields
+        //DELETE NOT WORKING THERE
         const fields = response.data;
         delete fields._id;
         delete fields.createdAt;
         delete fields.updatedAt;
         delete fields.__v;
-
+        
         const history:UserHistorySchema = {
             "user": user,
             "ipAddress": ipAddress,
@@ -174,7 +172,6 @@ abstract class AbstractController {
             "fields": fields,
         } as UserHistorySchema;
 
-        LogHelper.warn(history);
         //Service call to add UserHistory
         userHistoryService.insert(history);
         return true;
