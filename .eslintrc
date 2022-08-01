@@ -12,7 +12,7 @@
     ],
     "rules": {
         // turn on errors for missing imports
-        "import/no-unresolved": "off",
+        "import/no-unresolved": "error",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/no-inferrable-types": "off"
