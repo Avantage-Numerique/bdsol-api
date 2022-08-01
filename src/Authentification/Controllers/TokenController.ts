@@ -1,8 +1,7 @@
 import * as jwt from "jsonwebtoken";
 import config from "../../config";
 import {JwtPayload, VerifyErrors} from "jsonwebtoken";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import {now} from "../../helpers";
+import {now} from "../../Helpers/DateTime";
 
 /**
  * Controller to manage the token operation
@@ -25,18 +24,27 @@ export class TokenController {
      * It assign the results to the callback TokenController.onVerifyToken
      * @param token
      */
-    public static verify(token:string):any
+    public static async verify(token:string):Promise<string|JwtPayload|undefined|any>
     {
-        let user;
-        jwt.verify(
-            token,
-            config.tokenSecret,
-            (err, decoded) => {
-                user = TokenController.onVerifyToken(err, decoded);
-            }
-        );
-        return user;
+        let verifiedToken;
+        try {
+            await jwt.verify(
+                token,
+                config.tokenSecret,
+                (err, decoded) => {
+                    verifiedToken = TokenController.onVerifyToken(err, decoded);
+                }
+            );
+            return verifiedToken;
+
+        } catch (error:any)
+        {
+            // escalade the erry to the next try and catch.
+            throw error;
+        }
+
     }
+
 
     /**
      * Callback of the jwt.verify, to handle the error and the decoded value in the TokenController Scope.
@@ -67,24 +75,30 @@ export class TokenController {
      * @param decoded {JwtPayload|null}
      * @protected
      */
-    protected static onVerifyToken(err:VerifyErrors|null, decoded:string|JwtPayload|undefined)
+    protected static onVerifyToken(err:VerifyErrors|null, decoded:any|JwtPayload|undefined)
     {
-        LogHelper.info("TokenController.onVerifyToken", err, decoded);
         if (err)
         {
-            LogHelper.error("TokenController.onVerifyToken error", err, decoded);
             //could be : JsonWebTokenError
             // could be : TokenExpiredError
             throw err;
         }
-        if (TokenController.isValid(decoded)) {
+        if (TokenController.isValid(decoded) &&
+            TokenController.isActive(decoded))
+        {
+            // we assume here,it will be an Object that we can deconstructed.
+            decoded.validated = true;
             return decoded;
         }
         throw new Error('Token format is wrong.');
     }
 
 
-
+    /**
+     * @Deprecated
+     * @param verifiedToken {any} Likely to be an object.
+     * @protected
+     */
     protected static updateTokenLife(verifiedToken:any):any
     {
         if (TokenController.isValid(verifiedToken) &&
@@ -94,7 +108,6 @@ export class TokenController {
             //if augment lifespan
             //add params with last updated
             //add params with the count of request
-            //
             return verifiedToken;
         }
     }

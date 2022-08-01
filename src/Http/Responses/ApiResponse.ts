@@ -5,7 +5,7 @@ export interface ApiResponseContract {
     code:number;//statusCode - ?
     message:string;
     errors:Array<any>;
-    data: object;
+    data: any;
 }
 
 export default class ApiResponse implements ApiResponseContract {

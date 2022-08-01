@@ -9,9 +9,7 @@ export * from './Contracts/Migration';
 
 export {Service} from './Service';
 
-export * from './Drivers/FakeUserDBDriver';
 export * from './Drivers/MongooseDriver';
-
 
 export * from './Providers/DataProvider';
 export * from './Providers/UsersProvider';

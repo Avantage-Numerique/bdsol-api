@@ -2,14 +2,15 @@
     {
         "infoTest":
         {
-            "name":"Update Full",
+            "name":"Update Full + add fondationDate",
             "error":false,
             "status":200
         },
-        "nom":"Petit théâtre du vieux Noranda",
+        "name":"Petit théâtre du vieux Noranda",
         "description": "Théâtre et magie",
         "url":"https://petittheatre.org/",
-        "contactPoint":"info@petittheatre.org"
+        "contactPoint":"info@petittheatre.org",
+        "fondationDate":"1999-09-10"
     },
     {
         "infoTest":
@@ -27,7 +28,7 @@
             "status":400
         },
         "id":"123456789123456789123456",
-        "nom":"Marche - e - pas"
+        "name":"Marche - e - pas"
     },
     {
         "infoTest":
@@ -37,7 +38,7 @@
             "status":400
         },
         "id":"123456",
-        "nom": "Petit f"
+        "name": "Petit f"
     },
     {
         "infoTest":
@@ -46,7 +47,7 @@
             "error":true,
             "status":400
         },
-        "nom": ""
+        "name": ""
     },
     {
         "infoTest":
@@ -55,10 +56,33 @@
             "error":false,
             "status":200
         },
-        "nom": "Oui permis",
+        "name": "Oui permis",
         "description": "",
         "url":"",
         "contactPoint":""
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update empty date",
+            "error":true,
+            "status":400
+        },
+        "name": "Oui permis",
+        "description": "afd",
+        "url":"vda",
+        "contactPoint":"",
+        "fondationDate":""
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update wrong date",
+            "error":true,
+            "status":400
+        },
+        "name": "Oui permis",
+        "fondationDate":"fdfija2434df9"
     },
     {
         "infoTest":
@@ -67,7 +91,7 @@
             "error":false,
             "status":200
         },
-        "nom":"Petit théâtre du vieux Noranda",
+        "name":"Petit théâtre du vieux Noranda",
         "description": "Théâtre et magie",
         "url":"https://petittheatre.org/",
         "contactPoint":"info@petittheatre.org"

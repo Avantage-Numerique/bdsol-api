@@ -1,5 +1,6 @@
-
-
+/**
+ * @deprecated Never implemented here this will be removed.
+ */
 export class Password {
 
     public static encrypt($password:string):string {

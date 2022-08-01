@@ -1,11 +1,12 @@
 
 // Database connection.
 import UserAuthContract from "../../Authentification/Contracts/UserAuthContract";
-import {UserContract} from "./User";
+import {UserContract} from "../Contracts/UserContract";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 
 /**
+ * @deprecated
  *  User to get in fakeuser to test authenfication wihtout have to run mongodb serveur aside. That help develop without docker.
  */
 export class FakeUserModel {
@@ -36,7 +37,7 @@ export class FakeUserModel {
 
     public static async findOne(userInfo:UserAuthContract):Promise<UserContract | undefined> {
         if (FakeUserModel.collection !== null) {
-            return FakeUserModel.collection.find(u => { return u.username === userInfo.username && u.password === userInfo.password });
+            return FakeUserModel.collection.find(u => { return u.username === userInfo.username });
         }
         LogHelper.warn('FakeUserModel collection is null');
         return undefined;

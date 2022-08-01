@@ -6,9 +6,9 @@
             "error":false,
             "status":200
         },
-        "nom":"Richard",
-        "prenom":"Jean-Marcel",
-        "surnom":"Rickette",
+        "lastName":"Richard",
+        "firstName":"Jean-Marcel",
+        "nickname":"Rickette",
         "description":"Humour noir"
     },
     {
@@ -19,9 +19,9 @@
             "status":400
         },
         "id":"123456789123456789123456",
-        "nom":"Bichard",
-        "prenom":"Kean-Marcel",
-        "surnom":"Hickette",
+        "lastName":"Bichard",
+        "firstName":"Kean-Marcel",
+        "nickname":"Hickette",
         "description":"Numour hoir"
     },
     {
@@ -32,55 +32,55 @@
             "status":400
         },
         "id":"1234567",
-        "nom":"Bichard",
-        "prenom":"Kean-Marcel",
-        "surnom":"Hickette",
+        "lastName":"Bichard",
+        "firstName":"Kean-Marcel",
+        "nickname":"Hickette",
         "description":"Numour hoir"
     },
     {
         "infoTest":
         {
-            "name":"Update no nom",
+            "name":"Update no lastName",
             "error":false,
             "status":200
         },
-        "prenom":"Jean-Marcel",
-        "surnom":"Bickette",
+        "firstName":"Jean-Marcel",
+        "nickname":"Bickette",
         "description":"Humour Blanc"
     },
     {
         "infoTest":
         {
-            "name":"Update no prenom",
+            "name":"Update no firstName",
             "error":false,
             "status":200
         },
-        "nom":"Winchester",
-        "surnom":"Lickette",
+        "lastName":"Winchester",
+        "nickname":"Lickette",
         "description":"Humour turquoise"
     },
     {
         "infoTest":
         {
-            "name":"Update empty nom",
+            "name":"Update empty lastName",
             "error":true,
             "status":400
         },
-        "nom":"",
-        "prenom":"Sylvain",
-        "surnom":"Kickette",
+        "lastName":"",
+        "firstName":"Sylvain",
+        "nickname":"Kickette",
         "description":"Humour bleu"
     },
     {
         "infoTest":
         {
-            "name":"Update empty prenom",
+            "name":"Update empty firstName",
             "error":true,
             "status":400
         },
-        "nom":"Gichard",
-        "prenom":"",
-        "surnom":"Nickette",
+        "lastName":"Gichard",
+        "firstName":"",
+        "nickname":"Nickette",
         "description":"Humour noir"
     },
     {
@@ -90,9 +90,9 @@
             "error":false,
             "status":200
         },
-        "nom":"Lavallée",
-        "prenom":"Jean-Marcel",
-        "surnom":"",
+        "lastName":"Lavallée",
+        "firstName":"Jean-Marcel",
+        "nickname":"",
         "description":""
     },
     {

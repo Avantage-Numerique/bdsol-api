@@ -1,30 +1,10 @@
 # L'API de la BDSOL
 
 ## Installation de l'api et du frontend en `dev`
-
-Les directives assument que vous vous rendez au bon endroit sur votre disque dur de travail, afin d'effectuer les commandes.
-
-1. Déterminer l'endroit sur votre environnement pour cloner et installer le projet.
-2. Se rendre dans le dossier cloner du projet `cd chemin/vers/votre/env/dev`
-3. Ensuite, cloner le repo. : <br>`git clone --recurse-submodules https://github.com/Avantage-Numerique/bdsol-api.git ./`
-4. Installer les package de l'API : `cd ./api` et ensuite `npm install`
-5. Installer les package du frontend : `cd ./frontend` et ensuite `npm install`
-6. Copier le fichier `.env.exemple` et le renommé en `.env`.
-
-* Si vous avez besoin de *Puller* le *submodule* de l'application public (*frontend*)<br>
-  sur le même chemin de dossier de base de la bdsol-api : `git submodule update --init --progress -- "frontend"`
+[Voir le répertoire pour la bdsol workspace](https://github.com/Avantage-Numerique/bdsol-workspace)
 
 ### Démarrer l'environnement de travail.
-
-#### Sans Docker
-
-1. Démarrer l'api en mode dev : `cd ./api` et ensuite `npm run serve-ts`
-  1. Il faut changer la variable d'environnement de l'API `DB_DRIVER='fakeusers'`
-2. Démarrer le frontend en mode dev : `cd ./frontend` et ensuite `npm run dev`
-
-#### Avec Docker
-1. `docker compose build`
-2. `docker compose up`
+1. `docker compose up`
 
 Note : Docker compose up, fait déjà un build en soit. Mais la première fois, c'est un peu plus prudent de regarder le processus de *build* via cette commande.
 
@@ -40,21 +20,9 @@ Lorsqu'on interagi avec la base de données à l'extérieur de Docker, dans votr
 ```url
 mongodb://localhost:27018/?readPreference=primary&appname=mongo&directConnection=true&ssl=false
 ```
-### Travailler sur le frontend à partir d'ici
-1. Lors du git clone, on copie tout les fichiers du submodule : frontend.
-2. Lorsqu'on a des modifications à pusher au répertoire original du submodule `Frontend` on doit
-```shell
-cd <MYSUBMODULE> #frontend
-git add <stuff> # si pertinent
-git commit -m "Votre commentaire en français sur vos changements." #ça sera commité dans la branche main paramétré dans le fichier .gitmodules.
-git push origin main # ça commitera vos changement dans la branche du sous-module.
-```
-#### Pour que l'équipe voit les changements, il faut commiter aussi le répertoire pour qu'il soit
-```shell
-cd .. # retour dans le repo de l'API avec le docker
-git commit -m "Mise à jour du submodule frontend"
-git push origin master # La branche principale du répertoire de l'API.
-```
+### Travailler sur le frontend
+[Voir le répertoire pour la bdsol workspace](https://github.com/Avantage-Numerique/bdsol-workspace)
+
 
 ---
 ## Utilisation de l'API
@@ -72,7 +40,6 @@ Pour gérer mieux les erreurs HTTP : voir : https://www.npmjs.com/package/http-s
 [Voir la documentation des URI définis.](api/doc/documentation-api.md)
 
 ### Début du travail pour les point de terminaison CRUD
-
 
 Code : **202** : Tout est ok, mais le serveur n'a pas terminé<br>
 À voir si on le garde, présentement dans le Service abstrait.
@@ -112,9 +79,9 @@ Version 0.0.5 : on a décidé d'utiliser Docker pour garder les containers sépa
 ## Plan de travail
 - [X] Établir un environnement reproduisable pour bien testé le front-end et le backend.
 - [X] établir les dépendances et restrictions de versions : **[Node](https://nodejs.org/fr/) 16 pour l'api et l'app**
-  - [X] Ports **`3000` frontend** et **`8000` pour API**
-  - [X] Environnement / Type de serveurs : Node pour les deux, [mongodb](https://www.mongodb.com/fr-fr) pour l'instant comme engin de base de données.
-  - [ ] Gestion des versions et des dépendances à venir pour l'API
+    - [X] Ports **`3000` frontend** et **`8000` pour API**
+    - [X] Environnement / Type de serveurs : Node pour les deux, [mongodb](https://www.mongodb.com/fr-fr) pour l'instant comme engin de base de données.
+    - [ ] Gestion des versions et des dépendances à venir pour l'API
 
 ## Objectifs
 1. Collaborer dans la mise en place de ces dépendances dans tout le `stack` de l'application.
@@ -136,7 +103,7 @@ Une des sources intéressantes sur le sujet : https://medium.com/serverlessguru/
 
 ##### Test suits
 - [Jest](https://jestjs.io/)
-  - [Enzyme](https://enzymejs.github.io/enzyme/) : test components output more easily
+    - [Enzyme](https://enzymejs.github.io/enzyme/) : test components output more easily
 - [Chai](https://www.chaijs.com/)
 - [Mocha](https://mochajs.org/)
 - [Cucumber)(https://www.elliotdenolf.com/posts/cucumberjs-with-typescript/)] Outil plus facile d'accès pour écrire des tests de façon intelligible.
@@ -150,10 +117,10 @@ Une des sources intéressantes sur le sujet : https://medium.com/serverlessguru/
 
 ## À faire
 - [ ] Contrat pour les requêtes aux services
-  - [ ] Abstrait pour fonctionner avec tous les services ?
+    - [ ] Abstrait pour fonctionner avec tous les services ?
 - [ ] Tests à faire API
-  - [ ] Endpoint Login positif, négatif
-  - [ ] Fake db driver
-  - [ ] 
+    - [ ] Endpoint Login positif, négatif
+    - [ ] Fake db driver
+    - [ ] 
 - [ ] Ajout d'un système de traduction pour les strings statique
 - [ ] Ajout d'un système de traduction pour la structure de données.

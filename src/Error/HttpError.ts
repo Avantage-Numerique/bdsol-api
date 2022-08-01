@@ -3,16 +3,16 @@ import LogHelper from "../Monitoring/Helpers/LogHelper";
 import {StatusCodes, ReasonPhrases} from "http-status-codes";
 import {ErrorResponse} from "../Http/Responses/ErrorResponse";
 
-export default class HttpError {
+export default class HttpError extends Error {
 
-    //public statusCode;
-    public response;
+    public name:any;
+    public status:any;
+    public message:string;
+    public stack:any;
+    public response:any;
 
-    constructor(response: object)
-    {
-        if (typeof response === 'object') {
-            this.response = response;
-        }
+    constructor(message:string = "Erreur") {
+        super(message);
     }
 
     /**
@@ -53,6 +53,29 @@ export default class HttpError {
             StatusCodes.NOT_IMPLEMENTED,
             message
         );
+    }
+
+
+    static Unauthorized (message: string = "")
+    {
+        const msg:string = message !== "" ? message : "Ce chemin d'accès nécessiste un token pour être utilisé.";
+
+        LogHelper.error(ReasonPhrases.UNAUTHORIZED, StatusCodes.UNAUTHORIZED, msg);
+
+        const unauthorizedError:HttpError = new HttpError(msg);
+        unauthorizedError.name = "UNAUTHORIZED";
+        unauthorizedError.status = StatusCodes.UNAUTHORIZED;
+
+        //error.stack = ;//need to get the stack.
+        /*const unauthorizedRequestError = ErrorResponse.create(
+            error,
+            StatusCodes.UNAUTHORIZED,
+            ReasonPhrases.UNAUTHORIZED,
+            {}
+        );*/
+
+        return unauthorizedError;
+        //return unauthorizedRequestError;
     }
 
 }

@@ -6,9 +6,9 @@
             "error":false,
             "status":201
         },
-        "nom":"Parent",
-        "prenom":"Jean-marc",
-        "surnom":"Mickette",
+        "lastName":"Parent",
+        "firstName":"Jean-marc",
+        "nickname":"Mickette",
         "description":"Humour"
     },
     {
@@ -18,55 +18,55 @@
             "error":false,
             "status":201
         },
-        "nom":"Tremblay",
-        "prenom":"Michel",
-        "surnom":"Dj Pro Grand Gangsta",
+        "lastName":"Tremblay",
+        "firstName":"Michel",
+        "nickname":"Dj Pro Grand Gangsta",
         "description":"La musica fiesta"
     },
     {
         "infoTest":
         {
-            "name":"Create no nom",
+            "name":"Create no lastName",
             "error":true,
             "status":400
         },
-        "prenom":"Sarah",
-        "surnom":"Le Patin Mou",
+        "firstName":"Sarah",
+        "nickname":"Le Patin Mou",
         "description":""
     },
     {
         "infoTest":
         {
-            "name":"Create no prenom",
+            "name":"Create no firstName",
             "error":true,
             "status":400
         },
-        "nom":"Daigneault",
-        "surnom":"Pikotte",
+        "lastName":"Daigneault",
+        "nickname":"Pikotte",
         "description":"Circus is love, circus is life"
     },
     {
         "infoTest":
         {
-            "name":"Create empty nom",
+            "name":"Create empty lastName",
             "error":true,
             "status":400
         },
-        "nom":"",
-        "prenom":"Adelard",
-        "surnom":"Jean-guy la moustache",
+        "lastName":"",
+        "firstName":"Adelard",
+        "nickname":"Jean-guy la moustache",
         "description":"Moustachios"
     },
     {
         "infoTest":
         {
-            "name":"Create empty prenom",
+            "name":"Create empty firstName",
             "error":true,
             "status":400
         },
-        "nom":"Boutin",
-        "prenom":"",
-        "surnom":"Prime Minister",
+        "lastName":"Boutin",
+        "firstName":"",
+        "nickname":"Prime Minister",
         "description":"Redneck"
     },
     {
@@ -76,9 +76,9 @@
             "error":false,
             "status":201
         },
-        "nom":"Croche",
-        "prenom":"Sarah",
-        "surnom":"",
+        "lastName":"Croche",
+        "firstName":"Sarah",
+        "nickname":"",
         "description":""
     },
     {
@@ -88,8 +88,8 @@
             "error":false,
             "status":201
         },
-        "nom":"Neutron",
-        "prenom":"Jimmy"
+        "lastName":"Neutron",
+        "firstName":"Jimmy"
     },
     {
         "infoTest":

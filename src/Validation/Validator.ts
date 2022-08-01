@@ -1,4 +1,4 @@
-
+import * as Rules from "./Rules";
 //add isValid - contract to limit used
 // Check if this is overkill
 
@@ -25,98 +25,97 @@
 
 export default class Validator {
 
-    public static validate(data:any, rules:any):boolean
-    {
-        let isValid = false;
-
-        for (let property in data)
-        {
-            for (let rule in rules[property])
-            {
-                //check if the data[property] rule applied
-                //rules must be set
-                //rules definition ?
-                // Sets rule from the the Model.schema
-                //isValid = isValid ?? Rules[rule].validate();
-                isValid = true;
-            }
-        }
-
-        return isValid;
-    }
-}
+    //Instantiate de rules handler
+    public isdefined = new Rules.isDefined();
+    private isnotnull = new Rules.isNotNull();
+    private isstring = new Rules.isString();
+    private isnotempty = new Rules.isNotEmpty();
+    private minlenght = new Rules.minLength();
+    private maxlength = new Rules.maxLength();
+    private idvalid = new Rules.idValid();
+    private isobject = new Rules.isObject();
+    private objectnotempty = new Rules.objectNotEmpty();
+    private isdate = new Rules.isDate();
 
 
-//"Nom" : ["notEmpty", "notNull", "notUndefined"]//Rules
+    /** 
+     * @method validateData Validate data against a rule set
+     * @note   if a rule is followed by ":" the next thing is a parameter to pass to the method
+     * @note   if fields to validate contains "gte:" or "lte:" in their beginning, values will be evaluated without it.
+     * @param {any} data - Value to validate : { "nom" : "Audet" }
+     * @param {any} ruleSet - set of rule to check for each field: { "nom":["isDefined", "isSet" ...], "prenom":[...] }
+     * @param {boolean} emptyOk - when false, Return error if object is empty 
+     * @note ruleSet is in entity model
+     * @return {object} - { isValid, message } :
+     * @desc isValid (boolean): Passed the ruleSet or not.
+     * @desc message (string) : Error or success message 
+     */
+    public validateData(data:any, ruleSet:any, emptyOk:boolean=false){
+        this.isdefined
+        .setNext(this.isnotnull)
+        .setNext(this.isstring)
+        .setNext(this.isnotempty)
+        .setNext(this.minlenght)
+        .setNext(this.maxlength)
+        .setNext(this.idvalid)
+        .setNext(this.isobject)
+        .setNext(this.objectnotempty)
+        .setNext(this.isdate);
 
-
-/*
-const
-    //(response).
-    data {
-        champs = [
-            {
-                "name": "nom",
-                "label": "Nom",
-                "type": "string",//Rich? //Longtext ?
-                "reapeatable": true,
-                "rules": ["required", "notEmpty", "notNull", "notUndefined"]
-            }
-        ]
-    }
-};*/
-
-/*
-//Dans la classe Personne:
-static validatorSchema =
-    {
-        "variables":["nom", "prenom", "surnom", "description"],
-        "notEmpty":["nom","prenom"],
-        "isSet":["nom","prenom"],
-        "notNull":["nom","prenom"],
-        "notUndefined":["nom","prenom"],
-        "minLenght":[{"nom":"2"},{"prenom":"2"}],
-        "comporte 3 voyelle":[],
-        "autre règle quelconque":[]
-    }
-
-//Dans la classe validator
-class Validator {
-    constructor(){};
-    static Validator(collection:string, requestData:any)
-    {
-        let validSchema;
-        switch(collection){
-            case "personnes":
-                validSchema = Personne.validatorSchema; break;
-            case "users":
-                validSchema = Users.validatorSchema; break;
-            default: validSchema = null;
-        }
-        if(validSchema === null)
-            return;//erreur pas de schéma
-
-        //rules
+        //in (key) / of (value)
+        //Warning : "for in" not neccesarily proceed in order
         let isValid = true;
-        let message = "";
-        message += Validator.notEmpty(validSchema.variables, validSchema.notEmpty, requestData)
-        message += Validator.isSet(validSchema.isSet, requestData)
+        let message = "Erreurs : ";
+        let rule;
 
-        //Si il y a un message, alors pas valide.
-        if(message !== "")
-            isValid = false;
+        //Object empty check
+        if(emptyOk === false) {
+            if (data == undefined || typeof data != 'object' || Object.entries(data).length == 0){
+                message += "\n L'objet à valider est vide.";
+                isValid = false;
+                return { isValid, message };
+            }
+        }
 
-        return {message, isValid};
+        //Structure : "nom":["isDefined", ...]
+        //For each field in ruleSet ("nom"...)
+        for (const field in ruleSet) {
+            //For each rule of those field ("isDefined"...)
+            for (rule of ruleSet[field]) { //do we instead => validate(data[field], ruleSet[field].pop())
+                //Set data to validate
+                let dataField = data[field];
+
+                //Remove (gte, lte) operator if needed (those are for QueryBuilder)
+                if(dataField !== undefined){
+                    if (dataField.toString().indexOf("gte:") == 0 || dataField.toString().indexOf("lte:") == 0){
+                        dataField = dataField.toString().substring(4, dataField.toString().length);
+                    }
+                }
+
+                let param = -1;
+                //If param is passed
+                if ( rule.indexOf(":") != -1) {
+                    //ex: minLenght:3  => param = 3, rule = minLength
+                    param = rule.substring(rule.indexOf(":")+1, rule.length);
+                    rule = rule.substring(0, rule.indexOf(":"));
+                }
+                
+                //Verify rule if data is there |OR| if data is not but should be (isDefined) 
+                if((dataField !== undefined && typeof dataField !== 'undefined') ||
+                    ((dataField == undefined || typeof dataField == 'undefined') && ruleSet[field].includes("isDefined"))){
+
+                    const ruleMsg = this.isdefined.handle(rule, dataField, param);
+                    if (ruleMsg != "OK") {
+                        message += ruleMsg;
+                        isValid = false;
+                    }
+                }
+            }
+        }
+        if (isValid)
+            message = "OK";
+        
+        return { isValid, message };
     }
-    private notEmpty(variables:any, schema:any, data:any):string
-    {
-        //Exemple :    schema= {"notEmpty":["nom","prenom"]}
 
-        //For each element in schema (schema = "notEmpty":[nom, prénom]),
-            //si requestData.(variables[0,1,2,3....]) contient l'élément (notEmpty => [nom, prenom])
-                //faire la vérif notEmpty sur l'élément
-                    //si erreur, message += l'élément est fautif
-        //return message;
-    }
 }
- */

@@ -1,11 +1,10 @@
+import mongoose from "mongoose";
 import {Document} from "mongoose"
 
 export interface PersonneSchema extends Document {
-    nom:string;
-    prenom:string;
-    surnom:string;
-    description:string
+    lastName:string;
+    firstName:string;
+    nickname:string;
+    description:string;
+    occupation:[mongoose.ObjectId];
 }
-
-
-

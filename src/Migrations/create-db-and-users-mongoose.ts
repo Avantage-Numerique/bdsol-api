@@ -1,5 +1,5 @@
 import LogHelper from "../Monitoring/Helpers/LogHelper";
-import {fakeUsers} from "../Users/fakeUsers";
+import {fakeUser} from "../Users/fakeUser";
 import config from "../config";
 import {DbProvider, Service} from "../Database/DatabaseDomain";
 import type {MigrationContract} from "../Database/DatabaseDomain";
@@ -19,7 +19,8 @@ export default class CreateDbAndUsersMongoose implements MigrationContract {
     public async conditions():Promise<boolean> {
         if (this.provider !== null)
         {
-            const userCount:number = await this.provider.connection.collection(User.collectionName).count();
+            const userModel:User = User.getInstance();
+            const userCount:number = await this.provider.connection.collection(userModel.collectionName).count();
 
             LogHelper.info(`Conditions for Migration ${CreateDbAndUsersMongoose.name} checks`, "usercount", userCount);
             return config.environnement === 'development' &&
@@ -50,7 +51,7 @@ export default class CreateDbAndUsersMongoose implements MigrationContract {
             if (this.provider.service !== null && this.provider.service.model !== null) {
                 LogHelper.log(`Aucun utilisateurs de créer, on ajoute deux utilisateurs test pour l'environnement ${config.environnement}`);
 
-                await this.provider.service.model.insertMany(fakeUsers);
+                await this.provider.service.insert(fakeUser);
                 return true;
             }
         }

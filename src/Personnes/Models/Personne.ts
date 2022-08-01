@@ -1,88 +1,153 @@
 import mongoose from "mongoose";
-import {Schema} from "mongoose"
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import {Schema} from "mongoose";
 import { PersonneSchema } from "../Schemas/PersonneSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
-import {DataProvider} from "../../Database/DatabaseDomain";
+import AbstractModel from "../../Abstract/Model";
+import * as fs from 'fs';
 
-class Personne {
-    
-    /** @static Nom du modèle */
-    static modelName:string = 'Personne';
+class Personne extends AbstractModel {
 
-    /** @static Nom de la collection dans la base de donnée */
-    static collectionName:string = 'personnes';
+    /** @protected @static Singleton instance */
+    protected static _instance:Personne;
 
-    /** @static Connection mongoose */
-    static connection:mongoose.Connection;
+    /** @public @static Model singleton instance constructor */
+    public static getInstance():Personne {
+        if (Personne._instance === undefined) {
+            Personne._instance = new Personne();
+            Personne._instance.initSchema();
+        }
+        return Personne._instance;
+    }
 
-    static provider:DbProvider;
+    /** @public Model lastName */
+    modelName:string = 'Personne';
 
-    /** @static Schéma pour la base de donnée */
-    static schema:Schema =
+    /** @public Collection lastName in database*/
+    collectionName:string = 'personnes';
+
+    /** @public Connection mongoose */
+    connection:mongoose.Connection;
+    provider:DbProvider;
+    mongooseModel:mongoose.Model<any>;
+
+    /** @public Database schema */
+    schema:Schema =
         new Schema<PersonneSchema>({
-
-            //_id: Schema.Types.ObjectId,
-            nom: { type: String, required: true },
-            prenom: { type: String, required: true },
-            surnom: String,
-            description: String
+            lastName: {
+                type: String,
+                required: true,
+                alias: 'nom'
+            },
+            firstName: {
+                type: String,
+                required: true,
+                alias: 'prenom'
+            },
+            nickname: {
+                type: String,
+                alias: 'surnom'
+            },
+            description: String,
+            occupation: {
+                type: [mongoose.Types.ObjectId],
+                default:undefined,
+                ref: 'taxonomies'
+            }
         },
             {
                 timestamps: true
         });
-    
-    /**
-     * @method isNomOrPrenomValid Vérifie les conditions d'insertion dans la base de donnée d'un nom ou d'un prénom.
-     * @param {string} nom - Nom ou prénom à valider
-     * @return {boolean} isValid
-     */
-    static isNomOrPrenomValid(nom:string):boolean {
-        return (nom.length >= 2);//nom will always be a string selon mon IDE : typeof nom === "string" &&
-    }
 
-    /**
-     * @static method
-     * @method initSchema
-     */
-    static initSchema() {
-        if (Personne.providerIsSetup()) {
-            Personne.provider.connection.model(Personne.modelName, Personne.schema);
+
+    /** @public Used to return attributes and rules for each field of this entity. */
+    fieldInfo =
+    {
+        "route": "",
+        "field": [
+            {
+                "name": "lastName",
+                "label": "Nom",
+                "type": "String",
+                "rules": []
+            },
+            {
+                "name": "firstName",
+                "label": "Prénom",
+                "type": "String",
+                "rules": []
+            },
+            {
+                "name": "nickname",
+                "label": "Surnom",
+                "type": "String",
+                "rules": []
+            },
+            {
+                "name": "description",
+                "label": "Description",
+                "type": "String",
+                "rules": []
+            },
+            {
+                "name": "occupation",
+                "label": "Occupation",
+                "type": "ObjectId",
+                "rules": []
+            }
+        ]
+    };
+
+    /** @public Rule set for every field of this entity for each route */
+    ruleSet:any = {
+        "default":{
+            "id":["idValid"],
+            "lastName":["isString"],
+            "firstName":["isString"],
+            "nickname":["isString"],
+            "description":["isString"]
+        },
+        "create":{
+            "lastName":["isDefined", "minLength:2"],
+            "firstName":["isDefined", "minLength:2"],
+        },
+        "update":{
+            "id":["isDefined"]
+        },
+        "search":{
+        },
+        "list":{
+        },
+        "delete":{
+            "id":["isDefined"]
         }
     }
 
     /**
-     * @static Method
-     * @method getInstance
-     * @return model
+     * @get the field that are searchable.
+     * @return {Object} the field slug/names.
      */
-    static getInstance() {
-        Personne.provider = DataProvider.getInstance();//must have
-        if (Personne.providerIsSetup()) {
-            Personne.initSchema();
-            return Personne.provider.connection.model(Personne.modelName);
-        }
-        LogHelper.error("Personne Provider is not setup. Can't get Personne's model",
-            Personne.provider,
-            typeof Personne.provider,
-            Personne.provider.connection,
-            typeof Personne.provider.connection
-        );
-        throw new Error("Personne Provider is not setup. Can't get Personne's model");
-    }
-
-    /**
-     * @static method
-     * @method providerIsSetup
-     * @return {boolean} isSetup
-     */
-    static providerIsSetup():boolean {
-        return Personne.provider !== undefined && Personne.provider.connection !== undefined;
-    }
-
     get searchSearchableFields():object {
-        //eturn {"nom":{},"prenom":{},"surnom":{},"description":{}};
-        return ["nom", "prenom","surnom","description"];
+        return ["lastName", "firstName","nickname","description", "occupation"];
     }
+
+    /**
+     * @public @method dataTransfertObject Format the document for the public return.
+     * @param document
+     * @return {any}
+     */
+    public dataTransfertObject(document: any) {
+        return {
+            lastName: document.lastName,
+            firstName: document.firstName,
+            nickname: document.nickname,
+            description: document.description,
+            occupation: document.occupation
+        }
+    }
+
+    public async documentation():Promise<any>{
+        const response =  fs.readFileSync('/api/doc/Personnes.md', 'utf-8');
+        return response;
+   }
 }
 export default Personne;

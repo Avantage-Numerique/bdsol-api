@@ -8,6 +8,10 @@ import {DataProvider} from "../Providers/DataProvider";
 import {User} from "../../Users/UsersDomain";
 
 import CreateDbAndUsersMongoose from "../../Migrations/create-db-and-users-mongoose";
+import Personne from "../../Personnes/Models/Personne";
+import Organisation from "../../Organisations/Models/Organisation";
+import Taxonomy from "../../Taxonomy/Models/Taxonomy";
+import UserHistory from "../../UserHistory/Models/UserHistory";
 
 export class MongooseDBDriver implements DBDriver {
 
@@ -49,6 +53,14 @@ export class MongooseDBDriver implements DBDriver {
         LogHelper.info(`[BD] Connexion à la base de données structurée, ouverte et liée ...`);
         await this.providers.data.connect();
 
+        this.providers.users.assign(User.getInstance());
+
+        this.providers.data.assign(Personne.getInstance());
+        this.providers.data.assign(Organisation.getInstance());
+
+        this.providers.data.assign(Taxonomy.getInstance());
+        this.providers.data.assign(UserHistory.getInstance());
+
         await this.generateFakeUsers();
     }
 
@@ -80,12 +92,14 @@ export class MongooseDBDriver implements DBDriver {
         return null;
     }
 
+
     public getModel(name: string): any {
         if (this.db !== null && name === 'users') {
             return User.getInstance();
         }
         return null;
     }
+
 
     public onDbError(error: any) {
         LogHelper.error(error);

@@ -1,66 +1,164 @@
 import mongoose from "mongoose";
 import {Schema} from "mongoose";
 import {OrganisationSchema} from "../Schemas/OrganisationSchema";
-import {DbProvider, DataProvider} from "../../Database/DatabaseDomain";
+import {DbProvider} from "../../Database/DatabaseDomain";
+import AbstractModel from "../../Abstract/Model";
+import * as fs from 'fs';
 
+class Organisation extends AbstractModel {
 
-class Organisation {
+    /** @protected @static Singleton instance of model Organisation */
+    protected static _instance:Organisation;
 
-    /** @static Nom du modèle */
-    static modelName: string = "Organisation";
+    /** @public @static Model singleton instance constructor */
+    public static getInstance():Organisation {
+        if (Organisation._instance === undefined) {
+            Organisation._instance = new Organisation();
+            Organisation._instance.initSchema();
+        }
+        return Organisation._instance;
+    }
 
-    /** @static Nom de la collection dans la base de données */
-    static collectionName: string = 'organisations';
+    /** @public Model name */
+    modelName: string = "Organisation";
 
-    /** @static Connection mongoose */
-    static connection: mongoose.Connection;
+    /** @public Collection name in database */
+    collectionName: string = 'organisations';
+    
+    /** @public Connection mongoose */
+    connection: mongoose.Connection;
+    mongooseModel:mongoose.Model<any>;
+    provider: DbProvider;
 
-    /** @static Provider */
-    static provider: DbProvider;
-
-    /** @static Schéma pour la base de donnée */
-    static schema: Schema =
+    /** @public Database schema */
+    schema: Schema =
         new Schema<OrganisationSchema>({
-                nom: {type: String, required: true},
-                description: String,
-                url: String, //String? TODO
-                contactPoint: String //String? TODO
+                name: {
+                    type: String,
+                    required: true,
+                    alias: 'nom'
+                },
+                description: {
+                    type: String,
+                    alias: 'desc'
+                },
+                url: {
+                    type: String,
+                },
+                contactPoint: {
+                    type: String,
+                },
+                fondationDate: {
+                    type: Date,
+                },
+                offer: {
+                    type: [mongoose.Types.ObjectId],
+                    default: undefined,
+                    ref: 'taxonomies'
+                }
             },
             {
                 timestamps: true
             });
-
+    
+    /** @public Used to return attributes and rules for each field of this entity. */
+    fieldInfo =
+    {
+        "route": "",
+        "field": [
+            {
+                "name": "name",
+                "label": "name",
+                "type": "String",
+                "rules": []
+            },
+            {
+                "name": "description",
+                "label": "Description",
+                "type": "String",
+                "rules": []
+            },
+            {
+                "name": "url",
+                "label": "Site internet",
+                "type": "String",
+                "rules": []
+            },
+            {
+                "name": "contactPoint",
+                "label": "Point de contact",
+                "type": "String",
+                "rules": []
+            },
+            {
+                "name": "fondationDate",
+                "label": "Date de fondation",
+                "type": "Date",
+                "rules": []
+            },
+            {
+                "name": "offer",
+                "label": "Offre de service",
+                "type": "ObjectId",
+                "rules": []
+            }
+        ]
+    };
+    
     /**
-     * @static method
-     * @method initSchema
-     */
-    static initSchema() {
-        if (Organisation.providerIsSetup()) {
-            Organisation.provider.connection.model(Organisation.modelName, Organisation.schema);
+     * @public Rule set for every field of this entity for each route
+     * @deprecated*/
+    ruleSet:any = {
+        "default":{
+            "id":["idValid"],
+            "name":["isString"],
+            "description":["isString"],
+            "url":["isString"],
+            "contactPoint":["isString"],
+            "fondationDate":["isDate"]
+        },
+        "create":{
+            "name":["isDefined", "minLength:2"],
+        },
+        "update":{
+            "id":["isDefined"]
+        },
+        "search":{
+        },
+        "list":{
+        },
+        "delete":{
+            "id":["isDefined"]
         }
     }
 
     /**
-     * @static method
-     * @method getInstance
+     * @get the field that are searchable.
+     * @return {Object} the field slug/names.
      */
-    static getInstance() {
-        Organisation.provider = DataProvider.getInstance();//must have
-        if (Organisation.providerIsSetup()) {
-            Organisation.initSchema();
-            return Organisation.provider.connection.model(Organisation.modelName);
-        }
-        throw new Error("Organisation Provider is not setup. Can't get Organisation's model");
+    get searchSearchableFields():object {
+        return ["name", "description","url","contactPoint", "fondationDate", "offer"];
     }
 
     /**
-     * @static method
-     * @method providerIsSetup
-     * @return {boolean} isSetup
+     * @public @method dataTransfertObject Format the document for the public return.
+     * @param document
+     * @return {any}
      */
-    static providerIsSetup(): boolean {
-        return Organisation.provider !== undefined && Organisation.provider.connection !== undefined;
+    public dataTransfertObject(document: any):any {
+        return {
+            name: document.name,
+            description: document.description,
+            url: document.url,
+            contactPoint: document.contactPoint,
+            fondationDate: document.fondationDate,
+            offer: document.offer
+        }
     }
+
+    public async documentation():Promise<any>{
+        const response =  fs.readFileSync('/api/doc/Organisations.md', 'utf-8');
+        return response;
+   }
 }
-
 export default Organisation;

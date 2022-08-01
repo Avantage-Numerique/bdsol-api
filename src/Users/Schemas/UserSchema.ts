@@ -1,82 +1,129 @@
 import {Schema, Document} from "mongoose"
+import {PasswordsController} from "../../Authentification/Controllers/PasswordsController";
 
 /**
  *
  */
 export interface UserDocument extends Document {
-    username:string;
-    email:string;
-    password:string;
-    avatar:string;
-    name:string;
+    username: string;
+    email: string;
+    password: string;
+    avatar: string;
+    name: string;
     role: string;
 }
 
+export interface UserRegistrationRequiredData {
+    username: string;
+    email: string;
+    password: string;
+}
+
+export const UserValidation:any = {
+    username: ["isString", "required", "unique"],
+    email: ["isString", "required", "unique"],
+    password: ["isString", "isUnique"],
+    avatar: ["isString", "isUrl"],
+    name: ["isString"],
+    role: ["isString"]
+};
+
+/**
+ * @deprecated
+ */
 export class UserSchema {
 
-    private _username:string;
-    private _email:string;
-    private _password:string;
-    private _avatar:string;
-    private _name:string;
-    private _role:string;
+    private _username: string;
+    private _email: string;
+    private _password: string;
+    private _avatar: string;
+    private _name: string;
+    private _role: string;
 
-    static documentSchema:Schema<UserDocument>;
+    static documentSchema: Schema<UserDocument>;
 
-    constructor (props:any) {
-        //this.initGetterSetter();
-        // make this as a loop from documentSchema to keep this as dry as it should.
+    constructor(props: any) {
         this.username = props.username || "no username";
-        this.email = props.email || "no username";
-        this.password = props.password || "no username";
-        this.avatar = props.avatar || "no username";
-        this.name = props.name || "no username";
-        this.role = props.role || "no username";
-
-        //this.RestrictAccessToUnderscoreVarsFromExternalScope(this);
-        //this.initGetterSetter();
+        this.email = props.email || "no email";
+        this.password = props.password || "no password";
+        this.avatar = props.avatar || "no avatar";
+        this.name = props.name || "no name";
+        this.role = props.role || "no role";
     }
 
     /**
-     * Mongoose schema getter as a singleton.
+     * Set the event to adjust data to the current document on Pre.
+     * doc : https://mongoosejs.com/docs/typescript/schemas.html
+     * à relire : https://thecodebarbarian.com/working-with-mongoose-in-typescript.html
      */
-    static schema():Schema<UserDocument> {
-
-        if (UserSchema.documentSchema === undefined) {
-
-            UserSchema.documentSchema = new Schema<UserDocument>({
-                username: { type: String, required: true, unique: true },
-                email: { type: String, required: true, unique: true },
-                password: { type: String, required: true },
-                avatar: String,
-                name: String,
-                role: String
-            },
+    static async registerPreEvents() {
+        if (UserSchema.documentSchema !== undefined)
+        {
+            // CREATE users, we hash the password.
+            await UserSchema.documentSchema.pre('save', async function (next: any): Promise<any>
             {
-                timestamps: true
+                const user: any = this;
+                if (!user.isModified('password')) {
+                    return next();
+                }
+                try {
+                    user.password = await PasswordsController.hash(user.password);
+                } catch (error: any) {
+                    throw error;
+                }
+                return next();
+            });
+
+            // UpdateOne users, we hash the password.
+            //await UserSchema.documentSchema.pre('UpdateOne', UserSchema.hashPasswordBeforeSaving);
+            //await UserSchema.documentSchema.pre('save', UserSchema.hashPasswordBeforeSaving);
+            await UserSchema.documentSchema.pre('UpdateOne', async function (next: any): Promise<any>
+            {
+                const user: any = this;
+                if (!user.isModified('password')) {
+                    return next();
+                }
+                try {
+                    user.password = await PasswordsController.hash(user.password);
+                } catch (error: any) {
+                    throw error;
+                }
+                return next();
             });
         }
-        return UserSchema.documentSchema;
+    }
+
+    // hashPasswordBeforeSaving
+    static async hashPasswordBeforeSaving(next:any):Promise<any>
+    {
+        const user: any = this;
+        if (!user.isModified('password')) {
+            return next();
+        }
+        try {
+            user.password = await PasswordsController.hash(user.password);
+        } catch (error: any) {
+            throw error;
+        }
+        return next();
     }
 
 
     /**
+     * @deprecated ???
      * Premier jet de retour de données public, versus privé.
      **/
-    /*public publicRouteData() {
-        let schema = UserSchema.schema();
+    public static dataTransfertObject(document: any) {
         return {
-            "user" : {
-                username: this.username,
-                email: this.email,
-                avatar: this.avatar,
-                name: this.name,
-            }
+            username: document.username,
+            avatar: document.avatar,
+            name: document.name,
+            id: document._id
         }
-    }*/
+    }
 
 
-    public get username():string {
+    public get username(): string {
         return this._username;
     }
 
@@ -84,7 +131,7 @@ export class UserSchema {
         this._username = username;
     }
 
-    public get password():string {
+    public get password(): string {
         return this._password;
     }
 
@@ -92,7 +139,7 @@ export class UserSchema {
         this._password = password;
     }
 
-    public get email():string {
+    public get email(): string {
         return this._email;
     }
 
@@ -100,15 +147,15 @@ export class UserSchema {
         this._email = email;
     }
 
-    public get avatar():string {
-        return this._email;
+    public get avatar(): string {
+        return this._avatar;
     }
 
     public set avatar(avatar) {
         this._avatar = avatar;
     }
 
-    public get name():string {
+    public get name(): string {
         return this._email;
     }
 
@@ -116,7 +163,7 @@ export class UserSchema {
         this._name = name;
     }
 
-    public get role():string {
+    public get role(): string {
         return this._role;
     }
 
@@ -125,20 +172,6 @@ export class UserSchema {
     }
 }
 
-//Mongoose pre
-/*
-
-user_schema.pre('save', function (next) {
-  const user = this;
-  if (!user.isModified('password')) return next();
-  bcrypt.hash(user.password, SALT_WORK_FACTOR, function (error, hash) {
-    if (error) return next(error);
-    user.password = hash;
-    console.log(hash); // properly consoles the hash
-    next();
-  });
-});
- */
 
 /*
     private RestrictAccessToUnderscoreVarsFromExternalScope(obj) {

@@ -2,13 +2,17 @@ import mongoose from "mongoose";
 import config from "../../config";
 import type {DbProvider} from "./DbProvider";
 import {BaseProvider} from "./DbProvider";
-import {User, UsersService} from "../../Users/UsersDomain";
+import {UsersService} from "../../Users/UsersDomain";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import AbstractModel from "../../Abstract/Model";
 
 
-export class UsersProvider extends BaseProvider implements DbProvider {
+export class UsersProvider extends BaseProvider implements DbProvider
+{
 
     private static _singleton:UsersProvider;
+
+    _models:Array<AbstractModel>;
 
     constructor(name='')
     {
@@ -17,6 +21,10 @@ export class UsersProvider extends BaseProvider implements DbProvider {
     }
 
 
+    /**
+     * Singleton getter in the scope of the concrete provider.
+     * @return {DbProvider}
+     */
     public static getInstance():DbProvider|undefined
     {
         if (UsersProvider._singleton === undefined) {
@@ -26,14 +34,29 @@ export class UsersProvider extends BaseProvider implements DbProvider {
     }
 
 
+    /**
+     * Connect this provider to mongoose.
+     * @async
+     * @return {mongoose.Connection}
+     */
     public async connect():Promise<mongoose.Connection|undefined>
     {
-        LogHelper.log("UserProvider Connecting to DB");
+        LogHelper.info("UserProvider Connecting to DB");
         await super.connect();
 
-        User.connection = this.connection;
-        this.service = UsersService.getInstance(User.getInstance());
-
         return this.connection;
+    }
+
+
+    /**
+     * Setup the mode with this provider properties: Connection, provider and setup this.service.
+     * @param model
+     */
+    public assign(model:AbstractModel):void
+    {
+        this.addModel(model);
+        model.connection = this.connection;
+        model.provider = this;
+        this.service = UsersService.getInstance(model);
     }
 }

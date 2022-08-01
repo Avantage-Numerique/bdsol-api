@@ -7,9 +7,9 @@
             "status":400
         },
         "id":"",
-        "nom": "",
-        "prenom": "",
-        "surnom": "",
+        "lastName": "",
+        "firstName": "",
+        "nickname": "",
         "description": ""
     },
     {
@@ -28,35 +28,35 @@
             "status":400
         },
         "id":"",
-        "nom":""
+        "lastName":""
     },
     {
         "infoTest":
         {
-            "name":"List only nom",
+            "name":"List only lastName",
             "error":false,
             "status":200
         },
-        "nom": "a"
+        "lastName": "a"
     },
     {
         "infoTest":
         {
-            "name":"List only prenom",
+            "name":"List only firstName",
             "error":false,
             "status":200
         },
-        "prenom": "i"
+        "firstName": "i"
     },
     {
         "infoTest":
         {
-            "name":"List nom&prenom",
+            "name":"List lastName&firstName",
             "error":false,
             "status":200
         },
-        "nom": "Croche",
-        "prenom": "Sar"
+        "lastName": "Croche",
+        "firstName": "Sar"
     },
     {
         "infoTest":
@@ -70,22 +70,22 @@
     {
         "infoTest":
         {
-            "name":"List id+nom = 0",
+            "name":"List id+lastName = 0",
             "error":false,
             "status":404,
             "setId":true
         },
-        "nom": "fsdga"
+        "lastName": "fsdga"
     },
     {
         "infoTest":
         {
-            "name":"List id+nom = 1",
+            "name":"List id+lastName = 1",
             "error":false,
             "status":200,
             "setId":true
         },
-        "nom": "Laval"
+        "lastName": "Laval"
     }
 
 ]
