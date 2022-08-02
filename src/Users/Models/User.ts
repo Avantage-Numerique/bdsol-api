@@ -35,9 +35,20 @@ export class User extends AbstractModel {
     /** @public Database schema */
     schema:Schema =
         new Schema<UserContract>({
-                username: {type: String, required: true, unique: true},
-                email: {type: String, required: true, unique: true},
-                password: {type: String, required: true},
+                username: {
+                    type: String,
+                    required: true,
+                    unique: true
+                },
+                email: {
+                    type: String,
+                    required: true,
+                    unique: true
+                },
+                password: {
+                    type: String,
+                    required: true
+                },
                 avatar: String,
                 name: String,
                 role: String

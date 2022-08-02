@@ -5,6 +5,9 @@ import {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
 
+const slug = require('mongoose-slug-updater');
+mongoose.plugin(slug);
+
 class Organisation extends AbstractModel {
 
     /** @protected @static Singleton instance of model Organisation */
@@ -37,6 +40,13 @@ class Organisation extends AbstractModel {
                     type: String,
                     required: true,
                     alias: 'nom'
+                },
+                slug: {
+                    type: String,
+                    slug: "name",
+                    slugPaddingSize: 3,
+                    index: true,
+                    unique: true
                 },
                 description: {
                     type: String,

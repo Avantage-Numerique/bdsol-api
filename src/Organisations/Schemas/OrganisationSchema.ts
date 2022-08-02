@@ -3,6 +3,7 @@ import {Document} from "mongoose"
 
 export interface OrganisationSchema extends Document {
     name:string;
+    slug:string;
     description:string;
     url:string;
     contactPoint:string;
