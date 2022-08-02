@@ -7,7 +7,7 @@ export class TextSanitizer {
      */
     public static middlewareSanitizer():CustomSanitizer {
         return (value) => {
-            return TextSanitizer.sanitizeTextValue(value);
+            return TextSanitizer.sanitize(value);
         }
     }
 
@@ -31,7 +31,7 @@ export class TextSanitizer {
      * Method to sanitize Html with the default content value.
      * @param raw {string}
      */
-    public static sanitizeTextValue(raw:string):string
+    public static sanitize(raw:string):string
     {
         return raw;
     }
