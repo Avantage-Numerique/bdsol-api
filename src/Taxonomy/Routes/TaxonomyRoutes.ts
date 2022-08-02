@@ -7,6 +7,18 @@ class TaxonomyRoutes extends AbstractRoute {
     controllerInstance: AbstractController = TaxonomyController.getInstance();
     routerInstance: express.Router = express.Router();
     routerInstanceAuthentification: express.Router = express.Router();
+
+
+    middlewaresDistribution:any = {
+        all: [],
+        create: [],
+        update: [],
+        delete: [],
+        search: [],
+        list: [],
+        getinfo: [],
+        getdoc: [],
+    }
 }
 
 export {TaxonomyRoutes};

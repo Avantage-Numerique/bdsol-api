@@ -63,6 +63,7 @@ abstract class AbstractController {
             return updatedModelResponse;
 
         LogHelper.debug("Service response from update is undefined");
+
         return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
             StatusCodes.INTERNAL_SERVER_ERROR,

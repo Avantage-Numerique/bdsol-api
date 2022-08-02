@@ -107,7 +107,6 @@ export abstract class Service {
         try {
             //let item = await this.model.create(data);
             // UpdateOne
-            LogHelper.debug("insert begin", this.model, this.model.create);
             const meta = await this.model.create(data)
                 .then((model: any) => {
                     return model;
@@ -117,10 +116,7 @@ export abstract class Service {
                     return e;
                 });
 
-            LogHelper.debug("insert", meta);
-
             //Insert in userHistory
-
             return this.parseResult(meta, 'Création');
 
         } catch (insertError: any) {
@@ -206,7 +202,6 @@ export abstract class Service {
     private parseResult(meta: any, actionMessage: string = "Mise à jour"): ApiResponseContract
     {
         LogHelper.debug(`Parse Result method for ${actionMessage}`, meta, actionMessage);
-
 
         // Mongo DB validation failed, make that excalade the response flow, shall we.
         if (meta.errors) {

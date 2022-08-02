@@ -45,8 +45,9 @@ export class VerifyTokenMiddleware {
 
                     if (verifiedToken.validated === true) {
                         // Set the user in the request, for the last middlewares and endpoints.
+                        req.user.id = req.socket.remoteAddress;//when reverse proxy : req.headers['x-forwarded-for'] ||
                         req.user = verifiedToken;
-
+                        LogHelper.debug("User set in req in API", req.user);
                         LogHelper.log(`User's token verified, next to url ${req.originalUrl}`);
                         // Here is the only reason why we allow the request to do the next() function.
                         next();

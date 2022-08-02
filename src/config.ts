@@ -47,7 +47,7 @@ const config = {
     },
     query: {
         defaultSkip: process.env.QUERY_DEFAULT_SKIP || 0,
-        defaultLimit: process.env.QUERY_DEFAULT_LIMIT || 10,
+        defaultLimit: process.env.QUERY_DEFAULT_LIMIT || 100,
     }
 };
 

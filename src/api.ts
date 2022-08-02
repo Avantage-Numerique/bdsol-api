@@ -103,7 +103,7 @@ export default class Api {
      */
     private _initRouter()
     {
-        LogHelper.info("Configuration des routes de l'API ...");
+        LogHelper.info("[ROUTES] Configuration des routes de l'API ...");
         //this seeem to be a "branch" independant. Middle ware pass here, and error handling are only manage into the same "router's hierarchy" may I labled.
         this.mainRouter = express.Router();
 
@@ -121,7 +121,7 @@ export default class Api {
 
         //assign all these routes to the app.
         this.express.use(this.mainRouter);
-        LogHelper.info("Configuration des routes terminés");
+        LogHelper.info("[ROUTES] Configuration des routes terminés");
     }
 
 

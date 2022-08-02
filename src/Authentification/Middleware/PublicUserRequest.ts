@@ -24,15 +24,7 @@ export class PublicUserRequest {
                 avatar: "",
                 name: "public",
                 role: "public",
-                ip: req.ip,
-                session: {
-                    ip: req.ip,
-                    ips: req.ips,
-                    originalUrl: req.originalUrl,
-                    http: req.httpVersion,
-                    httpMajor: req.httpVersionMajor,
-                    httpMinor: req.httpVersionMinor
-                }
+                ip: req.headers['x-forwarded-for'] || req.socket.remoteAddress,
             };
             next();
         }

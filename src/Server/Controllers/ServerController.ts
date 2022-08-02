@@ -54,7 +54,7 @@ export default class ServerController {
      */
     private static _setDBDriver()
     {
-        LogHelper.info(`Initiation du driver ${config.db.driver} de la base de données.`);
+        LogHelper.info(`[BD] Initiation du driver ${config.db.driver} de la base de données.`);
 
         if (config.db.driver === 'mongodb') {
             ServerController.database = new MongooseDBDriver();

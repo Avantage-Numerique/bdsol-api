@@ -7,5 +7,11 @@
 namespace Express {
     export interface Request {
         user?: any;
+        data?: any;
+    }
+}
+namespace Express {
+    export interface Response {
+        serviceResponse?: any;
     }
 }

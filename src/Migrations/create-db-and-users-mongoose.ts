@@ -22,7 +22,7 @@ export default class CreateDbAndUsersMongoose implements MigrationContract {
             const userModel:User = User.getInstance();
             const userCount:number = await this.provider.connection.collection(userModel.collectionName).count();
 
-            LogHelper.info(`Conditions for Migration ${CreateDbAndUsersMongoose.name} checks`, "usercount", userCount);
+            LogHelper.info(`[BD] [DEV] Conditions for Migration ${CreateDbAndUsersMongoose.name} checks`, "usercount", userCount);
             return config.environnement === 'development' &&
                 userCount <= 0;
         }
@@ -32,7 +32,7 @@ export default class CreateDbAndUsersMongoose implements MigrationContract {
     public async up()
     {
         if (await this.conditions()) {
-            LogHelper.log(`Appel de la migration ${CreateDbAndUsersMongoose.name}`);
+            LogHelper.info(`[BD] [DEV] Appel de la migration ${CreateDbAndUsersMongoose.name}`);
             await this.fake();
         }
     }

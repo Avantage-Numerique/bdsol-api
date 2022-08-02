@@ -4,6 +4,7 @@ import {OrganisationSchema} from "../Schemas/OrganisationSchema";
 import {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 class Organisation extends AbstractModel {
 
@@ -146,13 +147,14 @@ class Organisation extends AbstractModel {
      * @return {any}
      */
     public dataTransfertObject(document: any):any {
+        LogHelper.debug('dataTransfertObject',document);
         return {
-            name: document.name,
-            description: document.description,
-            url: document.url,
-            contactPoint: document.contactPoint,
-            fondationDate: document.fondationDate,
-            offer: document.offer
+            name: document.name ?? '',
+            description: document.description ?? '',
+            url: document.url ?? '',
+            contactPoint: document.contactPoint ?? '',
+            fondationDate: document.fondationDate ?? '',
+            offer: document.offer ?? ''
         }
     }
 

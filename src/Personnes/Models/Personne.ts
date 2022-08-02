@@ -132,6 +132,7 @@ class Personne extends AbstractModel {
 
     /**
      * @public @method dataTransfertObject Format the document for the public return.
+     * @todo faire une version qu'on a un objet adapté au document et non mandatoir sur toute les propriétés inscrite.
      * @param document
      * @return {any}
      */
