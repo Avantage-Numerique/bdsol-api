@@ -8,5 +8,5 @@ export interface MigrationContract {
     onUp: (error:any, result:any) => void;
     down: () => Promise<void>;
     onDown: (error:any, result:any) => void;
-    fake: () => Promise<boolean>;
+    fake: (entity:any) => Promise<boolean>;
 }

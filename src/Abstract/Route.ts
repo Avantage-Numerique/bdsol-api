@@ -41,7 +41,7 @@ abstract class AbstractRoute
     public async createHandler(req: Request, res: Response): Promise<any> {
 
         const response:ApiResponseContract = await this.controllerInstance.create(req.body.data);
-        LogHelper.debug("createHandler", req.user);
+        //LogHelper.debug("createHandler", req.user);
         
         if(!response.error)
             this.controllerInstance.createUserHistory(req, res, response, 'create');

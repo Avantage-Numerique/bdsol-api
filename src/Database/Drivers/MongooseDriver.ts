@@ -7,7 +7,7 @@ import {UsersProvider} from "../Providers/UsersProvider";
 import {DataProvider} from "../Providers/DataProvider";
 import {User} from "../../Users/UsersDomain";
 
-import CreateDbAndUsersMongoose from "../../Migrations/create-db-and-users-mongoose";
+import CreateDbAndEntityMongoose from "../../Migrations/create-db-and-users-mongoose";
 import Personne from "../../Personnes/Models/Personne";
 import Organisation from "../../Organisations/Models/Organisation";
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
@@ -67,7 +67,7 @@ export class MongooseDBDriver implements DBDriver {
     public async generateFakeUsers() {
         if (config.environnement === 'development') {
             //will create the fake users if the collection is empty.
-            const usersCollection = new CreateDbAndUsersMongoose(this.providers.users);
+            const usersCollection = new CreateDbAndEntityMongoose(this.providers.users);
             await usersCollection.up();
         }
     }
