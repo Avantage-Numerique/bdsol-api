@@ -29,8 +29,6 @@ abstract class AbstractRoute
      * @abstract
      */
     abstract middlewaresDistribution:any;
-    //abstract middlewaresPublicDistribution:any;
-    //abstract middlewaresAuthentificationDistribution:any;
 
 
     // Initiator (called in api.ts)
@@ -106,6 +104,11 @@ abstract class AbstractRoute
         //const middlewaresArrayName = property as keyof this;
         //const middle:Array<any> = this[middlewaresArrayName];
         //return middle[route];
+        return this.middlewaresDistribution[route] ?? [];
+    }
+
+    public defaultRequestSanitization(route:string):Array<any> {
+
         return this.middlewaresDistribution[route] ?? [];
     }
 
