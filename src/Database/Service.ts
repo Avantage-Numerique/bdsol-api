@@ -14,6 +14,7 @@ import AbstractModel from "../Abstract/Model";
 export abstract class Service {
 
     model: any;//@todo create or find the best type for this.
+    appModel: AbstractModel;
     connection: any;
     state:string;
 
@@ -23,6 +24,7 @@ export abstract class Service {
     LIST_STATE:string = "list";
 
     constructor(model: AbstractModel) {
+        this.appModel = model;
         this.model = model.connect();
     }
 

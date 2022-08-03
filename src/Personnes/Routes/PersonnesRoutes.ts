@@ -14,10 +14,18 @@ class PersonnesRoutes extends AbstractRoute {
     middlewaresDistribution:any = {
         all: [],
         create: [
-            body('data.lastName').customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer()).trim(),
-            body('data.firstName').customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer()).trim(),
-            body('data.nickname').customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer()).trim(),
-            body('data.description').customSanitizer(HtmlSanitizer.validatorCustomSanitizer()).trim(),
+            body('data.lastName')
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .trim(),
+            body('data.firstName')
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .trim(),
+            body('data.nickname')
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .trim(),
+            body('data.description')
+                .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
+                .trim(),
             //occupation array of objectid
         ],
         update: [],

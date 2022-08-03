@@ -1,7 +1,8 @@
-import {CustomSanitizer} from "express-validator";
-import _ from 'lodash';
+import type {CustomSanitizer} from "express-validator";
+import {Str} from "../../Helpers/Str";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
-export class LatinSanitizer {
+export class NoSpaceSanitizer {
 
 
     /**
@@ -10,7 +11,7 @@ export class LatinSanitizer {
      */
     public static sanitize(raw:string):string
     {
-        return _.deburr(raw);
+        return Str.noSpaces(raw);
     }
 
 
@@ -21,7 +22,8 @@ export class LatinSanitizer {
      */
     public static validatorCustomSanitizer():CustomSanitizer {
         return (value) => {
-            return LatinSanitizer.sanitize(value);
+            LogHelper.debug('Sanitizing To no space', value);
+            return NoSpaceSanitizer.sanitize(value);
         }
     }
 

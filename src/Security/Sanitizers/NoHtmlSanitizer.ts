@@ -9,7 +9,7 @@ export class NoHtmlSanitizer {
      * Method to sanitize field with no Html field.
      * @param raw {string}
      */
-    public static sanitize(raw:string)
+    public static sanitize(raw:string):string
     {
         return sanitizeHtml(raw, NoHtmlSanitizer.options());
     }
@@ -42,7 +42,7 @@ export class NoHtmlSanitizer {
      */
     public static validatorCustomSanitizer():CustomSanitizer {
         return (value) => {
-            LogHelper.debug('Sanitizing richText', value);
+            LogHelper.debug('Sanitizing To no HTML', value);
             return NoHtmlSanitizer.sanitize(value);
         }
     }

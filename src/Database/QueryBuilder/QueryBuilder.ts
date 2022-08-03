@@ -21,12 +21,13 @@ export default class QueryBuilder {
                 finalQuery._id = query[field];
             
             //NE FONCTIONNE PAS PRÉSENTEMENT AVEC LES NOMBRES PUISQUE JE CONVERTIS LES NOMBRES EN STRING!
+
             //S'il s'agit d'une donnée où tente d'applique un ">=" (gte)
-            else if ( query[field].toString().indexOf("gte:") == 0 ){
+            else if ( query[field] && query[field].toString().indexOf("gte:") == 0 ){
                 finalQuery[field] = { $gte: query[field].toString().substring(4, query[field].length) };
             }
             //S'il s'agit d'une donnée où on applique un "<=" (lte)
-            else if ( query[field].toString().indexOf("lte:") == 0 ){
+            else if ( query[field] && query[field].toString().indexOf("lte:") == 0 ){
                 finalQuery[field] = { $lte: query[field].toString().substring(4, query[field].length) };
             }
 

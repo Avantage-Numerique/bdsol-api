@@ -20,6 +20,8 @@ abstract class AbstractController {
     /** @abstract Service of a specific entity */
     abstract service:Service;
 
+    abstract name:string;
+
     /** @static UserHistory Service */
     // this is too soon. thi
     //static userHistory:UserHistory = UserHistory.getInstance();
@@ -139,7 +141,7 @@ abstract class AbstractController {
 
         const userHistoryService:UsersHistoryService = UsersHistoryService.getInstance(UserHistory.getInstance());
 
-        LogHelper.log("Create UserHistory");
+        LogHelper.log("Create UserHistory ", req.user, );
 
         //User id
         const user:mongoose.ObjectId = req.user.id;

@@ -1,6 +1,19 @@
-import {CustomSanitizer} from "express-validator";
+import type {CustomSanitizer} from "express-validator";
 
 export class TextSanitizer {
+
+    /**
+     * Method to sanitize Html with the default content value.
+     * @param raw {string}
+     */
+    public static sanitize(raw:string):string
+    {
+        return raw;
+    }
+
+    public static options():any {
+        return {};
+    }
 
     /**
      * Middleware getter of the function to be added as the function.
@@ -26,14 +39,5 @@ export class TextSanitizer {
         }
     }
 
-
-    /**
-     * Method to sanitize Html with the default content value.
-     * @param raw {string}
-     */
-    public static sanitize(raw:string):string
-    {
-        return raw;
-    }
 
 }

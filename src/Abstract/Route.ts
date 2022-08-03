@@ -2,7 +2,7 @@ import {ApiResponseContract} from "../Http/Responses/ApiResponse";
 import express, {NextFunction} from "express";
 import {Response, Request} from "express";
 import AbstractController from "./Controller";
-import LogHelper from "../Monitoring/Helpers/LogHelper";
+//import LogHelper from "../Monitoring/Helpers/LogHelper";
 
 abstract class AbstractRoute
 {
@@ -125,7 +125,6 @@ abstract class AbstractRoute
     public async createHandler(req: Request, res: Response): Promise<any> {
 
         const response:ApiResponseContract = await this.controllerInstance.create(req.body.data);
-        LogHelper.debug("createHandler", req.user);
         
         if(!response)
             this.controllerInstance.createUserHistory(req, res, response, 'create');

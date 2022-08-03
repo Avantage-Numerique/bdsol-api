@@ -132,6 +132,7 @@ export class User extends AbstractModel {
             avatar: document.avatar,
             name: document.name,
             email: document.email,
+            role: document.role,
         }
     }
 

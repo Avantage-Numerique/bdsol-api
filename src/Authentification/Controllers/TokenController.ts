@@ -2,6 +2,7 @@ import * as jwt from "jsonwebtoken";
 import config from "../../config";
 import {JwtPayload, VerifyErrors} from "jsonwebtoken";
 import {now} from "../../Helpers/DateTime";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 /**
  * Controller to manage the token operation
@@ -128,10 +129,15 @@ export class TokenController {
             verifiedToken.iat >= 0 &&
             verifiedToken.exp !== undefined &&
             verifiedToken.exp >= 0 &&
-            verifiedToken.user_id !== undefined &&
+            verifiedToken.id !== undefined &&
             verifiedToken.username !== undefined &&
             verifiedToken.role !== undefined;
     }
 
+    public static generateUserToken(user:any):string
+    {
+        LogHelper.debug(user);
+        return TokenController.generate(user);
+    }
 
 }

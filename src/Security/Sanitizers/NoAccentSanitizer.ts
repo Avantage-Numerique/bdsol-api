@@ -1,7 +1,8 @@
-import {CustomSanitizer} from "express-validator";
+import type {CustomSanitizer} from "express-validator";
 import _ from 'lodash';
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
-export class LatinSanitizer {
+export class NoAccentSanitizer {
 
 
     /**
@@ -21,7 +22,8 @@ export class LatinSanitizer {
      */
     public static validatorCustomSanitizer():CustomSanitizer {
         return (value) => {
-            return LatinSanitizer.sanitize(value);
+            LogHelper.debug('Sanitizing To no accent', value);
+            return NoAccentSanitizer.sanitize(value);
         }
     }
 

@@ -1,4 +1,3 @@
-import {NextFunction, Response, Request} from "express";
 import sanitizeHtml from 'sanitize-html';
 import {CustomSanitizer} from "express-validator";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
@@ -56,7 +55,7 @@ export class HtmlSanitizer {
      */
     public static validatorCustomSanitizer():CustomSanitizer {
         return (value) => {
-            LogHelper.debug('Sanitizing richText', value);
+            LogHelper.debug('Sanitizing default html', value);
             return HtmlSanitizer.sanitize(value);
         }
     }
@@ -65,14 +64,7 @@ export class HtmlSanitizer {
     public static middlewareSchemaValidator():CustomSanitizer
     {
         return (value, {req, location, path}) => {
-            let sanitizedValue;
 
-            if (req.body.foo && location && path) {
-                sanitizedValue = parseInt(value);
-            } else {
-                sanitizedValue = 0;
-            }
-            return sanitizedValue;
         }
     }
 

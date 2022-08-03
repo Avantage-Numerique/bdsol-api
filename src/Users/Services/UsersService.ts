@@ -21,4 +21,9 @@ export class UsersService extends Service {
     async get(query: any): Promise<ApiResponseContract> {
         return await super.get(query);
     }
+
+    async getUserByUsername(username:string): Promise<any>
+    {
+        return await this.get({username: username});
+    }
 }
