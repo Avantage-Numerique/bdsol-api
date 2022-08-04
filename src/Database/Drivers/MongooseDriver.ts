@@ -12,6 +12,15 @@ import Personne from "../../Personnes/Models/Personne";
 import Organisation from "../../Organisations/Models/Organisation";
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 import UserHistory from "../../UserHistory/Models/UserHistory";
+import CreateDataMongoose from "../../Migrations/create-data-mongoose";
+import { PersonnesController } from "../../Personnes/Controllers/PersonnesController";
+import OrganisationsController from "../../Organisations/Controllers/OrganisationsController";
+import { TaxonomyController } from "../../Taxonomy/Controllers/TaxonomyController";
+import { UsersHistoryController } from "../../UserHistory/Controllers/UsersHistoryController";
+import PersonnesService from "../../Personnes/Services/PersonnesService";
+import OrganisationsService from "../../Organisations/Services/OrganisationsService";
+import TaxonomyService from "../../Taxonomy/Services/TaxonomyService";
+import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService";
 
 export class MongooseDBDriver implements DBDriver {
 
@@ -61,14 +70,22 @@ export class MongooseDBDriver implements DBDriver {
         this.providers.data.assign(Taxonomy.getInstance());
         this.providers.data.assign(UserHistory.getInstance());
 
-        await this.generateFakeUsers();
+        await this.generateFakeData();
     }
 
-    public async generateFakeUsers() {
+    public async generateFakeData() {
         if (config.environnement === 'development') {
             //will create the fake users if the collection is empty.
             const usersCollection = new CreateDbAndEntityMongoose(this.providers.users);
             await usersCollection.up();
+            //const personData = new CreateDataMongoose(this.providers.data, Personne.getInstance());
+            //await personData.up('person');
+            /*const organisationData = new CreateDataMongoose(this.providers.data, Organisation.getInstance());
+            await organisationData.up('organisation');
+            const taxonomyData = new CreateDataMongoose(this.providers.data, Taxonomy.getInstance());
+            await taxonomyData.up('taxonomy');
+            const userHistoryData = new CreateDataMongoose(this.providers.data, UserHistory.getInstance());
+            await userHistoryData.up('userHistory');*/
         }
     }
 

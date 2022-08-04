@@ -3,28 +3,27 @@ import config from "../config";
 import {DbProvider, Service} from "../Database/DatabaseDomain";
 import type {MigrationContract} from "../Database/DatabaseDomain";
 import {fakeUser} from "./FakeEntity/fakeUser";
-import {fakePerson} from "./FakeEntity/fakePerson";
-import {fakeOrganisation} from "./FakeEntity/fakeOrganisation";
-import {fakeTaxonomy} from "./FakeEntity/fakeTaxonomy";
-import {fakeUserHistory} from "./FakeEntity/fakeUserHistory";
+import {fakePersons} from "./FakeEntity/fakePerson";
+import {fakeOrganisation as fakeOrganisations} from "./FakeEntity/fakeOrganisation";
+import {fakeTaxonomy as fakeTaxonomies} from "./FakeEntity/fakeTaxonomy";
+import {fakeUserHistory as fakeUserHistories} from "./FakeEntity/fakeUserHistory";
 import AbstractModel from "../Abstract/Model";
-import AbstractController from "../Abstract/Controller";
+import PersonnesService from "../Personnes/Services/PersonnesService";
 
 export default class CreateDataMongoose implements MigrationContract {
 
-    public service:Service;
-    public controller:AbstractController;
+    public provider:DbProvider|null;
     public model:AbstractModel;
+    public service:Service;
 
-    constructor(controller:AbstractController, model:AbstractModel, service:Service) {
-        this.controller = controller;
+    constructor(provider:DbProvider|null = null, model:AbstractModel) {
+        this.provider = provider
         this.model = model;
-        this.service = service;
     }
 
     public async conditions():Promise<boolean> {
-        if (this.model.provider !== null) {
-            const count:number = await this.model.provider.connection.collection(this.model.collectionName).countDocuments();
+        if (this.provider !== null) {
+            const count:number = await this.provider.connection.collection(this.model.collectionName).countDocuments();
             LogHelper.info(`Conditions for Migration ${CreateDataMongoose.name} checks`, "count "+ this.model.collectionName, count);
             return config.environnement === 'development' &&
                 count <= 0;
@@ -47,26 +46,28 @@ export default class CreateDataMongoose implements MigrationContract {
 
     public async fake(entity:string)
     {
-        if (this.model.provider !== null && this.model.provider.service !== null && this.model.provider.service.model !== null){
+        LogHelper.warn("Dans Fake");
+        console.log(this.model.mongooseModel);
+        if (this.model !== null){// && this.provider.service !== null && this.provider.service.model !== null){
             LogHelper.log("Ajout de " + this.model.collectionName + " à la BD");
             switch(entity){
                 case 'user':
-                    await this.service.insert(fakeUser);
+                    //await this.provider.service.model.insertMany(fakeUser);
                     break;
                 case 'person':
-                    await this.service.insert(fakePerson);
+                    //await this.model.mongooseModel.insertMany(fakePersons);
                     break;
                 case 'organisation':
-                    await this.service.insert(fakeOrganisation);
+                    //await this.provider.service.model.insertMany(fakeOrganisations);
                     break;
                 case 'taxonomy':
-                    await this.service.insert(fakeTaxonomy);
+                    //await this.provider.service.model.insertMany(fakeTaxonomies);
                     break;
                 case 'userHistory':
-                    await this.service.insert(fakeUserHistory);
+                    //await this.provider.service.model.insertMany(fakeUserHistories);
                     break;
                 default: break;
-            }
+           }
         }
         return false;
     }
