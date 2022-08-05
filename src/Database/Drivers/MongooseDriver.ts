@@ -1,25 +1,31 @@
-import * as mongoDB from "mongodb";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import {Connection} from "mongoose";
 import mongoose from "mongoose";
 import type {DBDriver} from "./DBDriver";
 import {UsersProvider} from "../Providers/UsersProvider";
 import {DataProvider} from "../Providers/DataProvider";
 import {User} from "../../Users/UsersDomain";
 
-import CreateDbAndUsersMongoose from "../../Migrations/create-db-and-users-mongoose";
+import CreateDbAndEntityMongoose from "../../Migrations/create-db-and-users-mongoose";
 import Personne from "../../Personnes/Models/Personne";
 import Organisation from "../../Organisations/Models/Organisation";
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 import UserHistory from "../../UserHistory/Models/UserHistory";
+import {MongooseSlugUpdater} from "../Plugins/MongooseSlugUpdater";
 
-export class MongooseDBDriver implements DBDriver {
+//import plugin from "../../../node_modules/mongoose-slug-updater/lib/slug-generator";
 
+
+export class MongooseDBDriver implements DBDriver
+{
     public driverPrefix: string;
-    public client: mongoDB.MongoClient | null;
-    public db: mongoDB.Db | mongoose.Connection | null;//will be the provider.
+    public client: any;
+    public db: Connection | null;//will be the provider.
     public baseUrl: string;
     public providers: any;
+
+    public plugins:any;
 
     /**
      * Constructor fo this driver. Object is created 1 time in  ServerController.
@@ -36,8 +42,16 @@ export class MongooseDBDriver implements DBDriver {
         };
     }
 
+    public async configAddon() {
+        const mongooseSlugPlugin = new MongooseSlugUpdater();//../
+        await mongooseSlugPlugin.loadDependancy();
+        mongooseSlugPlugin.assign(mongoose);
+    }
+
+
     public async connect() {
         LogHelper.info(`[BD] Connexion aux base de données ...`);
+        //this.configAddon();
         await this.initDb();
     }
 
@@ -53,6 +67,8 @@ export class MongooseDBDriver implements DBDriver {
         LogHelper.info(`[BD] Connexion à la base de données structurée, ouverte et liée ...`);
         await this.providers.data.connect();
 
+        await this.configAddon();
+
         this.providers.users.assign(User.getInstance());
 
         this.providers.data.assign(Personne.getInstance());
@@ -67,7 +83,7 @@ export class MongooseDBDriver implements DBDriver {
     public async generateFakeUsers() {
         if (config.environnement === 'development') {
             //will create the fake users if the collection is empty.
-            const usersCollection = new CreateDbAndUsersMongoose(this.providers.users);
+            const usersCollection = new CreateDbAndEntityMongoose(this.providers.users);
             await usersCollection.up();
         }
     }

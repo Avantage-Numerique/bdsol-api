@@ -1,5 +1,4 @@
 import * as mongoDB from "mongodb";
-import mongoose from "mongoose";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import type {DBDriver} from "./DBDriver";
@@ -17,7 +16,7 @@ export class MongoDBDriver implements DBDriver {
 
     public driverPrefix: string;
     public client: mongoDB.MongoClient | null;
-    public db: mongoDB.Db | mongoose.Connection | null;
+    public db: mongoDB.Db | null;
     public baseUrl: string;
 
     /**

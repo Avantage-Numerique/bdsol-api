@@ -43,6 +43,13 @@ class Personne extends AbstractModel {
                 required: true,
                 alias: 'prenom'
             },
+            slug: {
+                type: String,
+                slug: ["firstName", "lastName"],
+                slugPaddingSize: 3,
+                index: true,
+                unique: true
+            },
             nickname: {
                 type: String,
                 alias: 'surnom'

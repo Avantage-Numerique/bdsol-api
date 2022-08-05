@@ -41,6 +41,7 @@
     "lodash.deburr": "^4.1.0",
     "mongodb": "^4.8.0",
     "mongoose": "^6.4.5",
+    "mongoose-slug-updater": "^3.3.0",
     "sanitize-html": "^2.7.1",
     "typescript": "^4.7.4"
   },

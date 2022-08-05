@@ -39,6 +39,13 @@ class Organisation extends AbstractModel {
                     required: true,
                     alias: 'nom'
                 },
+                slug: {
+                    type: String,
+                    slug: "name",
+                    slugPaddingSize: 3,
+                    index: true,
+                    unique: true
+                },
                 description: {
                     type: String,
                     alias: 'desc'

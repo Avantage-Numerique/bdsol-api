@@ -1,5 +1,4 @@
-import {Schema} from "mongoose"
-import mongoose from "mongoose";
+import type {Schema, Connection, Model} from "mongoose";//, mongoose
 import { DbProvider } from "../Database/DatabaseDomain";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 
@@ -18,9 +17,9 @@ abstract class AbstractModel {
      * The active connections to the mongoose/mongodb.
      * @abstract Connection mongoose.
      */
-    abstract connection:mongoose.Connection;
+    abstract connection:Connection;
     abstract provider:DbProvider;
-    abstract mongooseModel:mongoose.Model<any>;
+    abstract mongooseModel:Model<any>;
     
     /** @abstract Schema in the database. */
     abstract schema:Schema;

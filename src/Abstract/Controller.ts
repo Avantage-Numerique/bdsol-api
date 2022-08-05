@@ -144,33 +144,28 @@ abstract class AbstractController {
         LogHelper.log("Create UserHistory ", req.user, );
 
         //User id
-        const user:mongoose.ObjectId = req.user.id;
+        const user:mongoose.ObjectId = req.user.user_id;
 
         //IP Address
-        const ipAddress = "IpAdress Bidon"
+        const ipAddress = req.ip;
 
         //Modification date
         const modifDate = new Date();
 
         //Modified entity id
-        const modifiedEntity = response._id;
+        const modifiedEntity = response.data._id;
 
         //Action on the data
         //action <---
 
         //Set modified fields
-        let fields;
-        if (action == 'update') {
-            fields = this.entity.dataTransfertObject(req.data);
-        }
-        else {
-            fields = response.data;
-            delete fields._id;
-            delete fields.createdAt;
-            delete fields.updatedAt;
-            delete fields.__v;
-        }
-
+        //DELETE NOT WORKING THERE
+        const fields = response.data;
+        delete fields._id;
+        delete fields.createdAt;
+        delete fields.updatedAt;
+        delete fields.__v;
+        
         const history:UserHistorySchema = {
             "user": user,
             "ipAddress": ipAddress,

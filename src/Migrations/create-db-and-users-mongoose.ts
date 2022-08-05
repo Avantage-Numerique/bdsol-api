@@ -1,9 +1,9 @@
 import LogHelper from "../Monitoring/Helpers/LogHelper";
-import {fakeUser} from "../Users/fakeUser";
 import config from "../config";
 import {DbProvider, Service} from "../Database/DatabaseDomain";
 import type {MigrationContract} from "../Database/DatabaseDomain";
 import {User} from "../Users/Models/User";
+import {fakeUser} from "./FakeEntity/fakeUser";
 
 export default class CreateDbAndUsersMongoose implements MigrationContract {
 
@@ -12,7 +12,6 @@ export default class CreateDbAndUsersMongoose implements MigrationContract {
 
     constructor(provider:DbProvider|null = null)
     {
-        //LogHelper.log(`CreateDbAndUsersMongoose ${service} création`);
         this.provider = provider;
     }
 

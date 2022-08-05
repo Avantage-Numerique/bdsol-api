@@ -142,13 +142,13 @@ export abstract class Service {
             const id = data.id;
             delete data.id; //Remove id from data
             // UpdateOne
-            const meta = await this.model.updateOne({_id: id}, data, {new: true})
+            const meta = await this.model.findOneAndUpdate({_id: id}, data, {new: true})
                 .catch((e: any) => {
-                        LogHelper.info("UpdateOne catch:", e);
+                        LogHelper.info("findOneAndUpdate catch:", e);
                         return e;
                     }
                 );
-            LogHelper.info("UpdateOne return after the catch :", meta);
+            LogHelper.info("findOneAndUpdate return after the catch :", meta);
             // if method updateOne fail, it returns a mongo error with a code and a message. // was method findByIdAndUpdate used.
 
             //Insert in userHistory
