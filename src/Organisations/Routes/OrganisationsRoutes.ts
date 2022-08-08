@@ -13,12 +13,23 @@ class OrganisationsRoutes extends AbstractRoute {
 
     middlewaresDistribution:any = {
         all: [
-            body('data.name').customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer()).trim(),
+            body('data.name')
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .trim(),
             //I remove espace() sanitizer here, because I didn't find any way yet to handle the unescape method for each of those field.
-            body('data.description').customSanitizer(HtmlSanitizer.validatorCustomSanitizer()).trim(),
-            body('data.url').customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer()).trim(),
-            body('data.contactPoint').customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer()).trim(),
-            body('data.fondationDate').customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer()).trim().toDate(),
+            body('data.description')
+                .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
+                .trim(),
+            body('data.url')
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .trim(),
+            body('data.contactPoint')
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .trim(),
+            body('data.fondationDate')
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .trim()
+                .toDate(),
             //offer array of objectid
         ],
         create: [],
