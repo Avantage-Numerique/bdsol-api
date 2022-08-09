@@ -12,22 +12,25 @@ class PersonnesRoutes extends AbstractRoute {
     routerInstanceAuthentification: express.Router = express.Router();
 
     middlewaresDistribution:any = {
-        all: [],
-        create: [
+        all: [
             body('data.lastName')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
                 .trim(),
             body('data.firstName')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
                 .trim(),
             body('data.nickname')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
                 .trim(),
             body('data.description')
                 .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
             //occupation array of objectid
         ],
+        create: [],
         update: [],
         delete: [],
         search: [],

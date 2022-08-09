@@ -4,7 +4,8 @@ import AbstractRoute from "../../Abstract/Route";
 import AbstractController from "../../Abstract/Controller";
 import {body} from "express-validator";
 import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
-import {HtmlSanitizer} from "../../Security/Sanitizers/HtmlSanitizer";
+import {NoSpaceSanitizer} from "../../Security/Sanitizers/NoSpaceSanitizer";
+import {NoAccentSanitizer} from "../../Security/Sanitizers/NoAccentSanitizer";
 
 class UsersRoutes extends AbstractRoute {
     controllerInstance: AbstractController = UsersController.getInstance();
@@ -16,9 +17,13 @@ class UsersRoutes extends AbstractRoute {
         all: [
             body('data.username')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
+                .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
+                .customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
                 .trim(),
             body('data.email')
-                .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
                 .normalizeEmail()
                 .trim(),
             //body('data.password'),

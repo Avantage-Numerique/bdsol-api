@@ -42,7 +42,6 @@ export class NoHtmlSanitizer {
      */
     public static validatorCustomSanitizer():CustomSanitizer {
         return (value) => {
-            LogHelper.debug('Sanitizing To no HTML', value);
             return NoHtmlSanitizer.sanitize(value);
         }
     }

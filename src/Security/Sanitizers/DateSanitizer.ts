@@ -1,5 +1,4 @@
 import {CustomSanitizer} from "express-validator";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 export class DateSanitizer {
 
@@ -27,7 +26,6 @@ export class DateSanitizer {
      */
     public static validatorCustomSanitizer():CustomSanitizer {
         return (value) => {
-            LogHelper.debug('Sanitizing To Date', value);
             return DateSanitizer.sanitize(value);
         }
     }
