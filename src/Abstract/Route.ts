@@ -43,12 +43,14 @@ abstract class AbstractRoute
 
         this.routerInstanceAuthentification.post('/create', [
             ...this.addMiddlewares("all"),
+            ...this.addMiddlewares("createUpdate"),
             ...this.addMiddlewares("create"),
             this.createHandler.bind(this)
         ]);
 
         this.routerInstanceAuthentification.post('/update', [
             ...this.addMiddlewares("all"),
+            ...this.addMiddlewares("createUpdate"),
             ...this.addMiddlewares("update"),
             this.updateHandler.bind(this)
         ]);

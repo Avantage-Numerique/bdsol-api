@@ -12,7 +12,8 @@ class PersonnesRoutes extends AbstractRoute {
     routerInstanceAuthentification: express.Router = express.Router();
 
     middlewaresDistribution:any = {
-        all: [
+        all: [],
+        createUpdate: [
             body('data.lastName')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()

@@ -12,7 +12,8 @@ class OrganisationsRoutes extends AbstractRoute {
     routerInstanceAuthentification: express.Router = express.Router();
 
     middlewaresDistribution:any = {
-        all: [
+        all: [],
+        createUpdate: [
             body('data.name')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim(),

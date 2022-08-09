@@ -10,6 +10,7 @@ class UsersHistoryRoutes extends AbstractRoute {
 
     middlewaresDistribution:any = {
         all: [],
+        createUpdate: [],
         create: [],
         update: [],
         delete: [],

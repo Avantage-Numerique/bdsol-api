@@ -13,7 +13,8 @@ class TaxonomyRoutes extends AbstractRoute {
 
 
     middlewaresDistribution:any = {
-        all: [
+        all: [],
+        createUpdate: [
             body('data.category')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
