@@ -1,6 +1,6 @@
+import * as mongoDB from "mongodb";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import {Connection} from "mongoose";
 import mongoose from "mongoose";
 import type {DBDriver} from "./DBDriver";
 import {UsersProvider} from "../Providers/UsersProvider";
@@ -12,20 +12,23 @@ import Personne from "../../Personnes/Models/Personne";
 import Organisation from "../../Organisations/Models/Organisation";
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 import UserHistory from "../../UserHistory/Models/UserHistory";
-import {MongooseSlugUpdater} from "../Plugins/MongooseSlugUpdater";
+import CreateDataMongoose from "../../Migrations/create-data-mongoose";
+import { PersonnesController } from "../../Personnes/Controllers/PersonnesController";
+import OrganisationsController from "../../Organisations/Controllers/OrganisationsController";
+import { TaxonomyController } from "../../Taxonomy/Controllers/TaxonomyController";
+import { UsersHistoryController } from "../../UserHistory/Controllers/UsersHistoryController";
+import PersonnesService from "../../Personnes/Services/PersonnesService";
+import OrganisationsService from "../../Organisations/Services/OrganisationsService";
+import TaxonomyService from "../../Taxonomy/Services/TaxonomyService";
+import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService";
 
-//import plugin from "../../../node_modules/mongoose-slug-updater/lib/slug-generator";
+export class MongooseDBDriver implements DBDriver {
 
-
-export class MongooseDBDriver implements DBDriver
-{
     public driverPrefix: string;
-    public client: any;
-    public db: Connection | null;//will be the provider.
+    public client: mongoDB.MongoClient | null;
+    public db: mongoDB.Db | mongoose.Connection | null;//will be the provider.
     public baseUrl: string;
     public providers: any;
-
-    public plugins:any;
 
     /**
      * Constructor fo this driver. Object is created 1 time in  ServerController.
@@ -42,16 +45,8 @@ export class MongooseDBDriver implements DBDriver
         };
     }
 
-    public async configAddon() {
-        const mongooseSlugPlugin = new MongooseSlugUpdater();//../
-        await mongooseSlugPlugin.loadDependancy();
-        mongooseSlugPlugin.assign(mongoose);
-    }
-
-
     public async connect() {
         LogHelper.info(`[BD] Connexion aux base de données ...`);
-        //this.configAddon();
         await this.initDb();
     }
 
@@ -67,8 +62,6 @@ export class MongooseDBDriver implements DBDriver
         LogHelper.info(`[BD] Connexion à la base de données structurée, ouverte et liée ...`);
         await this.providers.data.connect();
 
-        await this.configAddon();
-
         this.providers.users.assign(User.getInstance());
 
         this.providers.data.assign(Personne.getInstance());
@@ -77,14 +70,22 @@ export class MongooseDBDriver implements DBDriver
         this.providers.data.assign(Taxonomy.getInstance());
         this.providers.data.assign(UserHistory.getInstance());
 
-        await this.generateFakeUsers();
+        await this.generateFakeData();
     }
 
-    public async generateFakeUsers() {
+    public async generateFakeData() {
         if (config.environnement === 'development') {
             //will create the fake users if the collection is empty.
             const usersCollection = new CreateDbAndEntityMongoose(this.providers.users);
             await usersCollection.up();
+            //const personData = new CreateDataMongoose(this.providers.data, Personne.getInstance());
+            //await personData.up('person');
+            /*const organisationData = new CreateDataMongoose(this.providers.data, Organisation.getInstance());
+            await organisationData.up('organisation');
+            const taxonomyData = new CreateDataMongoose(this.providers.data, Taxonomy.getInstance());
+            await taxonomyData.up('taxonomy');
+            const userHistoryData = new CreateDataMongoose(this.providers.data, UserHistory.getInstance());
+            await userHistoryData.up('userHistory');*/
         }
     }
 

@@ -1,37 +1,35 @@
 import LogHelper from "../Monitoring/Helpers/LogHelper";
+import {fakeUser} from "./FakeEntity/fakeUser";
 import config from "../config";
 import {DbProvider, Service} from "../Database/DatabaseDomain";
 import type {MigrationContract} from "../Database/DatabaseDomain";
 import {User} from "../Users/Models/User";
-import {fakeUser} from "./FakeEntity/fakeUser";
 
-export default class CreateDbAndUsersMongoose implements MigrationContract {
 
-    public usersService:Service|null;
+export default class CreateDbAndEntityMongoose implements MigrationContract {
+
     public provider:DbProvider|null;
 
     constructor(provider:DbProvider|null = null)
     {
+        //LogHelper.log(`CreateDbAndUsersMongoose ${service} création`);
         this.provider = provider;
     }
 
-    public async conditions():Promise<boolean> {
-        if (this.provider !== null)
-        {
+    public async userConditions():Promise<boolean> {
+        if (this.provider !== null) {
             const userModel:User = User.getInstance();
-            const userCount:number = await this.provider.connection.collection(userModel.collectionName).count();
-
-            LogHelper.info(`[BD] [DEV] Conditions for Migration ${CreateDbAndUsersMongoose.name} checks`, "usercount", userCount);
+            const userCount:number = await this.provider.connection.collection(userModel.collectionName).countDocuments();
+            LogHelper.info(`Conditions for Migration ${CreateDbAndEntityMongoose.name} checks`, "usercount", userCount);
             return config.environnement === 'development' &&
                 userCount <= 0;
         }
         return false;
     }
 
-    public async up()
-    {
-        if (await this.conditions()) {
-            LogHelper.info(`[BD] [DEV] Appel de la migration ${CreateDbAndUsersMongoose.name}`);
+    public async up() {
+        if (await this.userConditions()) {
+            LogHelper.log(`Appel de la migration ${CreateDbAndEntityMongoose.name}`);
             await this.fake();
         }
     }
@@ -42,23 +40,14 @@ export default class CreateDbAndUsersMongoose implements MigrationContract {
         //clear document ?
     }
 
-
     public async fake()
     {
-        if (this.provider !== null)
-        {
-            if (this.provider.service !== null && this.provider.service.model !== null) {
-                LogHelper.log(`Aucun utilisateurs de créer, on ajoute deux utilisateurs test pour l'environnement ${config.environnement}`);
-
-                await this.provider.service.insert(fakeUser);
-                return true;
-            }
+        if (this.provider !== null && this.provider.service !== null && this.provider.service.model !== null){
+            LogHelper.log("Ajout de users à la BD");
+            await this.provider.service.insert(fakeUser);
         }
-        LogHelper.log(`No need to execute Migration ${CreateDbAndUsersMongoose.name}`);
         return false;
     }
-
-
 
     public onUp(error:any, result:any)
     {

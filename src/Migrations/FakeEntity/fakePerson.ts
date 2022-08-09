@@ -1,4 +1,4 @@
-export const fakePerson = [
+export const fakePersons = [
     {
         lastName:"Watson",
         firstName:"Patrick",
@@ -10,5 +10,5 @@ export const fakePerson = [
         firstName:"Jean-Marc",
         nickname:"Mickette",
         description:"Humour",
-    },
+    }
 ];

@@ -23,7 +23,7 @@ class UserHistory extends AbstractModel {
     modelName:string = 'UserHistory';
 
     /** @public Collection lastName in database*/
-    collectionName:string = 'userHistories';
+    collectionName:string = 'userhistories';
 
     /** @public Connection mongoose */
     connection:mongoose.Connection;
