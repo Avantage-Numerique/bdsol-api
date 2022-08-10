@@ -4,7 +4,8 @@ import type {DbProvider} from "../../Database/DatabaseDomain";
 import {UserContract} from "../Contracts/UserContract";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
-import {HashingMiddleware} from "../../Authentification/Middleware/HashingMiddleware";
+import {HashingMiddleware, hashPasswordMiddleware} from "../../Authentification/Middleware/HashingMiddleware";
+import {PasswordsController} from "../../Authentification/Controllers/PasswordsController";
 
 export class User extends AbstractModel {
 
@@ -157,8 +158,8 @@ export class User extends AbstractModel {
         if (this.schema !== undefined)
         {
             // CREATE users, we hash the password.
-            await this.schema.pre('save', HashingMiddleware.mongooseMiddlewareHandler());
-            await this.schema.pre('UpdateOne', HashingMiddleware.mongooseMiddlewareHandler());
+            await this.schema.pre('save', hashPasswordMiddleware);
+            await this.schema.pre('UpdateOne', hashPasswordMiddleware);//HashingMiddleware.mongooseMiddlewareHandler()
         }
     }
 

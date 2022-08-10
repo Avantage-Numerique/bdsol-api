@@ -11,6 +11,7 @@ export class HtmlSanitizer {
      */
     public static sanitize(raw:string)
     {
+        LogHelper.debug('Sanitizing with content HTML : ', raw);
         return sanitizeHtml(raw, HtmlSanitizer.options());
     }
 

@@ -106,29 +106,52 @@ export abstract class Service {
      * @param data any the document structure. This is type any because that class will be extended.
      */
     async insert(data: any): Promise<ApiResponseContract> {
+        let meta;
         try {
             //let item = await this.model.create(data);
             // UpdateOne
-            const meta = await this.model.create(data)
-                .then((model: any) => {
+
+            meta = await this.model.create(data);
+
+            /**
+             *
+             .then((model: any) => {
+                    LogHelper.error("Can't create target Model with data", model);
                     return model;
                 })
-                .catch((e: any) => {
-                    LogHelper.debug("model.create", e);
+             .catch((e: any) => {
+                    LogHelper.error("Can't create target Model with data", data, e);
                     return e;
-                });
+                })
+             */
 
+            /*const options:any = {
+                limit:1,
+                rawResult:true
+            }
+            let meta:any;
+            //this don't work because in the callback, is like an async but we can't await it.
+            this.model.insertMany(data, options, await (error:any, docs:any) => {
+
+                LogHelper.debug("insertMany", error, docs);
+                if (error !== null) {
+                    throw error;
+                }
+                meta = docs;
+            });
+            LogHelper.debug("insert", meta);*/
             //Insert in userHistory
-            return this.parseResult(meta, 'Création');
 
         } catch (insertError: any) {
-
+            LogHelper.error(insertError);
             return ErrorResponse.create(
                 insertError.errors,
                 StatusCodes.INTERNAL_SERVER_ERROR,
-                insertError.errmsg || "Not able to insert item"
+                insertError.message || "Not able to insert item"
             );
         }
+
+        return this.parseResult(meta, 'Création');
     }
 
     /**

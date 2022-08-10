@@ -1,25 +1,29 @@
-FROM node:lts-alpine
+FROM node:16-alpine as apibuild
+
+# Install python3 into the deps of the container. For the argon bug : 2022-05-30 : Error: Error loading shared library /api/node_modules/argon2/lib/binding/napi-v3/argon2.node: Exec format error
+RUN apk update \
+    && apk --no-cache --virtual build-dependencies add \
+        python3 \
+        make \
+        g++ \
+        git \
+        openssh \
+    && npm install -g node-gyp \
+    && npm install -g @mapbox/node-pre-gyp
 
 ## API
-
 RUN mkdir -p /api
 WORKDIR /api
-COPY . .
 
-# --no-cache: download package index on-the-fly, no need to cleanup afterwards
-# --virtual: bundle packages, remove whole bundle at once, when done
-RUN apk --no-cache --virtual build-dependencies add \
-    python3 \
-    make \
-    g++
-RUN npm install -g node-gyp
-RUN npm install -g @mapbox/node-pre-gyp
-RUN npm install argon2
+COPY ./package.json .
+COPY ./src .
+
 RUN npm install
-RUN npm rebuild argon2
 
 # Argon2 prebuild library seem off. We rebuild them all with this.
-# RUN npm rebuild
+RUN npm rebuild
+
+RUN npm rebuild argon2
 
 EXPOSE 8000
 

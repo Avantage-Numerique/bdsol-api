@@ -127,6 +127,24 @@ class AuthentificationController
     }
 
 
+    public async register(requestData:any): Promise<ApiResponseContract>
+    {
+        LogHelper.log("Authentification Controller Register : ", requestData);
+        const createdDocumentResponse = await this.service.insert(requestData);
+
+        if (createdDocumentResponse !== undefined)
+            return createdDocumentResponse;
+
+        LogHelper.debug("Service response from insert is undefined");
+
+        return ErrorResponse.create(
+            new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            'Service returned an undefined response from insert'
+        );
+    }
+
+
     public async generateToken(): Promise<string>
     {
         if (config.isDevelopment)

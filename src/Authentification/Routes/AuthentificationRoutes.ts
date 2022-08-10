@@ -4,6 +4,10 @@ import config from "../../config";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import AuthentificationController from "../Controllers/AuthentificationController";
 import {VerifyTokenMiddleware} from "../Middleware/VerifyTokenMiddleware";
+import {body} from "express-validator";
+import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
+import {NoSpaceSanitizer} from "../../Security/Sanitizers/NoSpaceSanitizer";
+import {NoAccentSanitizer} from "../../Security/Sanitizers/NoAccentSanitizer";
 
 
 
@@ -28,7 +32,33 @@ export class AuthentificationRoutes {
     /**
      * All he current routes middlewares to add into the routes.
      */
-    public middlewaresDistribution:any = {};
+    public middlewaresDistribution:any = {
+        register: [
+            body('data.username')
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
+                .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
+                .customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
+                .trim(),
+            body('data.email')
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
+                .normalizeEmail()
+                .trim(),
+            //body('data.password'),
+            body('data.avatar')
+                .isURL()
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .trim(),
+            body('data.name')
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .trim(),
+            body('data.role')
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
+                .trim()
+        ]
+    };
 
 
     /**
@@ -55,6 +85,10 @@ export class AuthentificationRoutes {
      */
     public setupPublicRoutes():express.Router
     {
+        this.routerInstance.post('/register', [
+            //...this.addMiddlewares("register"),
+            this.registerHandler.bind(this)
+        ]);
 
         this.routerInstance.post('/login', [
             this.loginHandler.bind(this)
@@ -91,6 +125,22 @@ export class AuthentificationRoutes {
 
 
     //  POST
+
+    /**
+     * POST:REGISTER
+     * The "CREATE USER" ROUTE.
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async registerHandler(req: Request, res: Response): Promise<any> {
+
+        const {data} = req.body;
+        const response = await this.controller.register(data);
+        LogHelper.debug("registerHandler", data, response);
+        return res.status(response.code).send(response);
+    }
+
 
     /**
      * POST:LOGIN

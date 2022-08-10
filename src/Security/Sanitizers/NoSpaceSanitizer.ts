@@ -1,5 +1,6 @@
 import type {CustomSanitizer} from "express-validator";
 import {Str} from "../../Helpers/Str";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 export class NoSpaceSanitizer {
 
@@ -10,6 +11,7 @@ export class NoSpaceSanitizer {
      */
     public static sanitize(raw:string):string
     {
+        LogHelper.debug('Sanitizing with no space : ',raw);
         return Str.noSpaces(raw);
     }
 
