@@ -1,130 +1,254 @@
 [
-    {
-        "nom":"Animateur 2D et 3D",
-        "description":"Créateur d'animation visuelle de personnage ou objet 2D et 3D.",
-        "subTaxonomy":"Test -> Cinéologie ?"
+    {   
+        "category" : "occupation",
+        "name"  : "Animateur 2D et 3D",
+        "description" : "Créateur d'animation visuelle de personnage ou objet 2D et 3D.",
+        "source" : ""
     },
     {
-        "nom":"Architecte d'information"
+        "category" : "occupation",
+        "name"  :"Architecte d'information",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Architecte logiciel"
+        "category" : "occupation",
+        "name"   :"Architecte logiciel",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Auteur - scénariste"
+        "category" : "occupation",
+        "name"  :"Auteur - scénariste",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Chargée de projet numérique"
+        "category" : "occupation",
+        "name"  :"Chargée de projet numérique",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Chef développeur Back-End/Web"
+        "category" : "occupation",
+        "name"  :"Chef développeur Back-End/Web",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Chef développeur Front-End/Web"
+        "category" : "occupation",
+        "name"  :"Chef développeur Front-End/Web",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Chef monteur"
+        "category" : "occupation",
+        "name"  :"Chef monteur",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Chef opérateur de son"
+        "category" : "occupation",
+        "name"  :"Chef opérateur de son",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Chorégraphe"
+        "category" : "occupation",
+        "name"  :"Chorégraphe",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Concepteur architecture"
+        "category" : "occupation",
+        "name"  :"Concepteur architecture",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Concepteur d'images"
+        "category" : "occupation",
+        "name"  :"Concepteur d'images",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Concepteur designer"
+        "category" : "occupation",
+        "name"  :"Concepteur designer",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Concepteur interactive"
+        "category" : "occupation",
+        "name"  :"Concepteur interactive",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Concepteur lumière"
+        "category" : "occupation",
+        "name"  :"Concepteur lumière",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Concepteur multimédia"
+        "category" : "occupation",
+        "name"  :"Concepteur multimédia",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Concepteur sonore"
+        "category" : "occupation",
+        "name"  :"Concepteur sonore",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Concepteur technologique et électronique"
+        "category" : "occupation",
+        "name"  :"Concepteur technologique et électronique",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Designer d'interactivité "
+        "category" : "occupation",
+        "name"  :"Designer d'interactivité ",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Designeur industriel"
+        "category" : "occupation",
+        "name"  :"Designeur industriel",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Dessinateur industriel"
+        "category" : "occupation",
+        "name"  :"Dessinateur industriel",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Développeur Back-End/Web"
+        "category" : "occupation",
+        "name"  :"Développeur Back-End/Web",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Directeur artistique"
+        "category" : "occupation",
+        "name"  :"Directeur artistique",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Directeur de création"
+        "category" : "occupation",
+        "name"  :"Directeur de création",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Enseignant"
+        "category" : "occupation",
+        "name"  :"Enseignant",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Graphiste d'interface"
+        "category" : "occupation",
+        "name"  :"Graphiste d'interface",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Illustrateur"
+        "category" : "occupation",
+        "name"  :"Illustrateur",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Infographiste - multimédia"
+        "category" : "occupation",
+        "name"  :"Infographiste - multimédia",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Ingénieur du son"
+        "category" : "occupation",
+        "name"  :"Ingénieur du son",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Interprète"
+        "category" : "occupation",
+        "name"  :"Interprète",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Mixeur"
+        "category" : "occupation",
+        "name"  :"Mixeur",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Modeleur 3D"
+        "category" : "occupation",
+        "name"  :"Modeleur 3D",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Monteur de vidéos"
+        "category" : "occupation",
+        "name"  :"Monteur de vidéos",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Motion designer"
+        "category" : "occupation",
+        "name"  :"Motion designer",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Producteur"
+        "category" : "occupation",
+        "name"  :"Producteur",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Rédacteur - Scénariste"
+        "category" : "occupation",
+        "name"  :"Rédacteur - Scénariste",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Rédacteur web"
+        "category" : "occupation",
+        "name"  :"Rédacteur web",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Répétiteur / Dir. des répétitions"
+        "category" : "occupation",
+        "name"  :"Répétiteur / Dir. des répétitions",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Sound designer"
+        "category" : "occupation",
+        "name"  :"Sound designer",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Travailleur culturel"
+        "category" : "occupation",
+        "name"  :"Travailleur culturel",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Video jockeys"
+        "category" : "occupation",
+        "name"  :"Video jockeys",
+        "description" : "",
+        "source" : ""
     },
     {
-        "nom":"Webdesigner"
+        "category" : "occupation",
+        "name"  :"Webdesigner",
+        "description" : "",
+        "source" : ""
     }
 ]
