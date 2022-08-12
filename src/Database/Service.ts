@@ -103,8 +103,6 @@ export abstract class Service {
      */
     async insert(data: any): Promise<ApiResponseContract> {
         try {
-            //let item = await this.model.create(data);
-            // UpdateOne
             LogHelper.debug("insert begin", this.model, this.model.create);
             const meta = await this.model.create(data)
                 .then((model: any) => {
@@ -116,8 +114,6 @@ export abstract class Service {
                 });
 
             LogHelper.debug("insert", meta);
-
-            //Insert in userHistory
 
             return this.parseResult(meta, 'Création');
 
@@ -148,6 +144,7 @@ export abstract class Service {
                         return e;
                     }
                 );
+
             LogHelper.info("findOneAndUpdate return after the catch :", meta);
             // if method updateOne fail, it returns a mongo error with a code and a message. // was method findByIdAndUpdate used.
 
