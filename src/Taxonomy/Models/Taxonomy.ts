@@ -38,7 +38,7 @@ class Taxonomy extends AbstractModel {
             category: {
                 type: String,
                 required: [true, 'Required category (occupation, ...)'],
-                enum: ['occupation', 'skill', 'domaine', 'competence'],
+                enum: ['occupation', 'skill', 'domain', 'competence'],
                 lowercase: true,
                 trim: true,
                 index: true
@@ -61,6 +61,13 @@ class Taxonomy extends AbstractModel {
                 alias:'desc'
             },
             source: {
+                type: String
+            },
+            status: {
+                type: String,
+                enum: ["Accepted", "Pending", "Rejected", "Deprecated"]
+            },
+            addReason: {
                 type: String
             }
         },

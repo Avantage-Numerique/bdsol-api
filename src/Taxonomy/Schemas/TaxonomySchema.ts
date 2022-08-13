@@ -6,4 +6,6 @@ export interface TaxonomySchema extends Document {
     slug:string;
     description:string;
     source:string;
+    status:string;
+    addReason:string;
 }
