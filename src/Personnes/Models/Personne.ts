@@ -181,7 +181,7 @@ class Personne extends AbstractModel {
                 const personne: any = this;
                 if (personne.isModified('occupation')) {
                     const taxo = TaxonomyController.getInstance();
-                    const taxoList = taxo.list({ id : personne.occupation });
+                    const taxoList = taxo.list({ id : personne.occupation, category: "occupation" });
                     const count = (await taxoList).data.length;
                     if (personne.occupation.length != count)
                         throw("Pre save Erreur data occupation existe pas ou doublons");
@@ -190,18 +190,20 @@ class Personne extends AbstractModel {
             });
 
             //Pre update verification for occupation
-            /*await this.schema.pre('updateOne', async function (next: any): Promise<any>
+            await this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any>
             {
                 const personne: any = this;
-                if (personne.occupation) {
+                const data = personne.getUpdate();
+                
+                if (data.occupation) {
                     const taxo = TaxonomyController.getInstance();
-                    const taxoList = taxo.list({ id : personne.occupation });
+                    const taxoList = taxo.list({ id : data.occupation, category: "occupation" });
                     const count = (await taxoList).data.length;
-                    if (personne.occupation.length != count)
+                    if (data.occupation.length != count)
                         throw("Pre save Erreur data occupation existe pas ou doublons");
                 }
                 return next();
-            });*/
+            });
         }
     }
 

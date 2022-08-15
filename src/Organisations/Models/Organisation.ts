@@ -201,18 +201,20 @@ class Organisation extends AbstractModel {
            });
 
            //Pre update verification for occupation
-           /*await this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any>
+           await this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any>
            {
                const organisation: any = this;
-               if (organisation.offer) {
+               const data = organisation.getUpdate();
+               
+               if (data.offer) {
                    const taxo = TaxonomyController.getInstance();
-                   const taxoList = taxo.list({ id : organisation.offer, category: "occupation" }); //"Offer is the same as occupation"
+                   const taxoList = taxo.list({ id : data.offer, category: "occupation" }); //"Offer is the same as occupation"
                    const count = (await taxoList).data.length;
                    if (organisation.offer.length != count)
                        throw("Pre save Erreur data occupation existe pas ou doublons"); 
                 }
                return next();
-           });*/
+           });
 
        }
    }
