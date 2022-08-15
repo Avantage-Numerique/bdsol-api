@@ -4,6 +4,7 @@ import { PersonneSchema } from "../Schemas/PersonneSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
+import { TaxonomyController } from "../../Taxonomy/Controllers/TaxonomyController";
 
 class Personne extends AbstractModel {
 
@@ -15,6 +16,7 @@ class Personne extends AbstractModel {
         if (Personne._instance === undefined) {
             Personne._instance = new Personne();
             Personne._instance.initSchema();
+            Personne._instance.registerPreEvents();
         }
         return Personne._instance;
     }
@@ -154,7 +156,52 @@ class Personne extends AbstractModel {
     }
 
     public async documentation():Promise<any>{
+
         return fs.readFileSync('/api/doc/Personnes.md', 'utf-8');
    }
+
+    public async registerPreEvents()
+    {
+        if (this.schema !== undefined)
+        {
+            //Prendre le array fournit dans data (data.occupation)
+            //Pour vérif si les valeurs existe toute.  ( .count ) en filtrant sur les id et compare le nombre de résultat retourné avec le .length
+            //Pour vérif si les valeurs ont des doublons :
+                //(Possible que sa marche juste avec le .count, si je chercher avec plusieurs filtre id mais qu'il y a 2 fois le même id, sa retourne tu 1 ou 2.  
+            //Créer un Set avec les valeurs, et comparer .length du set au .length du array. Auquel cas, si doublons, length !=
+            // const setNoDoublon = new Set(arrayOccupation);
+            //if setNoDoublon.length != arrayOccupation.length { throw error }
+
+            //Pre save, verification for occupation
+            //Verify that occupations in the array exists and that there are no duplicates
+            await this.schema.pre('save', async function (next: any): Promise<any>
+            {
+                const personne: any = this;
+                if (personne.isModified('occupation')) {
+                    const taxo = TaxonomyController.getInstance();
+                    const taxoList = taxo.list({ id : personne.occupation });
+                    const count = (await taxoList).data.length;
+                    if (personne.occupation.length != count)
+                        throw("Pre save Erreur data occupation existe pas ou doublons");
+                }
+                return next();
+            });
+
+            //Pre update verification for occupation
+            /*await this.schema.pre('updateOne', async function (next: any): Promise<any>
+            {
+                const personne: any = this;
+                if (personne.occupation) {
+                    const taxo = TaxonomyController.getInstance();
+                    const taxoList = taxo.list({ id : personne.occupation });
+                    const count = (await taxoList).data.length;
+                    if (personne.occupation.length != count)
+                        throw("Pre save Erreur data occupation existe pas ou doublons");
+                }
+                return next();
+            });*/
+        }
+    }
+
 }
 export default Personne;
