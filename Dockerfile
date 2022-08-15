@@ -17,6 +17,8 @@ WORKDIR /api
 
 COPY ./package.json .
 COPY ./src .
+COPY ./.env .
+COPY ./tsconfig.json .
 
 RUN npm install
 
