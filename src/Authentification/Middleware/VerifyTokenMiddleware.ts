@@ -31,7 +31,7 @@ export class VerifyTokenMiddleware {
                 const token = authentificationHeader.split(' ');
                 const userToken = token[1];
 
-                //LogHelper.info("A Token is sent via the header authorization.", userToken);
+                LogHelper.info("A Token is sent via the header authorization.", userToken);
 
                 // Check if no token
                 if (!userToken) {
@@ -42,6 +42,7 @@ export class VerifyTokenMiddleware {
                 try
                 {
                     const verifiedToken:any = await TokenController.verify(userToken);
+                    LogHelper.log(`TokenController Verifying the token ${verifiedToken}`, verifiedToken);
 
                     if (verifiedToken.validated === true) {
                         // Set the user in the request, for the last middlewares and endpoints.

@@ -1,11 +1,9 @@
-
 import mongoose, {Schema} from "mongoose";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import {UserContract} from "../Contracts/UserContract";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
-import {HashingMiddleware, hashPasswordMiddleware} from "../../Authentification/Middleware/HashingMiddleware";
-import {PasswordsController} from "../../Authentification/Controllers/PasswordsController";
+import {HashingMiddleware} from "../../Authentification/Middleware/HashingMiddleware";//HashingMiddleware
 
 export class User extends AbstractModel {
 
@@ -153,13 +151,19 @@ export class User extends AbstractModel {
         return fs.readFileSync('/api/doc/Users.md', 'utf-8');
    }
 
+    /**
+     * The model's events that needs to be done during the mongoose phases
+     * for now :
+     * Pre->Save
+     * Pre->UpdateOne.
+     */
     public async assignDbEventsToSchema()
     {
         if (this.schema !== undefined)
         {
             // CREATE users, we hash the password.
-            await this.schema.pre('save', hashPasswordMiddleware);
-            await this.schema.pre('UpdateOne', hashPasswordMiddleware);//HashingMiddleware.mongooseMiddlewareHandler()
+            await this.schema.pre('save', HashingMiddleware.mongooseMiddlewareHandler());
+            await this.schema.pre('UpdateOne', HashingMiddleware.mongooseMiddlewareHandler());//
         }
     }
 

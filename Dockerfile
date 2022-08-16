@@ -19,6 +19,7 @@ COPY ./package.json .
 COPY ./src .
 COPY ./.env .
 COPY ./tsconfig.json .
+COPY ./nodemon.json .
 
 RUN npm install
 

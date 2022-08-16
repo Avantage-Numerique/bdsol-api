@@ -2,5 +2,5 @@
   "verbose": true,
   "ignore": [],
   "legacyWatch": true,
-  "watch": ["src/**/*.ts"]
+  "watch": ["**/*.ts"]
 }

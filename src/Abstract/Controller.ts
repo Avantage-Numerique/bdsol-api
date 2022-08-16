@@ -144,7 +144,7 @@ abstract class AbstractController {
         LogHelper.log("Create UserHistory ", req.user, );
 
         //User id
-        const user:mongoose.ObjectId = req.user.user_id;
+        const user:mongoose.ObjectId = req.user.id;
 
         //IP Address
         const ipAddress = req.ip;

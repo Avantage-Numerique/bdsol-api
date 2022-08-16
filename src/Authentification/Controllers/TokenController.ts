@@ -16,6 +16,7 @@ export class TokenController {
      */
     public static generate(encapsulateData:any):string
     {
+        LogHelper.debug('Generate with the data', encapsulateData);
         //verify type of the encapsulate Data ?
         return jwt.sign(encapsulateData, config.tokenSecret, config.jwt.defaultOptions);
     }
