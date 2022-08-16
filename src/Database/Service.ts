@@ -42,8 +42,7 @@ export abstract class Service {
         }
 
         try {
-            const item = await this.model.findOne(query).
-            setOptions({ sanitizeFilter: true });
+            const item = await this.model.findOne(query);
 
 
             if (item !== null) {
@@ -111,36 +110,14 @@ export abstract class Service {
             //let item = await this.model.create(data);
             // UpdateOne
 
-            meta = await this.model.create(data);
-
-            /**
-             *
-             .then((model: any) => {
-                    LogHelper.error("Can't create target Model with data", model);
-                    return model;
-                })
+            meta = await this.model.create(data)
              .catch((e: any) => {
                     LogHelper.error("Can't create target Model with data", data, e);
                     return e;
-                })
-             */
+                });
 
-            /*const options:any = {
-                limit:1,
-                rawResult:true
-            }
-            let meta:any;
-            //this don't work because in the callback, is like an async but we can't await it.
-            this.model.insertMany(data, options, await (error:any, docs:any) => {
-
-                LogHelper.debug("insertMany", error, docs);
-                if (error !== null) {
-                    throw error;
-                }
-                meta = docs;
-            });
-            LogHelper.debug("insert", meta);*/
             //Insert in userHistory
+            return this.parseResult(meta, 'Création');
 
         } catch (insertError: any) {
             LogHelper.error(insertError);
@@ -151,7 +128,6 @@ export abstract class Service {
             );
         }
 
-        return this.parseResult(meta, 'Création');
     }
 
     /**

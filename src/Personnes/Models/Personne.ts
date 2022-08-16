@@ -5,6 +5,7 @@ import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
 import { TaxonomyController } from "../../Taxonomy/Controllers/TaxonomyController";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 class Personne extends AbstractModel {
 
@@ -179,8 +180,12 @@ class Personne extends AbstractModel {
                 const personne: any = this;
                 if (personne.isModified('occupation')) {
                     const taxo = TaxonomyController.getInstance();
-                    const taxoList = taxo.list({ id : personne.occupation, category: "occupation" });
-                    const count = (await taxoList).data.length;
+                    const taxoList = await taxo.list({ id : personne.occupation, category: "occupation" }); //Taxonomies.OCCUPATION
+                    const count = taxoList.data.length;
+
+                    LogHelper.debug("Pre save taxoList", taxoList);
+                    console.log(taxoList);
+                    LogHelper.debug("Pre save", personne.occupation, personne.occupation.length, count);
                     if (personne.occupation.length != count)
                         throw("Pre save Erreur data occupation existe pas ou doublons");
                 }

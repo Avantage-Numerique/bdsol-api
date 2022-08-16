@@ -101,7 +101,6 @@ export default class Api {
                 baseRoute: "/userhistory",
                 manager: new UsersHistoryRoutes()
             }
-
         ];
     }
 
@@ -176,7 +175,6 @@ export default class Api {
      */
     private _needAuthentificationRoutes()
     {
-
         /**
          * Init all the base routes
          */

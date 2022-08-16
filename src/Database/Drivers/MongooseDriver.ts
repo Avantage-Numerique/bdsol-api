@@ -12,7 +12,7 @@ import Personne from "../../Personnes/Models/Personne";
 import Organisation from "../../Organisations/Models/Organisation";
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 import UserHistory from "../../UserHistory/Models/UserHistory";
-import CreateDataMongoose from "../../Migrations/create-data-mongoose";
+/*import CreateDataMongoose from "../../Migrations/create-data-mongoose";
 import { PersonnesController } from "../../Personnes/Controllers/PersonnesController";
 import OrganisationsController from "../../Organisations/Controllers/OrganisationsController";
 import { TaxonomyController } from "../../Taxonomy/Controllers/TaxonomyController";
@@ -20,7 +20,7 @@ import { UsersHistoryController } from "../../UserHistory/Controllers/UsersHisto
 import PersonnesService from "../../Personnes/Services/PersonnesService";
 import OrganisationsService from "../../Organisations/Services/OrganisationsService";
 import TaxonomyService from "../../Taxonomy/Services/TaxonomyService";
-import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService";
+import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService";*/
 import {MongooseSlugUpdater} from "../Plugins/MongooseSlugUpdater";
 
 export class MongooseDBDriver implements DBDriver {
@@ -58,13 +58,6 @@ export class MongooseDBDriver implements DBDriver {
         LogHelper.info(`[BD] Connexion aux base de données ...`);
         await this.initDb();
     }
-
-
-    public async connect2() {
-        LogHelper.info(`[BD] Connexion aux base de données ...`);
-        await this.initDb();
-    }
-
 
     /**
      * Method mandatory in DBDriver, to init this driver.

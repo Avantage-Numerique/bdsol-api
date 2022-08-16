@@ -4,11 +4,9 @@ import {OrganisationSchema} from "../Schemas/OrganisationSchema";
 import {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
-<<<<<<< .mine
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-=======
 import { TaxonomyController } from "../../Taxonomy/Controllers/TaxonomyController";
->>>>>>> .theirs
+
 
 class Organisation extends AbstractModel {
 
@@ -194,8 +192,8 @@ class Organisation extends AbstractModel {
                const organisation: any = this;
                if (organisation.isModified('offer')) {
                    const taxo = TaxonomyController.getInstance();
-                   const taxoList = taxo.list({ id : organisation.offer, category: "occupation" }); //"Offer is the same as occupation"
-                   const count = (await taxoList).data.length;
+                   const taxoList = await taxo.list({ id : organisation.offer, category: "occupation" }); //"Offer is the same as occupation"
+                   const count = taxoList.data.length;
                    if (organisation.offer.length != count)
                        throw("Pre save Erreur data occupation existe pas ou doublons"); 
                 }

@@ -92,8 +92,9 @@ abstract class AbstractController {
      * @return {ApiResponseContract} Promise containing a list of documents
     */
     public async list(requestData:any):Promise<ApiResponseContract> {
-        LogHelper.log("Controller list : ", requestData);
+
         const query = QueryBuilder.build(requestData);
+        LogHelper.log("Controller list : ", query, requestData);
         return await this.service.all(query);
     }
 

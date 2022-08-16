@@ -1,5 +1,5 @@
 
-export default class QueryBuilder {
+export default class ApiQuery {
 
     static initQuery:any;
     static query:any;
@@ -14,11 +14,11 @@ export default class QueryBuilder {
     }
 
     /**
-     * @method QueryBuilder Forme la requête de condition à envoyer à mongoose.
-     * 
+     * @method ApiQuery Forme la requête de condition à envoyer à mongoose.
+     *
      * Paramètre :
      * @param {key:value} query  - Les critère de recherche
-     * 
+     *
      * Retourne :
      * @return {object} finalQuery est un objet contenant les conditions de recherche adaptée pour mongo
      * @note NE FONCTIONNE PAS PRÉSENTEMENT AVEC LES NOMBRES PUISQUE JE CONVERTIS LES NOMBRES EN STRING!
@@ -26,34 +26,33 @@ export default class QueryBuilder {
     static build(query:any) {
 
         //const finalQuery:any = {};
-        QueryBuilder.query = {};
-        QueryBuilder.initQuery = query;
+        ApiQuery.query = {};
+        ApiQuery.initQuery = query;
 
         let value:any;
         for (const field in query)
         {
-            if (QueryBuilder.fieldIsDeclared(field))
+            if (ApiQuery.fieldIsDeclared(field))
             {
-
                 value = query[field].toString();//@todo : Add a try/catch for this ?
 
                 //  S'il s'agit d'un id
                 if (field == "id") {
-                    QueryBuilder.query._id = value;
+                    ApiQuery.query._id = value;
                 }
 
-                if (QueryBuilder.haveProperty(value)) {
-                    QueryBuilder.query[field] = QueryBuilder.propertyToQueryObject(value);
+                if (ApiQuery.haveProperty(value)) {
+                    ApiQuery.query[field] = ApiQuery.propertyToQueryObject(value);
                 }
 
                 //  Si ce n'est pas un Id ou si on cherche une date précise (field == date).
-                if (!QueryBuilder.haveProperty(value)) {
-                    QueryBuilder.query[field] = { $regex: value, $options : 'i' };
+                if (!ApiQuery.haveProperty(value)) {
+                    ApiQuery.query[field] = { $regex: value, $options : 'i' };
                 }
             }
         }
 
-        return QueryBuilder.query;
+        return ApiQuery.query;
     }
 
     /**
@@ -64,12 +63,12 @@ export default class QueryBuilder {
     static propertyToQueryObject(value:string):any
     {
         let queryProperty:any = {};
-        for (const supportedProperty in QueryBuilder.supportedProperties)
+        for (const supportedProperty in ApiQuery.supportedProperties)
         {
-            const propertyParams:any = QueryBuilder.supportedProperties[supportedProperty];
+            const propertyParams:any = ApiQuery.supportedProperties[supportedProperty];
 
-            if (QueryBuilder.haveProperty(value, supportedProperty + QueryBuilder.propertySeperator)) {
-                return queryProperty[propertyParams.queryProperty] = QueryBuilder.queryPropertyValue(value);
+            if (ApiQuery.haveProperty(value, supportedProperty + ApiQuery.propertySeperator)) {
+                return queryProperty[propertyParams.queryProperty] = ApiQuery.queryPropertyValue(value);
             }
         }
     }
@@ -78,7 +77,7 @@ export default class QueryBuilder {
     /**
      * Check if the value have a seperator within his value,
      * @param value {string} the field value raw
-     * @param propertysValueSeperator {string} would be equal to QueryBuilder.propertySeperator
+     * @param propertysValueSeperator {string} would be equal to ApiQuery.propertySeperator
      */
     static haveProperty(value:string, propertysValueSeperator:string=":") {
         return value.includes(propertysValueSeperator);
@@ -101,9 +100,9 @@ export default class QueryBuilder {
      * @return {boolean}
      */
     static fieldIsDeclared(field:string):boolean {
-        return QueryBuilder.queryIsValid()
-            && QueryBuilder.initQuery[field] !== null
-            && QueryBuilder.initQuery[field] !== undefined;
+        return ApiQuery.queryIsValid()
+            && ApiQuery.initQuery[field] !== null
+            && ApiQuery.initQuery[field] !== undefined;
     }
 
 
@@ -111,9 +110,9 @@ export default class QueryBuilder {
      * @return {boolean} if the query is an object, and not null/undefined.
      */
     static queryIsValid():boolean {
-        return QueryBuilder.initQuery !== null
-            && QueryBuilder.initQuery !== undefined
-            && typeof QueryBuilder.initQuery === "object";
+        return ApiQuery.initQuery !== null
+            && ApiQuery.initQuery !== undefined
+            && typeof ApiQuery.initQuery === "object";
     }
 
 
