@@ -19,7 +19,7 @@ export class VerifyTokenMiddleware {
          */
         return async function (req: Request, res: Response, next: NextFunction)
         {
-            LogHelper.info(`Verifying the token sent for ${req.url}`);
+            LogHelper.info(`Verifying the token sent for ${req.originalUrl}`);
 
             // Get token from header
             //const headers = req.headers;
@@ -31,7 +31,7 @@ export class VerifyTokenMiddleware {
                 const token = authentificationHeader.split(' ');
                 const userToken = token[1];
 
-                //LogHelper.info("A Token is sent via the header authorization.", userToken);
+                LogHelper.info("A Token is sent via the header authorization.", userToken);
 
                 // Check if no token
                 if (!userToken) {
@@ -42,11 +42,12 @@ export class VerifyTokenMiddleware {
                 try
                 {
                     const verifiedToken:any = await TokenController.verify(userToken);
+                    LogHelper.log(`TokenController Verifying the token ${verifiedToken}`, verifiedToken);
 
                     if (verifiedToken.validated === true) {
                         // Set the user in the request, for the last middlewares and endpoints.
+                        req.user.ip = req.socket.remoteAddress;//when reverse proxy : req.headers['x-forwarded-for'] ||
                         req.user = verifiedToken;
-
                         LogHelper.log(`User's token verified, next to url ${req.originalUrl}`);
                         // Here is the only reason why we allow the request to do the next() function.
                         next();

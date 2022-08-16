@@ -14,6 +14,7 @@ import AbstractModel from "../Abstract/Model";
 export abstract class Service {
 
     model: any;//@todo create or find the best type for this.
+    appModel: AbstractModel;
     connection: any;
     state:string;
 
@@ -23,6 +24,7 @@ export abstract class Service {
     LIST_STATE:string = "list";
 
     constructor(model: AbstractModel) {
+        this.appModel = model;
         this.model = model.connect();
     }
 
@@ -30,7 +32,8 @@ export abstract class Service {
      * Get all the documents from a collection that fits the query.
      * @param query any Should be an object with the document's
      */
-    async get(query: any): Promise<ApiResponseContract> {
+    async get(query: any): Promise<ApiResponseContract>
+    {
         if (config.db.config.createObjectIdForQuery) {
             query._id = Service.transformToObjectId(query._id);
             if (query._id.error) {
@@ -39,8 +42,7 @@ export abstract class Service {
         }
 
         try {
-            const item = await this.model.findOne(query).
-            setOptions({ sanitizeFilter: true });
+            const item = await this.model.findOne(query);
 
 
             if (item !== null) {
@@ -58,7 +60,8 @@ export abstract class Service {
      * Get all the documents from a collection that fits the query.
      * @param query
      */
-    async all(query: any): Promise<ApiResponseContract> {
+    async all(query: any): Promise<ApiResponseContract>
+    {
 
         //set and dry parameters passed via query, but for preheating purposes.
         let {skip, limit} = query;
@@ -102,29 +105,29 @@ export abstract class Service {
      * @param data any the document structure. This is type any because that class will be extended.
      */
     async insert(data: any): Promise<ApiResponseContract> {
+        let meta;
         try {
-            LogHelper.debug("insert begin", this.model, this.model.create);
-            const meta = await this.model.create(data)
-                .then((model: any) => {
-                    return model;
-                })
-                .catch((e: any) => {
-                    LogHelper.debug("model.create", e);
+            //let item = await this.model.create(data);
+            // UpdateOne
+
+            meta = await this.model.create(data)
+             .catch((e: any) => {
+                    LogHelper.error("Can't create target Model with data", data, e);
                     return e;
                 });
 
-            LogHelper.debug("insert", meta);
-
+            //Insert in userHistory
             return this.parseResult(meta, 'Création');
 
         } catch (insertError: any) {
-
+            LogHelper.error(insertError);
             return ErrorResponse.create(
                 insertError.errors,
                 StatusCodes.INTERNAL_SERVER_ERROR,
-                insertError.errmsg || "Not able to insert item"
+                insertError.message || "Not able to insert item"
             );
         }
+
     }
 
     /**
@@ -144,7 +147,6 @@ export abstract class Service {
                         return e;
                     }
                 );
-
             LogHelper.info("findOneAndUpdate return after the catch :", meta);
             // if method updateOne fail, it returns a mongo error with a code and a message. // was method findByIdAndUpdate used.
 
@@ -201,7 +203,6 @@ export abstract class Service {
     private parseResult(meta: any, actionMessage: string = "Mise à jour"): ApiResponseContract
     {
         LogHelper.debug(`Parse Result method for ${actionMessage}`, meta, actionMessage);
-
 
         // Mongo DB validation failed, make that excalade the response flow, shall we.
         if (meta.errors) {

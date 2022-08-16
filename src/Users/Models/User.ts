@@ -1,10 +1,9 @@
-
 import mongoose, {Schema} from "mongoose";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import {UserContract} from "../Contracts/UserContract";
 import AbstractModel from "../../Abstract/Model";
-import {PasswordsController} from "../../Authentification/Controllers/PasswordsController";
 import * as fs from 'fs';
+import {HashingMiddleware} from "../../Authentification/Middleware/HashingMiddleware";//HashingMiddleware
 
 export class User extends AbstractModel {
 
@@ -16,7 +15,7 @@ export class User extends AbstractModel {
         if (User._instance === undefined) {
             User._instance = new User();
             User._instance.initSchema();
-            User._instance.registerPreEvents();
+            User._instance.assignDbEventsToSchema();
         }
         return User._instance;
     }
@@ -143,31 +142,28 @@ export class User extends AbstractModel {
             avatar: document.avatar,
             name: document.name,
             email: document.email,
+            role: document.role,
         }
     }
 
-    public async documentation():Promise<any>{
+
+    public async documentation():Promise<any> {
         return fs.readFileSync('/api/doc/Users.md', 'utf-8');
    }
 
-    public async registerPreEvents()
+    /**
+     * The model's events that needs to be done during the mongoose phases
+     * for now :
+     * Pre->Save
+     * Pre->UpdateOne.
+     */
+    public async assignDbEventsToSchema()
     {
         if (this.schema !== undefined)
         {
             // CREATE users, we hash the password.
-            await this.schema.pre('save', async function (next: any): Promise<any>
-            {
-                const user: any = this;
-                if (!user.isModified('password')) {
-                    return next();
-                }
-                try {
-                    user.password = await PasswordsController.hash(user.password);
-                } catch (error: any) {
-                    throw error;
-                }
-                return next();
-            });
+            await this.schema.pre('save', HashingMiddleware.mongooseMiddlewareHandler());
+            await this.schema.pre('UpdateOne', HashingMiddleware.mongooseMiddlewareHandler());//
         }
     }
 

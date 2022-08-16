@@ -13,6 +13,10 @@ class UsersHistoryController extends AbstractController {
     /** @public Model */
     entity:UserHistory;
 
+
+    name:string = "UserHistory";
+
+
     constructor() {
         super();
         this.entity = UserHistory.getInstance();

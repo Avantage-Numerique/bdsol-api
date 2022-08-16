@@ -4,10 +4,9 @@ import {OrganisationSchema} from "../Schemas/OrganisationSchema";
 import {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import { TaxonomyController } from "../../Taxonomy/Controllers/TaxonomyController";
 
-const slug = require('mongoose-slug-updater');
-mongoose.plugin(slug);
 
 class Organisation extends AbstractModel {
 
@@ -158,19 +157,20 @@ class Organisation extends AbstractModel {
      * @return {any}
      */
     public dataTransfertObject(document: any):any {
+        LogHelper.debug('dataTransfertObject',document);
         return {
-            name: document.name,
-            description: document.description,
-            url: document.url,
-            contactPoint: document.contactPoint,
-            fondationDate: document.fondationDate,
-            offer: document.offer
+            name: document.name ?? '',
+            description: document.description ?? '',
+            url: document.url ?? '',
+            contactPoint: document.contactPoint ?? '',
+            fondationDate: document.fondationDate ?? '',
+            offer: document.offer ?? ''
         }
     }
 
     public async documentation():Promise<any>{
-        const response =  fs.readFileSync('/api/doc/Organisations.md', 'utf-8');
-        return response;
+
+        return fs.readFileSync('/api/doc/Organisations.md', 'utf-8');
    }
 
    public async registerPreEvents()
@@ -192,8 +192,8 @@ class Organisation extends AbstractModel {
                const organisation: any = this;
                if (organisation.isModified('offer')) {
                    const taxo = TaxonomyController.getInstance();
-                   const taxoList = taxo.list({ id : organisation.offer, category: "occupation" }); //"Offer is the same as occupation"
-                   const count = (await taxoList).data.length;
+                   const taxoList = await taxo.list({ id : organisation.offer, category: "occupation" }); //"Offer is the same as occupation"
+                   const count = taxoList.data.length;
                    if (organisation.offer.length != count)
                        throw("Pre save Erreur data occupation existe pas ou doublons"); 
                 }

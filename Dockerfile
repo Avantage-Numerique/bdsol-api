@@ -16,9 +16,10 @@ RUN mkdir -p /api
 WORKDIR /api
 
 COPY ./package.json .
-COPY ./.env .
 COPY ./src .
+COPY ./.env .
 COPY ./tsconfig.json .
+COPY ./nodemon.json .
 
 RUN npm install
 

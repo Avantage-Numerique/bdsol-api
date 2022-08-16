@@ -4,9 +4,6 @@ import { TaxonomySchema } from "../Schemas/TaxonomySchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model"
 
-const slug = require('mongoose-slug-updater');
-mongoose.plugin(slug);
-
 class Taxonomy extends AbstractModel {
 
     /** @protected @static Singleton instance of model Taxonomy */

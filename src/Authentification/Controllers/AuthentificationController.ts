@@ -5,29 +5,45 @@ import {LogoutResponse} from "../Responses/LogoutResponse";
 import UserAuthContract from "../Contracts/UserAuthContract";
 import {TokenController} from "./TokenController";
 import {UsersService, User} from "../../Users/UsersDomain";
-
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
 import {PasswordsController} from "./PasswordsController";
 import {SuccessResponse} from "../../Http/Responses/SuccessResponse";
 import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import config from "../../config";
 
 
 class AuthentificationController
 {
 
-    public static service:UsersService;
-    public static userModel:User;
-    //user provider.
+    /** @private @static Singleton instance */
+    private static _instance:AuthentificationController;
+
+
+    public service:UsersService;
+    public userModel:User;
+
 
     constructor()
     {
-        AuthentificationController.userModel = User.getInstance();
-        AuthentificationController.service = UsersService.getInstance(AuthentificationController.userModel);
+        this.userModel = User.getInstance();
+        this.service = UsersService.getInstance(this.userModel);
 
-        if (AuthentificationController.service === undefined) {
+        if (this.service === undefined) {
             LogHelper.error("[AuthentificationController] Service is null in Authentification");
         }
+    }
+
+
+    /**
+     * @public @static @method getInstance Create the singleton instance if not existing
+     * @return {AuthentificationController} Controller singleton constructor
+     */
+    public static getInstance():AuthentificationController {
+        if (AuthentificationController._instance === undefined) {
+            AuthentificationController._instance = new AuthentificationController();
+        }
+        return AuthentificationController._instance;
     }
 
     /**
@@ -48,11 +64,12 @@ class AuthentificationController
             !targetUser.error &&
             targetUser.data !== null)
         {
-            LogHelper.log(`Les information de ${targetUser.data.username} fonctionnent, génération du token JW ...`);
+            LogHelper.info(`Les information de ${targetUser.data.username} fonctionnent, génération du token JW ...`);
+            LogHelper.debug(targetUser);
 
             // Generate an access token
-            const data:any = AuthentificationController.userModel.dataTransfertObject(targetUser.data);
-            data.token = this.generateToken(targetUser.data);
+            const data:any = this.userModel.dataTransfertObject(targetUser.data);
+            data.token = TokenController.generateUserToken(this.userModel.dataTransfertObject(targetUser.data));
 
             return  SuccessResponse.create(
                 { user: data },
@@ -110,19 +127,35 @@ class AuthentificationController
     }
 
 
-    /**
-     * Generete a token form user data.
-     * @param user {any} must have _id, username and role setup though.
-     * @private
-     */
-    private generateToken(user:any):string
+    public async register(requestData:any): Promise<ApiResponseContract>
     {
-        return TokenController.generate({
-            "user_id": `${user._id}`,
-            "username": `${user.username}`,
-            "role": `${user.role}`
-        });
+        LogHelper.log("Authentification Controller Register : ", requestData);
+        const createdDocumentResponse = await this.service.insert(requestData);
+
+        if (createdDocumentResponse !== undefined)
+            return createdDocumentResponse;
+
+        LogHelper.debug("Service response from insert is undefined");
+
+        return ErrorResponse.create(
+            new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            'Service returned an undefined response from insert'
+        );
     }
+
+
+    public async generateToken(): Promise<string>
+    {
+        if (config.isDevelopment)
+        {
+            const devUser:any = await this.service.model.findOne({username: "datageek"});
+            LogHelper.debug(devUser, this.userModel.dataTransfertObject(devUser));
+            return TokenController.generateUserToken(this.userModel.dataTransfertObject(devUser));
+        }
+        return "";
+    }
+
 
     /**
      * search in the current database driver for the user.
@@ -142,7 +175,7 @@ class AuthentificationController
             LogHelper.info(`Vérification des informations fournis par ${username} ...`);
             if (ServerController.database.driverPrefix === 'mongodb')
             {
-                const user = await AuthentificationController.service.get(targetUser);
+                const user = await this.service.get(targetUser);
 
                 // If we find a user, we check the password through the hashing comparaison.
                 if (!user.error && user.data.password !== undefined)

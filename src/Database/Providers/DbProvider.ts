@@ -28,7 +28,11 @@ export abstract class BaseProvider implements DbProvider {
     protected _url:string;
     protected _databaseName:string;
 
+    protected _debug:boolean = config.mongooseDebug;
+
     abstract _models:Array<AbstractModel>;
+
+
 
 
     constructor(name='') {
@@ -44,12 +48,15 @@ export abstract class BaseProvider implements DbProvider {
      */
     public async connect():Promise<mongoose.Connection|undefined>
     {
-        LogHelper.info("Connect to url : ", this.url);
+        LogHelper.info("[BD] Connect to url : ", this.url);
         try {
             const connectionOptions:any = {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
             };
+            mongoose.set('debug', this._debug);
+            //@todo debug this, broke service create. https://thecodebarbarian.com/whats-new-in-mongoose-6-sanitizefilter.html
+            //mongoose.set('sanitizeFilter', true);
             this.connection = await mongoose.createConnection(this.url, connectionOptions as mongoose.ConnectOptions);//
 
             return this.connection;
@@ -59,8 +66,6 @@ export abstract class BaseProvider implements DbProvider {
             LogHelper.error("Can't connect to db in provider");
             throw error;
         }
-
-        return undefined;
     }
 
     /**

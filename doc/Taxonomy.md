@@ -67,7 +67,7 @@ Retour à la base de [Documention de l'API](documentation-api.md)
               "slug": { "type": "string" },
               "description": { "type": "string" },
               "source": { "type": "string" }
-          },
+          }
       },
       "required": ["data"]
   }
@@ -90,7 +90,7 @@ Retour à la base de [Documention de l'API](documentation-api.md)
               "slug": { "type": "string" },
               "description": { "type": "string" },
               "source": { "type": "string" }
-          },
+          }
       },
       "required": ["data"]
   }

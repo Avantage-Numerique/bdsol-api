@@ -5,8 +5,9 @@
  *  String helpers to manage string in dynamic calling and sanitization contexte.
  *  Like changing a camel case to a Studly case. Or a snake case to a kebab case.
  *  Really close to the Laravel implementation for their Support Str helper
+ *  Could use lodash for casing ?
  *  @features
- *  string cahing, help for multiple call on the same string.
+ *  string caching, help for multiple call on the same string.
  */
 export class Str {
 
@@ -168,6 +169,10 @@ export class Str {
 
     public static allowedChars(str:string):string {
         return str.replace(Str.ALLOW_CHAR, "");
+    }
+
+    public static noSpaces(str:string):string {
+        return str.replace(Str.NO_SPACE, "")
     }
 
 }

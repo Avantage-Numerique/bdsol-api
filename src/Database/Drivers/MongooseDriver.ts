@@ -12,7 +12,7 @@ import Personne from "../../Personnes/Models/Personne";
 import Organisation from "../../Organisations/Models/Organisation";
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 import UserHistory from "../../UserHistory/Models/UserHistory";
-import CreateDataMongoose from "../../Migrations/create-data-mongoose";
+/*import CreateDataMongoose from "../../Migrations/create-data-mongoose";
 import { PersonnesController } from "../../Personnes/Controllers/PersonnesController";
 import OrganisationsController from "../../Organisations/Controllers/OrganisationsController";
 import { TaxonomyController } from "../../Taxonomy/Controllers/TaxonomyController";
@@ -20,7 +20,8 @@ import { UsersHistoryController } from "../../UserHistory/Controllers/UsersHisto
 import PersonnesService from "../../Personnes/Services/PersonnesService";
 import OrganisationsService from "../../Organisations/Services/OrganisationsService";
 import TaxonomyService from "../../Taxonomy/Services/TaxonomyService";
-import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService";
+import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService";*/
+import {MongooseSlugUpdater} from "../Plugins/MongooseSlugUpdater";
 
 export class MongooseDBDriver implements DBDriver {
 
@@ -29,6 +30,8 @@ export class MongooseDBDriver implements DBDriver {
     public db: mongoDB.Db | mongoose.Connection | null;//will be the provider.
     public baseUrl: string;
     public providers: any;
+
+    public plugins:any;
 
     /**
      * Constructor fo this driver. Object is created 1 time in  ServerController.
@@ -45,6 +48,12 @@ export class MongooseDBDriver implements DBDriver {
         };
     }
 
+    public async configAddon() {
+        const mongooseSlugPlugin = new MongooseSlugUpdater();//../
+        await mongooseSlugPlugin.loadDependancy();
+        mongooseSlugPlugin.assign(mongoose);
+    }
+
     public async connect() {
         LogHelper.info(`[BD] Connexion aux base de données ...`);
         await this.initDb();
@@ -55,6 +64,7 @@ export class MongooseDBDriver implements DBDriver {
      */
     public async initDb() {
         //await this.initMongoose();
+        await this.configAddon();
 
         LogHelper.info(`[BD] Connexion à la base de données utilisateurs ...`);
         await this.providers.users.connect();

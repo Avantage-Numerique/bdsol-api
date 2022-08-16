@@ -96,7 +96,7 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/personnes/sea
               "nickname": { "type": "string" },
               "description": { "type": "string" },
               "occupation": { "type": ["ObjectId"] }
-          },
+          }
       },
       "required": ["data"]
   }

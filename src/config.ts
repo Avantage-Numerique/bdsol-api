@@ -7,9 +7,13 @@ dotenv.config();
 const config = {
 
     environnement: process.env.ENVIRONNEMENT || "development",
+
     isProduction: process.env.ENVIRONNEMENT === 'production',
     isStaging: process.env.ENVIRONNEMENT === 'staging',
     isDevelopment: process.env.ENVIRONNEMENT === 'development',
+
+    // Dev configuration.
+    mongooseDebug: process.env.ENVIRONNEMENT === 'development' && process.env.MONGOOSE_DEBUG === 'true' ,
 
     appName: process.env.APP_NAME || "API",
     port: process.env.PORT || "8000",
@@ -47,7 +51,7 @@ const config = {
     },
     query: {
         defaultSkip: process.env.QUERY_DEFAULT_SKIP || 0,
-        defaultLimit: process.env.QUERY_DEFAULT_LIMIT || 10,
+        defaultLimit: process.env.QUERY_DEFAULT_LIMIT || 100,
     }
 };
 

@@ -8,8 +8,12 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 
 ```json
 {
-    "username": "string",
-    "password": "string"
+    "type": "object",
+    "properties": {
+        "username": { "type": "string" },
+        "password": { "type": "string" }
+    },
+    "required": ["username", "password"]
 }
 ```
 
@@ -60,7 +64,11 @@ Code : **401** : lorsque les informations ne sont pas OK.
 
 ```json
 {
-    "token": "string"
+    "type": "object",
+    "properties": {
+        "token": { "type": "string" }
+    },
+    "required": ["token"]
 }
 ```
 
@@ -121,7 +129,11 @@ Cette fonction n'est pas implémenté encore. l'url retourne toujours cette rép
 
 ```json
 {
-    "username": "string"
+    "type": "object",
+    "properties": {
+        "username": { "type": "string" }
+    },
+    "required": ["token"]
 }
 ```
 

@@ -5,9 +5,7 @@ import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
 import { TaxonomyController } from "../../Taxonomy/Controllers/TaxonomyController";
-
-const slug = require('mongoose-slug-updater');
-mongoose.plugin(slug);
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 class Personne extends AbstractModel {
 
@@ -144,6 +142,7 @@ class Personne extends AbstractModel {
 
     /**
      * @public @method dataTransfertObject Format the document for the public return.
+     * @todo faire une version qu'on a un objet adapté au document et non mandatoir sur toute les propriétés inscrite.
      * @param document
      * @return {any}
      */
@@ -158,9 +157,9 @@ class Personne extends AbstractModel {
     }
 
     public async documentation():Promise<any>{
-        const response =  fs.readFileSync('/api/doc/Personnes.md', 'utf-8');
-        return response;
-    }
+
+        return fs.readFileSync('/api/doc/Personnes.md', 'utf-8');
+   }
 
     public async registerPreEvents()
     {
@@ -181,8 +180,12 @@ class Personne extends AbstractModel {
                 const personne: any = this;
                 if (personne.isModified('occupation')) {
                     const taxo = TaxonomyController.getInstance();
-                    const taxoList = taxo.list({ id : personne.occupation, category: "occupation" });
-                    const count = (await taxoList).data.length;
+                    const taxoList = await taxo.list({ id : personne.occupation, category: "occupation" }); //Taxonomies.OCCUPATION
+                    const count = taxoList.data.length;
+
+                    LogHelper.debug("Pre save taxoList", taxoList);
+                    console.log(taxoList);
+                    LogHelper.debug("Pre save", personne.occupation, personne.occupation.length, count);
                     if (personne.occupation.length != count)
                         throw("Pre save Erreur data occupation existe pas ou doublons");
                 }

@@ -1,99 +1,227 @@
-import express from "express";
-import AuthenficationController from "../Controllers/AuthentificationController";
+import express, {Request, Response} from "express";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import config from "../../config";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
-import {TokenController} from "../Controllers/TokenController";
-
-// add { mergeParams: true } to get the main route params.
-const AuthentificationRouter = express.Router();
-
-// GET ENDPOINTS
-
-//  LOGIN
-AuthentificationRouter.get('/login',
-    (req, res) => {
-        LogHelper.warn('trying to access login with get method');
-        return res.send('There is no place in eightyworld for login.');
-    });
+import AuthentificationController from "../Controllers/AuthentificationController";
+import {VerifyTokenMiddleware} from "../Middleware/VerifyTokenMiddleware";
+import {body} from "express-validator";
+import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
+import {NoSpaceSanitizer} from "../../Security/Sanitizers/NoSpaceSanitizer";
+import {NoAccentSanitizer} from "../../Security/Sanitizers/NoAccentSanitizer";
 
 
-//  POST ENDPOINTS
 
-/**
- * Post method to return a token if the user is in the DB
- * requête body en JSON :
- * username:string
- * password:string
- */
-AuthentificationRouter.post('/login',
-    async (req, res) => {
+
+export class AuthentificationRoutes {
+    
+    /**
+     * Controller of a specific entity.
+     */
+    public controller: AuthentificationController = AuthentificationController.getInstance();
+
+    /**
+     * Router for public route.
+     */
+    public routerInstance: express.Router = express.Router();
+
+    /**
+     * Router for the authentifiation route.
+     */
+    public routerInstanceAuthentification: express.Router = express.Router();
+
+    /**
+     * All he current routes middlewares to add into the routes.
+     */
+    public middlewaresDistribution:any = {
+        register: [
+            body('data.username')
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
+                .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
+                .customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
+                .trim(),
+            body('data.email')
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
+                .normalizeEmail()
+                .trim(),
+            //body('data.password'),
+            body('data.avatar')
+                .isURL()
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .trim(),
+            body('data.name')
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .trim(),
+            body('data.role')
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
+                .trim()
+        ]
+    };
+
+
+    /**
+     * AuthRoutes init
+     * Setup all the private or authentification route, of the entity. Each of these need to add a header with a token to execute the controller's method.
+     * @return {express.Router} router for the private route.
+     * @public @method
+     */
+    public setupAuthRoutes():express.Router
+    {
+        this.routerInstanceAuthentification.post('/logout', [
+            VerifyTokenMiddleware.middlewareFunction(),
+            this.logoutHandler.bind(this)
+        ]);
+        return this.routerInstanceAuthentification;
+    }
+
+
+    /**
+     * Public routes init
+     * Setup all the endpoint that can be reachable when no token is added to the header (public)
+     * @return {express.Router} router for the public routes
+     * @public @method
+     */
+    public setupPublicRoutes():express.Router
+    {
+        this.routerInstance.post('/register', [
+            //...this.addMiddlewares("register"),
+            this.registerHandler.bind(this)
+        ]);
+
+        this.routerInstance.post('/login', [
+            this.loginHandler.bind(this)
+        ]);
+
+
+        this.routerInstance.post('/verify-token', [
+            this.verifyTokenHandler.bind(this)
+        ]);
+
+
+        this.routerInstance.post('/generate-token', [
+            this.generateTokenDevHandler.bind(this)
+        ]);
+
+
+        this.routerInstance.get('/login', [
+            this.loginGetHandler.bind(this)
+        ]);
+
+        return this.routerInstance;
+    }
+
+
+    /**
+     * Add middleware from target array into the middlewares space in route declaration.
+     * @param route {string} the route / property of the middlewares array to push into middleware for this.
+     * @param middlewares {string} Not used yet.
+     */
+    public addMiddlewares(route:string, middlewares:string = ""):Array<any>
+    {
+        return this.middlewaresDistribution[route] ?? [];
+    }
+
+
+    //  POST
+
+    /**
+     * POST:REGISTER
+     * The "CREATE USER" ROUTE.
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async registerHandler(req: Request, res: Response): Promise<any> {
+
+        const {data} = req.body;
+        const response = await this.controller.register(data);
+        LogHelper.debug("registerHandler", data, response);
+        return res.status(response.code).send(response);
+    }
+
+
+    /**
+     * POST:LOGIN
+     * Check if the user is logged in.
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async loginHandler(req: Request, res: Response): Promise<any> {
 
         const {username, password} = req.body;
-
-        const controller = new AuthenficationController();
-        const response = await controller.login(username, password);
+        const response = await this.controller.login(username, password);
 
         return res.status(response.code).send(response);
-    });
+    }
 
-/**
- * Post method to return a token if the user is in the DB
- * requête body en JSON :
- * username:string
- * password:string
- */
-AuthentificationRouter.post('/logout',
-    async (req, res) => {
 
-        const {username} = req.body;
-
-        const controller = new AuthenficationController();
-        const response = await controller.logout(username);
-
+    /**
+     * POST:LOGOUT
+     * Check if the user is logged in.
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async logoutHandler(req: Request, res: Response): Promise<any>
+    {
+        const response = await this.controller.logout(req.body.username);
         return res.status(response.code).send(response);
-    });
+    }
 
-
-/**
- * Post method to verify if a token is valid and if it isn't expired.
- * requête body en JSON :
- * token:string
- */
-AuthentificationRouter.post('/verify-token',
-    async (req, res) => {
-
-        const {token} = req.body;
-
-        const controller = new AuthenficationController();
-        const response = await controller.verifyToken(token);
-
-        //200: success, 401:not valid (unauthorized), 501: Mauvais driver de bd
+    /**
+     * Post method to verify if a token is valid and if it isn't expired.
+     * requête body en JSON :
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async verifyTokenHandler(req: Request, res: Response): Promise<any>
+    {
+        const response = await this.controller.verifyToken(req.body.token);
         return res.status(response.code).send(response);
-    });
+    }
 
 
-
-/**
- * Post methodqui retourne un token pour un utilisateur.
- * requête body en JSON :
- * vide
- */
-AuthentificationRouter.post('/generate-token',
-    async (req, res) => {
-
+    /**
+     * Post methodqui retourne un token pour un utilisateur.
+     * requête body en JSON :
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async generateTokenDevHandler(req: Request, res: Response): Promise<any>
+    {
         if (config.isDevelopment)
         {
-            const token = TokenController.generate({ user_id: "6271b8ceee860ac5d96a32be", username: "datageek", role: "admin" });
+            const token = await this.controller.generateToken();
 
             return res.status(StatusCodes.OK).send({
                 "message": ReasonPhrases.OK,
                 "token": token
             });
         }
+        LogHelper.debug(config.isDevelopment);
         return res.status(StatusCodes.UNAUTHORIZED).json({
             "message": ReasonPhrases.UNAUTHORIZED
         });
-    });
+    }
 
-export {AuthentificationRouter};
+
+    //  GET
+
+    /**
+     * GET:LOGIN
+     * Return content to the user accessing /login on a get route.
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async loginGetHandler(req: Request, res: Response): Promise<any> {
+        LogHelper.warn('trying to access login with get method');
+        return res.send('There is no place in this  for login.');
+    }
+
+}

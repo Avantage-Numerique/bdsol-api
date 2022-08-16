@@ -13,6 +13,8 @@ class PersonnesController extends AbstractController {
     /** @public Model */
     entity:Personne;
 
+    name:string = "Personnes";
+
     constructor() {
         super();
         this.entity = Personne.getInstance();
