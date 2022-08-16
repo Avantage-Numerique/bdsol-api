@@ -3,252 +3,294 @@
         "category" : "occupation",
         "name"  : "Animateur 2D et 3D",
         "description" : "Créateur d'animation visuelle de personnage ou objet 2D et 3D.",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Architecte d'information",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"   :"Architecte logiciel",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Auteur - scénariste",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Chargée de projet numérique",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Chef développeur Back-End/Web",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Chef développeur Front-End/Web",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Chef monteur",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Chef opérateur de son",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Chorégraphe",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Concepteur architecture",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Concepteur d'images",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Concepteur designer",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Concepteur interactive",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Concepteur lumière",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Concepteur multimédia",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Concepteur sonore",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Concepteur technologique et électronique",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Designer d'interactivité ",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Designeur industriel",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Dessinateur industriel",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Développeur Back-End/Web",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Directeur artistique",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Directeur de création",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Enseignant",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Graphiste d'interface",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Illustrateur",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Infographiste - multimédia",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Ingénieur du son",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Interprète",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Mixeur",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Modeleur 3D",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Monteur de vidéos",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Motion designer",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Producteur",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Rédacteur - Scénariste",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Rédacteur web",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Répétiteur / Dir. des répétitions",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Sound designer",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Travailleur culturel",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Video jockeys",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     },
     {
         "category" : "occupation",
         "name"  :"Webdesigner",
         "description" : "",
-        "source" : ""
+        "source" : "",
+        "status":"Accepted"
     }
 ]
