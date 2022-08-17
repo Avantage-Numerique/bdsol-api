@@ -1,5 +1,4 @@
 import {NextFunction, Response} from "express";
-import AuthRequest from "../Types/AuthRequest";
 
 /**
  * Express JS middleware for verifying the token.
@@ -17,12 +16,12 @@ export class AddUserToRequest {
     {
         /**
          * The AddUserToRequest anonymous function.
-         * @param req {AuthRequest}
+         * @param req {Request}
          * @param res {Response}
          * @param next {NextFunction}
          * @return Promise<Response<any, Record<string, any>> | undefined>
          */
-        return async function (req: AuthRequest, res: Response, next: NextFunction) {
+        return async function (req: Request, res: Response, next: NextFunction) {
             next();
         }
     }
