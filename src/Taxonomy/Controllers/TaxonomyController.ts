@@ -1,6 +1,9 @@
 import Taxonomy from "../Models/Taxonomy"
 import TaxonomyService from "../Services/TaxonomyService";
 import AbstractController from "../../Abstract/Controller"
+import {ReasonPhrases, StatusCodes} from "http-status-codes";
+import {SuccessResponse} from "../../Http/Responses/SuccessResponse";
+import {Taxonomies} from "../TaxonomiesEnum";
 
 class TaxonomyController extends AbstractController {
 
@@ -30,6 +33,13 @@ class TaxonomyController extends AbstractController {
             TaxonomyController._instance = new TaxonomyController();
         }
         return TaxonomyController._instance;
+    }
+
+    public static getTaxonomies():any {
+        const data:any = {
+            taxonomies: Taxonomies
+        }
+        return SuccessResponse.create(data, StatusCodes.OK, ReasonPhrases.OK);
     }
 }
 export {TaxonomyController};

@@ -2,9 +2,10 @@ import {ApiResponseContract} from "../Http/Responses/ApiResponse";
 import express, {NextFunction} from "express";
 import {Response, Request} from "express";
 import AbstractController from "./Controller";
+import {RouteContract} from "./Contracts/RouteContract";
 //import LogHelper from "../Monitoring/Helpers/LogHelper";
 
-abstract class AbstractRoute
+abstract class AbstractRoute implements RouteContract
 {
     /**
      * Controller of a specific entity.
@@ -61,7 +62,11 @@ abstract class AbstractRoute
             this.deleteHandler.bind(this)
         ]);
 
-        return this.routerInstanceAuthentification;
+        return this.setupAdditionnalAuthRoutes(this.routerInstanceAuthentification);
+    }
+
+    public setupAdditionnalAuthRoutes(router:express.Router):express.Router {
+        return router;
     }
 
 
@@ -94,7 +99,12 @@ abstract class AbstractRoute
             ...this.addMiddlewares("getdoc"),
             this.getDoc.bind(this)
         ]);
-        return this.routerInstance;
+
+        return this.setupAdditionnalPublicRoutes(this.routerInstance);
+    }
+
+    public setupAdditionnalPublicRoutes(router:express.Router):express.Router {
+        return router;
     }
 
 
