@@ -1,12 +1,12 @@
 {
   "name": "bdsolapi",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "La BDSOL disponible grâce à docker, avec toutes ses facettes. Principalement pour le developpement.",
   "main": "src/api.ts",
   "private": true,
   "scripts": {
     "tsc": "tsc",
-    "serve": "node build/server.js",
+    "serve": "node build/src/server.js",
     "serve-ts": "npx ts-node src/server.ts",
     "dev": "npx nodemon src/server.ts",
     "dev-old": "npx ts-node-dev --respawn --transpile-only --debug --watch src src/server.ts",
@@ -18,9 +18,10 @@
   },
   "keywords": [],
   "authors": [
-    "Marc-André Martin"
+    "Marc-André Martin",
+    "Frédéric Rivard"
   ],
-  "license": "MIT",
+  "license": "à venir",
   "dependencies": {
     "@types/body-parser": "^1.19.2",
     "@types/cors": "^2.8.12",
