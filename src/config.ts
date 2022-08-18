@@ -22,6 +22,15 @@ const config = {
     tokenSecret: process.env.JWT_KEY || "not set yet",
     tokenSecureSecret: process.env.SECURE_JWT_KEY || "not set securely :P",
 
+    cors: {
+        allowedOrigins: process.env.CORS_ALLOWED_ORIGINS ? process.env.CORS_ALLOWED_ORIGINS.split(' ') : [
+            'http://bdsolapp.devlocal',
+            'https://bdsolapp.devlocal',
+            'http://localhost:3000',
+            'https://localhost:3000'
+        ]
+    },
+
     db: {
         driver: process.env.DB_DRIVER || "mongodb",
         host: process.env.DB_HOST || "not set",

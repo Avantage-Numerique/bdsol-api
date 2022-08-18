@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import config from "./config";
 import {ApiRouter} from "./routes";
 import {HealthCheckRouter} from "./Healthcheck/Routes/HealthCheckRoutes";
 import {AuthentificationRoutes} from "./Authentification/Routes/AuthentificationRoutes";
@@ -25,6 +26,7 @@ export default class Api {
     public baseRoutes:Array<any>;
     public entitiesRoutes:Array<any>;
 
+
     public start() {
         this._initEntitiesRouters();
         this._initBaseRoutes();
@@ -38,21 +40,26 @@ export default class Api {
      */
     private _initMiddleware()
     {
+        /**
+         * [
+         'http://bdsolapp.devlocal',
+         'https://bdsolapp.devlocal',
+         'http://localhost:3000',
+         'https://localhost:3000',
+         'http://localhost',
+         'https://localhost',
+         'http://51.222.24.157',
+         'https://51.222.24.157',
+         'http://51.222.24.157:3000',
+         'https://51.222.24.157:3000',
+         'http://bdsol.avantagenumerique.org',
+         'https://bdsol.avantagenumerique.org',
+         'http://bdsol.avantagenumerique.org:3000',
+         'https://bdsol.avantagenumerique.org:3000'
+         ]
+         */
         // Add a list of allowed origins.
-        const allowedOrigins = [
-                'http://localhost:3000',
-                'https://localhost:3000',
-                'http://localhost',
-                'https://localhost',
-                'http://51.222.24.157',
-                'https://51.222.24.157',
-                'http://51.222.24.157:3000',
-                'https://51.222.24.157:3000',
-                'http://bdsol.avantagenumerique.org',
-                'https://bdsol.avantagenumerique.org',
-                'http://bdsol.avantagenumerique.org:3000',
-                'https://bdsol.avantagenumerique.org:3000'
-            ],
+        const allowedOrigins = config.cors.allowedOrigins,
             options: cors.CorsOptions = {
                 origin: allowedOrigins
             };
