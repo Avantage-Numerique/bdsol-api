@@ -15,7 +15,7 @@ class UsersRoutes extends AbstractRoute {
 
     middlewaresDistribution:any = {
         all: [],
-        createUpdate: [
+        create: [
             body('data.username')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
@@ -40,7 +40,7 @@ class UsersRoutes extends AbstractRoute {
                 .stripLow()
                 .trim(),
         ],
-        create: [],
+        createUpdate: [],
         update: [],
         delete: [],
         search: [],

@@ -13,7 +13,7 @@ class PersonnesRoutes extends AbstractRoute {
 
     middlewaresDistribution:any = {
         all: [],
-        createUpdate: [
+        create: [
             body('data.lastName')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
@@ -31,7 +31,7 @@ class PersonnesRoutes extends AbstractRoute {
                 .trim(),
             //occupation array of objectid
         ],
-        create: [],
+        createUpdate: [],
         update: [],
         delete: [],
         search: [],

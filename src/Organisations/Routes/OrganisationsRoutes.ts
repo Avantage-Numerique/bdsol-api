@@ -13,7 +13,7 @@ class OrganisationsRoutes extends AbstractRoute {
 
     middlewaresDistribution:any = {
         all: [],
-        createUpdate: [
+        create: [
             body('data.name')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
@@ -33,7 +33,7 @@ class OrganisationsRoutes extends AbstractRoute {
                 .toDate(),
             //offer array of objectid
         ],
-        create: [],
+        createUpdate: [],
         update: [],
         delete: [],
         search: [],
