@@ -13,7 +13,7 @@ export class SuccessResponse extends ApiResponse {
             error:false,
             code: code,
             message: message,
-            errors: [],
+            errors: {},
             data: data
         } as ApiResponseContract);
         return success.response;

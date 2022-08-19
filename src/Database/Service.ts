@@ -18,10 +18,17 @@ export abstract class Service {
     connection: any;
     state:string;
 
-    CREATE_STATE:string = "create";
-    UPDATE_STATE:string = "update";
-    DELETE_STATE:string = "delete";
-    LIST_STATE:string = "list";
+    static CREATE_STATE:string = "create";
+    static UPDATE_STATE:string = "update";
+    static DELETE_STATE:string = "delete";
+    static LIST_STATE:string = "list";
+    static SEARCH_STATE:string = "search";
+
+    static CREATE_MSG:string = "Création";
+    static UPDATE_MSG:string = "Mise à jour";
+    static DELETE_MSG:string = "Suppression";
+    static LIST_MSG:string = "La liste";
+    static SEARCH_MSG:string = "La recherche";
 
     constructor(model: AbstractModel) {
         this.appModel = model;
@@ -116,8 +123,7 @@ export abstract class Service {
                     return e;
                 });
 
-            //Insert in userHistory
-            return this.parseResult(meta, 'Création');
+            return this.parseResult(meta, Service.CREATE_STATE);
 
         } catch (insertError: any) {
             LogHelper.error(insertError);
@@ -140,8 +146,13 @@ export abstract class Service {
         try {
             const id = data.id;
             delete data.id; //Remove id from data
+            
+            if( (id != undefined && id.length != 24) || Object.keys(data).length < 1)
+                return ErrorResponse.create(data, StatusCodes.BAD_REQUEST, "id cannot be casted as ObjectId or object to update empty");
+            
+
             // UpdateOne
-            const meta = await this.model.findOneAndUpdate({_id: id}, data, {new: true})
+            const meta = await this.model.findOneAndUpdate({_id: id}, data, {new: true, runValidators: true})
                 .catch((e: any) => {
                         LogHelper.info("findOneAndUpdate catch:", e);
                         return e;
@@ -150,18 +161,16 @@ export abstract class Service {
             LogHelper.info("findOneAndUpdate return after the catch :", meta);
             // if method updateOne fail, it returns a mongo error with a code and a message. // was method findByIdAndUpdate used.
 
-            //Insert in userHistory
-            return this.parseResult(meta, 'Mise à jour');
+            return this.parseResult(meta, Service.UPDATE_STATE);
 
         } catch (updateError: any) {
             return ErrorResponse.create(
                 updateError.errors,
-                StatusCodes.INTERNAL_SERVER_ERROR,
-                updateError.errmsg || "Not able to update item"
+                StatusCodes.UNPROCESSABLE_ENTITY,
+                updateError.errmsg || "Not able to update item or item doesn't exist"
             );
         }
     }
-
 
     /**
      * Delete the target document with the target id
@@ -178,7 +187,7 @@ export abstract class Service {
             );
             LogHelper.info("findByIdAndDelete return after the catch :", meta);
 
-            return this.parseResult(meta, 'La supression');
+            return this.parseResult(meta, Service.DELETE_STATE);
 
         } catch (deleteError: any) {
 
@@ -190,7 +199,6 @@ export abstract class Service {
         }
     }
 
-
     private static transformToObjectId(id: string): mongoose.Types.ObjectId | ApiResponseContract {
         try {
             return new mongoose.Types.ObjectId(id);
@@ -200,9 +208,20 @@ export abstract class Service {
         }
     }
 
-    private parseResult(meta: any, actionMessage: string = "Mise à jour"): ApiResponseContract
+    private parseResult(meta: any, state:string): ApiResponseContract
     {
-        LogHelper.debug(`Parse Result method for ${actionMessage}`, meta, actionMessage);
+        let actionMessage:string;
+        switch(state){
+            case Service.CREATE_STATE : actionMessage = Service.CREATE_MSG; break;
+            case Service.UPDATE_STATE : actionMessage = Service.UPDATE_MSG; break;
+            case Service.DELETE_STATE : actionMessage = Service.DELETE_MSG; break;
+            case Service.LIST_STATE   : actionMessage = Service.LIST_MSG;   break;
+            case Service.SEARCH_STATE : actionMessage = Service.SEARCH_MSG; break;
+            default : actionMessage = "State not defined"
+        }
+
+        LogHelper.debug(`Parse Result method for ${state}`, meta, actionMessage);
+        console.log(meta);
 
         // Mongo DB validation failed, make that excalade the response flow, shall we.
         if (meta.errors) {
@@ -229,7 +248,7 @@ export abstract class Service {
         }
 
         // Si not unique
-        if (meta.index === 0) {
+        if (meta.code === 11000) {
             const wrongElements = Object.getOwnPropertyNames(meta.keyValue);
             let wrongElementsValues = "";
 
@@ -263,7 +282,7 @@ export abstract class Service {
         // RESULTS
 
         // UPDATE SUCCESSFUL
-        if (meta.acknowledged !== undefined &&
+        /*if (meta.acknowledged !== undefined &&
             meta.acknowledged) {
             LogHelper.log(StatusCodes.OK + " " + actionMessage + " de l'item réussi");
             return SuccessResponse.create(
@@ -271,10 +290,10 @@ export abstract class Service {
                 StatusCodes.OK,
                 actionMessage + " de l'item réussi"
             );
-        }
+        }*/
 
         // UPDATE FAILED
-        if (meta.acknowledged !== undefined &&
+        /*if (meta.acknowledged !== undefined &&
             !meta.acknowledged) {
             LogHelper.log(StatusCodes.NOT_MODIFIED + " " + actionMessage + " de l'item n'a pas été réussi");
             return ErrorResponse.create(
@@ -282,13 +301,23 @@ export abstract class Service {
                 StatusCodes.NOT_MODIFIED,
                 actionMessage + " de l'item n'a pas été réussi"
             );
-        }
+        }*/
 
-        // CREATE SUCCESS //By Default after all the rest ? Not White listing.
-        return SuccessResponse.create(
-            meta,
-            StatusCodes.CREATED,
-            actionMessage + " de l'item réussi"
-        );
+        if(meta.TypeError)
+            return ErrorResponse.create(meta, StatusCodes.BAD_REQUEST, "Échec de la " + actionMessage)
+
+        switch(state){
+            case Service.CREATE_STATE :
+                return SuccessResponse.create(meta, StatusCodes.CREATED, actionMessage + " de l'item réussi"); break;
+            case Service.UPDATE_STATE :
+                return SuccessResponse.create(meta, StatusCodes.OK, actionMessage + " de l'item réussi"); break;
+            case Service.DELETE_STATE :
+                return SuccessResponse.create(meta, StatusCodes.OK, actionMessage + " de l'item réussi"); break;
+            case Service.LIST_STATE   :
+                return SuccessResponse.create(meta, StatusCodes.OK, actionMessage + " a réussi"); break;
+            case Service.SEARCH_STATE :
+                return SuccessResponse.create(meta, StatusCodes.OK, actionMessage + " a réussi"); break;
+            default : return ErrorResponse.create(meta, StatusCodes.INTERNAL_SERVER_ERROR, "Le state dans service n'est pas défini...")
+        }
     }
 }

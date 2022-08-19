@@ -23,12 +23,11 @@ export class ErrorResponse extends ApiResponse
         if (errorsObj !== undefined &&
             errorsObj.name !== undefined)
         {
-            singleError = [
+            singleError =
                 {
                     name: errorsObj.name,
                     message: errorsObj.message
-                }
-            ];
+                };
         }
         else
         {

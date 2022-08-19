@@ -3,7 +3,6 @@ import express, {NextFunction} from "express";
 import {Response, Request} from "express";
 import AbstractController from "./Controller";
 import {RouteContract} from "./Contracts/RouteContract";
-//import LogHelper from "../Monitoring/Helpers/LogHelper";
 
 abstract class AbstractRoute implements RouteContract
 {
@@ -44,14 +43,14 @@ abstract class AbstractRoute implements RouteContract
 
         this.routerInstanceAuthentification.post('/create', [
             ...this.addMiddlewares("all"),
-            ...this.addMiddlewares("createUpdate"),
+            //...this.addMiddlewares("createUpdate"),
             ...this.addMiddlewares("create"),
             this.createHandler.bind(this)
         ]);
 
         this.routerInstanceAuthentification.post('/update', [
             ...this.addMiddlewares("all"),
-            ...this.addMiddlewares("createUpdate"),
+            //...this.addMiddlewares("createUpdate"),
             ...this.addMiddlewares("update"),
             this.updateHandler.bind(this)
         ]);
@@ -135,7 +134,6 @@ abstract class AbstractRoute implements RouteContract
      * @return {Promise<any>}
      */
     public async createHandler(req: Request, res: Response): Promise<any> {
-
         const response:ApiResponseContract = await this.controllerInstance.create(req.body.data);
         
         if(!response.error)
@@ -153,7 +151,6 @@ abstract class AbstractRoute implements RouteContract
      * @return {Promise<any>}
      */
     public async updateHandler(req: Request, res: Response): Promise<any> {
-
         const response:ApiResponseContract = await this.controllerInstance.update(req.body.data);
 
         if(!response.error)

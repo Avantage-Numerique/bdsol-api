@@ -4,7 +4,7 @@ export interface ApiResponseContract {
     error:boolean;
     code:number;//statusCode - ?
     message:string;
-    errors:Array<any>;
+    errors:any;
     data: any;
 }
 
@@ -16,7 +16,7 @@ export default class ApiResponse implements ApiResponseContract {
     protected _data:object;
     protected _code:number;
     protected _error:boolean = true;
-    protected _errors:Array<any>;
+    protected _errors:any;
     protected _message:string;
 
     constructor(responseParams:ApiResponseContract) {

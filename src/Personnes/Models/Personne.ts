@@ -38,11 +38,13 @@ class Personne extends AbstractModel {
         new Schema<PersonneSchema>({
             lastName: {
                 type: String,
+                minLength:2,
                 required: true,
                 alias: 'nom'
             },
             firstName: {
                 type: String,
+                minLength:2,
                 required: true,
                 alias: 'prenom'
             },
@@ -192,12 +194,12 @@ class Personne extends AbstractModel {
                 return next();
             });
 
-            //Pre update verification for occupation
+            //Pre update verification for occupation //Maybe it should be in the schema as a validator
             await this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any>
             {
                 const personne: any = this;
                 const data = personne.getUpdate();
-                
+
                 if (data.occupation) {
                     const taxo = TaxonomyController.getInstance();
                     const taxoList = taxo.list({ id : data.occupation, category: "occupation" });

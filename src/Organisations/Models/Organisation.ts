@@ -40,6 +40,7 @@ class Organisation extends AbstractModel {
                 name: {
                     type: String,
                     required: true,
+                    unique: true,
                     alias: 'nom'
                 },
                 slug: {
@@ -200,7 +201,7 @@ class Organisation extends AbstractModel {
                return next();
            });
 
-           //Pre update verification for occupation
+           //Pre update verification for occupation //Maybe it should be in the schema as a validator
            await this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any>
            {
                const organisation: any = this;
