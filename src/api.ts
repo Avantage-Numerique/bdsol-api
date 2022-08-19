@@ -101,7 +101,7 @@ export default class Api {
                 manager: new OrganisationsRoutes()
             },
             {
-                baseRoute: "/taxonomy",
+                baseRoute: "/taxonomies",
                 manager: new TaxonomyRoutes()
             },
             {
