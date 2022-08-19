@@ -49,7 +49,7 @@ class TaxonomyRoutes extends AbstractRoute {
 
     public setupAdditionnalPublicRoutes(router: express.Router) {
 
-        router.post('/taxonomies', [
+        router.post('/supported', [
             ...this.addMiddlewares("all"),
             this.getTaxonomiesHanlder.bind(this)
         ]);
