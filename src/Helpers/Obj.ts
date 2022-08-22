@@ -8,4 +8,16 @@ export class Obj {
         return toObject;
     }
 
+    public isNull(element:any):Boolean {
+        return element === null;
+    }
+
+    public isUndefined(element:any):Boolean {
+        return element === undefined;
+    }
+
+    public isEmpty(element:any):Boolean {
+        return element === "" || element === [] || element === {};
+    }
+
 }

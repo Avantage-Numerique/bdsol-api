@@ -3,26 +3,27 @@ import config from "../config";
 import {DbProvider, Service} from "../Database/DatabaseDomain";
 import type {MigrationContract} from "../Database/DatabaseDomain";
 import {fakeUser} from "./FakeEntity/fakeUser";
-import {fakePersons} from "./FakeEntity/fakePerson";
+import {fakePersons, fakePerson} from "./FakeEntity/fakePerson";
 import {fakeOrganisation as fakeOrganisations} from "./FakeEntity/fakeOrganisation";
 import {fakeTaxonomy as fakeTaxonomies} from "./FakeEntity/fakeTaxonomy";
 import {fakeUserHistory as fakeUserHistories} from "./FakeEntity/fakeUserHistory";
 import AbstractModel from "../Abstract/Model";
-import PersonnesService from "../Personnes/Services/PersonnesService";
 
 export default class CreateDataMongoose implements MigrationContract {
 
-    public provider:DbProvider|null;
+    public provider:DbProvider;
     public model:AbstractModel;
     public service:Service;
 
-    constructor(provider:DbProvider|null = null, model:AbstractModel) {
+    constructor(provider:DbProvider, model:AbstractModel) {
         this.provider = provider
         this.model = model;
     }
 
-    public async conditions():Promise<boolean> {
-        if (this.provider !== null) {
+    public async conditions():Promise<boolean>
+    {
+        if (this.provider !== null)
+        {
             const count:number = await this.provider.connection.collection(this.model.collectionName).countDocuments();
             LogHelper.info(`Conditions for Migration ${CreateDataMongoose.name} checks`, "count "+ this.model.collectionName, count);
             return config.environnement === 'development' &&
@@ -56,6 +57,8 @@ export default class CreateDataMongoose implements MigrationContract {
                     break;
                 case 'person':
                     //await this.model.mongooseModel.insertMany(fakePersons);
+                    //await this.provider.service.insert(fakePerson);
+
                     break;
                 case 'organisation':
                     //await this.provider.service.model.insertMany(fakeOrganisations);

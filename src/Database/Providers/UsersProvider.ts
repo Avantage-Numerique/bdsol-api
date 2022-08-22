@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 import config from "../../config";
 import type {DbProvider} from "./DbProvider";
 import {BaseProvider} from "./DbProvider";
-import {UsersService} from "../../Users/UsersDomain";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import AbstractModel from "../../Abstract/Model";
+import {Service} from "../Service";
 
 
 export class UsersProvider extends BaseProvider implements DbProvider
@@ -51,12 +51,14 @@ export class UsersProvider extends BaseProvider implements DbProvider
     /**
      * Setup the mode with this provider properties: Connection, provider and setup this.service.
      * @param model
+     * @param service {Service}
      */
-    public assign(model:AbstractModel):void
+    public assign(model:AbstractModel, service:Service|null=null):void
     {
         this.addModel(model);
         model.connection = this.connection;
         model.provider = this;
-        this.service = UsersService.getInstance(model);
+        //this.service = UsersService.getInstance(model);
+        //this.services = [UsersService.getInstance(model)];
     }
 }

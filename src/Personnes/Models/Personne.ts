@@ -6,6 +6,7 @@ import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
 import { TaxonomyController } from "../../Taxonomy/Controllers/TaxonomyController";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import PersonnesService from "../Services/PersonnesService";
 
 class Personne extends AbstractModel {
 
@@ -31,6 +32,7 @@ class Personne extends AbstractModel {
     /** @public Connection mongoose */
     connection:mongoose.Connection;
     provider:DbProvider;
+    service:PersonnesService;
     mongooseModel:mongoose.Model<any>;
 
     /** @public Database schema */

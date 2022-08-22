@@ -4,6 +4,7 @@ import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import type {DbProvider} from "./DbProvider";
 import {BaseProvider} from "./DbProvider";
 import AbstractModel from "../../Abstract/Model";
+import type {Service} from "../Service";
 
 /**
  *  The Data provider allow entities to interact with the DB via the MongooseDriver.
@@ -56,12 +57,15 @@ export class DataProvider extends BaseProvider implements DbProvider
     /**
      * Assign a model to this provider.
      * @param model
+     * @param service {Service}
      */
-    public assign(model:AbstractModel) {
-        this.addModel(model);
+    public assign(model:AbstractModel, service:Service|null=null) {
         model.connection = this.connection;
         model.provider = this;
-        return model;
+        if (service !== null) {
+            this.addService(service);
+        }
+        this.addModel(model);
     }
 
 }

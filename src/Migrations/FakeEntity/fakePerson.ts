@@ -12,3 +12,10 @@ export const fakePersons = [
         description:"Humour",
     }
 ];
+
+export const fakePerson = {
+    lastName:"Parent",
+    firstName:"Jean-Marc",
+    nickname:"Mickette",
+    description:"Humour",
+};

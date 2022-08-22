@@ -3,6 +3,7 @@ import {Schema} from "mongoose";
 import { UserHistorySchema } from "../Schemas/UserHistorySchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
+import UsersHistoryService from "../Services/UsersHistoryService";
 
 
 class UserHistory extends AbstractModel {
@@ -28,6 +29,7 @@ class UserHistory extends AbstractModel {
     /** @public Connection mongoose */
     connection:mongoose.Connection;
     provider:DbProvider;
+    service:UsersHistoryService;
     mongooseModel:mongoose.Model<any>;
 
     /** @public Database schema */

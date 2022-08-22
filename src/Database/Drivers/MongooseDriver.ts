@@ -12,8 +12,8 @@ import Personne from "../../Personnes/Models/Personne";
 import Organisation from "../../Organisations/Models/Organisation";
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 import UserHistory from "../../UserHistory/Models/UserHistory";
-/*import CreateDataMongoose from "../../Migrations/create-data-mongoose";
-import { PersonnesController } from "../../Personnes/Controllers/PersonnesController";
+import CreateDataMongoose from "../../Migrations/create-data-mongoose";
+/*import { PersonnesController } from "../../Personnes/Controllers/PersonnesController";
 import OrganisationsController from "../../Organisations/Controllers/OrganisationsController";
 import { TaxonomyController } from "../../Taxonomy/Controllers/TaxonomyController";
 import { UsersHistoryController } from "../../UserHistory/Controllers/UsersHistoryController";
@@ -88,8 +88,10 @@ export class MongooseDBDriver implements DBDriver {
             //will create the fake users if the collection is empty.
             const usersCollection = new CreateDbAndEntityMongoose(this.providers.users);
             await usersCollection.up();
-            //const personData = new CreateDataMongoose(this.providers.data, Personne.getInstance());
-            //await personData.up('person');
+
+            const personData = new CreateDataMongoose(this.providers.data, Personne.getInstance());
+            await personData.up('person');
+
             /*const organisationData = new CreateDataMongoose(this.providers.data, Organisation.getInstance());
             await organisationData.up('organisation');
             const taxonomyData = new CreateDataMongoose(this.providers.data, Taxonomy.getInstance());

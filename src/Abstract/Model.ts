@@ -1,5 +1,5 @@
 import type {Schema, Connection, Model} from "mongoose";//, mongoose
-import { DbProvider } from "../Database/DatabaseDomain";
+import {DbProvider, Service} from "../Database/DatabaseDomain";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 
 abstract class AbstractModel {
@@ -19,6 +19,7 @@ abstract class AbstractModel {
      */
     abstract connection:Connection;
     abstract provider:DbProvider;
+    abstract service:Service;
     abstract mongooseModel:Model<any>;
     
     /** @abstract Schema in the database. */

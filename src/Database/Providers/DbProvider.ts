@@ -8,12 +8,13 @@ import AbstractModel from "../../Abstract/Model";
 export interface DbProvider {
     connection:mongoose.Connection;
     service:Service|null;
+    services:Array<Service>;
     urlPrefix:string;
     url:string;
     databaseName:string;
 
     connect():Promise<mongoose.Connection|undefined>;
-    assign: (model:AbstractModel) => void;
+    assign: (model:AbstractModel, service:Service|null) => void;
 }
 
 /**
@@ -23,6 +24,7 @@ export abstract class BaseProvider implements DbProvider {
 
     protected _connection:mongoose.Connection;
     protected _service:Service;
+    protected _services:Array<Service> = [];
 
     protected _urlPrefix:string;
     protected _url:string;
@@ -71,9 +73,10 @@ export abstract class BaseProvider implements DbProvider {
     /**
      * @abstract
      * Assign models to the provider and stocks models in an array.
-     * @param model
+     * @param model {AbstractModel}
+     * @param service {Service}
      */
-    abstract assign(model:AbstractModel):void;
+    abstract assign(model:AbstractModel, service:Service|null):void;
 
 
     /**
@@ -104,6 +107,17 @@ export abstract class BaseProvider implements DbProvider {
     }
     public set service(service) {
         this._service = service;
+    }
+
+    public get services():Array<Service> {
+        return this._services;
+    }
+    public set services(services: Array<Service>) {
+        this._services = services;
+    }
+
+    public addService(service:Service) {
+        this._services.push(service);
     }
 
 
