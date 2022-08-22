@@ -65,8 +65,7 @@ class Organisation extends AbstractModel {
                 },
                 offer: {
                     type: [mongoose.Types.ObjectId],
-                    default: undefined,
-                    ref: 'taxonomies'
+                    default: undefined
                 }
             },
             {

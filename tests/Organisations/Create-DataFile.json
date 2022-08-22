@@ -22,7 +22,7 @@
         "description": "Petite église, salle de spectacle sympatoche",
         "url":"http://www.agoradesarts.com/",
         "contactPoint":"info@agoradesarts.com",
-        "fondationDate":"2022-06-08"
+        "fondationDate":"2022-06-08T00:00:00.000Z"
     },
     {
         "infoTest":
@@ -81,22 +81,11 @@
         "infoTest":
         {
             "name":"Create empty date",
-            "error":true,
-            "status":400
+            "error":false,
+            "status":201
         },
         "name": "L'iro kals",
         "description": "Gryt",
-        "fondationDate":""
-    },
-    {
-        "infoTest":
-        {
-            "name":"Create wrong date",
-            "error":true,
-            "status":400
-        },
-        "name": "L'iro kals",
-        "description": "Gryt",
-        "fondationDate":"fasver2344"
+        "fondationDate":null
     }
 ]

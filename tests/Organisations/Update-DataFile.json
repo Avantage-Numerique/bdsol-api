@@ -10,7 +10,7 @@
         "description": "Théâtre et magie",
         "url":"https://petittheatre.org/",
         "contactPoint":"info@petittheatre.org",
-        "fondationDate":"1999-09-10"
+        "fondationDate":"1999-09-10T00:00:00.000Z"
     },
     {
         "infoTest":
@@ -25,7 +25,7 @@
         {
             "name":"Update random id",
             "error":true,
-            "status":400
+            "status":422
         },
         "id":"123456789123456789123456",
         "name":"Marche - e - pas"
@@ -65,24 +65,14 @@
         "infoTest":
         {
             "name":"Update empty date",
-            "error":true,
-            "status":400
+            "error":false,
+            "status":200
         },
         "name": "Oui permis",
         "description": "afd",
         "url":"vda",
         "contactPoint":"",
-        "fondationDate":""
-    },
-    {
-        "infoTest":
-        {
-            "name":"Update wrong date",
-            "error":true,
-            "status":400
-        },
-        "name": "Oui permis",
-        "fondationDate":"fdfija2434df9"
+        "fondationDate":null
     },
     {
         "infoTest":

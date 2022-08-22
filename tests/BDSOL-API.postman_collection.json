@@ -25,16 +25,14 @@
 									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
 									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
 									"    pm.iterationData.unset(\"infoTest\");\r",
-									"\r",
 									"    v_data = pm.iterationData.toObject();\r",
-									"\r",
 									"}\r",
 									"else{\r",
-									"    v_data.nom = \"Librairie Pommerleau\";\r",
-									"    v_data.description = \"Librairie de petit marchandeur\";\r",
+									"    v_data.name = \"Librairie Pommerleau\";\r",
+									"    v_data.description = \"Librairie de petits marchandeurs\";\r",
 									"    v_data.url = \"https://lalibrairiepommerleau.meilleur\";\r",
 									"    v_data.contactPoint = \"info@meilleurelibrairie.meilleurfois2\"\r",
-									"\r",
+									"    //v_data.dateDeFondation = \"\r",
 									"}\r",
 									"\r",
 									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
@@ -52,15 +50,18 @@
 									"        \"error\": { \"type\": \"boolean\" },\r",
 									"        \"code\": { \"type\": \"number\" },\r",
 									"        \"message\": { \"type\": \"string\" },\r",
-									"        \"errors\": { \"type\": \"array\" },\r",
+									"        \"errors\": { \"type\": \"object\" },\r",
 									"        \"data\": {\r",
 									"            \"type\": \"object\",\r",
 									"            \"properties\": {\r",
 									"                        \"_id\": { \"type\": \"string\" },\r",
-									"                        \"nom\": { \"type\": \"string\" },\r",
+									"                        \"name\": { \"type\": \"string\" },\r",
+									"                        \"slug\": { \"type\": \"string\" },\r",
 									"                        \"description\": { \"type\": \"string\" },\r",
 									"                        \"url\": { \"type\": \"string\" },\r",
 									"                        \"contactPoint\": { \"type\": \"string\" },\r",
+									"                        \"fondationDate\": {\"type\": [\"null\", \"string\"]},\r",
+									"                        \"offer\": { \"type\": \"array\" },\r",
 									"                        \"createdAt\": { \"type\": \"string\" },\r",
 									"                        \"updatedAt\": { \"type\": \"string\" }\r",
 									"            },\r",
@@ -87,13 +88,11 @@
 									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
 									"});\r",
 									"\r",
-									"if (jsonResponse.error == false)\r",
-									"{\r",
-									"    pm.environment.set(\"org\"+Number(pm.info.iteration+1), jsonData);\r",
-									"\r",
-									"    pm.test('Data check', function(){\r",
+									"if (infoTest.error == false) {\r",
+									"pm.test('Data check', function() {\r",
+									"        pm.environment.set(\"org\"+Number(pm.info.iteration+1), jsonData);\r",
 									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
-									"    });\r",
+									"    })\r",
 									"}"
 								],
 								"type": "text/javascript"
@@ -140,7 +139,6 @@
 									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
 									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
 									"    pm.iterationData.unset(\"infoTest\");\r",
-									"\r",
 									"    v_data = pm.iterationData.toObject();\r",
 									"\r",
 									"    if(v_data.id === undefined)\r",
@@ -165,15 +163,20 @@
 									"        \"error\": { \"type\": \"boolean\" },\r",
 									"        \"code\": { \"type\": \"number\" },\r",
 									"        \"message\": { \"type\": \"string\" },\r",
-									"        \"errors\": { \"type\": \"array\" },\r",
+									"        \"errors\": { \"type\": \"object\" },\r",
 									"        \"data\": {\r",
 									"            \"type\": \"object\",\r",
 									"            \"properties\": {\r",
-									"                        \"acknowledged\": { \"type\": \"boolean\" },\r",
-									"                        \"modifiedCount\": { \"type\": \"number\" },\r",
-									"                        \"upsertedId\": { \"type\": \"null\" },\r",
-									"                        \"upsertedCount\": { \"type\": \"number\" },\r",
-									"                        \"matchedCount\": { \"type\": \"number\" },\r",
+									"                        \"_id\": { \"type\": \"string\" },\r",
+									"                        \"name\": { \"type\": \"string\" },\r",
+									"                        \"slug\": { \"type\": \"string\" },\r",
+									"                        \"description\": { \"type\": \"string\" },\r",
+									"                        \"url\": { \"type\": \"string\" },\r",
+									"                        \"contactPoint\": { \"type\": \"string\" },\r",
+									"                        \"fondationDate\": {\"type\": [\"null\", \"string\"]},\r",
+									"                        \"offer\": { \"type\": \"array\" },\r",
+									"                        \"createdAt\": { \"type\": \"string\" },\r",
+									"                        \"updatedAt\": { \"type\": \"string\" }\r",
 									"            },\r",
 									"        }\r",
 									"    },\r",
@@ -197,7 +200,12 @@
 									"pm.test('Schema is valid', function() {\r",
 									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
 									"});\r",
-									""
+									"\r",
+									"if(!infoTest.error){\r",
+									"    pm.test('DataResponse is valid', function() {\r",
+									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
+									"    });\r",
+									"}"
 								],
 								"type": "text/javascript"
 							}
@@ -529,6 +537,58 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "6-getinfo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"route\":\"create\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{orgPATH}}/getinfo",
+							"host": [
+								"{{baseURL}}{{orgPATH}}"
+							],
+							"path": [
+								"getinfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Temp test",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"id\":\"62ffc252867d3ea63a757c37\",\r\n        \"name\":\"Librairie Pommerleau\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{orgPATH}}/update",
+							"host": [
+								"{{baseURL}}{{orgPATH}}"
+							],
+							"path": [
+								"update"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -548,15 +608,17 @@
 									"        \"error\": { \"type\": \"boolean\" },\r",
 									"        \"code\": { \"type\": \"number\" },\r",
 									"        \"message\": { \"type\": \"string\" },\r",
-									"        \"errors\": { \"type\": \"array\" },\r",
+									"        \"errors\": { \"type\": \"object\" },\r",
 									"        \"data\": {\r",
 									"            \"type\": \"object\",\r",
 									"            \"properties\": {\r",
 									"                        \"_id\": { \"type\": \"string\" },\r",
-									"                        \"nom\": { \"type\": \"string\" },\r",
-									"                        \"prenom\": { \"type\": \"string\" },\r",
-									"                        \"surnom\": { \"type\": \"string\" },\r",
+									"                        \"lastName\": { \"type\": \"string\" },\r",
+									"                        \"firstName\": { \"type\": \"string\" },\r",
+									"                        \"slug\": { \"type\": \"string\" },\r",
+									"                        \"nickname\": { \"type\": \"string\" },\r",
 									"                        \"description\": { \"type\": \"string\" },\r",
+									"                        \"occupation\": { \"type\": \"array\" },\r",
 									"                        \"createdAt\": { \"type\": \"string\" },\r",
 									"                        \"updatedAt\": { \"type\": \"string\" }\r",
 									"            },\r",
@@ -583,14 +645,12 @@
 									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
 									"});\r",
 									"\r",
-									"if (jsonResponse.error == false)\r",
-									"{\r",
-									"    pm.environment.set(\"pers\"+Number(pm.info.iteration+1), jsonData);\r",
-									"\r",
-									"    pm.test('Data check', function(){\r",
+									"pm.test('Data check', function() {\r",
+									"    if (infoTest.error == false) {\r",
+									"        pm.environment.set(\"pers\"+Number(pm.info.iteration+1), jsonData);\r",
 									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
-									"    });\r",
-									"}"
+									"    }\r",
+									"})"
 								],
 								"type": "text/javascript"
 							}
@@ -608,16 +668,14 @@
 									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
 									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
 									"    pm.iterationData.unset(\"infoTest\");\r",
-									"\r",
 									"    v_data = pm.iterationData.toObject();\r",
-									"\r",
 									"}\r",
 									"else{\r",
-									"    v_data.nom = \"Parent\";\r",
-									"    v_data.prenom = \"Jean-marc\";\r",
-									"    v_data.surnom = \"Mickette\";\r",
-									"    v_data.description = \"Humour\"\r",
-									"\r",
+									"    v_data.lastName = \"P\";\r",
+									"    v_data.firstName = \"J\";\r",
+									"    v_data.nickname = \"Mickette\";\r",
+									"    v_data.description = \"Humour\";\r",
+									"    //v_data.occupation = [\"62eb0bd0a8b154bf068a4170\",\"62f271c0fe1255db5aec8f13\"]\r",
 									"}\r",
 									"\r",
 									"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
@@ -667,14 +725,14 @@
 									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
 									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
 									"    pm.iterationData.unset(\"infoTest\");\r",
-									"\r",
 									"    v_data = pm.iterationData.toObject();\r",
 									"\r",
 									"    if(v_data.id === undefined)\r",
 									"        v_data.id = pm.environment.get(\"pers1\")._id;\r",
 									"}\r",
 									"else{\r",
-									"    v_data.id = \"bidon\"\r",
+									"    v_data.id = \"62f56b48f094be6418cdbd29\",\r",
+									"    v_data.occupation = [\"62eb0bd0a8b154bf068a4170\"]\r",
 									"}\r",
 									"\r",
 									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
@@ -696,11 +754,15 @@
 									"        \"data\": {\r",
 									"            \"type\": \"object\",\r",
 									"            \"properties\": {\r",
-									"                        \"acknowledged\": { \"type\": \"boolean\" },\r",
-									"                        \"modifiedCount\": { \"type\": \"number\" },\r",
-									"                        \"upsertedId\": { \"type\": \"null\" },\r",
-									"                        \"upsertedCount\": { \"type\": \"number\" },\r",
-									"                        \"matchedCount\": { \"type\": \"number\" },\r",
+									"                        \"_id\": { \"type\": \"string\" },\r",
+									"                        \"lastName\": { \"type\": \"string\" },\r",
+									"                        \"firstName\": { \"type\": \"string\" },\r",
+									"                        \"slug\": { \"type\": \"string\" },\r",
+									"                        \"nickname\": { \"type\": \"string\" },\r",
+									"                        \"description\": { \"type\": \"string\" },\r",
+									"                        \"occupation\": { \"type\": \"array\" },\r",
+									"                        \"createdAt\": { \"type\": \"string\" },\r",
+									"                        \"updatedAt\": { \"type\": \"string\" }\r",
 									"            },\r",
 									"        }\r",
 									"    },\r",
@@ -725,6 +787,12 @@
 									"pm.test('Schema is valid', function() {\r",
 									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
 									"});\r",
+									"\r",
+									"if(!infoTest.error){\r",
+									"    pm.test('DataResponse is valid', function() {\r",
+									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
+									"    });\r",
+									"}\r",
 									""
 								],
 								"type": "text/javascript"
@@ -798,9 +866,9 @@
 									"            \"type\": \"object\",\r",
 									"            \"properties\": {\r",
 									"                        \"_id\": { \"type\": \"string\" },\r",
-									"                        \"nom\": { \"type\": \"string\" },\r",
-									"                        \"prenom\": { \"type\": \"string\" },\r",
-									"                        \"surnom\": { \"type\": \"string\" },\r",
+									"                        \"lastName\": { \"type\": \"string\" },\r",
+									"                        \"firstName\": { \"type\": \"string\" },\r",
+									"                        \"nickname\": { \"type\": \"string\" },\r",
 									"                        \"description\": { \"type\": \"string\" },\r",
 									"                        \"createdAt\": { \"type\": \"string\" },\r",
 									"                        \"updatedAt\": { \"type\": \"string\" }\r",
@@ -829,7 +897,7 @@
 									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
 									"});\r",
 									"\r",
-									"pm.test('Search found or not item correctly', function(){\r",
+									"pm.test('Search found item correctly', function(){\r",
 									"    \r",
 									"});"
 								],
@@ -935,7 +1003,7 @@
 									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
 									"});\r",
 									"\r",
-									"pm.test('List found or not item correctly', function(){\r",
+									"pm.test('List found item correctly', function(){\r",
 									"    \r",
 									"});"
 								],
@@ -1057,6 +1125,78 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "6-getinfo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"route\":\"create\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{persPATH}}/getinfo",
+							"host": [
+								"{{baseURL}}{{persPATH}}"
+							],
+							"path": [
+								"getinfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TempTest",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"id\":\"62ffb76428d13f50c2bfc3bb\",\r\n        \"firstName\":\"d\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{persPATH}}/update",
+							"host": [
+								"{{baseURL}}{{persPATH}}"
+							],
+							"path": [
+								"update"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"event": [
@@ -1100,6 +1240,7 @@
 									"        \"data\": {\r",
 									"            \"type\": \"object\",\r",
 									"            \"properties\": {\r",
+									"                        \"_id\": { \"type\": \"string\" },\r",
 									"                        \"username\": { \"type\": \"string\" },\r",
 									"                        \"email\": { \"type\": \"string\" },\r",
 									"                        \"password\": { \"type\": \"string\" },\r",
@@ -1132,15 +1273,12 @@
 									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
 									"});\r",
 									"\r",
-									"if (jsonResponse.error == false)\r",
-									"{\r",
-									"    pm.environment.set(\"user\"+Number(pm.info.iteration+1), jsonData._id);\r",
-									"\r",
-									"    pm.test('Data check', function(){\r",
+									"pm.test('Data check', function() {\r",
+									"    if (infoTest.error == false) {\r",
+									"        pm.environment.set(\"user\"+Number(pm.info.iteration+1), jsonData);\r",
 									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
-									"    });\r",
-									"}\r",
-									""
+									"    }\r",
+									"})"
 								],
 								"type": "text/javascript"
 							}
@@ -1149,7 +1287,6 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"\r",
 									"let v_data = {};\r",
 									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
 									"console.log(pm.iterationData.toObject());\r",
@@ -1159,20 +1296,7 @@
 									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
 									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
 									"    pm.iterationData.unset(\"infoTest\");\r",
-									"\r",
 									"    v_data = pm.iterationData.toObject();\r",
-									"    /*if (pm.iterationData.has(\"username\"))\r",
-									"        v_data.username = pm.iterationData.get(\"username\");\r",
-									"    if (pm.iterationData.has(\"email\"))\r",
-									"        v_data.email = pm.iterationData.get(\"email\");\r",
-									"    if (pm.iterationData.has(\"password\"))\r",
-									"        v_data.password = pm.iterationData.get(\"password\");\r",
-									"    if (pm.iterationData.has(\"avatar\"))\r",
-									"        v_data.avatar = pm.iterationData.get(\"avatar\");\r",
-									"    if (pm.iterationData.has(\"name\"))\r",
-									"        v_data.name = pm.iterationData.get(\"name\");\r",
-									"    if (pm.iterationData.has(\"role\"))\r",
-									"        v_data.role = pm.iterationData.get(\"role\");*/\r",
 									"}\r",
 									"else{\r",
 									"    v_data.username = \"Marienero\";\r",
@@ -1260,11 +1384,15 @@
 									"        \"data\": {\r",
 									"            \"type\": \"object\",\r",
 									"            \"properties\": {\r",
-									"                        \"acknowledged\": { \"type\": \"boolean\" },\r",
-									"                        \"modifiedCount\": { \"type\": \"number\" },\r",
-									"                        \"upsertedId\": { \"type\": \"null\" },\r",
-									"                        \"upsertedCount\": { \"type\": \"number\" },\r",
-									"                        \"matchedCount\": { \"type\": \"number\" },\r",
+									"                        \"_id\": { \"type\": \"string\" },\r",
+									"                        \"username\": { \"type\": \"string\" },\r",
+									"                        \"email\": { \"type\": \"string\" },\r",
+									"                        \"password\": { \"type\": \"string\" },\r",
+									"                        \"avatar\": { \"type\": \"string\" },\r",
+									"                        \"name\": { \"type\": \"string\" },\r",
+									"                        \"role\": { \"type\": \"string\" },\r",
+									"                        \"createdAt\": { \"type\": \"string\" },\r",
+									"                        \"updatedAt\": { \"type\": \"string\" }\r",
 									"            },\r",
 									"        }\r",
 									"    },\r",
@@ -1289,6 +1417,9 @@
 									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
 									"});\r",
 									"\r",
+									"pm.test('DataResponse is valid', function() {\r",
+									"    pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
+									"});\r",
 									""
 								],
 								"type": "text/javascript"
@@ -1301,6 +1432,52 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"data\": {{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{usersPATH}}/update",
+							"host": [
+								"{{baseURL}}{{usersPATH}}"
+							],
+							"path": [
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TempTest",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": {\r\n        \"id\":\"62eaafe21bd6f083070e5d39\",\r\n        \"avatar\":\"https://res.cloudinary.com/teepublic/image/private/s--W9Vj2N6H--/t_Preview/b_rgb:36538b,c_limit,f_jpg,h_630,q_90,w_630/v1523212912/production/designs/2570408_0.jpg\"\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1416,6 +1593,64 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "VerifyToken",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjI5NjQ4Y2VjNGRiNmJlOTIyNTNhYjE0IiwidXNlcm5hbWUiOiJNYXJpZW5lcm8iLCJyb2xlIjoiQ2FsaW3DqXJvIiwiaWF0IjoxNjU0MTg2MTk2LCJleHAiOjE2NTQyNzI1OTZ9.r6TC41ebN47_x5HiROKr0c1wan7KYU5UjCwt_ev9C44\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/verify-token",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"verify-token"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Registration",
+					"item": [
+						{
+							"name": "1- Register-user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"data\": {\r\n        \"username\": \"joebine\",\r\n        \"password\": \"1234\",\r\n        \"email\": \"marcandre@mamarmite.com\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8000/register",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"register"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
@@ -1440,6 +1675,915 @@
 						}
 					},
 					"response": []
+				}
+			]
+		},
+		{
+			"name": "Taxonomie",
+			"item": [
+				{
+					"name": "Temp Test create",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data = {};\r",
+									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+									"console.log(pm.iterationData.toObject());\r",
+									"\r",
+									"if (pm.iterationData.has(\"infoTest\"))\r",
+									"{\r",
+									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+									"    pm.iterationData.unset(\"infoTest\");\r",
+									"    v_data = pm.iterationData.toObject();\r",
+									"}\r",
+									"else{\r",
+									"    v_data.category = \"occupation\";\r",
+									"    v_data.name = \"Circassien\";\r",
+									"    v_data.description = \"Le circassien pratique l'action de faire du cirque.\";\r",
+									"    v_data.source = \"\";\r",
+									"}\r",
+									"\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"error\": { \"type\": \"boolean\" },\r",
+									"        \"code\": { \"type\": \"number\" },\r",
+									"        \"message\": { \"type\": \"string\" },\r",
+									"        \"errors\": { \"type\": \"array\" },\r",
+									"        \"data\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                        \"_id\": { \"type\": \"string\" },\r",
+									"                        \"category\": { \"type\": \"string\" },\r",
+									"                        \"name\": { \"type\": \"string\" },\r",
+									"                        \"slug\": { \"type\": \"string\" },\r",
+									"                        \"description\": { \"type\": \"string\" },\r",
+									"                        \"createdAt\": { \"type\": \"string\" },\r",
+									"                        \"updatedAt\": { \"type\": \"string\" }\r",
+									"            },\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+									"};\r",
+									"const infoTest = pm.environment.get(\"infoTest\");\r",
+									"pm.iterationData.unset(\"infoTest\");\r",
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"\r",
+									"pm.test('Status/code check', function(){\r",
+									"    pm.response.to.have.status(infoTest.status);\r",
+									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+									"});\r",
+									"\r",
+									"pm.test('Error check', function(){\r",
+									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+									"});\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test('Data check', function() {\r",
+									"    if (infoTest.error == false) {\r",
+									"        pm.environment.set(\"taxo\"+Number(pm.info.iteration+1), jsonData);\r",
+									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
+									"    }\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\" : {{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{taxoPATH}}/create",
+							"host": [
+								"{{baseURL}}{{taxoPATH}}"
+							],
+							"path": [
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTaxonomiesEnum",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data = {};\r",
+									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+									"console.log(pm.iterationData.toObject());\r",
+									"\r",
+									"if (pm.iterationData.has(\"infoTest\"))\r",
+									"{\r",
+									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+									"    pm.iterationData.unset(\"infoTest\");\r",
+									"    v_data = pm.iterationData.toObject();\r",
+									"}\r",
+									"else{\r",
+									"    v_data.category = \"occupation\";\r",
+									"    v_data.name = \"Circassien\";\r",
+									"    v_data.description = \"Le circassien pratique l'action de faire du cirque.\";\r",
+									"    v_data.source = \"\";\r",
+									"}\r",
+									"\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"error\": { \"type\": \"boolean\" },\r",
+									"        \"code\": { \"type\": \"number\" },\r",
+									"        \"message\": { \"type\": \"string\" },\r",
+									"        \"errors\": { \"type\": \"array\" },\r",
+									"        \"data\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                        \"_id\": { \"type\": \"string\" },\r",
+									"                        \"category\": { \"type\": \"string\" },\r",
+									"                        \"name\": { \"type\": \"string\" },\r",
+									"                        \"slug\": { \"type\": \"string\" },\r",
+									"                        \"description\": { \"type\": \"string\" },\r",
+									"                        \"createdAt\": { \"type\": \"string\" },\r",
+									"                        \"updatedAt\": { \"type\": \"string\" }\r",
+									"            },\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+									"};\r",
+									"const infoTest = pm.environment.get(\"infoTest\");\r",
+									"pm.iterationData.unset(\"infoTest\");\r",
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"\r",
+									"pm.test('Status/code check', function(){\r",
+									"    pm.response.to.have.status(infoTest.status);\r",
+									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+									"});\r",
+									"\r",
+									"pm.test('Error check', function(){\r",
+									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+									"});\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test('Data check', function() {\r",
+									"    if (infoTest.error == false) {\r",
+									"        pm.environment.set(\"taxo\"+Number(pm.info.iteration+1), jsonData);\r",
+									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
+									"    }\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\" : {{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{taxoPATH}}/create",
+							"host": [
+								"{{baseURL}}{{taxoPATH}}"
+							],
+							"path": [
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Temp Test update",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data = {};\r",
+									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+									"console.log(pm.iterationData.toObject());\r",
+									"\r",
+									"if (pm.iterationData.has(\"infoTest\"))\r",
+									"{\r",
+									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+									"    pm.iterationData.unset(\"infoTest\");\r",
+									"    v_data = pm.iterationData.toObject();\r",
+									"\r",
+									"    if(v_data.id === undefined)\r",
+									"        v_data.id = pm.environment.get(\"taxo1\")._id;\r",
+									"}\r",
+									"else{\r",
+									"    v_data.id = \"bidon\"\r",
+									"}\r",
+									"\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"error\": { \"type\": \"boolean\" },\r",
+									"        \"code\": { \"type\": \"number\" },\r",
+									"        \"message\": { \"type\": \"string\" },\r",
+									"        \"errors\": { \"type\": \"array\" },\r",
+									"        \"data\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                        \"_id\": { \"type\": \"string\" },\r",
+									"                        \"category\": { \"type\": \"string\" },\r",
+									"                        \"name\": { \"type\": \"string\" },\r",
+									"                        \"slug\": { \"type\": \"string\" },\r",
+									"                        \"description\": { \"type\": \"string\" },\r",
+									"                        \"createdAt\": { \"type\": \"string\" },\r",
+									"                        \"updatedAt\": { \"type\": \"string\" }\r",
+									"            },\r",
+									"            \"required\": [\"category\", \"name\"]\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+									"};\r",
+									"\r",
+									"const infoTest = pm.environment.get(\"infoTest\");\r",
+									"pm.iterationData.unset(\"infoTest\");\r",
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"pm.test('Status/code check', function(){\r",
+									"    pm.response.to.have.status(infoTest.status);\r",
+									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+									"});\r",
+									"\r",
+									"pm.test('Error check', function(){\r",
+									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+									"});\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test('DataResponse is valid', function() {\r",
+									"    pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": {{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{taxoPATH}}/update",
+							"host": [
+								"{{baseURL}}{{taxoPATH}}"
+							],
+							"path": [
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Temp Test search",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"id\":\"62d58ed0a353741b1093efa7\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{taxoPATH}}/search",
+							"host": [
+								"{{baseURL}}{{taxoPATH}}"
+							],
+							"path": [
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Temp Test list",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{taxoPATH}}/list",
+							"host": [
+								"{{baseURL}}{{taxoPATH}}"
+							],
+							"path": [
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5-Delete-all-taxo",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data = {};\r",
+									"let toDel;\r",
+									"let vars;\r",
+									"let varsKeys;\r",
+									"while(pm.environment.toObject())\r",
+									"{\r",
+									"    vars = pm.environment.toObject();\r",
+									"    varsKeys = Object.keys(vars);\r",
+									"\r",
+									"    toDel = varsKeys.pop();\r",
+									"    if(toDel === undefined)\r",
+									"    break;\r",
+									"\r",
+									"    if (toDel.includes(\"taxo\")){\r",
+									"        break;\r",
+									"    }\r",
+									"    pm.environment.unset(toDel);\r",
+									"\r",
+									"}\r",
+									"if(toDel !== undefined)\r",
+									"{\r",
+									"    v_data.id = vars[toDel]._id\r",
+									"    pm.environment.unset(toDel);\r",
+									"}\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"if(Object.keys(pm.environment.toObject()) != 0)\r",
+									"{\r",
+									"    pm.test('Status OK', function(){\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"\r",
+									"    pm.test('Delete successful', function(){\r",
+									"        pm.expect(jsonResponse.error).to.be.false;\r",
+									"        pm.expect(jsonResponse.errors).to.be.empty;\r",
+									"    });\r",
+									"\r",
+									"    postman.setNextRequest(\"5-Delete-all-taxo\");\r",
+									"}\r",
+									"else\r",
+									"{\r",
+									"    pm.environment.clear();\r",
+									"    postman.setNextRequest(null);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add bunch of taxo",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"let v_data = {};\r",
+									"v_data = pm.iterationData.toObject();\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status/code check', function(){\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.environment.clear();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{taxoPATH}}/create",
+							"host": [
+								"{{baseURL}}{{taxoPATH}}"
+							],
+							"path": [
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "UserHistory",
+			"item": [
+				{
+					"name": "history-Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"user\":\"62cf242933be108a45c85be6\",\r\n        \"ipAddress\":\"UneAdresseIP\",\r\n        \"modifiedEntity\":\"62d0417ebc2a9629f4d7c683\",\r\n        \"action\":\"create\",\r\n        \"fields\":{\r\n            \"name\":\"Taxo1\",\r\n            \"slug\":\"saxonomie\"\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{usrHstPATH}}/create",
+							"host": [
+								"{{baseURL}}{{usrHstPATH}}"
+							],
+							"path": [
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sanitization",
+			"item": [
+				{
+					"name": "Create",
+					"item": [
+						{
+							"name": "1-Create-Organisation-sanitization",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let v_data = {};\r",
+											"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+											"console.log(pm.iterationData.toObject());\r",
+											"\r",
+											"if (pm.iterationData.has(\"infoTest\"))\r",
+											"{\r",
+											"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+											"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+											"    pm.iterationData.unset(\"infoTest\");\r",
+											"\r",
+											"    v_data = pm.iterationData.toObject();\r",
+											"\r",
+											"}\r",
+											"else{\r",
+											"    v_data.name = \"Librairie Pommerleau\";\r",
+											"    v_data.description = '<h6><span style=\"font-weight: 400;\">Bluff, une coproduction du Petit Théâtre du Vieux Noranda et des <a href=\"http://productionsquitteoudouble.com/\">Productions Quitte ou Double</a></span></h6><p><strong>Bluff, pièce de théâtre en téléprésence.</strong></p><p><span style=\"font-weight: 400;\">Trois interprètes se trouvent dans trois villes différentes, réuni·es* par un dispositif de téléprésence. Iels se révèlent, se questionnent, discutent et débattent autour des questions de l’authenticité, du mensonge et de l’imaginaire. À travers la caméra, iels cherchent à démontrer leur honnêteté et leur intégrité.</p><script></script>';;\r",
+											"    v_data.url = \"https://lalibrairiepommerleau.meilleur\";\r",
+											"    v_data.contactPoint = \"info@meilleurelibrairie.meilleurfois2\"\r",
+											"    //v_data.dateDeFondation = \"1kjkjhgvjhbj2-22-2050\";\r",
+											"\r",
+											"}\r",
+											"\r",
+											"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\": {\r",
+											"        \"error\": { \"type\": \"boolean\" },\r",
+											"        \"code\": { \"type\": \"number\" },\r",
+											"        \"message\": { \"type\": \"string\" },\r",
+											"        \"errors\": { \"type\": \"array\" },\r",
+											"        \"data\": {\r",
+											"            \"type\": \"object\",\r",
+											"            \"properties\": {\r",
+											"                        \"_id\": { \"type\": \"string\" },\r",
+											"                        \"nom\": { \"type\": \"string\" },\r",
+											"                        \"description\": { \"type\": \"string\" },\r",
+											"                        \"url\": { \"type\": \"string\" },\r",
+											"                        \"contactPoint\": { \"type\": \"string\" },\r",
+											"                        \"fondationDate\": { \"type\": \"string\" },\r",
+											"                        \"createdAt\": { \"type\": \"string\" },\r",
+											"                        \"updatedAt\": { \"type\": \"string\" }\r",
+											"            },\r",
+											"        }\r",
+											"    },\r",
+											"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+											"};\r",
+											"const infoTest = pm.environment.get(\"infoTest\");\r",
+											"pm.iterationData.unset(\"infoTest\");\r",
+											"const jsonResponse = pm.response.json();\r",
+											"const jsonData = jsonResponse.data;\r",
+											"\r",
+											"\r",
+											"pm.test('Status/code check', function(){\r",
+											"    pm.response.to.have.status(infoTest.status);\r",
+											"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+											"});\r",
+											"\r",
+											"pm.test('Error check', function(){\r",
+											"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+											"});\r",
+											"\r",
+											"pm.test('Schema is valid', function() {\r",
+											"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"if (jsonResponse.error == false)\r",
+											"{\r",
+											"    pm.environment.set(\"org\"+Number(pm.info.iteration+1), jsonData);\r",
+											"\r",
+											"    pm.test('Data check', function(){\r",
+											"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
+											"    });\r",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}{{orgPATH}}/create",
+									"host": [
+										"{{baseURL}}{{orgPATH}}"
+									],
+									"path": [
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1-Create-personne-sanitization",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\": {\r",
+											"        \"error\": { \"type\": \"boolean\" },\r",
+											"        \"code\": { \"type\": \"number\" },\r",
+											"        \"message\": { \"type\": \"string\" },\r",
+											"        \"errors\": { \"type\": \"array\" },\r",
+											"        \"data\": {\r",
+											"            \"type\": \"object\",\r",
+											"            \"properties\": {\r",
+											"                        \"_id\": { \"type\": \"string\" },\r",
+											"                        \"lastName\": { \"type\": \"string\" },\r",
+											"                        \"firstName\": { \"type\": \"string\" },\r",
+											"                        \"slug\": { \"type\": \"string\" },\r",
+											"                        \"nickname\": { \"type\": \"string\" },\r",
+											"                        \"description\": { \"type\": \"string\" },\r",
+											"                        \"occupation\": { \"type\": \"array\" },\r",
+											"                        \"createdAt\": { \"type\": \"string\" },\r",
+											"                        \"updatedAt\": { \"type\": \"string\" }\r",
+											"            },\r",
+											"        }\r",
+											"    },\r",
+											"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+											"};\r",
+											"const infoTest = pm.environment.get(\"infoTest\");\r",
+											"pm.iterationData.unset(\"infoTest\");\r",
+											"const jsonResponse = pm.response.json();\r",
+											"const jsonData = jsonResponse.data;\r",
+											"\r",
+											"\r",
+											"pm.test('Status/code check', function(){\r",
+											"    pm.response.to.have.status(infoTest.status);\r",
+											"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+											"});\r",
+											"\r",
+											"pm.test('Error check', function(){\r",
+											"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+											"});\r",
+											"\r",
+											"pm.test('Schema is valid', function() {\r",
+											"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test('Data check', function() {\r",
+											"    if (infoTest.error == false) {\r",
+											"        pm.environment.set(\"pers\"+Number(pm.info.iteration+1), jsonData);\r",
+											"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
+											"    }\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let v_data = {};\r",
+											"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+											"console.log(pm.iterationData.toObject());\r",
+											"\r",
+											"if (pm.iterationData.has(\"infoTest\"))\r",
+											"{\r",
+											"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+											"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+											"    pm.iterationData.unset(\"infoTest\");\r",
+											"    v_data = pm.iterationData.toObject();\r",
+											"}\r",
+											"else{\r",
+											"    v_data.lastName = \"Parent\";\r",
+											"    v_data.firstName = \"Jean-marc\";\r",
+											"    v_data.nickname = \"Mickette\";\r",
+											"    v_data.description = \"Humour\";\r",
+											"}\r",
+											"\r",
+											"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}{{persPATH}}/create",
+									"host": [
+										"{{baseURL}}{{persPATH}}"
+									],
+									"path": [
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1-Create-user-sanitization",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\": {\r",
+											"        \"error\": { \"type\": \"boolean\" },\r",
+											"        \"code\": { \"type\": \"number\" },\r",
+											"        \"message\": { \"type\": \"string\" },\r",
+											"        \"errors\": { \"type\": \"object\" },\r",
+											"        \"data\": {\r",
+											"            \"type\": \"object\",\r",
+											"            \"properties\": {\r",
+											"                        \"_id\": { \"type\": \"string\" },\r",
+											"                        \"username\": { \"type\": \"string\" },\r",
+											"                        \"email\": { \"type\": \"string\" },\r",
+											"                        \"password\": { \"type\": \"string\" },\r",
+											"                        \"avatar\": { \"type\": \"string\" },\r",
+											"                        \"name\": { \"type\": \"string\" },\r",
+											"                        \"role\": { \"type\": \"string\" },\r",
+											"                        \"createdAt\": { \"type\": \"string\" },\r",
+											"                        \"updatedAt\": { \"type\": \"string\" }\r",
+											"            },\r",
+											"        }\r",
+											"    },\r",
+											"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+											"};\r",
+											"\r",
+											"const infoTest = pm.environment.get(\"infoTest\");\r",
+											"pm.iterationData.unset(\"infoTest\");\r",
+											"const jsonResponse = pm.response.json();\r",
+											"const jsonData = jsonResponse.data;\r",
+											"\r",
+											"pm.test('Status/code check', function(){\r",
+											"    pm.response.to.have.status(infoTest.status);\r",
+											"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+											"});\r",
+											"\r",
+											"pm.test('Error check', function(){\r",
+											"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+											"});\r",
+											"\r",
+											"pm.test('Schema is valid', function() {\r",
+											"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test('Data check', function() {\r",
+											"    if (infoTest.error == false) {\r",
+											"        pm.environment.set(\"user\"+Number(pm.info.iteration+1), jsonData);\r",
+											"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
+											"    }\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let v_data = {};\r",
+											"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+											"console.log(pm.iterationData.toObject());\r",
+											"\r",
+											"if (pm.iterationData.has(\"infoTest\"))\r",
+											"{\r",
+											"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+											"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+											"    pm.iterationData.unset(\"infoTest\");\r",
+											"    v_data = pm.iterationData.toObject();\r",
+											"}\r",
+											"else{\r",
+											"    v_data.username = \"Marienero\";\r",
+											"    v_data.email = \"mauveTercelle@jira.atlassian.cash\";\r",
+											"    v_data.password = \"jironde42\";\r",
+											"    v_data.avatar = \"La Marie dans la bible lah..\"\r",
+											"    v_data.name = \"Marie Neron\";\r",
+											"    v_data.role = \"Caliméro\";\r",
+											"}\r",
+											"\r",
+											"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"data\" : {{v_data}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}{{usersPATH}}/create",
+									"host": [
+										"{{baseURL}}{{usersPATH}}"
+									],
+									"path": [
+										"create"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		}
