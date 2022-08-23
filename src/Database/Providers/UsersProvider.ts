@@ -12,6 +12,8 @@ export class UsersProvider extends BaseProvider implements DbProvider
 
     private static _singleton:UsersProvider;
 
+    protected _services:Array<Service> = [];
+
     _models:Array<AbstractModel>;
 
     constructor(name='')
@@ -53,12 +55,11 @@ export class UsersProvider extends BaseProvider implements DbProvider
      * @param model
      * @param service {Service}
      */
-    public assign(model:AbstractModel, service:Service|null=null):void
+    /*public assign(service:Service):void
     {
-        this.addModel(model);
-        model.connection = this.connection;
-        model.provider = this;
-        //this.service = UsersService.getInstance(model);
-        //this.services = [UsersService.getInstance(model)];
-    }
+        // we may can delete the model's provider property because everything is already handler within the model's connecion set here.
+        this.addService(service);
+        service.model.connection = this.connection;
+        service.model.provider = this;
+    }*/
 }

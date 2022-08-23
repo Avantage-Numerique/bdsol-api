@@ -28,6 +28,10 @@ export default class LogHelper
         LogHelper.finalLog('debug', args);
     }
 
+    public static raw(...args: any[]) {
+        LogHelper.finalLog('raw', args);
+    }
+
     /** 
      *  @method finalLog applique des styles aux logs, les affiche et les inscrit dans un fichier log.
      *  @desc Explains syntax
@@ -71,7 +75,10 @@ export default class LogHelper
                     console.log("\x1b[90;4m%s\x1b[0;90m%j\x1b[0m", "[INFO]", toLog); break;
                 }
                 case 'debug': {
-                    console.log("[DEBUG]", toLog); break;//"\x1b[36;4m%s\x1b[0;36m%j\x1b[0m",
+                    console.log("\x1b[36;4m%s\x1b[0;36m%j\x1b[0m", "[DEBUG]", toLog); break;
+                }
+                case 'raw': {
+                    console.log("[DEBUG]", toLog); break;
                 }
             }
         }

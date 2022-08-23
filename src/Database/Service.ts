@@ -6,16 +6,18 @@ import {SuccessResponse} from "../Http/Responses/SuccessResponse";
 import {ErrorResponse} from "../Http/Responses/ErrorResponse";
 import type {ApiResponseContract} from "../Http/Responses/ApiResponse";
 import AbstractModel from "../Abstract/Model";
+import {Obj} from "../Helpers/Obj";
 
 /**
  * Give ability to query and CRUD on collections and its documents.
  * @param model any The model to be use to query in the documents.
  */
-export abstract class Service {
+export abstract class Service
+{
 
     model: any;//@todo create or find the best type for this.
     appModel: AbstractModel;
-    connection: any;
+    //connection: any;
     state:string;
 
     static CREATE_STATE:string = "create";
@@ -32,7 +34,13 @@ export abstract class Service {
 
     constructor(model: AbstractModel) {
         this.appModel = model;
-        this.model = model.connect();
+    }
+
+    public connectToMongoose():any
+    {
+        if (Obj.isNotNull(this.appModel)) {
+            this.model = this.appModel.connect();
+        }
     }
 
     /**
@@ -114,9 +122,6 @@ export abstract class Service {
     async insert(data: any): Promise<ApiResponseContract> {
         let meta;
         try {
-            //let item = await this.model.create(data);
-            // UpdateOne
-
             meta = await this.model.create(data)
              .catch((e: any) => {
                     LogHelper.error("Can't create target Model with data", data, e);
@@ -308,16 +313,16 @@ export abstract class Service {
 
         switch(state){
             case Service.CREATE_STATE :
-                return SuccessResponse.create(meta, StatusCodes.CREATED, actionMessage + " de l'item réussi"); break;
+                return SuccessResponse.create(meta, StatusCodes.CREATED, actionMessage + " de l'item réussi");
             case Service.UPDATE_STATE :
-                return SuccessResponse.create(meta, StatusCodes.OK, actionMessage + " de l'item réussi"); break;
+                return SuccessResponse.create(meta, StatusCodes.OK, actionMessage + " de l'item réussi");
             case Service.DELETE_STATE :
-                return SuccessResponse.create(meta, StatusCodes.OK, actionMessage + " de l'item réussi"); break;
+                return SuccessResponse.create(meta, StatusCodes.OK, actionMessage + " de l'item réussi");
             case Service.LIST_STATE   :
-                return SuccessResponse.create(meta, StatusCodes.OK, actionMessage + " a réussi"); break;
+                return SuccessResponse.create(meta, StatusCodes.OK, actionMessage + " a réussi");
             case Service.SEARCH_STATE :
-                return SuccessResponse.create(meta, StatusCodes.OK, actionMessage + " a réussi"); break;
-            default : return ErrorResponse.create(meta, StatusCodes.INTERNAL_SERVER_ERROR, "Le state dans service n'est pas défini...")
+                return SuccessResponse.create(meta, StatusCodes.OK, actionMessage + " a réussi");
+            default : return ErrorResponse.create(meta, StatusCodes.INTERNAL_SERVER_ERROR, "Le state dans service n'est pas défini...");
         }
     }
 }

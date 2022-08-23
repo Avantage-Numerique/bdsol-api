@@ -12,6 +12,9 @@ import type {Service} from "../Service";
 export class DataProvider extends BaseProvider implements DbProvider
 {
     private static _singleton:DataProvider;
+
+    protected _services:Array<Service> = [];
+
     _models:Array<AbstractModel>;
 
     /**
@@ -59,13 +62,11 @@ export class DataProvider extends BaseProvider implements DbProvider
      * @param model
      * @param service {Service}
      */
-    public assign(model:AbstractModel, service:Service|null=null) {
-        model.connection = this.connection;
-        model.provider = this;
-        if (service !== null) {
-            this.addService(service);
-        }
-        this.addModel(model);
-    }
+    /*public assign(service:Service) {
+        // we may can delete the model's provider property because everything is already handler within the model's connecion set here.
+        this.addService(service);
+        service.model.connection = this.connection;
+        service.model.provider = this;
+    }*/
 
 }

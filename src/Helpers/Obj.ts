@@ -8,16 +8,28 @@ export class Obj {
         return toObject;
     }
 
-    public isNull(element:any):Boolean {
+    public static isNull(element:any):Boolean {
         return element === null;
     }
 
-    public isUndefined(element:any):Boolean {
+    public static isNotNull(element:any):Boolean {
+        return element !== null;
+    }
+
+    public static isUndefined(element:any):Boolean {
         return element === undefined;
     }
 
-    public isEmpty(element:any):Boolean {
-        return element === "" || element === [] || element === {};
+    public static isNotUndefined(element:any):Boolean {
+        return element !== undefined;
+    }
+
+    public static isEmpty(element:any):Boolean {
+        return element === [] || element === {};
+    }
+
+    public static isNotEmpty(element:any):Boolean {
+        return element !== [] && element !== {};
     }
 
 }

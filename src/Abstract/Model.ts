@@ -40,12 +40,12 @@ abstract class AbstractModel {
             return this.mongooseModel = this.provider.connection.model(this.modelName);
         }
 
-        LogHelper.error("this Provider is not setup. Can't get this's model",
+        LogHelper.error(`${this.constructor.name}'s provider is not setup. Can't get the model`,
             this.provider,
             typeof this.provider
         );
 
-        throw new Error("this Provider is not setup. Can't get this's model");
+        throw new Error(`${this.constructor.name}'s provider is not setup. Can't get the model`);
     }
 
 

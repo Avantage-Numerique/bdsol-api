@@ -1,4 +1,4 @@
-export const fakeOrganisation = [
+export const fakeOrganisations = [
     {
         name:"Petit Théâtre",
         description:"Vie et magie",

@@ -3,6 +3,7 @@ import Organisation from "../Models/Organisation";
 
 class OrganisationsService extends Service
 {
+
     /** @private @static Singleton instance */
     private static _instance:OrganisationsService;
 
