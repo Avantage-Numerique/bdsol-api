@@ -40,7 +40,9 @@ export abstract class Service
     {
         if (Obj.isNotNull(this.appModel)) {
             this.model = this.appModel.connect();
+            return true;
         }
+        return false;
     }
 
     /**
@@ -77,7 +79,6 @@ export abstract class Service
      */
     async all(query: any): Promise<ApiResponseContract>
     {
-
         //set and dry parameters passed via query, but for preheating purposes.
         let {skip, limit} = query;
 
@@ -94,10 +95,7 @@ export abstract class Service
         }
 
         try {
-            const items = await this.model
-                .find(query)
-                .skip(skip)
-                .limit(limit);
+            const items = await this.model.find(query).skip(skip).limit(limit);
 
             return SuccessResponse.create(
                 items,
@@ -106,11 +104,11 @@ export abstract class Service
             );
 
         } catch (getAllErrors: any) {
-
+            LogHelper.error(`[${this.constructor.name} all, ${getAllErrors.message}`);
             return ErrorResponse.create(
-                getAllErrors.errors,
+                getAllErrors,
                 StatusCodes.INTERNAL_SERVER_ERROR,
-                getAllErrors.errmsg || "Not able to get the queried items"
+                getAllErrors.message || "Not able to get the queried items"
             );
         }
     }
@@ -159,12 +157,9 @@ export abstract class Service
             // UpdateOne
             const meta = await this.model.findOneAndUpdate({_id: id}, data, {new: true, runValidators: true})
                 .catch((e: any) => {
-                        LogHelper.info("findOneAndUpdate catch:", e);
                         return e;
                     }
                 );
-            LogHelper.info("findOneAndUpdate return after the catch :", meta);
-            // if method updateOne fail, it returns a mongo error with a code and a message. // was method findByIdAndUpdate used.
 
             return this.parseResult(meta, Service.UPDATE_STATE);
 
@@ -190,7 +185,6 @@ export abstract class Service
                     return e;
                 }
             );
-            LogHelper.info("findByIdAndDelete return after the catch :", meta);
 
             return this.parseResult(meta, Service.DELETE_STATE);
 
@@ -224,9 +218,6 @@ export abstract class Service
             case Service.SEARCH_STATE : actionMessage = Service.SEARCH_MSG; break;
             default : actionMessage = "State not defined"
         }
-
-        LogHelper.debug(`Parse Result method for ${state}`, meta, actionMessage);
-        console.log(meta);
 
         // Mongo DB validation failed, make that excalade the response flow, shall we.
         if (meta.errors) {

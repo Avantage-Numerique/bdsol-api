@@ -49,17 +49,4 @@ export class UsersProvider extends BaseProvider implements DbProvider
         return this.connection;
     }
 
-
-    /**
-     * Setup the mode with this provider properties: Connection, provider and setup this.service.
-     * @param model
-     * @param service {Service}
-     */
-    /*public assign(service:Service):void
-    {
-        // we may can delete the model's provider property because everything is already handler within the model's connecion set here.
-        this.addService(service);
-        service.model.connection = this.connection;
-        service.model.provider = this;
-    }*/
 }

@@ -20,9 +20,11 @@ export default class CreateDataMongoose implements SeederContract {
     }
 
     public async conditions(): Promise<boolean> {
-        if (this.service.appModel.connection !== null) {
+        if (this.service.appModel.connection !== null)
+        {
             const count: number = await this.service.appModel.connection.collection(this.service.appModel.collectionName).countDocuments();
             LogHelper.info(`[DB][SEEDERS] Conditions for Migration ${CreateDataMongoose.name} checks`, "count " + this.service.appModel.collectionName, count);
+
             return config.environnement === 'development' &&
                 count <= 0;
         }
@@ -45,7 +47,7 @@ export default class CreateDataMongoose implements SeederContract {
         //const entity:string = "none";
         //Mongoose insertMany don't call the pre-Save events that our slugs all depends on. We use create (inside the service.insert function.).
         switch (this.service.appModel.collectionName) {
-            case 'user':
+            case 'users':
                 return await this.service.insert(fakeUser);
 
             case 'personnes':

@@ -2,7 +2,6 @@ import * as jwt from "jsonwebtoken";
 import config from "../../config";
 import {JwtPayload, VerifyErrors} from "jsonwebtoken";
 import {now} from "../../Helpers/DateTime";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 /**
  * Controller to manage the token operation
@@ -16,8 +15,6 @@ export class TokenController {
      */
     public static generate(encapsulateData:any):string
     {
-        LogHelper.debug('Generate with the data', encapsulateData);
-        //verify type of the encapsulate Data ?
         return jwt.sign(encapsulateData, config.tokenSecret, config.jwt.defaultOptions);
     }
 
@@ -137,7 +134,6 @@ export class TokenController {
 
     public static generateUserToken(user:any):string
     {
-        LogHelper.debug(user);
         return TokenController.generate(user);
     }
 

@@ -29,7 +29,13 @@ export class Obj {
     }
 
     public static isNotEmpty(element:any):Boolean {
-        return element !== [] && element !== {};
+        if (Array.isArray(element)) {
+            return element.length >= 1;
+        }
+        if (typeof element === 'object' && !Array.isArray(element)) {
+            return element !== {};
+        }
+        return false;
     }
 
 }

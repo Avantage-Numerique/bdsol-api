@@ -5,17 +5,17 @@ import {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import { TaxonomyController } from "../../Taxonomy/Controllers/TaxonomyController";
+import {TaxonomyController} from "../../Taxonomy/Controllers/TaxonomyController";
 import OrganisationsService from "../Services/OrganisationsService";
 
 
 class Organisation extends AbstractModel {
 
     /** @protected @static Singleton instance of model Organisation */
-    protected static _instance:Organisation;
+    protected static _instance: Organisation;
 
     /** @public @static Model singleton instance constructor */
-    public static getInstance():Organisation {
+    public static getInstance(): Organisation {
         if (Organisation._instance === undefined) {
             Organisation._instance = new Organisation();
             Organisation._instance.initSchema();
@@ -29,11 +29,11 @@ class Organisation extends AbstractModel {
 
     /** @public Collection name in database */
     collectionName: string = 'organisations';
-    
+
     /** @public Connection mongoose */
     connection: mongoose.Connection;
     service: OrganisationsService;
-    mongooseModel:mongoose.Model<any>;
+    mongooseModel: mongoose.Model<any>;
     provider: DbProvider;
 
     /** @public Database schema */
@@ -73,75 +73,73 @@ class Organisation extends AbstractModel {
             {
                 timestamps: true
             });
-    
+
     /** @public Used to return attributes and rules for each field of this entity. */
     fieldInfo =
-    {
-        "route": "",
-        "field": [
-            {
-                "name": "name",
-                "label": "name",
-                "type": "String",
-                "rules": []
-            },
-            {
-                "name": "description",
-                "label": "Description",
-                "type": "String",
-                "rules": []
-            },
-            {
-                "name": "url",
-                "label": "Site internet",
-                "type": "String",
-                "rules": []
-            },
-            {
-                "name": "contactPoint",
-                "label": "Point de contact",
-                "type": "String",
-                "rules": []
-            },
-            {
-                "name": "fondationDate",
-                "label": "Date de fondation",
-                "type": "Date",
-                "rules": []
-            },
-            {
-                "name": "offer",
-                "label": "Offre de service",
-                "type": "ObjectId",
-                "rules": []
-            }
-        ]
-    };
-    
+        {
+            "route": "",
+            "field": [
+                {
+                    "name": "name",
+                    "label": "name",
+                    "type": "String",
+                    "rules": []
+                },
+                {
+                    "name": "description",
+                    "label": "Description",
+                    "type": "String",
+                    "rules": []
+                },
+                {
+                    "name": "url",
+                    "label": "Site internet",
+                    "type": "String",
+                    "rules": []
+                },
+                {
+                    "name": "contactPoint",
+                    "label": "Point de contact",
+                    "type": "String",
+                    "rules": []
+                },
+                {
+                    "name": "fondationDate",
+                    "label": "Date de fondation",
+                    "type": "Date",
+                    "rules": []
+                },
+                {
+                    "name": "offer",
+                    "label": "Offre de service",
+                    "type": "ObjectId",
+                    "rules": []
+                }
+            ]
+        };
+
     /**
      * @public Rule set for every field of this entity for each route
      * @deprecated*/
-    ruleSet:any = {
-        "default":{
-            "id":["idValid"],
-            "name":["isString"],
-            "description":["isString"],
-            "url":["isString"],
-            "contactPoint":["isString"],
-            "fondationDate":["isDate"]
+    ruleSet: any = {
+        "default": {
+            "id": ["idValid"],
+            "name": ["isString"],
+            "description": ["isString"],
+            "url": ["isString"],
+            "contactPoint": ["isString"],
+            "fondationDate": ["isDate"]
         },
-        "create":{
-            "name":["isDefined", "minLength:2"],
+        "create": {
+            "name": ["isDefined", "minLength:2"],
         },
-        "update":{
-            "id":["isDefined"]
+        "update": {
+            "id": ["isDefined"]
         },
-        "search":{
-        },
-        "list":{
-        },
-        "delete":{
-            "id":["isDefined"]
+        "search": {},
+        "list": {},
+        "delete": {
+            "id": ["isDefined"]
         }
     }
 
@@ -149,8 +147,8 @@ class Organisation extends AbstractModel {
      * @get the field that are searchable.
      * @return {Object} the field slug/names.
      */
-    get searchSearchableFields():object {
-        return ["name", "description","url","contactPoint", "fondationDate", "offer"];
+    get searchSearchableFields(): object {
+        return ["name", "description", "url", "contactPoint", "fondationDate", "offer"];
     }
 
     /**
@@ -158,8 +156,8 @@ class Organisation extends AbstractModel {
      * @param document
      * @return {any}
      */
-    public dataTransfertObject(document: any):any {
-        LogHelper.debug('dataTransfertObject',document);
+    public dataTransfertObject(document: any): any {
+        LogHelper.debug('dataTransfertObject', document);
         return {
             name: document.name ?? '',
             description: document.description ?? '',
@@ -170,55 +168,52 @@ class Organisation extends AbstractModel {
         }
     }
 
-    public async documentation():Promise<any>{
+    public async documentation(): Promise<any> {
 
         return fs.readFileSync('/api/doc/Organisations.md', 'utf-8');
-   }
+    }
 
-   public async registerPreEvents()
-   {
-       if (this.schema !== undefined)
-       {
-           //Prendre le array fournit dans data (data.occupation)
-           //Pour vérif si les valeurs existe toute.  ( .count ) en filtrant sur les id et compare le nombre de résultat retourné avec le .length
-           //Pour vérif si les valeurs ont des doublons :
-               //(Possible que sa marche juste avec le .count, si je chercher avec plusieurs filtre id mais qu'il y a 2 fois le même id, sa retourne tu 1 ou 2.  
-           //Créer un Set avec les valeurs, et comparer .length du set au .length du array. Auquel cas, si doublons, length !=
-           // const setNoDoublon = new Set(arrayOccupation);
-           //if setNoDoublon.length != arrayOccupation.length { throw error }
+    public async registerPreEvents() {
+        if (this.schema !== undefined) {
+            //Prendre le array fournit dans data (data.occupation)
+            //Pour vérif si les valeurs existe toute.  ( .count ) en filtrant sur les id et compare le nombre de résultat retourné avec le .length
+            //Pour vérif si les valeurs ont des doublons :
+            //(Possible que sa marche juste avec le .count, si je chercher avec plusieurs filtre id mais qu'il y a 2 fois le même id, sa retourne tu 1 ou 2.
+            //Créer un Set avec les valeurs, et comparer .length du set au .length du array. Auquel cas, si doublons, length !=
+            // const setNoDoublon = new Set(arrayOccupation);
+            //if setNoDoublon.length != arrayOccupation.length { throw error }
 
-           //Pre save, verification for occupation
-           //Verify that occupations in the array exists and that there are no duplicates
-           await this.schema.pre('save', async function (next: any): Promise<any>
-           {
-               const organisation: any = this;
-               if (organisation.isModified('offer')) {
-                   const taxo = TaxonomyController.getInstance();
-                   const taxoList = await taxo.list({ id : organisation.offer, category: "occupation" }); //"Offer is the same as occupation"
-                   const count = taxoList.data.length;
-                   if (organisation.offer.length != count)
-                       throw("Pre save Erreur data occupation existe pas ou doublons"); 
+            //Pre save, verification for occupation
+            //Verify that occupations in the array exists and that there are no duplicates
+            await this.schema.pre('save', async function (next: any): Promise<any> {
+                const organisation: any = this;
+                if (organisation.isModified('offer')) {
+                    const taxo = TaxonomyController.getInstance();
+                    const taxoList = await taxo.list({id: organisation.offer, category: "occupation"}); //"Offer is the same as occupation"
+                    const count = taxoList.data.length;
+                    if (organisation.offer.length != count)
+                        throw("Pre save Erreur data occupation existe pas ou doublons");
                 }
-               return next();
-           });
+                return next();
+            });
 
-           //Pre update verification for occupation //Maybe it should be in the schema as a validator
-           await this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any>
-           {
-               const organisation: any = this;
-               const data = organisation.getUpdate();
-               
-               if (data.offer) {
-                   const taxo = TaxonomyController.getInstance();
-                   const taxoList = taxo.list({ id : data.offer, category: "occupation" }); //"Offer is the same as occupation"
-                   const count = (await taxoList).data.length;
-                   if (organisation.offer.length != count)
-                       throw("Pre save Erreur data occupation existe pas ou doublons"); 
+            //Pre update verification for occupation //Maybe it should be in the schema as a validator
+            await this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
+                const organisation: any = this;
+                const data = organisation.getUpdate();
+
+                if (data.offer) {
+                    const taxo = TaxonomyController.getInstance();
+                    const taxoList = taxo.list({id: data.offer, category: "occupation"}); //"Offer is the same as occupation"
+                    const count = (await taxoList).data.length;
+                    if (organisation.offer.length != count)
+                        throw("Pre save Erreur data occupation existe pas ou doublons");
                 }
-               return next();
-           });
+                return next();
+            });
 
-       }
-   }
+        }
+    }
 }
+
 export default Organisation;

@@ -18,7 +18,7 @@ class UsersController extends AbstractController {
     constructor() {
         super();
         this.entity = User.getInstance();
-        this.service = new UsersService(this.entity);
+        this.service = UsersService.getInstance(this.entity);
     }
 
     /**
@@ -31,5 +31,6 @@ class UsersController extends AbstractController {
         }
         return UsersController._instance;
     }
+
 }
 export {UsersController};

@@ -5,8 +5,8 @@ import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
 import { TaxonomyController } from "../../Taxonomy/Controllers/TaxonomyController";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import PersonnesService from "../Services/PersonnesService";
+import {Obj} from "../../Helpers/Obj";
 
 class Personne extends AbstractModel {
 
@@ -176,39 +176,34 @@ class Personne extends AbstractModel {
             //Créer un Set avec les valeurs, et comparer .length du set au .length du array. Auquel cas, si doublons, length !=
             // const setNoDoublon = new Set(arrayOccupation);
             //if setNoDoublon.length != arrayOccupation.length { throw error }
+            const middlewareTaxonomy = async (document:any, controller:any) => {
 
+                if (document.isModified('occupation')
+                    && Obj.isNotEmpty(document.occupation))
+                {
+                    const occupationsExist = await controller.getInstance().list({ id : document.occupation, category: "occupation" });
+
+                    if (!occupationsExist.error) {
+                        const foundOccupationCount = occupationsExist.data.length;
+
+                        if (document.occupation.length != foundOccupationCount) {
+                            throw("Pre save Erreur data occupation existe pas ou doublons");
+                        }
+                    }
+                }
+            }
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
             await this.schema.pre('save', async function (next: any): Promise<any>
             {
-                const personne: any = this;
-                if (personne.isModified('occupation')) {
-                    const taxo = TaxonomyController.getInstance();
-                    const taxoList = await taxo.list({ id : personne.occupation, category: "occupation" }); //Taxonomies.OCCUPATION
-                    const count = taxoList.data.length;
-
-                    LogHelper.debug("Pre save taxoList", taxoList);
-                    console.log(taxoList);
-                    LogHelper.debug("Pre save", personne.occupation, personne.occupation.length, count);
-                    if (personne.occupation.length != count)
-                        throw("Pre save Erreur data occupation existe pas ou doublons");
-                }
+                await middlewareTaxonomy(this, TaxonomyController);
                 return next();
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
             await this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any>
             {
-                const personne: any = this;
-                const data = personne.getUpdate();
-
-                if (data.occupation) {
-                    const taxo = TaxonomyController.getInstance();
-                    const taxoList = taxo.list({ id : data.occupation, category: "occupation" });
-                    const count = (await taxoList).data.length;
-                    if (data.occupation.length != count)
-                        throw("Pre save Erreur data occupation existe pas ou doublons");
-                }
+                await middlewareTaxonomy(this, TaxonomyController);
                 return next();
             });
         }
