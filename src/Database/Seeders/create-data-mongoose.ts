@@ -1,17 +1,17 @@
-import LogHelper from "../Monitoring/Helpers/LogHelper";
-import config from "../config";
-import {Service} from "../Database/DatabaseDomain";
-import type {MigrationContract} from "../Database/DatabaseDomain";
-import {fakeUser} from "./FakeEntity/fakeUser";
-import {fakePersons} from "./FakeEntity/fakePerson";
-import {fakeOrganisations} from "./FakeEntity/fakeOrganisations";
-import {fakeTaxonomies} from "./FakeEntity/fakeTaxonomies";
-import {fakeUserHistories} from "./FakeEntity/fakeUserHistories";
-import {ApiResponseContract} from "../Http/Responses/ApiResponse";
-import {ErrorResponse} from "../Http/Responses/ErrorResponse";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import config from "../../config";
+import {Service} from "../DatabaseDomain";
+import {fakeUser} from "../../Data/FakeEntities/fakeUser";
+import {fakePersons} from "../../Data/FakeEntities/fakePerson";
+import {fakeOrganisations} from "../../Data/FakeEntities/fakeOrganisations";
+import {fakeTaxonomies} from "../../Data/FakeEntities/fakeTaxonomies";
+import {fakeUserHistories} from "../../Data/FakeEntities/fakeUserHistories";
+import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
 import {StatusCodes} from "http-status-codes";
+import {SeederContract} from "../Contracts/SeederContract";
 
-export default class CreateDataMongoose implements MigrationContract {
+export default class CreateDataMongoose implements SeederContract {
 
     public service: Service;
 
@@ -31,7 +31,7 @@ export default class CreateDataMongoose implements MigrationContract {
 
     public async up() {
         if (await this.conditions()) {
-            LogHelper.raw(`[DB][SEEDERS] Appel de la migration ${CreateDataMongoose.name}`);
+            LogHelper.info(`[DB][SEEDERS] Appel de la migration ${CreateDataMongoose.name}`);
             await this.fake();
         }
     }

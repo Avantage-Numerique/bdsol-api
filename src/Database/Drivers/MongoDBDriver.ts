@@ -3,7 +3,7 @@ import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import type {DBDriver} from "./DBDriver";
 import {User} from "../../Users/UsersDomain";
-import CreateUsersCollection from "../../Migrations/create-users-collection";
+import CreateUsersCollection from "../Seeders/create-users-collection";
 
 
 /**

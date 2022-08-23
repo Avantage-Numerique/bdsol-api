@@ -1,8 +1,8 @@
 import * as mongoDB from "mongodb";
-import LogHelper from "../Monitoring/Helpers/LogHelper";
-import {fakeUser} from "./FakeEntity/fakeUser";
-import config from "../config";
-import {MigrationContract} from "../Database/Contracts/Migration";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import {fakeUser} from "../../Data/FakeEntities/fakeUser";
+import config from "../../config";
+import {MigrationContract} from "../Contracts/Migration";
 
 
 export default class CreateUsersCollection implements MigrationContract {
@@ -19,7 +19,7 @@ export default class CreateUsersCollection implements MigrationContract {
     public async up() {
         if (this.db !== null) {
             this.model = this.db.collection(this.name);
-            await this.fake();
+            await this.fake({});
         }
     }
 
@@ -36,7 +36,7 @@ export default class CreateUsersCollection implements MigrationContract {
         LogHelper.error(error, result);
     }
 
-    public async fake() {
+    public async fake(data:any) {
         if (config.environnement === 'development'
             && this.model !== null) {
 

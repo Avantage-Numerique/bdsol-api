@@ -1,10 +1,10 @@
-import LogHelper from "../Monitoring/Helpers/LogHelper";
-import {fakeUser} from "./FakeEntity/fakeUser";
-import config from "../config";
-import {DbProvider, Service} from "../Database/DatabaseDomain";
-import type {MigrationContract} from "../Database/DatabaseDomain";
-import {ApiResponseContract} from "../Http/Responses/ApiResponse";
-import {ErrorResponse} from "../Http/Responses/ErrorResponse";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import {fakeUser} from "../../Data/FakeEntities/fakeUser";
+import config from "../../config";
+import {DbProvider, Service} from "../DatabaseDomain";
+import type {MigrationContract} from "../DatabaseDomain";
+import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
 import {StatusCodes} from "http-status-codes";
 
 

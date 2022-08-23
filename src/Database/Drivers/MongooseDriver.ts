@@ -10,7 +10,7 @@ import Personne from "../../Personnes/Models/Personne";
 import Organisation from "../../Organisations/Models/Organisation";
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 import UserHistory from "../../UserHistory/Models/UserHistory";
-import CreateDataMongoose from "../../Migrations/create-data-mongoose";
+import CreateDataMongoose from "../Seeders/create-data-mongoose";
 import {MongooseSlugUpdater} from "../Plugins/MongooseSlugUpdater";
 import PersonnesService from "../../Personnes/Services/PersonnesService";
 import OrganisationsService from "../../Organisations/Services/OrganisationsService";
