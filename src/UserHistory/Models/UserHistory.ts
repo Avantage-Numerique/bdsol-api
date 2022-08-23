@@ -36,7 +36,6 @@ class UserHistory extends AbstractModel {
             user: {
                 type: mongoose.Types.ObjectId,
                 required: true,
-                //ref: 'users' //Note, c'est dans une autre bd ?
             },
             ipAddress: {
                 type: String,

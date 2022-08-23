@@ -93,9 +93,11 @@ abstract class AbstractController {
     */
     public async list(requestData:any):Promise<ApiResponseContract> {
 
-        const query = QueryBuilder.build(requestData);
-        LogHelper.log("Controller list : ", query, requestData);
-        return await this.service.all(query);
+        //const query = QueryBuilder.build(requestData);
+        //LogHelper.log("Controller list : ", query, requestData);
+        //return await this.service.all(query);
+        LogHelper.log("Controller list : ", requestData);
+        return await this.service.all(requestData);
     }
 
 
@@ -145,7 +147,7 @@ abstract class AbstractController {
         LogHelper.log("Create UserHistory ", req.user, );
 
         //User id
-        const user:mongoose.ObjectId = req.user.id;
+        const user:mongoose.ObjectId = req.user.id
 
         //IP Address
         const ipAddress = req.ip;
