@@ -8,6 +8,7 @@ import {body} from "express-validator";
 import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
 import {NoSpaceSanitizer} from "../../Security/Sanitizers/NoSpaceSanitizer";
 import {NoAccentSanitizer} from "../../Security/Sanitizers/NoAccentSanitizer";
+import { UsersController } from "../../Users/UsersDomain";
 
 
 
@@ -17,7 +18,7 @@ export class AuthentificationRoutes {
     /**
      * Controller of a specific entity.
      */
-    public controller: AuthentificationController = AuthentificationController.getInstance();
+    public controllerInstance: AuthentificationController = AuthentificationController.getInstance();
 
     /**
      * Router for public route.
@@ -136,8 +137,11 @@ export class AuthentificationRoutes {
     public async registerHandler(req: Request, res: Response): Promise<any> {
 
         const {data} = req.body;
-        const response = await this.controller.register(data);
+        const response = await this.controllerInstance.register(data);
         LogHelper.debug("registerHandler", data, response);
+        //History of registration
+        if(!response.error)
+            UsersController.getInstance().createUserHistory(req, res, response, 'create');
         return res.status(response.code).send(response);
     }
 
@@ -152,7 +156,7 @@ export class AuthentificationRoutes {
     public async loginHandler(req: Request, res: Response): Promise<any> {
 
         const {username, password} = req.body;
-        const response = await this.controller.login(username, password);
+        const response = await this.controllerInstance.login(username, password);
 
         return res.status(response.code).send(response);
     }
@@ -167,7 +171,7 @@ export class AuthentificationRoutes {
      */
     public async logoutHandler(req: Request, res: Response): Promise<any>
     {
-        const response = await this.controller.logout(req.body.username);
+        const response = await this.controllerInstance.logout(req.body.username);
         return res.status(response.code).send(response);
     }
 
@@ -180,7 +184,7 @@ export class AuthentificationRoutes {
      */
     public async verifyTokenHandler(req: Request, res: Response): Promise<any>
     {
-        const response = await this.controller.verifyToken(req.body.token);
+        const response = await this.controllerInstance.verifyToken(req.body.token);
         return res.status(response.code).send(response);
     }
 
@@ -196,7 +200,7 @@ export class AuthentificationRoutes {
     {
         if (config.isDevelopment)
         {
-            const token = await this.controller.generateToken();
+            const token = await this.controllerInstance.generateToken();
 
             return res.status(StatusCodes.OK).send({
                 "message": ReasonPhrases.OK,

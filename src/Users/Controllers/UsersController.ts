@@ -1,6 +1,11 @@
+import mongoose from "mongoose";
 import {User} from "../Models/User";
 import {UsersService} from "../Services/UsersService";
 import AbstractController from "../../Abstract/Controller";
+import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService";
+import UserHistory from "../../UserHistory/Models/UserHistory";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import { UserHistorySchema } from "../../UserHistory/Schemas/UserHistorySchema";
 
 class UsersController extends AbstractController {
 
@@ -32,5 +37,47 @@ class UsersController extends AbstractController {
         return UsersController._instance;
     }
 
+    public async createUserHistory(req:any, res:any, response:any, action:string):Promise<boolean> {
+
+        const userHistoryService:UsersHistoryService = UsersHistoryService.getInstance(UserHistory.getInstance());
+
+        LogHelper.log("Create UserHistory ", response.data._id );
+
+        //User id
+        const user:mongoose.ObjectId = response.data._id
+
+        //IP Address
+        const ipAddress = req.ip;
+
+        //Modification date
+        const modifDate = new Date();
+
+        //Modified entity id
+        const modifiedEntity = response.data._id;
+
+        //Action on the data
+        //action <---
+
+        //Set modified fields
+        //DELETE NOT WORKING THERE
+        const fields = response.data;
+        delete fields._id;
+        delete fields.createdAt;
+        delete fields.updatedAt;
+        delete fields.__v;
+        
+        const history:UserHistorySchema = {
+            "user": user,
+            "ipAddress": ipAddress,
+            "modifDate": modifDate,
+            "modifiedEntity": modifiedEntity,
+            "action": action,
+            "fields": fields,
+        } as UserHistorySchema;
+
+        //Service call to add UserHistory
+        userHistoryService.insert(history);
+        return true;
+    }
 }
 export {UsersController};
