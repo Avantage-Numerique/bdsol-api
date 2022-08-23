@@ -18,7 +18,7 @@ class PersonnesController extends AbstractController {
     constructor() {
         super();
         this.entity = Personne.getInstance();
-        this.service = new PersonnesService(this.entity);
+        this.service = PersonnesService.getInstance(this.entity);
     }
 
     /**

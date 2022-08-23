@@ -2,15 +2,17 @@ import mongoose from "mongoose";
 import config from "../../config";
 import type {DbProvider} from "./DbProvider";
 import {BaseProvider} from "./DbProvider";
-import {UsersService} from "../../Users/UsersDomain";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import AbstractModel from "../../Abstract/Model";
+import {Service} from "../Service";
 
 
 export class UsersProvider extends BaseProvider implements DbProvider
 {
 
     private static _singleton:UsersProvider;
+
+    protected _services:Array<Service> = [];
 
     _models:Array<AbstractModel>;
 
@@ -47,16 +49,4 @@ export class UsersProvider extends BaseProvider implements DbProvider
         return this.connection;
     }
 
-
-    /**
-     * Setup the mode with this provider properties: Connection, provider and setup this.service.
-     * @param model
-     */
-    public assign(model:AbstractModel):void
-    {
-        this.addModel(model);
-        model.connection = this.connection;
-        model.provider = this;
-        this.service = UsersService.getInstance(model);
-    }
 }

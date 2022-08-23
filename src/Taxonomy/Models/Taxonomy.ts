@@ -4,6 +4,7 @@ import { TaxonomySchema } from "../Schemas/TaxonomySchema";
 import {Taxonomies} from "../TaxonomiesEnum";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model"
+import TaxonomyService from "../Services/TaxonomyService";
 
 class Taxonomy extends AbstractModel {
 
@@ -28,7 +29,9 @@ class Taxonomy extends AbstractModel {
     /** @public Connection mongoose */
     connection:mongoose.Connection;
     provider:DbProvider;
+    service:TaxonomyService;
     mongooseModel:mongoose.Model<any>;
+
 
     /** @public Database schema */
     schema:Schema =

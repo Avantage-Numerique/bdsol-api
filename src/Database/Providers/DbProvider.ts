@@ -7,13 +7,13 @@ import AbstractModel from "../../Abstract/Model";
 
 export interface DbProvider {
     connection:mongoose.Connection;
-    service:Service|null;
+    services:Array<Service>;
     urlPrefix:string;
     url:string;
     databaseName:string;
 
     connect():Promise<mongoose.Connection|undefined>;
-    assign: (model:AbstractModel) => void;
+    assign: (service:Service) => void;
 }
 
 /**
@@ -23,6 +23,7 @@ export abstract class BaseProvider implements DbProvider {
 
     protected _connection:mongoose.Connection;
     protected _service:Service;
+    protected abstract _services:any;//object
 
     protected _urlPrefix:string;
     protected _url:string;
@@ -71,10 +72,30 @@ export abstract class BaseProvider implements DbProvider {
     /**
      * @abstract
      * Assign models to the provider and stocks models in an array.
-     * @param model
+     * @param service {Service}
      */
-    abstract assign(model:AbstractModel):void;
+    //abstract assign(service:Service):void;
 
+    public assign(service:Service):void
+    {
+        try {
+
+            LogHelper.info(`[DB] assigning ${service.constructor.name} to ${this.constructor.name}`);
+            // we may can delete the model's provider property because everything is already handler within the model's connecion set here.
+
+            service.appModel.provider = this;
+            service.appModel.connection = this.connection;
+
+            //this connect the appModel to it's mongoose Models in the service scope.
+            service.connectToMongoose();
+            this.addService(service);
+        }
+        catch (error:any)
+        {
+            LogHelper.error(`[DB] Failed to assign ${service.constructor.name} to ${this.constructor.name}`);
+            throw error;
+        }
+    }
 
     /**
      * This is the models
@@ -99,11 +120,15 @@ export abstract class BaseProvider implements DbProvider {
     }
 
 
-    public get service():any {
-        return this._service;
+    public get services():any {
+        return this._services;
     }
-    public set service(service) {
-        this._service = service;
+    public set services(services:any) {
+        this._services = services;
+    }
+
+    public addService(service:Service) {
+        this._services[service.constructor.name] = service;
     }
 
 

@@ -5,23 +5,18 @@ import mongoose from "mongoose";
 import type {DBDriver} from "./DBDriver";
 import {UsersProvider} from "../Providers/UsersProvider";
 import {DataProvider} from "../Providers/DataProvider";
-import {User} from "../../Users/UsersDomain";
-
-import CreateDbAndEntityMongoose from "../../Migrations/create-db-and-users-mongoose";
+import {User, UsersService} from "../../Users/UsersDomain";
 import Personne from "../../Personnes/Models/Personne";
 import Organisation from "../../Organisations/Models/Organisation";
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 import UserHistory from "../../UserHistory/Models/UserHistory";
-/*import CreateDataMongoose from "../../Migrations/create-data-mongoose";
-import { PersonnesController } from "../../Personnes/Controllers/PersonnesController";
-import OrganisationsController from "../../Organisations/Controllers/OrganisationsController";
-import { TaxonomyController } from "../../Taxonomy/Controllers/TaxonomyController";
-import { UsersHistoryController } from "../../UserHistory/Controllers/UsersHistoryController";
+import CreateDataMongoose from "../Seeders/create-data-mongoose";
+import {MongooseSlugUpdater} from "../Plugins/MongooseSlugUpdater";
 import PersonnesService from "../../Personnes/Services/PersonnesService";
 import OrganisationsService from "../../Organisations/Services/OrganisationsService";
 import TaxonomyService from "../../Taxonomy/Services/TaxonomyService";
-import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService";*/
-import {MongooseSlugUpdater} from "../Plugins/MongooseSlugUpdater";
+import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService";
+import type {Service} from "../Service";
 
 export class MongooseDBDriver implements DBDriver {
 
@@ -49,7 +44,7 @@ export class MongooseDBDriver implements DBDriver {
     }
 
     public async configAddon() {
-        const mongooseSlugPlugin = new MongooseSlugUpdater();//../
+        const mongooseSlugPlugin = new MongooseSlugUpdater();
         await mongooseSlugPlugin.loadDependancy();
         mongooseSlugPlugin.assign(mongoose);
     }
@@ -67,37 +62,60 @@ export class MongooseDBDriver implements DBDriver {
         await this.configAddon();
 
         LogHelper.info(`[BD] Connexion à la base de données utilisateurs ...`);
+
+        //this set connection in the provider
         await this.providers.users.connect();
 
-        LogHelper.info(`[BD] Connexion à la base de données structurée, ouverte et liée ...`);
+        //LogHelper.info(`[BD] Connexion à la base de données structurée, ouverte et liée ...`);
         await this.providers.data.connect();
 
-        this.providers.users.assign(User.getInstance());
+        this.providers.users.assign(UsersService.getInstance(User.getInstance()));
 
-        this.providers.data.assign(Personne.getInstance());
-        this.providers.data.assign(Organisation.getInstance());
+        this.providers.data.assign(PersonnesService.getInstance(Personne.getInstance()));
+        this.providers.data.assign(OrganisationsService.getInstance(Organisation.getInstance()));
 
-        this.providers.data.assign(Taxonomy.getInstance());
-        this.providers.data.assign(UserHistory.getInstance());
+        this.providers.data.assign(TaxonomyService.getInstance(Taxonomy.getInstance()));
+        this.providers.data.assign(UsersHistoryService.getInstance(UserHistory.getInstance()));
 
         await this.generateFakeData();
     }
 
-    public async generateFakeData() {
+    public async generateFakeData()
+    {
         if (config.environnement === 'development') {
+
             //will create the fake users if the collection is empty.
-            const usersCollection = new CreateDbAndEntityMongoose(this.providers.users);
-            await usersCollection.up();
-            //const personData = new CreateDataMongoose(this.providers.data, Personne.getInstance());
-            //await personData.up('person');
-            /*const organisationData = new CreateDataMongoose(this.providers.data, Organisation.getInstance());
-            await organisationData.up('organisation');
-            const taxonomyData = new CreateDataMongoose(this.providers.data, Taxonomy.getInstance());
-            await taxonomyData.up('taxonomy');
-            const userHistoryData = new CreateDataMongoose(this.providers.data, UserHistory.getInstance());
-            await userHistoryData.up('userHistory');*/
+            //const usersCollection = new CreateDbAndEntityMongoose(this.providers.users.services.UsersService);
+            //await usersCollection.up();
+
+            const createDataTasks:Array<Service> = [
+                this.providers.users.services.UsersService,
+                this.providers.data.services.PersonnesService,
+                this.providers.data.services.OrganisationsService,
+                this.providers.data.services.TaxonomyService,
+                this.providers.data.services.UsersHistoryService,
+            ]
+
+            //Loop throught the services that need to be faked
+            //Still need refactoring to drying scope of responsability in the seeder ? or in this.
+            for (let targetService of createDataTasks) {
+                await this.fakeTask(targetService);
+            }
         }
     }
+
+    private async fakeTask(service:Service) {
+
+        // Fake Persons.
+        try {
+            const migration = new CreateDataMongoose(service);
+            await migration.up();
+        } catch(e:any) {
+            LogHelper.raw("Mongoose Driver erreur in migration ", e);
+            throw e;
+        }
+    }
+
 
     /**
      * @deprecated

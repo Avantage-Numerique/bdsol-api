@@ -1,4 +1,4 @@
-export const fakeUserHistory = [
+export const fakeUserHistories = [
     {
         user:"111111111111",
         ipAddress:"10.0.0.1",

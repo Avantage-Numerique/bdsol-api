@@ -77,7 +77,7 @@ export default class ServerController {
             await ServerController.database.connect();
 
         } catch(error: any) {
-            LogHelper.error("Database connection failed", error);
+            LogHelper.error("[Server.start] Database connection failed", error);
             process.exit(StatusCodes.INTERNAL_SERVER_ERROR);
         }
 

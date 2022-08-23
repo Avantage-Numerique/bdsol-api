@@ -3,7 +3,10 @@ import type {DbProvider} from "../../Database/DatabaseDomain";
 import {UserContract} from "../Contracts/UserContract";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
-import {HashingMiddleware} from "../../Authentification/Middleware/HashingMiddleware";//HashingMiddleware
+import {HashingMiddleware} from "../../Authentification/Middleware/HashingMiddleware";
+import {UsersService} from "../Services/UsersService";
+
+//HashingMiddleware
 
 export class User extends AbstractModel {
 
@@ -29,6 +32,7 @@ export class User extends AbstractModel {
     /** @public Connection mongoose */
     connection:mongoose.Connection;
     provider:DbProvider;
+    service:UsersService;
     mongooseModel:mongoose.Model<any>;
 
     /** @public Database schema */
@@ -55,7 +59,6 @@ export class User extends AbstractModel {
             {
                 timestamps: true
             });
-
 
     /** @public Used to return attributes and rules for each field of this entity. */
     fieldInfo = {

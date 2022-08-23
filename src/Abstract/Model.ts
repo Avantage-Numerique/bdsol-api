@@ -1,5 +1,5 @@
 import type {Schema, Connection, Model} from "mongoose";//, mongoose
-import { DbProvider } from "../Database/DatabaseDomain";
+import {DbProvider, Service} from "../Database/DatabaseDomain";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 
 abstract class AbstractModel {
@@ -19,6 +19,7 @@ abstract class AbstractModel {
      */
     abstract connection:Connection;
     abstract provider:DbProvider;
+    abstract service:Service;
     abstract mongooseModel:Model<any>;
     
     /** @abstract Schema in the database. */
@@ -39,12 +40,12 @@ abstract class AbstractModel {
             return this.mongooseModel = this.provider.connection.model(this.modelName);
         }
 
-        LogHelper.error("this Provider is not setup. Can't get this's model",
+        LogHelper.error(`${this.constructor.name}'s provider is not setup. Can't get the model`,
             this.provider,
             typeof this.provider
         );
 
-        throw new Error("this Provider is not setup. Can't get this's model");
+        throw new Error(`${this.constructor.name}'s provider is not setup. Can't get the model`);
     }
 
 

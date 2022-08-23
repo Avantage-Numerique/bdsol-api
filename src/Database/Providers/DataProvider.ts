@@ -4,6 +4,7 @@ import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import type {DbProvider} from "./DbProvider";
 import {BaseProvider} from "./DbProvider";
 import AbstractModel from "../../Abstract/Model";
+import type {Service} from "../Service";
 
 /**
  *  The Data provider allow entities to interact with the DB via the MongooseDriver.
@@ -11,6 +12,9 @@ import AbstractModel from "../../Abstract/Model";
 export class DataProvider extends BaseProvider implements DbProvider
 {
     private static _singleton:DataProvider;
+
+    protected _services:Array<Service> = [];
+
     _models:Array<AbstractModel>;
 
     /**
@@ -56,12 +60,13 @@ export class DataProvider extends BaseProvider implements DbProvider
     /**
      * Assign a model to this provider.
      * @param model
+     * @param service {Service}
      */
-    public assign(model:AbstractModel) {
-        this.addModel(model);
-        model.connection = this.connection;
-        model.provider = this;
-        return model;
-    }
+    /*public assign(service:Service) {
+        // we may can delete the model's provider property because everything is already handler within the model's connecion set here.
+        this.addService(service);
+        service.model.connection = this.connection;
+        service.model.provider = this;
+    }*/
 
 }
