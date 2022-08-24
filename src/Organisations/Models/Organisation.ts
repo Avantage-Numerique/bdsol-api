@@ -7,6 +7,7 @@ import * as fs from 'fs';
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {TaxonomyController} from "../../Taxonomy/Controllers/TaxonomyController";
 import OrganisationsService from "../Services/OrganisationsService";
+import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
 
 
 class Organisation extends AbstractModel {
@@ -173,45 +174,34 @@ class Organisation extends AbstractModel {
         return fs.readFileSync('/api/doc/Organisations.md', 'utf-8');
     }
 
+    /**
+     * Add listenner to pre and findOneAndUpdate mongoose events.
+     * Prendre le array fournit dans data (data.occupation)
+     * Pour vérif si les valeurs existe toute.  ( .count ) en filtrant sur les id et compare le nombre de résultat retourné avec le .length
+     * Pour vérif si les valeurs ont des doublons :
+     * (Possible que sa marche juste avec le .count, si je chercher avec plusieurs filtre id mais qu'il y a 2 fois le même id, sa retourne tu 1 ou 2.
+     * Créer un Set avec les valeurs, et comparer .length du set au .length du array. Auquel cas, si doublons, length !=
+     * const setNoDoublon = new Set(arrayOccupation);
+     * if setNoDoublon.length != arrayOccupation.length { throw error }
+     */
     public async registerPreEvents() {
         if (this.schema !== undefined) {
-            //Prendre le array fournit dans data (data.occupation)
-            //Pour vérif si les valeurs existe toute.  ( .count ) en filtrant sur les id et compare le nombre de résultat retourné avec le .length
-            //Pour vérif si les valeurs ont des doublons :
-            //(Possible que sa marche juste avec le .count, si je chercher avec plusieurs filtre id mais qu'il y a 2 fois le même id, sa retourne tu 1 ou 2.
-            //Créer un Set avec les valeurs, et comparer .length du set au .length du array. Auquel cas, si doublons, length !=
-            // const setNoDoublon = new Set(arrayOccupation);
-            //if setNoDoublon.length != arrayOccupation.length { throw error }
 
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
             await this.schema.pre('save', async function (next: any): Promise<any> {
-                const organisation: any = this;
-                if (organisation.isModified('offer')) {
-                    const taxo = TaxonomyController.getInstance();
-                    const taxoList = await taxo.list({id: organisation.offer, category: "occupation"}); //"Offer is the same as occupation"
-                    const count = taxoList.data.length;
-                    if (organisation.offer.length != count)
-                        throw("Pre save Erreur data occupation existe pas ou doublons");
-                }
+                await middlewareTaxonomy(this, TaxonomyController, "offer");
                 return next();
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
             await this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
                 const organisation: any = this;
-                const data = organisation.getUpdate();
+                const updatedDocument = organisation.getUpdate();
 
-                if (data.offer) {
-                    const taxo = TaxonomyController.getInstance();
-                    const taxoList = taxo.list({id: data.offer, category: "occupation"}); //"Offer is the same as occupation"
-                    const count = (await taxoList).data.length;
-                    if (organisation.offer.length != count)
-                        throw("Pre save Erreur data occupation existe pas ou doublons");
-                }
+                await middlewareTaxonomy(updatedDocument, TaxonomyController, "offer");
                 return next();
             });
-
         }
     }
 }
