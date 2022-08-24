@@ -10,10 +10,10 @@ import {Taxonomies} from "../TaxonomiesEnum";
  */
 const middlewareTaxonomy = async (document:any,
                                   controller:any,
-                                  taxonomyProperty:string = 'occupation',
+                                  taxonomyProperty:string = 'occupations',
                                   taxonomy:string = Taxonomies.Occupations) => {
 
-    if (document.isModified(taxonomy)
+    if (document.isModified(taxonomyProperty)
         && Obj.isNotEmpty(document[taxonomyProperty]))
     {
         const occupationsExist = await controller.getInstance().list({ id : document[taxonomyProperty], category: taxonomy });

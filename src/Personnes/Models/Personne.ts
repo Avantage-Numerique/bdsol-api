@@ -62,7 +62,7 @@ class Personne extends AbstractModel {
                     alias: 'surnom'
                 },
                 description: String,
-                occupation: {
+                occupations: {
                     type: [mongoose.Types.ObjectId],
                     default: undefined,
                     ref: 'taxonomies'

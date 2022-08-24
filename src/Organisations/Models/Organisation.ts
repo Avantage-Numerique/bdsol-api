@@ -66,7 +66,7 @@ class Organisation extends AbstractModel {
                 fondationDate: {
                     type: Date,
                 },
-                offer: {
+                offers: {
                     type: [mongoose.Types.ObjectId],
                     default: undefined
                 }
@@ -111,7 +111,7 @@ class Organisation extends AbstractModel {
                     "rules": []
                 },
                 {
-                    "name": "offer",
+                    "name": "offers",
                     "label": "Offre de service",
                     "type": "ObjectId",
                     "rules": []
@@ -149,7 +149,7 @@ class Organisation extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields(): object {
-        return ["name", "description", "url", "contactPoint", "fondationDate", "offer"];
+        return ["name", "description", "url", "contactPoint", "fondationDate", "offers"];
     }
 
     /**
@@ -190,7 +190,7 @@ class Organisation extends AbstractModel {
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
             await this.schema.pre('save', async function (next: any): Promise<any> {
-                await middlewareTaxonomy(this, TaxonomyController, "offer");
+                await middlewareTaxonomy(this, TaxonomyController, "offers");
                 return next();
             });
 
@@ -199,7 +199,7 @@ class Organisation extends AbstractModel {
                 const organisation: any = this;
                 const updatedDocument = organisation.getUpdate();
 
-                await middlewareTaxonomy(updatedDocument, TaxonomyController, "offer");
+                await middlewareTaxonomy(updatedDocument, TaxonomyController, "offers");
                 return next();
             });
         }
