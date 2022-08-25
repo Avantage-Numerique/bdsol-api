@@ -1,6 +1,7 @@
 import UserHistory from "../Models/UserHistory";
 import UsersHistoryService from "../Services/UsersHistoryService";
 import AbstractController from "../../Abstract/Controller";
+import { ApiResponseContract } from "src/Http/Responses/ApiResponse";
 
 class UsersHistoryController extends AbstractController {
 
@@ -13,9 +14,7 @@ class UsersHistoryController extends AbstractController {
     /** @public Model */
     entity:UserHistory;
 
-
     name:string = "UserHistory";
-
 
     constructor() {
         super();
@@ -32,6 +31,17 @@ class UsersHistoryController extends AbstractController {
             UsersHistoryController._instance = new UsersHistoryController();
         }
         return UsersHistoryController._instance;
+    }
+
+    /**
+     * @method list List entity documents with research terms from database
+     * @param {any} requestData - Research terms { "nom":"Jean" }
+     * @return {ApiResponseContract} Promise containing a list of documents
+     */
+     public async list(requestData: any): Promise<ApiResponseContract> {
+        //const query = QueryBuilder.build(requestData);
+        const sort = { "createdAt": -1 };
+        return await this.service.all(requestData, sort);
     }
 }
 export {UsersHistoryController};

@@ -77,10 +77,12 @@ export abstract class Service
      * Get all the documents from a collection that fits the query.
      * @param query
      */
-    async all(query: any): Promise<ApiResponseContract>
+    async all(query: any, sort?:any): Promise<ApiResponseContract>
     {
         //set and dry parameters passed via query, but for preheating purposes.
         let {skip, limit} = query;
+        if (sort == undefined)
+            sort = {};
 
         skip = skip ? Number(skip) : config.query.defaultSkip;
         limit = limit ? Number(limit) : config.query.defaultLimit;
@@ -95,7 +97,7 @@ export abstract class Service
         }
 
         try {
-            const items = await this.model.find(query).sort({ "createdAt": -1 }).skip(skip).limit(limit);
+            const items = await this.model.find(query).sort(sort).skip(skip).limit(limit);
 
             return SuccessResponse.create(
                 items,
