@@ -53,7 +53,7 @@ class Personne extends AbstractModel {
             slug: {
                 type: String,
                 slug: ["firstName", "lastName"],
-                slugPaddingSize: 3,
+                slugPaddingSize: 2,
                 index: true,
                 unique: true
             },
@@ -64,8 +64,7 @@ class Personne extends AbstractModel {
             description: String,
             occupation: {
                 type: [mongoose.Types.ObjectId],
-                default:undefined,
-                ref: 'taxonomies'
+                default:undefined
             }
         },
             {

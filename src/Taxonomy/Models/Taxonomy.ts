@@ -53,7 +53,7 @@ class Taxonomy extends AbstractModel {
             slug: {
                 type: String,
                 slug: "name",
-                slugPaddingSize: 3,
+                slugPaddingSize: 2,
                 index: true,
                 unique: true
             },
