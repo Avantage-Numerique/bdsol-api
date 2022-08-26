@@ -25,7 +25,7 @@ export class Obj {
     }
 
     public static isEmpty(element:any):Boolean {
-        return element === [] || element === {};
+        return Object.keys(element).length === 0 || element.length === 0;
     }
 
     public static isNotEmpty(element:any):Boolean {
@@ -33,7 +33,7 @@ export class Obj {
             return element.length >= 1;
         }
         if (typeof element === 'object' && !Array.isArray(element)) {
-            return element !== {};
+            return Object.keys(element).length !== 0;
         }
         return false;
     }
