@@ -72,7 +72,7 @@ class UsersController extends AbstractController {
             "modifDate": modifDate,
             "modifiedEntity": modifiedEntity,
             "action": action,
-            "fields": fields,
+            "fields": this.entity.dataTransfertObject(fields),
         } as UserHistorySchema;
 
         //Service call to add UserHistory
