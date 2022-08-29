@@ -1,9 +1,9 @@
 export const fakeOrganisations = [
     {
-        name:"Petit Théâtre",
+        name:"Petit Théâtre du Vieux Noranda",
         description:"Vie et magie",
-        url:"Patrick",
-        contactPoint:"PoW",
+        url:"https://petittheatre.org",
+        contactPoint:"Rosalie Chartier-Lacombe",
         fondationDate:"2022-08-02",
     },
     {
