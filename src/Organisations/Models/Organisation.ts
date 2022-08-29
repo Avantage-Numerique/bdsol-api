@@ -165,7 +165,8 @@ class Organisation extends AbstractModel {
             url: document.url ?? '',
             contactPoint: document.contactPoint ?? '',
             fondationDate: document.fondationDate ?? '',
-            offer: document.offer ?? ''
+            offer: document.offer ?? '',
+            slug: document.offer ?? ''
         }
     }
 

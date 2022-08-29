@@ -150,11 +150,12 @@ class Personne extends AbstractModel {
      */
     public dataTransfertObject(document: any) {
         return {
-            lastName: document.lastName,
-            firstName: document.firstName,
-            nickname: document.nickname,
-            description: document.description,
-            occupation: document.occupation
+            lastName: document.lastName ?? '',
+            firstName: document.firstName ?? '',
+            nickname: document.nickname ?? '',
+            description: document.description ?? '',
+            occupation: document.occupation ?? '',
+            slug: document.slug ?? ''
         }
     }
 
