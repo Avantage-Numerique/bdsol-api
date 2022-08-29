@@ -1,7 +1,7 @@
 import UserHistory from "../Models/UserHistory";
 import UsersHistoryService from "../Services/UsersHistoryService";
 import AbstractController from "../../Abstract/Controller";
-import { ApiResponseContract } from "src/Http/Responses/ApiResponse";
+import { ApiResponseContract } from "../../Http/Responses/ApiResponse"
 
 class UsersHistoryController extends AbstractController {
 

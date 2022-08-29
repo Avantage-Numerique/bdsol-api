@@ -80,8 +80,8 @@ abstract class AbstractController {
      * @return {ApiResponseContract} Promise containing a list of documents
      */
     public async list(requestData: any): Promise<ApiResponseContract> {
-        //const query = QueryBuilder.build(requestData);
-        return await this.service.all(requestData);
+        const query = QueryBuilder.build(requestData);
+        return await this.service.all(query);
     }
 
 

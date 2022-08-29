@@ -1,5 +1,5 @@
 import {Obj} from "../../Helpers/Obj";
-import {Taxonomies} from "../TaxonomiesEnum";
+import {TaxonomiesCategories} from "../TaxonomiesEnum";
 
 /**
  * Add the functionnality of validating if the taxonomy added to the schema exist, is valid, and if empty, passed through.
@@ -11,7 +11,7 @@ import {Taxonomies} from "../TaxonomiesEnum";
 const middlewareTaxonomy = async (document:any,
                                   controller:any,
                                   taxonomyProperty:string = 'occupations',
-                                  taxonomy:string = Taxonomies.Occupations) => {
+                                  taxonomy:string = TaxonomiesCategories.Occupations) => {
 
     if (document.isModified(taxonomyProperty)
         && Obj.isNotEmpty(document[taxonomyProperty]))

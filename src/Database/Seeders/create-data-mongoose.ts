@@ -4,7 +4,7 @@ import {Service} from "../DatabaseDomain";
 import {fakeUser} from "../../Data/FakeEntities/fakeUser";
 import {fakePersons} from "../../Data/FakeEntities/fakePerson";
 import {fakeOrganisations} from "../../Data/FakeEntities/fakeOrganisations";
-import {fakeTaxonomies} from "../../Data/FakeEntities/fakeTaxonomies";
+import {TaxonomiesPersistantData} from "../../Taxonomy/TaxonomiesPersistantData";
 import {fakeUserHistories} from "../../Data/FakeEntities/fakeUserHistories";
 import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
 import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
@@ -57,7 +57,7 @@ export default class CreateDataMongoose implements SeederContract {
                 return await this.service.insert(fakeOrganisations);
 
             case 'taxonomies':
-                return await this.service.insert(fakeTaxonomies);
+                return await this.service.insert(TaxonomiesPersistantData);
 
             case 'userhistories':
                 return await this.service.insert(fakeUserHistories);

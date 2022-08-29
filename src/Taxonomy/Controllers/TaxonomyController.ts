@@ -3,7 +3,7 @@ import TaxonomyService from "../Services/TaxonomyService";
 import AbstractController from "../../Abstract/Controller"
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {SuccessResponse} from "../../Http/Responses/SuccessResponse";
-import {Taxonomies} from "../TaxonomiesEnum";
+import {TaxonomiesCategories} from "../TaxonomiesEnum";
 
 class TaxonomyController extends AbstractController {
 
@@ -38,7 +38,7 @@ class TaxonomyController extends AbstractController {
 
     public static getTaxonomies():any {
         const data:any = {
-            taxonomies: Taxonomies
+            taxonomies: TaxonomiesCategories
         }
         return SuccessResponse.create(data, StatusCodes.OK, ReasonPhrases.OK);
     }
