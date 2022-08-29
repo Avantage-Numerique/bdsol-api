@@ -1,14 +1,19 @@
 import {CustomSanitizer} from "express-validator";
+import {Obj} from "../../Helpers/Obj";
 
 export class EnumSanitizer {
 
     /**
      * Method to sanitize Html with the default content value.
+     * @param targetEnum {enum}
      * @param raw {string}
      */
     public static sanitize(raw:string, targetEnum:any):string
     {
-        return raw;
+        if (Obj.enumHave(targetEnum, raw)) {
+            return raw;
+        }
+        throw new Error(`${raw} is not set in the API`);
     }
 
 
@@ -26,5 +31,4 @@ export class EnumSanitizer {
             return EnumSanitizer.sanitize(value, targetEnum);
         }
     }
-
 }

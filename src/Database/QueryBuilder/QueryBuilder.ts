@@ -1,3 +1,4 @@
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 export default class ApiQuery {
 
@@ -29,9 +30,12 @@ export default class ApiQuery {
         ApiQuery.query = {};
         ApiQuery.initQuery = query;
 
+        LogHelper.debug('QueryBuilder', ApiQuery.initQuery);
         let value:any;
         for (const field in query)
         {
+
+            LogHelper.debug('QueryBuilder', ApiQuery.fieldIsDeclared(field));
             if (ApiQuery.fieldIsDeclared(field))
             {
                 value = query[field].toString();//@todo : Add a try/catch for this ?
@@ -52,6 +56,7 @@ export default class ApiQuery {
             }
         }
 
+        LogHelper.debug('QueryBuilder', ApiQuery.query);
         return ApiQuery.query;
     }
 

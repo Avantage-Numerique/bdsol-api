@@ -6,7 +6,7 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 
 ### POST `/personnes/create`
 
-#### structure demandé
+#### Structure demandée
 ```json
 {
   "type": "object",
@@ -29,7 +29,7 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 
 ### POST `/personnes/update`
 
-#### structure demandé
+#### Structure demandée
 ```json
 {
   "type": "object",
@@ -59,7 +59,7 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte (<=) afin de trouver,
 ```json 
 "data":{ "createdAt":"gte:2022-06-14" }
 ```
-#### structure demandé
+#### Structure demandée
 ```json
 {
   "type": "object",
@@ -82,7 +82,7 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte (<=) afin de trouver,
 
 ### POST `/personnes/list`
 Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/personnes/search`.
-#### structure demandé
+#### Structure demandée
 ```json
 {
   "type": "object",
@@ -104,7 +104,7 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/personnes/sea
 ```
 
 ### POST `/personnes/delete`
-#### structure demandé
+#### Structure demandée
 ```json
 {
   "type": "object",
@@ -126,7 +126,7 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/personnes/sea
 Si une route est spécifiée (create, update, search, list, delete), les informations des champs seront retournée avec les règles de vérification des champs spécifique à la route, ainsi que les règles par défaut.
 Sinon, les champs n'auront que les règles par défaut.
 
-#### structure demandée
+#### Structure demandéee
 ```json
 {
   "type": "object",
@@ -143,6 +143,17 @@ Sinon, les champs n'auront que les règles par défaut.
   }
 }
 ```
+
+
+
+### GET `/personnes/:slug`
+
+Renvoie une personne identifiée à la slug précisée.
+
+#### Structure demandéee
+`:slug` Une chaine de caractère, sans accent, ni espace
+
+
 
 ### GET `/personnes/getdoc`
 Renvoie ce fichier de documentation

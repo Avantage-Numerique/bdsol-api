@@ -1,12 +1,18 @@
 Retour à la base de [Documention de l'API](documentation-api.md)
 
-# Personnes
+# Taxonomies
 
-## URL définies
+## Implémenter pour l'instant 
+- Occupations, slug : `occupations`
+- Domains, slug : `domains`
+- Abilities, slug : `abilities`
+- Skills, slug : `skills`
+
+## URI définies
 
 ### POST `/taxonomy/create`
 
-#### structure demandé
+#### Structure demandéee
 ```json
 {
   "type": "object",
@@ -29,7 +35,7 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 
 ### POST `/taxonomy/update`
 
-#### structure demandé
+#### Structure demandéee
 ```json
 {
   "type": "object",
@@ -53,7 +59,7 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 
 ### POST `/taxonomy/search`
 
-#### structure demandé
+#### Structure demandéee
 ```json
 {
   "type": "object",
@@ -76,7 +82,7 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 
 ### POST `/taxonomy/list`
 
-#### structure demandé
+#### Structure demandéee
 ```json
 {
   "type": "object",
@@ -98,7 +104,7 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 ```
 
 ### POST `/taxonomy/delete`
-#### structure demandé
+#### Structure demandéee
 ```json
 {
   "type": "object",
@@ -120,7 +126,7 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 Si une route est spécifiée (create, update, search, list, delete), les informations des champs seront retournée avec les règles de vérification des champs spécifique à la route, ainsi que les règles par défaut.
 Sinon, les champs n'auront que les règles par défaut.
 
-#### structure demandée
+#### Structure demandéee
 ```json
 {
   "type": "object",
@@ -137,6 +143,27 @@ Sinon, les champs n'auront que les règles par défaut.
   }
 }
 ```
+
+
+
+
+### GET `/:taxonomy`
+
+Renvoie toutes les taxonomies ajoutées dans la catégorie spécifiée par le paramètre :taxonomy.
+
+#### Structure demandéee
+`:taxonomy` Une chaine de caractère, sans accent, ni espace contenu dans les taxonomies implémentés pour l'instant.
+
+
+### GET `/:taxonomy/:slug`
+
+Renvoie une taxonomy contenu dans la taxonomy spécicifée.
+
+#### Structure demandéee
+`:taxonomy` Une chaine de caractère, sans accent, ni espace contenu dans les taxonomies implémentés pour l'instant.
+`:slug` Une chaine de caractère, sans accent, ni espace contenu dans la BD et assigné à la taxonomy implémenté pour l'instant.
+
+
 
 ### GET `/taxonomy/getdoc`
 Renvoie ce fichier de documentation

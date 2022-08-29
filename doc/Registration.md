@@ -5,7 +5,7 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 
 ## POST `/register`
 
-### structure demandé
+### Structure demandée
 
 ```json
 {

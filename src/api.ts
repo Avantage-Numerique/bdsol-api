@@ -173,7 +173,6 @@ export default class Api {
                 route.manager.setupPublicRoutes()
             );
         }
-
     }
 
     /**

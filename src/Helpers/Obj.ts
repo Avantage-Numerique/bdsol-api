@@ -1,5 +1,6 @@
 export class Obj {
 
+
     public static enumToObj(targetEnum: any):any {
         let toObject:any = {};
         for (let key of targetEnum) {
@@ -8,25 +9,35 @@ export class Obj {
         return toObject;
     }
 
+    public static enumHave(targetEnum:any, property:string):any {
+        return !!Object.values(targetEnum).includes(property);
+    }
+
+
     public static isNull(element:any):Boolean {
         return element === null;
     }
+
 
     public static isNotNull(element:any):Boolean {
         return element !== null;
     }
 
+
     public static isUndefined(element:any):Boolean {
         return element === undefined;
     }
+
 
     public static isNotUndefined(element:any):Boolean {
         return element !== undefined;
     }
 
+
     public static isEmpty(element:any):Boolean {
         return Object.keys(element).length === 0 || element.length === 0;
     }
+
 
     public static isNotEmpty(element:any):Boolean {
         if (Array.isArray(element)) {

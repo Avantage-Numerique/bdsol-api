@@ -78,6 +78,17 @@ abstract class AbstractController {
      * @param {any} requestData - Research terms { "nom":"Jean" }
      * @return {ApiResponseContract} Promise containing a list of documents
      */
+    public async get(requestData: any): Promise<ApiResponseContract> {
+        const query = QueryBuilder.build(requestData);
+        return await this.service.get(query);
+    }
+
+
+    /**
+     * @method list List entity documents with research terms from database
+     * @param {any} requestData - Research terms { "nom":"Jean" }
+     * @return {ApiResponseContract} Promise containing a list of documents
+     */
     public async list(requestData: any): Promise<ApiResponseContract> {
         const query = QueryBuilder.build(requestData);
         return await this.service.all(query);

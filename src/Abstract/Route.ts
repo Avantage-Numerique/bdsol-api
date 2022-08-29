@@ -5,6 +5,9 @@ import AbstractController from "./Controller";
 import {RouteContract} from "./Contracts/RouteContract";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 import {StatusCodes} from "http-status-codes";
+import {param} from "express-validator";
+import {NoSpaceSanitizer} from "../Security/Sanitizers/NoSpaceSanitizer";
+import {NoAccentSanitizer} from "../Security/Sanitizers/NoAccentSanitizer";
 
 abstract class AbstractRoute implements RouteContract
 {
@@ -31,6 +34,30 @@ abstract class AbstractRoute implements RouteContract
      * @abstract
      */
     abstract middlewaresDistribution:any;
+
+
+    /**
+     * The default middlewares for targeted route.
+     * @abstract
+     */
+    protected defaultMiddlewaresDistribution:any = {
+        all: [],
+        create: [],
+        createUpdate: [],
+        update: [],
+        delete: [],
+        search: [],
+        list: [],
+        getinfo: [],
+        getdoc: [],
+        bySlug: [
+            param('slug')
+                .customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
+                .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
+                .stripLow()
+                .trim()
+        ]
+    };
 
 
     // Initiator (called in api.ts)
@@ -84,26 +111,51 @@ abstract class AbstractRoute implements RouteContract
             ...this.addMiddlewares("search"),
             this.searchHandler.bind(this)
         ]);
+
         this.routerInstance.post('/list', [
             ...this.addMiddlewares("all"),
-            this.listHandler.bind(this),
             ...this.addMiddlewares("list"),
+            this.listHandler.bind(this),
             this.routeSendResponse,
         ]);
+
         this.routerInstance.post('/getinfo', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("getinfo"),
             this.getInfoHandler.bind(this)
         ]);
+
+        //  Get
+
         this.routerInstance.get('/getdoc', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("getdoc"),
-            this.getDoc.bind(this)
+            this.getDocumentationHandler.bind(this)
         ]);
 
-        return this.setupAdditionnalPublicRoutes(this.routerInstance);
+
+        // sets routes in target domain's route.
+        this.setupAdditionnalPublicRoutes(this.routerInstance);
+
+
+        //  Get
+
+        // Set the /:slug handler at the end of other route, to allow the routes sets in setupAdditionnalPublicRoutes to be 1 in priority.
+        this.routerInstance.get('/:slug', [
+            ...this.addMiddlewares("all"),
+            ...this.addMiddlewares("bySlug"),
+            this.bySlugHandler.bind(this),
+            this.routeSendResponse,
+        ]);
+
+        return this.routerInstance;
     }
 
+
+    /**
+     * Allow routes Manager to declare route on the same router.
+     * @param router {express.Router} The router to associate other routes, at the target Routes scope.
+     */
     public setupAdditionnalPublicRoutes(router:express.Router):express.Router {
         return router;
     }
@@ -112,21 +164,15 @@ abstract class AbstractRoute implements RouteContract
     //  Middlewares
 
     public addMiddlewares(route:string, middlewares:string = ""):Array<any> {
-        //trying this : https://stackoverflow.com/questions/62438346/how-to-dynamically-access-object-property-in-typescript
-        //const property:string = "middlewares" + middlewares+"Distribution";
-        //const middlewaresArrayName = property as keyof this;
-        //const middle:Array<any> = this[middlewaresArrayName];
-        //return middle[route];
-        return this.middlewaresDistribution[route] ?? [];
-    }
 
-    public defaultRequestSanitization(route:string):Array<any> {
+        const defaultRoutes:any = this.defaultMiddlewaresDistribution[route] ?? [];
+        const currentRouter:any = this.middlewaresDistribution[route] ?? [];
 
-        return this.middlewaresDistribution[route] ?? [];
+        return [...defaultRoutes, ...currentRouter];
     }
 
 
-    //  Route's handlers
+    //  Routes' handlers
 
     /**
      * CREATE
@@ -228,13 +274,27 @@ abstract class AbstractRoute implements RouteContract
 
 
     /**
+     * Uniform return the response of service method.
+     * @param req {Request} The current request
+     * @param res {Response} The curren response.
+     */
+    public async routeSendResponse(req: Request, res: Response): Promise<any> {
+        LogHelper.info(req.originalUrl);
+        return res.status(res.serviceResponse.code).send(res.serviceResponse);
+    }
+
+
+    //  GET handlers
+
+
+    /**
      * GETDOC
      * Handle the documentation method of the controller of the entity, passing the data to it.
      * @param req {Request}
      * @param res {Response}
      * @return {Promise<any>}
      */
-    public async getDoc(req: Request, res: Response): Promise<any> {
+    public async getDocumentationHandler(req: Request, res: Response): Promise<any> {
         const response:ApiResponseContract = await this.controllerInstance.getDoc();
         const style = '<style> body {white-space : pre; background-color : #22211f; color : white}</style>';
         LogHelper.log(`${req.originalUrl} response : ${response.code}, ${StatusCodes[response.code]}`);
@@ -242,10 +302,20 @@ abstract class AbstractRoute implements RouteContract
     }
 
 
-    public async routeSendResponse(req: Request, res: Response): Promise<any> {
-        LogHelper.info(req.originalUrl);
-        return res.status(res.serviceResponse.code).send(res.serviceResponse);
+    /**
+     * Route handler of /:slug for all the abstract one.
+     * @param req
+     * @param res
+     */
+    public async bySlugHandler(req: Request, res: Response): Promise<any> {
+
+        const {slug} = req.params;
+        const response:ApiResponseContract = await this.controllerInstance.get({slug:slug});
+
+        LogHelper.log(`${req.originalUrl} response : ${response.code}, ${StatusCodes[response.code]}`);
+        return res.status(response.code).send(response);
     }
+
 }
 
 export default AbstractRoute;

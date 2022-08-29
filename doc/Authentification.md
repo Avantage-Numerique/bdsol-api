@@ -4,7 +4,7 @@ Retour à la base de [Documention de l'API](documentation-api.md)
 
 ## POST `/login`
 
-### structure demandé
+### Structure demandéee
 
 ```json
 {
@@ -60,7 +60,7 @@ Code : **401** : lorsque les informations ne sont pas OK.
 
 ## POST `/verify-token`
 
-### structure demandé
+### Structure demandée
 
 ```json
 {
@@ -125,7 +125,7 @@ Cette fonction n'est pas implémenté encore. l'url retourne toujours cette rép
 }
 ```
 
-### structure demandé
+### Structure demandée
 
 ```json
 {
