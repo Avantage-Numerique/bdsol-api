@@ -42,7 +42,6 @@ export class VerifyTokenMiddleware {
                 try
                 {
                     const verifiedToken:any = await TokenController.verify(userToken);
-                    //LogHelper.log(`TokenController Verifying the token`);
 
                     if (verifiedToken.validated === true) {
                         // Set the user in the request, for the last middlewares and endpoints.

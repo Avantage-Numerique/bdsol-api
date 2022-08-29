@@ -1,5 +1,4 @@
 import {PasswordsController} from "../Controllers/PasswordsController";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 export class HashingMiddleware {
 
@@ -24,7 +23,6 @@ export class HashingMiddleware {
 //this need to be that way, because this, need to be in the scope of the event not this file nor this funciton.
 export const hashingPasswordAnonymousMiddleware = async function(next:any): Promise<any>
 {
-    LogHelper.debug("Hashing Middleware as a function in pre events.");
     //@ts-ignore
     if (this && !this.isModified('password')) {
         return next();

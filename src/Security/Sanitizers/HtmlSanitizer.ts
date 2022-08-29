@@ -1,6 +1,5 @@
 import sanitizeHtml from 'sanitize-html';
 import {CustomSanitizer} from "express-validator";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 export class HtmlSanitizer {
 
@@ -11,7 +10,6 @@ export class HtmlSanitizer {
      */
     public static sanitize(raw:string)
     {
-        LogHelper.debug('Sanitizing with content HTML : ', raw);
         return sanitizeHtml(raw, HtmlSanitizer.options());
     }
 
@@ -56,7 +54,6 @@ export class HtmlSanitizer {
      */
     public static validatorCustomSanitizer():CustomSanitizer {
         return (value) => {
-            LogHelper.debug('Sanitizing default html', value);
             return HtmlSanitizer.sanitize(value);
         }
     }
@@ -72,7 +69,6 @@ export class HtmlSanitizer {
     public static mongoosePostMiddleware():any {
         return async (doc:any, next:any): Promise<any> =>
         {
-            LogHelper.debug(doc);
             return next();
         }
     }

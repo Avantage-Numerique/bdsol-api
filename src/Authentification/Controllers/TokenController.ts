@@ -2,6 +2,7 @@ import * as jwt from "jsonwebtoken";
 import config from "../../config";
 import {JwtPayload, VerifyErrors} from "jsonwebtoken";
 import {now} from "../../Helpers/DateTime";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 /**
  * Controller to manage the token operation
@@ -38,6 +39,7 @@ export class TokenController {
 
         } catch (error:any)
         {
+            LogHelper.error(`Verify Token Error ${error.message}`, error);
             // escalade the erry to the next try and catch.
             throw error;
         }
@@ -82,6 +84,7 @@ export class TokenController {
             // could be : TokenExpiredError
             throw err;
         }
+
         if (TokenController.isValid(decoded) &&
             TokenController.isActive(decoded))
         {

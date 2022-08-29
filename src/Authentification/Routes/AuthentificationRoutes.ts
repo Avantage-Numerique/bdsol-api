@@ -206,7 +206,7 @@ export class AuthentificationRoutes {
                 "token": token
             });
         }
-        LogHelper.debug(config.isDevelopment);
+
         return res.status(StatusCodes.UNAUTHORIZED).json({
             "message": ReasonPhrases.UNAUTHORIZED
         });

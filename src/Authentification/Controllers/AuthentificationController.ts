@@ -65,7 +65,6 @@ class AuthentificationController
             targetUser.data !== null)
         {
             LogHelper.info(`Les information de ${targetUser.data.username} fonctionnent, génération du token JW ...`);
-            LogHelper.debug(targetUser);
 
             // Generate an access token
             const data:any = this.userModel.dataTransfertObject(targetUser.data);
@@ -108,8 +107,6 @@ class AuthentificationController
         if (ServerController.database.driverPrefix === 'mongodb')
         {
             try {
-                LogHelper.info(`Vérification du token`);
-
                     const decoded:any = await TokenController.verify(token);
 
                     // If we find a user, we check the password through the hashing comparaison.
@@ -135,8 +132,6 @@ class AuthentificationController
         if (createdDocumentResponse !== undefined)
             return createdDocumentResponse;
 
-        LogHelper.debug("Service response in /register from insert is undefined");
-
         return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
             StatusCodes.INTERNAL_SERVER_ERROR,
@@ -150,7 +145,6 @@ class AuthentificationController
         if (config.isDevelopment)
         {
             const devUser:any = await this.service.model.findOne({username: "datageek"});
-            LogHelper.debug(devUser, this.userModel.dataTransfertObject(devUser));
             return TokenController.generateUserToken(this.userModel.dataTransfertObject(devUser));
         }
         return "";

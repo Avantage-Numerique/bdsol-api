@@ -95,7 +95,6 @@ abstract class AbstractModel {
             //If the field exist in the Route's ruleSet. Don't double it. Or if default, don't double it.
             if(Object.keys(this.ruleSet[route]).indexOf(field) != -1 && route != "default")
             {
-                LogHelper.debug("ruleset[route][field], route, field ",this.ruleSet[route][field], route, field);
                 concatRule[field] = [
                     ...this.ruleSet[route][field],
                     ...this.ruleSet.default[field]

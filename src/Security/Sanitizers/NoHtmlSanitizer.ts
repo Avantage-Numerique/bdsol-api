@@ -1,7 +1,6 @@
 import {NextFunction, Response, Request} from "express";
 import sanitizeHtml from 'sanitize-html';
 import {CustomSanitizer} from "express-validator";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 export class NoHtmlSanitizer {
 
@@ -11,7 +10,6 @@ export class NoHtmlSanitizer {
      */
     public static sanitize(raw:string):string
     {
-        LogHelper.debug('Sanitizing with no HTML : ', raw);
         return sanitizeHtml(raw, NoHtmlSanitizer.options());
     }
 
@@ -69,7 +67,6 @@ export class NoHtmlSanitizer {
     public static mongoosePostMiddleware():any {
         return async (doc:any, next:any): Promise<any> =>
         {
-            LogHelper.debug(doc);
             return next();
         }
     }
