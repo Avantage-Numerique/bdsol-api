@@ -19,5 +19,17 @@ class UsersHistoryRoutes extends AbstractRoute {
         getinfo: [],
         getdoc: [],
     }
+
+
+    public setupAdditionnalPublicRoutes(router: express.Router) {
+
+        //  GET
+        //disabling this from the default Route class, because this take advantage on what's in the route object
+        router.get('/:slug', [
+            this.disabledRouteHandler.bind(this)
+        ]);
+
+        return router;
+    }
 }
 export {UsersHistoryRoutes};

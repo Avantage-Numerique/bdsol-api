@@ -4,10 +4,11 @@ import {Response, Request} from "express";
 import AbstractController from "./Controller";
 import {RouteContract} from "./Contracts/RouteContract";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
-import {StatusCodes} from "http-status-codes";
+import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {param} from "express-validator";
 import {NoSpaceSanitizer} from "../Security/Sanitizers/NoSpaceSanitizer";
 import {NoAccentSanitizer} from "../Security/Sanitizers/NoAccentSanitizer";
+import {ErrorResponse} from "../Http/Responses/ErrorResponse";
 
 abstract class AbstractRoute implements RouteContract
 {
@@ -314,6 +315,19 @@ abstract class AbstractRoute implements RouteContract
 
         LogHelper.log(`${req.originalUrl} response : ${response.code}, ${StatusCodes[response.code]}`);
         return res.status(response.code).send(response);
+    }
+
+
+    /**
+     * Route handler of /:slug for all the abstract one.
+     * @param req
+     * @param res
+     */
+    public async disabledRouteHandler(req: Request, res: Response): Promise<any> {
+
+        LogHelper.log(`${req.originalUrl} response : ${ReasonPhrases.NOT_FOUND} ${StatusCodes.NOT_FOUND}`);
+        const disabledResponse:ApiResponseContract = ErrorResponse.create(new Error(ReasonPhrases.NOT_FOUND), StatusCodes.NOT_FOUND);
+        return res.status(disabledResponse.code).send(disabledResponse);
     }
 
 }
