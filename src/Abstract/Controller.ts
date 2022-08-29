@@ -1,4 +1,3 @@
-import LogHelper from "../Monitoring/Helpers/LogHelper";
 import {ApiResponseContract} from "../Http/Responses/ApiResponse";
 import {StatusCodes, ReasonPhrases} from "http-status-codes";
 import {ErrorResponse} from "../Http/Responses/ErrorResponse";
@@ -118,7 +117,6 @@ abstract class AbstractController {
     }
 
     public async getDoc(): Promise<any> {
-        LogHelper.log("Route getDoc : ");
         return this.entity.documentation();
     }
 
@@ -141,12 +139,7 @@ abstract class AbstractController {
         //action <---
 
         //Set modified fields
-        //DELETE NOT WORKING THERE
         const fields = response.data;
-        delete fields._id;
-        delete fields.createdAt;
-        delete fields.updatedAt;
-        delete fields.__v;
 
         const history: UserHistorySchema = {
             "user": user,

@@ -98,7 +98,7 @@ export class MongooseDBDriver implements DBDriver {
 
             //Loop throught the services that need to be faked
             //Still need refactoring to drying scope of responsability in the seeder ? or in this.
-            for (let targetService of createDataTasks) {
+            for (const targetService of createDataTasks) {
                 await this.fakeTask(targetService);
             }
         }

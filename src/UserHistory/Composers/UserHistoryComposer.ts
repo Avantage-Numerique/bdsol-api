@@ -1,17 +1,11 @@
 import UsersHistoryService from "../Services/UsersHistoryService";
 import UserHistory from "../Models/UserHistory";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {UserHistorySchema} from "../Schemas/UserHistorySchema";
 import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
 
 export class UserHistoryComposer {
 
-    public async createHistoryHanlder(req:any, res:any, response:any, action:string):Promise<ApiResponseContract> {
-
-        //const userHistoryService:UsersHistoryService = UsersHistoryService.getInstance(UserHistory.getInstance());
-
-        LogHelper.log("Create UserHistory ", req.user, );
-
+    public async createHistoryHandler(req:any, res:any, response:any, action:string):Promise<ApiResponseContract> {
 
         //Action on the data
         //action <---

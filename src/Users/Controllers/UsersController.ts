@@ -40,9 +40,6 @@ class UsersController extends AbstractController {
     public async createUserHistory(req:any, res:any, response:any, action:string):Promise<boolean> {
 
         const userHistoryService:UsersHistoryService = UsersHistoryService.getInstance(UserHistory.getInstance());
-
-        LogHelper.log("Create UserHistory ", response.data._id );
-
         //User id
         const user:mongoose.ObjectId = response.data._id
 
@@ -59,12 +56,7 @@ class UsersController extends AbstractController {
         //action <---
 
         //Set modified fields
-        //DELETE NOT WORKING THERE
         const fields = response.data;
-        delete fields._id;
-        delete fields.createdAt;
-        delete fields.updatedAt;
-        delete fields.__v;
         
         const history:UserHistorySchema = {
             "user": user,

@@ -138,7 +138,6 @@ export class AuthentificationRoutes {
 
         const {data} = req.body;
         const response = await this.controllerInstance.register(data);
-        LogHelper.debug("registerHandler", data, response);
         //History of registration
         if(!response.error)
             UsersController.getInstance().createUserHistory(req, res, response, 'create');

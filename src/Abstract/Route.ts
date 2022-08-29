@@ -3,6 +3,7 @@ import express, {NextFunction} from "express";
 import {Response, Request} from "express";
 import AbstractController from "./Controller";
 import {RouteContract} from "./Contracts/RouteContract";
+import LogHelper from "../Monitoring/Helpers/LogHelper";
 
 abstract class AbstractRoute implements RouteContract
 {
@@ -134,8 +135,8 @@ abstract class AbstractRoute implements RouteContract
      * @return {Promise<any>}
      */
     public async createHandler(req: Request, res: Response): Promise<any> {
+        LogHelper.info("Route /create");
         const response:ApiResponseContract = await this.controllerInstance.create(req.body.data);
-        
         if(!response.error)
             this.controllerInstance.createUserHistory(req, res, response, 'create');
 
@@ -151,8 +152,8 @@ abstract class AbstractRoute implements RouteContract
      * @return {Promise<any>}
      */
     public async updateHandler(req: Request, res: Response): Promise<any> {
+        LogHelper.info("Route /update");
         const response:ApiResponseContract = await this.controllerInstance.update(req.body.data);
-
         if(!response.error)
             this.controllerInstance.createUserHistory(req, res, response, 'update');
 
@@ -168,7 +169,7 @@ abstract class AbstractRoute implements RouteContract
      * @return {Promise<any>}
      */
     public async searchHandler(req: Request, res: Response): Promise<any> {
-
+        LogHelper.info("Route /search");
         const response:ApiResponseContract = await this.controllerInstance.search(req.body.data);
         return res.status(response.code).send(response);
     }
@@ -183,7 +184,7 @@ abstract class AbstractRoute implements RouteContract
      * @return {Promise<any>}
      */
     public async listHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-
+        LogHelper.info("Route /list");
         res.serviceResponse = await this.controllerInstance.list(req.body.data);
         return next();
         //return res.status(response.code).send(response);
@@ -198,9 +199,8 @@ abstract class AbstractRoute implements RouteContract
      * @return {Promise<any>}
      */
     public async deleteHandler(req: Request, res: Response): Promise<any> {
-
+        LogHelper.info("Route /delete");
         const response:ApiResponseContract = await this.controllerInstance.delete(req.body.data);
-
         if(!response.error)
             this.controllerInstance.createUserHistory(req, res, response, 'delete');
         return res.status(response.code).send(response);
@@ -215,7 +215,7 @@ abstract class AbstractRoute implements RouteContract
      * @return {Promise<any>}
      */
     public async getInfoHandler(req: Request, res: Response): Promise<any> {
-
+        LogHelper.info("Route /getInfo");
         const response:ApiResponseContract = await this.controllerInstance.getInfo(req.body.data);
         return res.status(response.code).send(response);
     }
@@ -229,15 +229,15 @@ abstract class AbstractRoute implements RouteContract
      * @return {Promise<any>}
      */
     public async getDoc(req: Request, res: Response): Promise<any> {
-
+        LogHelper.info("Route /getDoc");
         const response:ApiResponseContract = await this.controllerInstance.getDoc();
         const style = '<style> body {white-space : pre; background-color : #22211f; color : white}</style>';
-
         return res.send(style+response);
     }
 
 
     public async routeSendResponse(req: Request, res: Response): Promise<any> {
+        LogHelper.info("Route SendResponse");
         return res.status(res.serviceResponse.code).send(res.serviceResponse);
     }
 }

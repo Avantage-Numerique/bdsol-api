@@ -4,7 +4,6 @@ import {OrganisationSchema} from "../Schemas/OrganisationSchema";
 import {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {TaxonomyController} from "../../Taxonomy/Controllers/TaxonomyController";
 import OrganisationsService from "../Services/OrganisationsService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
@@ -158,7 +157,6 @@ class Organisation extends AbstractModel {
      * @return {any}
      */
     public dataTransfertObject(document: any): any {
-        LogHelper.debug('dataTransfertObject', document);
         return {
             name: document.name ?? '',
             description: document.description ?? '',

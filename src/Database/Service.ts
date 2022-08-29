@@ -267,7 +267,7 @@ export abstract class Service
         // Erreur MongooseError
         if (meta.name === "MongooseError") {
 
-            LogHelper.error(StatusCodes.INTERNAL_SERVER_ERROR);
+            LogHelper.error("'Service' MongooseError ", StatusCodes.INTERNAL_SERVER_ERROR);
 
             return ErrorResponse.create({
                     name: "Erreur de service : " + meta.name,

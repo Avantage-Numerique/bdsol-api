@@ -135,7 +135,7 @@ class AuthentificationController
         if (createdDocumentResponse !== undefined)
             return createdDocumentResponse;
 
-        LogHelper.debug("Service response from insert is undefined");
+        LogHelper.debug("Service response in /register from insert is undefined");
 
         return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
