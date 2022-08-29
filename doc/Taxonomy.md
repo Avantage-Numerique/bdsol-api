@@ -152,7 +152,7 @@ Sinon, les champs n'auront que les règles par défaut.
 Renvoie toutes les taxonomies ajoutées dans la catégorie spécifiée par le paramètre :taxonomy.
 
 #### Structure demandéee
-`:taxonomy` Une chaine de caractère, sans accent, ni espace contenu dans les taxonomies implémentés pour l'instant.
+- `:taxonomy` Une chaine de caractère, sans accent, ni espace contenu dans les taxonomies implémentés pour l'instant.
 
 
 ### GET `/:taxonomy/:slug`
@@ -160,8 +160,8 @@ Renvoie toutes les taxonomies ajoutées dans la catégorie spécifiée par le pa
 Renvoie une taxonomy contenu dans la taxonomy spécicifée.
 
 #### Structure demandéee
-`:taxonomy` Une chaine de caractère, sans accent, ni espace contenu dans les taxonomies implémentés pour l'instant.
-`:slug` Une chaine de caractère, sans accent, ni espace contenu dans la BD et assigné à la taxonomy implémenté pour l'instant.
+- `:taxonomy` Une chaine de caractère, sans accent, ni espace contenu dans les taxonomies implémentés pour l'instant.
+- `:slug` Une chaine de caractère, sans accent, ni espace contenu dans la BD et assigné à la taxonomy implémenté pour l'instant.
 
 
 
