@@ -58,7 +58,7 @@ export abstract class BaseProvider implements DbProvider {
             mongoose.set('debug', this._debug);
             //@todo debug this, broke service create. https://thecodebarbarian.com/whats-new-in-mongoose-6-sanitizefilter.html
             //mongoose.set('sanitizeFilter', true);
-            this.connection = await mongoose.createConnection(this.url, connectionOptions as mongoose.ConnectOptions);//
+            this.connection = await mongoose.createConnection(this.url);//Deprecated : , connectionOptions as mongoose.ConnectOptions
 
             return this.connection;
         }

@@ -108,8 +108,8 @@ export class MongooseDBDriver implements DBDriver {
 
         // Fake Persons.
         try {
-            const migration = new CreateDataMongoose(service);
-            await migration.up();
+            const seeder = new CreateDataMongoose(service);
+            await seeder.up();
         } catch(e:any) {
             LogHelper.raw("Mongoose Driver erreur in migration ", e);
             throw e;
