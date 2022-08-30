@@ -1,3 +1,5 @@
+import { transpileModule } from "typescript";
+
 /**
  * Entry point for loggin activity into the API
  * This is a version 0, with basic console.log thing.
@@ -7,29 +9,42 @@ export default class LogHelper
     static printToConsole: boolean = true;
 
     public BLUE:string = "";
+    public static showLog = true;
+    public static showError = true;
+    public static showWarn = true;
+    public static showInfo = true;
+    public static showDebug = true;
+    public static showRaw = true;
+
 
     public static log(...args: any[]) {
-        LogHelper.finalLog('log', args);
+        if(LogHelper.showLog)
+            LogHelper.finalLog('log', args);
     }
 
     public static error(...args: any[]) {
-        LogHelper.finalLog('error', args);
+        if(LogHelper.showError)
+            LogHelper.finalLog('error', args);
     }
 
     public static warn(...args: any[]) {
-        LogHelper.finalLog('warn', args);
+        if(LogHelper.showWarn)
+            LogHelper.finalLog('warn', args);
     }
 
     public static info(...args: any[]) {
-        LogHelper.finalLog('info', args);
+        if(LogHelper.showInfo)
+            LogHelper.finalLog('info', args);
     }
 
     public static debug(...args: any[]) {
-        LogHelper.finalLog('debug', args);
+        if(LogHelper.showDebug)
+            LogHelper.finalLog('debug', args);
     }
 
     public static raw(...args: any[]) {
-        LogHelper.finalLog('raw', args);
+        if(LogHelper.showRaw)
+            LogHelper.finalLog('raw', args);
     }
 
     /** 
@@ -60,22 +75,26 @@ export default class LogHelper
             6 = Aqua        6 = Light Aqua
             7 = White       7 = Bright White
             */
+           const d = new Date();
+           const date = d.toLocaleDateString('en-CA');
+           const time = d.toLocaleTimeString('it-IT');
+           const dateTime = "["+date+"]["+time+"]"
 
             switch(consoleMethod){
                 case 'log': {
-                    console.log("\x1b[37;4m%s\x1b[0;37m%j\x1b[0m", "[LOG]", toLog); break;
+                    console.log("\x1b[37;4m%s\x1b[0;37m%j\x1b[0m", dateTime+"[LOG]", toLog); break;
                 }
                 case 'error': {
-                    console.log("\x1b[31;4m%s\x1b[0;31m%j\x1b[0m", "[ERROR]", toLog); break;
+                    console.log("\x1b[31;4m%s\x1b[0;31m%j\x1b[0m", dateTime+"[ERROR]", toLog); break;
                 }
                 case 'warn': {
-                    console.log("\x1b[33;4m%s\x1b[0;33m%j\x1b[0m", "[WARN]", toLog); break;
+                    console.log("\x1b[33;4m%s\x1b[0;33m%j\x1b[0m", dateTime+"[WARN]", toLog); break;
                 }
                 case 'info': {
-                    console.log("\x1b[90;4m%s\x1b[0;90m%j\x1b[0m", "[INFO]", toLog); break;
+                    console.log("\x1b[90;4m%s\x1b[0;90m%j\x1b[0m", dateTime+"[INFO]", toLog); break;
                 }
                 case 'debug': {
-                    console.log("\x1b[36;4m%s\x1b[0;36m%j\x1b[0m", "[DEBUG]", toLog); break;
+                    console.log("\x1b[36;4m%s\x1b[0;36m%j\x1b[0m", dateTime+"[DEBUG]", toLog); break;
                 }
                 case 'raw': {
                     console.log("[DEBUG]", toLog); break;
