@@ -1,6 +1,9 @@
 {
   "verbose": true,
-  "ignore": [],
+  "ignore": [
+    "node_modules",
+    "logs"],
   "legacyWatch": true,
-  "watch": ["**/*.ts"]
+  "watch": ["**/*.ts"],
+  "ext": "js json ts"
 }
