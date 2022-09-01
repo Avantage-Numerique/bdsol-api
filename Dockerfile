@@ -18,6 +18,7 @@ WORKDIR /api
 COPY ./package.json .
 COPY ./src .
 COPY ./doc .
+COPY ./logs .
 COPY ./.env .
 COPY ./tsconfig.json .
 COPY ./nodemon.json .
