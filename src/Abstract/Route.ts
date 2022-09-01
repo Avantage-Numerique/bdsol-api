@@ -187,7 +187,7 @@ abstract class AbstractRoute implements RouteContract
         LogHelper.log(`${req.originalUrl} response : ${response.code}, ${StatusCodes[response.code]}`);
         if(!response.error){
             const userHistoryCreated:boolean = await this.controllerInstance.createUserHistory(req, res, response, 'create');
-            LogHelper.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`)
+            LogHelper.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
         }
         return res.status(response.code).send(response);
     }
@@ -205,7 +205,7 @@ abstract class AbstractRoute implements RouteContract
         LogHelper.log(`${req.originalUrl} response : ${response.code}, ${StatusCodes[response.code]}`);
         if(!response.error){
             const userHistoryCreated:boolean = await this.controllerInstance.createUserHistory(req, res, response, 'update');
-            LogHelper.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`)
+            LogHelper.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
         }
         return res.status(response.code).send(response);
     }
@@ -254,7 +254,7 @@ abstract class AbstractRoute implements RouteContract
         LogHelper.log(`${req.originalUrl} response : ${response.code}, ${StatusCodes[response.code]}`);
         if(!response.error) {
             const userHistoryCreated:boolean = await this.controllerInstance.createUserHistory(req, res, response, 'delete');
-            LogHelper.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`)
+            LogHelper.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
         }
         return res.status(response.code).send(response);
     }
