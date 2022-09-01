@@ -1,3 +1,5 @@
+
+
 export class Obj {
 
 
@@ -47,6 +49,16 @@ export class Obj {
             return Object.keys(element).length !== 0;
         }
         return false;
+    }
+
+
+    public static propertyToString(obj:any, propertyValue:any):string {
+
+        for (let property in obj) {
+            let prop = obj[property];
+            if (propertyValue === prop) return property;
+        }
+        return "";
     }
 
 }

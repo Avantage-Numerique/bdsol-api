@@ -75,20 +75,23 @@ abstract class AbstractRoute implements RouteContract
             ...this.addMiddlewares("all"),
             //...this.addMiddlewares("createUpdate"),
             ...this.addMiddlewares("create"),
-            this.createHandler.bind(this)
+            this.createHandler.bind(this),
+            this.routeSendResponse.bind(this),
         ]);
 
         this.routerInstanceAuthentification.post('/update', [
             ...this.addMiddlewares("all"),
             //...this.addMiddlewares("createUpdate"),
             ...this.addMiddlewares("update"),
-            this.updateHandler.bind(this)
+            this.updateHandler.bind(this),
+            this.routeSendResponse.bind(this),
         ]);
 
         this.routerInstanceAuthentification.post('/delete', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("delete"),
-            this.deleteHandler.bind(this)
+            this.deleteHandler.bind(this),
+            this.routeSendResponse.bind(this),
         ]);
 
         return this.setupAdditionnalAuthRoutes(this.routerInstanceAuthentification);
@@ -110,20 +113,22 @@ abstract class AbstractRoute implements RouteContract
         this.routerInstance.post('/search', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("search"),
-            this.searchHandler.bind(this)
+            this.searchHandler.bind(this),
+            this.routeSendResponse.bind(this),
         ]);
 
         this.routerInstance.post('/list', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("list"),
             this.listHandler.bind(this),
-            this.routeSendResponse,
+            this.routeSendResponse.bind(this),
         ]);
 
         this.routerInstance.post('/getinfo', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("getinfo"),
-            this.getInfoHandler.bind(this)
+            this.getInfoHandler.bind(this),
+            this.routeSendResponse.bind(this),
         ]);
 
         //  Get
@@ -131,9 +136,17 @@ abstract class AbstractRoute implements RouteContract
         this.routerInstance.get('/getdoc', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("getdoc"),
-            this.getDocumentationHandler.bind(this)
+            this.getDocumentationHandler.bind(this),
+            this.routeSendResponse.bind(this),
         ]);
 
+
+        this.routerInstance.get('/list', [
+            ...this.addMiddlewares("all"),
+            ...this.addMiddlewares("list"),
+            this.listHandler.bind(this),
+            this.routeSendResponse.bind(this),
+        ]);
 
         // sets routes in target domain's route.
         this.setupAdditionnalPublicRoutes(this.routerInstance);
@@ -145,8 +158,8 @@ abstract class AbstractRoute implements RouteContract
         this.routerInstance.get('/:slug', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("bySlug"),
-            this.bySlugHandler.bind(this),
-            this.routeSendResponse,
+            this.getByUriParamsHandler.bind(this),
+            this.routeSendResponse.bind(this),
         ]);
 
         return this.routerInstance;
@@ -164,6 +177,12 @@ abstract class AbstractRoute implements RouteContract
 
     //  Middlewares
 
+
+    /**
+     * Search for target route's middlewares
+     * @param route {string}
+     * @param middlewares {string}
+     */
     public addMiddlewares(route:string, middlewares:string = ""):Array<any> {
 
         const defaultRoutes:any = this.defaultMiddlewaresDistribution[route] ?? [];
@@ -175,21 +194,24 @@ abstract class AbstractRoute implements RouteContract
 
     //  Routes' handlers
 
+
     /**
      * CREATE
      * Handle the create method of the controller of the entity, passing the data to it.
      * @param req {Request}
      * @param res {Response}
+     * @param next {NextFunction}
      * @return {Promise<any>}
      */
-    public async createHandler(req: Request, res: Response): Promise<any> {
-        const response:ApiResponseContract = await this.controllerInstance.create(req.body.data);
-        LogHelper.log(`${req.originalUrl} response : ${response.code}, ${StatusCodes[response.code]}`);
-        if(!response.error){
-            const userHistoryCreated:boolean = await this.controllerInstance.createUserHistory(req, res, response, 'create');
-            LogHelper.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`)
+    public async createHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+
+        res.serviceResponse = await this.controllerInstance.create(req.body.data);
+
+        if(!res.serviceResponse.error){
+            const userHistoryCreated:boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'create');
+            LogHelper.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
         }
-        return res.status(response.code).send(response);
+        return next();
     }
 
 
@@ -198,16 +220,40 @@ abstract class AbstractRoute implements RouteContract
      * Handle the update method of the controller of the entity, passing the data to it.
      * @param req {Request}
      * @param res {Response}
+     * @param next {NextFunction}
      * @return {Promise<any>}
      */
-    public async updateHandler(req: Request, res: Response): Promise<any> {
-        const response:ApiResponseContract = await this.controllerInstance.update(req.body.data);
-        LogHelper.log(`${req.originalUrl} response : ${response.code}, ${StatusCodes[response.code]}`);
-        if(!response.error){
-            const userHistoryCreated:boolean = await this.controllerInstance.createUserHistory(req, res, response, 'update');
-            LogHelper.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`)
+    public async updateHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+
+        res.serviceResponse = await this.controllerInstance.update(req.body.data);
+
+        if(!res.serviceResponse.error){
+            const userHistoryCreated:boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'update');
+            LogHelper.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
         }
-        return res.status(response.code).send(response);
+
+        return next();
+    }
+
+
+    /**
+     * DELETE
+     * Handle the delete method of the controller of the entity, passing the data to it.
+     * @param req {Request}
+     * @param res {Response}
+     * @param next {NextFunction}
+     * @return {Promise<any>}
+     */
+    public async deleteHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+
+        res.serviceResponse = await this.controllerInstance.delete(req.body.data);
+
+        if(!res.serviceResponse.error){
+            const userHistoryCreated:boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'delete');
+            LogHelper.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
+        }
+
+        return next();
     }
 
 
@@ -216,12 +262,13 @@ abstract class AbstractRoute implements RouteContract
      * Handle the search method of the controller of the entity, passing the data to it.
      * @param req {Request}
      * @param res {Response}
+     * @param next {NextFunction}
      * @return {Promise<any>}
      */
-    public async searchHandler(req: Request, res: Response): Promise<any> {
-        const response:ApiResponseContract = await this.controllerInstance.search(req.body.data);
-        LogHelper.log(`${req.originalUrl} response : ${response.code}, ${StatusCodes[response.code]}`);
-        return res.status(response.code).send(response);
+    public async searchHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+
+        res.serviceResponse = await this.controllerInstance.search(req.body.data);
+        return next();
     }
 
 
@@ -234,30 +281,25 @@ abstract class AbstractRoute implements RouteContract
      * @return {Promise<any>}
      */
     public async listHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        LogHelper.info(`Entering ${req.originalUrl}`);
-        res.serviceResponse = await this.controllerInstance.list(req.body.data);
-        //LogHelper.log(`Route /list response : ${response.code}, ${StatusCodes[response.code]}`);
-        return next();
-        //return res.status(response.code).send(response);
-    }
 
+        res.serviceResponse = await this.controllerInstance.list(req.body.data);
+        return next();
+    }
 
     /**
-     * DELETE
-     * Handle the delete method of the controller of the entity, passing the data to it.
+     * get LIST
+     * Handle the list method for the get endpoint of the controller of the entity, passing the data to it.
      * @param req {Request}
      * @param res {Response}
+     * @param next {NextFunction}
      * @return {Promise<any>}
      */
-    public async deleteHandler(req: Request, res: Response): Promise<any> {
-        const response:ApiResponseContract = await this.controllerInstance.delete(req.body.data);
-        LogHelper.log(`${req.originalUrl} response : ${response.code}, ${StatusCodes[response.code]}`);
-        if(!response.error) {
-            const userHistoryCreated:boolean = await this.controllerInstance.createUserHistory(req, res, response, 'delete');
-            LogHelper.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`)
-        }
-        return res.status(response.code).send(response);
+    public async getListHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+
+        res.serviceResponse = await this.controllerInstance.list({});
+        return next();
     }
+
 
 
     /**
@@ -265,28 +307,29 @@ abstract class AbstractRoute implements RouteContract
      * Handle the getInfo method of the controller of the entity, passing the data to it
      * @param req {Request}
      * @param res {Response}
+     * @param next {NextFunction}
      * @return {Promise<any>}
      */
-    public async getInfoHandler(req: Request, res: Response): Promise<any> {
-        const response:ApiResponseContract = await this.controllerInstance.getInfo(req.body.data);
-        LogHelper.log(`Route /getinfo response : ${response.code}, ${StatusCodes[response.code]}`);
-        return res.status(response.code).send(response);
+    public async getInfoHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+
+        res.serviceResponse = await this.controllerInstance.getInfo(req.body.data);
+        return next();
     }
 
 
     /**
-     * Uniform return the response of service method.
+     * Uniform return the response of service method. Previous routes middlewares must require the next params to be able to end the chain by this.
      * @param req {Request} The current request
      * @param res {Response} The curren response.
      */
     public async routeSendResponse(req: Request, res: Response): Promise<any> {
-        LogHelper.info(req.originalUrl);
-        return res.status(res.serviceResponse.code).send(res.serviceResponse);
+        //LogHelper.info(req.originalUrl);
+        return await this.defaultReturnResponseJson(res.serviceResponse, req, res);
+        //return res.status(res.serviceResponse.code).send(res.serviceResponse);
     }
 
 
     //  GET handlers
-
 
     /**
      * GETDOC
@@ -296,39 +339,100 @@ abstract class AbstractRoute implements RouteContract
      * @return {Promise<any>}
      */
     public async getDocumentationHandler(req: Request, res: Response): Promise<any> {
+
         const response:ApiResponseContract = await this.controllerInstance.getDoc();
         const style = '<style> body {white-space : pre; background-color : #22211f; color : white}</style>';
-        LogHelper.log(`${req.originalUrl} response : ${response.code}, ${StatusCodes[response.code]}`);
-        return res.send(style+response);
+        return await this.defaultReturnTemplate(style+response, req, res);
     }
 
 
     /**
-     * Route handler of /:slug for all the abstract one.
-     * @param req
-     * @param res
+     * Route handler to transform all the URI params into query to the get
+     * @param req {Request}
+     * @param res {Response}
+     * @param next {NextFunction}
      */
-    public async bySlugHandler(req: Request, res: Response): Promise<any> {
-
-        const {slug} = req.params;
-        const response:ApiResponseContract = await this.controllerInstance.get({slug:slug});
-
-        LogHelper.log(`${req.originalUrl} response : ${response.code}, ${StatusCodes[response.code]}`);
-        return res.status(response.code).send(response);
+    public async getByUriParamsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        // this may be overkill, because req.params already get all the same structure.
+        let initialQuery:any = {};
+        for (let param in req.params) {
+            initialQuery[param] = req.params[param];
+        }
+        res.serviceResponse = await this.controllerInstance.get(initialQuery);
+        return next();
     }
 
 
     /**
-     * Route handler of /:slug for all the abstract one.
+     * Route handler to transform all the URI params into query to the get
+     * @param req {Request}
+     * @param res {Response}
+     * @param next {NextFunction}
+     */
+    public async listByUriParamsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        // this may be overkill, because req.params already get all the same structure.
+        let initialQuery:any = {};
+        for (let param in req.params) {
+            initialQuery[param] = req.params[param];
+        }
+        res.serviceResponse = await this.controllerInstance.list(initialQuery);
+        return next();
+    }
+
+    /**
+     * Route handler to disable a route, that is define here, but shouldn't in an higher scope.
      * @param req
      * @param res
      */
     public async disabledRouteHandler(req: Request, res: Response): Promise<any> {
-
-        LogHelper.log(`${req.originalUrl} response : ${ReasonPhrases.NOT_FOUND} ${StatusCodes.NOT_FOUND}`);
-        const disabledResponse:ApiResponseContract = ErrorResponse.create(new Error(ReasonPhrases.NOT_FOUND), StatusCodes.NOT_FOUND);
-        return res.status(disabledResponse.code).send(disabledResponse);
+        return await this.defaultReturnResponseJson(
+            ErrorResponse.create(new Error(ReasonPhrases.NOT_FOUND), StatusCodes.NOT_FOUND),
+            req,
+            res
+        );
     }
+
+
+    //  UTILS TO DRY THINGS
+
+    /**
+     * build up the response for all JSON response.
+     * @param appResponse {ApiResponseContract}
+     * @param req {Request}
+     * @param res {Response}
+     * @protected
+     */
+    protected async defaultReturnResponseJson(appResponse:ApiResponseContract, req: Request, res: Response): Promise<any> {
+
+        this.logRoute(appResponse.code, req);
+        return res.status(appResponse.code).send(appResponse);
+    }
+
+
+    /**
+     * Build up the response for the tempalte route, (only getDoc for now).
+     * @param appResponse {ApiResponseContract}
+     * @param req {Request}
+     * @param res {Response}
+     * @protected
+     */
+    protected async defaultReturnTemplate(appResponse:any, req: Request, res: Response): Promise<any> {
+        this.logRoute(StatusCodes.OK, req);
+        return res.status(StatusCodes.OK).send(appResponse);
+    }
+
+
+    /**
+     * Single place to standardized the route loggin here.
+     * @param code {any} Should alway be an Int.
+     * @param req {any} the request to trace some things setup in there.
+     * @protected
+     */
+    protected logRoute(code:any, req:Request):void {
+
+        LogHelper.log(`${req.originalUrl} response : ${code}, ${StatusCodes[code]}`);
+    }
+
 
 }
 
