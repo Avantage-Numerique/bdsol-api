@@ -13,6 +13,7 @@ import {PublicUserRequest} from "./Authentification/Middleware/PublicUserRequest
 import LogHelper from "./Monitoring/Helpers/LogHelper";
 import {ApiErrorHandler} from "./Error/Middlewares/ApiErrorHandler";
 import {UsersHistoryRoutes} from "./UserHistory/Routes/UsersHistoryRoutes";
+import {GetRequestIp} from "./Monitoring/Middlewares/GetRequestIp";
 
 /**
  * Main class for the API
@@ -122,7 +123,8 @@ export default class Api {
         LogHelper.info("[ROUTES] Configuration des routes de l'API ...");
 
         this.mainRouter = express.Router(); //this seeem to be a "branch" independant. Middle ware pass here, and error handling are only manage into the same "router's hierarchy" may I labled.
-        this.mainRouter.use(PublicUserRequest.middlewareFunction());    // Set an empty user property in Request there. Would be possible to feed with more default info.
+        this.mainRouter.use(GetRequestIp.middleware());    // Set an empty user property in Request there. Would be possible to feed with more default info.
+        this.mainRouter.use(PublicUserRequest.middleware());    // Set an empty user property in Request there. Would be possible to feed with more default info.
 
         // All public routes
         this._initPublicRoutes();

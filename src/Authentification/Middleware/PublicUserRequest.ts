@@ -6,7 +6,7 @@ export class PublicUserRequest {
     /**
      * Getter for the anonumous function that will act as the middleware, with the parameters and the next() call.
      */
-    public static middlewareFunction()
+    public static middleware()
     {
         /**
          * The PublicUserRequest just set an blank you

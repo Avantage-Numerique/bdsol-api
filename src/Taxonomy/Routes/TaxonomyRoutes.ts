@@ -1,17 +1,16 @@
-import express, {Response, Request} from "express";
+import express, {Response, Request, NextFunction} from "express";
 import {TaxonomyController} from "../Controllers/TaxonomyController";
-import AbstractRoute from "../../Abstract/Route";
 import AbstractController from "../../Abstract/Controller";
 import {body, param} from "express-validator";
 import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
 import {HtmlSanitizer} from "../../Security/Sanitizers/HtmlSanitizer";
-import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
 import {NoAccentSanitizer} from "../../Security/Sanitizers/NoAccentSanitizer";
 import {NoSpaceSanitizer} from "../../Security/Sanitizers/NoSpaceSanitizer";
 import {EnumSanitizer} from "../../Security/Sanitizers/EnumSanitizer";
 import {TaxonomiesCategories} from "../TaxonomiesEnum";
+import CrudRoute from "../../Abstract/CrudRoute";
 
-class TaxonomyRoutes extends AbstractRoute {
+class TaxonomyRoutes extends CrudRoute {
     controllerInstance: AbstractController = TaxonomyController.getInstance();
     routerInstance: express.Router = express.Router();
     routerInstanceAuthentification: express.Router = express.Router();
@@ -50,7 +49,7 @@ class TaxonomyRoutes extends AbstractRoute {
         getinfo: [],
         getdoc: [],
         byTaxonomy: [
-            param('taxonomy')
+            param('category')
                 .customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
                 .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
                 .stripLow()
@@ -63,48 +62,42 @@ class TaxonomyRoutes extends AbstractRoute {
 
         router.post('/supported', [
             ...this.addMiddlewares("all"),
-            this.getTaxonomiesHanlder.bind(this)
+            this.getTaxonomiesHanlder.bind(this),
+            this.routeSendResponse.bind(this)
         ]);
 
         //  GET
 
-        router.get('/:taxonomy/:slug', [
+        router.get('/:category/:slug', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("byTaxonomy"),
             ...this.addMiddlewares("bySlug"),
-            this.getTargetTaxonomyHandler.bind(this)
+            this.getByUriParamsHandler.bind(this),
+            this.routeSendResponse.bind(this)
         ]);
 
-        router.get('/:taxonomy', [
+        router.get('/:category', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("byTaxonomy"),
-            this.listTargetTaxonomyHandler.bind(this)
+            this.listByUriParamsHandler.bind(this),
+            this.routeSendResponse.bind(this)
         ]);
 
         return router;
     }
 
 
-    public async getTaxonomiesHanlder(req: Request, res: Response): Promise<any> {
-        const response: ApiResponseContract = TaxonomyController.getTaxonomies();
-        return res.status(response.code).send(response);
+    /**
+     * List all the taxonomy's categories set in the enum via the TaxonomyController.getTaxonomies
+     * @param req {Request}
+     * @param res {Response}
+     * @param next {NextFunction}
+     */
+    public async getTaxonomiesHanlder(req: Request, res: Response, next: NextFunction): Promise<any> {
+        res.serviceResponse = TaxonomyController.getTaxonomies();
+        return next();
     }
 
-
-    public async listTargetTaxonomyHandler(req: Request, res: Response): Promise<any> {
-        const { taxonomy } = req.params;
-
-        const response: ApiResponseContract = await this.controllerInstance.list({category:taxonomy});
-        return res.status(response.code).send(response);
-    }
-
-
-    public async getTargetTaxonomyHandler(req: Request, res: Response): Promise<any> {
-        const { taxonomy, slug } = req.params;
-
-        const response: ApiResponseContract = await this.controllerInstance.list({category:taxonomy, slug:slug});
-        return res.status(response.code).send(response);
-    }
 
 }
 

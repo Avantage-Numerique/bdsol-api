@@ -1,9 +1,9 @@
 import express from "express";
 import {UsersHistoryController} from "../Controllers/UsersHistoryController";
-import AbstractRoute from "../../Abstract/Route";
 import AbstractController from "../../Abstract/Controller";
+import CrudRoute from "../../Abstract/CrudRoute";
 
-class UsersHistoryRoutes extends AbstractRoute {
+class UsersHistoryRoutes extends CrudRoute {
     controllerInstance: AbstractController = UsersHistoryController.getInstance();
     routerInstance: express.Router = express.Router();
     routerInstanceAuthentification: express.Router = express.Router();
