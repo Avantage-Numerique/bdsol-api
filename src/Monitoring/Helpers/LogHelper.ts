@@ -1,5 +1,4 @@
-import { transpileModule } from "typescript";
-
+import * as fs from 'fs';
 /**
  * Entry point for loggin activity into the API
  * This is a version 0, with basic console.log thing.
@@ -7,8 +6,8 @@ import { transpileModule } from "typescript";
 export default class LogHelper
 {
     static printToConsole: boolean = true;
+    static logToFile: boolean = true;
 
-    public BLUE:string = "";
     public static showLog = true;
     public static showError = true;
     public static showWarn = true;
@@ -19,35 +18,35 @@ export default class LogHelper
 
     public static log(...args: any[]) {
         if(LogHelper.showLog)
-            LogHelper.finalLog('log', args);
+            LogHelper.finalLog('LOG', args);
     }
 
     public static error(...args: any[]) {
         if(LogHelper.showError)
-            LogHelper.finalLog('error', args);
+            LogHelper.finalLog('ERROR', args);
     }
 
     public static warn(...args: any[]) {
         if(LogHelper.showWarn)
-            LogHelper.finalLog('warn', args);
+            LogHelper.finalLog('WARN', args);
     }
 
     public static info(...args: any[]) {
         if(LogHelper.showInfo)
-            LogHelper.finalLog('info', args);
+            LogHelper.finalLog('INFO', args);
     }
 
     public static debug(...args: any[]) {
         if(LogHelper.showDebug)
-            LogHelper.finalLog('debug', args);
+            LogHelper.finalLog('DEBUG', args);
     }
 
     public static raw(...args: any[]) {
         if(LogHelper.showRaw)
-            LogHelper.finalLog('raw', args);
+            LogHelper.finalLog('RAW', args);
     }
 
-    /** 
+    /**
      *  @method finalLog applique des styles aux logs, les affiche et les inscrit dans un fichier log.
      *  @desc Explains syntax
      *  @see {@link https://simplernerd.com/js-console-colors/}
@@ -56,7 +55,18 @@ export default class LogHelper
      *  @desc Other usefull doc
      *  @see {@link https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color}
      */
-    public static finalLog(consoleMethod:string, toLog: any[]) {
+    public static finalLog(consoleMethod:any, toLog: any[], userRouteInfo?:any) {
+        const d = new Date();
+        const date = d.toLocaleDateString('en-CA');
+        const time = d.toLocaleTimeString('it-IT');
+        const dateTime = "["+date+"]["+time+"]"
+
+        let verbose;
+        if (userRouteInfo != undefined)        
+            verbose = dateTime + "["+userRouteInfo+"]"+"["+consoleMethod+"]";
+        else
+            verbose = dateTime + "["+consoleMethod+"]"
+        
         if (LogHelper.printToConsole) {
 
             /*
@@ -75,36 +85,57 @@ export default class LogHelper
             6 = Aqua        6 = Light Aqua
             7 = White       7 = Bright White
             */
-           const d = new Date();
-           const date = d.toLocaleDateString('en-CA');
-           const time = d.toLocaleTimeString('it-IT');
-           const dateTime = "["+date+"]["+time+"]"
 
-            switch(consoleMethod){
-                case 'log': {
-                    console.log("\x1b[37;4m%s\x1b[0;37m%j\x1b[0m", dateTime+"[LOG]", toLog); break;
-                }
-                case 'error': {
-                    console.log("\x1b[31;4m%s\x1b[0;31m%j\x1b[0m", dateTime+"[ERROR]", toLog); break;
-                }
-                case 'warn': {
-                    console.log("\x1b[33;4m%s\x1b[0;33m%j\x1b[0m", dateTime+"[WARN]", toLog); break;
-                }
-                case 'info': {
-                    console.log("\x1b[90;4m%s\x1b[0;90m%j\x1b[0m", dateTime+"[INFO]", toLog); break;
-                }
-                case 'debug': {
-                    console.log("\x1b[36;4m%s\x1b[0;36m%j\x1b[0m", dateTime+"[DEBUG]", toLog); break;
-                }
-                case 'raw': {
-                    console.log("[DEBUG]", toLog); break;
-                }
+           //First \x1b means that the first object will have this format (dateTime, [LOG] ...), 2nd param (toLog) will have the next format
+           //Third is to reset format
+            enum Formats {
+                LOG = "\x1b[37;4m%s\x1b[0;37m%j\x1b[0m",
+                ERROR = "\x1b[31;4m%s\x1b[0;31m%j\x1b[0m",
+                WARN = "\x1b[33;4m%s\x1b[0;33m%j\x1b[0m",
+                INFO = "\x1b[90;4m%s\x1b[0;90m%j\x1b[0m",
+                DEBUG = "\x1b[36;4m%s\x1b[0;36m%j\x1b[0m",
+                RAW = ""
             }
+            type LogFormat = keyof typeof Formats;
+            const key:LogFormat = consoleMethod;
+            const format:Formats = Formats[key];
+
+            console.log(format, verbose, toLog);
         }
-        LogHelper.logToFile(toLog);
+        if (LogHelper.logToFile)
+            LogHelper.logFile(verbose, toLog, consoleMethod);
     }
 
-    public static logToFile(args:any[]) {
-        //nothing yet.
+    public static logFile(verbose:any, args:any[], consoleMethod:any) {
+        const d = new Date;
+        const date = d.toLocaleDateString('en-CA');
+
+        const path = "./logs/";
+        const allFileName = date.toString()+"-all.log";
+        const data = verbose+"["+args+"]\n";
+
+        fs.open(path+allFileName, 'a', function(err, fd){
+            if (err)
+                console.log("Can't log into file")
+            else {
+                fs.write(fd, data, (err) => {
+                    if (err)
+                        console.log(err.message);
+                });
+            }
+        });
+        if (consoleMethod == "ERROR") {
+            const errorFileName = date.toString()+"-error.log"
+            fs.open(path+errorFileName, 'a', function(err, fd){
+                if (err)
+                    console.log("Can't log into file")
+                else {
+                    fs.write(fd, data, (err) => {
+                        if (err)
+                            console.log(err.message);
+                    });
+                }
+            });
+        }
     }
 }

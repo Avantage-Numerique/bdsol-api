@@ -6,3 +6,6 @@ build
 
 bdsolapi
 bdsolapi.pub
+
+#Logs
+logs/
