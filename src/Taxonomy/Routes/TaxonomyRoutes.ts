@@ -1,6 +1,5 @@
 import express, {Response, Request, NextFunction} from "express";
 import {TaxonomyController} from "../Controllers/TaxonomyController";
-import AbstractRoute from "../../Abstract/Route";
 import AbstractController from "../../Abstract/Controller";
 import {body, param} from "express-validator";
 import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
@@ -9,8 +8,9 @@ import {NoAccentSanitizer} from "../../Security/Sanitizers/NoAccentSanitizer";
 import {NoSpaceSanitizer} from "../../Security/Sanitizers/NoSpaceSanitizer";
 import {EnumSanitizer} from "../../Security/Sanitizers/EnumSanitizer";
 import {TaxonomiesCategories} from "../TaxonomiesEnum";
+import CrudRoute from "../../Abstract/CrudRoute";
 
-class TaxonomyRoutes extends AbstractRoute {
+class TaxonomyRoutes extends CrudRoute {
     controllerInstance: AbstractController = TaxonomyController.getInstance();
     routerInstance: express.Router = express.Router();
     routerInstanceAuthentification: express.Router = express.Router();

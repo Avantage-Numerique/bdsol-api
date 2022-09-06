@@ -1,12 +1,12 @@
 import express from "express";
 import {PersonnesController} from "../Controllers/PersonnesController";
-import AbstractRoute from "../../Abstract/Route";
 import AbstractController from "../../Abstract/Controller";
 import {body} from "express-validator";
 import {HtmlSanitizer} from "../../Security/Sanitizers/HtmlSanitizer";
 import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
+import CrudRoute from "../../Abstract/CrudRoute";
 
-class PersonnesRoutes extends AbstractRoute {
+class PersonnesRoutes extends CrudRoute {
     controllerInstance: AbstractController = PersonnesController.getInstance();
     routerInstance: express.Router = express.Router();
     routerInstanceAuthentification: express.Router = express.Router();
