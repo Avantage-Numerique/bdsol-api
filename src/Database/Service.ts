@@ -76,18 +76,22 @@ export abstract class Service
     /**
      * Get all the documents from a collection that fits the query.
      * @param query
+     * @param sorting
      */
-    async all(query: any, sort?:any): Promise<ApiResponseContract>
+    async all(query: any, sorting?:any): Promise<ApiResponseContract>
     {
         //set and dry parameters passed via query, but for preheating purposes.
-        let {skip, limit} = query;
-        if (sort == undefined)
-            sort = {};
+        let {skip, limit, sort} = query;
+        if (sorting === undefined && query.sort === undefined)
+            sorting = {};
+
 
         skip = skip ? Number(skip) : config.query.defaultSkip;
         limit = limit ? Number(limit) : config.query.defaultLimit;
+        sort = sort ? sort : {};
         delete query.skip;
         delete query.limit;
+        delete query.sort;
 
         if (config.db.config.createObjectIdForQuery) {
             query._id = Service.transformToObjectId(query._id);

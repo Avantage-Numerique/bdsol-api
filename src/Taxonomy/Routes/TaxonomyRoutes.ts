@@ -11,6 +11,7 @@ import {TaxonomiesCategories} from "../TaxonomiesEnum";
 import CrudRoute from "../../Abstract/CrudRoute";
 
 class TaxonomyRoutes extends CrudRoute {
+
     controllerInstance: AbstractController = TaxonomyController.getInstance();
     routerInstance: express.Router = express.Router();
     routerInstanceAuthentification: express.Router = express.Router();
@@ -58,6 +59,7 @@ class TaxonomyRoutes extends CrudRoute {
         ]
     }
 
+
     public setupAdditionnalPublicRoutes(router: express.Router) {
 
         router.post('/supported', [
@@ -77,6 +79,18 @@ class TaxonomyRoutes extends CrudRoute {
         ]);
 
         router.get('/:category', [
+            ...this.addMiddlewares("all"),
+            ...this.addMiddlewares("byTaxonomy"),
+            this.listByUriParamsHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+
+        return router;
+    }
+
+    public setupAdditionnalAuthRoutes(router: express.Router): express.Router {
+
+        router.post('/:category', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("byTaxonomy"),
             this.listByUriParamsHandler.bind(this),

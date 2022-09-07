@@ -1,3 +1,4 @@
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 export default class ApiQuery {
 
@@ -29,6 +30,11 @@ export default class ApiQuery {
         ApiQuery.query = {};
         ApiQuery.initQuery = query;
 
+        //default sort.
+        ApiQuery.query.sort = {
+            updatedAt : -1
+        };
+
         let value:any;
         for (const field in query)
         {
@@ -39,6 +45,12 @@ export default class ApiQuery {
                 //  S'il s'agit d'un id
                 if (field == "id") {
                     ApiQuery.query._id = value;
+                }
+
+                if (field == "sort") {
+                    LogHelper.debug("QueryBuilder: Sort field found in the query", field, value, ApiQuery.initQuery);
+                    ApiQuery.query.sort.updatedAt = value === "asc" ? 1 : -1;
+                    continue;
                 }
 
                 if (ApiQuery.haveProperty(value)) {
@@ -52,6 +64,7 @@ export default class ApiQuery {
             }
         }
 
+        LogHelper.debug("QueryBuilder: lastly", ApiQuery.query);
         return ApiQuery.query;
     }
 
