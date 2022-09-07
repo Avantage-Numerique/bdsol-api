@@ -1,14 +1,5 @@
 @startuml "BDSOL-UML"
-'Syntax doc
-' https://plantuml.com/guide
-
-'VsCode download extension (PlantUML) --> Alt-D
-
-'Format
-' hide the spot
 hide circle
-'skinparam linetype polyline
-
 package Entity {
   entity "Personne" as pers {
     *_id : ObjectId
