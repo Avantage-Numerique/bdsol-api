@@ -33,7 +33,6 @@ abstract class AbstractRoute implements RouteContract
      */
     abstract middlewaresDistribution:any;
 
-
     /**
      * The default middlewares for targeted route.
      * @abstract
@@ -52,9 +51,7 @@ abstract class AbstractRoute implements RouteContract
     abstract setupAuthRoutes():express.Router;
 
 
-    public setupAdditionnalAuthRoutes(router:express.Router):express.Router {
-        return router;
-    }
+    abstract setupAdditionnalAuthRoutes(router:express.Router):express.Router;
 
 
     /**
@@ -70,9 +67,7 @@ abstract class AbstractRoute implements RouteContract
      * Allow routes Manager to declare route on the same router.
      * @param router {express.Router} The router to associate other routes, at the target Routes scope.
      */
-    public setupAdditionnalPublicRoutes(router:express.Router):express.Router {
-        return router;
-    }
+    abstract setupAdditionnalPublicRoutes(router:express.Router):express.Router;
 
 
     //  Middlewares

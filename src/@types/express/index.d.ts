@@ -7,8 +7,8 @@
 namespace Express {
     export interface Request {
         user?: any;
-        data?: any;
         visitor?: any;
+        data?: any;
     }
 }
 namespace Express {

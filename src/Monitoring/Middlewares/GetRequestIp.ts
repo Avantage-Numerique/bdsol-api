@@ -1,5 +1,4 @@
 import {NextFunction, Request, Response} from "express";
-import LogHelper from "../Helpers/LogHelper";
 
 export class GetRequestIp {
 
@@ -20,8 +19,6 @@ export class GetRequestIp {
          */
         return async function (req: Request, res: Response, next: NextFunction) {
             req.visitor = GetRequestIp.parseHeader(req);
-            LogHelper.debug(req.visitor);
-
             next();
         }
     }
@@ -42,7 +39,6 @@ export class GetRequestIp {
         let ip:any="";
         if (req.headers["x-forwarded-for"]) {
             ip = (req.headers["x-forwarded-for"] as string).split(',')[0];
-            LogHelper.debug('middleware get request ip', ip);
         }
         if (req.headers["x-real-ip"]) {
             ip = req.connection.remoteAddress;

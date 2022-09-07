@@ -94,6 +94,10 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
     }
 
 
+    public setupAdditionnalAuthRoutes(router: express.Router):express.Router {
+        return router;
+    }
+
     /**
      * Public routes init
      * Setup all the endpoint that can be reachable when no token is added to the header (public)
@@ -155,6 +159,10 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         ]);
 
         return this.routerInstance;
+    }
+
+    public setupAdditionnalPublicRoutes(router: express.Router):express.Router {
+        return router;
     }
 
     //  Routes' handlers
@@ -328,7 +336,11 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         for (let param in req.params) {
             initialQuery[param] = req.params[param];
         }
-        res.serviceResponse = await this.controllerInstance.list(initialQuery);
+        const data = req.body.data ?? {};
+
+        const query:any = {...initialQuery, ...data}
+        LogHelper.debug(initialQuery, data, query);
+        res.serviceResponse = await this.controllerInstance.list(query);
         return next();
     }
 
