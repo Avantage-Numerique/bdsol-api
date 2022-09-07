@@ -1,6 +1,9 @@
 # Base de données
 
 ## Schema actuel de la bd
+
+![](./BdStructure.svg)
+
 ```plantuml:bdsol-uml
 @startuml
 'Syntax doc
@@ -91,3 +94,4 @@ pers -[hidden]r- usr
 
 @enduml
 ```
+![](./bdsol-uml.svg)
