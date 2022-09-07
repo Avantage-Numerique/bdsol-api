@@ -2,7 +2,11 @@
 
 ## Schema actuel de la bd
 
-![](./BdStructure.svg)
+
+```plantuml:bd-structure
+```
+
+![](./bd-structure.svg)
 
 ```plantuml:bdsol-uml
 @startuml
