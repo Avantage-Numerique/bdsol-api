@@ -1,5 +1,10 @@
 name: generate plantuml
-on: push
+on: 
+  push:
+    paths:
+      - '**.puml'
+    branches:
+      - master
 jobs:
   generate_plantuml:
     runs-on: ubuntu-latest
