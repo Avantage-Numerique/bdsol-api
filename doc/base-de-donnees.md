@@ -2,4 +2,4 @@
 
 ## Schema actuel de la bd
 
-![](./bd-structure.svg)
+![](bd-structure.svg)
