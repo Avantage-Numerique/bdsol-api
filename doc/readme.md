@@ -2,6 +2,9 @@
 version 0.0.5
 
 ## Table des matières
+### Général
+- [Structure de la base de données actuelle](base-de-donnees.md)
+### Domaines
 - [Authentification](Authentification.md)
 - [Registration](Registration.md)
 - [Utilisateurs](Users.md)
