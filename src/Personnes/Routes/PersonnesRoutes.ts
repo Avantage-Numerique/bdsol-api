@@ -13,6 +13,7 @@ class PersonnesRoutes extends CrudRoute {
 
     middlewaresDistribution:any = {
         all: [],
+        createUpdate: [],
         create: [
             body('data.lastName')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
@@ -29,10 +30,24 @@ class PersonnesRoutes extends CrudRoute {
             body('data.description')
                 .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
-            //occupation array of objectid
         ],
-        createUpdate: [],
-        update: [],
+        update: [
+            body('data.lastName').optional()
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
+                .trim(),
+            body('data.firstName').optional()
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
+                .trim(),
+            body('data.nickname').optional()
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
+                .trim(),
+            body('data.description').optional()
+                .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
+                .trim()
+        ],
         delete: [],
         search: [],
         list: [],

@@ -19,19 +19,19 @@ class TaxonomyRoutes extends CrudRoute {
     middlewaresDistribution: any = {
         all: [],
         create: [
-            /*body('data.category')
+            body('data.category').optional()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
-                .trim(),*/
+                .trim(),
             //I remove espace() sanitizer here, because I didn't find any way yet to handle the unescape method for each of those field.
             body('data.name')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .trim(),
-            /*body('data.slug')
+            body('data.slug').optional()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()//only alpha num acii beteween 32 and 13-ish
-                .trim(),//no space*/
+                .trim(),//no space
             body('data.description')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
@@ -43,7 +43,30 @@ class TaxonomyRoutes extends CrudRoute {
                 .trim()
         ],
         createUpdate: [],
-        update: [],
+        update: [
+            body('data.category').optional()
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
+                .trim(),
+            //I remove espace() sanitizer here, because I didn't find any way yet to handle the unescape method for each of those field.
+            body('data.name').optional()
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
+                .trim(),
+            /*body('data.slug').optional()
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()//only alpha num acii beteween 32 and 13-ish
+                .trim(),//no space*/
+            body('data.description').optional()
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .trim(),
+            body('data.source').optional()
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .trim(),
+            body('data.addReason').optional()
+                .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
+                .trim()
+        ],
         delete: [],
         search: [],
         list: [],

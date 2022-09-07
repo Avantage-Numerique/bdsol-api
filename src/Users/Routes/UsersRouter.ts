@@ -41,7 +41,31 @@ class UsersRoutes extends CrudRoute {
                 .trim(),
         ],
         createUpdate: [],
-        update: [],
+        update: [
+            body('data.username').optional()
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
+                .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
+                .customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
+                .trim(),
+            body('data.email').optional()
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
+                .normalizeEmail()
+                .trim(),
+            //body('data.password'),
+            body('data.avatar').optional()
+                .isURL()
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .trim(),
+            body('data.name').optional()
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .trim(),
+            body('data.role').optional()
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
+                .trim(),
+        ],
         delete: [],
         search: [],
         list: [],

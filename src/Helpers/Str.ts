@@ -17,8 +17,10 @@ export class Str {
     public static NO_SPACE = /\s+/g;
     public static ALLOW_CHAR = /[^A-Z0-9\s]+/ig;
     public static EMAIL = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
+    //public static URL = /|[^a-z0-9-~+_.?#=!&;,/:%@$\|*\'()\[\]\\x80-\\xff]|i]/;
     public static URL = /[a-z0-9]/g;//use this for the slug function : https://www.npmjs.com/package/any-ascii
-
+    //public static URL = /^(?:(?:https?|mailto|data|ftp|tel|file|sms):|[^&:/?#]*(?:[/?#]|$))/gi;//from angular https://github.com/angular/angular/blob/main/packages/core/src/sanitization/url_sanitizer.ts
+    //public static URL = /((((https?|ftps?|gopher|telnet|nntp)://)|(mailto:|news:))(%[0-9A-Fa-f]{2}|[-()_.!~*';/?:@&=+$,A-Za-z0-9])+)([).!';/?:,][[:blank:|:blank:]])/gi;//from OWAsp https://owasp.org/www-community/OWASP_Validation_Regex_Repository
 
     public static DELIMITERS:any = {
         "underscore": "_",
