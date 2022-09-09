@@ -17,7 +17,7 @@ HealthCheckRouter.post("/ping", async (_req, res) => {
 
 HealthCheckRouter.get("/authors", async (_req, res) => {
     const response = {
-        message: "You and me <3",
+        message: "L'équipe de la BDSOL : Vincent, Frédéric et Marc-André, et bientôt le code de l'équipe d'HUB01 sera aussi des auteurs :)",
     };
     return res.status(200).send(response);
 });
