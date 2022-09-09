@@ -315,8 +315,8 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      */
     public async getByUriParamsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
         // this may be overkill, because req.params already get all the same structure.
-        let initialQuery: any = {};
-        for (let param in req.params) {
+        const initialQuery: any = {};
+        for (const param in req.params) {
             initialQuery[param] = req.params[param];
         }
         res.serviceResponse = await this.controllerInstance.get(initialQuery);
@@ -332,8 +332,8 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      */
     public async listByUriParamsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
         // this may be overkill, because req.params already get all the same structure.
-        let initialQuery: any = {};
-        for (let param in req.params) {
+        const initialQuery: any = {};
+        for (const param in req.params) {
             initialQuery[param] = req.params[param];
         }
         const data = req.body.data ?? {};

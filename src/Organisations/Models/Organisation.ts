@@ -169,7 +169,6 @@ class Organisation extends AbstractModel {
     }
 
     public async documentation(): Promise<any> {
-
         return fs.readFileSync('/api/doc/Organisations.md', 'utf-8');
     }
 
