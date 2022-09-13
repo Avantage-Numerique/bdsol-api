@@ -23,10 +23,10 @@ class OrganisationsRoutes extends CrudRoute {
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
             //I remove espace() sanitizer here, because I didn't find any way yet to handle the unescape method for each of those field.
-            body('data.description')
+            body('data.description').optional()
                 .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
-            body('data.url')
+            body('data.url').optional()
                 .stripLow()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
@@ -34,11 +34,11 @@ class OrganisationsRoutes extends CrudRoute {
                 .customSanitizer(LatinSanitizer.validatorCustomSanitizer())
                 .trim()
                 .customSanitizer(UrlSanitizer.validatorCustomSanitizer()),
-            body('data.contactPoint')
+            body('data.contactPoint').optional()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .trim(),
-            body('data.fondationDate')
+            body('data.fondationDate').optional()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim()
                 .toDate(),

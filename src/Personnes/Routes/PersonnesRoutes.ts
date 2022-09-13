@@ -23,11 +23,11 @@ class PersonnesRoutes extends CrudRoute {
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .trim(),
-            body('data.nickname')
+            body('data.nickname').optional()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .trim(),
-            body('data.description')
+            body('data.description').optional()
                 .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
         ],

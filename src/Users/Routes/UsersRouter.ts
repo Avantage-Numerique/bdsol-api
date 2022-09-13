@@ -29,14 +29,14 @@ class UsersRoutes extends CrudRoute {
                 .normalizeEmail()
                 .trim(),
             //body('data.password'),
-            body('data.avatar')
+            body('data.avatar').optional()
                 .isURL()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
-            body('data.name')
+            body('data.name').optional()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
-            body('data.role')
+            body('data.role').optional()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .trim(),
