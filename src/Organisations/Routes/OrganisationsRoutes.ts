@@ -27,13 +27,13 @@ class OrganisationsRoutes extends CrudRoute {
                 .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
             body('data.url')
-                .customSanitizer(UrlSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
                 .customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
                 .customSanitizer(LatinSanitizer.validatorCustomSanitizer())
-                .trim(),
+                .trim()
+                .customSanitizer(UrlSanitizer.validatorCustomSanitizer()),
             body('data.contactPoint')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()

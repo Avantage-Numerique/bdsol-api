@@ -1,7 +1,6 @@
 
 import {CustomSanitizer} from "express-validator";
 import {sanitizeUrl} from "@braintree/sanitize-url";
-import {Str} from "../../Helpers/Str";
 
 export class UrlSanitizer {
 
@@ -11,8 +10,7 @@ export class UrlSanitizer {
      */
     public static sanitize(raw:string)
     {
-        //Regex.Replace(url, @"[^-A-Za-z0-9+&@#/%?=~_|!:,.;\(\)]", "");
-        return sanitizeUrl(raw.replace(Str.URL, ""));
+        return sanitizeUrl(raw);
     }
 
 

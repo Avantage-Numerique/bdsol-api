@@ -8,7 +8,6 @@ import {SuccessResponse} from "../Http/Responses/SuccessResponse";
 import UsersHistoryService from "../UserHistory/Services/UsersHistoryService";
 import UserHistory from "../UserHistory/Models/UserHistory";
 import {UserHistorySchema} from "../UserHistory/Schemas/UserHistorySchema";
-import mongoose from "mongoose";
 
 /**
  * AbstractController
@@ -139,15 +138,17 @@ abstract class AbstractController {
         return SuccessResponse.create(info, StatusCodes.OK, ReasonPhrases.OK);
     }
 
+
     public async getDoc(): Promise<any> {
         return this.entity.documentation();
     }
+
 
     public async createUserHistory(req: any, res: any, response: any, action: string): Promise<boolean> {
         const userHistoryService: UsersHistoryService = UsersHistoryService.getInstance(UserHistory.getInstance());
 
         //User id
-        const user: mongoose.ObjectId = req.user.id;
+        const user: any = req.user.id;
 
         //IP Address
         const ipAddress = req.ip;
