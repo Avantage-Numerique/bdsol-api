@@ -12,3 +12,9 @@ ECHO Start tests Organisations
 CALL ./Organisations/testOrganisations.bat
 ECHO Sortie testOrganisations.bat
 PAUSE
+
+ECHO 
+ECHO Start tests Taxonomies
+CALL ./Taxonomies/testTaxonomies.bat
+ECHO Sortie testTaxonomies.bat
+PAUSE
