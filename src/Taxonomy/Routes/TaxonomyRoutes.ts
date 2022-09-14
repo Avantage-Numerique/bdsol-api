@@ -19,7 +19,7 @@ class TaxonomyRoutes extends CrudRoute {
     middlewaresDistribution: any = {
         all: [],
         create: [
-            body('data.category').optional()
+            body('data.category')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .trim(),
