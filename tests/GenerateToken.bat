@@ -1,1 +1,0 @@
-CALL newman run BDSOL-API.postman_collection.json --folder "Dev Token" --working-dir %cd% -g workspace.postman_globals.json --export-globals ./workspace.postman_globals.json --timeout-request 5000

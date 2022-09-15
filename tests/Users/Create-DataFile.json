@@ -6,7 +6,7 @@
             "error":false,
             "status":201
         },
-        "username": "datageek",
+        "username": "datageekerinooo",
         "email": "vilain@wwe.com",
         "password": "1234lamouche",
         "avatar": "Ti-recks",
@@ -61,7 +61,7 @@
             "error":true,
             "status":409
         },
-        "username":"datageek",
+        "username":"datageekerinooo",
         "email":"Lafaillette.@tulipod.com",
         "password":"1234",
         "avatar": "ard",
