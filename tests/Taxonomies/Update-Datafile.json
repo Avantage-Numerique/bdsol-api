@@ -1,0 +1,94 @@
+[
+    {
+        "infoTest":
+        {
+            "name":"Update Full + add fondationDate",
+            "error":false,
+            "status":200
+        },
+        "category" : "skills",
+        "name"  : "Circassiensse",
+        "description" : "La personne qui fait les actions de faire du cirquesse",
+        "source" : "Eric",
+        "status" : "Pending",
+        "addReason" : "Parce que j'en fais pas"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update min length name",
+            "error":true,
+            "status":400
+        },
+        "name"  : "a"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update empty data",
+            "error":true,
+            "status":400
+        }
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update id bidon",
+            "error":true,
+            "status":400
+        },
+        "id" : "2451",
+        "category" : "skills"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update id 24 length",
+            "error":true,
+            "status":400
+        },
+        "id" : 123456789123456789123456,
+        "name" : "Lodibidon"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update special chars",
+            "error":false,
+            "status":200
+        },
+        "category" : "skills",
+        "name" : "!\"/$%?&*()<>{}[]~éàè`{$Status}`",
+        "description" : "!\"/$%?&*()<>{}[]~éàè`{$Status}`",
+        "source" : "!\"/$%?&*()<>{}[]~éàè`{$Status}`",
+        "status" : "Pending",
+        "addReason" : "!\"/$%?&*()<>{}[]~éàè`{$Status}`"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update enum status",
+            "error":true,
+            "status":400
+        },
+        "category" : "occupations",
+        "name"  : "asdf",
+        "description" : "asdf",
+        "source" : "asdf",
+        "status" : "Patate"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update enum category",
+            "error":true,
+            "status":400
+        },
+        "category" : "Pas une category",
+        "name"  : "asdfdd",
+        "description" : "asdfff",
+        "source" : "asdfff",
+        "status" : "Pending",
+        "addReason" : "asdffff"
+    }
+]

@@ -66,6 +66,7 @@ class Taxonomy extends AbstractModel {
             },
             status: {
                 type: String,
+                required: true,
                 enum: TaxonomiesStatus
             },
             addReason: {
