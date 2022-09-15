@@ -7,613 +7,8 @@
 	},
 	"item": [
 		{
-			"name": "Organisations",
+			"name": "CreateVariable",
 			"item": [
-				{
-					"name": "1-Create-all-org",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let v_data = {};\r",
-									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
-									"console.log(pm.iterationData.toObject());\r",
-									"\r",
-									"if (pm.iterationData.has(\"infoTest\"))\r",
-									"{\r",
-									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
-									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
-									"    pm.iterationData.unset(\"infoTest\");\r",
-									"    v_data = pm.iterationData.toObject();\r",
-									"}\r",
-									"else{\r",
-									"    v_data.name = \"L'isande à nos porte\";\r",
-									"    v_data.description = \"Gryt\";\r",
-									"    v_data.fondationDate = \"2022-02-02\"\r",
-									"}\r",
-									"\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const schema = {\r",
-									"    \"type\": \"object\",\r",
-									"    \"properties\": {\r",
-									"        \"error\": { \"type\": \"boolean\" },\r",
-									"        \"code\": { \"type\": \"number\" },\r",
-									"        \"message\": { \"type\": \"string\" },\r",
-									"        \"errors\": { \"type\": \"object\" },\r",
-									"        \"data\": {\r",
-									"            \"type\": \"object\",\r",
-									"            \"properties\": {\r",
-									"                        \"_id\": { \"type\": \"string\" },\r",
-									"                        \"name\": { \"type\": \"string\" },\r",
-									"                        \"slug\": { \"type\": \"string\" },\r",
-									"                        \"description\": { \"type\": \"string\" },\r",
-									"                        \"url\": { \"type\": \"string\" },\r",
-									"                        \"contactPoint\": { \"type\": \"string\" },\r",
-									"                        \"fondationDate\": {\"type\": [\"null\", \"string\"]},\r",
-									"                        \"offer\": { \"type\": \"array\" },\r",
-									"                        \"createdAt\": { \"type\": \"string\" },\r",
-									"                        \"updatedAt\": { \"type\": \"string\" }\r",
-									"            },\r",
-									"        }\r",
-									"    },\r",
-									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
-									"};\r",
-									"const infoTest = pm.environment.get(\"infoTest\");\r",
-									"pm.iterationData.unset(\"infoTest\");\r",
-									"const jsonResponse = pm.response.json();\r",
-									"const jsonData = jsonResponse.data;\r",
-									"\r",
-									"\r",
-									"pm.test('Status/code check', function(){\r",
-									"    pm.response.to.have.status(infoTest.status);\r",
-									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
-									"});\r",
-									"\r",
-									"pm.test('Error check', function(){\r",
-									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
-									"});\r",
-									"\r",
-									"pm.test('Schema is valid', function() {\r",
-									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
-									"});\r",
-									"\r",
-									"if (infoTest.error == false) {\r",
-									"pm.test('Data check', function() {\r",
-									"        pm.environment.set(\"org\"+Number(pm.info.iteration+1), jsonData);\r",
-									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
-									"    })\r",
-									"}"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{orgPATH}}/create",
-							"host": [
-								"{{baseURL}}{{orgPATH}}"
-							],
-							"path": [
-								"create"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "2-Update-all-org",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let v_data = {};\r",
-									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
-									"console.log(pm.iterationData.toObject());\r",
-									"\r",
-									"if (pm.iterationData.has(\"infoTest\"))\r",
-									"{\r",
-									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
-									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
-									"    pm.iterationData.unset(\"infoTest\");\r",
-									"    v_data = pm.iterationData.toObject();\r",
-									"\r",
-									"    if(v_data.id === undefined)\r",
-									"        v_data.id = pm.environment.get(\"org1\")._id;\r",
-									"}\r",
-									"else{\r",
-									"    v_data.id = \"bidon\"\r",
-									"}\r",
-									"\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const schema = {\r",
-									"    \"type\": \"object\",\r",
-									"    \"properties\": {\r",
-									"        \"error\": { \"type\": \"boolean\" },\r",
-									"        \"code\": { \"type\": \"number\" },\r",
-									"        \"message\": { \"type\": \"string\" },\r",
-									"        \"errors\": { \"type\": \"object\" },\r",
-									"        \"data\": {\r",
-									"            \"type\": \"object\",\r",
-									"            \"properties\": {\r",
-									"                        \"_id\": { \"type\": \"string\" },\r",
-									"                        \"name\": { \"type\": \"string\" },\r",
-									"                        \"slug\": { \"type\": \"string\" },\r",
-									"                        \"description\": { \"type\": \"string\" },\r",
-									"                        \"url\": { \"type\": \"string\" },\r",
-									"                        \"contactPoint\": { \"type\": \"string\" },\r",
-									"                        \"fondationDate\": {\"type\": [\"null\", \"string\"]},\r",
-									"                        \"offer\": { \"type\": \"array\" },\r",
-									"                        \"createdAt\": { \"type\": \"string\" },\r",
-									"                        \"updatedAt\": { \"type\": \"string\" }\r",
-									"            },\r",
-									"        }\r",
-									"    },\r",
-									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
-									"};\r",
-									"\r",
-									"const infoTest = pm.environment.get(\"infoTest\");\r",
-									"pm.iterationData.unset(\"infoTest\");\r",
-									"const jsonResponse = pm.response.json();\r",
-									"const jsonData = jsonResponse.data;\r",
-									"\r",
-									"pm.test('Status/code check', function(){\r",
-									"    pm.response.to.have.status(infoTest.status);\r",
-									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
-									"});\r",
-									"\r",
-									"pm.test('Error check', function(){\r",
-									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
-									"});\r",
-									"\r",
-									"pm.test('Schema is valid', function() {\r",
-									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
-									"});\r",
-									"\r",
-									"if(!infoTest.error){\r",
-									"    pm.test('DataResponse is valid', function() {\r",
-									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
-									"    });\r",
-									"}"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{orgPATH}}/update",
-							"host": [
-								"{{baseURL}}{{orgPATH}}"
-							],
-							"path": [
-								"update"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "3-Search-all-org",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let v_data = {};\r",
-									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
-									"console.log(pm.iterationData.toObject());\r",
-									"\r",
-									"if (pm.iterationData.has(\"infoTest\"))\r",
-									"{\r",
-									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
-									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
-									"    pm.iterationData.unset(\"infoTest\");\r",
-									"\r",
-									"    v_data = pm.iterationData.toObject();\r",
-									"\r",
-									"    if(pm.environment.get(\"infoTest\").setId == true)\r",
-									"        v_data.id = pm.environment.get(\"org1\")._id;\r",
-									"}\r",
-									"\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const schema = {\r",
-									"    \"type\": \"object\",\r",
-									"    \"properties\": {\r",
-									"        \"error\": { \"type\": \"boolean\" },\r",
-									"        \"code\": { \"type\": \"number\" },\r",
-									"        \"message\": { \"type\": \"string\" },\r",
-									"        \"errors\": { \"type\": \"array\" },\r",
-									"        \"data\": {\r",
-									"            \"type\": \"object\",\r",
-									"            \"properties\": {\r",
-									"                        \"_id\": { \"type\": \"string\" },\r",
-									"                        \"nom\": { \"type\": \"string\" },\r",
-									"                        \"description\": { \"type\": \"string\" },\r",
-									"                        \"url\": { \"type\": \"string\" },\r",
-									"                        \"contactPoint\": { \"type\": \"string\" },\r",
-									"                        \"createdAt\": { \"type\": \"string\" },\r",
-									"                        \"updatedAt\": { \"type\": \"string\" }\r",
-									"            },\r",
-									"        }\r",
-									"    },\r",
-									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
-									"};\r",
-									"\r",
-									"\r",
-									"const infoTest = pm.environment.get(\"infoTest\");\r",
-									"pm.iterationData.unset(\"infoTest\");\r",
-									"const jsonResponse = pm.response.json();\r",
-									"const jsonData = jsonResponse.data;\r",
-									"\r",
-									"pm.test('Status/code check', function(){\r",
-									"    pm.response.to.have.status(infoTest.status);\r",
-									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
-									"});\r",
-									"\r",
-									"pm.test('Error check', function(){\r",
-									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
-									"});\r",
-									"\r",
-									"pm.test('Schema is valid', function() {\r",
-									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
-									"});\r",
-									"\r",
-									"pm.test('Search found or not item correctly', function(){\r",
-									"    \r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{orgPATH}}/search",
-							"host": [
-								"{{baseURL}}{{orgPATH}}"
-							],
-							"path": [
-								"search"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "4-List-all-org",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let v_data = {};\r",
-									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
-									"console.log(pm.iterationData.toObject());\r",
-									"\r",
-									"if (pm.iterationData.has(\"infoTest\"))\r",
-									"{\r",
-									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
-									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
-									"    pm.iterationData.unset(\"infoTest\");\r",
-									"\r",
-									"    v_data = pm.iterationData.toObject();\r",
-									"\r",
-									"    if(pm.environment.get(\"infoTest\").setId == true)\r",
-									"        v_data.id = pm.environment.get(\"org1\")._id;\r",
-									"}\r",
-									"\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const schema = {\r",
-									"    \"type\": \"object\",\r",
-									"    \"properties\": {\r",
-									"        \"error\": { \"type\": \"boolean\" },\r",
-									"        \"code\": { \"type\": \"number\" },\r",
-									"        \"message\": { \"type\": \"string\" },\r",
-									"        \"errors\": { \"type\": \"array\" },\r",
-									"        \"data\": {\r",
-									"            \"type\": \"array\",\r",
-									"            \"properties\": {\r",
-									"                        \"_id\": { \"type\": \"string\" },\r",
-									"                        \"nom\": { \"type\": \"string\" },\r",
-									"                        \"description\": { \"type\": \"string\" },\r",
-									"                        \"url\": { \"type\": \"string\" },\r",
-									"                        \"contactPoint\": { \"type\": \"string\" },\r",
-									"                        \"createdAt\": { \"type\": \"string\" },\r",
-									"                        \"updatedAt\": { \"type\": \"string\" }\r",
-									"            },\r",
-									"        }\r",
-									"    },\r",
-									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
-									"};\r",
-									"\r",
-									"\r",
-									"const infoTest = pm.environment.get(\"infoTest\");\r",
-									"pm.iterationData.unset(\"infoTest\");\r",
-									"const jsonResponse = pm.response.json();\r",
-									"const jsonData = jsonResponse.data;\r",
-									"\r",
-									"pm.test('Status/code check', function(){\r",
-									"    pm.response.to.have.status(infoTest.status);\r",
-									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
-									"});\r",
-									"\r",
-									"pm.test('Error check', function(){\r",
-									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
-									"});\r",
-									"\r",
-									"pm.test('Schema is valid', function() {\r",
-									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
-									"});\r",
-									"\r",
-									"pm.test('List found or not item correctly', function(){\r",
-									"    \r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{orgPATH}}/list",
-							"host": [
-								"{{baseURL}}{{orgPATH}}"
-							],
-							"path": [
-								"list"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "5-Delete-all-org",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let v_data = {};\r",
-									"let toDel;\r",
-									"let vars;\r",
-									"let varsKeys;\r",
-									"while(pm.environment.toObject())\r",
-									"{\r",
-									"    vars = pm.environment.toObject();\r",
-									"    varsKeys = Object.keys(vars);\r",
-									"\r",
-									"    toDel = varsKeys.pop();\r",
-									"    if(toDel === undefined)\r",
-									"    break;\r",
-									"\r",
-									"    if (toDel.includes(\"org\")){\r",
-									"        break;\r",
-									"    }\r",
-									"    pm.environment.unset(toDel);\r",
-									"\r",
-									"}\r",
-									"if(toDel !== undefined)\r",
-									"{\r",
-									"    v_data.id = vars[toDel]._id\r",
-									"    pm.environment.unset(toDel);\r",
-									"}\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const jsonResponse = pm.response.json();\r",
-									"const jsonData = jsonResponse.data;\r",
-									"\r",
-									"if(Object.keys(pm.environment.toObject()) != 0)\r",
-									"{\r",
-									"    pm.test('Status OK', function(){\r",
-									"        pm.response.to.have.status(200);\r",
-									"    });\r",
-									"\r",
-									"    pm.test('Delete successful', function(){\r",
-									"        pm.expect(jsonResponse.error).to.be.false;\r",
-									"        pm.expect(jsonResponse.errors).to.be.empty;\r",
-									"    });\r",
-									"\r",
-									"    postman.setNextRequest(\"5-Delete-all-org\");\r",
-									"}\r",
-									"else\r",
-									"{\r",
-									"    pm.environment.clear();\r",
-									"    postman.setNextRequest(null);\r",
-									"}"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{orgPATH}}/delete",
-							"host": [
-								"{{baseURL}}{{orgPATH}}"
-							],
-							"path": [
-								"delete"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "6-getinfo",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{\r\n        \"route\":\"create\"\r\n    }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{orgPATH}}/getinfo",
-							"host": [
-								"{{baseURL}}{{orgPATH}}"
-							],
-							"path": [
-								"getinfo"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Temp test",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{\r\n        \"id\":\"63037964e56a560986e6403b\"\r\n    }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{orgPATH}}/delete",
-							"host": [
-								"{{baseURL}}{{orgPATH}}"
-							],
-							"path": [
-								"delete"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Only One element of",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\": {\r\n        \"id\": \"63189d23ad35ffffd15eb1e0\",\r\n        \"url\": \"https://é!*(&)!#(*)&@!google.com.com\"\r\n    }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{orgPATH}}/update",
-							"host": [
-								"{{baseURL}}{{orgPATH}}"
-							],
-							"path": [
-								"update"
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "CreateEnvVariable-org",
 					"event": [
@@ -715,614 +110,6 @@
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "Personnes",
-			"item": [
-				{
-					"name": "1-Create-all-pers",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const schema = {\r",
-									"    \"type\": \"object\",\r",
-									"    \"properties\": {\r",
-									"        \"error\": { \"type\": \"boolean\" },\r",
-									"        \"code\": { \"type\": \"number\" },\r",
-									"        \"message\": { \"type\": \"string\" },\r",
-									"        \"errors\": { \"type\": \"object\" },\r",
-									"        \"data\": {\r",
-									"            \"type\": \"object\",\r",
-									"            \"properties\": {\r",
-									"                        \"_id\": { \"type\": \"string\" },\r",
-									"                        \"lastName\": { \"type\": \"string\" },\r",
-									"                        \"firstName\": { \"type\": \"string\" },\r",
-									"                        \"slug\": { \"type\": \"string\" },\r",
-									"                        \"nickname\": { \"type\": \"string\" },\r",
-									"                        \"description\": { \"type\": \"string\" },\r",
-									"                        \"occupation\": { \"type\": \"array\" },\r",
-									"                        \"createdAt\": { \"type\": \"string\" },\r",
-									"                        \"updatedAt\": { \"type\": \"string\" }\r",
-									"            },\r",
-									"        }\r",
-									"    },\r",
-									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
-									"};\r",
-									"const infoTest = pm.environment.get(\"infoTest\");\r",
-									"pm.iterationData.unset(\"infoTest\");\r",
-									"const jsonResponse = pm.response.json();\r",
-									"const jsonData = jsonResponse.data;\r",
-									"\r",
-									"\r",
-									"pm.test('Status/code check', function(){\r",
-									"    pm.response.to.have.status(infoTest.status);\r",
-									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
-									"});\r",
-									"\r",
-									"pm.test('Error check', function(){\r",
-									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
-									"});\r",
-									"\r",
-									"pm.test('Schema is valid', function() {\r",
-									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
-									"});\r",
-									"\r",
-									"pm.test('Data check', function() {\r",
-									"    if (infoTest.error == false) {\r",
-									"        pm.environment.set(\"pers\"+Number(pm.info.iteration+1), jsonData);\r",
-									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
-									"    }\r",
-									"})"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let v_data = {};\r",
-									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
-									"console.log(pm.iterationData.toObject());\r",
-									"\r",
-									"if (pm.iterationData.has(\"infoTest\"))\r",
-									"{\r",
-									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
-									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
-									"    pm.iterationData.unset(\"infoTest\");\r",
-									"    v_data = pm.iterationData.toObject();\r",
-									"}\r",
-									"else{\r",
-									"    v_data.lastName = \"Parent\";\r",
-									"    v_data.firstName = \"Jean-Marc\";\r",
-									"    v_data.nickname = \"Mickette\";\r",
-									"    v_data.description = \"Humour\";\r",
-									"    //v_data.occupation = [\"62eb0bd0a8b154bf068a4170\",\"62f271c0fe1255db5aec8f13\"]\r",
-									"}\r",
-									"\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{persPATH}}/create",
-							"host": [
-								"{{baseURL}}{{persPATH}}"
-							],
-							"path": [
-								"create"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "2-Update-all-pers",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let v_data = {};\r",
-									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
-									"console.log(pm.iterationData.toObject());\r",
-									"\r",
-									"if (pm.iterationData.has(\"infoTest\"))\r",
-									"{\r",
-									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
-									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
-									"    pm.iterationData.unset(\"infoTest\");\r",
-									"    v_data = pm.iterationData.toObject();\r",
-									"\r",
-									"    if(v_data.id === undefined)\r",
-									"        v_data.id = pm.environment.get(\"pers1\")._id;\r",
-									"}\r",
-									"else{\r",
-									"    v_data.id = \"62f56b48f094be6418cdbd29\",\r",
-									"    v_data.occupation = [\"62eb0bd0a8b154bf068a4170\"]\r",
-									"}\r",
-									"\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const schema = {\r",
-									"    \"type\": \"object\",\r",
-									"    \"properties\": {\r",
-									"        \"error\": { \"type\": \"boolean\" },\r",
-									"        \"code\": { \"type\": \"number\" },\r",
-									"        \"message\": { \"type\": \"string\" },\r",
-									"        \"errors\": { \"type\": \"object\" },\r",
-									"        \"data\": {\r",
-									"            \"type\": \"object\",\r",
-									"            \"properties\": {\r",
-									"                        \"_id\": { \"type\": \"string\" },\r",
-									"                        \"lastName\": { \"type\": \"string\" },\r",
-									"                        \"firstName\": { \"type\": \"string\" },\r",
-									"                        \"slug\": { \"type\": \"string\" },\r",
-									"                        \"nickname\": { \"type\": \"string\" },\r",
-									"                        \"description\": { \"type\": \"string\" },\r",
-									"                        \"occupation\": { \"type\": \"array\" },\r",
-									"                        \"createdAt\": { \"type\": \"string\" },\r",
-									"                        \"updatedAt\": { \"type\": \"string\" }\r",
-									"            },\r",
-									"        }\r",
-									"    },\r",
-									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
-									"};\r",
-									"\r",
-									"\r",
-									"const infoTest = pm.environment.get(\"infoTest\");\r",
-									"pm.iterationData.unset(\"infoTest\");\r",
-									"const jsonResponse = pm.response.json();\r",
-									"const jsonData = jsonResponse.data;\r",
-									"\r",
-									"pm.test('Status/code check', function(){\r",
-									"    pm.response.to.have.status(infoTest.status);\r",
-									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
-									"});\r",
-									"\r",
-									"pm.test('Error check', function(){\r",
-									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
-									"});\r",
-									"\r",
-									"pm.test('Schema is valid', function() {\r",
-									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
-									"});\r",
-									"\r",
-									"if(!infoTest.error){\r",
-									"    pm.test('DataResponse is valid', function() {\r",
-									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
-									"    });\r",
-									"}\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{persPATH}}/update",
-							"host": [
-								"{{baseURL}}{{persPATH}}"
-							],
-							"path": [
-								"update"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "3-Search-all-pers",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let v_data = {};\r",
-									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
-									"console.log(pm.iterationData.toObject());\r",
-									"\r",
-									"if (pm.iterationData.has(\"infoTest\"))\r",
-									"{\r",
-									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
-									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
-									"    pm.iterationData.unset(\"infoTest\");\r",
-									"\r",
-									"    v_data = pm.iterationData.toObject();\r",
-									"\r",
-									"    if(pm.environment.get(\"infoTest\").setId == true)\r",
-									"        v_data.id = pm.environment.get(\"pers1\")._id;\r",
-									"}\r",
-									"\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const schema = {\r",
-									"    \"type\": \"object\",\r",
-									"    \"properties\": {\r",
-									"        \"error\": { \"type\": \"boolean\" },\r",
-									"        \"code\": { \"type\": \"number\" },\r",
-									"        \"message\": { \"type\": \"string\" },\r",
-									"        \"errors\": { \"type\": \"array\" },\r",
-									"        \"data\": {\r",
-									"            \"type\": \"object\",\r",
-									"            \"properties\": {\r",
-									"                        \"_id\": { \"type\": \"string\" },\r",
-									"                        \"lastName\": { \"type\": \"string\" },\r",
-									"                        \"firstName\": { \"type\": \"string\" },\r",
-									"                        \"nickname\": { \"type\": \"string\" },\r",
-									"                        \"description\": { \"type\": \"string\" },\r",
-									"                        \"createdAt\": { \"type\": \"string\" },\r",
-									"                        \"updatedAt\": { \"type\": \"string\" }\r",
-									"            },\r",
-									"        }\r",
-									"    },\r",
-									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
-									"};\r",
-									"\r",
-									"\r",
-									"const infoTest = pm.environment.get(\"infoTest\");\r",
-									"pm.iterationData.unset(\"infoTest\");\r",
-									"const jsonResponse = pm.response.json();\r",
-									"const jsonData = jsonResponse.data;\r",
-									"\r",
-									"pm.test('Status/code check', function(){\r",
-									"    pm.response.to.have.status(infoTest.status);\r",
-									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
-									"});\r",
-									"\r",
-									"pm.test('Error check', function(){\r",
-									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
-									"});\r",
-									"\r",
-									"pm.test('Schema is valid', function() {\r",
-									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
-									"});\r",
-									"\r",
-									"pm.test('Search found item correctly', function(){\r",
-									"    \r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{persPATH}}/search",
-							"host": [
-								"{{baseURL}}{{persPATH}}"
-							],
-							"path": [
-								"search"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "4-List-all-pers",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let v_data = {};\r",
-									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
-									"console.log(pm.iterationData.toObject());\r",
-									"\r",
-									"if (pm.iterationData.has(\"infoTest\"))\r",
-									"{\r",
-									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
-									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
-									"    pm.iterationData.unset(\"infoTest\");\r",
-									"\r",
-									"    v_data = pm.iterationData.toObject();\r",
-									"\r",
-									"    if(pm.environment.get(\"infoTest\").setId == true)\r",
-									"        v_data.id = pm.environment.get(\"pers1\")._id;\r",
-									"}\r",
-									"\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const schema = {\r",
-									"    \"type\": \"object\",\r",
-									"    \"properties\": {\r",
-									"        \"error\": { \"type\": \"boolean\" },\r",
-									"        \"code\": { \"type\": \"number\" },\r",
-									"        \"message\": { \"type\": \"string\" },\r",
-									"        \"errors\": { \"type\": \"array\" },\r",
-									"        \"data\": {\r",
-									"            \"type\": \"array\",\r",
-									"            \"properties\": {\r",
-									"                        \"_id\": { \"type\": \"string\" },\r",
-									"                        \"nom\": { \"type\": \"string\" },\r",
-									"                        \"prenom\": { \"type\": \"string\" },\r",
-									"                        \"surnom\": { \"type\": \"string\" },\r",
-									"                        \"description\": { \"type\": \"string\" },\r",
-									"                        \"createdAt\": { \"type\": \"string\" },\r",
-									"                        \"updatedAt\": { \"type\": \"string\" }\r",
-									"            },\r",
-									"        }\r",
-									"    },\r",
-									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
-									"};\r",
-									"\r",
-									"\r",
-									"const infoTest = pm.environment.get(\"infoTest\");\r",
-									"pm.iterationData.unset(\"infoTest\");\r",
-									"const jsonResponse = pm.response.json();\r",
-									"const jsonData = jsonResponse.data;\r",
-									"\r",
-									"pm.test('Status/code check', function(){\r",
-									"    pm.response.to.have.status(infoTest.status);\r",
-									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
-									"});\r",
-									"\r",
-									"pm.test('Error check', function(){\r",
-									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
-									"});\r",
-									"\r",
-									"pm.test('Schema is valid', function() {\r",
-									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
-									"});\r",
-									"\r",
-									"pm.test('List found item correctly', function(){\r",
-									"    \r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{persPATH}}/list",
-							"host": [
-								"{{baseURL}}{{persPATH}}"
-							],
-							"path": [
-								"list"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "5-Delete-all-pers",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let v_data = {};\r",
-									"let toDel;\r",
-									"let vars;\r",
-									"let varsKeys;\r",
-									"while(pm.environment.toObject())\r",
-									"{\r",
-									"    vars = pm.environment.toObject();\r",
-									"    varsKeys = Object.keys(vars);\r",
-									"\r",
-									"    toDel = varsKeys.pop();\r",
-									"    if(toDel === undefined)\r",
-									"    break;\r",
-									"\r",
-									"    if (toDel.includes(\"pers\")){\r",
-									"        break;\r",
-									"    }\r",
-									"    pm.environment.unset(toDel);\r",
-									"\r",
-									"}\r",
-									"if(toDel !== undefined)\r",
-									"{\r",
-									"    v_data.id = vars[toDel]._id\r",
-									"    pm.environment.unset(toDel);\r",
-									"}\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const jsonResponse = pm.response.json();\r",
-									"const jsonData = jsonResponse.data;\r",
-									"\r",
-									"if(Object.keys(pm.environment.toObject()) != 0)\r",
-									"{\r",
-									"    pm.test('Status OK', function(){\r",
-									"        pm.response.to.have.status(200);\r",
-									"    });\r",
-									"\r",
-									"    pm.test('Delete successful', function(){\r",
-									"        pm.expect(jsonResponse.error).to.be.false;\r",
-									"        pm.expect(jsonResponse.errors).to.be.empty;\r",
-									"    });\r",
-									"\r",
-									"    postman.setNextRequest(\"5-Delete-all-pers\");\r",
-									"}\r",
-									"else\r",
-									"{\r",
-									"    pm.environment.clear();\r",
-									"    postman.setNextRequest(null);\r",
-									"}"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{persPATH}}/delete",
-							"host": [
-								"{{baseURL}}{{persPATH}}"
-							],
-							"path": [
-								"delete"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "6-getinfo",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{\r\n        \"route\":\"create\"\r\n    }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{persPATH}}/getinfo",
-							"host": [
-								"{{baseURL}}{{persPATH}}"
-							],
-							"path": [
-								"getinfo"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "TempTest",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{\r\n        \"id\":\"62ffb76428d13f50c2bfc3bb\",\r\n        \"firstName\":\"d\"\r\n    }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{persPATH}}/update",
-							"host": [
-								"{{baseURL}}{{persPATH}}"
-							],
-							"path": [
-								"update"
-							]
-						}
-					},
-					"response": []
 				},
 				{
 					"name": "CreateEnvVariable-pers",
@@ -1418,258 +205,6 @@
 							],
 							"path": [
 								"ping"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				}
-			]
-		},
-		{
-			"name": "Users",
-			"item": [
-				{
-					"name": "1-Create-all-user",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const schema = {\r",
-									"    \"type\": \"object\",\r",
-									"    \"properties\": {\r",
-									"        \"error\": { \"type\": \"boolean\" },\r",
-									"        \"code\": { \"type\": \"number\" },\r",
-									"        \"message\": { \"type\": \"string\" },\r",
-									"        \"errors\": { \"type\": \"object\" },\r",
-									"        \"data\": {\r",
-									"            \"type\": \"object\",\r",
-									"            \"properties\": {\r",
-									"                        \"_id\": { \"type\": \"string\" },\r",
-									"                        \"username\": { \"type\": \"string\" },\r",
-									"                        \"email\": { \"type\": \"string\" },\r",
-									"                        \"password\": { \"type\": \"string\" },\r",
-									"                        \"avatar\": { \"type\": \"string\" },\r",
-									"                        \"name\": { \"type\": \"string\" },\r",
-									"                        \"role\": { \"type\": \"string\" },\r",
-									"                        \"createdAt\": { \"type\": \"string\" },\r",
-									"                        \"updatedAt\": { \"type\": \"string\" }\r",
-									"            },\r",
-									"        }\r",
-									"    },\r",
-									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
-									"};\r",
-									"\r",
-									"const infoTest = pm.environment.get(\"infoTest\");\r",
-									"pm.iterationData.unset(\"infoTest\");\r",
-									"const jsonResponse = pm.response.json();\r",
-									"const jsonData = jsonResponse.data;\r",
-									"\r",
-									"pm.test('Status/code check', function(){\r",
-									"    pm.response.to.have.status(infoTest.status);\r",
-									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
-									"});\r",
-									"\r",
-									"pm.test('Error check', function(){\r",
-									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
-									"});\r",
-									"\r",
-									"pm.test('Schema is valid', function() {\r",
-									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
-									"});\r",
-									"\r",
-									"pm.test('Data check', function() {\r",
-									"    if (infoTest.error == false) {\r",
-									"        pm.environment.set(\"user\"+Number(pm.info.iteration+1), jsonData);\r",
-									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
-									"    }\r",
-									"})"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let v_data = {};\r",
-									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
-									"console.log(pm.iterationData.toObject());\r",
-									"\r",
-									"if (pm.iterationData.has(\"infoTest\"))\r",
-									"{\r",
-									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
-									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
-									"    pm.iterationData.unset(\"infoTest\");\r",
-									"    v_data = pm.iterationData.toObject();\r",
-									"}\r",
-									"else{\r",
-									"    v_data.username = \"Marienero\";\r",
-									"    v_data.email = \"mauveTercelle@jira.atlassian.cash\";\r",
-									"    v_data.password = \"jironde42\";\r",
-									"    v_data.avatar = \"La Marie dans la bible lah..\"\r",
-									"    v_data.name = \"Marie Neron\";\r",
-									"    v_data.role = \"Caliméro\";\r",
-									"}\r",
-									"\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
-									"\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\" : {{v_data}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{usersPATH}}/create",
-							"host": [
-								"{{baseURL}}{{usersPATH}}"
-							],
-							"path": [
-								"create"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "2-Update-all-user",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let v_data = {};\r",
-									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
-									"console.log(pm.iterationData.toObject());\r",
-									"\r",
-									"if (pm.iterationData.has(\"infoTest\"))\r",
-									"{\r",
-									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
-									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
-									"    pm.iterationData.unset(\"infoTest\");\r",
-									"\r",
-									"    v_data = pm.iterationData.toObject();\r",
-									"\r",
-									"    if(v_data.id === undefined)\r",
-									"        v_data.id = pm.environment.get(\"user1\");\r",
-									"}\r",
-									"else{\r",
-									"    v_data.id = \"bidon\"\r",
-									"}\r",
-									"\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const schema = {\r",
-									"    \"type\": \"object\",\r",
-									"    \"properties\": {\r",
-									"        \"error\": { \"type\": \"boolean\" },\r",
-									"        \"code\": { \"type\": \"number\" },\r",
-									"        \"message\": { \"type\": \"string\" },\r",
-									"        \"errors\": { \"type\": \"object\" },\r",
-									"        \"data\": {\r",
-									"            \"type\": \"object\",\r",
-									"            \"properties\": {\r",
-									"                        \"_id\": { \"type\": \"string\" },\r",
-									"                        \"username\": { \"type\": \"string\" },\r",
-									"                        \"email\": { \"type\": \"string\" },\r",
-									"                        \"password\": { \"type\": \"string\" },\r",
-									"                        \"avatar\": { \"type\": \"string\" },\r",
-									"                        \"name\": { \"type\": \"string\" },\r",
-									"                        \"role\": { \"type\": \"string\" },\r",
-									"                        \"createdAt\": { \"type\": \"string\" },\r",
-									"                        \"updatedAt\": { \"type\": \"string\" }\r",
-									"            },\r",
-									"        }\r",
-									"    },\r",
-									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
-									"};\r",
-									"\r",
-									"const infoTest = pm.environment.get(\"infoTest\");\r",
-									"pm.iterationData.unset(\"infoTest\");\r",
-									"const jsonResponse = pm.response.json();\r",
-									"const jsonData = jsonResponse.data;\r",
-									"\r",
-									"pm.test('Status/code check', function(){\r",
-									"    pm.response.to.have.status(infoTest.status);\r",
-									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
-									"});\r",
-									"\r",
-									"pm.test('Error check', function(){\r",
-									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
-									"});\r",
-									"\r",
-									"pm.test('Schema is valid', function() {\r",
-									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
-									"});\r",
-									"\r",
-									"pm.test('DataResponse is valid', function() {\r",
-									"    pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\": {{v_data}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{usersPATH}}/update",
-							"host": [
-								"{{baseURL}}{{usersPATH}}"
-							],
-							"path": [
-								"update"
 							]
 						}
 					},
@@ -1777,12 +312,321 @@
 					"response": []
 				},
 				{
-					"name": "TempTest",
+					"name": "CreateEnvVariable-taxo",
 					"event": [
 						{
 							"listen": "prerequest",
 							"script": {
 								"exec": [
+									"const create_schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"error\": { \"type\": \"boolean\" },\r",
+									"        \"code\": { \"type\": \"number\" },\r",
+									"        \"message\": { \"type\": \"string\" },\r",
+									"        \"errors\": { \"type\": \"object\" },\r",
+									"        \"data\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                        \"_id\": { \"type\": \"string\" },\r",
+									"                        \"category\": { \"type\": \"string\" },\r",
+									"                        \"name\": { \"type\": \"string\" },\r",
+									"                        \"slug\": { \"type\": \"string\" },\r",
+									"                        \"description\": { \"type\": \"string\" },\r",
+									"                        \"source\": { \"type\": \"string\" },\r",
+									"                        \"status\": { \"type\": \"string\" },\r",
+									"                        \"addReason\": { \"type\": \"string\" },\r",
+									"                        \"createdAt\": { \"type\": \"string\" },\r",
+									"                        \"updatedAt\": { \"type\": \"string\" }\r",
+									"            },\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+									"};\r",
+									"\r",
+									"const update_schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"error\": { \"type\": \"boolean\" },\r",
+									"        \"code\": { \"type\": \"number\" },\r",
+									"        \"message\": { \"type\": \"string\" },\r",
+									"        \"errors\": { \"type\": \"object\" },\r",
+									"        \"data\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                        \"_id\": { \"type\": \"string\" },\r",
+									"                        \"category\": { \"type\": \"string\" },\r",
+									"                        \"name\": { \"type\": \"string\" },\r",
+									"                        \"slug\": { \"type\": \"string\" },\r",
+									"                        \"description\": { \"type\": \"string\" },\r",
+									"                        \"source\": { \"type\": \"string\" },\r",
+									"                        \"status\": { \"type\": \"string\" },\r",
+									"                        \"addReason\": { \"type\": \"string\" },\r",
+									"                        \"createdAt\": { \"type\": \"string\" },\r",
+									"                        \"updatedAt\": { \"type\": \"string\" }\r",
+									"            },\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+									"};\r",
+									"\r",
+									"const entity_path = \"/taxonomies\";\r",
+									"\r",
+									"const e_data = {\r",
+									"    \"category\" : \"occupations\",\r",
+									"    \"name\" : \"Circassien\",\r",
+									"    \"description\" : \"Le circassien pratique l'action de faire du cirque.\",\r",
+									"    \"source\" : \"\",\r",
+									"    \"status\": \"Pending\",\r",
+									"    \"addReason\":\"Je pense que le cirque fait partie intégrante de la culture et j'aimerais qu'il soit ajouté pour pouvoir me l'attribuer.\"\r",
+									"};\r",
+									"pm.environment.clear();\r",
+									"pm.environment.set(\"create_schema\", create_schema);\r",
+									"pm.environment.set(\"update_schema\", update_schema);\r",
+									"pm.environment.set(\"entityPATH\", entity_path);\r",
+									"pm.environment.set(\"e_data\", e_data);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/ping",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"ping"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Entity",
+			"item": [
+				{
+					"name": "Create-Entity",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data;\r",
+									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+									"console.log(pm.iterationData.toObject());\r",
+									"\r",
+									"if (pm.iterationData.has(\"infoTest\"))\r",
+									"{\r",
+									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+									"    pm.iterationData.unset(\"infoTest\");\r",
+									"    v_data = pm.iterationData.toObject();\r",
+									"}\r",
+									"else{\r",
+									"    v_data = pm.environment.get(\"e_data\");\r",
+									"}\r",
+									"\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = pm.environment.get(\"create_schema\");\r",
+									"const errorSchema = pm.globals.get(\"error_schema\");\r",
+									"\r",
+									"const infoTest = pm.environment.get(\"infoTest\");\r",
+									"pm.iterationData.unset(\"infoTest\");\r",
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"\r",
+									"pm.test('Status/code check', function(){\r",
+									"    pm.response.to.have.status(infoTest.status);\r",
+									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+									"});\r",
+									"\r",
+									"pm.test('Error check', function(){\r",
+									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+									"});\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    if(infoTest.error == false)\r",
+									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
+									"    else\r",
+									"    pm.expect(jsonResponse).to.have.jsonSchema(errorSchema);\r",
+									"});\r",
+									"\r",
+									"pm.test('Data check', function() {\r",
+									"    if (jsonResponse.error == false) {\r",
+									"        pm.environment.set(\"createdEntity\"+Number(pm.info.iteration+1), jsonData);\r",
+									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
+									"    }\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{entityPATH}}{{createROUTE}}",
+							"host": [
+								"{{baseURL}}{{entityPATH}}{{createROUTE}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update-Entity",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data;\r",
+									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+									"console.log(pm.iterationData.toObject());\r",
+									"\r",
+									"if (pm.iterationData.has(\"infoTest\"))\r",
+									"{\r",
+									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+									"    pm.iterationData.unset(\"infoTest\");\r",
+									"    v_data = pm.iterationData.toObject();\r",
+									"    if(v_data.id === undefined)\r",
+									"        v_data.id = pm.environment.get(\"createdEntity1\")._id;\r",
+									"}\r",
+									"else{\r",
+									"    //v_data = pm.environment.get(\"e_data\");\r",
+									"    v_data.id = \"bidon\";\r",
+									"}\r",
+									"\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = pm.environment.get(\"update_schema\");\r",
+									"const errorSchema = pm.globals.get(\"error_schema\");\r",
+									"const infoTest = pm.environment.get(\"infoTest\");\r",
+									"pm.iterationData.unset(\"infoTest\");\r",
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"pm.test('Status/code check', function(){\r",
+									"    pm.response.to.have.status(infoTest.status);\r",
+									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+									"});\r",
+									"\r",
+									"pm.test('Error check', function(){\r",
+									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+									"});\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    if (infoTest.error == false)\r",
+									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
+									"    else\r",
+									"    pm.expect(jsonResponse).to.have.jsonSchema(errorSchema)\r",
+									"});\r",
+									"\r",
+									"pm.test('DataResponse is valid', function() {\r",
+									"    if(jsonResponse.error == false){\r",
+									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{entityPATH}}{{updateROUTE}}",
+							"host": [
+								"{{baseURL}}{{entityPATH}}{{updateROUTE}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete-Entity",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data = {};\r",
+									"let toDel;\r",
+									"let vars = pm.environment.toObject();\r",
+									"let varsKeys = Object.keys(vars);\r",
+									"let env = Object.keys(pm.environment.toObject())\r",
+									"\r",
+									"v_data.id = \"\";\r",
+									"\r",
+									"if (v_data.id == \"\"){\r",
+									"    while(varsKeys.length != 0){\r",
+									"        toDel = varsKeys.pop();\r",
+									"\r",
+									"        if (toDel.includes(\"created\") || toDel.includes(\"infoTest\")){\r",
+									"            break;\r",
+									"        }\r",
+									"        if (varsKeys.length == 0)\r",
+									"            toDel = undefined;\r",
+									"    }\r",
+									"    if (toDel != undefined){\r",
+									"        v_data.id = vars[toDel]._id\r",
+									"        pm.environment.unset(toDel);\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
 									""
 								],
 								"type": "text/javascript"
@@ -1792,6 +636,38 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"\r",
+									"pm.test('Status OK', function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Delete successful', function(){\r",
+									"    pm.expect(jsonResponse.error).to.be.false;\r",
+									"    pm.expect(jsonResponse.errors).to.be.empty;\r",
+									"});\r",
+									"\r",
+									"let vars = pm.environment.toObject();\r",
+									"let varsKeys = Object.keys(vars);\r",
+									"let toDel;\r",
+									"let nextTest = false;\r",
+									"while(varsKeys.length != 0){\r",
+									"    toDel = varsKeys.pop();\r",
+									"\r",
+									"    if (toDel.includes(\"created\") || toDel.includes(\"infoTest\")){\r",
+									"        nextTest = true;\r",
+									"        break;\r",
+									"    }\r",
+									"    if (varsKeys.length == 0)\r",
+									"        nextTest = false;\r",
+									"\r",
+									"}\r",
+									"if (nextTest)\r",
+									"    postman.setNextRequest(\"Delete-Entity\");\r",
+									"else\r",
+									"    postman.setNextRequest(null);\r",
 									""
 								],
 								"type": "text/javascript"
@@ -1803,7 +679,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"data\": {\r\n        \"id\":\"62eaafe21bd6f083070e5d39\",\r\n        \"avatar\":\"https://res.cloudinary.com/teepublic/image/private/s--W9Vj2N6H--/t_Preview/b_rgb:36538b,c_limit,f_jpg,h_630,q_90,w_630/v1523212912/production/designs/2570408_0.jpg\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1811,12 +687,79 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}{{usersPATH}}/update",
+							"raw": "{{baseURL}}{{entityPATH}}/delete",
 							"host": [
-								"{{baseURL}}{{usersPATH}}"
+								"{{baseURL}}{{entityPATH}}"
 							],
 							"path": [
-								"update"
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateEnvVariable",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"const e_data = {\r",
+									"    \r",
+									"};\r",
+									"pm.environment.set(\"e_data\", e_data);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/ping",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"ping"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TempRequest",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{entityPATH}}/create",
+							"host": [
+								"{{baseURL}}{{entityPATH}}"
+							],
+							"path": [
+								"create"
 							]
 						}
 					},
@@ -1997,628 +940,6 @@
 							],
 							"path": [
 								"asdfasdfasdfasdf"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Taxonomies",
-			"item": [
-				{
-					"name": "Temp Test create",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let v_data = {};\r",
-									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
-									"console.log(pm.iterationData.toObject());\r",
-									"\r",
-									"if (pm.iterationData.has(\"infoTest\"))\r",
-									"{\r",
-									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
-									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
-									"    pm.iterationData.unset(\"infoTest\");\r",
-									"    v_data = pm.iterationData.toObject();\r",
-									"}\r",
-									"else{\r",
-									"    v_data.category = \"occupations\";\r",
-									"    v_data.name = \"Circassien\";\r",
-									"    v_data.description = \"Le circassien pratique l'action de faire du cirque.\";\r",
-									"    v_data.source = \"\";\r",
-									"}\r",
-									"\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const schema = {\r",
-									"    \"type\": \"object\",\r",
-									"    \"properties\": {\r",
-									"        \"error\": { \"type\": \"boolean\" },\r",
-									"        \"code\": { \"type\": \"number\" },\r",
-									"        \"message\": { \"type\": \"string\" },\r",
-									"        \"errors\": { \"type\": \"array\" },\r",
-									"        \"data\": {\r",
-									"            \"type\": \"object\",\r",
-									"            \"properties\": {\r",
-									"                        \"_id\": { \"type\": \"string\" },\r",
-									"                        \"category\": { \"type\": \"string\" },\r",
-									"                        \"name\": { \"type\": \"string\" },\r",
-									"                        \"slug\": { \"type\": \"string\" },\r",
-									"                        \"description\": { \"type\": \"string\" },\r",
-									"                        \"source\": { \"type\": \"string\" },\r",
-									"                        \"status\": { \"type\": \"string\" },\r",
-									"                        \"addReason\": { \"type\": \"string\" },\r",
-									"                        \"createdAt\": { \"type\": \"string\" },\r",
-									"                        \"updatedAt\": { \"type\": \"string\" }\r",
-									"            },\r",
-									"        }\r",
-									"    },\r",
-									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
-									"};\r",
-									"const infoTest = pm.environment.get(\"infoTest\");\r",
-									"pm.iterationData.unset(\"infoTest\");\r",
-									"const jsonResponse = pm.response.json();\r",
-									"const jsonData = jsonResponse.data;\r",
-									"\r",
-									"\r",
-									"pm.test('Status/code check', function(){\r",
-									"    pm.response.to.have.status(infoTest.status);\r",
-									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
-									"});\r",
-									"\r",
-									"pm.test('Error check', function(){\r",
-									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
-									"});\r",
-									"\r",
-									"pm.test('Schema is valid', function() {\r",
-									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
-									"});\r",
-									"\r",
-									"pm.test('Data check', function() {\r",
-									"    if (infoTest.error == false) {\r",
-									"        pm.environment.set(\"taxo\"+Number(pm.info.iteration+1), jsonData);\r",
-									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
-									"    }\r",
-									"})"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\" : {{v_data}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{taxoPATH}}/create",
-							"host": [
-								"{{baseURL}}{{taxoPATH}}"
-							],
-							"path": [
-								"create"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetTaxonomiesEnum",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let v_data = {};\r",
-									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
-									"console.log(pm.iterationData.toObject());\r",
-									"\r",
-									"if (pm.iterationData.has(\"infoTest\"))\r",
-									"{\r",
-									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
-									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
-									"    pm.iterationData.unset(\"infoTest\");\r",
-									"    v_data = pm.iterationData.toObject();\r",
-									"}\r",
-									"else{\r",
-									"    v_data.category = \"occupation\";\r",
-									"    v_data.name = \"Circassien\";\r",
-									"    v_data.description = \"Le circassien pratique l'action de faire du cirque.\";\r",
-									"    v_data.source = \"\";\r",
-									"}\r",
-									"\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const schema = {\r",
-									"    \"type\": \"object\",\r",
-									"    \"properties\": {\r",
-									"        \"error\": { \"type\": \"boolean\" },\r",
-									"        \"code\": { \"type\": \"number\" },\r",
-									"        \"message\": { \"type\": \"string\" },\r",
-									"        \"errors\": { \"type\": \"array\" },\r",
-									"        \"data\": {\r",
-									"            \"type\": \"object\",\r",
-									"            \"properties\": {\r",
-									"                        \"_id\": { \"type\": \"string\" },\r",
-									"                        \"category\": { \"type\": \"string\" },\r",
-									"                        \"name\": { \"type\": \"string\" },\r",
-									"                        \"slug\": { \"type\": \"string\" },\r",
-									"                        \"description\": { \"type\": \"string\" },\r",
-									"                        \"createdAt\": { \"type\": \"string\" },\r",
-									"                        \"updatedAt\": { \"type\": \"string\" }\r",
-									"            },\r",
-									"        }\r",
-									"    },\r",
-									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
-									"};\r",
-									"const infoTest = pm.environment.get(\"infoTest\");\r",
-									"pm.iterationData.unset(\"infoTest\");\r",
-									"const jsonResponse = pm.response.json();\r",
-									"const jsonData = jsonResponse.data;\r",
-									"\r",
-									"\r",
-									"pm.test('Status/code check', function(){\r",
-									"    pm.response.to.have.status(infoTest.status);\r",
-									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
-									"});\r",
-									"\r",
-									"pm.test('Error check', function(){\r",
-									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
-									"});\r",
-									"\r",
-									"pm.test('Schema is valid', function() {\r",
-									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
-									"});\r",
-									"\r",
-									"pm.test('Data check', function() {\r",
-									"    if (infoTest.error == false) {\r",
-									"        pm.environment.set(\"taxo\"+Number(pm.info.iteration+1), jsonData);\r",
-									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
-									"    }\r",
-									"})"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\" : {{v_data}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{taxoPATH}}/create",
-							"host": [
-								"{{baseURL}}{{taxoPATH}}"
-							],
-							"path": [
-								"create"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Temp Test update",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let v_data = {};\r",
-									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
-									"console.log(pm.iterationData.toObject());\r",
-									"\r",
-									"if (pm.iterationData.has(\"infoTest\"))\r",
-									"{\r",
-									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
-									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
-									"    pm.iterationData.unset(\"infoTest\");\r",
-									"    v_data = pm.iterationData.toObject();\r",
-									"\r",
-									"    if(v_data.id === undefined)\r",
-									"        v_data.id = pm.environment.get(\"taxo1\")._id;\r",
-									"}\r",
-									"else{\r",
-									"    v_data.id = \"bidon\"\r",
-									"}\r",
-									"\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const schema = {\r",
-									"    \"type\": \"object\",\r",
-									"    \"properties\": {\r",
-									"        \"error\": { \"type\": \"boolean\" },\r",
-									"        \"code\": { \"type\": \"number\" },\r",
-									"        \"message\": { \"type\": \"string\" },\r",
-									"        \"errors\": { \"type\": \"array\" },\r",
-									"        \"data\": {\r",
-									"            \"type\": \"object\",\r",
-									"            \"properties\": {\r",
-									"                        \"_id\": { \"type\": \"string\" },\r",
-									"                        \"category\": { \"type\": \"string\" },\r",
-									"                        \"name\": { \"type\": \"string\" },\r",
-									"                        \"slug\": { \"type\": \"string\" },\r",
-									"                        \"description\": { \"type\": \"string\" },\r",
-									"                        \"createdAt\": { \"type\": \"string\" },\r",
-									"                        \"updatedAt\": { \"type\": \"string\" }\r",
-									"            },\r",
-									"        }\r",
-									"    },\r",
-									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
-									"};\r",
-									"\r",
-									"const infoTest = pm.environment.get(\"infoTest\");\r",
-									"pm.iterationData.unset(\"infoTest\");\r",
-									"const jsonResponse = pm.response.json();\r",
-									"const jsonData = jsonResponse.data;\r",
-									"\r",
-									"pm.test('Status/code check', function(){\r",
-									"    pm.response.to.have.status(infoTest.status);\r",
-									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
-									"});\r",
-									"\r",
-									"pm.test('Error check', function(){\r",
-									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
-									"});\r",
-									"\r",
-									"pm.test('Schema is valid', function() {\r",
-									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
-									"});\r",
-									"\r",
-									"pm.test('DataResponse is valid', function() {\r",
-									"    pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\": {{v_data}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{taxoPATH}}/update",
-							"host": [
-								"{{baseURL}}{{taxoPATH}}"
-							],
-							"path": [
-								"update"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Temp Test search",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{\r\n        \"id\":\"62d58ed0a353741b1093efa7\"\r\n    }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{taxoPATH}}/search",
-							"host": [
-								"{{baseURL}}{{taxoPATH}}"
-							],
-							"path": [
-								"search"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Temp Test list",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{\r\n        \"name\":\"ani\"\r\n    }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{taxoPATH}}/occupations/",
-							"host": [
-								"{{baseURL}}{{taxoPATH}}"
-							],
-							"path": [
-								"occupations",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "5-Delete-all-taxo",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let v_data = {};\r",
-									"let toDel;\r",
-									"let vars;\r",
-									"let varsKeys;\r",
-									"while(pm.environment.toObject())\r",
-									"{\r",
-									"    vars = pm.environment.toObject();\r",
-									"    varsKeys = Object.keys(vars);\r",
-									"\r",
-									"    toDel = varsKeys.pop();\r",
-									"    if(toDel === undefined)\r",
-									"    break;\r",
-									"\r",
-									"    if (toDel.includes(\"taxo\")){\r",
-									"        break;\r",
-									"    }\r",
-									"    pm.environment.unset(toDel);\r",
-									"\r",
-									"}\r",
-									"if(toDel !== undefined)\r",
-									"{\r",
-									"    v_data.id = vars[toDel]._id\r",
-									"    pm.environment.unset(toDel);\r",
-									"}\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const jsonResponse = pm.response.json();\r",
-									"const jsonData = jsonResponse.data;\r",
-									"\r",
-									"if(Object.keys(pm.environment.toObject()) != 0)\r",
-									"{\r",
-									"    pm.test('Status OK', function(){\r",
-									"        pm.response.to.have.status(200);\r",
-									"    });\r",
-									"\r",
-									"    pm.test('Delete successful', function(){\r",
-									"        pm.expect(jsonResponse.error).to.be.false;\r",
-									"        pm.expect(jsonResponse.errors).to.be.empty;\r",
-									"    });\r",
-									"\r",
-									"    postman.setNextRequest(\"5-Delete-all-taxo\");\r",
-									"}\r",
-									"else\r",
-									"{\r",
-									"    pm.environment.clear();\r",
-									"    postman.setNextRequest(null);\r",
-									"}"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "TempTest",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{\r\n        \r\n    }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{taxoPATH}}/create",
-							"host": [
-								"{{baseURL}}{{taxoPATH}}"
-							],
-							"path": [
-								"create"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CreateEnvVariable-taxo",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"const create_schema = {\r",
-									"    \"type\": \"object\",\r",
-									"    \"properties\": {\r",
-									"        \"error\": { \"type\": \"boolean\" },\r",
-									"        \"code\": { \"type\": \"number\" },\r",
-									"        \"message\": { \"type\": \"string\" },\r",
-									"        \"errors\": { \"type\": \"object\" },\r",
-									"        \"data\": {\r",
-									"            \"type\": \"object\",\r",
-									"            \"properties\": {\r",
-									"                        \"_id\": { \"type\": \"string\" },\r",
-									"                        \"category\": { \"type\": \"string\" },\r",
-									"                        \"name\": { \"type\": \"string\" },\r",
-									"                        \"slug\": { \"type\": \"string\" },\r",
-									"                        \"description\": { \"type\": \"string\" },\r",
-									"                        \"source\": { \"type\": \"string\" },\r",
-									"                        \"status\": { \"type\": \"string\" },\r",
-									"                        \"addReason\": { \"type\": \"string\" },\r",
-									"                        \"createdAt\": { \"type\": \"string\" },\r",
-									"                        \"updatedAt\": { \"type\": \"string\" }\r",
-									"            },\r",
-									"        }\r",
-									"    },\r",
-									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
-									"};\r",
-									"\r",
-									"const update_schema = {\r",
-									"    \"type\": \"object\",\r",
-									"    \"properties\": {\r",
-									"        \"error\": { \"type\": \"boolean\" },\r",
-									"        \"code\": { \"type\": \"number\" },\r",
-									"        \"message\": { \"type\": \"string\" },\r",
-									"        \"errors\": { \"type\": \"object\" },\r",
-									"        \"data\": {\r",
-									"            \"type\": \"object\",\r",
-									"            \"properties\": {\r",
-									"                        \"_id\": { \"type\": \"string\" },\r",
-									"                        \"category\": { \"type\": \"string\" },\r",
-									"                        \"name\": { \"type\": \"string\" },\r",
-									"                        \"slug\": { \"type\": \"string\" },\r",
-									"                        \"description\": { \"type\": \"string\" },\r",
-									"                        \"source\": { \"type\": \"string\" },\r",
-									"                        \"status\": { \"type\": \"string\" },\r",
-									"                        \"addReason\": { \"type\": \"string\" },\r",
-									"                        \"createdAt\": { \"type\": \"string\" },\r",
-									"                        \"updatedAt\": { \"type\": \"string\" }\r",
-									"            },\r",
-									"        }\r",
-									"    },\r",
-									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
-									"};\r",
-									"\r",
-									"const entity_path = \"/taxonomies\";\r",
-									"\r",
-									"const e_data = {\r",
-									"    \"category\" : \"occupations\",\r",
-									"    \"name\" : \"Circassien\",\r",
-									"    \"description\" : \"Le circassien pratique l'action de faire du cirque.\",\r",
-									"    \"source\" : \"\",\r",
-									"    \"status\": \"Pending\",\r",
-									"    \"addReason\":\"Je pense que le cirque fait partie intégrante de la culture et j'aimerais qu'il soit ajouté pour pouvoir me l'attribuer.\"\r",
-									"};\r",
-									"pm.environment.clear();\r",
-									"pm.environment.set(\"create_schema\", create_schema);\r",
-									"pm.environment.set(\"update_schema\", update_schema);\r",
-									"pm.environment.set(\"entityPATH\", entity_path);\r",
-									"pm.environment.set(\"e_data\", e_data);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}/ping",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"ping"
 							]
 						}
 					},
@@ -3036,337 +1357,6 @@
 							"response": []
 						}
 					]
-				}
-			]
-		},
-		{
-			"name": "Entity",
-			"item": [
-				{
-					"name": "Create-Entity",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let v_data;\r",
-									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
-									"console.log(pm.iterationData.toObject());\r",
-									"\r",
-									"if (pm.iterationData.has(\"infoTest\"))\r",
-									"{\r",
-									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
-									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
-									"    pm.iterationData.unset(\"infoTest\");\r",
-									"    v_data = pm.iterationData.toObject();\r",
-									"}\r",
-									"else{\r",
-									"    v_data = pm.environment.get(e_data);\r",
-									"}\r",
-									"\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const schema = pm.environment.get(\"create_schema\");\r",
-									"const errorSchema = pm.globals.get(\"error_schema\");\r",
-									"\r",
-									"const infoTest = pm.environment.get(\"infoTest\");\r",
-									"pm.iterationData.unset(\"infoTest\");\r",
-									"const jsonResponse = pm.response.json();\r",
-									"const jsonData = jsonResponse.data;\r",
-									"\r",
-									"\r",
-									"pm.test('Status/code check', function(){\r",
-									"    pm.response.to.have.status(infoTest.status);\r",
-									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
-									"});\r",
-									"\r",
-									"pm.test('Error check', function(){\r",
-									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
-									"});\r",
-									"\r",
-									"pm.test('Schema is valid', function() {\r",
-									"    if(infoTest.error == false)\r",
-									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
-									"    else\r",
-									"    pm.expect(jsonResponse).to.have.jsonSchema(errorSchema);\r",
-									"});\r",
-									"\r",
-									"pm.test('Data check', function() {\r",
-									"    if (jsonResponse.error == false) {\r",
-									"        pm.environment.set(\"createdEntity\"+Number(pm.info.iteration+1), jsonData);\r",
-									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
-									"    }\r",
-									"})"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{entityPATH}}{{createROUTE}}",
-							"host": [
-								"{{baseURL}}{{entityPATH}}{{createROUTE}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update-Entity",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let v_data;\r",
-									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
-									"console.log(pm.iterationData.toObject());\r",
-									"\r",
-									"if (pm.iterationData.has(\"infoTest\"))\r",
-									"{\r",
-									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
-									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
-									"    pm.iterationData.unset(\"infoTest\");\r",
-									"    v_data = pm.iterationData.toObject();\r",
-									"    if(v_data.id === undefined)\r",
-									"        v_data.id = pm.environment.get(\"createdEntity1\")._id;\r",
-									"}\r",
-									"else{\r",
-									"    v_data = pm.environment.get(e_data);\r",
-									"}\r",
-									"\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const schema = pm.environment.get(\"update_schema\");\r",
-									"const errorSchema = pm.globals.get(\"error_schema\");\r",
-									"const infoTest = pm.environment.get(\"infoTest\");\r",
-									"pm.iterationData.unset(\"infoTest\");\r",
-									"const jsonResponse = pm.response.json();\r",
-									"const jsonData = jsonResponse.data;\r",
-									"\r",
-									"pm.test('Status/code check', function(){\r",
-									"    pm.response.to.have.status(infoTest.status);\r",
-									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
-									"});\r",
-									"\r",
-									"pm.test('Error check', function(){\r",
-									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
-									"});\r",
-									"\r",
-									"pm.test('Schema is valid', function() {\r",
-									"    if (infoTest.error == false)\r",
-									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
-									"    else\r",
-									"    pm.expect(jsonResponse).to.have.jsonSchema(errorSchema)\r",
-									"});\r",
-									"\r",
-									"pm.test('DataResponse is valid', function() {\r",
-									"    if(jsonResponse.error == false){\r",
-									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
-									"    }\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{entityPATH}}{{updateROUTE}}",
-							"host": [
-								"{{baseURL}}{{entityPATH}}{{updateROUTE}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete-Entity",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let v_data = {};\r",
-									"let toDel;\r",
-									"let vars = pm.environment.toObject();\r",
-									"let varsKeys = Object.keys(vars);\r",
-									"let env = Object.keys(pm.environment.toObject())\r",
-									"\r",
-									"while(varsKeys.length != 0){\r",
-									"    toDel = varsKeys.pop();\r",
-									"\r",
-									"    if (toDel.includes(\"createdEntity\") || toDel.includes(\"infoTest\")){\r",
-									"        break;\r",
-									"    }\r",
-									"}\r",
-									"\r",
-									"v_data.id = vars[toDel]._id\r",
-									"pm.environment.unset(toDel);\r",
-									"\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const jsonResponse = pm.response.json();\r",
-									"const jsonData = jsonResponse.data;\r",
-									"\r",
-									"\r",
-									"pm.test('Status OK', function(){\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test('Delete successful', function(){\r",
-									"    pm.expect(jsonResponse.error).to.be.false;\r",
-									"    pm.expect(jsonResponse.errors).to.be.empty;\r",
-									"});\r",
-									"\r",
-									"let vars = pm.environment.toObject();\r",
-									"let varsKeys = Object.keys(vars);\r",
-									"let toDel;\r",
-									"while(varsKeys.length != 0){\r",
-									"    toDel = varsKeys.pop();\r",
-									"\r",
-									"    if (toDel.includes(\"createdEntity\") || toDel.includes(\"infoTest\")){\r",
-									"        break;\r",
-									"    }\r",
-									"}\r",
-									"if (varsKeys.length != 0)\r",
-									"    postman.setNextRequest(\"Delete-Entity\");\r",
-									"else\r",
-									"    postman.setNextRequest(null);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}{{entityPATH}}/delete",
-							"host": [
-								"{{baseURL}}{{entityPATH}}"
-							],
-							"path": [
-								"delete"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CreateEnvVariable",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"const create_schema = {};\r",
-									"const update_schema = {};\r",
-									"const error_schema = {\r",
-									"    \"type\": \"object\",\r",
-									"    \"properties\": {\r",
-									"        \"error\": { \"type\": \"boolean\" },\r",
-									"        \"code\": { \"type\": \"number\" },\r",
-									"        \"message\": { \"type\": \"string\" },\r",
-									"        \"errors\": { \"type\": \"object\" },\r",
-									"        \"data\": { \"type\": \"object\" }\r",
-									"    },\r",
-									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
-									"};\r",
-									"\r",
-									"const entity_path = \"\";\r",
-									"const e_data = {};\r",
-									"\r",
-									"\r",
-									"\r",
-									"\r",
-									"//pm.environment.set(\"create_schema\", create_schema);\r",
-									"//pm.environment.set(\"update_schema-schema\", update_schema);\r",
-									"pm.globals.set(\"error_schema\", error_schema);\r",
-									"//pm.environment.set(\"entityPATH\", entity_path);\r",
-									"//pm.environment.set(\"e_data\", e_data);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"data\":{}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}/ping",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"ping"
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		}
