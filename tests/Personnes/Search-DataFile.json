@@ -2,20 +2,8 @@
     {
         "infoTest":
         {
-            "name":"Search all empty",
-            "error":true,
-            "status":400
-        },
-        "id":"",
-        "lastName": "",
-        "firstName": "",
-        "nickname": "",
-        "description": ""
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search empty data",
+            "name":"Search empty data give error",
+            "count":0,
             "error":true,
             "status":400
         }
@@ -23,104 +11,77 @@
     {
         "infoTest":
         {
-            "name":"Search empty id",
+            "name":"Search no result no error",
+            "count":0,
+            "error":false,
+            "status":200
+        },
+        "lastName" : "Éclair"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Search one result no error",
+            "count":1,
+            "error":false,
+            "status":200
+        },
+        "lastName" : "Auclair"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Search 1 id",
+            "note": "if(id==1) id=realId",
+            "count":1,
+            "error":false,
+            "status":200
+        },
+        "id" : 1
+    },
+    {
+        "infoTest":
+        {
+            "name":"Search id and other",
+            "note": "if(id==1) id=realId",
+            "count":1,
+            "error":false,
+            "status":200
+        },
+        "id" : 1,
+        "description": "jeune homme"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Search fake id",
+            "note": "if(id==1) id=realId",
+            "count":0,
+            "error":false,
+            "status":200
+        },
+        "id" : "123456789123456789123456"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Search fake id length != 24",
+            "note": "if(id==1) id=realId",
+            "count":0,
             "error":true,
-            "status":400
+            "status":500
         },
-        "id":"",
-        "lastName":""
+        "id" : "123456789123456"
     },
     {
         "infoTest":
         {
-            "name":"Search random id",
-            "error":true,
-            "status":404
-        },
-        "id":"123456789123456789123456"
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search id length != 24",
-            "error":true,
-            "status":400
-        },
-        "id":"12345"
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search only lastName",
+            "name":"Search 2 fields",
+            "count":1,
             "error":false,
             "status":200
         },
-        "lastName": "trem"
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search only firstName",
-            "error":false,
-            "status":200
-        },
-        "firstName": "Sarah"
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search lastName&firstName",
-            "error":false,
-            "status":200
-        },
-        "lastName": "Neut",
-        "firstName": "jimm"
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search only nickname",
-            "error":false,
-            "status":200
-        },
-        "nickname": "dj"
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search only description",
-            "error":false,
-            "status":200
-        },
-        "description": "la"
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search id",
-            "error":false,
-            "status":200,
-            "setId":true
-        }
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search id+lastName = 0",
-            "error":false,
-            "status":404,
-            "setId":true
-        },
-        "lastName":"fasdgb"
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search id+lastName = 1",
-            "error":false,
-            "status":200,
-            "setId":true
-        },
-        "lastName":"Laval"
+        "lastName" : "Aucla",
+        "firstName" : "Pier"
     }
 ]

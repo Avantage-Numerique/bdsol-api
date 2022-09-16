@@ -66,7 +66,7 @@ export abstract class Service
                 return SuccessResponse.create(item, StatusCodes.OK, ReasonPhrases.OK);
             }
 
-            return ErrorResponse.create(new Error(ReasonPhrases.NOT_FOUND), StatusCodes.NOT_FOUND);
+            return SuccessResponse.create({}, StatusCodes.OK, ReasonPhrases.OK);
 
         } catch (getAllErrors: any) {
             return ErrorResponse.create(getAllErrors, StatusCodes.INTERNAL_SERVER_ERROR);

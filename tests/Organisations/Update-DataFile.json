@@ -77,13 +77,14 @@
     {
         "infoTest":
         {
-            "name":"Update full 2",
+            "name":"Update prepare for search/list",
             "error":false,
             "status":200
         },
         "name":"Petit théâtre du vieux Noranda",
         "description": "Théâtre et magie",
         "url":"https://petittheatre.org/",
-        "contactPoint":"info@petittheatre.org"
+        "contactPoint":"info@petittheatre.org",
+        "fondationDate":"1999-09-10T00:00:00.000Z"
     }
 ]

@@ -426,7 +426,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"let v_data;\r",
+									"let v_data = {};\r",
 									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
 									"console.log(pm.iterationData.toObject());\r",
 									"\r",
@@ -514,7 +514,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"let v_data;\r",
+									"let v_data = {};\r",
 									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
 									"console.log(pm.iterationData.toObject());\r",
 									"\r",
@@ -590,6 +590,169 @@
 							"raw": "{{baseURL}}{{entityPATH}}{{updateROUTE}}",
 							"host": [
 								"{{baseURL}}{{entityPATH}}{{updateROUTE}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search-Entity",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data = {};\r",
+									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+									"console.log(pm.iterationData.toObject());\r",
+									"\r",
+									"if (pm.iterationData.has(\"infoTest\"))\r",
+									"{\r",
+									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+									"    pm.iterationData.unset(\"infoTest\");\r",
+									"    v_data = pm.iterationData.toObject();\r",
+									"    \r",
+									"    //If iterationData.id = 1 then replace it with a id created previously\r",
+									"    if (v_data.id != undefined && v_data.id == 1)\r",
+									"        v_data.id = pm.environment.get(\"createdEntity1\")._id;\r",
+									"}\r",
+									"else{\r",
+									"    v_data = {};\r",
+									"}\r",
+									"\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const infoTest = pm.environment.get(\"infoTest\");\r",
+									"pm.iterationData.unset(\"infoTest\");\r",
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"pm.test('Status/code check', function(){\r",
+									"    pm.response.to.have.status(infoTest.status);\r",
+									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+									"});\r",
+									"\r",
+									"pm.test('Error check', function(){\r",
+									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+									"});\r",
+									"\r",
+									"pm.test('Count is valid', function() {\r",
+									"    if(jsonResponse.error == false){\r",
+									"        if(infoTest.count == 0)\r",
+									"            pm.expect(Object.keys(jsonData).length).to.be.equal(0);\r",
+									"        else\r",
+									"            pm.expect(Object.keys(jsonData).length).to.above(0);\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{entityPATH}}{{searchROUTE}}",
+							"host": [
+								"{{baseURL}}{{entityPATH}}{{searchROUTE}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List-Entity",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data = {};\r",
+									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+									"console.log(pm.iterationData.toObject());\r",
+									"\r",
+									"if (pm.iterationData.has(\"infoTest\"))\r",
+									"{\r",
+									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+									"    pm.iterationData.unset(\"infoTest\");\r",
+									"    v_data = pm.iterationData.toObject();\r",
+									"    \r",
+									"    //If iterationData.id = 1 then replace it with a id created previously\r",
+									"    if (v_data.id != undefined && v_data.id == 1)\r",
+									"        v_data.id = pm.environment.get(\"createdEntity1\")._id;\r",
+									"}\r",
+									"else{\r",
+									"    v_data = {};\r",
+									"}\r",
+									"\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const infoTest = pm.environment.get(\"infoTest\");\r",
+									"pm.iterationData.unset(\"infoTest\");\r",
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"pm.test('Status/code check', function(){\r",
+									"    pm.response.to.have.status(infoTest.status);\r",
+									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+									"});\r",
+									"\r",
+									"pm.test('Error check', function(){\r",
+									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+									"});\r",
+									"\r",
+									"pm.test('Count is valid', function() {\r",
+									"    if(jsonResponse.error == false){\r",
+									"            pm.expect(jsonData.length).to.be.equal(infoTest.count);\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{entityPATH}}{{listROUTE}}",
+							"host": [
+								"{{baseURL}}{{entityPATH}}{{listROUTE}}"
 							]
 						}
 					},

@@ -2,20 +2,8 @@
     {
         "infoTest":
         {
-            "name":"List all empty",
-            "error":true,
-            "status":400
-        },
-        "id":"",
-        "lastName": "",
-        "firstName": "",
-        "nickname": "",
-        "description": ""
-    },
-    {
-        "infoTest":
-        {
-            "name":"List empty data",
+            "name":"List empty data give no error",
+            "count":4,
             "error":false,
             "status":200
         }
@@ -23,69 +11,77 @@
     {
         "infoTest":
         {
-            "name":"List empty id",
+            "name":"List no result no error",
+            "count":0,
+            "error":false,
+            "status":200
+        },
+        "lastName" : "raasdfdbtfadsf"
+    },
+    {
+        "infoTest":
+        {
+            "name":"List 2 result no error",
+            "count":2,
+            "error":false,
+            "status":200
+        },
+        "lastName" : "la"
+    },
+    {
+        "infoTest":
+        {
+            "name":"List 1 id",
+            "note": "if(id==1) id=realId",
+            "count":1,
+            "error":false,
+            "status":200
+        },
+        "id" : 1
+    },
+    {
+        "infoTest":
+        {
+            "name":"List id and other",
+            "note": "if(id==1) id=realId",
+            "count":1,
+            "error":false,
+            "status":200
+        },
+        "id" : 1,
+        "lastName": "Auclai"
+    },
+    {
+        "infoTest":
+        {
+            "name":"List fake id",
+            "note": "if(id==1) id=realId",
+            "count":0,
+            "error":false,
+            "status":200
+        },
+        "id" : "123456789123456789123456"
+    },
+    {
+        "infoTest":
+        {
+            "name":"List fake id length != 24",
+            "note": "if(id==1) id=realId",
+            "count":0,
             "error":true,
-            "status":400
+            "status":500
         },
-        "id":"",
-        "lastName":""
+        "id" : "123456789123456"
     },
     {
         "infoTest":
         {
-            "name":"List only lastName",
+            "name":"List 2 fields",
+            "count":2,
             "error":false,
             "status":200
         },
-        "lastName": "a"
-    },
-    {
-        "infoTest":
-        {
-            "name":"List only firstName",
-            "error":false,
-            "status":200
-        },
-        "firstName": "i"
-    },
-    {
-        "infoTest":
-        {
-            "name":"List lastName&firstName",
-            "error":false,
-            "status":200
-        },
-        "lastName": "Croche",
-        "firstName": "Sar"
-    },
-    {
-        "infoTest":
-        {
-            "name":"List id",
-            "error":false,
-            "status":200,
-            "setId":true
-        }
-    },
-    {
-        "infoTest":
-        {
-            "name":"List id+lastName = 0",
-            "error":false,
-            "status":404,
-            "setId":true
-        },
-        "lastName": "fsdga"
-    },
-    {
-        "infoTest":
-        {
-            "name":"List id+lastName = 1",
-            "error":false,
-            "status":200,
-            "setId":true
-        },
-        "lastName": "Laval"
+        "lastName" : "la",
+        "firstName" : "e"
     }
-
 ]
