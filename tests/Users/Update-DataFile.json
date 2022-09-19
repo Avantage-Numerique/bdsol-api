@@ -104,5 +104,19 @@
             "status":409
         },
         "email": "petitefleure95@jardin.petal"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update prepare for search/list",
+            "error":false,
+            "status":200
+        },
+        "username": "Limonette52",
+        "email": "limono.soleil@terre.universesses",
+        "password": "not1234",
+        "avatar": "Krik",
+        "name": "Simonette Lymerman",
+        "role": "Persil"
     }
 ]

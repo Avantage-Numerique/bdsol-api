@@ -2,36 +2,36 @@
     {
         "infoTest":
         {
-            "name":"List empty data give no error",
-            "count":5,
-            "error":false,
-            "status":200
+            "name":"Search empty data give error",
+            "count":0,
+            "error":true,
+            "status":400
         }
     },
     {
         "infoTest":
         {
-            "name":"List no result no error",
+            "name":"Search no result no error",
             "count":0,
             "error":false,
             "status":200
         },
-        "name" : "raasdfdbtfadsf"
+        "username" : "Limonetes42"
     },
     {
         "infoTest":
         {
-            "name":"List 2 result no error",
-            "count":2,
+            "name":"Search one result no error",
+            "count":1,
             "error":false,
             "status":200
         },
-        "name" : "ra"
+        "username" : "Limonette52"
     },
     {
         "infoTest":
         {
-            "name":"List 1 id",
+            "name":"Search 1 id",
             "note": "if(id==1) id=realId",
             "count":1,
             "error":false,
@@ -42,19 +42,19 @@
     {
         "infoTest":
         {
-            "name":"List id and other",
+            "name":"Search id and other",
             "note": "if(id==1) id=realId",
             "count":1,
             "error":false,
             "status":200
         },
         "id" : 1,
-        "name": "Petit t"
+        "name": "Simonette Lym"
     },
     {
         "infoTest":
         {
-            "name":"List fake id",
+            "name":"Search fake id",
             "note": "if(id==1) id=realId",
             "count":0,
             "error":false,
@@ -65,7 +65,7 @@
     {
         "infoTest":
         {
-            "name":"List fake id length != 24",
+            "name":"Search fake id length != 24",
             "note": "if(id==1) id=realId",
             "count":0,
             "error":true,
@@ -76,12 +76,12 @@
     {
         "infoTest":
         {
-            "name":"List 2 fields",
-            "count":2,
+            "name":"Search 2 fields",
+            "count":1,
             "error":false,
             "status":200
         },
-        "name" : "ra",
-        "description" : "é"
+        "username" : "Limon",
+        "avatar" : "Kri"
     }
 ]

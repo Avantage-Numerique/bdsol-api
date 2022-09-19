@@ -2,20 +2,8 @@
     {
         "infoTest":
         {
-            "name":"Search all empty",
-            "error":true,
-            "status":400
-        },
-        "id":"",
-        "name": "",
-        "prenom": "",
-        "surnom": "",
-        "description": ""
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search empty data",
+            "name":"Search empty data give error",
+            "count":0,
             "error":true,
             "status":400
         }
@@ -23,104 +11,77 @@
     {
         "infoTest":
         {
-            "name":"Search empty id",
+            "name":"Search no result no error",
+            "count":0,
+            "error":false,
+            "status":200
+        },
+        "name" : "Petit Théâtre du vieux Norandoo"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Search one result no error",
+            "count":1,
+            "error":false,
+            "status":200
+        },
+        "name" : "Petit Théâtre du vieux Noranda"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Search 1 id",
+            "note": "if(id==1) id=realId",
+            "count":1,
+            "error":false,
+            "status":200
+        },
+        "id" : 1
+    },
+    {
+        "infoTest":
+        {
+            "name":"Search id and other",
+            "note": "if(id==1) id=realId",
+            "count":1,
+            "error":false,
+            "status":200
+        },
+        "id" : 1,
+        "description": "Théâtre"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Search fake id",
+            "note": "if(id==1) id=realId",
+            "count":0,
+            "error":false,
+            "status":200
+        },
+        "id" : "123456789123456789123456"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Search fake id length != 24",
+            "note": "if(id==1) id=realId",
+            "count":0,
             "error":true,
-            "status":400
+            "status":500
         },
-        "id":"",
-        "name":""
+        "id" : "123456789123456"
     },
     {
         "infoTest":
         {
-            "name":"Search random id",
-            "error":false,
-            "status":404
-        },
-        "id":"123456789123456789123456"
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search id length != 24",
-            "error":true,
-            "status":400
-        },
-        "id":"12345"
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search only name",
+            "name":"Search 2 fields",
+            "count":1,
             "error":false,
             "status":200
         },
-        "name": "arts"
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search only description",
-            "error":false,
-            "status":200
-        },
-        "description": "réno"
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search name&prenom",
-            "error":false,
-            "status":200
-        },
-        "name": "alph",
-        "description": "gard"
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search only url",
-            "error":false,
-            "status":200
-        },
-        "url": "htt"
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search only contactPoint",
-            "error":false,
-            "status":200
-        },
-        "contactPoint": "info"
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search id",
-            "error":false,
-            "status":200,
-            "setId":true
-        }
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search id+name = 0",
-            "error":false,
-            "status":404,
-            "setId":true
-        },
-        "name":"fasdgb"
-    },
-    {
-        "infoTest":
-        {
-            "name":"Search id+name = 1",
-            "error":false,
-            "status":200,
-            "setId":true
-        },
-        "name":"Noranda"
+        "name" : "vieux no",
+        "description" : "th"
     }
 ]

@@ -1,7 +1,7 @@
 {
   "_": {
     "postman_variable_scope": "globals",
-    "postman_exported_at": "2022-09-14T19:38:41.096Z",
+    "postman_exported_at": "2022-09-15T16:30:26.360Z",
     "postman_exported_using": "Newman/5.3.2"
   },
   "id": "005c6ac7-ec14-4597-8afa-52bfea11711f",
@@ -34,7 +34,7 @@
     },
     {
       "type": "any",
-      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjIwNmNhZjk1MjgxNjI5ZjcyMTA0OSIsInVzZXJuYW1lIjoiZGF0YWdlZWsiLCJhdmF0YXIiOiJUaS1yZWNrcyIsIm5hbWUiOiJTdGV2ZSBBdXN0aW4iLCJlbWFpbCI6InZpbGFpbkB3d2UuY29tIiwicm9sZSI6ImFkbWluIiwiY3JlYXRlZEF0IjoiMjAyMi0wOS0xNFQxNjo1MjoyNi41NDBaIiwiaWF0IjoxNjYzMTgzOTQ5LCJleHAiOjE2NjMyNzAzNDl9.MQyS6o67sxr-L3-NKs0tNQiHI9IexUGrBuqsL8cB5g4",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjM1MjQ2NzM4NzRjZGU1YWRiMDhmOCIsInVzZXJuYW1lIjoiZGF0YWdlZWsiLCJhdmF0YXIiOiJodHRwczovL3d3dy5wbmdhcmVhLmNvbS9wbmdtLzIvNDk4NzIzMF9wZXBlLXBuZy1lei10d2l0Y2gtZW1vdGUtcG5nLXBuZy1kb3dubG9hZC5wbmciLCJuYW1lIjoiSHlkaWxlIER1cm9jaGVyIiwiZW1haWwiOiJkYXRhZ2Vla0B0ZXN0LmNvbSIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjItMDktMTVUMTY6MjY6NDYuMjg2WiIsImlhdCI6MTY2MzI1OTMwOSwiZXhwIjoxNjYzMzQ1NzA5fQ.k7raLqpCLCVAUmRbEPv7FnZdg3HlAuVPStjvGKs2nGg",
       "key": "DevToken"
     },
     {
@@ -105,6 +105,6 @@
     }
   ],
   "_postman_variable_scope": "globals",
-  "_postman_exported_at": "2022-09-14T19:39:34.775Z",
+  "_postman_exported_at": "2022-09-15T16:30:33.207Z",
   "_postman_exported_using": "Newman/5.3.2"
 }

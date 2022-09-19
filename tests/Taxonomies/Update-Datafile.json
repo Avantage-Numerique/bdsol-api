@@ -90,5 +90,19 @@
         "source" : "asdfff",
         "status" : "Pending",
         "addReason" : "asdffff"
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update prepare for search and list",
+            "error":false,
+            "status":200
+        },
+        "category" : "occupations",
+        "name" : "Circassien(ne)",
+        "description" : "Les gens qui font du cirque",
+        "source" : "Fred",
+        "status" : "Pending",
+        "addReason" : "Parce que c'est cool le cirque"
     }
 ]

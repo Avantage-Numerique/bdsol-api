@@ -102,5 +102,17 @@
             "error":true,
             "status":400
         }
+    },
+    {
+        "infoTest":
+        {
+            "name":"Update prepare for search/list",
+            "error":false,
+            "status":200
+        },
+        "lastName" : "Auclair",
+        "firstName" : "Pierre",
+        "nickname" : "Namasspamousse",
+        "description" : "Un jeune homme charmant et attentionné"
     }
 ]
