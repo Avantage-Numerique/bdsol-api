@@ -1,12 +1,14 @@
-import express from "express";
+import express, {NextFunction, Request, Response} from "express";
 import {PersonnesController} from "../Controllers/PersonnesController";
 import AbstractController from "../../Abstract/Controller";
 import {body} from "express-validator";
 import {HtmlSanitizer} from "../../Security/Sanitizers/HtmlSanitizer";
 import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
 import CrudRoute from "../../Abstract/CrudRoute";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 class PersonnesRoutes extends CrudRoute {
+
     controllerInstance: AbstractController = PersonnesController.getInstance();
     routerInstance: express.Router = express.Router();
     routerInstanceAuthentification: express.Router = express.Router();
@@ -15,14 +17,14 @@ class PersonnesRoutes extends CrudRoute {
         all: [],
         createUpdate: [],
         create: [
-            body('data.lastName')
+            /*body('data.lastName')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .trim(),
             body('data.firstName')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
-                .trim(),
+                .trim(),*/
             body('data.nickname').optional()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
