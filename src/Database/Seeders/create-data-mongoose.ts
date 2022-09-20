@@ -32,10 +32,20 @@ export default class CreateDataMongoose implements SeederContract {
     }
 
     public async up() {
-        if (await this.conditions()) {
-            LogHelper.info(`[DB][SEEDERS] Appel de la migration ${CreateDataMongoose.name}`);
-            await this.fake();
+        if (config.isDevelopment){
+                if (await this.conditions()) {
+                LogHelper.info(`[DB][SEEDERS] Appel de la migration ${CreateDataMongoose.name}`);
+                await this.fake();
+            }
         }
+        
+        //Insert permanent taxonomies
+        if (this.service.appModel.collectionName == "taxonomies") {
+            TaxonomiesPersistantData.forEach( (taxonomy) => {
+                this.service.persistantData( taxonomy );
+            });
+        }
+
     }
 
     public async down() {
@@ -56,8 +66,8 @@ export default class CreateDataMongoose implements SeederContract {
             case 'organisations':
                 return await this.service.insert(fakeOrganisations);
 
-            case 'taxonomies':
-                return await this.service.insert(TaxonomiesPersistantData);
+            //case 'taxonomies':
+                //return await this.service.insert(TaxonomiesPersistantData);
 
             case 'userhistories':
                 return await this.service.insert(fakeUserHistories);
