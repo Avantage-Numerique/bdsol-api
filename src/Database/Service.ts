@@ -146,11 +146,30 @@ export abstract class Service
     }
 
     /**
+     * Insert the persistant data
+     * @param filter Try to find item, if item != exist, then create it.
+     */
+    async persistantData(filter:any): Promise<ApiResponseContract>{
+        try {
+            const meta = this.model.findOneAndUpdate(filter, filter, { runValidators:true, upsert:true })
+            .catch((e:any) => { return e });
+            return this.parseResult(meta, Service.UPDATE_STATE)
+        }
+        catch(e:any){
+            return ErrorResponse.create( e, StatusCodes.INTERNAL_SERVER_ERROR, "Insertion of persistant data failed.")
+        }
+    }
+
+    /**
      * With modify the target document.
      * @param data any document data containing id
      * @note error 11000 //error = not unique {"index":0,"code":11000,"keyPattern":{"username":1},"keyValue":{"username":"mamilidasdasdasd"}}
      */
-    async update(data: any): Promise<ApiResponseContract> {
+    async update(data: any, options?:any): Promise<ApiResponseContract> {
+
+        const updateOptions = { new: true,
+                                runValidators: true,
+                                ...options}
 
         try {
             const id = data.id;
@@ -161,7 +180,7 @@ export abstract class Service
             
 
             // UpdateOne
-            const meta = await this.model.findOneAndUpdate({_id: id}, data, {new: true, runValidators: true})
+            const meta = await this.model.findOneAndUpdate({_id: id}, data, updateOptions)
                 .catch((e: any) => {
                         return e;
                     }
