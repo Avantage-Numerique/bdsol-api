@@ -55,7 +55,13 @@
         {
             "name":"Update special chars",
             "error":false,
-            "status":200
+            "status":200,
+            "ignoreFields":{
+                "name":"!\"/$%?&amp;*()&lt;&gt;{}[]~éàè`{$Status}`",
+                "description":"!\"/$%?&amp;*()&lt;&gt;{}[]~éàè`{$Status}`",
+                "source":"!\"/$%?&amp;*()&lt;&gt;{}[]~éàè`{$Status}`",
+                "addReason":"!\"/$%?&amp;*()&lt;&gt;{}[]~éàè`{$Status}`"
+            }
         },
         "category" : "skills",
         "name" : "!\"/$%?&*()<>{}[]~éàè`{$Status}`",
