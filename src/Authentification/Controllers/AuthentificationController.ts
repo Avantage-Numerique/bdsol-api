@@ -69,6 +69,7 @@ class AuthentificationController
             // Generate an access token
             const data:any = this.userModel.dataTransfertObject(targetUser.data);
             data.token = TokenController.generateUserToken(this.userModel.dataTransfertObject(targetUser.data));
+            data.tokenVerified = true;
 
             return  SuccessResponse.create(
                 { user: data },
@@ -111,7 +112,7 @@ class AuthentificationController
 
                     // If we find a user, we check the password through the hashing comparaison.
                     if (decoded && !decoded.error) {
-                        return  SuccessResponse.create({}, StatusCodes.OK, ReasonPhrases.OK);
+                        return  SuccessResponse.create({tokenVerified:true}, StatusCodes.OK, ReasonPhrases.OK);
                     }
                     return ErrorResponse.create(new Error("Connection refusée"), StatusCodes.UNAUTHORIZED);
             }

@@ -69,7 +69,6 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
         this.routerInstanceAuthentification.post('/create', [
             ...this.addMiddlewares("all"),
-            //...this.addMiddlewares("createUpdate"),
             ...this.addMiddlewares("create"),
             this.createHandler.bind(this),
             this.routeSendResponse.bind(this),
@@ -77,7 +76,6 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
         this.routerInstanceAuthentification.post('/update', [
             ...this.addMiddlewares("all"),
-            //...this.addMiddlewares("createUpdate"),
             ...this.addMiddlewares("update"),
             this.updateHandler.bind(this),
             this.routeSendResponse.bind(this),
@@ -339,7 +337,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         const data = req.body.data ?? {};
 
         const query:any = {...initialQuery, ...data}
-        LogHelper.debug(initialQuery, data, query);
+
         res.serviceResponse = await this.controllerInstance.list(query);
         return next();
     }

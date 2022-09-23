@@ -41,11 +41,11 @@ export class GetRequestIp {
             ip = (req.headers["x-forwarded-for"] as string).split(',')[0];
         }
         if (req.headers["x-real-ip"]) {
-            ip = req.connection.remoteAddress;
+            ip = req.socket.remoteAddress;
         }
 
-        if (req.connection.remoteAddress) {
-            ip = req.connection.remoteAddress;
+        if (req.socket.remoteAddress) {
+            ip = req.socket.remoteAddress;
         }
 
         return ip;
