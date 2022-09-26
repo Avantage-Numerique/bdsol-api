@@ -16,7 +16,8 @@ export class PublicUserRequest {
          * @return Promise<Response<any, Record<string, any>> | undefined>
          */
         return async function (req: Request, res: Response, next: NextFunction) {
-            LogHelper.info(`Public user (${req.ip}) requested : ${req.originalUrl}`);
+            if (req.originalUrl !== '/ping')
+                LogHelper.info(`Public user (${req.ip}) requested : ${req.originalUrl}`);
             req.user = {
                 id: "",
                 username: "",

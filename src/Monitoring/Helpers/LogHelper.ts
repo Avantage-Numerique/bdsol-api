@@ -47,9 +47,9 @@ export default class LogHelper
 
     public routeVerbose:string;
 
-    constructor(res:any){
-        if (res.ip != undefined && res.url)
-            this.routeVerbose = res.ip + ' ' + res.url
+    constructor(req:any){
+        if(req.user && req.user.username && req.ip)
+            this.routeVerbose = '[' + req.user.username + '][' + req.originalUrl + ']'
     }
 
     //With instance
@@ -151,7 +151,6 @@ export default class LogHelper
 
         if (routeVerbose != undefined)
             verbose += routeVerbose;
-
 
         return verbose;
     }

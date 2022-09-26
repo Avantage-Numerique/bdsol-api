@@ -123,8 +123,8 @@ abstract class AbstractRoute implements RouteContract
      * @protected
      */
     protected async defaultReturnResponseJson(appResponse:ApiResponseContract, req: Request, res: Response): Promise<any> {
-
-        this.logRoute(appResponse.code, req);
+        const logger = new LogHelper(req);
+        logger.log(`Response status ${appResponse.code}, ${StatusCodes[appResponse.code]}`);
         return res.status(appResponse.code).send(appResponse);
     }
 
@@ -137,7 +137,8 @@ abstract class AbstractRoute implements RouteContract
      * @protected
      */
     protected async defaultReturnTemplate(appResponse:any, req: Request, res: Response): Promise<any> {
-        this.logRoute(StatusCodes.OK, req);
+        const logger = new LogHelper(req);
+        logger.log(`Response status ${StatusCodes.OK}, ${StatusCodes["OK"]}`);
         return res.status(StatusCodes.OK).send(appResponse);
     }
 

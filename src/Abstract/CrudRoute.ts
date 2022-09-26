@@ -175,7 +175,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @return {Promise<any>}
      */
     public async createHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        const logger = new LogHelper(res);
+        const logger = new LogHelper(req);
         res.serviceResponse = await this.controllerInstance.create(req.body.data);
 
         if (!res.serviceResponse.error) {
@@ -195,7 +195,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @return {Promise<any>}
      */
     public async updateHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        const logger = new LogHelper(res);
+        const logger = new LogHelper(req);
         res.serviceResponse = await this.controllerInstance.update(req.body.data);
 
         if (!res.serviceResponse.error) {
@@ -216,7 +216,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @return {Promise<any>}
      */
     public async deleteHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        const logger = new LogHelper(res);
+        const logger = new LogHelper(req);
         res.serviceResponse = await this.controllerInstance.delete(req.body.data);
 
         if (!res.serviceResponse.error) {

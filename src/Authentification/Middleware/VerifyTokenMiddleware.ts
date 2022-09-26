@@ -19,8 +19,6 @@ export class VerifyTokenMiddleware {
          */
         return async function (req: Request, res: Response, next: NextFunction)
         {
-            LogHelper.info(`Verifying the token sent for ${req.originalUrl}`);
-
             // Get token from header
             //const headers = req.headers;
             if (req.headers &&
