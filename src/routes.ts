@@ -1,4 +1,5 @@
 import express from "express";
+import { EndOfLineState } from "typescript";
 
 const ApiRouter = express.Router();
 
@@ -13,5 +14,20 @@ ApiRouter.get("/", async (req, res) => {
 ApiRouter.get("/test", async (req, res) => {
     res.send(`Testing ...`);
 });
+
+ApiRouter.get('/42',async (req, res) => {
+    res.send('<style> body {white-space : pre; background-color : #22211f; color : white}</style>'+
+    '<h1>The Answer to the Ultimate Question of Life, the Universe, and Everything.</h1>'+
+    '<pre><h1 style="font-size:66">'+
+    " ___   ___    _______  "+"<br/>"+
+    "|\\  \\ |\\  \\  /  ___  \\    "+"<br/>"+
+    "\\ \\  \\\\_\\  \\/__/|_/  /|   "+"<br/>"+
+    " \\ \\______  \\__|//  / /  "+"<br/>"+
+    "  \\|_____|\\  \\  /  /_/__  "+"<br/>"+
+    "         \\ \\__\\|\\________\\"+"<br/>"+
+    "          \\|__| \\|_______|"+"<br/>"+
+    '</h1></pre>'
+    );
+})
 
 export {ApiRouter};
