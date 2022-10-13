@@ -1,5 +1,9 @@
 import {NextFunction, Request, Response} from "express";
 
+/**
+ * Middleware that parse headers and store visitor infos in the request object as req.visitor.
+ * its structure is setup in parseHeader()
+ */
 export class GetRequestIp {
 
     /**
@@ -36,18 +40,17 @@ export class GetRequestIp {
     }
 
     private static getVisitorIp(req: Request):any {
-        let ip:any="";
+
         if (req.headers["x-forwarded-for"]) {
-            ip = (req.headers["x-forwarded-for"] as string).split(',')[0];
+            return (req.headers["x-forwarded-for"] as string).split(',')[0];
         }
+
         if (req.headers["x-real-ip"]) {
-            ip = req.socket.remoteAddress;
+            return req.socket.remoteAddress;
         }
 
         if (req.socket.remoteAddress) {
-            ip = req.socket.remoteAddress;
+            return req.socket.remoteAddress;
         }
-
-        return ip;
     }
 }

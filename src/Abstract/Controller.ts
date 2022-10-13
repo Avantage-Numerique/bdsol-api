@@ -151,7 +151,8 @@ abstract class AbstractController {
         const user: any = req.user.id;
 
         //IP Address
-        const ipAddress = req.ip;
+        const ipAddress = req.visitor.ip;
+        const fromAppIp = req.ip;
 
         //Modification date
         const modifDate = new Date();

@@ -17,7 +17,7 @@ export class PublicUserRequest {
          */
         return async function (req: Request, res: Response, next: NextFunction) {
             if (req.originalUrl !== '/ping')
-                LogHelper.info(`Public user (${req.ip}) requested : ${req.originalUrl}`);
+                LogHelper.info(`Public user (${req.visitor.ip}) requested : ${req.originalUrl} from app/server : ${req.ip}`);
             req.user = {
                 id: "",
                 username: "",
@@ -25,7 +25,7 @@ export class PublicUserRequest {
                 avatar: "",
                 name: "public",
                 role: "public",
-                ip: req.headers['x-forwarded-for'] || req.socket.remoteAddress,
+                ip: req.visitor.ip,
             };
             next();
         }
