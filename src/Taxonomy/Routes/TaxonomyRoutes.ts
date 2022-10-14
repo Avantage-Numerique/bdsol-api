@@ -21,6 +21,7 @@ class TaxonomyRoutes extends CrudRoute {
         create: [
             body('data.category')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .customSanitizer(EnumSanitizer.validatorCustomSanitizer(TaxonomiesCategories))
                 .stripLow()
                 .trim(),
             //I remove espace() sanitizer here, because I didn't find any way yet to handle the unescape method for each of those field.
@@ -28,28 +29,29 @@ class TaxonomyRoutes extends CrudRoute {
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .trim(),
-            body('data.slug').optional()
+            body('data.slug').optional().bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()//only alpha num acii beteween 32 and 13-ish
                 .trim(),//no space
-            body('data.description')
+            body('data.description').optional().bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
-            body('data.source')
+            body('data.source').optional().bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
-            body('data.addReason')
+            body('data.addReason').optional().bail()
                 .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
                 .trim()
         ],
         createUpdate: [],
         update: [
-            body('data.category').optional()
+            body('data.category').optional().bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .customSanitizer(EnumSanitizer.validatorCustomSanitizer(TaxonomiesCategories))
                 .stripLow()
                 .trim(),
             //I remove espace() sanitizer here, because I didn't find any way yet to handle the unescape method for each of those field.
-            body('data.name').optional()
+            body('data.name').optional().bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .trim(),
@@ -57,13 +59,13 @@ class TaxonomyRoutes extends CrudRoute {
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()//only alpha num acii beteween 32 and 13-ish
                 .trim(),//no space*/
-            body('data.description').optional()
+            body('data.description').optional().bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
-            body('data.source').optional()
+            body('data.source').optional().bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
-            body('data.addReason').optional()
+            body('data.addReason').optional().bail()
                 .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
                 .trim()
         ],
@@ -74,6 +76,8 @@ class TaxonomyRoutes extends CrudRoute {
         getdoc: [],
         byTaxonomy: [
             param('category')
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .customSanitizer(EnumSanitizer.validatorCustomSanitizer(TaxonomiesCategories))
                 .customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
                 .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
                 .stripLow()

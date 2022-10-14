@@ -19,14 +19,14 @@ class OrganisationsRoutes extends CrudRoute {
         all: [],
         createUpdate: [],
         create: [
-            body('data.name')
+            body('data.name').isLength({min:1}).bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
             //I remove espace() sanitizer here, because I didn't find any way yet to handle the unescape method for each of those field.
             body('data.description').optional()
                 .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
-            body('data.url').optional()
+            body('data.url').exists({checkFalsy:true}).bail()
                 .stripLow()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
@@ -34,24 +34,25 @@ class OrganisationsRoutes extends CrudRoute {
                 .customSanitizer(LatinSanitizer.validatorCustomSanitizer())
                 .trim()
                 .customSanitizer(UrlSanitizer.validatorCustomSanitizer()),
-            body('data.contactPoint').optional()
+            body('data.contactPoint').exists({checkFalsy:true}).bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
+                .normalizeEmail()
                 .trim(),
-            body('data.fondationDate').optional()
+            body('data.fondationDate').exists({checkFalsy:true}).bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim()
                 .toDate(),
         ],
         update: [
-            body('data.name').optional()
+            body('data.name').exists({checkFalsy:true}).bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
             //I remove espace() sanitizer here, because I didn't find any way yet to handle the unescape method for each of those field.
-            body('data.description').optional()
+            body('data.description').exists({checkFalsy:true}).bail()
                 .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
-            body('data.url').optional()
+            body('data.url').exists({checkFalsy:true}).bail()
                 .customSanitizer(UrlSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
@@ -59,12 +60,12 @@ class OrganisationsRoutes extends CrudRoute {
                 .customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
                 .customSanitizer(LatinSanitizer.validatorCustomSanitizer())
                 .trim(),
-            body('data.contactPoint').optional()
+            body('data.contactPoint').exists({checkFalsy:true}).bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .normalizeEmail()
                 .stripLow()
                 .trim(),
-            body('data.fondationDate').optional()
+            body('data.fondationDate').exists({checkFalsy:true}).bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim()
                 .toDate(),

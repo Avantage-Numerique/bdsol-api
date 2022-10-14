@@ -13,7 +13,7 @@ export class EnumSanitizer {
         if (Obj.enumHave(targetEnum, raw)) {
             return raw;
         }
-        throw new Error(`${raw} is not set in the API`);
+        return "";
     }
 
 

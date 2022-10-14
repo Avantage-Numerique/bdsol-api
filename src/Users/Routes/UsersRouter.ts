@@ -16,14 +16,14 @@ class UsersRoutes extends CrudRoute {
     middlewaresDistribution:any = {
         all: [],
         create: [
-            body('data.username')
+            body('data.username').exists({checkFalsy:true}).bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
                 .customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
                 .trim(),
             //ajouter lowercase
-            body('data.email')
+            body('data.email').exists({checkFalsy:true}).bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .normalizeEmail()
@@ -43,26 +43,26 @@ class UsersRoutes extends CrudRoute {
         ],
         createUpdate: [],
         update: [
-            body('data.username').optional()
+            body('data.username').exists({checkFalsy:true}).bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
                 .customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
                 .trim(),
-            body('data.email').optional()
+            body('data.email').exists({checkFalsy:true}).bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .normalizeEmail()
                 .trim(),
             //body('data.password'),
-            body('data.avatar').optional()
+            body('data.avatar').exists({checkFalsy:true}).bail()
                 .isURL()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
-            body('data.name').optional()
+            body('data.name').exists({checkFalsy:true}).bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
-            body('data.role').optional()
+            body('data.role').exists({checkFalsy:true}).bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .trim(),
