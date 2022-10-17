@@ -6,6 +6,7 @@ export interface UserHistorySchema extends Document {
     ipAddress: string;
     modifDate: Date;
     action: string;
+    entityCollection: string;
     modifiedEntity: mongoose.ObjectId;
     fields: object;
 }

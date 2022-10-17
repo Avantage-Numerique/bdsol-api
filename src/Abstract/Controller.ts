@@ -157,6 +157,9 @@ abstract class AbstractController {
         //Modification date
         const modifDate = new Date();
 
+        //Affected database
+        const entityCollection = req.originalUrl.split("/")[1]; //split every '/' --> [ "" / "organisations" / "create" ]
+
         //Modified entity id
         const modifiedEntity = response.data._id;
 
@@ -170,8 +173,9 @@ abstract class AbstractController {
             "user": user,
             "ipAddress": ipAddress,
             "modifDate": modifDate,
-            "modifiedEntity": modifiedEntity,
             "action": action,
+            "entityCollection": entityCollection,
+            "modifiedEntity": modifiedEntity,
             "fields": this.entity.dataTransfertObject(fields),
         } as UserHistorySchema;
 
