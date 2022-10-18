@@ -7,6 +7,7 @@ import * as fs from 'fs';
 import {TaxonomyController} from "../../Taxonomy/Controllers/TaxonomyController";
 import PersonnesService from "../Services/PersonnesService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
+import { Status } from "../../Abstract/Schema/StatusSchema";
 import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 
 class Personne extends AbstractModel {
@@ -67,10 +68,12 @@ class Personne extends AbstractModel {
                     alias: 'surnom'
                 },
                 description: String,
-                occupations: [{
-                    type: mongoose.Types.ObjectId,
-                    ref: 'Taxonomy'
-                }]
+                occupations: {
+                    type: [{
+                        occupationId: { type: mongoose.Types.ObjectId },
+                        status: Status.schema
+                    }]
+                }
             },
             {
                 timestamps: true
@@ -157,7 +160,7 @@ class Personne extends AbstractModel {
             firstName: document.firstName ?? '',
             nickname: document.nickname ?? '',
             description: document.description ?? '',
-            occupation: document.occupation ?? '',
+            occupations: document.occupations ?? '',
             slug: document.slug ?? ''
         }
     }

@@ -7,6 +7,8 @@ import * as fs from 'fs';
 import {TaxonomyController} from "../../Taxonomy/Controllers/TaxonomyController";
 import OrganisationsService from "../Services/OrganisationsService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
+import { Teammate } from "../../Abstract/Schema/TeammateSchema";
+import { Status } from "../../Abstract/Schema/StatusSchema";
 import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 
 
@@ -67,10 +69,15 @@ class Organisation extends AbstractModel {
                 fondationDate: {
                     type: Date,
                 },
-                offers: [{
-                    type: mongoose.Types.ObjectId,
-                    ref: 'Taxonomy'
-                }]
+                offers: {
+                    type: [{
+                        offerId: { type: mongoose.Types.ObjectId },
+                        status: Status.schema
+                    }]
+                },
+                team: {
+                    type: [Teammate.schema]
+                }
             },
             {
                 timestamps: true

@@ -1,4 +1,5 @@
 import {Document} from "mongoose"
+import { StatusSchema } from "../../Abstract/Schema/StatusSchema";
 
 export interface TaxonomySchema extends Document {
     category:string;
@@ -6,6 +7,5 @@ export interface TaxonomySchema extends Document {
     slug:string;
     description:string;
     source:string;
-    status:string;
-    addReason:string;
+    status:StatusSchema;
 }

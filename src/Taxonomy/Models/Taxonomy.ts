@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 import {Schema} from "mongoose"
 import { TaxonomySchema } from "../Schemas/TaxonomySchema";
-import {TaxonomiesCategories, TaxonomiesStatus} from "../TaxonomiesEnum";
+import { TaxonomiesCategories } from "../TaxonomiesEnum";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model"
 import TaxonomyService from "../Services/TaxonomyService";
+import { Status, StatusStates } from "../../Abstract/Schema/StatusSchema";
 
 class Taxonomy extends AbstractModel {
 
@@ -65,12 +66,9 @@ class Taxonomy extends AbstractModel {
                 type: String
             },
             status: {
-                type: String,
+                type: Status.schema,
                 required: true,
-                enum: TaxonomiesStatus
-            },
-            addReason: {
-                type: String
+                enum: StatusStates
             }
         },
             {

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {Document} from "mongoose"
+import {Document} from "mongoose";
 
 export interface PersonneSchema extends Document {
     lastName:string;
@@ -7,5 +7,5 @@ export interface PersonneSchema extends Document {
     slug:string;
     nickname:string;
     description:string;
-    occupations:[mongoose.ObjectId];
+    occupations:[object];
 }

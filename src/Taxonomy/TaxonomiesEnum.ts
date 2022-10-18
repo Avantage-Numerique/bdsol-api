@@ -7,13 +7,3 @@ export enum TaxonomiesCategories {
     Abilities = "abilities",
     Skills = "skills"
 }
-
-/**
- * Taxonomies Enum list all status supported for now.
- */
-export enum TaxonomiesStatus {
-    Accepted = "Accepted",
-    Pending = "Pending",
-    Rejected = "Rejected",
-    Deprecated = "Deprecated"
-}
