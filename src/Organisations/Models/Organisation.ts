@@ -7,6 +7,7 @@ import * as fs from 'fs';
 import {TaxonomyController} from "../../Taxonomy/Controllers/TaxonomyController";
 import OrganisationsService from "../Services/OrganisationsService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
+import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 
 
 class Organisation extends AbstractModel {
@@ -18,8 +19,9 @@ class Organisation extends AbstractModel {
     public static getInstance(): Organisation {
         if (Organisation._instance === undefined) {
             Organisation._instance = new Organisation();
-            Organisation._instance.initSchema();
             Organisation._instance.registerPreEvents();
+            Organisation._instance.registerEvents();
+            Organisation._instance.initSchema();
         }
         return Organisation._instance;
     }
@@ -65,10 +67,10 @@ class Organisation extends AbstractModel {
                 fondationDate: {
                     type: Date,
                 },
-                offers: {
-                    type: [mongoose.Types.ObjectId],
-                    default: undefined
-                }
+                offers: [{
+                    type: mongoose.Types.ObjectId,
+                    ref: 'Taxonomy'
+                }]
             },
             {
                 timestamps: true
@@ -182,18 +184,18 @@ class Organisation extends AbstractModel {
      * const setNoDoublon = new Set(arrayOccupation);
      * if setNoDoublon.length != arrayOccupation.length { throw error }
      */
-    public async registerPreEvents() {
+    public registerPreEvents() {
         if (this.schema !== undefined) {
 
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
-            await this.schema.pre('save', async function (next: any): Promise<any> {
+            this.schema.pre('save', async function (next: any): Promise<any> {
                 await middlewareTaxonomy(this, TaxonomyController, "offers");
                 return next();
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
-            await this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
+            this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
                 const organisation: any = this;
                 const updatedDocument = organisation.getUpdate();
 
@@ -201,6 +203,17 @@ class Organisation extends AbstractModel {
                 return next();
             });
         }
+    }
+
+    public registerEvents():void {
+
+        this.schema.pre('find', function() {
+            middlewarePopulateProperty(this, 'offers');
+        });
+
+        this.schema.pre('findOne', function() {
+            middlewarePopulateProperty(this, 'offers');
+        });
     }
 }
 

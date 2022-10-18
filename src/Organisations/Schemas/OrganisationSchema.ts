@@ -8,5 +8,5 @@ export interface OrganisationSchema extends Document {
     url:string;
     contactPoint:string;
     fondationDate:Date;
-    offers:mongoose.ObjectId
+    offers:[mongoose.ObjectId]
 }

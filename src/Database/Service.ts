@@ -61,7 +61,6 @@ export abstract class Service
         try {
             const item = await this.model.findOne(query);
 
-
             if (item !== null) {
                 return SuccessResponse.create(item, StatusCodes.OK, ReasonPhrases.OK);
             }
@@ -102,7 +101,7 @@ export abstract class Service
 
         try {
             const items = await this.model.find(query).sort(sort).skip(skip).limit(limit);
-
+            //populate
             return SuccessResponse.create(
                 items,
                 StatusCodes.OK,
@@ -163,6 +162,7 @@ export abstract class Service
     /**
      * With modify the target document.
      * @param data any document data containing id
+     * @param options {any} document data containing id
      * @note error 11000 //error = not unique {"index":0,"code":11000,"keyPattern":{"username":1},"keyValue":{"username":"mamilidasdasdasd"}}
      */
     async update(data: any, options?:any): Promise<ApiResponseContract> {
@@ -177,7 +177,6 @@ export abstract class Service
             
             if( (id != undefined && id.length != 24) || Object.keys(data).length < 1)
                 return ErrorResponse.create(data, StatusCodes.BAD_REQUEST, "id cannot be casted as ObjectId or object to update empty");
-            
 
             // UpdateOne
             const meta = await this.model.findOneAndUpdate({_id: id}, data, updateOptions)

@@ -69,13 +69,14 @@ export class MongooseDBDriver implements DBDriver {
         //LogHelper.info(`[BD] Connexion à la base de données structurée, ouverte et liée ...`);
         await this.providers.data.connect();
 
+        //order is important for populate. If the schema in relation isn't declare before, it will not work.
         this.providers.users.assign(UsersService.getInstance(User.getInstance()));
-
-        this.providers.data.assign(PersonnesService.getInstance(Personne.getInstance()));
-        this.providers.data.assign(OrganisationsService.getInstance(Organisation.getInstance()));
 
         this.providers.data.assign(TaxonomyService.getInstance(Taxonomy.getInstance()));
         this.providers.data.assign(UsersHistoryService.getInstance(UserHistory.getInstance()));
+
+        this.providers.data.assign(PersonnesService.getInstance(Personne.getInstance()));
+        this.providers.data.assign(OrganisationsService.getInstance(Organisation.getInstance()));
 
         await this.generateFakeData();
     }

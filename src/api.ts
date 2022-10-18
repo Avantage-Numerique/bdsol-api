@@ -90,16 +90,8 @@ export default class Api {
     private _initEntitiesRouters() {
         this.entitiesRoutes = [
             {
-                baseRoute: "/personnes",
-                manager: new PersonnesRoutes()
-            },
-            {
                 baseRoute: "/users",
                 manager: new UsersRoutes()
-            },
-            {
-                baseRoute: "/organisations",
-                manager: new OrganisationsRoutes()
             },
             {
                 baseRoute: "/taxonomies",
@@ -108,6 +100,14 @@ export default class Api {
             {
                 baseRoute: "/userhistory",
                 manager: new UsersHistoryRoutes()
+            },
+            {
+                baseRoute: "/personnes",
+                manager: new PersonnesRoutes()
+            },
+            {
+                baseRoute: "/organisations",
+                manager: new OrganisationsRoutes()
             }
         ];
     }

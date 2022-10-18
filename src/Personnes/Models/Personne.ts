@@ -7,6 +7,7 @@ import * as fs from 'fs';
 import {TaxonomyController} from "../../Taxonomy/Controllers/TaxonomyController";
 import PersonnesService from "../Services/PersonnesService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
+import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 
 class Personne extends AbstractModel {
 
@@ -17,8 +18,12 @@ class Personne extends AbstractModel {
     public static getInstance(): Personne {
         if (Personne._instance === undefined) {
             Personne._instance = new Personne();
-            Personne._instance.initSchema();
+
+            //events must be defined before assigning to mongoose : https://mongoosejs.com/docs/middleware.html#defining
+            Personne._instance.registerEvents();
             Personne._instance.registerPreEvents();
+
+            Personne._instance.initSchema();
         }
         return Personne._instance;
     }
@@ -62,16 +67,14 @@ class Personne extends AbstractModel {
                     alias: 'surnom'
                 },
                 description: String,
-                occupations: {
-                    type: [mongoose.Types.ObjectId],
-                    default: undefined,
-                    ref: 'taxonomies'
-                }
+                occupations: [{
+                    type: mongoose.Types.ObjectId,
+                    ref: 'Taxonomy'
+                }]
             },
             {
                 timestamps: true
             });
-
 
     /** @public Used to return attributes and rules for each field of this entity. */
     fieldInfo =
@@ -174,22 +177,33 @@ class Personne extends AbstractModel {
      * const setNoDoublon = new Set(arrayOccupation);
      * if setNoDoublon.length != arrayOccupation.length { throw error }
       */
-    public async registerPreEvents() {
+    public registerPreEvents() {
         if (this.schema !== undefined) {
 
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
-            await this.schema.pre('save', async function (next: any): Promise<any> {
+            this.schema.pre('save', async function (next: any): Promise<any> {
                 await middlewareTaxonomy(this, TaxonomyController);
                 return next();
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
-            await this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
+            this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
                 await middlewareTaxonomy(this, TaxonomyController);
                 return next();
             });
         }
+    }
+
+    public registerEvents():void {
+
+        this.schema.pre('find', function() {
+            middlewarePopulateProperty(this, 'occupations');
+        });
+
+        this.schema.pre('findOne', function() {
+            middlewarePopulateProperty(this, 'occupations');
+        });
     }
 
 }
