@@ -146,11 +146,12 @@ export abstract class Service
 
     /**
      * Insert the persistant data
-     * @param filter Try to find item, if item != exist, then create it.
+     * @param data Try to find item, if item != exist, then create it.
      */
-    async persistantData(filter:any): Promise<ApiResponseContract>{
+    async persistantData(data:any): Promise<ApiResponseContract>{
+        const filter = { name:data.name, category:data.category };
         try {
-            const meta = this.model.findOneAndUpdate(filter, filter, { runValidators:true, upsert:true })
+            const meta = this.model.findOneAndUpdate(filter, data, { runValidators:true, upsert:true })
             .catch((e:any) => { return e });
             return this.parseResult(meta, Service.UPDATE_STATE)
         }

@@ -7,7 +7,7 @@ import * as fs from 'fs';
 import {TaxonomyController} from "../../Taxonomy/Controllers/TaxonomyController";
 import PersonnesService from "../Services/PersonnesService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
-import { Status } from "../../Abstract/Schema/StatusSchema";
+import { Status } from "../../Moderation/Schemas/StatusSchema";
 import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 
 class Personne extends AbstractModel {
@@ -70,7 +70,10 @@ class Personne extends AbstractModel {
                 description: String,
                 occupations: {
                     type: [{
-                        occupationId: { type: mongoose.Types.ObjectId },
+                        occupation: {
+                            type: mongoose.Types.ObjectId,
+                            ref: "Taxonomy"
+                        },
                         status: Status.schema
                     }]
                 }
@@ -186,13 +189,13 @@ class Personne extends AbstractModel {
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
             this.schema.pre('save', async function (next: any): Promise<any> {
-                await middlewareTaxonomy(this, TaxonomyController);
+                await middlewareTaxonomy(this, TaxonomyController, "occupations.occupation");
                 return next();
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
             this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
-                await middlewareTaxonomy(this, TaxonomyController);
+                await middlewareTaxonomy(this, TaxonomyController, "occupations.occupation");
                 return next();
             });
         }
@@ -201,11 +204,11 @@ class Personne extends AbstractModel {
     public registerEvents():void {
 
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'occupations');
+            middlewarePopulateProperty(this, 'occupations.occupation');
         });
 
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'occupations');
+            middlewarePopulateProperty(this, 'occupations.occupation');
         });
     }
 

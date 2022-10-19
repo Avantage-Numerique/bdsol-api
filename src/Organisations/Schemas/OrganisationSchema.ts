@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import {Document} from "mongoose"
-import { Teammate } from "../../Abstract/Schema/TeammateSchema";
+import { Teammate } from "../../Database/Schemas/TeammateSchema";
 
 export interface OrganisationSchema extends Document {
     name:string;

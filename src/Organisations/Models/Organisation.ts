@@ -7,8 +7,8 @@ import * as fs from 'fs';
 import {TaxonomyController} from "../../Taxonomy/Controllers/TaxonomyController";
 import OrganisationsService from "../Services/OrganisationsService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
-import { Teammate } from "../../Abstract/Schema/TeammateSchema";
-import { Status } from "../../Abstract/Schema/StatusSchema";
+import { Teammate } from "../../Database/Schemas/TeammateSchema";
+import { Status } from "../../Moderation/Schemas/StatusSchema";
 import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 
 
@@ -71,7 +71,7 @@ class Organisation extends AbstractModel {
                 },
                 offers: {
                     type: [{
-                        offerId: { type: mongoose.Types.ObjectId },
+                        offer: { type: mongoose.Types.ObjectId },
                         status: Status.schema
                     }]
                 },
@@ -215,11 +215,11 @@ class Organisation extends AbstractModel {
     public registerEvents():void {
 
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'offers');
+            middlewarePopulateProperty(this, 'offers.offer');
         });
 
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'offers');
+            middlewarePopulateProperty(this, 'offers.offer');
         });
     }
 }

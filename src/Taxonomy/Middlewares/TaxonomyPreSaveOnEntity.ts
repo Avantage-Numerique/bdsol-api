@@ -1,3 +1,4 @@
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {Obj} from "../../Helpers/Obj";
 import {TaxonomiesCategories} from "../TaxonomiesEnum";
 
@@ -12,10 +13,14 @@ const middlewareTaxonomy = async (document:any,
                                   controller:any,
                                   taxonomyProperty:string = 'occupations',
                                   taxonomy:string = TaxonomiesCategories.Occupations) => {
+    LogHelper.debug("Enter middleware");
+    console.log(taxonomyProperty);
+    console.log(document);
 
     if (document.isModified(taxonomyProperty)
         && Obj.isNotEmpty(document[taxonomyProperty]))
     {
+        LogHelper.debug("MiddlewareTaxonomy : ", taxonomyProperty, document[taxonomyProperty]);
         const occupationsExist = await controller.getInstance().list({ id : document[taxonomyProperty], category: taxonomy });
 
         if (!occupationsExist.error) {
