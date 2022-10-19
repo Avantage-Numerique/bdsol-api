@@ -25,24 +25,23 @@ export class Role {
     );
 }
 
-export interface TeammateSchema extends Document {
-    teammateId:mongoose.ObjectId;
+export interface MemberSchema extends Document {
+    member:mongoose.ObjectId;
     role: Role;
     status: Status;
 }
 
 
-export class Teammate {
+export class Member {
 
     /** @static schema */
     static schema:Schema =
-    new Schema<TeammateSchema>({
+    new Schema<MemberSchema>({
         //Id of the member of the team
-        teammateId: {
+        member: {
             type: mongoose.Types.ObjectId,
-            minlength:[24, "ObjectId are 24 in length"],
-            maxlength:[24, "ObjectId are 24 in length"],
-            required: [true, 'Required memberId to belong to a team']
+            required: [true, 'Required memberId to belong to a team'],
+            ref: "Personne"
         },
         role: {
             type: Role.schema,

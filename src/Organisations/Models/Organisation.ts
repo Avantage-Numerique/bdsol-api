@@ -7,7 +7,7 @@ import * as fs from 'fs';
 import {TaxonomyController} from "../../Taxonomy/Controllers/TaxonomyController";
 import OrganisationsService from "../Services/OrganisationsService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
-import { Teammate } from "../../Database/Schemas/TeammateSchema";
+import { Member } from "../../Database/Schemas/MemberSchema";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
 import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 
@@ -71,12 +71,16 @@ class Organisation extends AbstractModel {
                 },
                 offers: {
                     type: [{
-                        offer: { type: mongoose.Types.ObjectId },
+                        offer: {
+                            type: mongoose.Types.ObjectId,
+                            ref: "Taxonomy"
+                        },
                         status: Status.schema
                     }]
                 },
                 team: {
-                    type: [Teammate.schema]
+                    type: [Member.schema],
+                    ref: "Personne"
                 }
             },
             {
@@ -197,7 +201,7 @@ class Organisation extends AbstractModel {
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
             this.schema.pre('save', async function (next: any): Promise<any> {
-                await middlewareTaxonomy(this, TaxonomyController, "offers");
+                await middlewareTaxonomy(this, TaxonomyController, "offers.offer");
                 return next();
             });
 
@@ -206,7 +210,7 @@ class Organisation extends AbstractModel {
                 const organisation: any = this;
                 const updatedDocument = organisation.getUpdate();
 
-                await middlewareTaxonomy(updatedDocument, TaxonomyController, "offers");
+                await middlewareTaxonomy(updatedDocument, TaxonomyController, "offers.offer");
                 return next();
             });
         }
@@ -216,10 +220,12 @@ class Organisation extends AbstractModel {
 
         this.schema.pre('find', function() {
             middlewarePopulateProperty(this, 'offers.offer');
+            middlewarePopulateProperty(this, 'team.member');
         });
-
+        
         this.schema.pre('findOne', function() {
             middlewarePopulateProperty(this, 'offers.offer');
+            middlewarePopulateProperty(this, 'team.member');
         });
     }
 }

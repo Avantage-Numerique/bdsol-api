@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import {Document} from "mongoose"
-import { Teammate } from "../../Database/Schemas/TeammateSchema";
+import { Member } from "../../Database/Schemas/MemberSchema";
 
 export interface OrganisationSchema extends Document {
     name:string;
@@ -10,5 +10,5 @@ export interface OrganisationSchema extends Document {
     contactPoint:string;
     fondationDate:Date;
     offers:[object],
-    team: [Teammate],
+    team: [Member],
 }
