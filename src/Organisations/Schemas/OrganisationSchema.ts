@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import {Document} from "mongoose"
+import { Status } from "../../Moderation/Schemas/StatusSchema";
 import { Member } from "../../Database/Schemas/MemberSchema";
 
 export interface OrganisationSchema extends Document {
@@ -9,6 +10,7 @@ export interface OrganisationSchema extends Document {
     url:string;
     contactPoint:string;
     fondationDate:Date;
-    offers:[object],
-    team: [Member],
+    offers:[object];
+    team: [Member];
+    status: Status;
 }

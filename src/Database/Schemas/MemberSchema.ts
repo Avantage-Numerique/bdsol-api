@@ -40,14 +40,15 @@ export class Member {
         //Id of the member of the team
         member: {
             type: mongoose.Types.ObjectId,
-            required: [true, 'Required memberId to belong to a team'],
+            required: [true, 'Required memberId to identify member'],
             ref: "Personne"
         },
         role: {
             type: Role.schema,
         },
         status: {
-            type: Status.schema
+            type: Status.schema,
+            required: true
         }
     },
         {
