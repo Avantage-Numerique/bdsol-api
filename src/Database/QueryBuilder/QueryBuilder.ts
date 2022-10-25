@@ -1,3 +1,4 @@
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 export default class ApiQuery {
 
@@ -34,16 +35,15 @@ export default class ApiQuery {
             updatedAt : -1
         };
 
-        let value:any;
         for (const field in query)
         {
             if (ApiQuery.fieldIsDeclared(field))
             {
-                value = query[field].toString();//@todo : Add a try/catch for this ?
-
+                const value:any = query[field]//.toString();//@todo : Add a try/catch for this ?
                 //  S'il s'agit d'un id
-                if (field == "id") {
+                if (field == "id" || field == "_id") {
                     ApiQuery.query._id = value;
+                    continue;
                 }
 
                 if (field == "sort") {

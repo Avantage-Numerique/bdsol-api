@@ -24,6 +24,11 @@ class Personne extends AbstractModel {
             Personne._instance.registerEvents();
             Personne._instance.registerPreEvents();
 
+            //Setting virtual "fullName" field
+            Personne._instance.schema.virtual('fullName').get( function() {
+                return this.firstName + ' ' + this.lastName;
+            });
+
             Personne._instance.initSchema();
         }
         return Personne._instance;
@@ -48,13 +53,13 @@ class Personne extends AbstractModel {
                     type: String,
                     minLength: 2,
                     required: true,
-                    alias: 'nom'
+                    //alias: 'nom'
                 },
                 firstName: {
                     type: String,
                     minLength: 2,
                     required: true,
-                    alias: 'prenom'
+                    //alias: 'prenom'
                 },
                 slug: {
                     type: String,
@@ -65,7 +70,7 @@ class Personne extends AbstractModel {
                 },
                 nickname: {
                     type: String,
-                    alias: 'surnom'
+                    //alias: 'surnom'
                 },
                 description: String,
                 occupations: {
@@ -76,10 +81,14 @@ class Personne extends AbstractModel {
                         },
                         status: Status.schema
                     }]
+                },
+                status:{
+                    type: Status.schema
                 }
             },
             {
-                timestamps: true
+                toJSON: { virtuals: true },
+                timestamps: true,
             });
 
     /** @public Used to return attributes and rules for each field of this entity. */
@@ -189,13 +198,21 @@ class Personne extends AbstractModel {
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
             this.schema.pre('save', async function (next: any): Promise<any> {
-                await middlewareTaxonomy(this, TaxonomyController, "occupations.occupation");
+                const idList = this.occupations.map( (el:any) => {
+                    return new mongoose.Types.ObjectId(el.occupation);
+                });
+                await middlewareTaxonomy(idList, TaxonomyController, "occupations.occupation");
                 return next();
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
             this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
-                await middlewareTaxonomy(this, TaxonomyController, "occupations.occupation");
+                const personne: any = this;
+                const updatedDocument = personne.getUpdate();
+                updatedDocument.map( (el:any) => {
+                    return el.occupations;
+                });
+                await middlewareTaxonomy(updatedDocument, TaxonomyController, "occupations.occupation");
                 return next();
             });
         }

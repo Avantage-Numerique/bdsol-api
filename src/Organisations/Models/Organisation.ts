@@ -75,12 +75,18 @@ class Organisation extends AbstractModel {
                             type: mongoose.Types.ObjectId,
                             ref: "Taxonomy"
                         },
-                        status: Status.schema
-                    }]
+                        status: {
+                            type: Status.schema,
+                        }
+                    }],
+                    required:true
                 },
                 team: {
                     type: [Member.schema],
                     ref: "Personne"
+                },
+                status: {
+                    type: Status.schema
                 }
             },
             {
@@ -201,7 +207,10 @@ class Organisation extends AbstractModel {
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
             this.schema.pre('save', async function (next: any): Promise<any> {
-                await middlewareTaxonomy(this, TaxonomyController, "offers.offer");
+                const idList = this.offers.map( (el:any) => {
+                    return new mongoose.Types.ObjectId(el.offer);
+                });
+                await middlewareTaxonomy(idList, TaxonomyController, "offers.offer");
                 return next();
             });
 
@@ -209,6 +218,9 @@ class Organisation extends AbstractModel {
             this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
                 const organisation: any = this;
                 const updatedDocument = organisation.getUpdate();
+                updatedDocument.map( (el:any) => {
+                    return el.offer;
+                });
 
                 await middlewareTaxonomy(updatedDocument, TaxonomyController, "offers.offer");
                 return next();
