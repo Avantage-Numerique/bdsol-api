@@ -61,4 +61,12 @@ export class Obj {
         return "";
     }
 
+    public static pluck(obj:Array<any|object>, property:string):Array<any> {
+        let pluckedValues:Array<any> = [];
+        for (let element of obj) {
+            pluckedValues.push(element[property]);
+        }
+        return pluckedValues;
+    }
+
 }
