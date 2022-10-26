@@ -17,8 +17,8 @@ export class User extends AbstractModel {
     public static getInstance():User {
         if (User._instance === undefined) {
             User._instance = new User();
-            User._instance.initSchema();
             User._instance.assignDbEventsToSchema();
+            User._instance.initSchema();
         }
         return User._instance;
     }
