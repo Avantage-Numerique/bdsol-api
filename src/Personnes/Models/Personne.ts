@@ -209,10 +209,12 @@ class Personne extends AbstractModel {
             this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
                 const personne: any = this;
                 const updatedDocument = personne.getUpdate();
-                updatedDocument.map( (el:any) => {
-                    return el.occupations;
-                });
-                await middlewareTaxonomy(updatedDocument, TaxonomyController, "occupations.occupation");
+                if (updatedDocument["occupations"] != undefined){
+                    const idList = updatedDocument.occupations.map( (el:any) => {
+                        return new mongoose.Types.ObjectId(el.occupation);
+                    });
+                    await middlewareTaxonomy(idList, TaxonomyController, "occupations.occupation");
+                }
                 return next();
             });
         }
@@ -223,7 +225,7 @@ class Personne extends AbstractModel {
         this.schema.pre('find', function() {
             middlewarePopulateProperty(this, 'occupations.occupation');
         });
-
+        
         this.schema.pre('findOne', function() {
             middlewarePopulateProperty(this, 'occupations.occupation');
         });

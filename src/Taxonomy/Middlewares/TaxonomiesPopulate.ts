@@ -5,7 +5,8 @@
  */
 const middlewarePopulateProperty = (document:any,
                                   schemaProperty:string = 'occupations') => {
-
+    
+    //Note : I think we can pass "schemaProperty" and add a 2nd param to specify which field we want to populate from the underlying entity                                
     document.populate(schemaProperty);
 }
 

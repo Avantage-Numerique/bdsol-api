@@ -175,17 +175,15 @@ export abstract class Service
         try {
             const id = data.id;
             delete data.id; //Remove id from data
-            
-            if( (id != undefined && id.length != 24) || Object.keys(data).length < 1)
+            if( (id != undefined && id.length != 24) || Object.keys(data).length < 1){
                 return ErrorResponse.create(data, StatusCodes.BAD_REQUEST, "id cannot be casted as ObjectId or object to update empty");
-
+            }
             // UpdateOne
             const meta = await this.model.findOneAndUpdate({_id: id}, data, updateOptions)
                 .catch((e: any) => {
                         return e;
                     }
                 );
-
             return this.parseResult(meta, Service.UPDATE_STATE);
 
         } catch (updateError: any) {

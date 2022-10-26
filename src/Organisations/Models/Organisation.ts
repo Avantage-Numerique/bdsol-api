@@ -218,11 +218,13 @@ class Organisation extends AbstractModel {
             this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
                 const organisation: any = this;
                 const updatedDocument = organisation.getUpdate();
-                updatedDocument.map( (el:any) => {
-                    return el.offer;
-                });
+                if (updatedDocument["offers"] != undefined){
+                    const idList = updatedDocument.offers.map( (el:any) => {
+                        return el.offer;
+                    });
+                    await middlewareTaxonomy(idList, TaxonomyController, "offers.offer");
+                }
 
-                await middlewareTaxonomy(updatedDocument, TaxonomyController, "offers.offer");
                 return next();
             });
         }
