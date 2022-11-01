@@ -14,7 +14,7 @@
     },
     {
       "type": "any",
-      "value": "/personnes",
+      "value": "/persons",
       "key": "persPATH"
     },
     {

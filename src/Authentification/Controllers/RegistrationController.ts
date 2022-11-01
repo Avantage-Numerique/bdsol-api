@@ -7,7 +7,7 @@ import config from "../../config";
 
 export class RegistrationController {
 
-    /** @public PersonneService */
+    /** @public UsersService and model */
     public service:UsersService;
     public userModel:User;
 

@@ -5,7 +5,7 @@ import {ApiRouter} from "./routes";
 import {HealthCheckRouter} from "./Healthcheck/Routes/HealthCheckRoutes";
 import {AuthentificationRoutes} from "./Authentification/Routes/AuthentificationRoutes";
 import {UsersRoutes} from "./Users/Routes/UsersRouter";
-import {PersonnesRoutes} from './Personnes/Routes/PersonnesRoutes';
+import {PersonsRoutes} from './Persons/Routes/PersonsRoutes';
 import {OrganisationsRoutes} from './Organisations/Routes/OrganisationsRoutes'
 import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
 import {TaxonomyRoutes} from "./Taxonomy/Routes/TaxonomyRoutes";
@@ -90,16 +90,8 @@ export default class Api {
     private _initEntitiesRouters() {
         this.entitiesRoutes = [
             {
-                baseRoute: "/personnes",
-                manager: new PersonnesRoutes()
-            },
-            {
                 baseRoute: "/users",
                 manager: new UsersRoutes()
-            },
-            {
-                baseRoute: "/organisations",
-                manager: new OrganisationsRoutes()
             },
             {
                 baseRoute: "/taxonomies",
@@ -108,6 +100,14 @@ export default class Api {
             {
                 baseRoute: "/userhistory",
                 manager: new UsersHistoryRoutes()
+            },
+            {
+                baseRoute: "/persons",
+                manager: new PersonsRoutes()
+            },
+            {
+                baseRoute: "/organisations",
+                manager: new OrganisationsRoutes()
             }
         ];
     }

@@ -1,54 +1,65 @@
 import mongoose from "mongoose";
 import {Schema} from "mongoose";
-import {PersonneSchema} from "../Schemas/PersonneSchema";
+import {PersonSchema} from "../Schemas/PersonSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
 import {TaxonomyController} from "../../Taxonomy/Controllers/TaxonomyController";
-import PersonnesService from "../Services/PersonnesService";
+import PersonsService from "../Services/PersonsService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
+import { Status } from "../../Moderation/Schemas/StatusSchema";
+import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 
-class Personne extends AbstractModel {
+class Person extends AbstractModel {
 
     /** @protected @static Singleton instance */
-    protected static _instance: Personne;
+    protected static _instance: Person;
 
     /** @public @static Model singleton instance constructor */
-    public static getInstance(): Personne {
-        if (Personne._instance === undefined) {
-            Personne._instance = new Personne();
-            Personne._instance.initSchema();
-            Personne._instance.registerPreEvents();
+    public static getInstance(): Person {
+        if (Person._instance === undefined) {
+            Person._instance = new Person();
+
+            //events must be defined before assigning to mongoose : https://mongoosejs.com/docs/middleware.html#defining
+            Person._instance.registerEvents();
+            Person._instance.registerPreEvents();
+
+            //Setting virtual "fullName" field
+            Person._instance.schema.virtual('fullName').get( function() {
+                return this.firstName + ' ' + this.lastName;
+            });
+
+            Person._instance.initSchema();
         }
-        return Personne._instance;
+        return Person._instance;
     }
 
     /** @public Model lastName */
-    modelName: string = 'Personne';
+    modelName: string = 'Person';
 
     /** @public Collection lastName in database*/
-    collectionName: string = 'personnes';
+    collectionName: string = 'persons';
 
     /** @public Connection mongoose */
     connection: mongoose.Connection;
     provider: DbProvider;
-    service: PersonnesService;
+    service: PersonsService;
     mongooseModel: mongoose.Model<any>;
 
     /** @public Database schema */
     schema: Schema =
-        new Schema<PersonneSchema>({
+        new Schema<PersonSchema>({
                 lastName: {
                     type: String,
                     minLength: 2,
                     required: true,
-                    alias: 'nom'
+                    //alias: 'nom'
                 },
                 firstName: {
                     type: String,
                     minLength: 2,
                     required: true,
-                    alias: 'prenom'
+                    //alias: 'prenom'
                 },
                 slug: {
                     type: String,
@@ -59,19 +70,26 @@ class Personne extends AbstractModel {
                 },
                 nickname: {
                     type: String,
-                    alias: 'surnom'
+                    //alias: 'surnom'
                 },
                 description: String,
                 occupations: {
-                    type: [mongoose.Types.ObjectId],
-                    default: undefined,
-                    ref: 'taxonomies'
+                    type: [{
+                        occupation: {
+                            type: mongoose.Types.ObjectId,
+                            ref: "Taxonomy"
+                        },
+                        status: Status.schema
+                    }]
+                },
+                status:{
+                    type: Status.schema
                 }
             },
             {
-                timestamps: true
+                toJSON: { virtuals: true },
+                timestamps: true,
             });
-
 
     /** @public Used to return attributes and rules for each field of this entity. */
     fieldInfo =
@@ -154,14 +172,14 @@ class Personne extends AbstractModel {
             firstName: document.firstName ?? '',
             nickname: document.nickname ?? '',
             description: document.description ?? '',
-            occupation: document.occupation ?? '',
+            occupations: document.occupations ?? '',
             slug: document.slug ?? ''
         }
     }
 
     public async documentation(): Promise<any> {
 
-        return fs.readFileSync('/api/doc/Personnes.md', 'utf-8');
+        return fs.readFileSync('/api/doc/Persons.md', 'utf-8');
     }
 
     /**
@@ -174,24 +192,45 @@ class Personne extends AbstractModel {
      * const setNoDoublon = new Set(arrayOccupation);
      * if setNoDoublon.length != arrayOccupation.length { throw error }
       */
-    public async registerPreEvents() {
+    public registerPreEvents() {
         if (this.schema !== undefined) {
 
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
-            await this.schema.pre('save', async function (next: any): Promise<any> {
-                await middlewareTaxonomy(this, TaxonomyController);
+            this.schema.pre('save', async function (next: any): Promise<any> {
+                const idList = this.occupations.map( (el:any) => {
+                    return new mongoose.Types.ObjectId(el.occupation);
+                });
+                await middlewareTaxonomy(idList, TaxonomyController, "occupations.occupation");
                 return next();
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
-            await this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
-                await middlewareTaxonomy(this, TaxonomyController);
+            this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
+                const person: any = this;
+                const updatedDocument = person.getUpdate();
+                if (updatedDocument["occupations"] != undefined){
+                    const idList = updatedDocument.occupations.map( (el:any) => {
+                        return new mongoose.Types.ObjectId(el.occupation);
+                    });
+                    await middlewareTaxonomy(idList, TaxonomyController, "occupations.occupation");
+                }
                 return next();
             });
         }
     }
 
+    public registerEvents():void {
+
+        this.schema.pre('find', function() {
+            middlewarePopulateProperty(this, 'occupations.occupation');
+        });
+        
+        this.schema.pre('findOne', function() {
+            middlewarePopulateProperty(this, 'occupations.occupation');
+        });
+    }
+
 }
 
-export default Personne;
+export default Person;

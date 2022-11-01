@@ -157,7 +157,7 @@ class UserHistory extends AbstractModel {
     }
 
     public async documentation():Promise<any>{
-        //const response =  fs.readFileSync('/api/doc/Personnes.md', 'utf-8');
+        //const response =  fs.readFileSync('/api/doc/Persons.md', 'utf-8');
         return 'Not implemented';
    }
 }

@@ -105,6 +105,14 @@ class TaxonomyRoutes extends CrudRoute {
             this.routeSendResponse.bind(this)
         ]);
 
+        router.get('/:category/:id', [
+            ...this.addMiddlewares("all"),
+            ...this.addMiddlewares("byTaxonomy"),
+            ...this.addMiddlewares("bySlug"),
+            this.getByUriParamsHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+
         router.get('/:category', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("byTaxonomy"),

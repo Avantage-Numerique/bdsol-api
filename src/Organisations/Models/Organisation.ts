@@ -7,6 +7,9 @@ import * as fs from 'fs';
 import {TaxonomyController} from "../../Taxonomy/Controllers/TaxonomyController";
 import OrganisationsService from "../Services/OrganisationsService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
+import { Member } from "../../Database/Schemas/MemberSchema";
+import { Status } from "../../Moderation/Schemas/StatusSchema";
+import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 
 
 class Organisation extends AbstractModel {
@@ -18,8 +21,9 @@ class Organisation extends AbstractModel {
     public static getInstance(): Organisation {
         if (Organisation._instance === undefined) {
             Organisation._instance = new Organisation();
-            Organisation._instance.initSchema();
             Organisation._instance.registerPreEvents();
+            Organisation._instance.registerEvents();
+            Organisation._instance.initSchema();
         }
         return Organisation._instance;
     }
@@ -66,8 +70,23 @@ class Organisation extends AbstractModel {
                     type: Date,
                 },
                 offers: {
-                    type: [mongoose.Types.ObjectId],
-                    default: undefined
+                    type: [{
+                        offer: {
+                            type: mongoose.Types.ObjectId,
+                            ref: "Taxonomy"
+                        },
+                        status: {
+                            type: Status.schema,
+                        }
+                    }],
+                    required:true
+                },
+                team: {
+                    type: [Member.schema],
+                    ref: "Person"
+                },
+                status: {
+                    type: Status.schema
                 }
             },
             {
@@ -182,25 +201,46 @@ class Organisation extends AbstractModel {
      * const setNoDoublon = new Set(arrayOccupation);
      * if setNoDoublon.length != arrayOccupation.length { throw error }
      */
-    public async registerPreEvents() {
+    public registerPreEvents() {
         if (this.schema !== undefined) {
 
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
-            await this.schema.pre('save', async function (next: any): Promise<any> {
-                await middlewareTaxonomy(this, TaxonomyController, "offers");
+            this.schema.pre('save', async function (next: any): Promise<any> {
+                const idList = this.offers.map( (el:any) => {
+                    return new mongoose.Types.ObjectId(el.offer);
+                });
+                await middlewareTaxonomy(idList, TaxonomyController, "offers.offer");
                 return next();
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
-            await this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
+            this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
                 const organisation: any = this;
                 const updatedDocument = organisation.getUpdate();
+                if (updatedDocument["offers"] != undefined){
+                    const idList = updatedDocument.offers.map( (el:any) => {
+                        return el.offer;
+                    });
+                    await middlewareTaxonomy(idList, TaxonomyController, "offers.offer");
+                }
 
-                await middlewareTaxonomy(updatedDocument, TaxonomyController, "offers");
                 return next();
             });
         }
+    }
+
+    public registerEvents():void {
+
+        this.schema.pre('find', function() {
+            middlewarePopulateProperty(this, 'offers.offer');
+            middlewarePopulateProperty(this, 'team.member');
+        });
+        
+        this.schema.pre('findOne', function() {
+            middlewarePopulateProperty(this, 'offers.offer');
+            middlewarePopulateProperty(this, 'team.member');
+        });
     }
 }
 

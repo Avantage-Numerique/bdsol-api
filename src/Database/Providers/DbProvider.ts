@@ -34,8 +34,6 @@ export abstract class BaseProvider implements DbProvider {
     abstract _models:Array<AbstractModel>;
 
 
-
-
     constructor(name='') {
         if (name !== "") {
             this.databaseName = name;
@@ -51,14 +49,11 @@ export abstract class BaseProvider implements DbProvider {
     {
         LogHelper.info("[BD] Connect to url : ", this.url);
         try {
-            const connectionOptions:any = {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-            };
+
             mongoose.set('debug', this._debug);
             //@todo debug this, broke service create. https://thecodebarbarian.com/whats-new-in-mongoose-6-sanitizefilter.html
             //mongoose.set('sanitizeFilter', true);
-            this.connection = await mongoose.createConnection(this.url);//Deprecated : , connectionOptions as mongoose.ConnectOptions
+            this.connection = await mongoose.createConnection(this.url);
 
             return this.connection;
         }

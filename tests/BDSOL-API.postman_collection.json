@@ -168,7 +168,7 @@
 									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
 									"};\r",
 									"\r",
-									"const entity_path = \"/personnes\";\r",
+									"const entity_path = \"/persons\";\r",
 									"\r",
 									"const e_data = {\r",
 									"    \"lastName\" : \"Parent\",\r",
@@ -1291,7 +1291,7 @@
 							"response": []
 						},
 						{
-							"name": "1-Create-personne-sanitization",
+							"name": "1-Create-person-sanitization",
 							"event": [
 								{
 									"listen": "test",

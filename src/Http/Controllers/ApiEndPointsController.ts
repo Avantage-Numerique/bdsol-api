@@ -40,7 +40,7 @@ abstract class ApiEndPointsController implements ApiEndPointsControllerContract 
     }
 
     async entityCreate(data:any):Promise<any> {
-        //as the PersonneController avec les appels au service.
+        //as the PersonController avec les appels au service.
         return data;
     }
 

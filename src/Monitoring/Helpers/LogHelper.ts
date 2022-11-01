@@ -49,7 +49,7 @@ export default class LogHelper
 
     constructor(req:any){
         if(req.user && req.user.username && req.ip)
-            this.routeVerbose = '[' + req.user.username + '][' + req.originalUrl + ']'
+            this.routeVerbose = '[' + req.visitor.ip + ']' + '[' + req.user.username + ']' + '[' + req.originalUrl + ']'
     }
 
     //With instance

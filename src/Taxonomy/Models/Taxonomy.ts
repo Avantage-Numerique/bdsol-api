@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 import {Schema} from "mongoose"
 import { TaxonomySchema } from "../Schemas/TaxonomySchema";
-import {TaxonomiesCategories, TaxonomiesStatus} from "../TaxonomiesEnum";
+import { TaxonomiesCategories } from "../TaxonomiesEnum";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model"
 import TaxonomyService from "../Services/TaxonomyService";
+import { Status } from "../../Moderation/Schemas/StatusSchema";
 
 class Taxonomy extends AbstractModel {
 
@@ -16,6 +17,7 @@ class Taxonomy extends AbstractModel {
         if (Taxonomy._instance === undefined) {
             Taxonomy._instance = new Taxonomy();
             Taxonomy._instance.initSchema();
+            Taxonomy._instance.schema.index({ name:1, category:1 }, {unique: true})
         }
         return Taxonomy._instance;
     }
@@ -41,14 +43,13 @@ class Taxonomy extends AbstractModel {
                 required: [true, 'Required category (occupation, ...)'],
                 enum: TaxonomiesCategories,
                 lowercase: true,
-                trim: true,
-                index: true
+                trim: true
             },
             name: {
                 type: String,
                 required: [true, 'Name required'],
                 minlength:[2, 'MinLength 2'],
-                alias: 'nom'
+                alias: 'nom',
             },
             slug: {
                 type: String,
@@ -65,18 +66,14 @@ class Taxonomy extends AbstractModel {
                 type: String
             },
             status: {
-                type: String,
+                type: Status.schema,
                 required: true,
-                enum: TaxonomiesStatus
-            },
-            addReason: {
-                type: String
             }
         },
             {
                 timestamps: true,
                 strict: true,
-                collation: { locale: 'fr_CA' }
+                collation: { locale: 'fr_CA' },
         });
 
 

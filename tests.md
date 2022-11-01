@@ -69,8 +69,8 @@
   - Vérifier son assurance qu'il a face à son action
     - réussi, pas certain ou non ça n'a pas fonctionné
 
-# Ajout d'une personne
+# Ajout d'une person
 
-- Étape #1 : se rendre au formulaire de création d'une personne
+- Étape #1 : se rendre au formulaire de création d'une person
   - Prendre en note les cliques et le(les) chemins utilisés pour se rendre.
   - 
