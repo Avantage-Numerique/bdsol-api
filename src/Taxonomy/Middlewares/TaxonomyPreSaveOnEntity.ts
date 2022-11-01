@@ -12,9 +12,6 @@ const middlewareTaxonomy = async (idList:any,
                                   controller:any,
                                   taxonomyProperty:string = 'occupations',
                                   taxonomy:string = TaxonomiesCategories.Occupations) => {
-    LogHelper.debug("Enter middleware");
-    console.log(idList);
-
     if (idList.length != 0)
     {
         LogHelper.debug("MiddlewareTaxonomy : ", taxonomyProperty, idList);

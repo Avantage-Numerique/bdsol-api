@@ -38,7 +38,7 @@ class Person extends AbstractModel {
     modelName: string = 'Person';
 
     /** @public Collection lastName in database*/
-    collectionName: string = 'persons';
+    collectionName: string = 'people';
 
     /** @public Connection mongoose */
     connection: mongoose.Connection;
