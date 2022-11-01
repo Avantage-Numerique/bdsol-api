@@ -1,7 +1,9 @@
+'On VSCode, press Alt + D to show preview of plantUML
+
 @startuml "BDSOL-UML"
 hide circle
 package Entity {
-  entity "Personne" as pers {
+  entity "Person" as pers {
     *_id : ObjectId
     --
     *lastName : String

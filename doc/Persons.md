@@ -1,10 +1,10 @@
 Retour à la base de [Documention de l'API](readme.md)
 
-# Personnes
+# Persons
 
 ## URL définies
 
-### POST `/personnes/create`
+### POST `/persons/create`
 
 #### Structure demandée
 ```json
@@ -27,7 +27,7 @@ Retour à la base de [Documention de l'API](readme.md)
 }
 ```
 
-### POST `/personnes/update`
+### POST `/persons/update`
 
 #### Structure demandée
 ```json
@@ -52,7 +52,7 @@ Retour à la base de [Documention de l'API](readme.md)
 ```
 
 
-### POST `/personnes/search`
+### POST `/persons/search`
 Il est possible d'utiliser les opérateurs gte (>=) et lte (<=) afin de trouver, par exemple, une date antérieure ou ultérieure à "X". On ajoute à ce moment `gte:` ou `lte:` avant le paramètre.
 
 **Exemple :**
@@ -80,8 +80,8 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte (<=) afin de trouver,
 }
 ```
 
-### POST `/personnes/list`
-Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/personnes/search`.
+### POST `/persons/list`
+Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/persons/search`.
 #### Structure demandée
 ```json
 {
@@ -103,7 +103,7 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/personnes/sea
 }
 ```
 
-### POST `/personnes/delete`
+### POST `/persons/delete`
 #### Structure demandée
 ```json
 {
@@ -121,7 +121,7 @@ Il est possible d'utiliser les opérateurs gte (>=) et lte. Voir `/personnes/sea
 }
 ```
 
-### POST `/personnes/getinfo`
+### POST `/persons/getinfo`
 
 Si une route est spécifiée (create, update, search, list, delete), les informations des champs seront retournée avec les règles de vérification des champs spécifique à la route, ainsi que les règles par défaut.
 Sinon, les champs n'auront que les règles par défaut.
@@ -146,14 +146,14 @@ Sinon, les champs n'auront que les règles par défaut.
 
 
 
-### GET `/personnes/:slug`
+### GET `/persons/:slug`
 
-Renvoie une personne identifiée à la slug précisée.
+Renvoie une person identifiée à la slug précisée.
 
 #### Structure demandéee
 `:slug` Une chaine de caractère, sans accent, ni espace
 
 
 
-### GET `/personnes/getdoc`
+### GET `/persons/getdoc`
 Renvoie ce fichier de documentation

@@ -5,7 +5,7 @@ export const fakeUserHistories = [
         modifDate:"2010-01-01",
         action:"create",
         modifiedEntity:"222222222222",
-        entityCollection:"personnes",
+        entityCollection:"persons",
         fields:{"name":"Chanteur"},
     },
     {

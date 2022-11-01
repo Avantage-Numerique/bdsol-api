@@ -5,7 +5,7 @@ import {ApiRouter} from "./routes";
 import {HealthCheckRouter} from "./Healthcheck/Routes/HealthCheckRoutes";
 import {AuthentificationRoutes} from "./Authentification/Routes/AuthentificationRoutes";
 import {UsersRoutes} from "./Users/Routes/UsersRouter";
-import {PersonnesRoutes} from './Personnes/Routes/PersonnesRoutes';
+import {PersonsRoutes} from './Persons/Routes/PersonsRoutes';
 import {OrganisationsRoutes} from './Organisations/Routes/OrganisationsRoutes'
 import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
 import {TaxonomyRoutes} from "./Taxonomy/Routes/TaxonomyRoutes";
@@ -102,8 +102,8 @@ export default class Api {
                 manager: new UsersHistoryRoutes()
             },
             {
-                baseRoute: "/personnes",
-                manager: new PersonnesRoutes()
+                baseRoute: "/persons",
+                manager: new PersonsRoutes()
             },
             {
                 baseRoute: "/organisations",

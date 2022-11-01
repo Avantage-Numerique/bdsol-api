@@ -60,7 +60,7 @@ export default class CreateDataMongoose implements SeederContract {
             case 'users':
                 return await this.service.insert(fakeUser);
 
-            case 'personnes':
+            case 'persons':
                 return await this.service.insert(fakePersons);
 
             case 'organisations':

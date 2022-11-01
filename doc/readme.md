@@ -8,7 +8,7 @@ version 0.0.5
 - [Authentification](Authentification.md)
 - [Registration](Registration.md)
 - [Utilisateurs](Users.md)
-- [Personnes](Personnes.md)
+- [Persons](Persons.md)
 - [Organisations](Organisations.md)
 - [Taxonomy](Taxonomy.md)
 

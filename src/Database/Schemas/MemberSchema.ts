@@ -41,7 +41,7 @@ export class Member {
         member: {
             type: mongoose.Types.ObjectId,
             required: [true, 'Required memberId to identify member'],
-            ref: "Personne"
+            ref: "Person"
         },
         role: {
             type: Role.schema,

@@ -1,14 +1,14 @@
 import express from "express";
-import {PersonnesController} from "../Controllers/PersonnesController";
+import {PersonsController} from "../Controllers/PersonsController";
 import AbstractController from "../../Abstract/Controller";
 import {body} from "express-validator";
 import {HtmlSanitizer} from "../../Security/Sanitizers/HtmlSanitizer";
 import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
 import CrudRoute from "../../Abstract/CrudRoute";
 
-class PersonnesRoutes extends CrudRoute {
+class PersonsRoutes extends CrudRoute {
 
-    controllerInstance: AbstractController = PersonnesController.getInstance();
+    controllerInstance: AbstractController = PersonsController.getInstance();
     routerInstance: express.Router = express.Router();
     routerInstanceAuthentification: express.Router = express.Router();
 
@@ -56,4 +56,4 @@ class PersonnesRoutes extends CrudRoute {
         getdoc: [],
     }
 }
-export {PersonnesRoutes};
+export {PersonsRoutes};

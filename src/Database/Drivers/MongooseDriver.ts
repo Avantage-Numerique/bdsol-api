@@ -6,13 +6,13 @@ import type {DBDriver} from "./DBDriver";
 import {UsersProvider} from "../Providers/UsersProvider";
 import {DataProvider} from "../Providers/DataProvider";
 import {User, UsersService} from "../../Users/UsersDomain";
-import Personne from "../../Personnes/Models/Personne";
+import Person from "../../Persons/Models/Person";
 import Organisation from "../../Organisations/Models/Organisation";
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 import UserHistory from "../../UserHistory/Models/UserHistory";
 import CreateDataMongoose from "../Seeders/create-data-mongoose";
 import {MongooseSlugUpdater} from "../Plugins/MongooseSlugUpdater";
-import PersonnesService from "../../Personnes/Services/PersonnesService";
+import PersonsService from "../../Persons/Services/PersonsService";
 import OrganisationsService from "../../Organisations/Services/OrganisationsService";
 import TaxonomyService from "../../Taxonomy/Services/TaxonomyService";
 import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService";
@@ -75,7 +75,7 @@ export class MongooseDBDriver implements DBDriver {
         this.providers.data.assign(TaxonomyService.getInstance(Taxonomy.getInstance()));
         this.providers.data.assign(UsersHistoryService.getInstance(UserHistory.getInstance()));
 
-        this.providers.data.assign(PersonnesService.getInstance(Personne.getInstance()));
+        this.providers.data.assign(PersonsService.getInstance(Person.getInstance()));
         this.providers.data.assign(OrganisationsService.getInstance(Organisation.getInstance()));
 
         await this.generateFakeData();
@@ -91,7 +91,7 @@ export class MongooseDBDriver implements DBDriver {
 
             const createDataTasks:Array<Service> = [
                 this.providers.users.services.UsersService,
-                this.providers.data.services.PersonnesService,
+                this.providers.data.services.PersonsService,
                 this.providers.data.services.OrganisationsService,
                 this.providers.data.services.TaxonomyService,
                 this.providers.data.services.UsersHistoryService,

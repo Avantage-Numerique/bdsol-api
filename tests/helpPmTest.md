@@ -239,7 +239,7 @@ Avant de se lancer dans les enchainements de tests voici quelques points importa
 
 - `postman.setNextRequest(null)` Arrête l'execution de collection.
 
-- Limité aux test contenu dans le même fichier (Personne/Create/ "only those").
+- Limité aux test contenu dans le même fichier (Person/Create/ "only those").
 
 ### Exemple d'utilisation et condition d'arrêt
 
@@ -309,7 +309,7 @@ v_data.description = tableDescription[index];
 
 pm.environment.set("v_data", JSON.stringify(v_data));
 ```
-**La requête s'execute et insère une nouvelle personne dans la BD**
+**La requête s'execute et insère une nouvelle person dans la BD**
 
 *La requête arrive dans la section Test*
 ```javascript
@@ -343,7 +343,7 @@ function NextCreate(){
         return false;
 }
 ```
-Ayant incrémenter l'index dans les variables d'environnement. Lorsque Postman effectuera de nouveau le create, il prendra les valeurs contenu dans l'index suivant et créera une personne différente.
+Ayant incrémenter l'index dans les variables d'environnement. Lorsque Postman effectuera de nouveau le create, il prendra les valeurs contenu dans l'index suivant et créera une person différente.
 
 On peut aussi insérer dans une variable d'environnement le "id" de création qui a été retourné par le serveur comme réponse au create et s'en servir pour une prochaine requête update, search ou delete.
 

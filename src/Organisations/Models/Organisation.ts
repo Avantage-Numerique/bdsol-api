@@ -83,7 +83,7 @@ class Organisation extends AbstractModel {
                 },
                 team: {
                     type: [Member.schema],
-                    ref: "Personne"
+                    ref: "Person"
                 },
                 status: {
                     type: Status.schema
