@@ -30,7 +30,7 @@ export default class Validator {
     private isnotnull = new Rules.isNotNull();
     private isstring = new Rules.isString();
     private isnotempty = new Rules.isNotEmpty();
-    private minlenght = new Rules.minLength();
+    private minlength = new Rules.minLength();
     private maxlength = new Rules.maxLength();
     private idvalid = new Rules.idValid();
     private isobject = new Rules.isObject();
@@ -54,7 +54,7 @@ export default class Validator {
         .setNext(this.isnotnull)
         .setNext(this.isstring)
         .setNext(this.isnotempty)
-        .setNext(this.minlenght)
+        .setNext(this.minlength)
         .setNext(this.maxlength)
         .setNext(this.idvalid)
         .setNext(this.isobject)
@@ -94,7 +94,7 @@ export default class Validator {
                 let param = -1;
                 //If param is passed
                 if ( rule.indexOf(":") != -1) {
-                    //ex: minLenght:3  => param = 3, rule = minLength
+                    //ex: minLength:3  => param = 3, rule = minLength
                     param = rule.substring(rule.indexOf(":")+1, rule.length);
                     rule = rule.substring(0, rule.indexOf(":"));
                 }

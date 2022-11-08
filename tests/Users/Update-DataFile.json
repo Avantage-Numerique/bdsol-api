@@ -72,7 +72,7 @@
     {
         "infoTest":
         {
-            "name":"Update id lenght != 24",
+            "name":"Update id length != 24",
             "error":true,
             "status":400
         },
