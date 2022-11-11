@@ -9,6 +9,8 @@ import {NoSpaceSanitizer} from "../../Security/Sanitizers/NoSpaceSanitizer";
 import {NoAccentSanitizer} from "../../Security/Sanitizers/NoAccentSanitizer";
 import {UrlSanitizer} from "../../Security/Sanitizers/UrlSanitizer";
 import {LatinSanitizer} from "../../Security/Sanitizers/LatinSanitizer";
+import {IsObjectIdStringValid} from "../../Security/Validators/IsObjectidValidator";
+import {ObjectIdStringSanitizer} from "../../Security/Sanitizers/ObjectIdStringSanitizer";
 
 class OrganisationsRoutes extends CrudRoute {
     controllerInstance: AbstractController = OrganisationsController.getInstance();
@@ -43,6 +45,14 @@ class OrganisationsRoutes extends CrudRoute {
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim()
                 .toDate(),
+            body('data.offers.*.offer').exists({checkFalsy:true}).bail()
+                .custom(IsObjectIdStringValid.validatorCustom())
+                .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
+                .trim(),
+            body('data.team.*.member').exists({checkFalsy:true}).bail()
+                .custom(IsObjectIdStringValid.validatorCustom())
+                .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
+                .trim(),
         ],
         update: [
             body('data.name').exists({checkFalsy:true}).bail()
@@ -69,6 +79,14 @@ class OrganisationsRoutes extends CrudRoute {
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim()
                 .toDate(),
+            body('data.offers.*.offer').exists({checkFalsy:true}).bail()
+                .custom(IsObjectIdStringValid.validatorCustom())
+                .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
+                .trim(),
+            body('data.team.*.member').exists({checkFalsy:true}).bail()
+                .custom(IsObjectIdStringValid.validatorCustom())
+                .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
+                .trim(),
         ],
         delete: [],
         search: [],

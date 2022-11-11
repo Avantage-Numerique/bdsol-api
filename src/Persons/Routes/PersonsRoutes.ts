@@ -5,6 +5,8 @@ import {body} from "express-validator";
 import {HtmlSanitizer} from "../../Security/Sanitizers/HtmlSanitizer";
 import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
 import CrudRoute from "../../Abstract/CrudRoute";
+import {ObjectIdStringSanitizer} from "../../Security/Sanitizers/ObjectIdStringSanitizer";
+import {IsObjectIdStringValid} from "../../Security/Validators/IsObjectidValidator";
 
 class PersonsRoutes extends CrudRoute {
 
@@ -31,6 +33,11 @@ class PersonsRoutes extends CrudRoute {
             body('data.description').exists({checkFalsy:true}).bail()
                 .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
+            body('data.occupations.*.occupation').exists({checkFalsy:true}).bail()
+                .custom(IsObjectIdStringValid.validatorCustom())
+                .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
+                .trim(),
+            //status not sanitize yet, because it will be manage by backend
         ],
         update: [
             body('data.lastName').exists({checkFalsy:true}).bail()
@@ -47,7 +54,11 @@ class PersonsRoutes extends CrudRoute {
                 .trim(),
             body('data.description').exists({checkFalsy:true}).bail()
                 .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
-                .trim()
+                .trim(),
+            body('data.occupations.*.occupation').exists({checkFalsy:true}).bail()
+                .custom(IsObjectIdStringValid.validatorCustom())
+                .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
+                .trim(),
         ],
         delete: [],
         search: [],
