@@ -6,6 +6,7 @@ import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
 import {NoSpaceSanitizer} from "../../Security/Sanitizers/NoSpaceSanitizer";
 import {NoAccentSanitizer} from "../../Security/Sanitizers/NoAccentSanitizer";
 import CrudRoute from "../../Abstract/CrudRoute";
+import {AlphaNumOnlySanitizer} from "../../Security/Sanitizers/AlphaNumOnlySanitizer";
 
 class UsersRoutes extends CrudRoute {
     controllerInstance: AbstractController = UsersController.getInstance();
@@ -18,9 +19,10 @@ class UsersRoutes extends CrudRoute {
         create: [
             body('data.username').exists({checkFalsy:true}).bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .stripLow()
                 .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
                 .customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
+                .stripLow()
+                .customSanitizer(AlphaNumOnlySanitizer.validatorCustomSanitizer())
                 .trim(),
             //ajouter lowercase
             body('data.email').exists({checkFalsy:true}).bail()
