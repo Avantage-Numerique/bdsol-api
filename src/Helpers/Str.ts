@@ -17,7 +17,8 @@ export class Str {
     public static POSSIBLE_SLUG_CHAR = /._|-/g;
     public static NO_SPACE = /\s+/g;
     public static ALLOW_CHAR = /[^A-Z0-9\s]+/ig;
-    public static OBJECTID_ALLOWED_CHAR = /[^0-9a-fA-F]{24}$/;
+    public static ALPHA_NUM_ONLY = /[^0-9a-fA-F]{24}$/;
+    public static OBJECTID_ALLOWED_CHAR = Str.ALPHA_NUM_ONLY;
     public static EMAIL = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
     //public static URL = /|[^a-z0-9-~+_.?#=!&;,/:%@$\|*\'()\[\]\\x80-\\xff]|i]/;
     //public static URL = /[a-z0-9]/g;//use this for the slug function : https://www.npmjs.com/package/any-ascii
@@ -183,6 +184,10 @@ export class Str {
 
     public static toObjectIdAllowedCharacter(str:string):string {
         return str.replace(Str.OBJECTID_ALLOWED_CHAR, "");
+    }
+
+    public static alphaNumOnly(str:string):string {
+        return str.replace(Str.ALPHA_NUM_ONLY, "");
     }
 
 }
