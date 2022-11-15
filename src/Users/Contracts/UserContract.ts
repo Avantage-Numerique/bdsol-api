@@ -4,5 +4,7 @@ export interface UserContract {
     password:string;
     avatar:string;
     name:string;
+    firstName?:string;
+    lastName?:string;
     role: string;
 }

@@ -54,6 +54,8 @@ export class User extends AbstractModel {
                 },
                 avatar: String,
                 name: String,
+                firstName: String,
+                lastName: String,
                 role: String
             },
             {
@@ -144,6 +146,8 @@ export class User extends AbstractModel {
             username: document.username ?? "",
             avatar: document.avatar ?? "",
             name: document.name ?? "",
+            firstName: document.name ?? "",
+            lastName: document.name ?? "",
             email: document.email ?? "",
             role: document.role ?? "",
             createdAt: document.createdAt ?? ""

@@ -19,6 +19,8 @@ Retour à la base de [Documention de l'API](readme.md)
                 "password": { "type": "string" },
                 "avatar": { "type": "string" },
                 "name": { "type": "string" },
+                "lastName": { "type": "string" },
+                "firstName": { "type": "string" },
                 "role": { "type": "string" }
             },
             "required": ["username", "email", "password"]
@@ -45,6 +47,8 @@ Retour à la base de [Documention de l'API](readme.md)
                 "password": { "type": "string" },
                 "avatar": { "type": "string" },
                 "name": { "type": "string" },
+                "lastName": { "type": "string" },
+                "firstName": { "type": "string" },
                 "role": { "type": "string" }
             },
             "required": ["id"]
