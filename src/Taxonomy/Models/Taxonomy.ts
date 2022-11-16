@@ -67,7 +67,7 @@ class Taxonomy extends AbstractModel {
             },
             status: {
                 type: Status.schema,
-                required: true,
+                //required: true,
             }
         },
             {

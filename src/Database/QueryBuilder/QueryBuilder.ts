@@ -1,4 +1,3 @@
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 export default class ApiQuery {
 
@@ -37,6 +36,9 @@ export default class ApiQuery {
 
         for (const field in query)
         {
+            //Allow "offers.offer" to be directly assigned without options ($regex, $option are not allowed)
+            const noOption = field.split(".").length > 1;
+
             if (ApiQuery.fieldIsDeclared(field))
             {
                 const value:any = query[field]//.toString();//@todo : Add a try/catch for this ?
@@ -57,6 +59,9 @@ export default class ApiQuery {
 
                 //  Si ce n'est pas un Id ou si on cherche une date précise (field == date).
                 if (!ApiQuery.haveProperty(value)) {
+                    if (noOption)
+                        ApiQuery.query[field] = value;
+                    else
                     ApiQuery.query[field] = { $regex: value, $options : 'i' };
                 }
             }
@@ -71,7 +76,7 @@ export default class ApiQuery {
      */
     static propertyToQueryObject(value:string):any
     {
-        let queryProperty:any = {};
+        const queryProperty:any = {};
         for (const supportedProperty in ApiQuery.supportedProperties)
         {
             const propertyParams:any = ApiQuery.supportedProperties[supportedProperty];

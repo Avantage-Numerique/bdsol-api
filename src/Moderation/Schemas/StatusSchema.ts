@@ -32,7 +32,7 @@ export class Status {
         //The last user that modified the status
         lastModifiedBy: {
             type: mongoose.Types.ObjectId,
-            required: true
+            //required: true
         },
         //If need to have a message attached to it (Reason to add taxonomy, comment...)
         message: {
