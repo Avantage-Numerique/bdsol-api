@@ -1,18 +1,40 @@
-import { RouteContract } from "../../../Abstract/Contracts/RouteContract";
-import AbstractRoute from "../../../Abstract/Route";
+import express, {Request, Response} from "express";
+import { StatusStates } from "../StatusSchema";
+import { StatusCodes } from "http-status-codes";
 
+class ModerationRoutes {
 
+    public routerInstance: express.Router;
+    public routerInstanceAuthentification: express.Router;
 
+    constructor(){
+        this.routerInstance = express.Router();
+        this.routerInstanceAuthentification = express.Router();
+    }
 
-class ModerationRoute extends AbstractRoute implements RouteContract {
+    /**
+     * Public routes init
+     * Setup all the endpoint that can be reachable when no token is added to the header (public)
+     * @return {express.Router} router for the public routes
+     * @public @method
+     */
+    public setupPublicRoutes(): express.Router {
+        this.routerInstance.get('/StatusEnum', this.getStatusEnumHandler);
+        return this.routerInstance;
+    }
 
-    controllerInstance: AbstractController;
-    routerInstance: Router;
-    routerInstanceAuthentification: Router;
-    middlewaresDistribution: any;
+    public setupAuthRoutes(): express.Router { return this.routerInstance }
 
-    setupAuthRoutes(): Router;
-    setupPublicRoutes(): Router;
-    addMiddlewares(route:string, middlewares:string): Array<any>;
-
+    /**
+     * GetStatusEnumHandler
+     * Handle the return of the Enum of status available
+     * @param req {Request}
+     * @param res {Response}
+     * @param next {NextFunction}
+     * @return {Promise<any>}
+     */
+     public async getStatusEnumHandler(req: Request, res: Response): Promise<any> {
+        return res.status(StatusCodes.OK).send(StatusStates);
+    }
 }
+export default ModerationRoutes

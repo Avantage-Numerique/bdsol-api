@@ -14,6 +14,7 @@ import LogHelper from "./Monitoring/Helpers/LogHelper";
 import {ApiErrorHandler} from "./Error/Middlewares/ApiErrorHandler";
 import {UsersHistoryRoutes} from "./UserHistory/Routes/UsersHistoryRoutes";
 import {GetRequestIp} from "./Monitoring/Middlewares/GetRequestIp";
+import ModerationRoutes from "./Moderation/Schemas/Route/ModerationRoutes";
 
 /**
  * Main class for the API
@@ -108,6 +109,10 @@ export default class Api {
             {
                 baseRoute: "/organisations",
                 manager: new OrganisationsRoutes()
+            },
+            {
+                baseRoute: "/info",
+                manager: new ModerationRoutes()
             }
         ];
     }
