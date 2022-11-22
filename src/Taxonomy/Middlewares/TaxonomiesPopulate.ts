@@ -2,14 +2,12 @@
  * Populate field on pre "find"
  * @param document {any} The mongoose document
  * @param schemaProperty {string} The parameters in the document to populate (with the ref value).
- * @param fieldToPopulate {string} Specify which field of underlying object to populate ( spaced string. E.g. "name slug createdAt" )
- * @default fieldToPopulate if not specified, it will populate all field
  */
 const middlewarePopulateProperty = (document:any,
-                                  schemaProperty:string = 'occupations',
-                                  fieldToPopulate?:string) => {
+                                  schemaProperty:string = 'occupations') => {
     
-    document.populate(schemaProperty, fieldToPopulate);
+    //Note : I think we can pass "schemaProperty" and add a 2nd param to specify which field we want to populate from the underlying entity                                
+    document.populate(schemaProperty);
 }
 
 export {middlewarePopulateProperty};
