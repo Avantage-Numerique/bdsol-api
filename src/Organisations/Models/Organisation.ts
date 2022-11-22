@@ -10,6 +10,7 @@ import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEn
 import { Member } from "../../Database/Schemas/MemberSchema";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
 import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
+import Person from "../../Persons/Models/Person";
 
 
 class Organisation extends AbstractModel {
@@ -182,7 +183,8 @@ class Organisation extends AbstractModel {
             url: document.url ?? '',
             contactPoint: document.contactPoint ?? '',
             fondationDate: document.fondationDate ?? '',
-            offer: document.offer ?? '',
+            offers: document.offers ?? '',
+            team: document.team ?? '',
             slug: document.offer ?? ''
         }
     }
@@ -233,13 +235,13 @@ class Organisation extends AbstractModel {
     public registerEvents():void {
 
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'offers.offer');
-            middlewarePopulateProperty(this, 'team.member');
+            middlewarePopulateProperty(this, 'offers.offer', "name status");
+            middlewarePopulateProperty(this, 'team.member', "firstName");
         });
         
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'offers.offer');
-            middlewarePopulateProperty(this, 'team.member');
+            middlewarePopulateProperty(this, 'offers.offer', "name status");
+            middlewarePopulateProperty(this, 'team.member', "firstName");
         });
     }
 }

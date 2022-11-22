@@ -223,11 +223,11 @@ class Person extends AbstractModel {
     public registerEvents():void {
 
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'occupations.occupation');
+            middlewarePopulateProperty(this, 'occupations.occupation', "name");
         });
         
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'occupations.occupation');
+            middlewarePopulateProperty(this, 'occupations.occupation', "name");
         });
     }
 
