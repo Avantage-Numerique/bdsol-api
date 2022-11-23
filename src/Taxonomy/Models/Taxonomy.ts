@@ -16,6 +16,9 @@ class Taxonomy extends AbstractModel {
     public static getInstance():Taxonomy {
         if (Taxonomy._instance === undefined) {
             Taxonomy._instance = new Taxonomy();
+
+            Taxonomy._instance.schema.virtual("type").get( function () { return Taxonomy._instance.modelName });
+
             Taxonomy._instance.initSchema();
             Taxonomy._instance.schema.index({ name:1, category:1 }, {unique: true})
         }
@@ -49,7 +52,7 @@ class Taxonomy extends AbstractModel {
                 type: String,
                 required: [true, 'Name required'],
                 minlength:[2, 'MinLength 2'],
-                alias: 'nom',
+                //alias: 'nom',
             },
             slug: {
                 type: String,
@@ -60,7 +63,7 @@ class Taxonomy extends AbstractModel {
             },
             description: {
                 type: String,
-                alias:'desc'
+                //alias:'desc'
             },
             source: {
                 type: String
@@ -71,6 +74,7 @@ class Taxonomy extends AbstractModel {
             }
         },
             {
+                toJSON: { virtuals: true },
                 timestamps: true,
                 strict: true,
                 collation: { locale: 'fr_CA' },

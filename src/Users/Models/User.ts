@@ -18,6 +18,8 @@ export class User extends AbstractModel {
         if (User._instance === undefined) {
             User._instance = new User();
             User._instance.assignDbEventsToSchema();
+
+            User._instance.schema.virtual("type").get( function () { return User._instance.modelName });
             User._instance.initSchema();
         }
         return User._instance;
@@ -59,6 +61,7 @@ export class User extends AbstractModel {
                 role: String
             },
             {
+                toJSON: { virtuals: true },
                 timestamps: true
             });
 

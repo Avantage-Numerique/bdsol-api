@@ -24,10 +24,11 @@ class Person extends AbstractModel {
             Person._instance.registerEvents();
             Person._instance.registerPreEvents();
 
-            //Setting virtual "fullName" field
+            //Setting virtual "fullName" and "type" field
             Person._instance.schema.virtual('fullName').get( function() {
                 return this.firstName + ' ' + this.lastName;
             });
+            Person._instance.schema.virtual("type").get( function () { return Person._instance.modelName });
 
             Person._instance.initSchema();
         }
@@ -61,6 +62,7 @@ class Person extends AbstractModel {
                     required: true,
                     //alias: 'prenom'
                 },
+                //FirstName in virtuals (getInstance())
                 slug: {
                     type: String,
                     slug: ["firstName", "lastName"],

@@ -23,6 +23,8 @@ class Organisation extends AbstractModel {
             Organisation._instance = new Organisation();
             Organisation._instance.registerPreEvents();
             Organisation._instance.registerEvents();
+
+            Organisation._instance.schema.virtual("type").get( function () { return Organisation._instance.modelName });
             Organisation._instance.initSchema();
         }
         return Organisation._instance;
@@ -47,7 +49,7 @@ class Organisation extends AbstractModel {
                     type: String,
                     required: true,
                     unique: true,
-                    alias: 'nom'
+                    //alias: 'nom'
                 },
                 slug: {
                     type: String,
@@ -58,7 +60,7 @@ class Organisation extends AbstractModel {
                 },
                 description: {
                     type: String,
-                    alias: 'desc'
+                    //alias: 'desc'
                 },
                 url: {
                     type: String,
@@ -90,6 +92,7 @@ class Organisation extends AbstractModel {
                 }
             },
             {
+                toJSON: { virtuals: true },
                 timestamps: true
             });
 
