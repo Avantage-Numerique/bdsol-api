@@ -33,7 +33,8 @@ class SearchRoutes {
      * @return {Promise<any>}
      */
      public async getSearchOnParam(req: Request, res: Response): Promise<any> {
-        return res.status(StatusCodes.OK).send(req.query);
+        //Need to send an array of objects that have been requested from params : req.query
+        return res.status(StatusCodes.OK).send([req.query]);
     }
 }
 export default SearchRoutes
