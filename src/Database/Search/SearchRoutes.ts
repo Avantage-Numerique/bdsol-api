@@ -18,21 +18,35 @@ class SearchRoutes {
      * @public @method
      */
     public setupPublicRoutes(): express.Router {
-        this.routerInstance.get('/', this.getSearchOnParam);
+        this.routerInstance.get('/', this.getSearchSuggestion);
+        this.routerInstance.get('/results', this.getSearchOnParam);
         return this.routerInstance;
     }
 
     public setupAuthRoutes(): express.Router { return this.routerInstance }
 
     /**
-     * GetStatusEnumHandler
-     * Handle the return of the Enum of status available
+     * GetSearchOnParam
+     * Handle the search and returns the full list of entity
      * @param req {Request}
      * @param res {Response}
      * @param next {NextFunction}
      * @return {Promise<any>}
      */
      public async getSearchOnParam(req: Request, res: Response): Promise<any> {
+        //Need to send an array of objects that have been requested from params : req.query
+        return res.status(StatusCodes.OK).send([req.query]);
+    }
+
+    /**
+     * getSearchSuggestion
+     * Handle the search and returns only and overview about what would the full search return
+     * @param req {Request}
+     * @param res {Response}
+     * @param next {NextFunction}
+     * @return {Promise<any>}
+     */
+     public async getSearchSuggestion(req: Request, res: Response): Promise<any> {
         //Need to send an array of objects that have been requested from params : req.query
         return res.status(StatusCodes.OK).send([req.query]);
     }
