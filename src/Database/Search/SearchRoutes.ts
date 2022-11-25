@@ -30,11 +30,14 @@ class SearchRoutes {
      * Handle the search and returns the full list of entity
      * @param req {Request}
      * @param res {Response}
-     * @param next {NextFunction}
      * @return {Promise<any>}
      */
      public async getSearchOnParam(req: Request, res: Response): Promise<any> {
-        //Need to send an array of objects that have been requested from params : req.query
+         //Send out $text : { $search : req.query } to all entity
+         //Merge in an array the results of each search
+         //Sort from search score (or let frontend do it)
+
+         //Send back full (DTO) of each entity search result in an array sorted, 
         return res.status(StatusCodes.OK).send([req.query]);
     }
 
@@ -43,11 +46,15 @@ class SearchRoutes {
      * Handle the search and returns only and overview about what would the full search return
      * @param req {Request}
      * @param res {Response}
-     * @param next {NextFunction}
      * @return {Promise<any>}
      */
      public async getSearchSuggestion(req: Request, res: Response): Promise<any> {
-        //Need to send an array of objects that have been requested from params : req.query
+         //Send out $text : { $search : req.query } to all entity
+         //Only take the _id, and fewest fields possible (_id, name, slug, type)
+         //Merge in an array the results of each search
+         //Sort from search score (or let frontend do it)
+
+         //Send back DTO of fewest field of each entity search result in an array sorted, 
         return res.status(StatusCodes.OK).send([req.query]);
     }
 }

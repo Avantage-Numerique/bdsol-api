@@ -31,6 +31,10 @@ class Person extends AbstractModel {
             Person._instance.schema.virtual("type").get( function () { return Person._instance.modelName });
 
             Person._instance.initSchema();
+
+            //Index
+            Person._instance.schema.index({ "occupations.occupation":1});
+            Person._instance.schema.index({ firstName:"text", lastName:"text", nickname:"text", slug:"text" }, { default_language: "french" });
         }
         return Person._instance;
     }

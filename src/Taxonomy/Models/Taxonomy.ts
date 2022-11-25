@@ -20,7 +20,11 @@ class Taxonomy extends AbstractModel {
             Taxonomy._instance.schema.virtual("type").get( function () { return Taxonomy._instance.modelName });
 
             Taxonomy._instance.initSchema();
-            Taxonomy._instance.schema.index({ name:1, category:1 }, {unique: true})
+
+            //Index
+            Taxonomy._instance.schema.index({ category:1 });
+            Taxonomy._instance.schema.index({ name:1, category:1 }, {unique: true});
+            Taxonomy._instance.schema.index({ name:"text", description:"text", category:"text", slug:"text" }, { default_language: "french" });
         }
         return Taxonomy._instance;
     }
@@ -77,7 +81,7 @@ class Taxonomy extends AbstractModel {
                 toJSON: { virtuals: true },
                 timestamps: true,
                 strict: true,
-                collation: { locale: 'fr_CA' },
+                //collation: { locale: 'fr_CA' },
         });
 
 

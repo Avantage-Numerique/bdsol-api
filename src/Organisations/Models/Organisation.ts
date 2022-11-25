@@ -26,6 +26,10 @@ class Organisation extends AbstractModel {
 
             Organisation._instance.schema.virtual("type").get( function () { return Organisation._instance.modelName });
             Organisation._instance.initSchema();
+
+            Organisation._instance.schema.index({ "offers.offer":1});
+            Organisation._instance.schema.index({ "team.member":1});
+            Organisation._instance.schema.index({ name:"text", description:"text"}, { default_language: "french" });
         }
         return Organisation._instance;
     }
@@ -48,6 +52,7 @@ class Organisation extends AbstractModel {
                 name: {
                     type: String,
                     required: true,
+                    index:true,
                     unique: true,
                     //alias: 'nom'
                 },
