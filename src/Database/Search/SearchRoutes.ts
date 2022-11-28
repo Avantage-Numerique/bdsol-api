@@ -1,12 +1,14 @@
 import express, {Request, Response} from "express";
-import { StatusCodes } from "http-status-codes";
+import {StatusCodes} from "http-status-codes";
+import Person from "../../Persons/Models/Person";
+import Organisation from "../../Organisations/Models/Organisation";
 
 class SearchRoutes {
 
     public routerInstance: express.Router;
     public routerInstanceAuthentification: express.Router;
 
-    constructor(){
+    constructor() {
         this.routerInstance = express.Router();
         this.routerInstanceAuthentification = express.Router();
     }
@@ -23,7 +25,9 @@ class SearchRoutes {
         return this.routerInstance;
     }
 
-    public setupAuthRoutes(): express.Router { return this.routerInstance }
+    public setupAuthRoutes(): express.Router {
+        return this.routerInstance
+    }
 
     /**
      * GetSearchOnParam
@@ -32,13 +36,35 @@ class SearchRoutes {
      * @param res {Response}
      * @return {Promise<any>}
      */
-     public async getSearchOnParam(req: Request, res: Response): Promise<any> {
-         //Send out $text : { $search : req.query } to all entity
-         //Merge in an array the results of each search
-         //Sort from search score (or let frontend do it)
+    public async getSearchOnParam(req: Request, res: Response): Promise<any> {
+        //Send out $text : { $search : req.query } to all entity
 
-         //Send back full (DTO) of each entity search result in an array sorted, 
-        return res.status(StatusCodes.OK).send([req.query]);
+        const personModel: any = Person.getInstance().mongooseModel;
+        const organisationModel: any = Organisation.getInstance().mongooseModel;
+
+        const personsResults = await personModel.find(
+            {$text: { $search: req.query.searchIndex }},
+            {score: {$meta: "textScore"}}
+        ).sort(
+            {score: {$meta: "textScore"}}
+        );
+
+        const organisationResults = await organisationModel.find(
+            {$text: {$search: req.query.searchIndex}},
+            {score: {$meta: "textScore"}}
+        ).sort(
+            {score: {$meta: "textScore"}}
+        );
+
+
+        //Merge in an array the results of each search
+        //Sort from search score (or let frontend do it)
+
+        //Send back full (DTO) of each entity search result in an array sorted,
+        return res.status(StatusCodes.OK).send( [
+            ...personsResults,
+            ...organisationResults
+        ]);
     }
 
     /**
@@ -48,14 +74,16 @@ class SearchRoutes {
      * @param res {Response}
      * @return {Promise<any>}
      */
-     public async getSearchSuggestion(req: Request, res: Response): Promise<any> {
-         //Send out $text : { $search : req.query } to all entity
-         //Only take the _id, and fewest fields possible (_id, name, slug, type)
-         //Merge in an array the results of each search
-         //Sort from search score (or let frontend do it)
+    public async getSearchSuggestion(req: Request, res: Response): Promise<any> {
+        //Send out $text : { $search : req.query } to all entity
+        //Only take the _id, and fewest fields possible (_id, name, slug, type)
+        //Merge in an array the results of each search
+        //Sort from search score (or let frontend do it)
 
-         //Send back DTO of fewest field of each entity search result in an array sorted, 
+        //Send back DTO of fewest field of each entity search result in an array sorted,
         return res.status(StatusCodes.OK).send([req.query]);
     }
+
 }
+
 export default SearchRoutes
