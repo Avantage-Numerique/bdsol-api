@@ -23,6 +23,9 @@ class Organisation extends AbstractModel {
             Organisation._instance = new Organisation();
             Organisation._instance.registerPreEvents();
             Organisation._instance.registerEvents();
+
+            Organisation._instance.schema.virtual("type").get( function () { return Organisation._instance.modelName });
+
             Organisation._instance.initSchema();
         }
         return Organisation._instance;
@@ -90,6 +93,7 @@ class Organisation extends AbstractModel {
                 }
             },
             {
+                toJSON: { virtuals: true },
                 timestamps: true
             });
 
@@ -177,13 +181,19 @@ class Organisation extends AbstractModel {
      */
     public dataTransfertObject(document: any): any {
         return {
+            _id: document._id ?? '',
             name: document.name ?? '',
             description: document.description ?? '',
             url: document.url ?? '',
             contactPoint: document.contactPoint ?? '',
             fondationDate: document.fondationDate ?? '',
-            offer: document.offer ?? '',
-            slug: document.offer ?? ''
+            offers: document.offers ?? '',
+            team: document.team ?? '',
+            slug: document.slug ?? '',
+            status : document.status ?? '',
+            type: document.type ?? '',
+            createdAt : document.createdAt ?? '',
+            updatedAt : document.updatedAt ?? '',
         }
     }
 
@@ -233,13 +243,13 @@ class Organisation extends AbstractModel {
     public registerEvents():void {
 
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'offers.offer');
-            middlewarePopulateProperty(this, 'team.member');
+            middlewarePopulateProperty(this, 'offers.offer', "name category status");
+            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
         });
         
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'offers.offer');
-            middlewarePopulateProperty(this, 'team.member');
+            middlewarePopulateProperty(this, 'offers.offer', "name category status");
+            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
         });
     }
 }
