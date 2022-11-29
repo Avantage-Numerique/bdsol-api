@@ -159,6 +159,7 @@ class Taxonomy extends AbstractModel {
      */
     public dataTransfertObject(document: any) {
         return {
+            _id: document._id ?? '',
             category: document.category ?? '',
             name: document.name ?? '',
             slug: document.slug ?? '',

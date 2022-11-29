@@ -181,6 +181,7 @@ class Organisation extends AbstractModel {
      */
     public dataTransfertObject(document: any): any {
         return {
+            _id: document._id ?? '',
             name: document.name ?? '',
             description: document.description ?? '',
             url: document.url ?? '',

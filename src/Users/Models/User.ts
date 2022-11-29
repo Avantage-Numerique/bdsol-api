@@ -146,7 +146,7 @@ export class User extends AbstractModel {
      */
     public dataTransfertObject(document: any):any {
         return {
-            id: document._id ?? '',
+            _id: document._id ?? '',
             username: document.username ?? '',
             avatar: document.avatar ?? '',
             name: document.name ?? '',

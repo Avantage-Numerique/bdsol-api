@@ -182,6 +182,7 @@ class Person extends AbstractModel {
      */
     public dataTransfertObject(document: any) {
         return {
+            _id: document._id ?? '',
             lastName: document.lastName ?? '',
             firstName: document.firstName ?? '',
             nickname: document.nickname ?? '',
