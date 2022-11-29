@@ -227,7 +227,7 @@ export abstract class Service
                     break;
             }
 
-            const meta = await this.model.updateOne(where, {$setOnInsert: data}, updateOrCreateOptions)
+            const meta = await this.model.findOneAndUpdate(where, {$setOnInsert: data}, updateOrCreateOptions)
                 .catch((e: any) => {
                         return e;
                     }
