@@ -10,7 +10,6 @@ import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEn
 import { Member } from "../../Database/Schemas/MemberSchema";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
 import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
-import Person from "../../Persons/Models/Person";
 
 
 class Organisation extends AbstractModel {
@@ -24,6 +23,9 @@ class Organisation extends AbstractModel {
             Organisation._instance = new Organisation();
             Organisation._instance.registerPreEvents();
             Organisation._instance.registerEvents();
+
+            Organisation._instance.schema.virtual("type").get( function () { return Organisation._instance.modelName });
+
             Organisation._instance.initSchema();
         }
         return Organisation._instance;
@@ -91,6 +93,7 @@ class Organisation extends AbstractModel {
                 }
             },
             {
+                toJSON: { virtuals: true },
                 timestamps: true
             });
 
@@ -185,7 +188,11 @@ class Organisation extends AbstractModel {
             fondationDate: document.fondationDate ?? '',
             offers: document.offers ?? '',
             team: document.team ?? '',
-            slug: document.offer ?? ''
+            slug: document.slug ?? '',
+            status : document.status ?? '',
+            type: document.type ?? '',
+            createdAt : document.createdAt ?? '',
+            updatedAt : document.updatedAt ?? '',
         }
     }
 
@@ -235,13 +242,13 @@ class Organisation extends AbstractModel {
     public registerEvents():void {
 
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'offers.offer', "name status");
-            middlewarePopulateProperty(this, 'team.member', "firstName");
+            middlewarePopulateProperty(this, 'offers.offer', "name category status");
+            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
         });
         
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'offers.offer', "name status");
-            middlewarePopulateProperty(this, 'team.member', "firstName");
+            middlewarePopulateProperty(this, 'offers.offer', "name category status");
+            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
         });
     }
 }

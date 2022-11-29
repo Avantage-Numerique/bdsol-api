@@ -24,12 +24,25 @@ class Person extends AbstractModel {
             Person._instance.registerEvents();
             Person._instance.registerPreEvents();
 
-            //Setting virtual "fullName" field
+            //Setting virtual "fullName" and "type" field
             Person._instance.schema.virtual('fullName').get( function() {
                 return this.firstName + ' ' + this.lastName;
             });
+            Person._instance.schema.virtual("type").get( function () { return Person._instance.modelName });
 
             Person._instance.initSchema();
+
+            //Index
+            Person._instance.schema.index({ "occupations.occupation":1});
+            Person._instance.schema.index(
+                { firstName:"text", lastName:"text", nickname:"text", slug:"text" },
+                { 
+                    default_language: "french",
+                    //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
+                    weights:{
+                        firstName:3,
+                        lastName:3
+                }});
         }
         return Person._instance;
     }
@@ -61,6 +74,7 @@ class Person extends AbstractModel {
                     required: true,
                     //alias: 'prenom'
                 },
+                //FirstName in virtuals (getInstance())
                 slug: {
                     type: String,
                     slug: ["firstName", "lastName"],
@@ -173,7 +187,12 @@ class Person extends AbstractModel {
             nickname: document.nickname ?? '',
             description: document.description ?? '',
             occupations: document.occupations ?? '',
-            slug: document.slug ?? ''
+            slug: document.slug ?? '',
+            status: document.status ?? '',
+            type: document.type ?? '',
+            fullName: document.fullName ?? '',
+            createdAt : document.createdAt ?? '',
+            updatedAt : document.updatedAt ?? '',
         }
     }
 
@@ -223,11 +242,11 @@ class Person extends AbstractModel {
     public registerEvents():void {
 
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'occupations.occupation', "name");
+            middlewarePopulateProperty(this, 'occupations.occupation', "name category status");
         });
         
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'occupations.occupation', "name");
+            middlewarePopulateProperty(this, 'occupations.occupation', "name category status");
         });
     }
 
