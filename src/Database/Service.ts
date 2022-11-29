@@ -25,6 +25,8 @@ export abstract class Service
     static DELETE_STATE:string = "delete";
     static LIST_STATE:string = "list";
     static SEARCH_STATE:string = "search";
+    static UPDATE_OR_CREATE:string = "update or create";
+    static CUSTOM_FUNCTION:string = "custom";
 
     static CREATE_MSG:string = "Création";
     static UPDATE_MSG:string = "Mise à jour";
@@ -196,6 +198,52 @@ export abstract class Service
     }
 
     /**
+     * With modify the target document.
+     * @param data any document data containing id
+     * @param whereKeys {any} the key to find before insert.
+     * @param options {any} document data containing id
+     * @note error 11000 //error = not unique {"index":0,"code":11000,"keyPattern":{"username":1},"keyValue":{"username":"mamilidasdasdasd"}}
+     */
+    async updateOrCreate(data: any, whereKeys?:any, options?:any): Promise<ApiResponseContract> {
+
+        const updateOrCreateOptions = {
+            upsert: true,
+            new: true,
+            runValidators: true,
+            ...options
+        };
+
+        try {
+            let where:any = {};
+            switch (typeof whereKeys) {
+                case "string":
+                    where[whereKeys] = data[whereKeys];
+                    break;
+                default:
+                case "object":
+                    for (const whereKey of whereKeys) {
+                        where[whereKey] = data[whereKey];
+                    }
+                    break;
+            }
+
+            const meta = await this.model.updateOne(where, {$setOnInsert: data}, updateOrCreateOptions)
+                .catch((e: any) => {
+                        return e;
+                    }
+                );
+            return this.parseResult(meta, Service.UPDATE_OR_CREATE);
+
+        } catch (updateError: any) {
+            return ErrorResponse.create(
+                updateError.errors,
+                StatusCodes.UNPROCESSABLE_ENTITY,
+                updateError.errmsg || `Not able to ${Service.UPDATE_OR_CREATE} item`
+            );
+        }
+    }
+
+    /**
      * Delete the target document with the target id
      * @param id string of the objectid for the document.
      */
@@ -217,6 +265,32 @@ export abstract class Service
                 deleteError.errors,
                 StatusCodes.INTERNAL_SERVER_ERROR,
                 deleteError.message || "Error on delete item in Service"
+            );
+        }
+    }
+
+    /**
+     * Call on custom mongoose function on Model.
+     * @param mongooseFunction {string} function to call
+     * @param params {any} the function params
+     */
+    async custom(mongooseFunction:string, params?:any): Promise<ApiResponseContract> {
+        try {
+            const results = await this.model[mongooseFunction](...params)
+                .catch((e: any) => {
+                        LogHelper.info(`Error on custom call on ${mongooseFunction} item in Service`, e);
+                        return e;
+                    }
+                );
+
+            return this.parseResult(results, Service.CUSTOM_FUNCTION);
+
+        } catch (errors: any) {
+
+            return ErrorResponse.create(
+                errors.errors,
+                StatusCodes.INTERNAL_SERVER_ERROR,
+                errors.message || `Error on custom ${mongooseFunction} item in Service`
             );
         }
     }
@@ -298,29 +372,6 @@ export abstract class Service
                 meta.msg);
         }
 
-        // RESULTS
-
-        // UPDATE SUCCESSFUL
-        /*if (meta.acknowledged !== undefined &&
-            meta.acknowledged) {
-            LogHelper.log(StatusCodes.OK + " " + actionMessage + " de l'item réussi");
-            return SuccessResponse.create(
-                meta,
-                StatusCodes.OK,
-                actionMessage + " de l'item réussi"
-            );
-        }*/
-
-        // UPDATE FAILED
-        /*if (meta.acknowledged !== undefined &&
-            !meta.acknowledged) {
-            LogHelper.log(StatusCodes.NOT_MODIFIED + " " + actionMessage + " de l'item n'a pas été réussi");
-            return ErrorResponse.create(
-                meta,
-                StatusCodes.NOT_MODIFIED,
-                actionMessage + " de l'item n'a pas été réussi"
-            );
-        }*/
 
         if(meta.TypeError)
             return ErrorResponse.create(meta, StatusCodes.BAD_REQUEST, "Échec de la " + actionMessage)

@@ -3,7 +3,7 @@ import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import type {DBDriver} from "./DBDriver";
 import {User} from "../../Users/UsersDomain";
-import CreateUsersCollection from "../Seeders/create-users-collection";
+import Deprecate_createUsersCollection from "../Seeders/deprecate_create-users-collection";
 
 
 /**
@@ -12,7 +12,7 @@ import CreateUsersCollection from "../Seeders/create-users-collection";
  *
  * Mongodb was a raw driver to manage mongodb without ODM/ORM.
  */
-export class MongoDBDriver implements DBDriver {
+export class Deprecate_MongoDBDriver implements DBDriver {
 
     public driverPrefix: string;
     public client: mongoDB.MongoClient | null;
@@ -61,7 +61,7 @@ export class MongoDBDriver implements DBDriver {
                 LogHelper.log('[BD] Setting the default db ', config.db.name);
 
                 //will create the fake user for now.
-                const usersCollection = new CreateUsersCollection();
+                const usersCollection = new Deprecate_createUsersCollection();
                 usersCollection.db = this.db;
                 await usersCollection.up();
             }
