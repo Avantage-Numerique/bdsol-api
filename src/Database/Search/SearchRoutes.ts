@@ -37,7 +37,7 @@ class SearchRoutes {
      * @return {Promise<any>}
      */
     public async getSearchOnParam(req: Request, res: Response): Promise<any> {
-        //Send out $text : { $search : req.query } to all entity
+        //Send out $text : { $search : req.query } to all entity  
 
         const personModel: any = Person.getInstance().mongooseModel;
         const organisationModel: any = Organisation.getInstance().mongooseModel;
@@ -56,9 +56,8 @@ class SearchRoutes {
             {score: {$meta: "textScore"}}
         );
 
-        
         //Send back full (DTO) of each entity search result in an array sorted,
-        return res.status(StatusCodes.OK).send( [
+        return res.status(StatusCodes.OK).send([
             ...personsResults,
             ...organisationResults
           ].sort(
@@ -76,13 +75,27 @@ class SearchRoutes {
      * @return {Promise<any>}
      */
     public async getSearchSuggestion(req: Request, res: Response): Promise<any> {
-        //Send out $text : { $search : req.query } to all entity
-        //Only take the _id, and fewest fields possible (_id, name, slug, type)
-        //Merge in an array the results of each search
-        //Sort from search score (or let frontend do it)
+        const personModel: any = Person.getInstance().mongooseModel;
+        const organisationModel: any = Organisation.getInstance().mongooseModel;
+
+        const personsSuggestions = await personModel.find(
+            { $or: [
+              { firstName: { $regex: req.query.searchIndex, $options : 'i' }},
+              { lastName: { $regex: req.query.searchIndex, $options : 'i' }},
+              { nickname: { $regex: req.query.searchIndex, $options : 'i' }},
+              { description: { $regex: req.query.searchIndex, $options : 'i' }},
+            ]}
+        )
+
+        const organisationsSuggestions = await organisationModel.find(
+            { $or: [
+              { name: { $regex: req.query.searchIndex, $options : 'i' }},
+              { description: { $regex: req.query.searchIndex, $options : 'i' }},
+            ]}
+        )
 
         //Send back DTO of fewest field of each entity search result in an array sorted,
-        return res.status(StatusCodes.OK).send([req.query]);
+        return res.status(StatusCodes.OK).send([...personsSuggestions, ...organisationsSuggestions]);
     }
 
 }
