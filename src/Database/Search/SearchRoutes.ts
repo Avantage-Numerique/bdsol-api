@@ -56,15 +56,16 @@ class SearchRoutes {
             {score: {$meta: "textScore"}}
         );
 
-
-        //Merge in an array the results of each search
-        //Sort from search score (or let frontend do it)
-
+        
         //Send back full (DTO) of each entity search result in an array sorted,
         return res.status(StatusCodes.OK).send( [
             ...personsResults,
             ...organisationResults
-        ]);
+          ].sort(
+              //Would love to merge sort the results :) but this more easy V
+              function(a,b){ return a.score - b.score } //Sort the resulting array
+            )
+        );
     }
 
     /**

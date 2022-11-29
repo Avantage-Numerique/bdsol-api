@@ -34,7 +34,15 @@ class Person extends AbstractModel {
 
             //Index
             Person._instance.schema.index({ "occupations.occupation":1});
-            Person._instance.schema.index({ firstName:"text", lastName:"text", nickname:"text", slug:"text" }, { default_language: "french" });
+            Person._instance.schema.index(
+                { firstName:"text", lastName:"text", nickname:"text", slug:"text" },
+                { 
+                    default_language: "french",
+                    //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
+                    weights:{
+                        firstName:3,
+                        lastName:3
+                }});
         }
         return Person._instance;
     }
