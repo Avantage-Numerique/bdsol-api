@@ -241,7 +241,6 @@ class Person extends AbstractModel {
     }
 
     public registerEvents():void {
-
         this.schema.pre('find', function() {
             middlewarePopulateProperty(this, 'occupations.occupation', "name category status");
         });
@@ -250,7 +249,6 @@ class Person extends AbstractModel {
             middlewarePopulateProperty(this, 'occupations.occupation', "name category status");
         });
     }
-
 }
 
 export default Person;
