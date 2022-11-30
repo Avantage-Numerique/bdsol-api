@@ -2,6 +2,7 @@ import express, {Request, Response} from "express";
 import {StatusCodes} from "http-status-codes";
 import Person from "../../Persons/Models/Person";
 import Organisation from "../../Organisations/Models/Organisation";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 class SearchRoutes {
 
@@ -47,24 +48,22 @@ class SearchRoutes {
             {score: {$meta: "textScore"}}
         ).sort(
             {score: {$meta: "textScore"}}
-        );
+        ).lean();
 
         const organisationResults = await organisationModel.find(
             {$text: {$search: req.query.searchIndex}},
             {score: {$meta: "textScore"}}
         ).sort(
             {score: {$meta: "textScore"}}
-        );
+        ).lean();
+
+        //Sort by score
+        const sortedResult = [...personsResults, ...organisationResults];
+        //Would love to merge sort the results :) but this more easy V
+        sortedResult.sort( function(a,b){ return b.score - a.score } );
 
         //Send back full (DTO) of each entity search result in an array sorted,
-        return res.status(StatusCodes.OK).send([
-            ...personsResults,
-            ...organisationResults
-          ].sort(
-              //Would love to merge sort the results :) but this more easy V
-              function(a,b){ return a.score - b.score } //Sort the resulting array
-            )
-        );
+        return res.status(StatusCodes.OK).send(sortedResult)
     }
 
     /**
