@@ -2,7 +2,6 @@ import express, {Request, Response} from "express";
 import {StatusCodes} from "http-status-codes";
 import Person from "../../Persons/Models/Person";
 import Organisation from "../../Organisations/Models/Organisation";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 class SearchRoutes {
 
