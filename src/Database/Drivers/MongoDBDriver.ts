@@ -7,7 +7,7 @@ import CreateUsersCollection from "../Seeders/create-users-collection";
 
 
 /**
- * @Deprecated
+ * @deprecated
  * We use MongooseDriver instead to have an ODM
  *
  * Mongodb was a raw driver to manage mongodb without ODM/ORM.
@@ -42,7 +42,7 @@ export class MongoDBDriver implements DBDriver {
     }
 
     /**
-     * @Deprecated Will be use mongoose, but kept raw mongodb connection here in case. 2022-04-11
+     * @deprecated Will be use mongoose, but kept raw mongodb connection here in case. 2022-04-11
      * This is code to connect to mongo db directly. Without mongoose.
      * Keeping it for now. Because of mongoose is still in test.
      */

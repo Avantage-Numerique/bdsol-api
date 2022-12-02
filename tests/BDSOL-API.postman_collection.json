@@ -377,7 +377,7 @@
 									"    \"name\" : \"Circassien\",\r",
 									"    \"description\" : \"Le circassien pratique l'action de faire du cirque.\",\r",
 									"    \"source\" : \"\",\r",
-									"    \"status\": \"Pending\",\r",
+									"    \"status\": \"pending\",\r",
 									"    \"addReason\":\"Je pense que le cirque fait partie intégrante de la culture et j'aimerais qu'il soit ajouté pour pouvoir me l'attribuer.\"\r",
 									"};\r",
 									"pm.environment.clear();\r",

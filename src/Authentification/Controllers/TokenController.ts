@@ -97,7 +97,7 @@ export class TokenController {
 
 
     /**
-     * @Deprecated
+     * @deprecated
      * @param verifiedToken {any} Likely to be an object.
      * @protected
      */
