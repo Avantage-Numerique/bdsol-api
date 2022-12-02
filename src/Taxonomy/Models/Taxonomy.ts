@@ -6,6 +6,8 @@ import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model"
 import TaxonomyService from "../Services/TaxonomyService";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
+import * as fs from 'fs';
+
 
 class Taxonomy extends AbstractModel {
 
@@ -161,18 +163,21 @@ class Taxonomy extends AbstractModel {
      */
     public dataTransfertObject(document: any) {
         return {
+            _id: document._id ?? '',
             category: document.category ?? '',
             name: document.name ?? '',
             slug: document.slug ?? '',
             description: document.description ?? '',
             source: document.source ?? '',
             status: document.status ?? '',
-            addReason: document.addReason ?? ''
+            type: document.type ?? '',
+            createdAt : document.createdAt ?? '',
+            updatedAt : document.updatedAt ?? '',
         }
     }
 
     public async documentation():Promise<any>{
-        return 'not implemented';
+        return fs.readFileSync('/api/doc/Taxonomy.md', 'utf-8');
    }
 }
 export default Taxonomy;

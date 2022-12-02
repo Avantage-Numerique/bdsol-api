@@ -1,6 +1,6 @@
 
 /**
- * @Deprecated Error est un nom réservé à JS.
+ * @deprecated Error est un nom réservé à JS.
  */
 export class Error {
 

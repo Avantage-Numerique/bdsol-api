@@ -182,12 +182,18 @@ class Person extends AbstractModel {
      */
     public dataTransfertObject(document: any) {
         return {
+            _id: document._id ?? '',
             lastName: document.lastName ?? '',
             firstName: document.firstName ?? '',
             nickname: document.nickname ?? '',
             description: document.description ?? '',
             occupations: document.occupations ?? '',
-            slug: document.slug ?? ''
+            slug: document.slug ?? '',
+            status: document.status ?? '',
+            type: document.type ?? '',
+            fullName: document.fullName ?? '',
+            createdAt : document.createdAt ?? '',
+            updatedAt : document.updatedAt ?? '',
         }
     }
 
@@ -235,16 +241,14 @@ class Person extends AbstractModel {
     }
 
     public registerEvents():void {
-
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'occupations.occupation');
+            middlewarePopulateProperty(this, 'occupations.occupation', "name category status");
         });
         
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'occupations.occupation');
+            middlewarePopulateProperty(this, 'occupations.occupation', "name category status");
         });
     }
-
 }
 
 export default Person;

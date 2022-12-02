@@ -8,7 +8,7 @@ export const TaxonomiesPersistantData = [
         "description" : "Créateur d'animation visuelle de personnage ou objet 2D et 3D.",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -18,7 +18,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -28,7 +28,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -38,7 +38,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -48,7 +48,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -58,7 +58,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -68,7 +68,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -78,7 +78,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -88,7 +88,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -98,7 +98,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -108,7 +108,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -118,7 +118,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -128,7 +128,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -138,7 +138,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -148,7 +148,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -158,7 +158,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -168,7 +168,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -178,7 +178,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -188,7 +188,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -198,7 +198,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -208,7 +208,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -218,7 +218,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -228,7 +228,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -238,7 +238,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -248,7 +248,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -258,7 +258,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -268,7 +268,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -278,7 +278,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -288,7 +288,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -298,7 +298,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -308,7 +308,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -318,7 +318,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -328,7 +328,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -338,7 +338,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -348,7 +348,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -358,7 +358,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -368,7 +368,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -378,7 +378,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -388,7 +388,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -398,7 +398,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -408,7 +408,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -418,7 +418,7 @@ export const TaxonomiesPersistantData = [
         "description" : "",
         "source" : "",
         "status": {
-            "state":StatusStates.Accepted,
+            "state":StatusStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     }

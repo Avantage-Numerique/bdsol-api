@@ -20,6 +20,7 @@ export class User extends AbstractModel {
             User._instance.assignDbEventsToSchema();
 
             User._instance.schema.virtual("type").get( function () { return User._instance.modelName });
+
             User._instance.initSchema();
         }
         return User._instance;
@@ -145,15 +146,17 @@ export class User extends AbstractModel {
      */
     public dataTransfertObject(document: any):any {
         return {
-            id: document._id ?? "",
-            username: document.username ?? "",
-            avatar: document.avatar ?? "",
-            name: document.name ?? "",
-            firstName: document.name ?? "",
-            lastName: document.name ?? "",
-            email: document.email ?? "",
-            role: document.role ?? "",
-            createdAt: document.createdAt ?? ""
+            _id: document._id ?? '',
+            username: document.username ?? '',
+            avatar: document.avatar ?? '',
+            name: document.name ?? '',
+            firstName: document.name ?? '',
+            lastName: document.name ?? '',
+            email: document.email ?? '',
+            role: document.role ?? '',
+            type: document.type ?? '',
+            createdAt: document.createdAt ?? '',
+            updatedAt: document.updatedAt ?? '',
         }
     }
 
