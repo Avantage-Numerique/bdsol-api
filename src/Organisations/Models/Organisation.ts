@@ -27,6 +27,18 @@ class Organisation extends AbstractModel {
             Organisation._instance.schema.virtual("type").get( function () { return Organisation._instance.modelName });
 
             Organisation._instance.initSchema();
+
+            Organisation._instance.schema.index({ "offers.offer":1});
+            Organisation._instance.schema.index({ "team.member":1});
+            Organisation._instance.schema.index(
+                { name:"text", description:"text", slug:"text"},
+                { 
+                    default_language: "french",
+                    //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
+                    weights:{
+                        name:4,
+                        description:2
+                }});
         }
         return Organisation._instance;
     }
@@ -49,8 +61,9 @@ class Organisation extends AbstractModel {
                 name: {
                     type: String,
                     required: true,
+                    index:true,
                     unique: true,
-                    alias: 'nom'
+                    //alias: 'nom'
                 },
                 slug: {
                     type: String,
@@ -61,7 +74,7 @@ class Organisation extends AbstractModel {
                 },
                 description: {
                     type: String,
-                    alias: 'desc'
+                    //alias: 'desc'
                 },
                 url: {
                     type: String,
