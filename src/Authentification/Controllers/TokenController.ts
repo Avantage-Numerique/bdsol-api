@@ -84,7 +84,6 @@ export class TokenController {
             // could be : TokenExpiredError
             throw err;
         }
-        console.log("##############################", decoded);
         if (TokenController.isValid(decoded) &&
             TokenController.isActive(decoded))
         {
