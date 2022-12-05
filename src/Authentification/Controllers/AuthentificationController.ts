@@ -55,10 +55,10 @@ class AuthentificationController
     {
         // add encryption on send form till checking here.
         LogHelper.info(`${username} trying to connect ...`);
-
+        
         //Authenticate the user with the creditentials
         const targetUser = await this.authenticate(username, password);
-
+        
         // User was find in DB
         if (targetUser &&
             !targetUser.error &&
@@ -170,13 +170,22 @@ class AuthentificationController
             LogHelper.info(`Vérification des informations fournis par ${username} ...`);
             if (ServerController.database.driverPrefix === 'mongodb')
             {
-                const user = await this.service.get(targetUser);
-
+                //Note: Service removed password with the DTO, soo we used mongooseModel directly
+                //Refactoring : We should manage internal and external responses seperately in different services ...
+                const user = await User.getInstance().mongooseModel.findOne(targetUser).lean();
+                let response;
+                if (user !== null) {
+                    response = SuccessResponse.create(user, StatusCodes.OK, ReasonPhrases.OK);
+                }
+                else {
+                    response = ErrorResponse.create(user, StatusCodes.INTERNAL_SERVER_ERROR);
+                }
+    
                 // If we find a user, we check the password through the hashing comparaison.
-                if (!user.error && user.data.password !== undefined)
+                if (!response.error && response.data.password !== undefined)
                 {
-                    if (await PasswordsController.matches(user.data.password, password)) {
-                        return user;
+                    if (await PasswordsController.matches(response.data.password, password)) {
+                        return response;
                     }
                 }
                 return ErrorResponse.create(new Error("Connection refusée"), StatusCodes.UNAUTHORIZED);
