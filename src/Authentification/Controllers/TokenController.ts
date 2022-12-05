@@ -84,7 +84,7 @@ export class TokenController {
             // could be : TokenExpiredError
             throw err;
         }
-
+        console.log("##############################", decoded);
         if (TokenController.isValid(decoded) &&
             TokenController.isActive(decoded))
         {
@@ -130,7 +130,7 @@ export class TokenController {
             verifiedToken.iat >= 0 &&
             verifiedToken.exp !== undefined &&
             verifiedToken.exp >= 0 &&
-            verifiedToken.id !== undefined &&
+            (verifiedToken._id !== undefined || verifiedToken.id !== undefined) &&
             verifiedToken.username !== undefined &&
             verifiedToken.role !== undefined;
     }
