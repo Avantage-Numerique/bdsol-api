@@ -10,7 +10,7 @@
         "name"  : "Circassien",
         "description" : "La personne qui fait l'action de faire du cirque",
         "source" : "Fred",
-        "status" : "accepted",
+        "status" : "Accepted",
         "addReason" : "Parce que je fais du cirque et je veux l'utiliser"
     },
     {
@@ -22,7 +22,7 @@
         },
         "category" : "occupations",
         "name" : "Patriote",
-        "status" : "pending"
+        "status" : "Pending"
     },
     {
         "infoTest":
@@ -40,7 +40,7 @@
             "status":400
         },
         "category" : "skills",
-        "status" : "pending"
+        "status" : "Pending"
     },
     {
         "infoTest":
@@ -50,7 +50,7 @@
             "status":400
         },
         "name" : "Patate",
-        "status" : "accepted"
+        "status" : "Accepted"
     },
     {
         "infoTest":
@@ -71,7 +71,7 @@
         },
         "category" : "occupations",
         "name" : "a",
-        "status" : "pending"
+        "status" : "Pending"
     },
     {
         "infoTest":
@@ -104,7 +104,7 @@
         "name" : "!\"/$%?&*()<>{}[]~éàè`{$Status}`",
         "description" : "!\"/$%?&*()<>{}[]~éàè`{$Status}`",
         "source" : "!\"/$%?&*()<>{}[]~éàè`{$Status}`",
-        "status" : "pending",
+        "status" : "Pending",
         "addReason" : "!\"/$%?&*()<>{}[]~éàè`{$Status}`"
     },
     {
@@ -118,7 +118,7 @@
         "name" : "Pataterino",
         "description" : "C'est une description",
         "source" : "C'est une source",
-        "status" : "pending",
+        "status" : "Pending",
         "addReason" : "Une raison d'ajout"
     },
     {
@@ -150,7 +150,7 @@
         "name" : "Un nom",
         "description" : "asdf",
         "source" : "asdf",
-        "status" : "pending",
+        "status" : "Pending",
         "addReason" : "asdf"
     }
 ]

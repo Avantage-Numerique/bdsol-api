@@ -111,13 +111,6 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
             this.routeSendResponse.bind(this),
         ]);
 
-        this.routerInstance.post('/textsearch', [
-            ...this.addMiddlewares("all"),
-            ...this.addMiddlewares("search"),
-            this.textSearchHandler.bind(this),
-            this.routeSendResponse.bind(this),
-        ]);
-
         this.routerInstance.post('/list', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("list"),
@@ -245,12 +238,8 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @return {Promise<any>}
      */
     public async searchHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        res.serviceResponse = await this.controllerInstance.search(req.body.data);
-        return next();
-    }
 
-    public async textSearchHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        res.serviceResponse = await this.controllerInstance.textSearch(req.body.data);
+        res.serviceResponse = await this.controllerInstance.search(req.body.data);
         return next();
     }
 

@@ -25,7 +25,7 @@ package Entity {
     *description : String
     *source : String
     *status : String enum:
-      ["accepted", "pending", "rejected", "deprecated"]
+      ["Accepted", "Pending", "Rejected", "Deprecated"]
     *addReason : String
 
   }

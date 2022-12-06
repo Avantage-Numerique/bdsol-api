@@ -8,7 +8,7 @@ export const fakePersons = [
         nickname:"PoW",
         description:"Chanteur",
         "status": {
-            "state":StatusStates.accepted,
+            "state":StatusStates.Accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -19,7 +19,7 @@ export const fakePersons = [
         nickname:"Mickette",
         description:"Humour",
         "status": {
-            "state":StatusStates.accepted,
+            "state":StatusStates.Accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     }

@@ -64,7 +64,7 @@ export abstract class Service
             const item = await this.model.findOne(query);
 
             if (item !== null) {
-                return SuccessResponse.create(this.appModel.dataTransfertObject(item), StatusCodes.OK, ReasonPhrases.OK);
+                return SuccessResponse.create(item, StatusCodes.OK, ReasonPhrases.OK);
             }
 
             return SuccessResponse.create({}, StatusCodes.OK, ReasonPhrases.OK);
@@ -103,13 +103,9 @@ export abstract class Service
 
         try {
             const items = await this.model.find(query).sort(sort).skip(skip).limit(limit);
-            const returnItems = items.map( (doc:any) => {
-                return this.appModel.dataTransfertObject(doc)
-            })
-
             //populate
             return SuccessResponse.create(
-                returnItems,
+                items,
                 StatusCodes.OK,
                 ReasonPhrases.OK
             );

@@ -23,22 +23,7 @@ class Organisation extends AbstractModel {
             Organisation._instance = new Organisation();
             Organisation._instance.registerPreEvents();
             Organisation._instance.registerEvents();
-
-            Organisation._instance.schema.virtual("type").get( function () { return Organisation._instance.modelName });
-
             Organisation._instance.initSchema();
-
-            Organisation._instance.schema.index({ "offers.offer":1});
-            Organisation._instance.schema.index({ "team.member":1});
-            Organisation._instance.schema.index(
-                { name:"text", description:"text", slug:"text"},
-                { 
-                    default_language: "french",
-                    //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
-                    weights:{
-                        name:4,
-                        description:2
-                }});
         }
         return Organisation._instance;
     }
@@ -61,9 +46,8 @@ class Organisation extends AbstractModel {
                 name: {
                     type: String,
                     required: true,
-                    index:true,
                     unique: true,
-                    //alias: 'nom'
+                    alias: 'nom'
                 },
                 slug: {
                     type: String,
@@ -74,7 +58,7 @@ class Organisation extends AbstractModel {
                 },
                 description: {
                     type: String,
-                    //alias: 'desc'
+                    alias: 'desc'
                 },
                 url: {
                     type: String,
@@ -106,7 +90,6 @@ class Organisation extends AbstractModel {
                 }
             },
             {
-                toJSON: { virtuals: true },
                 timestamps: true
             });
 
@@ -194,19 +177,13 @@ class Organisation extends AbstractModel {
      */
     public dataTransfertObject(document: any): any {
         return {
-            _id: document._id ?? '',
             name: document.name ?? '',
             description: document.description ?? '',
             url: document.url ?? '',
             contactPoint: document.contactPoint ?? '',
             fondationDate: document.fondationDate ?? '',
-            offers: document.offers ?? '',
-            team: document.team ?? '',
-            slug: document.slug ?? '',
-            status : document.status ?? '',
-            type: document.type ?? '',
-            createdAt : document.createdAt ?? '',
-            updatedAt : document.updatedAt ?? '',
+            offer: document.offer ?? '',
+            slug: document.offer ?? ''
         }
     }
 
@@ -256,13 +233,13 @@ class Organisation extends AbstractModel {
     public registerEvents():void {
 
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'offers.offer', "name category status");
-            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
+            middlewarePopulateProperty(this, 'offers.offer');
+            middlewarePopulateProperty(this, 'team.member');
         });
         
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'offers.offer', "name category status");
-            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
+            middlewarePopulateProperty(this, 'offers.offer');
+            middlewarePopulateProperty(this, 'team.member');
         });
     }
 }

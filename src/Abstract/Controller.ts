@@ -60,13 +60,6 @@ abstract class AbstractController {
         );
     }
 
-    public async textSearch(requestData:any): Promise<ApiResponseContract> {
-        const query = { $text: { $search: requestData.searchIndex }};
-        const score = { score: { $meta: "textScore" }};
-        const sort = { score: {$meta: "textScore"} };
-        return await this.service.all(query);
-    }
-
     /**
      * @method search Search for a single entity document with research terms from database.
      * @param {any} requestData - Research terms e.g. { "name":"Jean" }

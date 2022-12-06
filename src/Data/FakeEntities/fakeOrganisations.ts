@@ -8,7 +8,7 @@ export const fakeOrganisations = [
         contactPoint:"Rosalie Chartier-Lacombe",
         fondationDate:"2022-08-02",
         "status": {
-            "state":StatusStates.accepted,
+            "state":StatusStates.Accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -19,7 +19,7 @@ export const fakeOrganisations = [
         contactPoint:"info@meilleurelibrairie.meilleurfois2",
         fondationDate:"2000-01-02",
         "status": {
-            "state":StatusStates.accepted,
+            "state":StatusStates.Accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     }

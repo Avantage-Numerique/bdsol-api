@@ -4,10 +4,10 @@ import mongoose, {Schema} from "mongoose";
  * Enum list of all status supported for now.
  */
  export enum StatusStates {
-    accepted = "accepted",
-    pending = "pending",
-    rejected = "rejected",
-    deprecated = "deprecated"
+    Accepted = "Accepted",
+    Pending = "Pending",
+    Rejected = "Rejected",
+    Deprecated = "Deprecated"
 }
 
 export interface StatusSchema extends Document {
