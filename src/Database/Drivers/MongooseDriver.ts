@@ -15,12 +15,15 @@ import PersonsService from "../../Persons/Services/PersonsService";
 import OrganisationsService from "../../Organisations/Services/OrganisationsService";
 import TaxonomyService from "../../Taxonomy/Services/TaxonomyService";
 import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService";
-import type {Service} from "../Service";
+
 import {fakeUser} from "../../Data/FakeEntities/fakeUser";
 import {fakePersons} from "../../Data/FakeEntities/fakePerson";
 import {fakeOrganisations} from "../../Data/FakeEntities/fakeOrganisations";
 import {fakeUserHistories} from "../../Data/FakeEntities/fakeUserHistories";
+import SeederTaskContract from "../Seeders/SeederTaskContract";
+import {TaxonomiesPersistantData} from "../../Taxonomy/TaxonomiesPersistantData";
 import SeedData from "../Seeders/seed-data";
+import SeedPersistantData from "../Seeders/seed-persistant-data";
 
 export class MongooseDBDriver implements DBDriver {
 
@@ -85,52 +88,44 @@ export class MongooseDBDriver implements DBDriver {
         await this.seedDB();
     }
 
-
+    /**
+     * Async, Initiation step in MongooseDBDriver to seed the DB.
+     * @return void
+     */
     public async seedDB() {
         LogHelper.info(`[BD][SEEDERS] Seeding DB for env : ${config.environnement}`);
-        await this.generateFakeData();
         await this.addPersistantData();
+        await this.generateFakeData();
     }
 
-
+    /**
+     * In all environnement, seed the db with data.
+     */
     public async addPersistantData() {
 
         LogHelper.info(`[BD][SEEDERS] Adding perdistant Data`);
-        /*const persistantDataTasks: Array<Service> = [
-            this.providers.data.services.TaxonomyService,
-        ]
 
-        for (const targetService of persistantDataTasks) {
-            await this.seed(targetService);
-        }*/
-        /*const seedDataPair: { service: Service, data: any }[] = [
+        const persistantDataTasks: Array<SeederTaskContract> = [
             {
-                service: this.providers.users.services.TaxonomyService,
-                data: fakeUser
+                service: this.providers.data.services.TaxonomyService,
+                data: TaxonomiesPersistantData,
+                whereKeys: ['category', 'name']
             }
         ];
-
-        //Loop through the services that need to be faked
-        //Still need refactoring to drying scope of responsibility in the seeder ? or in this.
-        for (const targetService of seedDataPair) {
-            try {
-                const seeder = new SeedData(targetService.service, targetService.data);
-                await seeder.up();
-            } catch (e: any) {
-                LogHelper.raw("Mongoose Driver erreur in seeder ", e);
-                throw e;
-            }
-        }*/
+        await this.seedData(persistantDataTasks, SeedPersistantData);
     }
 
+    /**
+     * In environnement development, seed the bd with data to test things.
+     * @return void
+     */
     public async generateFakeData() {
 
-        //seeder CreateDataMongoose do check for env value before seeding the data.
         if (config.environnement === 'development') {
 
             LogHelper.info(`[BD][SEEDERS] Adding fake data in development`);
 
-            const seedDataPair: { service: Service, data: any, whereKeys: any }[] = [
+            const fakeDataTasks: Array<SeederTaskContract> = [
                 {
                     service: this.providers.users.services.UsersService,
                     data: fakeUser,
@@ -152,18 +147,27 @@ export class MongooseDBDriver implements DBDriver {
                     whereKeys: []
                 }
             ];
+            await this.seedData(fakeDataTasks);
+        }
+    }
 
-            //Loop through the services that need to be faked
-            //Still need refactoring to drying scope of responsibility in the seeder ? or in this.
-            for (const targetService of seedDataPair) {
-                try {
-                    const seeder = new SeedData(targetService.service, targetService.data, targetService.whereKeys);
-                    LogHelper.info(`[BD][SEEDERS] SEEDING ${targetService.service.constructor.name} with ${targetService.data.constructor.name}`);
-                    await seeder.up();
-                } catch (e: any) {
-                    LogHelper.raw(`[BD][SEEDERS][ERROR] Can't seed ${targetService.service.constructor.name} with ${targetService.data.constructor.name}`, e);
-                    throw e;
-                }
+    /**
+     * Factory seeders of data
+     * @param tasks service - data and wheres to add the data.
+     * @param seederClass the class to manage the seeding. Myst extend seedData.
+     */
+    public async seedData(tasks:Array<SeederTaskContract>, seederClass:typeof SeedData = SeedData) {
+
+        //Loop through the services that need to be faked
+        //Still need refactoring to drying scope of responsibility in the seeder ? or in this.
+        for (const task of tasks) {
+            try {
+                const seeder = new seederClass(task.service, task.data, task.whereKeys);
+                LogHelper.info(`[BD][SEEDERS][SEEDING] ${task.service.constructor.name} with ${task.data.constructor.name}`);
+                await seeder.up();
+            } catch (e: any) {
+                LogHelper.raw(`[BD][SEEDERS][SEEDING][ERROR] Can't seed ${task.service.constructor.name} with ${task.data.constructor.name}`, e);
+                throw e;
             }
         }
     }
