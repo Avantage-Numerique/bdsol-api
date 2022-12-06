@@ -2,6 +2,9 @@ import express, {Request, Response} from "express";
 import {StatusCodes} from "http-status-codes";
 import Person from "../../Persons/Models/Person";
 import Organisation from "../../Organisations/Models/Organisation";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import { SuccessResponse } from "../../Http/Responses/SuccessResponse";
+import { ReasonPhrases } from "http-status-codes";
 
 class SearchRoutes {
 
@@ -42,27 +45,32 @@ class SearchRoutes {
         const personModel: any = Person.getInstance().mongooseModel;
         const organisationModel: any = Organisation.getInstance().mongooseModel;
 
-        const personsResults = await personModel.find(
-            {$text: { $search: req.query.searchIndex }},
-            {score: {$meta: "textScore"}}
-        ).sort(
-            {score: {$meta: "textScore"}}
-        ).lean();
+        const promises = [];
+        promises.push(
+            await personModel.find(
+                {$text: { $search: req.query.searchIndex }},
+                {score: {$meta: "textScore"}}
+            ));
+        promises.push(
+            await organisationModel.find(
+                {$text: {$search: req.query.searchIndex}},
+                {score: {$meta: "textScore"}}
+            ));
 
-        const organisationResults = await organisationModel.find(
-            {$text: {$search: req.query.searchIndex}},
-            {score: {$meta: "textScore"}}
-        ).sort(
-            {score: {$meta: "textScore"}}
-        ).lean();
-
-        //Sort by score
-        const sortedResult = [...personsResults, ...organisationResults];
-        //Would love to merge sort the results :) but this more easy V
-        sortedResult.sort( function(a,b){ return b.score - a.score } );
-
+        let objectResultArray;
+        if(promises.length > 0){
+            objectResultArray = promises.flat().map( (el) => {
+                return JSON.stringify(el.toObject());
+            }).map( (str) => {
+                return JSON.parse(str);
+            });
+            //Would love to merge sort the results :) but this more easy V
+            objectResultArray.sort( function(a,b) { return b.score - a.score });
+        }
+            
         //Send back full (DTO) of each entity search result in an array sorted,
-        return res.status(StatusCodes.OK).send(sortedResult)
+        return res.status(StatusCodes.OK).send(objectResultArray);
+        //return SuccessResponse.create(objectResultArray, StatusCodes.OK, ReasonPhrases.OK);
     }
 
     /**
