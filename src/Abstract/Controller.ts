@@ -155,7 +155,7 @@ abstract class AbstractController {
         const userHistoryService: UsersHistoryService = UsersHistoryService.getInstance(UserHistory.getInstance());
 
         //User id
-        const user: any = req.user.id;
+        const user: any = req.user._id;
 
         //IP Address
         const ipAddress = req.visitor.ip;
