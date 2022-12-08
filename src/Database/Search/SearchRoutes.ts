@@ -60,7 +60,7 @@ class SearchRoutes {
         let objectResultArray;
         if(promises.length > 0){
             objectResultArray = promises.flat().map( (el) => {
-                return JSON.stringify(el.toObject());
+                return JSON.stringify(el.toJSON());
             }).map( (str) => {
                 return JSON.parse(str);
             });
