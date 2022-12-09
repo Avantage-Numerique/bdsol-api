@@ -1,5 +1,7 @@
 # L'API de la BDSOL
 
+[![Build Status](https://github.com/Avantage-Numerique/bdsol-api/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Avantage-Numerique/bdsol-api/actions)
+
 ## Installation de l'api et du frontend en `dev`
 [Voir le répertoire pour la bdsol workspace](https://github.com/Avantage-Numerique/bdsol-workspace)
 
