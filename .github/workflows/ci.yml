@@ -3,6 +3,8 @@ name: Build de l'api
 on:
   push:
     branches: [ master ]
+  pull_request:
+    types: [opened, reopened]
 
 jobs:
   build:
