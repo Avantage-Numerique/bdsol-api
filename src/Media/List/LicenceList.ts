@@ -1,3 +1,4 @@
+//https://creativecommons.org/about/cclicenses/
 export const licenceList = [
     "Public Domain (CC0)",
     "CC By",
