@@ -48,11 +48,11 @@ export class Media {
             },
             fileType: {
                 type: String,
-                enum: ["image", "video", "sound"]//fileTypeEnum
+                enum: ["image", "video", "sound"]//fileTypeEnum?
             },
             extension: {
                 type: String,
-                enum: ["mp3","mp4","png"] //fileExtensionEnum
+                enum: ["mp3","mp4","png"] //fileExtensionEnum?
             },
             slug: {
                 type: String,

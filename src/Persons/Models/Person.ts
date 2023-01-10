@@ -9,6 +9,7 @@ import PersonsService from "../Services/PersonsService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
 import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
+import { Media } from "../../Database/Schemas/MediaSchema";
 
 class Person extends AbstractModel {
 
@@ -95,6 +96,9 @@ class Person extends AbstractModel {
                         },
                         status: Status.schema
                     }]
+                },
+                portrait: {
+                    type: Media.schema
                 },
                 status:{
                     type: Status.schema
