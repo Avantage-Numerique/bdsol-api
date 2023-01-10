@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import {Schema} from "mongoose"
 import { TaxonomySchema } from "../Schemas/TaxonomySchema";
-import { TaxonomiesCategories } from "../TaxonomiesEnum";
+import { TaxonomiesCategoriesEnum } from "../TaxonomiesCategoriesEnum";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model"
 import TaxonomyService from "../Services/TaxonomyService";
@@ -50,7 +50,7 @@ class Taxonomy extends AbstractModel {
             category: {
                 type: String,
                 required: [true, 'Required category (occupation, ...)'],
-                enum: TaxonomiesCategories,
+                enum: TaxonomiesCategoriesEnum,
                 lowercase: true,
                 trim: true
             },

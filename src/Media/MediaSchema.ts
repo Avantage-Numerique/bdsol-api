@@ -1,19 +1,7 @@
-import mongoose, {Schema} from "mongoose";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
-
-export enum fileTypeEnum {
-    image = "occupations",
-    Domains = "domains",
-    Abilities = "abilities",
-    Skills = "skills"
-}
-
-export enum fileExtensionEnum {
-    image = "occupations",
-    Domains = "domains",
-    Abilities = "abilities",
-    Skills = "skills"
-}
+import {Schema} from "mongoose";
+import { Status } from "../Moderation/Schemas/StatusSchema";
+import { fileTypeList, fileExtensionList } from "./List/FileList";
+import { licenceList } from "./List/LicenceList";
 
 export interface MediaSchema extends Document {
     title: string,
@@ -44,15 +32,16 @@ export class Media {
                 type: String
             },
             licence: {
-                type: String
+                type: String,
+                enum: licenceList
             },
             fileType: {
                 type: String,
-                enum: ["image", "video", "sound"]//fileTypeEnum?
+                enum: fileTypeList
             },
             extension: {
                 type: String,
-                enum: ["mp3","mp4","png"] //fileExtensionEnum?
+                enum: fileExtensionList
             },
             slug: {
                 type: String,
