@@ -1,5 +1,3 @@
-import { StringLiteral } from "typescript";
-
 
 class MediaController {
 
@@ -18,6 +16,14 @@ class MediaController {
     }
 
     public uploadFile():boolean{
+        //If file not defined properly
+        if (this.file == undefined ||
+            this.type == undefined ||
+            this.fileName == undefined ||
+            this.extension == undefined ||
+            this.path == undefined
+            ){ return false; }
+
         let isUploaded = false;
         //Need type of file (img, video, sound)
         //Need file to save
@@ -37,10 +43,10 @@ class MediaController {
             case "image": isUploaded = this.uploadImage();break;
             case "video": isUploaded = this.uploadVideo();break;
             case "sound": isUploaded = this.uploadSound();break;
-            default:return false
+            default: return false
         }
 
-        return true;
+        return isUploaded;
     }
 
     private uploadImage():boolean{return true;}
