@@ -92,7 +92,12 @@ package Schemas {
     *alt : String
     *description : String
     *path : String
-    *licence : 
+    *licence : String (licenceList)
+    *fileType : String (fileTypeList)
+    *extension : String
+    (...fileExtensionImage, ...fileExtensionVideo, ...fileExtensionSound)
+    *slug : String (title)
+    *status : Object (StatusSchema)
   }
 
   entity "Member - MemberSchema" {
