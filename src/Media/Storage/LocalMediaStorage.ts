@@ -1,11 +1,11 @@
-import {publicStockage} from "../../Stockage/PublicStockage";
+import {publicStoragePath} from "../../Storage/Files/PublicStorage";
 
 /**
  *
  */
-class LocalMediaStockage {
+class LocalMediaStorage {
 
-    private _destination:string = publicStockage;
+    private _destination:string = publicStoragePath;
 
     public getMulterDiskStorageConfig():any {
         return {
@@ -14,13 +14,17 @@ class LocalMediaStockage {
         }
     }
 
+
     public filename(file:any) {
         return file.originalname;
     }
 
+
     public set destination(value:string) {
         this._destination = value;
     }
+
+
     public get destination():string {
         return this._destination;
     }
