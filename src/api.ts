@@ -16,6 +16,7 @@ import {UsersHistoryRoutes} from "./UserHistory/Routes/UsersHistoryRoutes";
 import {GetRequestIp} from "./Monitoring/Middlewares/GetRequestIp";
 import ModerationRoutes from "./Moderation/Schemas/Route/ModerationRoutes";
 import SearchRoutes from "./Database/Search/SearchRoutes";
+import {MediaRoutes} from "./Media/Routes/MediaRoutes";
 
 /**
  * Main class for the API
@@ -118,6 +119,10 @@ export default class Api {
             {
                 baseRoute: "/search",
                 manager: new SearchRoutes()
+            },
+            {
+                baseRoute: "/medias",
+                manager: new MediaRoutes()
             }
         ];
     }

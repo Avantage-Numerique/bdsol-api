@@ -1,13 +1,54 @@
+import AbstractController from "../../Abstract/Controller";
+import PersonsService from "../../Persons/Services/PersonsService";
+import MediasService from "../Services/MediasService";
+import Media from "../Models/Media";
+import {ControllerContract} from "../../Abstract/Contracts/ControllerContract";
+import {SuccessResponse} from "../../Http/Responses/SuccessResponse";
+import {StatusCodes} from "http-status-codes";
 
-class MediaController {
+class MediaController extends AbstractController implements ControllerContract {
+
+    /** @private @static Singleton instance */
+    private static _instance:ControllerContract;
+
+    /** @public PersonsService */
+    service:PersonsService;
+
+    /** @public Model */
+    entity:Media;
+
+    name:string = "Persons";
+
+    constructor() {
+        super();
+        this.entity = Media.getInstance();
+        this.service = MediasService.getInstance(this.entity);
+    }
+
+    /**
+     * @public @static @method getInstance Create the singleton instance if not existing
+     * @return {PersonsController} Controller singleton constructor
+     */
+    public static getInstance():ControllerContract {
+        if (MediaController._instance === undefined) {
+            MediaController._instance = new MediaController();
+        }
+        return MediaController._instance;
+    }
+
+    public basepath(requestData:any) {
+        return SuccessResponse.create({"basepath":"truetrue"}, StatusCodes.OK, "asdasdasd");
+    }
 
     private file:BinaryData;
     private type:string;//image, video, sound
     private fileName:string;
     private extension:string;
     private path:string;
+    private files:Array<any>;
 
-    constructor (file:BinaryData, type:string, fileName:string, extension:string, path:string){
+
+    public save(file:BinaryData, type:string, fileName:string, extension:string, path:string) {
         this.file = file;
         this.type = type;
         this.fileName = fileName;
@@ -52,8 +93,6 @@ class MediaController {
     private uploadImage():boolean{return true;}
     private uploadVideo():boolean{return true;}
     private uploadSound():boolean{return true;}
-
-
     
 }
 

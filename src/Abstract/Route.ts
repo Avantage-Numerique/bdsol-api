@@ -1,7 +1,7 @@
 import {ApiResponseContract} from "../Http/Responses/ApiResponse";
 import express from "express";
 import {Response, Request} from "express";
-import AbstractController from "./Controller";
+//import AbstractController from "./Controller";
 import {RouteContract} from "./Contracts/RouteContract";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
@@ -13,7 +13,7 @@ abstract class AbstractRoute implements RouteContract
      * Controller of a specific entity.
      * @abstract
      */
-    abstract controllerInstance: AbstractController;
+    abstract controllerInstance: any;
 
     /**
      * Router for public route.
