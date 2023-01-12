@@ -2,8 +2,12 @@ import mongoose from "mongoose";
 import {Schema} from "mongoose";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
-import { Media as MediaSchema } from "../../Media/MediaSchema";
+import { MediaSchema } from "../Schemas/MediaSchema";
 import MediasService from "../Services/MediasService";
+import { Status } from "../../Moderation/Schemas/StatusSchema";
+import { licenceList } from "../List/LicenceList";
+import { fileExtensionList, fileTypeList } from "../List/FileList";
+
 
 class Media extends AbstractModel {
 
@@ -37,7 +41,61 @@ class Media extends AbstractModel {
     mongooseModel: mongoose.Model<any>;
 
     /** @public Database schema */
-    schema: Schema = MediaSchema.schema;
+    schema: Schema =
+        new Schema<MediaSchema>(
+            {
+                title: {
+                    type: String
+                },
+                alt: {
+                    type: String
+                },
+                description: {
+                    type: String
+                },
+                path: {
+                    type: String
+                },
+                licence: {
+                    type: String,
+                    enum: licenceList
+                },
+                fileType: {
+                    type: String,
+                    enum: fileTypeList
+                },
+                extension: {
+                    type: String,
+                    enum: fileExtensionList
+                },
+                slug: {
+                    type: String,
+                    slug: ["title"],
+                    slugPaddingSize: 3,
+                    index: true,
+                    unique: true
+                },
+                entityId: {
+                    type: mongoose.Types.ObjectId,
+                    //required: true
+                },
+                entityType: {
+                    type: String,
+                    //required: true
+                },
+                uploadedBy: {
+                    type: mongoose.Types.ObjectId,
+                    //required: true
+                },
+                status: {
+                    type: Status.schema,
+                    //required: true
+                }
+            },
+            {
+                timestamps: true
+            }
+        );
 
     fieldInfo:any = {};
     ruleSet:any = {};

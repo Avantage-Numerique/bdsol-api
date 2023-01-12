@@ -50,7 +50,6 @@ package Entity {
         status : Object (StatusSchema)}
   }
 
-
   entity "User" as usr {
     *_id : ObjectId
     --
@@ -64,6 +63,7 @@ package Entity {
     *role : String
   }
 }
+
 package Logs {
   entity "UserHistory" as usrhst {
     *_id : ObjectId
@@ -97,6 +97,9 @@ package Schemas {
     *extension : String
     (...fileExtensionImage, ...fileExtensionVideo, ...fileExtensionSound)
     *slug : String (title)
+    *entityId : ObjectId
+    *entityType : String
+    *uploadedBy : ObjectId
     *status : Object (StatusSchema)
   }
 
