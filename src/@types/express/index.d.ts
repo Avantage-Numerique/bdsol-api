@@ -9,6 +9,7 @@ namespace Express {
         user?: any;
         visitor?: any;
         data?: any;
+        file?: any;
     }
 }
 namespace Express {

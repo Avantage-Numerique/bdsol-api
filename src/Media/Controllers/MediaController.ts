@@ -39,6 +39,10 @@ class MediaController extends AbstractController implements ControllerContract {
     public basepath(requestData:any) {
         return SuccessResponse.create({"basepath":"truetrue"}, StatusCodes.OK, "asdasdasd");
     }
+
+    public uploadSingle(requestData:any) {
+        return SuccessResponse.create({"uploadSingle":"truetrue"}, StatusCodes.OK, "Uploading single media comming into dev!");
+    }
 }
 
 export default MediaController;

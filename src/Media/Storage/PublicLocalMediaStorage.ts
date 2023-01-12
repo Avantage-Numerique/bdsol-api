@@ -1,11 +1,11 @@
-import {publicStoragePath} from "../../Storage/Files/PublicStorage";
+import PublicStorage from "../../Storage/Files/PublicStorage";
 
 /**
  *
  */
-class LocalMediaStorage {
+class PublicLocalMediaStorage {
 
-    private _destination:string = publicStoragePath;
+    private _destination:string = PublicStorage.destination;
 
     public getMulterDiskStorageConfig():any {
         return {
