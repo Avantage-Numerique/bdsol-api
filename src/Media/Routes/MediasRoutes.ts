@@ -14,6 +14,8 @@ import express, {NextFunction, Request, Response} from "express";
 import MediasController from "../Controllers/MediasController";
 import AbstractRoute from "../../Abstract/Route";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import uploadSingle from "../Middlewares/UploadSingleMediaMiddleware";
+
 
 class MediasRoutes extends AbstractRoute {
 
@@ -74,6 +76,13 @@ class MediasRoutes extends AbstractRoute {
      * @public @method
      */
     public setupAuthRoutes(): express.Router {
+
+        this.routerInstance.post('/', [
+            ...this.addMiddlewares("all"),
+            uploadSingle.single("mainImage"),
+            this.uploadSingleHandler.bind(this),
+            this.routeSendResponse.bind(this),
+        ]);
         return this.setupAdditionnalAuthRoutes(this.routerInstanceAuthentification);
     }
 
@@ -83,6 +92,23 @@ class MediasRoutes extends AbstractRoute {
 
     public setupAdditionnalPublicRoutes(router: express.Router):express.Router {
         return router;
+    }
+
+    /**
+     * BasePath
+     * Handle the list method of the controller of the entity, passing the data to it.
+     * @param req {Request}
+     * @param res {Response}
+     * @param next {NextFunction}
+     * @return {Promise<any>}
+     */
+    public async uploadSingleHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        LogHelper.debug("uploadSingleHandler");
+        // req.file is the name of your file in the form above, here 'uploaded_file'
+        // req.body will hold the text fields, if there were any
+        console.log(req.file, req.body);
+        res.serviceResponse = await this.controllerInstance.uploadSingle(req.body.data);
+        return next();
     }
 
     /**
