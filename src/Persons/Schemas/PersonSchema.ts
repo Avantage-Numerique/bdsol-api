@@ -1,5 +1,5 @@
 import {Document} from "mongoose";
-import { Media } from "../../Media/Schemas/MediaSchema";
+import Media from "../../Media/Models/Media";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
 
 export interface PersonSchema extends Document {
