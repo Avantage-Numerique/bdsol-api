@@ -203,7 +203,6 @@ class Person extends AbstractModel {
     }
 
     public async documentation(): Promise<any> {
-
         return fs.readFileSync('/api/doc/Persons.md', 'utf-8');
     }
 

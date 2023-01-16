@@ -17,6 +17,8 @@ import OrganisationsService from "../../Organisations/Services/OrganisationsServ
 import TaxonomyService from "../../Taxonomy/Services/TaxonomyService";
 import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService";
 import type {Service} from "../Service";
+import MediasService from "../../Media/Services/MediasService";
+import Media from "../../Media/Models/Media";
 
 export class MongooseDBDriver implements DBDriver {
 
@@ -73,6 +75,7 @@ export class MongooseDBDriver implements DBDriver {
         this.providers.users.assign(UsersService.getInstance(User.getInstance()));
 
         this.providers.data.assign(TaxonomyService.getInstance(Taxonomy.getInstance()));
+        this.providers.data.assign(MediasService.getInstance(Media.getInstance()));
         this.providers.data.assign(UsersHistoryService.getInstance(UserHistory.getInstance()));
 
         this.providers.data.assign(PersonsService.getInstance(Person.getInstance()));

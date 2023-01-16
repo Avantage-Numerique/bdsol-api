@@ -15,7 +15,7 @@ import MediasController from "../Controllers/MediasController";
 import AbstractRoute from "../../Abstract/Route";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import uploadSingle from "../Middlewares/UploadSingleMediaMiddleware";
-
+import * as fs from "fs";
 
 class MediasRoutes extends AbstractRoute {
 
@@ -63,6 +63,17 @@ class MediasRoutes extends AbstractRoute {
         this.routerInstance.get('/', [
             ...this.addMiddlewares("all"),
             this.basepathHandler.bind(this),
+            this.routeSendResponse.bind(this),
+        ]);
+        
+        // sets routes in target domain's route.
+        this.setupAdditionnalPublicRoutes(this.routerInstance);
+
+        // Set the /:slug handler at the end of other route, to allow the routes sets in setupAdditionnalPublicRoutes to be 1 in priority.
+        this.routerInstance.get('/:entity/:id/:fileName', [
+            ...this.addMiddlewares("all"),
+            ...this.addMiddlewares("bySlug"),
+            this.getByUriParamsHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
 
@@ -123,6 +134,25 @@ class MediasRoutes extends AbstractRoute {
         LogHelper.debug("basePathHandler");
         res.serviceResponse = await this.controllerInstance.basepath(req.body.data);
         return next();
+    }
+
+    /**
+     * Route handler to transform all the URI params into query to the get
+     * @param req {Request}
+     * @param res {Response}
+     * @param next {NextFunction}
+     */
+    public async getByUriParamsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        // this may be overkill, because req.params already get all the same structure.
+        const initialQuery: any = {};
+        for (const param in req.params) {
+            initialQuery[param] = req.params[param];
+        }
+        //fs.returnFile
+        const response = fs.readFileSync(`/api/localStorage/public/${req.params.entity}/${req.params.id}/${req.params.fileName}`, null);
+        console.log(req.originalUrl)
+        return res.status(200).send(response);//res.serviceResponse = {    error:false, code:200, message:"OK", errors:[], data:response }
+        //return next();
     }
 }
 export {MediasRoutes};

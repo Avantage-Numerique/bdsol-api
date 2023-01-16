@@ -106,7 +106,18 @@ class Media extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields(): object {
-        return [];
+        return ["title",
+            "alt",
+            "description",
+            "path",
+            "licence",
+            "fileType",
+            "extension",
+            "slug",
+            "entityId",
+            "entityType",
+            "uploadedBy",
+            "status"];
     }
 
     /**
@@ -115,7 +126,22 @@ class Media extends AbstractModel {
      * @return {any}
      */
     public dataTransfertObject(document: any) {
-        return {}
+        return {
+            title: document.title ?? '',
+            alt: document.alt ?? '',
+            description: document.description ?? '',
+            path: document.path ?? '',
+            licence: document.licence ?? '',
+            fileType: document.fileType ?? '',
+            extension: document.extension ?? '',
+            slug: document.slug ?? '',
+            entityId: document.entityId ?? '',
+            entityType: document.entityType ?? '',
+            uploadedBy: document.uploadedBy ?? '',
+            status: document.status ?? '',
+            createdAt : document.createdAt ?? '',
+            updatedAt : document.updatedAt ?? '',
+        }
     }
 
     public async documentation(): Promise<any> {
