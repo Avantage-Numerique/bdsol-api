@@ -1,6 +1,6 @@
 import {Document} from "mongoose";
 import Media from "../../Media/Models/Media";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
+import { Status } from "../../Database/Schemas/StatusSchema";
 
 export interface PersonSchema extends Document {
     lastName:string;

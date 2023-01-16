@@ -95,6 +95,7 @@ export class MongooseDBDriver implements DBDriver {
                 this.providers.data.services.OrganisationsService,
                 this.providers.data.services.TaxonomyService,
                 this.providers.data.services.UsersHistoryService,
+                //this.providers.data.services.MediasService
             ]
 
             //Loop throught the services that need to be faked

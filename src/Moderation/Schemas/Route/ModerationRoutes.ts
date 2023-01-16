@@ -1,5 +1,5 @@
 import express, {Request, Response} from "express";
-import { StatusStates } from "../StatusSchema";
+import { StatusStates } from "../../../Database/Schemas/StatusSchema";
 import { StatusCodes } from "http-status-codes";
 
 class ModerationRoutes {

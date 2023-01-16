@@ -7,7 +7,7 @@ import * as fs from 'fs';
 import {TaxonomyController} from "../../Taxonomy/Controllers/TaxonomyController";
 import PersonsService from "../Services/PersonsService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
+import { Status } from "../../Database/Schemas/StatusSchema";
 import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 import Media from "../../Media/Models/Media";
 

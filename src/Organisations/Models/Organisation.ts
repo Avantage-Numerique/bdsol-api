@@ -8,7 +8,7 @@ import {TaxonomyController} from "../../Taxonomy/Controllers/TaxonomyController"
 import OrganisationsService from "../Services/OrganisationsService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
 import { Member } from "../../Database/Schemas/MemberSchema";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
+import { Status } from "../../Database/Schemas/StatusSchema";
 import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 
 

@@ -1,4 +1,4 @@
-import { StatusStates } from "../../Moderation/Schemas/StatusSchema";
+import { StatusStates } from "../../Database/Schemas/StatusSchema";
 
 export const fakeOrganisations = [
     {

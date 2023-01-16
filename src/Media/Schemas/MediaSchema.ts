@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
+import { Status } from "../../Database/Schemas/StatusSchema";
 
 export interface MediaSchema extends Document {
     title: string;

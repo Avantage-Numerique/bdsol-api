@@ -3,7 +3,7 @@
 ### Middleware (Multer)
 
 Multer prend le fichier binaire dans le champ et ajoute une valeur à Request.file.
-J'ai ajusté notre type Rquest pour l'ajouter.
+J'ai ajusté notre type Request pour l'ajouter.
 
 Les paramètres que file contient :
 

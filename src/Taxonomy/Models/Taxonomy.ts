@@ -5,7 +5,7 @@ import { TaxonomiesCategoriesEnum } from "../TaxonomiesCategoriesEnum";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model"
 import TaxonomyService from "../Services/TaxonomyService";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
+import { Status } from "../../Database/Schemas/StatusSchema";
 import * as fs from 'fs';
 
 
