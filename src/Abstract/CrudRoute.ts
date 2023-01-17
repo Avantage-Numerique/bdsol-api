@@ -264,7 +264,6 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @return {Promise<any>}
      */
     public async listHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-
         res.serviceResponse = await this.controllerInstance.list(req.body.data);
         return next();
     }

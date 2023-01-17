@@ -9,17 +9,25 @@ const storage = multer.diskStorage({
         //const record = new Record(req, file);
         //Définir le path
         //Get l'entité
-        const entityType = req.originalUrl.split("/")[1];
-        const dest = PublicStorage.basePath + "/" + entityType + "/" + "idBidon"
+        const basePath = PublicStorage.basePath;
+        const entityType:string = req.originalUrl.split("/")[1];
+        const entityId:string = "123456789123456789123456"//req.entityId..?;
+        const dest = `${basePath}/${entityType}/${entityId}`
 
         //Create folder structure if doesn't exist
         if(!fs.existsSync(dest))
             fs.mkdirSync(dest, { recursive : true });
+
         cb(null, dest);
     },
     filename: (req:any, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + req.user._id + "-" + uniqueSuffix + "-" + file.originalname);
+        const uniqueSuffix = Math.round(Math.random() * 1E9).toString().substring(0, 6); //length 6 random number
+        const userId = req.userId ?? 'undefined';
+        const fieldname = file.fieldname;
+        const originalname = file.originalname.toString().substring(0, 10);
+        const extension = file.originalname.toString().split(".").pop();
+
+        cb(null, `${fieldname}-${userId}-${uniqueSuffix}-${originalname}.${extension}`);
     }
 });
 

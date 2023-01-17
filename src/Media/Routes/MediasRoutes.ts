@@ -16,6 +16,8 @@ import AbstractRoute from "../../Abstract/Route";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import uploadSingle from "../Middlewares/UploadSingleMediaMiddleware";
 import * as fs from "fs";
+import ApiResponse from "../../Http/Responses/ApiResponse";
+import { StatusCodes } from "http-status-codes";
 
 class MediasRoutes extends AbstractRoute {
 
@@ -143,16 +145,14 @@ class MediasRoutes extends AbstractRoute {
      * @param next {NextFunction}
      */
     public async getByUriParamsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        // this may be overkill, because req.params already get all the same structure.
-        const initialQuery: any = {};
-        for (const param in req.params) {
-            initialQuery[param] = req.params[param];
+        try {
+            const response = fs.readFileSync(`/api/localStorage/public/${req.params.entity}/${req.params.id}/${req.params.fileName}`, null);
+            res.serviceResponse = new ApiResponse({ error: false, code: StatusCodes.OK, message: "Ok", errors: [], data: response }).response
         }
-        //fs.returnFile
-        const response = fs.readFileSync(`/api/localStorage/public/${req.params.entity}/${req.params.id}/${req.params.fileName}`, null);
-        console.log(req.originalUrl)
-        return res.status(200).send(response);//res.serviceResponse = {    error:false, code:200, message:"OK", errors:[], data:response }
-        //return next();
+        catch {
+            res.serviceResponse = new ApiResponse({ error: true, code: StatusCodes.INTERNAL_SERVER_ERROR, message: "Unable to read file", errors: [], data: {} }).response
+        }
+        return next();
     }
 }
 export {MediasRoutes};

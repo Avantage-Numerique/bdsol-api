@@ -98,7 +98,8 @@ class Person extends AbstractModel {
                     }]
                 },
                 mainImage: {
-                    type: Media.getInstance().schema
+                    type: mongoose.Types.ObjectId,
+                    ref : "Media"
                 },
                 status:{
                     type: Status.schema
@@ -247,10 +248,11 @@ class Person extends AbstractModel {
     public registerEvents():void {
         this.schema.pre('find', function() {
             middlewarePopulateProperty(this, 'occupations.occupation', "name category status");
+            middlewarePopulateProperty(this, "mainImage");
         });
-        
         this.schema.pre('findOne', function() {
             middlewarePopulateProperty(this, 'occupations.occupation', "name category status");
+            middlewarePopulateProperty(this, 'mainImage');
         });
     }
 }
