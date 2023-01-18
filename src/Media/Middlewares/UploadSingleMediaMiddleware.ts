@@ -25,9 +25,11 @@ const storage = multer.diskStorage({
         const userId = req.userId ?? 'undefined';
         const fieldname = file.fieldname;
         const originalname = file.originalname.toString().substring(0, 10);
-        const extension = file.originalname.toString().split(".").pop();
 
-        cb(null, `${fieldname}-${userId}-${uniqueSuffix}-${originalname}.${extension}`);
+        //If no extension is detected, it's set to undefined and not put in the fileName
+        const extension = file.originalname.indexOf(".") != -1 ? file.originalname.toString().split(".").pop() : undefined;
+
+        cb(null, `${fieldname}-${userId}-${uniqueSuffix}-${originalname}${extension != undefined ? '.' + extension : ""}`);
     }
 });
 

@@ -87,6 +87,10 @@ class Media extends AbstractModel {
                     type: mongoose.Types.ObjectId,
                     //required: true
                 },
+                dbStatus: {
+                    type: String,
+                    enum: [ "in use", "archived", "to delete", "pending" ]
+                },
                 status: {
                     type: Status.schema,
                     //required: true

@@ -13,5 +13,6 @@ export interface MediaSchema extends Document {
     entityId: mongoose.ObjectId;
     entityType: string;
     uploadedBy: mongoose.ObjectId;
+    dbStatus: string;
     status: Status;
 }
