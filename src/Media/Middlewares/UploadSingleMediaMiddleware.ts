@@ -1,6 +1,9 @@
 import multer from "multer";
 import PublicStorage from "../../Storage/Files/PublicStorage";
 import * as fs from 'fs';
+import { fileExtensionList } from "../List/FileList";
+import * as mime from 'mime-types'
+
 //https://stackoverflow.com/questions/27213418/node-js-and-multer-handle-the-destination-of-the-uploaded-file-in-callback-fun
 const storage = multer.diskStorage({
     destination: (req:any, file:any, cb) => {
@@ -27,12 +30,33 @@ const storage = multer.diskStorage({
         const originalname = file.originalname.toString().substring(0, 10);
 
         //If no extension is detected, it's set to undefined and not put in the fileName
-        const extension = file.originalname.indexOf(".") != -1 ? file.originalname.toString().split(".").pop() : undefined;
+        const extension = mime.extension(file.mimetype);
 
         cb(null, `${fieldname}-${userId}-${uniqueSuffix}-${originalname}${extension != undefined ? '.' + extension : ""}`);
     }
 });
 
-const uploadSingle = multer({ storage: storage });
+const limits = {
+    fields: 1,
+    fieldNameSize: 50, // TODO: Check if this size is enough
+    fieldSize: 20000, //TODO: Check if this size is enough
+    // TODO: Change this line after compression
+    fileSize: 15000000, // 150 KB for a 1080x1080 JPG 90
+};
+
+function checkFileType(file:any, cb:any) {
+    //Check ext
+    const extension:string|false = mime.extension(file.mimetype);
+    if ( extension !== false && fileExtensionList.includes(extension))
+        return cb(null, true);
+    else
+        cb(new Error('Error: file extension not accepted'));
+}
+
+const uploadSingle = multer({
+    storage: storage,
+    //limits: limits,
+    fileFilter: function(req, file, cb){ checkFileType(file, cb) },
+});
 
 export default uploadSingle;
