@@ -39,7 +39,7 @@ class Media extends AbstractModel {
     provider: DbProvider;
     service: MediasService;
     mongooseModel: mongoose.Model<any>;
-
+    
     /** @public Database schema */
     schema: Schema =
         new Schema<MediaSchema>(
@@ -63,6 +63,9 @@ class Media extends AbstractModel {
                 fileType: {
                     type: String,
                     enum: fileTypeList
+                },
+                fileName: {
+                    type: String
                 },
                 extension: {
                     type: String,
