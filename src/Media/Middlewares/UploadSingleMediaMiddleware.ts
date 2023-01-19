@@ -3,6 +3,10 @@ import PublicStorage from "../../Storage/Files/PublicStorage";
 import * as fs from 'fs';
 import { fileExtensionList } from "../List/FileList";
 import * as mime from 'mime-types'
+import FileStorage from "../../Storage/Files/FileStorage";
+import PublicLocalMediaStorage from "../Storage/PublicLocalMediaStorage";
+
+const mediaStorage:PublicLocalMediaStorage = new PublicLocalMediaStorage();
 
 //https://stackoverflow.com/questions/27213418/node-js-and-multer-handle-the-destination-of-the-uploaded-file-in-callback-fun
 const storage = multer.diskStorage({
@@ -30,12 +34,20 @@ const storage = multer.diskStorage({
         const originalname = file.originalname.toString().substring(0, 10);
 
         //If no extension is detected, it's set to undefined and not put in the fileName
-        const extension = mime.extension(file.mimetype);
+        const tryExt:string|false = mime.extension(file.mimetype);
+        const extension:string = (tryExt !== false ? tryExt : "");
 
-        cb(null, `${fieldname}-${userId}-${uniqueSuffix}-${originalname}${extension != undefined ? '.' + extension : ""}`);
+        //cb(null, `${fieldname}-${userId}-${uniqueSuffix}-${originalname}${extension != undefined ? '.' + extension : ""}`);
+        cb(null, FileStorage.generateFilename([
+            fieldname,
+            userId,
+            uniqueSuffix,
+            originalname
+        ], extension));
     }
 });
 
+//PublicLocalMediaStorage.limit;
 const limits = {
     fields: 1,
     fieldNameSize: 50, // TODO: Check if this size is enough
@@ -54,9 +66,9 @@ function checkFileType(file:any, cb:any) {
 }
 
 const uploadSingle = multer({
-    storage: storage,
-    //limits: limits,
-    fileFilter: function(req, file, cb){ checkFileType(file, cb) },
+    storage: mediaStorage.storage("temp/123456789123456789123456/"),
+    //limits: mediaStorage.limits,
+    fileFilter: mediaStorage.fileFilter(),
 });
 
 export default uploadSingle;

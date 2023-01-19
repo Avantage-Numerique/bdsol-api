@@ -9,7 +9,6 @@ export const fileExtensionImage = [
     "jpg",
     "jpeg",
     "gif",
-    "svg",
     "webp",
 ]
 export const fileExtensionVideo = [
