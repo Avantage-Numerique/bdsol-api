@@ -185,9 +185,32 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         const logger = new LogHelper(req);
         res.serviceResponse = await this.controllerInstance.create(req.body.data);
 
+        //If person registered into databse (success of creating entity) proceed
         if (!res.serviceResponse.error) {
             const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'create');
             logger.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
+        
+
+            //#File Validation and Upload
+            //https://stackabuse.com/handling-file-uploads-in-node-js-with-expres-and-multer/
+
+                //if file attached
+                    //if entity have media field
+                        //catch entity id and other info
+                        //decide which param to keep(path, fileName, the field the media should be attached to...) and create a multer uploader based on that
+                        //upload with multer
+                        //if success
+                            //insert a new object media inside the database with all the information required
+                            //if success
+                                //catch id of the new created media, and go write it back into the person who just got created
+                                //if success
+                                    //return next() with a "complete both task" service response
+                                //msg : media created but not assigned to person
+                            //msg: media didn't register in database causing the person to not be assigned the media
+                        //The file couldn't upload at all (wrong format and whatnot)
+                    //msg: entity don't require media to be uploaded
+                //msg: no file attached => return next()
+            //msg: person failed to register to database (wrong request..) return next() with error msg: couldn't register person (bad request...)
         }
         return next();
     }
