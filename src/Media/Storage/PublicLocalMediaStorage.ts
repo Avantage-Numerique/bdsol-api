@@ -68,7 +68,7 @@ export default class PublicLocalMediaStorage extends PublicStorage {
     public filename(filenameRecipe:any, sep:string="-"):string {
 
         let filename:string = "";
-        for (let part of filenameRecipe) {
+        for (const part of filenameRecipe) {
             filename += part + sep;
         }
         return filename;

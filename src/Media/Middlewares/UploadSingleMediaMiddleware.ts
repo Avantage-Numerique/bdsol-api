@@ -47,26 +47,9 @@ const storage = multer.diskStorage({
     }
 });
 
-//PublicLocalMediaStorage.limit;
-const limits = {
-    fields: 1,
-    fieldNameSize: 50, // TODO: Check if this size is enough
-    fieldSize: 20000, //TODO: Check if this size is enough
-    // TODO: Change this line after compression
-    fileSize: 15000000, // 150 KB for a 1080x1080 JPG 90
-};
-
-function checkFileType(file:any, cb:any) {
-    //Check ext
-    const extension:string|false = mime.extension(file.mimetype);
-    if ( extension !== false && fileExtensionList.includes(extension))
-        return cb(null, true);
-    else
-        cb(new Error('Error: file extension not accepted'));
-}
-
 const uploadSingle = multer({
     storage: mediaStorage.storage("temp/123456789123456789123456/"),
+    //PublicLocalMediaStorage.limit;
     //limits: mediaStorage.limits,
     fileFilter: mediaStorage.fileFilter(),
 });

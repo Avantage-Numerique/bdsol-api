@@ -7,6 +7,8 @@ import {param} from "express-validator";
 import {NoAccentSanitizer} from "../Security/Sanitizers/NoAccentSanitizer";
 import {NoSpaceSanitizer} from "../Security/Sanitizers/NoSpaceSanitizer";
 import AbstractController from "./Controller";
+import uploadSingle from "../Media/Middlewares/UploadSingleMediaMiddleware";
+import multer from "multer";
 
 
 abstract class CrudRoute extends AbstractRoute implements RouteContract {
@@ -194,25 +196,68 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
             //#File Validation and Upload
             //https://stackabuse.com/handling-file-uploads-in-node-js-with-expres-and-multer/
 
-                //if file attached
-                    //if entity have media field
-                        //catch entity id and other info
-                        //decide which param to keep(path, fileName, the field the media should be attached to...) and create a multer uploader based on that
-                        //upload with multer
+            //if file attached?
+            if(true){
+                //if entity have media field
+                //TODO : Need to make a check for this
+                if(true) {
+                    //catch entity id and other info
+                    const createdEntityInfo = res.serviceResponse.data;//No sure if it's data
+                    //Here we gotta take note of the old media ID and make sure to eventually change it's dbStatus if the new media replace it (since it's create, shouldn't happen but still taking notes.)
+
+                    //decide which param to keep(path, fileName, the field the media should be attached to...) and create a multer uploader based on that
+                    const multerParams = uploadSingle;//Multer param = new factoryDeMulter(params)
+                    //upload with multer
+                    const upload = multerParams.single("mainImage"); //upload with multer
+
+                    upload(req, res, function(err) {
+                        // req.file contains information of uploaded file
+                        // req.body contains information of text fields, if there were any
+                
+                        if (false){//req.fileValidationError) {
+                            return res.send(req)//.fileValidationError);
+                        }
+                        else if (!req.file || !req.files) {
+                            return res.send('Please select an image to upload');
+                        }
+                        else if (err instanceof multer.MulterError) {
+                            return res.send(err);
+                        }
+                        else if (err) {
+                            return res.send(err);
+                        }
+                        // Display uploaded image for user validation
+                        //res.send(`You have uploaded this image: <hr/><img src="${req.file.path}" width="500"><hr /><a href="./">Upload another image</a>`);
+
+                    });
+
                         //if success
                             //insert a new object media inside the database with all the information required
+                            //TODO: Call media service with the creation of media linked to createdEntity
+
                             //if success
+                                //TODO: If the media got created continue
+
+                                //TODO: catch id of new media
+
+                                //TODO: Call person service, update with media field with the id of the media
                                 //catch id of the new created media, and go write it back into the person who just got created
+                                
+                                //TODO: check if success
                                 //if success
-                                    //return next() with a "complete both task" service response
-                                //msg : media created but not assigned to person
-                            //msg: media didn't register in database causing the person to not be assigned the media
-                        //The file couldn't upload at all (wrong format and whatnot)
-                    //msg: entity don't require media to be uploaded
-                //msg: no file attached => return next()
-            //msg: person failed to register to database (wrong request..) return next() with error msg: couldn't register person (bad request...)
+                                    //TO DO : If there was a media linked to entity before, change dbStatus of that media.
+
+                                        //return next() with a "complete both task" service response
+                                    //msg : media created but not assigned to person
+                                //msg: media didn't register in database causing the person to not be assigned the media
+                            //The file couldn't upload at all (wrong format and whatnot)
+                        //msg: entity don't require media to be uploaded
+                    //msg: no file attached => return next()
+                //msg: person failed to register to database (wrong request..) return next() with error msg: couldn't register person (bad request...)
+                }
+                return next();
+            }
         }
-        return next();
     }
 
 
