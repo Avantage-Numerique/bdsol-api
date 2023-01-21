@@ -1,5 +1,5 @@
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import {TaxonomiesCategories} from "../TaxonomiesEnum";
+import {TaxonomiesCategoriesEnum} from "../TaxonomiesCategoriesEnum";
 
 /**
  * Add the functionnality of validating if the taxonomy added to the schema exist, is valid, and if empty, passed through.
@@ -11,7 +11,7 @@ import {TaxonomiesCategories} from "../TaxonomiesEnum";
 const middlewareTaxonomy = async (idList:any,
                                   controller:any,
                                   taxonomyProperty:string = 'occupations',
-                                  taxonomy:string = TaxonomiesCategories.Occupations) => {
+                                  taxonomy:string = TaxonomiesCategoriesEnum.Occupations) => {
     if (idList.length != 0)
     {
         LogHelper.debug("MiddlewareTaxonomy : ", taxonomyProperty, idList);

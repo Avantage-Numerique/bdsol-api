@@ -7,7 +7,7 @@ import {HtmlSanitizer} from "../../Security/Sanitizers/HtmlSanitizer";
 import {NoAccentSanitizer} from "../../Security/Sanitizers/NoAccentSanitizer";
 import {NoSpaceSanitizer} from "../../Security/Sanitizers/NoSpaceSanitizer";
 import {EnumSanitizer} from "../../Security/Sanitizers/EnumSanitizer";
-import {TaxonomiesCategories} from "../TaxonomiesEnum";
+import {TaxonomiesCategoriesEnum} from "../TaxonomiesCategoriesEnum";
 import CrudRoute from "../../Abstract/CrudRoute";
 
 class TaxonomyRoutes extends CrudRoute {
@@ -21,7 +21,7 @@ class TaxonomyRoutes extends CrudRoute {
         create: [
             body('data.category')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .customSanitizer(EnumSanitizer.validatorCustomSanitizer(TaxonomiesCategories))
+                .customSanitizer(EnumSanitizer.validatorCustomSanitizer(TaxonomiesCategoriesEnum))
                 .stripLow()
                 .trim(),
             //I remove espace() sanitizer here, because I didn't find any way yet to handle the unescape method for each of those field.
@@ -47,7 +47,7 @@ class TaxonomyRoutes extends CrudRoute {
         update: [
             body('data.category').optional().bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .customSanitizer(EnumSanitizer.validatorCustomSanitizer(TaxonomiesCategories))
+                .customSanitizer(EnumSanitizer.validatorCustomSanitizer(TaxonomiesCategoriesEnum))
                 .stripLow()
                 .trim(),
             //I remove espace() sanitizer here, because I didn't find any way yet to handle the unescape method for each of those field.
@@ -77,12 +77,12 @@ class TaxonomyRoutes extends CrudRoute {
         byTaxonomy: [
             param('category')
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .customSanitizer(EnumSanitizer.validatorCustomSanitizer(TaxonomiesCategories))
+                .customSanitizer(EnumSanitizer.validatorCustomSanitizer(TaxonomiesCategoriesEnum))
                 .customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
                 .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .trim()
-                .customSanitizer(EnumSanitizer.validatorCustomSanitizer(TaxonomiesCategories))
+                .customSanitizer(EnumSanitizer.validatorCustomSanitizer(TaxonomiesCategoriesEnum))
         ]
     }
 

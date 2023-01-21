@@ -8,12 +8,13 @@ import {SuccessResponse} from "../Http/Responses/SuccessResponse";
 import UsersHistoryService from "../UserHistory/Services/UsersHistoryService";
 import UserHistory from "../UserHistory/Models/UserHistory";
 import {UserHistorySchema} from "../UserHistory/Schemas/UserHistorySchema";
+import {ControllerContract} from "./Contracts/ControllerContract";
 
 /**
  * AbstractController
  * Endpoint method for target entity that handle : create, update, delete, list, search, getInfo and getDoc.
  */
-abstract class AbstractController {
+abstract class AbstractController implements ControllerContract {
 
     /** @abstract Service of a specific entity */
     abstract service: Service;

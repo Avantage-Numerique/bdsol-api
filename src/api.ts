@@ -7,16 +7,16 @@ import {AuthentificationRoutes} from "./Authentification/Routes/Authentification
 import {UsersRoutes} from "./Users/Routes/UsersRouter";
 import {PersonsRoutes} from './Persons/Routes/PersonsRoutes';
 import {OrganisationsRoutes} from './Organisations/Routes/OrganisationsRoutes'
-import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
 import {TaxonomyRoutes} from "./Taxonomy/Routes/TaxonomyRoutes";
+import {UsersHistoryRoutes} from "./UserHistory/Routes/UsersHistoryRoutes";
+import { MediasRoutes } from "./Media/Routes/MediasRoutes";
+import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
 import {PublicUserRequest} from "./Authentification/Middleware/PublicUserRequest";
 import LogHelper from "./Monitoring/Helpers/LogHelper";
 import {ApiErrorHandler} from "./Error/Middlewares/ApiErrorHandler";
-import {UsersHistoryRoutes} from "./UserHistory/Routes/UsersHistoryRoutes";
 import {GetRequestIp} from "./Monitoring/Middlewares/GetRequestIp";
 import ModerationRoutes from "./Moderation/Schemas/Route/ModerationRoutes";
 import SearchRoutes from "./Database/Search/SearchRoutes";
-
 /**
  * Main class for the API
  * Use the express instance as public property.
@@ -118,6 +118,10 @@ export default class Api {
             {
                 baseRoute: "/search",
                 manager: new SearchRoutes()
+            },
+            {
+                baseRoute: "/medias",
+                manager: new MediasRoutes()
             }
         ];
     }

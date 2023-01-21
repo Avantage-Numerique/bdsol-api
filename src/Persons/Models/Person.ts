@@ -7,8 +7,9 @@ import * as fs from 'fs';
 import {TaxonomyController} from "../../Taxonomy/Controllers/TaxonomyController";
 import PersonsService from "../Services/PersonsService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
+import { Status } from "../../Database/Schemas/StatusSchema";
 import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
+import Media from "../../Media/Models/Media";
 
 class Person extends AbstractModel {
 
@@ -95,6 +96,10 @@ class Person extends AbstractModel {
                         },
                         status: Status.schema
                     }]
+                },
+                mainImage: {
+                    type: mongoose.Types.ObjectId,
+                    ref : "Media"
                 },
                 status:{
                     type: Status.schema
@@ -188,6 +193,7 @@ class Person extends AbstractModel {
             nickname: document.nickname ?? '',
             description: document.description ?? '',
             occupations: document.occupations ?? '',
+            mainImage: document.mainImage ?? '',
             slug: document.slug ?? '',
             status: document.status ?? '',
             type: document.type ?? '',
@@ -198,7 +204,6 @@ class Person extends AbstractModel {
     }
 
     public async documentation(): Promise<any> {
-
         return fs.readFileSync('/api/doc/Persons.md', 'utf-8');
     }
 
@@ -243,10 +248,11 @@ class Person extends AbstractModel {
     public registerEvents():void {
         this.schema.pre('find', function() {
             middlewarePopulateProperty(this, 'occupations.occupation', "name category status");
+            middlewarePopulateProperty(this, "mainImage");
         });
-        
         this.schema.pre('findOne', function() {
             middlewarePopulateProperty(this, 'occupations.occupation', "name category status");
+            middlewarePopulateProperty(this, 'mainImage');
         });
     }
 }

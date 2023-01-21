@@ -1,5 +1,6 @@
 import {Document} from "mongoose";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
+import Media from "../../Media/Models/Media";
+import { Status } from "../../Database/Schemas/StatusSchema";
 
 export interface PersonSchema extends Document {
     lastName:string;
@@ -8,5 +9,6 @@ export interface PersonSchema extends Document {
     nickname:string;
     description:string;
     occupations:[object];
+    mainImage:Media
     status: Status;
 }
