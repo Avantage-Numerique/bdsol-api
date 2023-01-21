@@ -7,8 +7,10 @@ import {param} from "express-validator";
 import {NoAccentSanitizer} from "../Security/Sanitizers/NoAccentSanitizer";
 import {NoSpaceSanitizer} from "../Security/Sanitizers/NoSpaceSanitizer";
 import AbstractController from "./Controller";
-import uploadSingle from "../Media/Middlewares/UploadSingleMediaMiddleware";
 import multer from "multer";
+import MediasController from "../Media/Controllers/MediasController";
+import PublicLocalMediaStorage from "../Media/Storage/PublicLocalMediaStorage";
+import e from "express";
 
 
 abstract class CrudRoute extends AbstractRoute implements RouteContract {
@@ -187,8 +189,11 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         const logger = new LogHelper(req);
         res.serviceResponse = await this.controllerInstance.create(req.body.data);
 
-        //If person registered into databse (success of creating entity) proceed
-        if (!res.serviceResponse.error) {
+        //If person registered into database (success of creating entity) proceed
+        if (res.serviceResponse.error) {
+            return next();
+        }
+        else {
             const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'create');
             logger.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
         
@@ -202,11 +207,18 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
                 //TODO : Need to make a check for this
                 if(true) {
                     //catch entity id and other info
-                    const createdEntityInfo = res.serviceResponse.data;//No sure if it's data
+                    const createdEntityId = res.serviceResponse.data._id;//No sure if it's data
                     //Here we gotta take note of the old media ID and make sure to eventually change it's dbStatus if the new media replace it (since it's create, shouldn't happen but still taking notes.)
 
                     //decide which param to keep(path, fileName, the field the media should be attached to...) and create a multer uploader based on that
-                    const multerParams = uploadSingle;//Multer param = new factoryDeMulter(params)
+                    const mediaStorage:PublicLocalMediaStorage = new PublicLocalMediaStorage();
+                    const multerParams = multer({
+                        storage: mediaStorage.storage("temp/123456789123456789123456/"),
+                        //PublicLocalMediaStorage.limit;
+                        //limits: mediaStorage.limits,
+                        fileFilter: mediaStorage.fileFilter(),
+                    });
+
                     //upload with multer
                     const upload = multerParams.single("mainImage"); //upload with multer
 
@@ -218,44 +230,58 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
                             return res.send(req)//.fileValidationError);
                         }
                         else if (!req.file || !req.files) {
-                            return res.send('Please select an image to upload');
+                            LogHelper.log("No files to save during /create of entity");
+                            return next()
                         }
                         else if (err instanceof multer.MulterError) {
-                            return res.send(err);
+                            res.serviceResponse.media.error = err;
+                            return next()
                         }
                         else if (err) {
-                            return res.send(err);
+                            res.serviceResponse.media.error = err;
+                            return next();
                         }
                         // Display uploaded image for user validation
                         //res.send(`You have uploaded this image: <hr/><img src="${req.file.path}" width="500"><hr /><a href="./">Upload another image</a>`);
 
                     });
 
-                        //if success
-                            //insert a new object media inside the database with all the information required
-                            //TODO: Call media service with the creation of media linked to createdEntity
-
-                            //if success
-                                //TODO: If the media got created continue
-
-                                //TODO: catch id of new media
-
-                                //TODO: Call person service, update with media field with the id of the media
-                                //catch id of the new created media, and go write it back into the person who just got created
-                                
-                                //TODO: check if success
-                                //if success
-                                    //TO DO : If there was a media linked to entity before, change dbStatus of that media.
-
-                                        //return next() with a "complete both task" service response
-                                    //msg : media created but not assigned to person
-                                //msg: media didn't register in database causing the person to not be assigned the media
-                            //The file couldn't upload at all (wrong format and whatnot)
-                        //msg: entity don't require media to be uploaded
-                    //msg: no file attached => return next()
-                //msg: person failed to register to database (wrong request..) return next() with error msg: couldn't register person (bad request...)
+                    const mediasController = MediasController.getInstance();
+                    //insert a new object media inside the database with all the information required
+                    const mediaResponse = await mediasController.internalCreate(req, res);
+                    
+                    if (mediaResponse.error){
+                        //Fill error
+                        res.serviceResponse.media = mediaResponse;
+                        res.serviceResponse.media.failMessage = "File uploaded and saved, but couldn't save media to database"
+                        return next();
+                    }
+                    else {
+                        const toLinkMediaId = mediaResponse.data._id;
+                        const updateRequest =
+                        {
+                            _id: createdEntityId,
+                            mainImage : toLinkMediaId,
+                        }
+                        const linkingMediaResponse = await this.controllerInstance.update(updateRequest)
+                        if (linkingMediaResponse.error){
+                            res.serviceResponse.media = mediaResponse;
+                            res.serviceResponse.media.failMessage = "Couldn't link entity with the new media";
+                            return next()
+                        }
+                        else{
+                            //const oldMedia = res.serviceResponse.data.mainImage;
+                            //if(oldMedia === undefined || oldMedia == ''){
+                                res.serviceResponse.media.error = false;
+                                res.serviceResponse.media.message = "Success to save file, create media, and link media to entity!"
+                                return next()
+                            }
+                            //else{
+                            //
+                            //   return next()
+                            //}
+                    }
                 }
-                return next();
             }
         }
     }
