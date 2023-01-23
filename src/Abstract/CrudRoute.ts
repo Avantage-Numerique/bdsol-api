@@ -10,7 +10,6 @@ import AbstractController from "./Controller";
 import multer from "multer";
 import MediasController from "../Media/Controllers/MediasController";
 import PublicLocalMediaStorage from "../Media/Storage/PublicLocalMediaStorage";
-import e from "express";
 
 
 abstract class CrudRoute extends AbstractRoute implements RouteContract {
@@ -39,6 +38,8 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      */
     abstract middlewaresDistribution: any;
 
+
+    public multipartSetup:PublicLocalMediaStorage;
 
     /**
      * The default middlewares for targeted route.
@@ -71,7 +72,22 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      */
     public setupAuthRoutes(): express.Router {
 
+        this.multipartSetup = new PublicLocalMediaStorage();
+        const multipartMiddlewareHandler = multer({
+            storage: this.multipartSetup.storage("temp/123456789123456789123456/"),
+            //PublicLocalMediaStorage.limit;
+            //limits: mediaStorage.limits,
+            fileFilter: this.multipartSetup.fileFilter(),
+        });
+
+        const multipartMiddlewareTemporaryHandler = multer({
+            storage: multer.memoryStorage()
+        });
+
+        //create target entity with upload
         this.routerInstanceAuthentification.post('/create', [
+            multipartMiddlewareHandler.single("mainImage"),
+            this.contentTypeParser,
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("create"),
             this.createHandler.bind(this),
@@ -178,6 +194,42 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
 
     /**
+     * Parse the current request content type. And parse data if it's multipart.
+     * inspire by : https://stackoverflow.com/questions/49784509/handle-multipart-formdata-application-json-and-text-plain-in-single-express-ha
+     * @param req
+     * @param res
+     * @param next
+     */
+    public async contentTypeParser(req:Request, res:Response, next:NextFunction): Promise<any> {
+
+        //quand on save le fichier en temp. Il est cleared à la fin de la equest est est passé en buffer dans le request.
+        /**
+         * cb(null, {
+         *       buffer: data,
+         *       size: data.length
+         *     })
+         * 1. donc on pourrait faire un temps au bebug, et save le buffer à la fin.
+         * 2. check le fichier temps pour vider ensuite.
+         */
+
+        const contentType:any = req.get('content-type');
+        LogHelper.debug("Is file setup ?", req.file);//this is set with full storage, but not with temp.
+
+        if (contentType.includes('application/json')) {
+            return next();
+        }
+
+        if (contentType.includes('multipart/form-data')) {
+            req.body.data = JSON.parse(req.body.data);
+
+            LogHelper.debug("Is body valid ?", req.body);
+            return next();
+        }
+
+        return next();
+    }
+
+    /**
      * CREATE
      * Handle the create method of the controller of the entity, passing the data to it.
      * @param req {Request}
@@ -186,7 +238,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @return {Promise<any>}
      */
     public async createHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        const logger = new LogHelper(req);
+
         res.serviceResponse = await this.controllerInstance.create(req.body.data);
 
         //If person registered into database (success of creating entity) proceed
@@ -195,7 +247,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         }
         else {
             const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'create');
-            logger.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
+            LogHelper.debug(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
         
 
             //#File Validation and Upload
@@ -211,16 +263,16 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
                     //Here we gotta take note of the old media ID and make sure to eventually change it's dbStatus if the new media replace it (since it's create, shouldn't happen but still taking notes.)
 
                     //decide which param to keep(path, fileName, the field the media should be attached to...) and create a multer uploader based on that
-                    const mediaStorage:PublicLocalMediaStorage = new PublicLocalMediaStorage();
+                    /*const mediaStorage:PublicLocalMediaStorage = new PublicLocalMediaStorage();
                     const multerParams = multer({
                         storage: mediaStorage.storage("temp/123456789123456789123456/"),
                         //PublicLocalMediaStorage.limit;
                         //limits: mediaStorage.limits,
                         fileFilter: mediaStorage.fileFilter(),
-                    });
+                    });*/
 
                     //upload with multer
-                    const upload = multerParams.single("mainImage"); //upload with multer
+                    /*const upload = multerParams.single("mainImage"); //upload with multer
 
                     upload(req, res, function(err) {
                         // req.file contains information of uploaded file
@@ -244,7 +296,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
                         // Display uploaded image for user validation
                         //res.send(`You have uploaded this image: <hr/><img src="${req.file.path}" width="500"><hr /><a href="./">Upload another image</a>`);
 
-                    });
+                    });*/
 
                     const mediasController = MediasController.getInstance();
                     //insert a new object media inside the database with all the information required
@@ -282,6 +334,8 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
                             //}
                     }
                 }
+            } else {
+                return next();
             }
         }
     }

@@ -35,7 +35,7 @@ enum LogFormats {
 export default class LogHelper
 {
     static printToConsole: boolean = true;
-    static logToFile: boolean = true;
+    static logToFile: boolean = false;
     
     public static showLog = true;
     public static showError = true;

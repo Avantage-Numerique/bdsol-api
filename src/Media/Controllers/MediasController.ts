@@ -1,10 +1,10 @@
 import AbstractController from "../../Abstract/Controller";
 import MediasService from "../Services/MediasService";
 import Media from "../Models/Media";
-import {ControllerContract} from "../../Abstract/Contracts/ControllerContract";
 import {SuccessResponse} from "../../Http/Responses/SuccessResponse";
 import {StatusCodes} from "http-status-codes";
 import * as mime from "mime-types"
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 class MediasController extends AbstractController { //implements ControllerContract {
 
@@ -45,7 +45,9 @@ class MediasController extends AbstractController { //implements ControllerContr
     }
 
     public internalCreate(req:any, res:any){
+        LogHelper.debug("Media internal Create");
         //TODO: Call media service with the creation of media linked to createdEntity
+        const file = req.file ?? undefined;
         const createData = {
             title: req.body.data.media.title ?? '',
             alt: req.body.data.media.alt ?? '',
@@ -53,8 +55,8 @@ class MediasController extends AbstractController { //implements ControllerContr
             path : "to determine",
             licence: req.body.data.media.licence ?? 'Public Domain (CC0)',
             fileType: req.body.data.media.fileType,
-            fileName: req.file.filename,
-            extension: mime.extension(req.file.mimetype),
+            fileName: file?.filename ?? "filenameNotSet",
+            extension: file?.mimetype ? mime.extension(file?.mimetype) : "image/png",
             entityId: res.serviceResponse.data._id,
             uploadedBy: req.userId,
             dbStatus: 'in use',
@@ -65,6 +67,7 @@ class MediasController extends AbstractController { //implements ControllerContr
                 //message: ''
             }
         }
+        LogHelper.debug("Media internal Create createData", createData);
         return this.service.insert(createData);
     }
 
