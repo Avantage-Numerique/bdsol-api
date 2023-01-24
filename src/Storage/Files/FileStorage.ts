@@ -1,5 +1,6 @@
-import fs from "fs";
+import * as fs from "fs";
 import * as mime from "mime-types";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {fileExtensionList} from "../../Media/List/FileList";
 
 export default class FileStorage {
@@ -47,6 +48,42 @@ export default class FileStorage {
 
     public static getUniquePrefix():string {
         return Math.round(Math.random() * 1E9).toString().substring(0, 6); //length 6 random number
+    }
+
+    public static generatePath(entityType:string, entityId:string):string {
+        return './localStorage/public/' + entityType + '/' + entityId;
+        //FileStorage.basePath + '/' + entityType + '/' + entityId + '/';
+    }
+
+    public static saveFile(entityType:string, entityId:string, mediaField:string, userId:string, file:any):void {
+        const path = this.generatePath(entityType, entityId);
+        const tryExt:string|false = mime.extension(file.mimetype);
+        const extension:string = (tryExt !== false ? tryExt : "");
+
+        const fileName = FileStorage.generateFilename(
+            [
+            mediaField,
+            userId,
+            FileStorage.getUniquePrefix(),
+            file.originalname
+            ],
+            extension)
+        
+        FileStorage.createPathIfNotExist(path);
+
+        LogHelper.debug(path, tryExt, extension, fileName);
+        LogHelper.debug(path+'/'+fileName);
+
+        const writeStream = fs.createWriteStream(path+'/'+fileName);
+        writeStream.on('ready', function() { writeStream.write(file.buffer);})
+        writeStream.on('close', function() {
+            writeStream.close(function(err) {
+                if(err)
+                    LogHelper.error("FileStorage : ", err);
+                else
+                    LogHelper.log("Success to save file");
+            })
+        })
     }
 
 }

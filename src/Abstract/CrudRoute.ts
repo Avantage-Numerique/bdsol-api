@@ -10,6 +10,7 @@ import AbstractController from "./Controller";
 import multer from "multer";
 import MediasController from "../Media/Controllers/MediasController";
 import PublicLocalMediaStorage from "../Media/Storage/PublicLocalMediaStorage";
+import FileStorage from "../Storage/Files/FileStorage";
 
 
 abstract class CrudRoute extends AbstractRoute implements RouteContract {
@@ -86,7 +87,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
         //create target entity with upload
         this.routerInstanceAuthentification.post('/create', [
-            multipartMiddlewareHandler.single("mainImage"),
+            multipartMiddlewareTemporaryHandler.single("mainImage"),
             this.contentTypeParser,
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("create"),
@@ -213,16 +214,12 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
          */
 
         const contentType:any = req.get('content-type');
-        LogHelper.debug("Is file setup ?", req.file);//this is set with full storage, but not with temp.
-
         if (contentType.includes('application/json')) {
             return next();
         }
 
         if (contentType.includes('multipart/form-data')) {
             req.body.data = JSON.parse(req.body.data);
-
-            LogHelper.debug("Is body valid ?", req.body);
             return next();
         }
 
@@ -239,6 +236,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      */
     public async createHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
 
+        console.log(Object.keys(req.file));
         res.serviceResponse = await this.controllerInstance.create(req.body.data);
 
         //If person registered into database (success of creating entity) proceed
@@ -246,8 +244,8 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
             return next();
         }
         else {
-            const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'create');
-            LogHelper.debug(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
+            //const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'create');
+            //LogHelper.debug(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
         
 
             //#File Validation and Upload
@@ -260,7 +258,6 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
                 if(true) {
                     //catch entity id and other info
                     const createdEntityId = res.serviceResponse.data._id;//No sure if it's data
-                    LogHelper.debug("createdPersonId",createdEntityId);
                     //Here we gotta take note of the old media ID and make sure to eventually change it's dbStatus if the new media replace it (since it's create, shouldn't happen but still taking notes.)
 
                     const mediasController = MediasController.getInstance();
@@ -280,18 +277,18 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
                             id: createdEntityId,
                             mainImage : toLinkMediaId,
                         }
-                        LogHelper.debug("media Id", toLinkMediaId);
                         const linkingMediaResponse = await this.controllerInstance.update(updateRequest)
-                        LogHelper.warn("link response", linkingMediaResponse);
                         if (linkingMediaResponse.error){
                             res.serviceResponse.media = mediaResponse;
                             res.serviceResponse.media.failMessage = "Couldn't link entity with the new media";
                             return next()
                         }
                         else{
-                                res.serviceResponse.media.error = false;
-                                res.serviceResponse.media.message = "Success to save file, create media, and link media to entity!"
-                                return next()
+                            //Save file
+                            FileStorage.saveFile("Person", createdEntityId, "mainImage", req.user.id, req.file);
+                            res.serviceResponse.media.error = false;
+                            res.serviceResponse.media.message = "Success to save file, create media, and link media to entity!"
+                            return next()
                         }
                     }
                 }
