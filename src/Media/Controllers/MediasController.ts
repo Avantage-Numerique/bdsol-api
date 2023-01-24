@@ -44,28 +44,25 @@ class MediasController extends AbstractController { //implements ControllerContr
         return SuccessResponse.create({"uploadSingle":"truetrue"}, StatusCodes.OK, "Uploading single media comming into dev!");
     }
 
-    public internalCreate(req:any, res:any){
+    public internalCreate(mediaData:any, file:any, path:string, fileName:string, userId:any, entityId:any){
         LogHelper.debug("Media internal Create");
         //TODO: Call media service with the creation of media linked to createdEntity
-        const file = req.file ?? undefined;
-        const media = req.body.data.media ?? {};
-
         const createData = {
-            title: media.title ?? '',
-            alt: media.alt ?? '',
-            description: media.description ?? '',
-            path : req.file.destination ?? 'undefined path',
-            licence: media.licence ?? 'Public Domain (CC0)',
-            fileType: file.fileType ?? 'image',
-            fileName: file?.filename ?? "filenameNotSet",
+            title: mediaData.title ?? '',
+            alt: mediaData.alt ?? '',
+            description: mediaData.description ?? '',
+            path : path ?? 'undefined path',
+            licence: mediaData.licence ?? 'Public Domain (CC0)',
+            fileType: file?.fileType ?? 'image',
+            fileName: fileName ?? "filenameNotSet",
             extension: file?.mimetype ? mime.extension(file?.mimetype) : "image/png",
-            entityId: res.serviceResponse.data._id,
-            uploadedBy: req.userId,
+            entityId: entityId ?? '',
+            uploadedBy: userId,
             dbStatus: 'in use',
             status: {
                 state: 'pending',
-                requestedBy: req.userId,
-                lastModifiedBy: req.userId,
+                requestedBy: userId,
+                lastModifiedBy: userId,
                 //message: ''
             }
         }

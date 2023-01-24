@@ -11,6 +11,7 @@ import multer from "multer";
 import MediasController from "../Media/Controllers/MediasController";
 import PublicLocalMediaStorage from "../Media/Storage/PublicLocalMediaStorage";
 import FileStorage from "../Storage/Files/FileStorage";
+import * as mime from "mime-types"
 
 
 abstract class CrudRoute extends AbstractRoute implements RouteContract {
@@ -235,8 +236,6 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @return {Promise<any>}
      */
     public async createHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-
-        console.log(Object.keys(req.file));
         res.serviceResponse = await this.controllerInstance.create(req.body.data);
 
         //If person registered into database (success of creating entity) proceed
@@ -258,11 +257,25 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
                 if(true) {
                     //catch entity id and other info
                     const createdEntityId = res.serviceResponse.data._id;//No sure if it's data
+                    const path = FileStorage.generatePath(req.baseUrl, createdEntityId);
+                    const tryExt:string|false = mime.extension(req.file.mimetype);
+                    const extension:string = (tryExt !== false ? tryExt : "");
+                    const fileName = FileStorage.generateFilename(
+                        [
+                        "mainImage",
+                        req.user.id,
+                        FileStorage.getUniquePrefix(),
+                        req.file.originalname
+                        ],
+                        extension
+                    )
+                    const mediaData = req.body.data.media ?? {}
+
                     //Here we gotta take note of the old media ID and make sure to eventually change it's dbStatus if the new media replace it (since it's create, shouldn't happen but still taking notes.)
 
                     const mediasController = MediasController.getInstance();
                     //insert a new object media inside the database with all the information required
-                    const mediaResponse = await mediasController.internalCreate(req, res);
+                    const mediaResponse = await mediasController.internalCreate(mediaData, req.file, path, fileName, req.user.id, createdEntityId);
                     res.serviceResponse.media = mediaResponse;
                     if (mediaResponse.error){
                         //Fill error
@@ -285,7 +298,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
                         }
                         else{
                             //Save file
-                            FileStorage.saveFile("Person", createdEntityId, "mainImage", req.user.id, req.file);
+                            FileStorage.saveFile(path, fileName, req.file);
                             res.serviceResponse.media.error = false;
                             res.serviceResponse.media.message = "Success to save file, create media, and link media to entity!"
                             return next()

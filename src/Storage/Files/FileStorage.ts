@@ -51,28 +51,13 @@ export default class FileStorage {
     }
 
     public static generatePath(entityType:string, entityId:string):string {
-        return './localStorage/public/' + entityType + '/' + entityId;
+        return './localStorage/public' + entityType + '/' + entityId;
         //FileStorage.basePath + '/' + entityType + '/' + entityId + '/';
     }
 
-    public static saveFile(entityType:string, entityId:string, mediaField:string, userId:string, file:any):void {
-        const path = this.generatePath(entityType, entityId);
-        const tryExt:string|false = mime.extension(file.mimetype);
-        const extension:string = (tryExt !== false ? tryExt : "");
-
-        const fileName = FileStorage.generateFilename(
-            [
-            mediaField,
-            userId,
-            FileStorage.getUniquePrefix(),
-            file.originalname
-            ],
-            extension)
+    public static saveFile(path:string, fileName:string, file:any):void {
         
         FileStorage.createPathIfNotExist(path);
-
-        LogHelper.debug(path, tryExt, extension, fileName);
-        LogHelper.debug(path+'/'+fileName);
 
         const writeStream = fs.createWriteStream(path+'/'+fileName);
         writeStream.on('ready', function() { writeStream.write(file.buffer);})
