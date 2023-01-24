@@ -172,6 +172,7 @@ export abstract class Service
      */
     async update(data: any, options?:any): Promise<ApiResponseContract> {
 
+        LogHelper.debug("in service", data);
         const updateOptions = { new: true,
                                 runValidators: true,
                                 ...options}
@@ -179,7 +180,8 @@ export abstract class Service
         try {
             const id = data.id;
             delete data.id; //Remove id from data
-            if( (id != undefined && id.length != 24) || Object.keys(data).length < 1){
+            console.log(id);
+            if( (id != undefined && id.toString().length != 24) || Object.keys(data).length < 1){
                 return ErrorResponse.create(data, StatusCodes.BAD_REQUEST, "id cannot be casted as ObjectId or object to update empty");
             }
             // UpdateOne

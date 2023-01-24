@@ -48,13 +48,15 @@ class MediasController extends AbstractController { //implements ControllerContr
         LogHelper.debug("Media internal Create");
         //TODO: Call media service with the creation of media linked to createdEntity
         const file = req.file ?? undefined;
+        const media = req.body.data.media ?? {};
+
         const createData = {
-            title: req.body.data.media.title ?? '',
-            alt: req.body.data.media.alt ?? '',
-            description: req.body.data.media.description ?? '',
-            path : "to determine",
-            licence: req.body.data.media.licence ?? 'Public Domain (CC0)',
-            fileType: req.body.data.media.fileType,
+            title: media.title ?? '',
+            alt: media.alt ?? '',
+            description: media.description ?? '',
+            path : req.file.destination ?? 'undefined path',
+            licence: media.licence ?? 'Public Domain (CC0)',
+            fileType: file.fileType ?? 'image',
             fileName: file?.filename ?? "filenameNotSet",
             extension: file?.mimetype ? mime.extension(file?.mimetype) : "image/png",
             entityId: res.serviceResponse.data._id,

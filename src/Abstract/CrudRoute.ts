@@ -254,54 +254,19 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
             //https://stackabuse.com/handling-file-uploads-in-node-js-with-expres-and-multer/
 
             //if file attached?
-            if(true){
+            if(req.file !== undefined){
                 //if entity have media field
-                //TODO : Need to make a check for this
+                //TODO : Need to make a check for this (this goes with making the create check for multiple field multer.single ("mainImage, and others..."))
                 if(true) {
                     //catch entity id and other info
                     const createdEntityId = res.serviceResponse.data._id;//No sure if it's data
+                    LogHelper.debug("createdPersonId",createdEntityId);
                     //Here we gotta take note of the old media ID and make sure to eventually change it's dbStatus if the new media replace it (since it's create, shouldn't happen but still taking notes.)
-
-                    //decide which param to keep(path, fileName, the field the media should be attached to...) and create a multer uploader based on that
-                    /*const mediaStorage:PublicLocalMediaStorage = new PublicLocalMediaStorage();
-                    const multerParams = multer({
-                        storage: mediaStorage.storage("temp/123456789123456789123456/"),
-                        //PublicLocalMediaStorage.limit;
-                        //limits: mediaStorage.limits,
-                        fileFilter: mediaStorage.fileFilter(),
-                    });*/
-
-                    //upload with multer
-                    /*const upload = multerParams.single("mainImage"); //upload with multer
-
-                    upload(req, res, function(err) {
-                        // req.file contains information of uploaded file
-                        // req.body contains information of text fields, if there were any
-                
-                        if (false){//req.fileValidationError) {
-                            return res.send(req)//.fileValidationError);
-                        }
-                        else if (!req.file || !req.files) {
-                            LogHelper.log("No files to save during /create of entity");
-                            return next()
-                        }
-                        else if (err instanceof multer.MulterError) {
-                            res.serviceResponse.media.error = err;
-                            return next()
-                        }
-                        else if (err) {
-                            res.serviceResponse.media.error = err;
-                            return next();
-                        }
-                        // Display uploaded image for user validation
-                        //res.send(`You have uploaded this image: <hr/><img src="${req.file.path}" width="500"><hr /><a href="./">Upload another image</a>`);
-
-                    });*/
 
                     const mediasController = MediasController.getInstance();
                     //insert a new object media inside the database with all the information required
                     const mediaResponse = await mediasController.internalCreate(req, res);
-                    
+                    res.serviceResponse.media = mediaResponse;
                     if (mediaResponse.error){
                         //Fill error
                         res.serviceResponse.media = mediaResponse;
@@ -312,26 +277,22 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
                         const toLinkMediaId = mediaResponse.data._id;
                         const updateRequest =
                         {
-                            _id: createdEntityId,
+                            id: createdEntityId,
                             mainImage : toLinkMediaId,
                         }
+                        LogHelper.debug("media Id", toLinkMediaId);
                         const linkingMediaResponse = await this.controllerInstance.update(updateRequest)
+                        LogHelper.warn("link response", linkingMediaResponse);
                         if (linkingMediaResponse.error){
                             res.serviceResponse.media = mediaResponse;
                             res.serviceResponse.media.failMessage = "Couldn't link entity with the new media";
                             return next()
                         }
                         else{
-                            //const oldMedia = res.serviceResponse.data.mainImage;
-                            //if(oldMedia === undefined || oldMedia == ''){
                                 res.serviceResponse.media.error = false;
                                 res.serviceResponse.media.message = "Success to save file, create media, and link media to entity!"
                                 return next()
-                            }
-                            //else{
-                            //
-                            //   return next()
-                            //}
+                        }
                     }
                 }
             } else {
