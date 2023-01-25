@@ -1,5 +1,5 @@
 import multer from "multer";
-import PublicStorage from "../../Storage/Files/PublicStorage";
+import PublicStorage from "../../Storage/Files/PublicLocalStorage";
 import * as fs from 'fs';
 import { fileExtensionList } from "../List/FileList";
 import * as mime from 'mime-types'

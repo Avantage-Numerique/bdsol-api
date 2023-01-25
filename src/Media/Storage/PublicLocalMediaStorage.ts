@@ -1,4 +1,4 @@
-import PublicStorage from "../../Storage/Files/PublicStorage";
+import PublicLocalStorage from "../../Storage/Files/PublicLocalStorage";
 import multer from "multer";
 import * as mime from "mime-types";
 import FileStorage from "../../Storage/Files/FileStorage";
@@ -6,10 +6,9 @@ import FileStorage from "../../Storage/Files/FileStorage";
 /**
  *
  */
-export default class PublicLocalMediaStorage extends PublicStorage {
+export default class PublicLocalMediaStorage extends PublicLocalStorage {
 
     public destination:string;
-
     public filenameRecipe:any;
 
 
@@ -17,7 +16,6 @@ export default class PublicLocalMediaStorage extends PublicStorage {
         super();
         this.filenameRecipe = filenameRecipe;
     }
-
 
     public limits:{fields:number, fieldNameSize:number, fieldSize:number, fileSize:number } = {
         fields: 1,
@@ -28,7 +26,7 @@ export default class PublicLocalMediaStorage extends PublicStorage {
     };
 
     public storage(targetPath:string):any {
-        const localDestination:string = `${PublicStorage.basePath}/${targetPath}`;
+        const localDestination:string = `${PublicLocalStorage.basePath}/${targetPath}`;
 
         return multer.diskStorage({
             destination: (req:any, file:any, cb) => {
