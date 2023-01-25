@@ -52,8 +52,7 @@ export default class FileStorage {
 
     /**
      * Save buffer into a file in the target path.
-     * @param path {string}
-     * @param fileName {string}
+     * @param record {Record}
      * @param file {any} This must be a multer file, got from the request.
      */
     public static saveFile(record:Record, file:any):void {
@@ -72,7 +71,11 @@ export default class FileStorage {
         })
     }
 
-//Remove character pass the last dot "." (don't use if you don't know if there is an extension)
+
+    /**
+     * Remove character pass the last dot "." (don't use if you don't know if there is an extension)
+     * @param filenameWithExt
+     */
     public static removeExtension(filenameWithExt:string) {
         const nameSplit = filenameWithExt.split(".");
         if (nameSplit.length > 1)

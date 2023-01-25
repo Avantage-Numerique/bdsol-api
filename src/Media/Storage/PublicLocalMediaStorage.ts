@@ -2,6 +2,7 @@ import PublicLocalStorage from "../../Storage/Files/PublicLocalStorage";
 import multer from "multer";
 import * as mime from "mime-types";
 import FileStorage from "../../Storage/Files/FileStorage";
+import AbstractController from "../../Abstract/Controller";
 
 /**
  *
@@ -11,10 +12,34 @@ export default class PublicLocalMediaStorage extends PublicLocalStorage {
     public destination:string;
     public filenameRecipe:any;
 
+    public path:string;
+    protected _storageMiddleware:any;
+    static _instance:PublicLocalMediaStorage;
+
 
     constructor(filenameRecipe:any={}) {
         super();
         this.filenameRecipe = filenameRecipe;
+    }
+
+    /**
+     * @static @static @method getInstance Create the singleton instance if not existing
+     * @return {PublicLocalMediaStorage} Controller singleton constructor
+     */
+    static getInstance():PublicLocalMediaStorage {
+        if (PublicLocalMediaStorage._instance === undefined) {
+            PublicLocalMediaStorage._instance = new PublicLocalMediaStorage();
+        }
+        return PublicLocalMediaStorage._instance;
+    }
+
+    /**
+     * @static get the middleware directly from the singleton instance.
+     * @param path
+     */
+    static middleware(path:string):any {
+        const storage:PublicLocalMediaStorage = PublicLocalMediaStorage.getInstance();
+        return storage.middleware(path);
     }
 
     public limits:{fields:number, fieldNameSize:number, fieldSize:number, fileSize:number } = {
@@ -64,9 +89,9 @@ export default class PublicLocalMediaStorage extends PublicLocalStorage {
 
 
     public filename(filenameRecipe:any, sep:string="-"):string {
-
+        this.filenameRecipe = filenameRecipe;
         let filename:string = "";
-        for (const part of filenameRecipe) {
+        for (const part of this.filenameRecipe) {
             filename += part + sep;
         }
         return filename;
@@ -77,5 +102,19 @@ export default class PublicLocalMediaStorage extends PublicLocalStorage {
             originalname
         ]*/
     }
+
+    public middleware(path:string):any {
+        if (!this._storageMiddleware && path !== this.path) {
+            this.path = path;
+            this._storageMiddleware = multer({
+                storage: this.storage(path),
+                //limits: mediaStorage.limits,//PublicLocalMediaStorage.limit;
+                fileFilter: this.fileFilter(),
+            });
+        }
+        return this._storageMiddleware;
+    }
+
+
 
 }

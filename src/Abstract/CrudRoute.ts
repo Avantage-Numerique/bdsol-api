@@ -13,6 +13,8 @@ import PublicLocalMediaStorage from "../Media/Storage/PublicLocalMediaStorage";
 import FileStorage from "../Storage/Files/FileStorage";
 import * as mime from "mime-types"
 import Record from "../Media/Record/Record";
+import multipartFormDataParser from "../Http/Requests/multipartRequest";
+import TempPublicLocalStorage from "../Storage/Files/TempPublicLocalStorage";
 
 
 abstract class CrudRoute extends AbstractRoute implements RouteContract {
@@ -75,22 +77,10 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      */
     public setupAuthRoutes(): express.Router {
 
-        this.multipartSetup = new PublicLocalMediaStorage();
-        const multipartMiddlewareHandler = multer({
-            storage: this.multipartSetup.storage("temp/123456789123456789123456/"),
-            //PublicLocalMediaStorage.limit;
-            //limits: mediaStorage.limits,
-            fileFilter: this.multipartSetup.fileFilter(),
-        });
-
-        const multipartMiddlewareTemporaryHandler = multer({
-            storage: multer.memoryStorage()
-        });
-
         //create target entity with upload
         this.routerInstanceAuthentification.post('/create', [
-            multipartMiddlewareTemporaryHandler.single("mainImage"),
-            this.contentTypeParser,
+            TempPublicLocalStorage.middleware().single("mainImage"),
+            multipartFormDataParser,
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("create"),
             this.createHandler.bind(this),
@@ -197,38 +187,6 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
 
     /**
-     * Parse the current request content type. And parse data if it's multipart.
-     * inspire by : https://stackoverflow.com/questions/49784509/handle-multipart-formdata-application-json-and-text-plain-in-single-express-ha
-     * @param req
-     * @param res
-     * @param next
-     */
-    public async contentTypeParser(req:Request, res:Response, next:NextFunction): Promise<any> {
-
-        //quand on save le fichier en temp. Il est cleared à la fin de la equest est est passé en buffer dans le request.
-        /**
-         * cb(null, {
-         *       buffer: data,
-         *       size: data.length
-         *     })
-         * 1. donc on pourrait faire un temps au bebug, et save le buffer à la fin.
-         * 2. check le fichier temps pour vider ensuite.
-         */
-
-        const contentType:any = req.get('content-type');
-        if (contentType.includes('application/json')) {
-            return next();
-        }
-
-        if (contentType.includes('multipart/form-data')) {
-            req.body.data = JSON.parse(req.body.data);
-            return next();
-        }
-
-        return next();
-    }
-
-    /**
      * CREATE
      * Handle the create method of the controller of the entity, passing the data to it.
      * @param req {Request}
@@ -246,7 +204,6 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         else {
             //const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'create');
             //LogHelper.debug(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
-        
 
             //#File Validation and Upload
             //https://stackabuse.com/handling-file-uploads-in-node-js-with-expres-and-multer/
