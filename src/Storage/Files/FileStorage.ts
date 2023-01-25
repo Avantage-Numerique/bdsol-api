@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as mime from "mime-types";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {fileExtensionList} from "../../Media/List/FileList";
+import Record from "../../Media/Record/Record";
 
 export default class FileStorage {
     static basePath:string;
@@ -33,22 +34,18 @@ export default class FileStorage {
         return callback(new Error('Error: file extension not accepted'), false);
     }
 
-
     public static fileTypeSupported(supportedExtensionsList:Array<any>, fileExtension:string):boolean {
         return supportedExtensionsList.includes(fileExtension);
     }
-
 
     public static getUniquePrefix():string {
         return Math.round(Math.random() * 1E9).toString().substring(0, 6); //length 6 random number
     }
 
-
     public static generatePath(entityType:string, entityId:string):string {
         return './localStorage/public' + entityType + '/' + entityId;
         //FileStorage.basePath + '/' + entityType + '/' + entityId + '/';
     }
-
 
 
     //      FS function
@@ -59,11 +56,11 @@ export default class FileStorage {
      * @param fileName {string}
      * @param file {any} This must be a multer file, got from the request.
      */
-    public static saveFile(path:string, fileName:string, file:any):void {
+    public static saveFile(record:Record, file:any):void {
 
-        FileStorage.createPathIfNotExist(path);
+        FileStorage.createPathIfNotExist(record.pathNoFilename);
 
-        const writeStream = fs.createWriteStream(path+'/'+fileName);
+        const writeStream = fs.createWriteStream(record.pathWithFilename);
         writeStream.on('ready', function() { writeStream.write(file.buffer);})
         writeStream.on('close', function() {
             writeStream.close(function(err) {
@@ -74,6 +71,15 @@ export default class FileStorage {
             })
         })
     }
+
+//Remove character pass the last dot "." (don't use if you don't know if there is an extension)
+    public static removeExtension(filenameWithExt:string) {
+        const nameSplit = filenameWithExt.split(".");
+        if (nameSplit.length > 1)
+            nameSplit.pop(); //Remove extension
+        return nameSplit.join("");
+    }
+
 
     /**
      * Create folder structure if doesn't exist
