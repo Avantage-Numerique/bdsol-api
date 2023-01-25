@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as mime from "mime-types";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {fileExtensionList} from "../../Media/List/FileList";
+import Record from "../../Media/Record/Record";
 
 export default class FileStorage {
     static basePath:string;
@@ -18,7 +19,15 @@ export default class FileStorage {
     }
 
     public static generateFilename(values:Array<string>, extension:string, sep:string="-") {
-        return `${values.join(sep)}.${extension}`;
+        return `${values.join(sep)}.${extension}`.replace(/\s/g, '');
+    }
+
+    //Remove character pass the last dot "." (don't use if you don't know if there is an extension)
+    public static removeExtension(filenameWithExt:string) {
+        const nameSplit = filenameWithExt.split(".");
+        if (nameSplit.length > 1)
+            nameSplit.pop(); //Remove extension
+        return nameSplit.join("");
     }
 
     /**
@@ -55,11 +64,11 @@ export default class FileStorage {
         //FileStorage.basePath + '/' + entityType + '/' + entityId + '/';
     }
 
-    public static saveFile(path:string, fileName:string, file:any):void {
+    public static saveFile(record:Record, file:any):void {
         
-        FileStorage.createPathIfNotExist(path);
+        FileStorage.createPathIfNotExist(record.pathNoFilename);
 
-        const writeStream = fs.createWriteStream(path+'/'+fileName);
+        const writeStream = fs.createWriteStream(record.pathWithFilename);
         writeStream.on('ready', function() { writeStream.write(file.buffer);})
         writeStream.on('close', function() {
             writeStream.close(function(err) {
