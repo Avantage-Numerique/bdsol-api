@@ -1,15 +1,3 @@
-
-/*
-const multer  = require('multer')
-const upload = multer({ dest: 'uploads/' })
-
-app.post('/profile', upload.single('avatar'), function (req, res, next) {
-  // req.file is the `avatar` file
-  // req.body will hold the text fields, if there were any
-
-})
-*/
-
 import express, {NextFunction, Request, Response} from "express";
 import MediasController from "../Controllers/MediasController";
 import AbstractRoute from "../../Abstract/Route";
@@ -145,14 +133,27 @@ class MediasRoutes extends AbstractRoute {
      * @param next {NextFunction}
      */
     public async getByUriParamsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        try {
-            const response = fs.readFileSync(`/api/localStorage/public/${req.params.entity}/${req.params.id}/${req.params.fileName}`, null);
-            res.serviceResponse = new ApiResponse({ error: false, code: StatusCodes.OK, message: "Ok", errors: [], data: response }).response
+        const options = {
+            root: "/api/localStorage/public",
+            dotfiles: 'deny',
+            headers: {
+                'x-timestamp': Date.now(),
+                'x-sent': true
+            }
         }
-        catch {
-            res.serviceResponse = new ApiResponse({ error: true, code: StatusCodes.INTERNAL_SERVER_ERROR, message: "Unable to read file", errors: [], data: {} }).response
-        }
-        return next();
+
+        res.status(200).sendFile(
+        `/${req.params.entity}/${req.params.id}/${req.params.fileName}`,
+        options,
+        function (err) {
+            if (err){
+                LogHelper.error("MediasRoute:", err);
+                res.status(404).send(new ApiResponse({ error: true, code: StatusCodes.NOT_FOUND, message: "File not found", errors: [], data: {} }).response)
+            }
+            else {
+                LogHelper.log(`Sent file at : /${req.params.entity}/${req.params.id}/${req.params.fileName}`);
+            }
+        });
     }
 }
 export {MediasRoutes};
