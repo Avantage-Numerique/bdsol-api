@@ -243,14 +243,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         if (res.serviceResponse.error) {
             return next();
         }
-        else {
-            //const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'create');
-            //LogHelper.debug(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
-        
-
-            //#File Validation and Upload
-            //https://stackabuse.com/handling-file-uploads-in-node-js-with-expres-and-multer/
-
+        else {        
             //if file attached?
             if(req.file !== undefined){
                 //if entity have media field
@@ -291,6 +284,9 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
                             FileStorage.saveFile(record, req.file);
                             res.serviceResponse.media.error = false;
                             res.serviceResponse.media.message = "Success to save file, create media, and link media to entity!"
+                            const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'create');
+                            LogHelper.debug(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
+
                             return next()
                         }
                     }

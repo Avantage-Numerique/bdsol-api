@@ -37,7 +37,7 @@ export default class Record {
 
     constructor(req:any, res:any, entityId:string, mediaField:string){
 
-        this.userId = req.user.id;
+        this.userId = req.user._id;
 
         const tryExt:string|false = mime.extension(req.file.mimetype);
         this.extension = (tryExt !== false ? tryExt : "");
