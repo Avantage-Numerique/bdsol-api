@@ -6,6 +6,8 @@ import uploadSingle from "../Middlewares/UploadSingleMediaMiddleware";
 import * as fs from "fs";
 import ApiResponse from "../../Http/Responses/ApiResponse";
 import { StatusCodes } from "http-status-codes";
+import FileStorage from "../../Storage/Files/FileStorage";
+import { PersonsController } from "../../Persons/Controllers/PersonsController";
 
 class MediasRoutes extends AbstractRoute {
 
@@ -53,6 +55,12 @@ class MediasRoutes extends AbstractRoute {
         this.routerInstance.get('/', [
             ...this.addMiddlewares("all"),
             this.basepathHandler.bind(this),
+            this.routeSendResponse.bind(this),
+        ]);
+
+        this.routerInstance.get('/delete/:entity/:id/:fileName', [
+            ...this.addMiddlewares("all"),
+            this.deleteHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
         
@@ -123,6 +131,28 @@ class MediasRoutes extends AbstractRoute {
     public async basepathHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
         LogHelper.debug("basePathHandler");
         res.serviceResponse = await this.controllerInstance.basepath(req.body.data);
+        return next();
+    }
+
+    public async deleteHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        //`/${req.params.entity}/${req.params.id}/${req.params.fileName}`
+
+        //delete file
+        // Assuming that 'path/file.txt' is a regular file.
+        fs.unlink(`./localStorage/public/${req.params.entity}/${req.params.id}/${req.params.fileName}`, (err) => {
+            if (err)
+                LogHelper.error("Deleting file failed : ", err);
+            else
+                console.log(`./localStorage/public/${req.params.entity}/${req.params.id}/${req.params.fileName} was deleted`);
+        });
+
+        //Modify the mediafield in entity
+        const entityController = PersonsController.getInstance();
+        res.serviceResponse = await entityController.service.update( { id: req.params.id, mainImage: null } )
+
+        //delete media from fileName && entityId (params.id)
+        const mediaController = MediasController.getInstance();
+        res.serviceResponse.media = await mediaController.service.findAndDelete({ entityId: req.params.id, fileName: FileStorage.removeExtension(req.params.fileName) });
         return next();
     }
 

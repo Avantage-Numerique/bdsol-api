@@ -198,6 +198,24 @@ export abstract class Service
         }
     }
 
+    async findAndDelete(filter:object) {
+        try {
+            const meta = await this.model.findOneAndDelete(filter)
+            .catch( (e:any) => {
+                LogHelper.info("findOneAndDelete catch:", e);
+                return e;
+            });
+            return this.parseResult(meta, Service.DELETE_STATE);
+        }
+        catch (findAndDeleteError:any) {
+            return ErrorResponse.create(
+                findAndDeleteError.errors,
+                StatusCodes.NOT_FOUND,
+                findAndDeleteError.message || "Error on findOneAndDelete item in Service"
+            );
+        }
+    }
+
     /**
      * Delete the target document with the target id
      * @param id string of the objectid for the document.
@@ -209,8 +227,7 @@ export abstract class Service
                 .catch((e: any) => {
                     LogHelper.info("findByIdAndDelete catch:", e);
                     return e;
-                }
-            );
+                });
 
             return this.parseResult(meta, Service.DELETE_STATE);
 
