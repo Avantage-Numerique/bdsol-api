@@ -2,7 +2,7 @@ import PublicLocalStorage from "../../Storage/Files/PublicLocalStorage";
 import multer from "multer";
 import * as mime from "mime-types";
 import FileStorage from "../../Storage/Files/FileStorage";
-import AbstractController from "../../Abstract/Controller";
+import FileSupportedFilter from "../../Storage/Filters/FileSupportedFilter";
 
 /**
  *
@@ -81,13 +81,12 @@ export default class PublicLocalMediaStorage extends PublicLocalStorage {
         });
     }
 
-    public fileFilter():any {
-        return (req:any, file:any, cb:any) => {
-            FileStorage.isFileTypeSupportedFilter(file, cb)
-        }
-    }
 
-
+    /**
+     * Generate the filename
+     * @param filenameRecipe {any} filename structure.
+     * @param sep {string} the seperator for the filename.
+     */
     public filename(filenameRecipe:any, sep:string="-"):string {
         this.filenameRecipe = filenameRecipe;
         let filename:string = "";
@@ -103,18 +102,20 @@ export default class PublicLocalMediaStorage extends PublicLocalStorage {
         ]*/
     }
 
+
+    /**
+     * Return the multer middleware
+     * @param path {string}
+     */
     public middleware(path:string):any {
         if (!this._storageMiddleware && path !== this.path) {
             this.path = path;
             this._storageMiddleware = multer({
                 storage: this.storage(path),
                 //limits: mediaStorage.limits,//PublicLocalMediaStorage.limit;
-                fileFilter: this.fileFilter(),
+                fileFilter: FileSupportedFilter.getMiddleware(),
             });
         }
         return this._storageMiddleware;
     }
-
-
-
 }

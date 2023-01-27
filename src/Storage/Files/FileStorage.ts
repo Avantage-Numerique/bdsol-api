@@ -3,15 +3,18 @@ import * as mime from "mime-types";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {fileExtensionList} from "../../Media/List/FileList";
 import Record from "../../Media/Record/Record";
+import multer from "multer";
 
 export default class FileStorage {
     static basePath:string;
     static destination:string;
 
+    //
+    public options:multer.Options
+
     public static filename(originFile:any) {
         return originFile.originalname;
     }
-
 
     /**
      * Check if file is supported in a list of file extension
