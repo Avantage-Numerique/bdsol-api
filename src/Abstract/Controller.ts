@@ -9,6 +9,10 @@ import UsersHistoryService from "../UserHistory/Services/UsersHistoryService";
 import UserHistory from "../UserHistory/Models/UserHistory";
 import {UserHistorySchema} from "../UserHistory/Schemas/UserHistorySchema";
 import {ControllerContract} from "./Contracts/ControllerContract";
+import PersonsController from "../Persons/Controllers/PersonsController";
+import OrganisationsController from "../Organisations/Controllers/OrganisationsController";
+import TaxonomyController from "../Taxonomy/Controllers/TaxonomyController";
+import MediasController from "../Media/Controllers/MediasController";
 
 /**
  * AbstractController
@@ -178,10 +182,7 @@ abstract class AbstractController implements ControllerContract {
         const fields = response.data;
 
         //Media
-        console.log(response);
         const media = response.media ?? {}
-        console.log("media", media);
-        console.log("media.data", media.data)
 
         const history: UserHistorySchema = {
             "user": user,

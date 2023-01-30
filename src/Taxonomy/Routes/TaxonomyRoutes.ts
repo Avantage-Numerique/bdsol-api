@@ -1,5 +1,5 @@
 import express, {Response, Request, NextFunction} from "express";
-import {TaxonomyController} from "../Controllers/TaxonomyController";
+import TaxonomyController from "../Controllers/TaxonomyController";
 import AbstractController from "../../Abstract/Controller";
 import {body, param} from "express-validator";
 import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
