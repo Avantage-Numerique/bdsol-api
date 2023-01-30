@@ -2,6 +2,7 @@ import { StatusStates } from "../../Database/Schemas/StatusSchema";
 
 export const fakePersons = [
     {
+        slug: "patrick-watson",
         lastName:"Watson",
         firstName:"Patrick",
         nickname:"PoW",
@@ -12,6 +13,7 @@ export const fakePersons = [
         }
     },
     {
+        slug: "jean-marc-parent",
         lastName:"Parent",
         firstName:"Jean-Marc",
         nickname:"Mickette",
