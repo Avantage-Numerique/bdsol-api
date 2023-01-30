@@ -23,7 +23,7 @@ export class Status {
         state: {
             type: String,
             enum: StatusStates,
-            required: true
+            //required: true
         },
         //The user who request the change
         requestedBy: {

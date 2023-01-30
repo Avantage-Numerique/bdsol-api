@@ -10,7 +10,6 @@ import Person from "../../Persons/Models/Person";
 import Organisation from "../../Organisations/Models/Organisation";
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 import UserHistory from "../../UserHistory/Models/UserHistory";
-import CreateDataMongoose from "../Seeders/create-data-mongoose";
 import {MongooseSlugUpdater} from "../Plugins/MongooseSlugUpdater";
 import PersonsService from "../../Persons/Services/PersonsService";
 import OrganisationsService from "../../Organisations/Services/OrganisationsService";
@@ -19,6 +18,14 @@ import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService"
 import type {Service} from "../Service";
 import MediasService from "../../Media/Services/MediasService";
 import Media from "../../Media/Models/Media";
+import {fakeUser} from "../../Data/FakeEntities/fakeUser";
+import {fakePersons} from "../../Data/FakeEntities/fakePerson";
+import {fakeOrganisations} from "../../Data/FakeEntities/fakeOrganisations";
+import {fakeUserHistories} from "../../Data/FakeEntities/fakeUserHistories";
+import SeederTaskContract from "../Seeders/SeederTaskContract";
+import {TaxonomiesPersistantData} from "../../Taxonomy/TaxonomiesPersistantData";
+import SeedData from "../Seeders/seed-data";
+import SeedPersistantData from "../Seeders/seed-persistant-data";
 
 export class MongooseDBDriver implements DBDriver {
 
@@ -28,7 +35,7 @@ export class MongooseDBDriver implements DBDriver {
     public baseUrl: string;
     public providers: any;
 
-    public plugins:any;
+    public plugins: any;
 
     /**
      * Constructor fo this driver. Object is created 1 time in  ServerController.
@@ -81,43 +88,90 @@ export class MongooseDBDriver implements DBDriver {
         this.providers.data.assign(PersonsService.getInstance(Person.getInstance()));
         this.providers.data.assign(OrganisationsService.getInstance(Organisation.getInstance()));
 
+        await this.seedDB();
+    }
+
+    /**
+     * Async, Initiation step in MongooseDBDriver to seed the DB.
+     * @return void
+     */
+    public async seedDB() {
+        LogHelper.info(`[BD][SEEDERS] Seeding DB for env : ${config.environnement}`);
+        await this.addPersistantData();
         await this.generateFakeData();
     }
 
-    public async generateFakeData()
-    {
+    /**
+     * In all environnement, seed the db with data.
+     */
+    public async addPersistantData() {
+
+        LogHelper.info(`[BD][SEEDERS] Adding perdistant Data`);
+
+        const persistantDataTasks: Array<SeederTaskContract> = [
+            {
+                service: this.providers.data.services.TaxonomyService,
+                data: TaxonomiesPersistantData,
+                whereKeys: ['category', 'name']
+            }
+        ];
+        await this.seedData(persistantDataTasks, SeedPersistantData);
+    }
+
+    /**
+     * In environnement development, seed the bd with data to test things.
+     * @return void
+     */
+    public async generateFakeData() {
+
         if (config.environnement === 'development') {
 
-            //will create the fake users if the collection is empty.
-            //const usersCollection = new CreateDbAndEntityMongoose(this.providers.users.services.UsersService);
-            //await usersCollection.up();
+            LogHelper.info(`[BD][SEEDERS] Adding fake data in development`);
 
-            const createDataTasks:Array<Service> = [
-                this.providers.users.services.UsersService,
-                this.providers.data.services.PersonsService,
-                this.providers.data.services.OrganisationsService,
-                this.providers.data.services.TaxonomyService,
-                this.providers.data.services.UsersHistoryService,
-                //this.providers.data.services.MediasService
-            ]
-
-            //Loop throught the services that need to be faked
-            //Still need refactoring to drying scope of responsability in the seeder ? or in this.
-            for (const targetService of createDataTasks) {
-                await this.fakeTask(targetService);
-            }
+            const fakeDataTasks: Array<SeederTaskContract> = [
+                {
+                    service: this.providers.users.services.UsersService,
+                    data: fakeUser,
+                    whereKeys: ['username']
+                },
+                {
+                    service: this.providers.data.services.PersonsService,
+                    data: fakePersons,
+                    whereKeys: ['firstName', 'lastName']
+                },
+                {
+                    service: this.providers.data.services.OrganisationsService,
+                    data: fakeOrganisations,
+                    whereKeys: ['name']
+                },
+                {
+                    service: this.providers.data.services.UsersHistoryService,
+                    data: fakeUserHistories,
+                    whereKeys: []
+                }
+            ];
+            await this.seedData(fakeDataTasks);
         }
     }
 
-    private async fakeTask(service:Service) {
+    /**
+     * Factory seeders of data
+     * @param tasks service - data and wheres to add the data.
+     * @param seederClass the class to manage the seeding. Myst extend seedData.
+     */
+    public async seedData(tasks:Array<SeederTaskContract>, seederClass:typeof SeedData = SeedData) {
 
-        // Fake Persons.
-        try {
-            const seeder = new CreateDataMongoose(service);
-            await seeder.up();
-        } catch(e:any) {
-            LogHelper.raw("Mongoose Driver erreur in migration ", e);
-            throw e;
+        //Loop through the services that need to be faked
+        //Still need refactoring to drying scope of responsibility in the seeder ? or in this.
+        for (const task of tasks) {
+            try {
+                const seeder = new seederClass(task.service, task.data, task.whereKeys);
+                LogHelper.info(`[BD][SEEDERS][SEEDING] ${task.service.constructor.name} with ${task.data.constructor.name}`);
+                await seeder.up();
+            } catch (e: any) {
+                LogHelper.raw(`[BD][SEEDERS][SEEDING][ERROR] Can't seed ${task.service.constructor.name} with ${task.data.constructor.name}`, e);
+                throw e;
+            }
         }
     }
 

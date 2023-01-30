@@ -1,15 +1,3 @@
-
-/*
-const multer  = require('multer')
-const upload = multer({ dest: 'uploads/' })
-
-app.post('/profile', upload.single('avatar'), function (req, res, next) {
-  // req.file is the `avatar` file
-  // req.body will hold the text fields, if there were any
-
-})
-*/
-
 import express, {NextFunction, Request, Response} from "express";
 import MediasController from "../Controllers/MediasController";
 import AbstractRoute from "../../Abstract/Route";
@@ -18,6 +6,8 @@ import uploadSingle from "../Middlewares/UploadSingleMediaMiddleware";
 import * as fs from "fs";
 import ApiResponse from "../../Http/Responses/ApiResponse";
 import { StatusCodes } from "http-status-codes";
+import FileStorage from "../../Storage/Files/FileStorage";
+import { PersonsController } from "../../Persons/Controllers/PersonsController";
 
 class MediasRoutes extends AbstractRoute {
 
@@ -65,6 +55,12 @@ class MediasRoutes extends AbstractRoute {
         this.routerInstance.get('/', [
             ...this.addMiddlewares("all"),
             this.basepathHandler.bind(this),
+            this.routeSendResponse.bind(this),
+        ]);
+
+        this.routerInstance.get('/delete/:entity/:id/:fileName', [
+            ...this.addMiddlewares("all"),
+            this.deleteHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
         
@@ -138,6 +134,28 @@ class MediasRoutes extends AbstractRoute {
         return next();
     }
 
+    public async deleteHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        //`/${req.params.entity}/${req.params.id}/${req.params.fileName}`
+
+        //delete file
+        // Assuming that 'path/file.txt' is a regular file.
+        fs.unlink(`./localStorage/public/${req.params.entity}/${req.params.id}/${req.params.fileName}`, (err) => {
+            if (err)
+                LogHelper.error("Deleting file failed : ", err);
+            else
+                console.log(`./localStorage/public/${req.params.entity}/${req.params.id}/${req.params.fileName} was deleted`);
+        });
+
+        //Modify the mediafield in entity
+        const entityController = PersonsController.getInstance();
+        res.serviceResponse = await entityController.service.update( { id: req.params.id, mainImage: null } )
+
+        //delete media from fileName && entityId (params.id)
+        const mediaController = MediasController.getInstance();
+        res.serviceResponse.media = await mediaController.service.findAndDelete({ entityId: req.params.id, fileName: FileStorage.removeExtension(req.params.fileName) });
+        return next();
+    }
+
     /**
      * Route handler to transform all the URI params into query to the get
      * @param req {Request}
@@ -145,14 +163,27 @@ class MediasRoutes extends AbstractRoute {
      * @param next {NextFunction}
      */
     public async getByUriParamsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        try {
-            const response = fs.readFileSync(`/api/localStorage/public/${req.params.entity}/${req.params.id}/${req.params.fileName}`, null);
-            res.serviceResponse = new ApiResponse({ error: false, code: StatusCodes.OK, message: "Ok", errors: [], data: response }).response
+        const options = {
+            root: "/api/localStorage/public",
+            dotfiles: 'deny',
+            headers: {
+                'x-timestamp': Date.now(),
+                'x-sent': true
+            }
         }
-        catch {
-            res.serviceResponse = new ApiResponse({ error: true, code: StatusCodes.INTERNAL_SERVER_ERROR, message: "Unable to read file", errors: [], data: {} }).response
-        }
-        return next();
+
+        res.status(200).sendFile(
+        `/${req.params.entity}/${req.params.id}/${req.params.fileName}`,
+        options,
+        function (err) {
+            if (err){
+                LogHelper.error("MediasRoute:", err);
+                res.status(404).send(new ApiResponse({ error: true, code: StatusCodes.NOT_FOUND, message: "File not found", errors: [], data: {} }).response)
+            }
+            else {
+                LogHelper.log(`Sent file at : /${req.params.entity}/${req.params.id}/${req.params.fileName}`);
+            }
+        });
     }
 }
 export {MediasRoutes};

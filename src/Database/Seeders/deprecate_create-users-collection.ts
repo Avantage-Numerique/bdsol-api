@@ -5,7 +5,7 @@ import config from "../../config";
 import {MigrationContract} from "../Contracts/Migration";
 
 
-export default class CreateUsersCollection implements MigrationContract {
+export default class Deprecate_createUsersCollection implements MigrationContract {
 
     db: mongoDB.Db | null;
     name: string = 'users';

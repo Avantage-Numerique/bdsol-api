@@ -50,7 +50,7 @@ class UsersController extends AbstractController {
         const modifDate = new Date();
 
         //Modified entity id
-        const modifiedEntity = response.data._id;
+        //const modifiedEntity = response.data._id;
 
         //Action on the data
         //action <---
@@ -58,12 +58,13 @@ class UsersController extends AbstractController {
         //Set modified fields
         const fields = response.data;
         
-        const history:UserHistorySchema = {
+        const history: UserHistorySchema = {
             "user": user,
             "ipAddress": ipAddress,
             "modifDate": modifDate,
-            "modifiedEntity": modifiedEntity,
-            "action": action,
+            "action": "create",
+            "entityCollection": "users",
+            "modifiedEntity": user,
             "fields": this.entity.dataTransfertObject(fields),
         } as UserHistorySchema;
 

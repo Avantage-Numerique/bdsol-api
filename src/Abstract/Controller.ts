@@ -177,6 +177,12 @@ abstract class AbstractController implements ControllerContract {
         //Set modified fields
         const fields = response.data;
 
+        //Media
+        console.log(response);
+        const media = response.media ?? {}
+        console.log("media", media);
+        console.log("media.data", media.data)
+
         const history: UserHistorySchema = {
             "user": user,
             "ipAddress": ipAddress,
@@ -185,6 +191,7 @@ abstract class AbstractController implements ControllerContract {
             "entityCollection": entityCollection,
             "modifiedEntity": modifiedEntity,
             "fields": this.entity.dataTransfertObject(fields),
+            "media": media.data ?? {}
         } as UserHistorySchema;
 
         //Service call to add UserHistory

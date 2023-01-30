@@ -68,6 +68,9 @@ class UserHistory extends AbstractModel {
             fields: {
                 type: Object,
                 required: true
+            },
+            media: {
+                type: Object,
             }
         },
             {
