@@ -1,8 +1,8 @@
-name: Principal
+name: Développement
 
 on:
   push:
-    branches: [ master ]
+    branches: [ dev ]
   pull_request:
     types: [opened, reopened]
 
