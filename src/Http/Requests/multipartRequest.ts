@@ -11,7 +11,7 @@ const multipartFormDataParser:any = async (req:Request, res:Response, next:NextF
     const contentType:any = req.get('content-type');
 
     /**
-     * Already handle by the default API middleware.
+     * This is the default content type.
      */
     if (contentType.includes('application/json')) {
         return next();
@@ -24,7 +24,6 @@ const multipartFormDataParser:any = async (req:Request, res:Response, next:NextF
         req.body.data = JSON.parse(req.body.data);
         return next();
     }
-
-    return next();
+    //throw error ? if we get there, the content-type isn't handled yet.
 }
 export default multipartFormDataParser;

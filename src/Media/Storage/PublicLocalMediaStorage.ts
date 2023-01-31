@@ -3,6 +3,8 @@ import multer from "multer";
 import * as mime from "mime-types";
 import FileStorage from "../../Storage/Files/FileStorage";
 import FileSupportedFilter from "../../Storage/Filters/FileSupportedFilter";
+import {fileExtensionList} from "../List/FileList";
+import {SingleLimits} from "../../Storage/limits";
 
 /**
  *
@@ -22,6 +24,7 @@ export default class PublicLocalMediaStorage extends PublicLocalStorage {
         this.filenameRecipe = filenameRecipe;
     }
 
+
     /**
      * @static @static @method getInstance Create the singleton instance if not existing
      * @return {PublicLocalMediaStorage} Controller singleton constructor
@@ -33,6 +36,7 @@ export default class PublicLocalMediaStorage extends PublicLocalStorage {
         return PublicLocalMediaStorage._instance;
     }
 
+
     /**
      * @static get the middleware directly from the singleton instance.
      * @param path
@@ -42,13 +46,6 @@ export default class PublicLocalMediaStorage extends PublicLocalStorage {
         return storage.middleware(path);
     }
 
-    public limits:{fields:number, fieldNameSize:number, fieldSize:number, fileSize:number } = {
-        fields: 1,
-        fieldNameSize: 50, // TODO: Check if this size is enough
-        fieldSize: 20000, //TODO: Check if this size is enough
-        // TODO: Change this line after compression
-        fileSize: 15000000, // 150 KB for a 1080x1080 JPG 90
-    };
 
     public storage(targetPath:string):any {
         const localDestination:string = `${PublicLocalStorage.basePath}/${targetPath}`;
@@ -94,12 +91,6 @@ export default class PublicLocalMediaStorage extends PublicLocalStorage {
             filename += part + sep;
         }
         return filename;
-        /*FileStorage.generateFilename([
-            fieldname,
-            userId,
-            FileStorage.getUniquePrefix(),
-            originalname
-        ]*/
     }
 
 
@@ -112,8 +103,8 @@ export default class PublicLocalMediaStorage extends PublicLocalStorage {
             this.path = path;
             this._storageMiddleware = multer({
                 storage: this.storage(path),
-                //limits: mediaStorage.limits,//PublicLocalMediaStorage.limit;
-                fileFilter: FileSupportedFilter.getMiddleware(),
+                limits: SingleLimits,
+                fileFilter: FileSupportedFilter.middleware(fileExtensionList),
             });
         }
         return this._storageMiddleware;

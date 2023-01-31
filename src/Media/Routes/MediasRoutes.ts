@@ -57,12 +57,6 @@ class MediasRoutes extends AbstractRoute {
             this.basepathHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
-
-        this.routerInstance.get('/delete/:entity/:id/:fileName', [
-            ...this.addMiddlewares("all"),
-            this.deleteHandler.bind(this),
-            this.routeSendResponse.bind(this),
-        ]);
         
         // sets routes in target domain's route.
         this.setupAdditionnalPublicRoutes(this.routerInstance);
@@ -92,6 +86,14 @@ class MediasRoutes extends AbstractRoute {
             this.uploadSingleHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
+
+
+        this.routerInstance.get('/delete/:entity/:id/:fileName', [
+            ...this.addMiddlewares("all"),
+            this.deleteHandler.bind(this),
+            this.routeSendResponse.bind(this),
+        ]);
+
         return this.setupAdditionnalAuthRoutes(this.routerInstanceAuthentification);
     }
 

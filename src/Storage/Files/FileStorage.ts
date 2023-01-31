@@ -6,11 +6,12 @@ import Record from "../../Media/Record/Record";
 import multer from "multer";
 
 export default class FileStorage {
+
     static basePath:string;
     static destination:string;
 
-    //
-    public options:multer.Options
+
+    public options:multer.Options;
 
     public static filename(originFile:any) {
         return originFile.originalname;
@@ -37,13 +38,16 @@ export default class FileStorage {
         return callback(new Error('Error: file extension not accepted'), false);
     }
 
+
     public static fileTypeSupported(supportedExtensionsList:Array<any>, fileExtension:string):boolean {
         return supportedExtensionsList.includes(fileExtension);
     }
 
+
     public static getUniquePrefix():string {
         return Math.round(Math.random() * 1E9).toString().substring(0, 6); //length 6 random number
     }
+
 
     public static generatePath(entityType:string, entityId:string):string {
         return './localStorage/public' + entityType + '/' + entityId;
@@ -92,8 +96,9 @@ export default class FileStorage {
      * @param path {string} Create the path if it isn't already the case.
      */
     public static createPathIfNotExist(path:string) {
-        if(!FileStorage.isPathExist(path))
+        if(!FileStorage.isPathExist(path)) {
             fs.mkdirSync(path, { recursive : true });
+        }
     }
 
 
@@ -104,6 +109,7 @@ export default class FileStorage {
     public static isPathExist(path:string) {
         return fs.existsSync(path);
     }
+
 
     /**
      * Generate a file name from multiple element set in an Array
