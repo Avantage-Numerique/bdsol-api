@@ -1,6 +1,6 @@
 import Taxonomy from "../Models/Taxonomy"
 import TaxonomyService from "../Services/TaxonomyService";
-import AbstractController from "../../Abstract/Controller"
+import AbstractController from "../../Abstract/Controller";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {SuccessResponse} from "../../Http/Responses/SuccessResponse";
 import {TaxonomiesCategoriesEnum} from "../TaxonomiesCategoriesEnum";
@@ -43,4 +43,4 @@ class TaxonomyController extends AbstractController {
         return SuccessResponse.create(data, StatusCodes.OK, ReasonPhrases.OK);
     }
 }
-export {TaxonomyController};
+export default TaxonomyController;

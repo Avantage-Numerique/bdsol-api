@@ -9,6 +9,6 @@ export interface PersonSchema extends Document {
     nickname:string;
     description:string;
     occupations:[object];
-    mainImage:Media
+    mainImage:Media;
     status: Status;
 }

@@ -4,7 +4,7 @@ import {OrganisationSchema} from "../Schemas/OrganisationSchema";
 import {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
-import {TaxonomyController} from "../../Taxonomy/Controllers/TaxonomyController";
+import TaxonomyController from "../../Taxonomy/Controllers/TaxonomyController";
 import OrganisationsService from "../Services/OrganisationsService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
 import { Member } from "../../Database/Schemas/MemberSchema";
@@ -100,6 +100,10 @@ class Organisation extends AbstractModel {
                 team: {
                     type: [Member.schema],
                     ref: "Person"
+                },
+                mainImage: {
+                    type: mongoose.Types.ObjectId,
+                    ref : "Media"
                 },
                 status: {
                     type: Status.schema
@@ -202,6 +206,7 @@ class Organisation extends AbstractModel {
             fondationDate: document.fondationDate ?? '',
             offers: document.offers ?? '',
             team: document.team ?? '',
+            mainImage: document.mainImage ?? '',
             slug: document.slug ?? '',
             status : document.status ?? '',
             type: document.type ?? '',
@@ -258,11 +263,13 @@ class Organisation extends AbstractModel {
         this.schema.pre('find', function() {
             middlewarePopulateProperty(this, 'offers.offer', "name category status");
             middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
+            middlewarePopulateProperty(this, "mainImage");
         });
         
         this.schema.pre('findOne', function() {
             middlewarePopulateProperty(this, 'offers.offer', "name category status");
             middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
+            middlewarePopulateProperty(this, "mainImage");
         });
     }
 }

@@ -32,4 +32,4 @@ class PersonsController extends AbstractController {
         return PersonsController._instance;
     }
 }
-export {PersonsController};
+export default PersonsController;

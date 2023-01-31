@@ -1,5 +1,5 @@
 import express from "express";
-import {PersonsController} from "../Controllers/PersonsController";
+import PersonsController from "../Controllers/PersonsController";
 import AbstractController from "../../Abstract/Controller";
 import {body} from "express-validator";
 import {HtmlSanitizer} from "../../Security/Sanitizers/HtmlSanitizer";

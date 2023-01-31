@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
 import {Document} from "mongoose"
 import { Status } from "../../Database/Schemas/StatusSchema";
+import Media from "../../Media/Models/Media";
 import { Member } from "../../Database/Schemas/MemberSchema";
 
 export interface OrganisationSchema extends Document {
@@ -12,5 +12,6 @@ export interface OrganisationSchema extends Document {
     fondationDate:Date;
     offers:[object];
     team: [Member];
+    mainImage:Media;
     status: Status;
 }

@@ -7,7 +7,7 @@ import * as fs from "fs";
 import ApiResponse from "../../Http/Responses/ApiResponse";
 import { StatusCodes } from "http-status-codes";
 import FileStorage from "../../Storage/Files/FileStorage";
-import { PersonsController } from "../../Persons/Controllers/PersonsController";
+import EntityControllerFactory from "../../Abstract/EntityControllerFactory";
 
 class MediasRoutes extends AbstractRoute {
 
@@ -149,7 +149,7 @@ class MediasRoutes extends AbstractRoute {
         });
 
         //Modify the mediafield in entity
-        const entityController = PersonsController.getInstance();
+        const entityController = EntityControllerFactory.getControllerFromEntity(req.params.entity);
         res.serviceResponse = await entityController.service.update( { id: req.params.id, mainImage: null } )
 
         //delete media from fileName && entityId (params.id)
