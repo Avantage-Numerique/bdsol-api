@@ -64,19 +64,47 @@ export default class FileStorage {
         //FileStorage.basePath + '/' + entityType + '/' + entityId + '/';
     }
 
-    public static saveFile(record:Record, file:any):void {
+    public static async saveFile(record:Record, file:any):Promise<void> {
         
-        FileStorage.createPathIfNotExist(record.pathNoFilename);
+        //https://stackoverflow.com/questions/35673866/how-to-use-typescript-async-await-with-promise-in-node-js-fs-module
+        //https://stackoverflow.com/questions/39880832/how-to-return-a-promise-when-writestream-finishes
+        
 
-        const writeStream = fs.createWriteStream(record.pathWithFilename);
-        writeStream.on('ready', function() { writeStream.write(file.buffer);})
-        writeStream.on('close', function() {
-            writeStream.close(function(err) {
-                if(err)
-                    LogHelper.error("FileStorage : ", err);
-                else
-                    LogHelper.log("Success to save file");
-            })
+        FileStorage.createPathIfNotExist(record.pathNoFilename);
+        console.log("in saveFile");
+        return new Promise<void>( (resolve, reject) => {
+            const writeStream = fs.createWriteStream(record.pathWithFilename);
+            writeStream.on('ready', function() { writeStream.write(file.buffer);})
+            writeStream.on('close', function() {
+                writeStream.close(function(err) {
+                    if(err)
+                        reject;//LogHelper.error("FileStorage : ", err);
+                    else
+                        resolve;//LogHelper.log("Success to save file");
+                });
+            });
+            /*writeStream.on('error', function() {
+                LogHelper.error("FileStorage failed to save file");
+                reject();
+            });
+            writeStream.on('finish', function() {
+                LogHelper.log("Success to save file");
+                resolve();
+            })*/
+        });
+    }
+
+    public static async deleteFile(record:Record):Promise<boolean> {
+        return new Promise<boolean>( (resolve, reject) => {
+            fs.unlink(record.pathWithFilename, (err) => {
+                if (err){
+                    reject(false);
+                }
+                else {
+                    LogHelper.log(`Delete file at ${record.pathWithFilename}`);
+                    resolve(true);
+                }
+            });
         })
     }
 

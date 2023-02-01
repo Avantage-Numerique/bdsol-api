@@ -143,7 +143,7 @@ class MediasRoutes extends AbstractRoute {
             if (err)
                 LogHelper.error("Deleting file failed : ", err);
             else
-                console.log(`./localStorage/public/${req.params.entity}/${req.params.id}/${req.params.fileName} was deleted`);
+                LogHelper.log(`./localStorage/public/${req.params.entity}/${req.params.id}/${req.params.fileName} was deleted`);
         });
 
         //Modify the mediafield in entity
@@ -152,7 +152,7 @@ class MediasRoutes extends AbstractRoute {
 
         //delete media from fileName && entityId (params.id)
         const mediaController = MediasController.getInstance();
-        res.serviceResponse.media = await mediaController.service.findAndDelete({ entityId: req.params.id, fileName: FileStorage.removeExtension(req.params.fileName) });
+        res.serviceResponse.media = await mediaController.internalDelete(req.params.id, FileStorage.removeExtension(req.params.fileName));
         return next();
     }
 

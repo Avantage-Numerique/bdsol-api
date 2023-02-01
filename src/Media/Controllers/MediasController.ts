@@ -72,7 +72,10 @@ class MediasController extends AbstractController { //implements ControllerContr
 
     public internalUpdateToArchived(toArchiveId:any){
         return this.service.update({ _id : toArchiveId, dbStatus:"archived"});
+    }
 
+    public internalDelete(entityId:any, filenameNoExt:string):any {
+        return this.service.findAndDelete({ entityId: entityId, fileName: filenameNoExt });
     }
 
 }

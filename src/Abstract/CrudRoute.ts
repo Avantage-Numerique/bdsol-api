@@ -243,28 +243,48 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         if (res.serviceResponse.error) {
             return next();
         }
-        else {        
-            //if file attached?
+        else {
             if(req.file !== undefined){
                 //if entity have media field
                 //TODO : Need to make a check for this (this goes with making the create check for multiple field multer.single ("mainImage, and others..."))
                 if(true) {
+                    //Create media object in response
+                    res.serviceResponse.media = {};
+                    res.serviceResponse.multer = {};
+
                     //catch entity id and other info
-                    const createdEntityId = res.serviceResponse.data._id;//No sure if it's data
-                    const record = new Record(req, res, createdEntityId, "mainImage")
+                    const createdEntityId = res.serviceResponse.data._id;
+                    const record = new Record(req, res, createdEntityId, "mainImage");
                     if (!record.isValid){
                         //Handle a response and return msg that something is wrong?
                     }
+
+                    //Save file
+                    await FileStorage.saveFile(record, req.file).then(function() {
+                        LogHelper.log("Saved file");
+                        
+                    }).catch(function (){
+                        res.serviceResponse.multer.error = true;
+                        res.serviceResponse.multer.message = "Couldn't save file to the server :( , saving file failed"
+                        return next();
+                    });
 
                     const mediasController = MediasController.getInstance();
                     //insert a new object media inside the database with all the information required
                     const mediaResponse = await mediasController.internalCreateFromRecord(record);
                     res.serviceResponse.media = mediaResponse;
                     if (mediaResponse.error){
-                        //Fill error
-                        res.serviceResponse.media = mediaResponse;
-                        res.serviceResponse.media.failMessage = "File uploaded and saved, but couldn't save media to database"
-                        return next();
+                        res.serviceResponse.media.failMessage = "Couldn't save file, creating media failed"
+
+                        //Delete file
+                        await FileStorage.deleteFile(record).then( function() {
+                            LogHelper.warn("Deleted file because couldn't create media");
+                        }).catch(function() {
+                            LogHelper.warn("Couldn't delete file although media failed to create");
+                            res.serviceResponse.multer.error = true;
+                            res.serviceResponse.multer.message = "Deleted file";
+                            return next();
+                        });
                     }
                     else {
                         const toLinkMediaId = mediaResponse.data._id;
@@ -273,25 +293,30 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
                             id: createdEntityId,
                             mainImage : toLinkMediaId,
                         }
-                        const linkingMediaResponse = await this.controllerInstance.update(updateRequest)
+                        const linkingMediaResponse = await this.controllerInstance.update(updateRequest);
                         if (linkingMediaResponse.error){
-                            res.serviceResponse.media = mediaResponse;
-                            res.serviceResponse.media.failMessage = "Couldn't link entity with the new media";
+                            res.serviceResponse.media.failMessage = "Couldn't save file, failed to link media to entity";
+                            //Delete media
+                            res.serviceResponse.media = await mediasController.internalDelete(record.entityId, record.filenameNoExt);
+                            //Delete file
+                            const fileDeleted = await FileStorage.deleteFile(record);
+                            if (fileDeleted) {
+                                res.serviceResponse.multer.error = true;
+                                res.serviceResponse.multer.message = "Deleted file";
+                            }
                             return next()
                         }
-                        else{
-                            //Save file
-                            FileStorage.saveFile(record, req.file);
-                            res.serviceResponse.media.error = false;
+                        else
+                        {
                             res.serviceResponse.media.message = "Success to save file, create media, and link media to entity!"
                             const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'create');
                             LogHelper.debug(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
-
                             return next()
                         }
                     }
                 }
-            } else {
+            }
+            else {
                 return next();
             }
         }
