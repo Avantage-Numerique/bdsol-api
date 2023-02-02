@@ -7,13 +7,6 @@ import {param} from "express-validator";
 import {NoAccentSanitizer} from "../Security/Sanitizers/NoAccentSanitizer";
 import {NoSpaceSanitizer} from "../Security/Sanitizers/NoSpaceSanitizer";
 import AbstractController from "./Controller";
-import multer from "multer";
-import MediasController from "../Media/Controllers/MediasController";
-import PublicLocalMediaStorage from "../Media/Storage/PublicLocalMediaStorage";
-import FileStorage from "../Storage/Files/FileStorage";
-import * as mime from "mime-types"
-import Record from "../Media/Record/Record";
-
 
 abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
@@ -40,9 +33,6 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @abstract
      */
     abstract middlewaresDistribution: any;
-
-
-    public multipartSetup:PublicLocalMediaStorage;
 
     /**
      * The default middlewares for targeted route.
@@ -75,22 +65,8 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      */
     public setupAuthRoutes(): express.Router {
 
-        this.multipartSetup = new PublicLocalMediaStorage();
-        const multipartMiddlewareHandler = multer({
-            storage: this.multipartSetup.storage("temp/123456789123456789123456/"),
-            //PublicLocalMediaStorage.limit;
-            //limits: mediaStorage.limits,
-            fileFilter: this.multipartSetup.fileFilter(),
-        });
-
-        const multipartMiddlewareTemporaryHandler = multer({
-            storage: multer.memoryStorage()
-        });
-
         //create target entity with upload
         this.routerInstanceAuthentification.post('/create', [
-            multipartMiddlewareTemporaryHandler.single("mainImage"),
-            this.contentTypeParser,
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("create"),
             this.createHandler.bind(this),
@@ -195,39 +171,6 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
     //  Routes' handlers
 
-
-    /**
-     * Parse the current request content type. And parse data if it's multipart.
-     * inspire by : https://stackoverflow.com/questions/49784509/handle-multipart-formdata-application-json-and-text-plain-in-single-express-ha
-     * @param req
-     * @param res
-     * @param next
-     */
-    public async contentTypeParser(req:Request, res:Response, next:NextFunction): Promise<any> {
-
-        //quand on save le fichier en temp. Il est cleared à la fin de la equest est est passé en buffer dans le request.
-        /**
-         * cb(null, {
-         *       buffer: data,
-         *       size: data.length
-         *     })
-         * 1. donc on pourrait faire un temps au bebug, et save le buffer à la fin.
-         * 2. check le fichier temps pour vider ensuite.
-         */
-
-        const contentType:any = req.get('content-type');
-        if (contentType.includes('application/json')) {
-            return next();
-        }
-
-        if (contentType.includes('multipart/form-data')) {
-            req.body.data = JSON.parse(req.body.data);
-            return next();
-        }
-
-        return next();
-    }
-
     /**
      * CREATE
      * Handle the create method of the controller of the entity, passing the data to it.
@@ -238,63 +181,12 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      */
     public async createHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
         res.serviceResponse = await this.controllerInstance.create(req.body.data);
-
-        //If person registered into database (success of creating entity) proceed
         if (res.serviceResponse.error) {
             return next();
         }
-        else {        
-            //if file attached?
-            if(req.file !== undefined){
-                //if entity have media field
-                //TODO : Need to make a check for this (this goes with making the create check for multiple field multer.single ("mainImage, and others..."))
-                if(true) {
-                    //catch entity id and other info
-                    const createdEntityId = res.serviceResponse.data._id;//No sure if it's data
-                    const record = new Record(req, res, createdEntityId, "mainImage")
-                    if (!record.isValid){
-                        //Handle a response and return msg that something is wrong?
-                    }
-
-                    const mediasController = MediasController.getInstance();
-                    //insert a new object media inside the database with all the information required
-                    const mediaResponse = await mediasController.internalCreateFromRecord(record);
-                    res.serviceResponse.media = mediaResponse;
-                    if (mediaResponse.error){
-                        //Fill error
-                        res.serviceResponse.media = mediaResponse;
-                        res.serviceResponse.media.failMessage = "File uploaded and saved, but couldn't save media to database"
-                        return next();
-                    }
-                    else {
-                        const toLinkMediaId = mediaResponse.data._id;
-                        const updateRequest =
-                        {
-                            id: createdEntityId,
-                            mainImage : toLinkMediaId,
-                        }
-                        const linkingMediaResponse = await this.controllerInstance.update(updateRequest)
-                        if (linkingMediaResponse.error){
-                            res.serviceResponse.media = mediaResponse;
-                            res.serviceResponse.media.failMessage = "Couldn't link entity with the new media";
-                            return next()
-                        }
-                        else{
-                            //Save file
-                            FileStorage.saveFile(record, req.file);
-                            res.serviceResponse.media.error = false;
-                            res.serviceResponse.media.message = "Success to save file, create media, and link media to entity!"
-                            const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'create');
-                            LogHelper.debug(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
-
-                            return next()
-                        }
-                    }
-                }
-            } else {
-                return next();
-            }
-        }
+        const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'create');
+        LogHelper.debug(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
+        return next();
     }
 
 
