@@ -56,6 +56,7 @@ class MediasController extends AbstractController { //implements ControllerContr
                 fileName: record.filenameNoExt,
                 extension: record.extension,
                 entityId: record.entityId ?? '',
+                entityType: record.entityType ?? '',
                 uploadedBy: record.userId,
                 dbStatus: 'in use',
                 status: {

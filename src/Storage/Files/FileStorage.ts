@@ -60,11 +60,11 @@ export default class FileStorage {
     }
 
     public static generatePath(entityType:string, entityId:string):string {
-        return './localStorage/public' + entityType + '/' + entityId;
+        return './localStorage/public/' + entityType + '/' + entityId;
         //FileStorage.basePath + '/' + entityType + '/' + entityId + '/';
     }
 
-    public static async saveFile(record:Record, file:any):Promise<void> {
+    public static async saveFile(record:Record, file:any) {
         
         //https://stackoverflow.com/questions/35673866/how-to-use-typescript-async-await-with-promise-in-node-js-fs-module
         //https://stackoverflow.com/questions/39880832/how-to-return-a-promise-when-writestream-finishes
@@ -72,15 +72,15 @@ export default class FileStorage {
 
         FileStorage.createPathIfNotExist(record.pathNoFilename);
         console.log("in saveFile");
-        return new Promise<void>( (resolve, reject) => {
+        //return new Promise<void>( (resolve, reject) => {
             const writeStream = fs.createWriteStream(record.pathWithFilename);
             writeStream.on('ready', function() { writeStream.write(file.buffer);})
             writeStream.on('close', function() {
                 writeStream.close(function(err) {
                     if(err)
-                        reject;//LogHelper.error("FileStorage : ", err);
+                       LogHelper.error("FileStorage : ", err);
                     else
-                        resolve;//LogHelper.log("Success to save file");
+                       LogHelper.log("Success to save file");
                 });
             });
             /*writeStream.on('error', function() {
@@ -91,7 +91,7 @@ export default class FileStorage {
                 LogHelper.log("Success to save file");
                 resolve();
             })*/
-        });
+        //});
     }
 
     public static async deleteFile(record:Record):Promise<boolean> {

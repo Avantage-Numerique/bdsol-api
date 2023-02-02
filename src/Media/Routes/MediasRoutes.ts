@@ -1,19 +1,24 @@
-import express, {NextFunction, Request, Response} from "express";
+import express, {NextFunction, request, Request, Response} from "express";
 import MediasController from "../Controllers/MediasController";
 import AbstractRoute from "../../Abstract/Route";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import uploadSingle from "../Middlewares/UploadSingleMediaMiddleware";
 import * as fs from "fs";
 import ApiResponse from "../../Http/Responses/ApiResponse";
 import { StatusCodes } from "http-status-codes";
 import FileStorage from "../../Storage/Files/FileStorage";
 import EntityControllerFactory from "../../Abstract/EntityControllerFactory";
+import * as mime from "mime-types"
+import Record from "../../Media/Record/Record";
+import PublicLocalMediaStorage from "../Storage/PublicLocalMediaStorage";
+import multer from "multer";
 
 class MediasRoutes extends AbstractRoute {
 
     controllerInstance:any = MediasController.getInstance();
     routerInstance: express.Router = express.Router();
     routerInstanceAuthentification: express.Router = express.Router();
+
+    public multipartSetup:PublicLocalMediaStorage;
 
     middlewaresDistribution:any = {
         all: [],
@@ -86,12 +91,33 @@ class MediasRoutes extends AbstractRoute {
      */
     public setupAuthRoutes(): express.Router {
 
+        this.multipartSetup = new PublicLocalMediaStorage();
+        const multipartMiddlewareHandler = multer({
+            storage: this.multipartSetup.storage("temp/123456789123456789123456/"),
+            //PublicLocalMediaStorage.limit;
+            //limits: mediaStorage.limits,
+            fileFilter: this.multipartSetup.fileFilter(),
+        });
+
+        const multipartMiddlewareTemporaryHandler = multer({
+            storage: multer.memoryStorage()
+        });
+
         this.routerInstance.post('/', [
             ...this.addMiddlewares("all"),
-            uploadSingle.single("mainImage"),
+            multipartMiddlewareHandler.single("mainImage"),
             this.uploadSingleHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
+
+        this.routerInstance.post('/upload', [
+            multipartMiddlewareTemporaryHandler.single("mainImage"),
+            this.contentTypeParser,
+            ...this.addMiddlewares("all"),
+            this.createHandler.bind(this),
+            this.routeSendResponse.bind(this),
+        ]);
+
         return this.setupAdditionnalAuthRoutes(this.routerInstanceAuthentification);
     }
 
@@ -133,6 +159,99 @@ class MediasRoutes extends AbstractRoute {
         res.serviceResponse = await this.controllerInstance.basepath(req.body.data);
         return next();
     }
+
+
+    public async createHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        res.serviceResponse = {};
+        LogHelper.log("Entered createHandler");
+        //Received file?
+        if(req.file == undefined){
+            res.serviceResponse.code = 400;
+            res.serviceResponse.message = "File not received."
+            return next();
+        }
+
+        //if entity have media field
+        //TODO : Need to make a check for this (this goes with making the create check for multiple field multer.single ("mainImage, and others..."))
+        if(true) {
+
+            //Check if entityId, mediaField, entityType is in the request;
+            const requestData = req.body.data;
+            const { entityId, mediaField, entityType } = requestData;
+
+            if(requestData.entityId == undefined ||
+                requestData.mediaField == undefined ||
+                requestData.entityType == undefined) {
+                //Insert message missing field here
+                LogHelper.log("undefined necessary field");
+                return next();
+            }
+
+
+            //Create object in response
+            res.serviceResponse.multer = {};
+        
+            const record = new Record(req, res, entityId, mediaField, entityType);
+            if (!record.isValid()){
+                //Handle a response and return msg that something is wrong?
+            }
+        
+            //Save file
+            FileStorage.saveFile(record, req.file)//.then(function() {
+                LogHelper.log("Saved file");
+            //}).catch(function (){
+                //res.serviceResponse.multer.error = true;
+                //res.serviceResponse.multer.message = "Couldn't save file to the server :( , saving file failed"
+               // return next();
+           //});
+        
+            const mediasController = MediasController.getInstance();
+            //insert a new object media inside the database with all the information required
+            const mediaResponse = await mediasController.internalCreateFromRecord(record);
+            res.serviceResponse = mediaResponse;
+            if (mediaResponse.error){
+                res.serviceResponse.failMessage = "Couldn't save file, creating media failed"
+    
+                //Delete file
+                await FileStorage.deleteFile(record).then( function() {
+                    LogHelper.warn("Deleted file because couldn't create media");
+                }).catch(function() {
+                    LogHelper.warn("Couldn't delete file although media failed to create");
+                    res.serviceResponse.multer.error = true;
+                    res.serviceResponse.multer.message = "Deleted file";
+                    return next();
+                });
+            }
+
+            const toLinkMediaId = mediaResponse.data._id;
+            const updateRequest = { id: entityId, mainImage : toLinkMediaId };
+            const linkingMediaResponse = await EntityControllerFactory.getControllerFromEntity(entityType).update(updateRequest);
+            
+            if (linkingMediaResponse.error){
+                res.serviceResponse.failMessage = "Couldn't save file, failed to link media to entity";
+                //Delete media
+                res.serviceResponse = await mediasController.internalDelete(record.entityId, record.filenameNoExt);
+                //Delete file
+                const fileDeleted = await FileStorage.deleteFile(record);
+                if (fileDeleted) {
+                    res.serviceResponse.multer.error = true;
+                    res.serviceResponse.multer.message = "Deleted file";
+                }
+                return next()
+            }
+
+            //Everything succeeded
+            res.serviceResponse.message = "Success to save file, create media, and link media to entity!"
+            const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'create');
+            LogHelper.debug(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
+            return next()
+
+        }
+
+        //Return msg no field to put image into entity
+
+    }
+
 
     public async deleteHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
         //`/${req.params.entity}/${req.params.id}/${req.params.fileName}`

@@ -35,7 +35,7 @@ export default class Record {
     public m_buffer:any;
 
 
-    constructor(req:any, res:any, entityId:string, mediaField:string){
+    constructor(req:any, res:any, entityId:string, mediaField:string, entityType:string){
 
         this.userId = req.user._id;
 
@@ -65,7 +65,7 @@ export default class Record {
                 "");
             this.filenameAndExt = this.filenameNoExt;
         }
-        this.entityType = req.baseUrl;
+        this.entityType = entityType;
         this.entityId = entityId;
         this.pathNoFilename = FileStorage.generatePath(this.entityType, this.entityId);
         this.pathWithFilename = this.pathNoFilename + '/' + this.filenameAndExt;
@@ -73,11 +73,11 @@ export default class Record {
 
         //Media info
         if(req.body.data.media !== undefined){
-            this.title = req.body.data.media.title
-            this.alt = req.body.data.media.alt
-            this.description = req.body.data.media.description
-            this.licence = req.body.data.media.licence
-            this.fileType = req.body.data.media.fileType
+            this.title = req.body.data.title
+            this.alt = req.body.data.alt
+            this.description = req.body.data.description
+            this.licence = req.body.data.licence
+            this.fileType = req.body.data.fileType
         }
 
         //Multer file props

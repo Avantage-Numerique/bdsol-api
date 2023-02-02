@@ -1,6 +1,5 @@
 import {ApiResponseContract} from "../Http/Responses/ApiResponse";
-import express from "express";
-import {Response, Request} from "express";
+import express, {NextFunction, Request, Response} from "express";
 //import AbstractController from "./Controller";
 import {RouteContract} from "./Contracts/RouteContract";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
@@ -152,6 +151,38 @@ abstract class AbstractRoute implements RouteContract
     protected logRoute(code:any, req:Request):void {
 
         LogHelper.log(`${req.originalUrl} response : ${code}, ${StatusCodes[code]}`);
+    }
+
+    /**
+     * Parse the current request content type. And parse data if it's multipart.
+     * inspire by : https://stackoverflow.com/questions/49784509/handle-multipart-formdata-application-json-and-text-plain-in-single-express-ha
+     * @param req
+     * @param res
+     * @param next
+     */
+    public async contentTypeParser(req:Request, res:Response, next:NextFunction): Promise<any> {
+
+        //quand on save le fichier en temp. Il est cleared à la fin de la equest est est passé en buffer dans le request.
+        /**
+         * cb(null, {
+         *       buffer: data,
+         *       size: data.length
+         *     })
+         * 1. donc on pourrait faire un temps au bebug, et save le buffer à la fin.
+         * 2. check le fichier temps pour vider ensuite.
+         */
+
+        const contentType:any = req.get('content-type');
+        if (contentType.includes('application/json')) {
+            return next();
+        }
+
+        if (contentType.includes('multipart/form-data')) {
+            req.body.data = JSON.parse(req.body.data);
+            return next();
+        }
+
+        return next();
     }
 
 
