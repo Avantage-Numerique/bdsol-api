@@ -6,7 +6,6 @@ import * as fs from 'fs';
 import {HashingMiddleware} from "../../Authentification/Middleware/HashingMiddleware";
 import {UsersService} from "../Services/UsersService";
 
-//HashingMiddleware
 
 export class User extends AbstractModel {
 
@@ -17,10 +16,10 @@ export class User extends AbstractModel {
     public static getInstance():User {
         if (User._instance === undefined) {
             User._instance = new User();
-            User._instance.assignDbEventsToSchema();
+
+            User._instance.registerPreEvents();
 
             User._instance.schema.virtual("type").get( function () { return User._instance.modelName });
-
             User._instance.initSchema();
         }
         return User._instance;
@@ -171,14 +170,15 @@ export class User extends AbstractModel {
      * Pre->Save
      * Pre->UpdateOne.
      */
-    public async assignDbEventsToSchema()
+    public registerPreEvents()
     {
-        if (this.schema !== undefined)
-        {
+        //if (this.schema !== undefined)
+        //{
             // CREATE users, we hash the password.
-            await this.schema.pre('save', HashingMiddleware.mongooseMiddlewareHandler());
-            await this.schema.pre('updateOne', HashingMiddleware.mongooseMiddlewareHandler());//
-        }
+            this.schema.pre('save', HashingMiddleware.mongooseMiddlewareHandler());
+            this.schema.pre('updateOne', HashingMiddleware.mongooseMiddlewareHandler());//
+            this.schema.pre('findOneAndUpdate', HashingMiddleware.mongooseMiddlewareFindOneAndUpdateHandler());//this is used in updateOrCreate method.
+        //}
     }
 
 }

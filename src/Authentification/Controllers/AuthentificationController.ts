@@ -156,7 +156,7 @@ class AuthentificationController
      * search in the current database driver for the user.
      * @param username
      * @param password
-     * @return {Promise} of type Any. Fakeusers driver is now
+     * @return {Promise} of type Any.
      * @private
      */
     private async authenticate(username:string, password:string): Promise<any>
