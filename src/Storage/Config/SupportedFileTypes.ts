@@ -4,12 +4,13 @@ export default class SupportedFileTypes {
 
     static _instance: SupportedFileTypes;
 
-    public _supportedMimeTypes:Array<string>;
-    public _extensionsList:any;
+    public _mimeTypes:Array<string>;
+    public _extensions:any;
 
-    constructor(list:Array<string>) {
-        this._supportedMimeTypes = list;
-        this._extensionsList = {};
+    constructor(mimeTypes:Array<string>) {
+        this._mimeTypes = mimeTypes;
+        this._extensions = {};
+        this.buildExtensionsList();
     }
 
     /**
@@ -24,13 +25,21 @@ export default class SupportedFileTypes {
     }
 
 
-    public get supportedMimeTypes():Array<string> {
-        return this._supportedMimeTypes;
+    /**
+     * Getter of the supported MimeTypes
+     */
+    public get mimeTypes():Array<string> {
+        return this._mimeTypes;
     }
 
 
+    /**
+     * Get extension of the target mimetype
+     * @param mimetype {string}
+     * @return {string}
+     */
     public extension(mimetype:string):string {
-        if (this._supportedMimeTypes.includes(mimetype)) {
+        if (this._mimeTypes.includes(mimetype)) {
             const extension:string|false = mime.extension(mimetype);
             return extension === false ? "" : extension;
         }
@@ -38,18 +47,21 @@ export default class SupportedFileTypes {
     }
 
 
-    public setExtensionsList():Array<any> {
-        if (this._extensionsList.length === 0) {
-            for (let mimetype in this._supportedMimeTypes) {
-                if (!this._extensionsList[mimetype].length) {
-                    this._extensionsList[mimetype] = [];
+    /**
+     * @return {Array<any>} Return the `mimetypes.extensions` object.
+     */
+    public buildExtensionsList():Array<any> {
+        if (this._extensions.length === 0) {
+            for (let mimetype in this._mimeTypes) {
+                if (!this._extensions[mimetype].length) {
+                    this._extensions[mimetype] = [];
                 }
                 if (this.extension(mimetype) !== "") {
-                    this._extensionsList[mimetype].push();
+                    this._extensions[mimetype].push();
                 }
             }
         }
-        return this._extensionsList;
+        return this._extensions;
     }
 
 }

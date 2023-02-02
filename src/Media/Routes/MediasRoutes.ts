@@ -87,7 +87,6 @@ class MediasRoutes extends AbstractRoute {
             this.routeSendResponse.bind(this),
         ]);
 
-
         this.routerInstance.get('/delete/:entity/:id/:fileName', [
             ...this.addMiddlewares("all"),
             this.deleteHandler.bind(this),
@@ -114,10 +113,6 @@ class MediasRoutes extends AbstractRoute {
      * @return {Promise<any>}
      */
     public async uploadSingleHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        LogHelper.debug("uploadSingleHandler");
-        // req.file is the name of your file in the form above, here 'uploaded_file'
-        // req.body will hold the text fields, if there were any
-        console.log(req.file, req.body);
         res.serviceResponse = await this.controllerInstance.uploadSingle(req.body.data);
         return next();
     }
@@ -131,7 +126,6 @@ class MediasRoutes extends AbstractRoute {
      * @return {Promise<any>}
      */
     public async basepathHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        LogHelper.debug("basePathHandler");
         res.serviceResponse = await this.controllerInstance.basepath(req.body.data);
         return next();
     }

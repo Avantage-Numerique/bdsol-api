@@ -10,10 +10,10 @@ export default class FileSupportedFilter implements FileFilterMiddlewareContract
     public file: Express.Multer.File;
     public callback: multer.FileFilterCallback;
 
-    public fileTypesList:Array<any>;
+    public supportedList:Array<any>;
 
     constructor(filetypes:Array<any>) {
-        this.fileTypesList = filetypes;
+        this.supportedList = filetypes;
     }
 
     /**
@@ -39,7 +39,7 @@ export default class FileSupportedFilter implements FileFilterMiddlewareContract
         const extension:string|false = mime.extension(file.mimetype);
 
         if (extension !== false) {
-            const fileTypeIsSupported:boolean = this.isFileTypeSupported(this.fileTypesList, extension);
+            const fileTypeIsSupported:boolean = this.isFileTypeSupported(this.supportedList, extension);
             return callback(
                 (fileTypeIsSupported ? null : new Error('Error: file extension not accepted')),
                 fileTypeIsSupported
@@ -49,8 +49,22 @@ export default class FileSupportedFilter implements FileFilterMiddlewareContract
     }
 
 
+    /**
+     *
+     * @param supportedExtensionsList {Array<any>} Array of extensions supported.
+     * @param fileExtension
+     */
     public isFileTypeSupported(supportedExtensionsList:Array<any>, fileExtension:string):boolean {
         return supportedExtensionsList.includes(fileExtension);
+    }
+
+
+    public challengeMimeType(file:any, callback:any){
+
+    }
+
+    public isExecutable(file:any, callback:any){
+
     }
 
 }

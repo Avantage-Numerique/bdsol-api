@@ -19,6 +19,7 @@ export default class TempPublicLocalStorage extends PublicLocalStorage {
         return TempPublicLocalStorage._instance;
     }
 
+
     /**
      * @static get the middleware directly from the singleton instance.
      * @return {multer.Multer}
@@ -29,6 +30,9 @@ export default class TempPublicLocalStorage extends PublicLocalStorage {
     }
 
 
+    /**
+     * Instance method that return the multer
+     */
     public middleware():multer.Multer {
         return multer({
             storage: multer.memoryStorage(),
