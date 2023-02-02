@@ -9,6 +9,7 @@ export default class Record {
     public filenameNoExt:string;
     public pathWithFilename:string;
     public pathNoFilename:string;
+    public url:string;
     public entityType:string;
     public entityId:string;
     public extension:string;
@@ -70,6 +71,7 @@ export default class Record {
         this.pathNoFilename = FileStorage.generatePath(this.entityType, this.entityId);
         this.pathWithFilename = this.pathNoFilename + '/' + this.filenameAndExt;
 
+        this.url = "/medias/"+ this.entityType + "/" + this.entityId + "/" + this.filenameAndExt;
 
         //Media info
         if(req.body.data.media !== undefined){

@@ -56,6 +56,9 @@ class Media extends AbstractModel {
                 path: {
                     type: String
                 },
+                url: {
+                    type: String
+                },
                 licence: {
                     type: String,
                     enum: licenceList
