@@ -6,6 +6,7 @@ export interface MediaSchema extends Document {
     alt: string;
     description: string;
     path: string;
+    url: string;
     licence: string;
     fileType: string;
     fileName: string;

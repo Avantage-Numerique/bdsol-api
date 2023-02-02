@@ -51,6 +51,7 @@ class MediasController extends AbstractController { //implements ControllerContr
                 alt: record.alt,
                 description: record.description,
                 path : record.pathNoFilename,
+                url: record.url,
                 licence: record.licence,
                 fileType: record.fileType,
                 fileName: record.filenameNoExt,
