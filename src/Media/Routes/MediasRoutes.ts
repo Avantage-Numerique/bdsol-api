@@ -56,23 +56,10 @@ class MediasRoutes extends AbstractRoute {
      * @public @method
      */
     public setupPublicRoutes(): express.Router {
-
-        this.routerInstance.get('/', [
-            ...this.addMiddlewares("all"),
-            this.basepathHandler.bind(this),
-            this.routeSendResponse.bind(this),
-        ]);
-
-        this.routerInstance.get('/delete/:entity/:id/:fileName', [
-            ...this.addMiddlewares("all"),
-            this.deleteHandler.bind(this),
-            this.routeSendResponse.bind(this),
-        ]);
         
         // sets routes in target domain's route.
         this.setupAdditionnalPublicRoutes(this.routerInstance);
 
-        // Set the /:slug handler at the end of other route, to allow the routes sets in setupAdditionnalPublicRoutes to be 1 in priority.
         this.routerInstance.get('/:entity/:id/:fileName', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("bySlug"),
@@ -103,18 +90,25 @@ class MediasRoutes extends AbstractRoute {
             storage: multer.memoryStorage()
         });
 
-        this.routerInstance.post('/', [
-            ...this.addMiddlewares("all"),
-            multipartMiddlewareHandler.single("mainImage"),
-            this.uploadSingleHandler.bind(this),
-            this.routeSendResponse.bind(this),
-        ]);
-
         this.routerInstance.post('/upload', [
             multipartMiddlewareTemporaryHandler.single("mainImage"),
             this.contentTypeParser,
             ...this.addMiddlewares("all"),
-            this.createHandler.bind(this),
+            this.createOrUpdateDispatch.bind(this),
+            this.routeSendResponse.bind(this),
+        ]);
+
+        this.routerInstance.post('/update', [
+            multipartMiddlewareTemporaryHandler.single("mainImage"),
+            this.contentTypeParser,
+            ...this.addMiddlewares("all"),
+            this.createOrUpdateDispatch.bind(this),
+            this.routeSendResponse.bind(this),
+        ]);
+
+        this.routerInstance.get('/delete/:entity/:id/:fileName', [
+            ...this.addMiddlewares("all"),
+            this.deleteHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
 
@@ -129,46 +123,21 @@ class MediasRoutes extends AbstractRoute {
         return router;
     }
 
-    /**
-     * BasePath
-     * Handle the list method of the controller of the entity, passing the data to it.
-     * @param req {Request}
-     * @param res {Response}
-     * @param next {NextFunction}
-     * @return {Promise<any>}
-     */
-    public async uploadSingleHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        LogHelper.debug("uploadSingleHandler");
-        // req.file is the name of your file in the form above, here 'uploaded_file'
-        // req.body will hold the text fields, if there were any
-        console.log(req.file, req.body);
-        res.serviceResponse = await this.controllerInstance.uploadSingle(req.body.data);
+    public async createOrUpdateDispatch(req: Request, res: Response, next: NextFunction): Promise<any> {
+        if(req.file !== undefined)
+            await this.createHandler(req, res);
+        else
+            await this.updateHandler(req, res);
         return next();
     }
 
-    /**
-     * BasePath
-     * Handle the list method of the controller of the entity, passing the data to it.
-     * @param req {Request}
-     * @param res {Response}
-     * @param next {NextFunction}
-     * @return {Promise<any>}
-     */
-    public async basepathHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        LogHelper.debug("basePathHandler");
-        res.serviceResponse = await this.controllerInstance.basepath(req.body.data);
-        return next();
-    }
-
-
-    public async createHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+    public async createHandler(req: Request, res: Response): Promise<any> {
         res.serviceResponse = {};
-        LogHelper.log("Entered createHandler");
         //Received file?
         if(req.file == undefined){
             res.serviceResponse.code = 400;
             res.serviceResponse.message = "File not received."
-            return next();
+            return;
         }
 
         //if entity have media field
@@ -184,9 +153,14 @@ class MediasRoutes extends AbstractRoute {
                 requestData.entityType == undefined) {
                 //Insert message missing field here
                 LogHelper.log("undefined necessary field");
-                return next();
+                return;
             }
 
+            //Get old media ID if exist
+            const entityResponse = await EntityControllerFactory.getControllerFromEntity(entityType).search( { id : entityId } );
+            const oldMediaId = entityResponse?.data?.[mediaField]?._id;
+
+            console.log(entityResponse);
 
             //Create object in response
             res.serviceResponse.multer = {};
@@ -219,7 +193,7 @@ class MediasRoutes extends AbstractRoute {
                     LogHelper.warn("Couldn't delete file although media failed to create");
                     res.serviceResponse.multer.error = true;
                     res.serviceResponse.multer.message = "Deleted file";
-                    return next();
+                    return;
                 });
             }
 
@@ -237,14 +211,23 @@ class MediasRoutes extends AbstractRoute {
                     res.serviceResponse.multer.error = true;
                     res.serviceResponse.multer.message = "Deleted file";
                 }
-                return next()
+                return;
+            }
+
+            //If entity had old media then update it
+            if (oldMediaId !== undefined){
+                res.serviceResponse.oldMedia = await this.controllerInstance.update( { id: oldMediaId, dbStatus: "archived" });
+                if (!res.serviceResponse.oldMedia.error)
+                    res.serviceResponse.message = "old media status set to archived successfully"
+                else
+                    res.serviceResponse.message = "old media status update to archived failed"
             }
 
             //Everything succeeded
             res.serviceResponse.message = "Success to save file, create media, and link media to entity!"
             const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'create');
             LogHelper.debug(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
-            return next()
+            return;
 
         }
 
@@ -252,6 +235,20 @@ class MediasRoutes extends AbstractRoute {
 
     }
 
+    public async updateHandler(req: Request, res: Response): Promise<any> {
+        //No file attached
+        const requestData = req.body.data;
+        const updateData:any = { id: requestData.id };
+        const modifiableFields = [ "title", "alt", "description", "licence" ] //User can only modify those fields
+        Object.entries(requestData).forEach( ([key, value]) => {
+            if (modifiableFields.includes(key)){
+                updateData[key] = value;
+            }
+        });
+
+        res.serviceResponse = await this.controllerInstance.service.update(updateData);
+        return;
+    }
 
     public async deleteHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
         //`/${req.params.entity}/${req.params.id}/${req.params.fileName}`

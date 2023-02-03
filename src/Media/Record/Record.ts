@@ -74,7 +74,7 @@ export default class Record {
         this.url = "/medias/"+ this.entityType + "/" + this.entityId + "/" + this.filenameAndExt;
 
         //Media info
-        if(req.body.data.media !== undefined){
+        if(req.body.data !== undefined){
             this.title = req.body.data.title
             this.alt = req.body.data.alt
             this.description = req.body.data.description

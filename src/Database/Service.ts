@@ -235,7 +235,7 @@ export abstract class Service
         };
 
         try {
-            let where:any = {};
+            const where:any = {};
             switch (typeof whereKeys) {
                 case "string":
                     where[whereKeys] = data[whereKeys];

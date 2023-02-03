@@ -3,7 +3,6 @@ import MediasService from "../Services/MediasService";
 import Media from "../Models/Media";
 import {SuccessResponse} from "../../Http/Responses/SuccessResponse";
 import {StatusCodes} from "http-status-codes";
-import * as mime from "mime-types"
 import Record from "../Record/Record";
 
 class MediasController extends AbstractController { //implements ControllerContract {
@@ -79,7 +78,6 @@ class MediasController extends AbstractController { //implements ControllerContr
     public internalDelete(entityId:any, filenameNoExt:string):any {
         return this.service.findAndDelete({ entityId: entityId, fileName: filenameNoExt });
     }
-
 }
 
 export default MediasController;

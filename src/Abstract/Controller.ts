@@ -9,10 +9,6 @@ import UsersHistoryService from "../UserHistory/Services/UsersHistoryService";
 import UserHistory from "../UserHistory/Models/UserHistory";
 import {UserHistorySchema} from "../UserHistory/Schemas/UserHistorySchema";
 import {ControllerContract} from "./Contracts/ControllerContract";
-import PersonsController from "../Persons/Controllers/PersonsController";
-import OrganisationsController from "../Organisations/Controllers/OrganisationsController";
-import TaxonomyController from "../Taxonomy/Controllers/TaxonomyController";
-import MediasController from "../Media/Controllers/MediasController";
 
 /**
  * AbstractController
