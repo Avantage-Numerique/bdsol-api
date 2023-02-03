@@ -175,9 +175,9 @@ export class User extends AbstractModel {
         //if (this.schema !== undefined)
         //{
             // CREATE users, we hash the password.
-            this.schema.pre('save', HashingMiddleware.mongooseMiddlewareHandler());
-            this.schema.pre('updateOne', HashingMiddleware.mongooseMiddlewareHandler());//
-            this.schema.pre('findOneAndUpdate', HashingMiddleware.mongooseMiddlewareFindOneAndUpdateHandler());//this is used in updateOrCreate method.
+            this.schema.pre('save', HashingMiddleware.handler());
+            this.schema.pre('updateOne', HashingMiddleware.handler());//
+            this.schema.pre('findOneAndUpdate', HashingMiddleware.findOneAndUpdateHandler());//this is used in updateOrCreate method.
         //}
     }
 

@@ -15,7 +15,6 @@ import PersonsService from "../../Persons/Services/PersonsService";
 import OrganisationsService from "../../Organisations/Services/OrganisationsService";
 import TaxonomyService from "../../Taxonomy/Services/TaxonomyService";
 import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService";
-import type {Service} from "../Service";
 import MediasService from "../../Media/Services/MediasService";
 import Media from "../../Media/Models/Media";
 import {fakeUser} from "../../Data/FakeEntities/fakeUser";
@@ -26,6 +25,7 @@ import SeederTaskContract from "../Seeders/SeederTaskContract";
 import {TaxonomiesPersistantData} from "../../Taxonomy/TaxonomiesPersistantData";
 import SeedData from "../Seeders/seed-data";
 import SeedPersistantData from "../Seeders/seed-persistant-data";
+
 
 export class MongooseDBDriver implements DBDriver {
 
@@ -54,8 +54,7 @@ export class MongooseDBDriver implements DBDriver {
 
     public async configAddon() {
         const mongooseSlugPlugin = new MongooseSlugUpdater();
-        await mongooseSlugPlugin.loadDependancy();
-        mongooseSlugPlugin.assign(mongoose);
+        await mongooseSlugPlugin.assign(mongoose);
     }
 
     public async connect() {

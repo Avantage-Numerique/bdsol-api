@@ -41,7 +41,7 @@ export default class SeedData extends Seeder implements SeederContract {
     {
         LogHelper.info(`[DB][SEEDERS] Seeder name : ${SeedData.name}`);
         if (this.data && this.whereKeys) {
-            this.data.forEach( (data:any) => {
+            this.data.forEach((data:any) => {
                 this.service.updateOrCreate( data, this.whereKeys );
             });
         }
