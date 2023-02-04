@@ -124,21 +124,28 @@ class MediasRoutes extends AbstractRoute {
     }
 
     public async createOrUpdateDispatch(req: Request, res: Response, next: NextFunction): Promise<any> {
-        if(req.file !== undefined)
-            await this.createHandler(req, res);
-        else
-            await this.updateHandler(req, res);
+        
+        //If file attached (either upload or update)
+        if(req.file !== undefined){
+            await this.createAndReplaceHandler(req, res);
+        }
+        //if no file attached
+        else {
+            if(req.url == "/upload"){
+                res.serviceResponse.code = 400;
+                res.serviceResponse.message = "File not received."
+            }
+            //if url /update and no file
+            else {
+                await this.updateHandler(req, res);
+            }
+        }
         return next();
     }
 
-    public async createHandler(req: Request, res: Response): Promise<any> {
+    public async createAndReplaceHandler(req: Request, res: Response): Promise<any> {
         res.serviceResponse = {};
-        //Received file?
-        if(req.file == undefined){
-            res.serviceResponse.code = 400;
-            res.serviceResponse.message = "File not received."
-            return;
-        }
+
 
         //if entity have media field
         //TODO : Need to make a check for this (this goes with making the create check for multiple field multer.single ("mainImage, and others..."))
@@ -167,7 +174,9 @@ class MediasRoutes extends AbstractRoute {
         
             const record = new Record(req, res, entityId, mediaField, entityType);
             if (!record.isValid()){
-                //Handle a response and return msg that something is wrong?
+                res.serviceResponse.code = 400;
+                res.serviceResponse.message = "Couldn't create Record associated with file."
+                return;
             }
         
             //Save file
@@ -232,6 +241,9 @@ class MediasRoutes extends AbstractRoute {
         }
 
         //Return msg no field to put image into entity
+        res.serviceResponse.error = true;
+        res.serviceResponse.message = "Entity mediaField is invalid";
+        return;
 
     }
 
@@ -262,13 +274,18 @@ class MediasRoutes extends AbstractRoute {
                 LogHelper.log(`./localStorage/public/${req.params.entity}/${req.params.id}/${req.params.fileName} was deleted`);
         });
 
-        //Modify the mediafield in entity
+        const mediaController = MediasController.getInstance();
         const entityController = EntityControllerFactory.getControllerFromEntity(req.params.entity);
-        res.serviceResponse = await entityController.service.update( { id: req.params.id, mainImage: null } )
+        const filenameNoExt = FileStorage.removeExtension(req.params.fileName);
 
         //delete media from fileName && entityId (params.id)
-        const mediaController = MediasController.getInstance();
-        res.serviceResponse.media = await mediaController.internalDelete(req.params.id, FileStorage.removeExtension(req.params.fileName));
+        res.serviceResponse = await mediaController.internalDelete(req.params.id, filenameNoExt);
+
+        //if entity media was in use => need to update entity media to null
+        //NOTE : IF WE HAVE AN ENTITY WITH MULTIPLE MEDIA FIELD, THIS APPROACH DOESN'T WORK (because multiple media could be "in use")
+        if(res.serviceResponse.data.dbStatus == "in use")
+            res.serviceResponse.update = await entityController.service.update( { id: req.params.id, mainImage: null } );
+
         return next();
     }
 

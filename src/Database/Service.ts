@@ -62,7 +62,7 @@ export abstract class Service
 
         try {
             const item = await this.model.findOne(query);
-
+            
             if (item !== null) {
                 return SuccessResponse.create(this.appModel.dataTransfertObject(item), StatusCodes.OK, ReasonPhrases.OK);
             }
