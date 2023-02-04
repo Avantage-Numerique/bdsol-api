@@ -11,6 +11,8 @@ import * as mime from "mime-types"
 import Record from "../../Media/Record/Record";
 import PublicLocalMediaStorage from "../Storage/PublicLocalMediaStorage";
 import multer from "multer";
+import { SuccessResponse } from "../../Http/Responses/SuccessResponse";
+import { ErrorResponse } from "../../Http/Responses/ErrorResponse";
 
 class MediasRoutes extends AbstractRoute {
 
@@ -132,8 +134,7 @@ class MediasRoutes extends AbstractRoute {
         //if no file attached
         else {
             if(req.url == "/upload"){
-                res.serviceResponse.code = 400;
-                res.serviceResponse.message = "File not received."
+                res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "File not received");
             }
             //if url /update and no file
             else {
@@ -159,7 +160,10 @@ class MediasRoutes extends AbstractRoute {
                 requestData.mediaField == undefined ||
                 requestData.entityType == undefined) {
                 //Insert message missing field here
-                LogHelper.log("undefined necessary field");
+                res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST,
+                    "Required field : entityId : (the entityId of the entity media belongs to), "+
+                    "mediaField : ('mainImage', ...), "+
+                    "entityType: (type of entity 'persons', 'organisations' ...)");
                 return;
             }
 
@@ -167,15 +171,12 @@ class MediasRoutes extends AbstractRoute {
             const entityResponse = await EntityControllerFactory.getControllerFromEntity(entityType).search( { id : entityId } );
             const oldMediaId = entityResponse?.data?.[mediaField]?._id;
 
-            console.log(entityResponse);
-
             //Create object in response
             res.serviceResponse.multer = {};
         
             const record = new Record(req, res, entityId, mediaField, entityType);
             if (!record.isValid()){
-                res.serviceResponse.code = 400;
-                res.serviceResponse.message = "Couldn't create Record associated with file."
+                ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Couldn't create Record associated with the file that was sent" );
                 return;
             }
         
@@ -241,10 +242,8 @@ class MediasRoutes extends AbstractRoute {
         }
 
         //Return msg no field to put image into entity
-        res.serviceResponse.error = true;
-        res.serviceResponse.message = "Entity mediaField is invalid";
+        res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Entity mediaField is invalid");
         return;
-
     }
 
     public async updateHandler(req: Request, res: Response): Promise<any> {
