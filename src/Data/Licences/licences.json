@@ -2,9 +2,9 @@
     "licences": [
         {
             "name": "copyright",
-            "label": "Sous droit d'auteur",
+            "label": "Sous droit d'auteur de l'utilisateur",
             "simpleSlug": "copyright",
-            "slug": "copy",
+            "slug": "copyright",
             "version": "1",
             "description":"",
             "guide": "",
@@ -17,7 +17,7 @@
         {
             "name": "CC0 Domaine public",
             "label": "CC Domaine public",
-            "simpleSlug": "0",
+            "simpleSlug": "zero",
             "slug": "cc-0",
             "version": "4.0",
             "description":"",

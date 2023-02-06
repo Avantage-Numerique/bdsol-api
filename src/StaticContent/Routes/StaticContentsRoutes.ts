@@ -60,6 +60,12 @@ class StaticContentsRoutes extends AbstractRoute {
             this.getByUriParamsHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
+        this.routerInstance.get('/:slug/:under-slug', [
+            ...this.addMiddlewares("all"),
+            ...this.addMiddlewares("bySlug"),
+            this.getByTwoLevelUriParamsHandler.bind(this),
+            this.routeSendResponse.bind(this),
+        ]);
         return this.routerInstance;
     }
 
@@ -79,8 +85,27 @@ class StaticContentsRoutes extends AbstractRoute {
      * @param next {NextFunction}
      */
     public async getByUriParamsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        console.log("controller : getByUriParamsHandler", req.params);
         if (req.params["slug"] === "licences") {
             res.serviceResponse = await this.controllerInstance.getLicencesContent();
+        }
+        if (req.params["slug"] === "licences") {
+            res.serviceResponse = await this.controllerInstance.getLicencesContent();
+        }
+
+        return next();
+    }
+
+    /**
+     * Route handler to transform all the URI params into query to the get
+     * @param req {Request}
+     * @param res {Response}
+     * @param next {NextFunction}
+     */
+    public async getByTwoLevelUriParamsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        console.log("controller : getByUriParamsHandler", req.params);
+        if (req.params["slug"] === "licence") {
+            res.serviceResponse = await this.controllerInstance.getTargetLicenceContent();
         }
 
         return next();

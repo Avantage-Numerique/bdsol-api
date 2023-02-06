@@ -25,6 +25,9 @@ class StaticContentsController implements ControllerContract {
     public model: any;//@todo create or find the best type for this.
     public appModel: AbstractModel;
 
+    public dataFolder:String = "../../Data/";
+
+    public licences:any = require(`${this.dataFolder}Licences/licences.json`);
 
     constructor() {
         this.entity = StaticContent.getInstance();
@@ -51,10 +54,30 @@ class StaticContentsController implements ControllerContract {
     public async getLicencesContent(requestData: any): Promise<ApiResponseContract> {
 
         try {
-            const rawContent:any = require("../../Data/Licences/licences.json");
+            if (this.licences !== null) {
+                return SuccessResponse.create(this.licences, StatusCodes.OK, ReasonPhrases.OK);
+            }
 
-            if (rawContent !== null) {
-                return SuccessResponse.create(rawContent, StatusCodes.OK, ReasonPhrases.OK);
+            return SuccessResponse.create({}, StatusCodes.OK, ReasonPhrases.OK);
+
+        } catch (getAllErrors: any) {
+            return ErrorResponse.create(getAllErrors, StatusCodes.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+
+
+    /**
+     * @method list List entity documents with research terms from database
+     * @param {any} requestData - Research terms { "nom":"Jean" }
+     * @return {ApiResponseContract} Promise containing a list of documents
+     */
+    public async getTargetLicenceContent(requestData: any): Promise<ApiResponseContract> {
+
+        try {
+            if (this.licences !== null) {
+                return SuccessResponse.create(this.licences, StatusCodes.OK, ReasonPhrases.OK);
             }
 
             return SuccessResponse.create({}, StatusCodes.OK, ReasonPhrases.OK);

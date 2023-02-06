@@ -1,7 +1,7 @@
 # Licences
 
 ## Licences creative common
-
+https://creativecommons.org/choose/results-one?license_code=by&amp;jurisdiction=&amp;version=4.0&amp;lang=fr
 
 ### 3 layers
 1. Légal
