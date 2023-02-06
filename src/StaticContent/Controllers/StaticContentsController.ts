@@ -27,11 +27,18 @@ class StaticContentsController implements ControllerContract {
 
     public dataFolder:String = "../../Data/";
 
-    public licences:any = require(`${this.dataFolder}Licences/licences.json`);
+    public licences:any
 
     constructor() {
         this.entity = StaticContent.getInstance();
         this.service = StaticContentsService.getInstance(this.entity);
+        this._loadStaticData();
+    }
+
+
+    private _loadStaticData() {
+        const rawlicences:any = require(`${this.dataFolder}Licences/licences.json`);
+        this.licences = rawlicences.licences;
     }
 
     /**
@@ -70,17 +77,14 @@ class StaticContentsController implements ControllerContract {
 
     /**
      * @method list List entity documents with research terms from database
-     * @param {any} requestData - Research terms { "nom":"Jean" }
+     * @param {string} licenceSlug - Research terms { "nom":"Jean" }
      * @return {ApiResponseContract} Promise containing a list of documents
      */
-    public async getTargetLicenceContent(requestData: any): Promise<ApiResponseContract> {
+    public async getTargetLicenceContent(licenceSlug: string): Promise<ApiResponseContract> {
 
         try {
-            if (this.licences !== null) {
-                return SuccessResponse.create(this.licences, StatusCodes.OK, ReasonPhrases.OK);
-            }
-
-            return SuccessResponse.create({}, StatusCodes.OK, ReasonPhrases.OK);
+            const targetLicence:any = this.licences[licenceSlug];
+            return SuccessResponse.create(targetLicence, StatusCodes.OK, ReasonPhrases.OK);
 
         } catch (getAllErrors: any) {
             return ErrorResponse.create(getAllErrors, StatusCodes.INTERNAL_SERVER_ERROR);

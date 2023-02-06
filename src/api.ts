@@ -125,7 +125,7 @@ export default class Api {
                 manager: new MediasRoutes()
             },
             {
-                baseRoute: "/static",
+                baseRoute: "/content",
                 manager: new StaticContentsRoutes()
             }
         ];

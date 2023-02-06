@@ -1,9 +1,8 @@
 import express, {NextFunction, Request, Response} from "express";
 import StaticContentsController from "../Controllers/StaticContentsController";
-import {param} from "express-validator";
 import AbstractRoute from "../../Abstract/Route";
-import {NoAccentSanitizer} from "../../Security/Sanitizers/NoAccentSanitizer";
-import {NoSpaceSanitizer} from "../../Security/Sanitizers/NoSpaceSanitizer";
+import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
+import {ReasonPhrases, StatusCodes} from "http-status-codes";
 
 class StaticContentsRoutes extends AbstractRoute {
 
@@ -18,13 +17,7 @@ class StaticContentsRoutes extends AbstractRoute {
 
     defaultMiddlewaresDistribution: any = {
         all: [],
-        bySlug: [
-            param('slug')
-                .customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
-                .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
-                .stripLow()
-                .trim()
-        ],
+        bySlug: [],
     }
 
 
@@ -53,19 +46,13 @@ class StaticContentsRoutes extends AbstractRoute {
      * @public @method
      */
     public setupPublicRoutes():express.Router {
-        // Set the /:slug handler at the end of other route, to allow the routes sets in setupAdditionnalPublicRoutes to be 1 in priority.
-        this.routerInstance.get('/:slug', [
-            ...this.addMiddlewares("all"),
-            ...this.addMiddlewares("bySlug"),
-            this.getByUriParamsHandler.bind(this),
-            this.routeSendResponse.bind(this),
-        ]);
-        this.routerInstance.get('/:slug/:under-slug', [
-            ...this.addMiddlewares("all"),
-            ...this.addMiddlewares("bySlug"),
+
+        this.routerInstance.get('/:slug/:secondSlug?', [
             this.getByTwoLevelUriParamsHandler.bind(this),
+            this.staticContentNotFound.bind(this),
             this.routeSendResponse.bind(this),
         ]);
+
         return this.routerInstance;
     }
 
@@ -78,6 +65,7 @@ class StaticContentsRoutes extends AbstractRoute {
         return router;
     }
 
+
     /**
      * Route handler to transform all the URI params into query to the get
      * @param req {Request}
@@ -85,10 +73,7 @@ class StaticContentsRoutes extends AbstractRoute {
      * @param next {NextFunction}
      */
     public async getByUriParamsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        console.log("controller : getByUriParamsHandler", req.params);
-        if (req.params["slug"] === "licences") {
-            res.serviceResponse = await this.controllerInstance.getLicencesContent();
-        }
+
         if (req.params["slug"] === "licences") {
             res.serviceResponse = await this.controllerInstance.getLicencesContent();
         }
@@ -103,12 +88,25 @@ class StaticContentsRoutes extends AbstractRoute {
      * @param next {NextFunction}
      */
     public async getByTwoLevelUriParamsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        console.log("controller : getByUriParamsHandler", req.params);
-        if (req.params["slug"] === "licence") {
-            res.serviceResponse = await this.controllerInstance.getTargetLicenceContent();
+
+        if (req.params["slug"] === "licences") {
+            res.serviceResponse = await this.controllerInstance.getLicencesContent();
+        }
+
+        if (req.params["slug"] === "licence" && req.params["secondSlug"] !== undefined) {
+            res.serviceResponse = await this.controllerInstance.getTargetLicenceContent(req.params["secondSlug"]);
         }
 
         return next();
+    }
+
+    public async staticContentNotFound(req: Request, res: Response, next: NextFunction): Promise<any> {
+
+        if (res.serviceResponse === undefined || res.serviceResponse === null || res.serviceResponse === "") {
+            res.serviceResponse = ErrorResponse.create(new Error(ReasonPhrases.NOT_FOUND), StatusCodes.NOT_FOUND);
+        }
+        return next();
+
     }
 }
 

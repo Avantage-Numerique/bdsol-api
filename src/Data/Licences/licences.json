@@ -1,6 +1,6 @@
 {
-    "licences": [
-        {
+    "licences": {
+        "copyright": {
             "name": "copyright",
             "label": "Sous droit d'auteur de l'utilisateur",
             "simpleSlug": "copyright",
@@ -14,7 +14,7 @@
             "image": "https://i.creativecommons.org/p/zero/1.0/88x31.png",
             "language": "fr"
         },
-        {
+        "zero": {
             "name": "CC0 Domaine public",
             "label": "CC Domaine public",
             "simpleSlug": "zero",
@@ -28,7 +28,7 @@
             "image": "https://i.creativecommons.org/p/zero/1.0/88x31.png",
             "language": "fr"
         },
-        {
+        "by-nc-nd": {
             "name": "CC BY-NC-ND 4.0",
             "label": "CC Attribution-NonCommercial-NoDerivs",
             "simpleSlug": "by-nc-nd",
@@ -42,7 +42,7 @@
             "image": "https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png",
             "language": "fr"
         },
-        {
+        "by-nc-sa": {
             "name": "CC BY-NC-SA 4.0",
             "label": "CC Attribution-NonCommercial-ShareAlike",
             "simpleSlug": "by-nc-sa",
@@ -56,7 +56,7 @@
             "image": "https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png",
             "language": "fr"
         },
-        {
+        "by-nc": {
             "name": "CC BY-NC 4.0",
             "label": "CC Attribution-NonCommercial",
             "simpleSlug": "by-nc",
@@ -70,7 +70,7 @@
             "image": "https://i.creativecommons.org/l/by-nc/4.0/88x31.png",
             "language": "fr"
         },
-        {
+        "by-nd": {
             "name": "CC BY-ND 4.0",
             "label": "CC Attribution-NoDerivs",
             "simpleSlug": "by-nd",
@@ -84,7 +84,7 @@
             "image": "https://i.creativecommons.org/l/by-nd/4.0/88x31.png",
             "language": "fr"
         },
-        {
+        "by-sa": {
             "name": "CC BY-SA 4.0",
             "label": "CC Attribution-ShareAlike",
             "simpleSlug": "by-sa",
@@ -98,7 +98,7 @@
             "image": "https://i.creativecommons.org/l/by-sa/4.0/88x31.png",
             "language": "fr"
         },
-        {
+        "by": {
             "name": "CC BY 4.0",
             "label": "CC Attribution",
             "simpleSlug": "by",
@@ -112,5 +112,5 @@
             "image": "https://i.creativecommons.org/l/by/4.0/88x31.png",
             "language": "fr"
         }
-    ]
+    }
 }
