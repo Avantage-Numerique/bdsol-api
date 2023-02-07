@@ -3,6 +3,7 @@ import StaticContentsController from "../Controllers/StaticContentsController";
 import AbstractRoute from "../../Abstract/Route";
 import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 class StaticContentsRoutes extends AbstractRoute {
 
@@ -89,6 +90,7 @@ class StaticContentsRoutes extends AbstractRoute {
      */
     public async getByTwoLevelUriParamsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
 
+        LogHelper.debug("getByTwoLevelUriParamsHandler", req.params);
         if (req.params["slug"] === "licences") {
             res.serviceResponse = await this.controllerInstance.getLicencesContent();
         }
