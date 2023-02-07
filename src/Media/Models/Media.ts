@@ -76,7 +76,7 @@ class Media extends AbstractModel {
                 },
                 slug: {
                     type: String,
-                    slug: ["title"],
+                    slug: ["entityId"],
                     slugPaddingSize: 3,
                     index: true,
                     unique: true
@@ -141,6 +141,7 @@ class Media extends AbstractModel {
             alt: document.alt ?? '',
             description: document.description ?? '',
             path: document.path ?? '',
+            url: document.url ?? '',
             licence: document.licence ?? '',
             fileType: document.fileType ?? '',
             extension: document.extension ?? '',

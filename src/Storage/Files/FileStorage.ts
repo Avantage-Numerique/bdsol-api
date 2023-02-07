@@ -94,18 +94,17 @@ export default class FileStorage {
         //});
     }
 
-    public static async deleteFile(record:Record):Promise<boolean> {
-        return new Promise<boolean>( (resolve, reject) => {
-            fs.unlink(record.pathWithFilename, (err) => {
-                if (err){
-                    reject(false);
-                }
-                else {
-                    LogHelper.log(`Delete file at ${record.pathWithFilename}`);
-                    resolve(true);
-                }
-            });
-        })
+    public static async deleteFile(record:Record){
+        fs.unlink(record.pathWithFilename, (err) => {
+            if (err){
+                LogHelper.error("Couldn't delete file at path : " + record.pathWithFilename);
+                return
+            }
+            else {
+                LogHelper.log(`Delete file at ${record.pathWithFilename}`);
+            }
+        });
+        return
     }
 
 }

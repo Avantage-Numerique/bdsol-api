@@ -170,9 +170,6 @@ class MediasRoutes extends AbstractRoute {
             //Get old media ID if exist
             const entityResponse = await EntityControllerFactory.getControllerFromEntity(entityType).search( { id : entityId } );
             const oldMediaId = entityResponse?.data?.[mediaField]?._id;
-
-            //Create object in response
-            res.serviceResponse.multer = {};
         
             const record = new Record(req, res, entityId, mediaField, entityType);
             if (!record.isValid()){
@@ -197,14 +194,12 @@ class MediasRoutes extends AbstractRoute {
                 res.serviceResponse.failMessage = "Couldn't save file, creating media failed"
     
                 //Delete file
-                await FileStorage.deleteFile(record).then( function() {
-                    LogHelper.warn("Deleted file because couldn't create media");
-                }).catch(function() {
-                    LogHelper.warn("Couldn't delete file although media failed to create");
-                    res.serviceResponse.multer.error = true;
-                    res.serviceResponse.multer.message = "Deleted file";
-                    return;
-                });
+                FileStorage.deleteFile(record);
+                
+                res.serviceResponse.multer = {};
+                res.serviceResponse.multer.error = true;
+                res.serviceResponse.multer.message = "Deleted file";
+                return;
             }
 
             const toLinkMediaId = mediaResponse.data._id;
@@ -212,15 +207,15 @@ class MediasRoutes extends AbstractRoute {
             const linkingMediaResponse = await EntityControllerFactory.getControllerFromEntity(entityType).update(updateRequest);
             
             if (linkingMediaResponse.error){
-                res.serviceResponse.failMessage = "Couldn't save file, failed to link media to entity";
                 //Delete media
                 res.serviceResponse = await mediasController.internalDelete(record.entityId, record.filenameNoExt);
+                res.serviceResponse.failMessage = "Couldn't save file, failed to link media to entity";
                 //Delete file
-                const fileDeleted = await FileStorage.deleteFile(record);
-                if (fileDeleted) {
-                    res.serviceResponse.multer.error = true;
-                    res.serviceResponse.multer.message = "Deleted file";
-                }
+                FileStorage.deleteFile(record);
+
+                res.serviceResponse.multer = {};
+                res.serviceResponse.multer.error = true;
+                res.serviceResponse.multer.message = "Deleted file";
                 return;
             }
 
