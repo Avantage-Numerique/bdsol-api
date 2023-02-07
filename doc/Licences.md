@@ -25,6 +25,7 @@ Code : **200** : lorsque les informations sont OK
             "label": "[Nom plus lisible pour la licence]",
             "simpleSlug": "[slug basic utilisé par creative common dans leur url]",
             "slug": "[Utiliser le slug de la licence et non cette prop] to deprecate]",
+            "form": "[Valeur à utiliser dans un formulaire.]",
             "version": "[Version de la licence chez Creative common]",
             "description":"[texte de description de la licence]",
             "guide": "[Simplification du légal en mode : comment ça s'applique]",
