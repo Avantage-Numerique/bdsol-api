@@ -74,7 +74,6 @@ class StaticContentsController implements ControllerContract {
     }
 
 
-
     /**
      * @method list List entity documents with research terms from database
      * @param {string} licenceSlug - Research terms { "nom":"Jean" }
@@ -84,12 +83,14 @@ class StaticContentsController implements ControllerContract {
 
         try {
             const targetLicence:any = this.licences[licenceSlug];
-            return SuccessResponse.create(targetLicence, StatusCodes.OK, ReasonPhrases.OK);
+
+            return targetLicence !== null && targetLicence !== undefined && targetLicence !== "" ?
+                SuccessResponse.create(targetLicence, StatusCodes.OK, ReasonPhrases.OK) :
+                ErrorResponse.create(new Error(ReasonPhrases.NOT_FOUND), StatusCodes.NOT_FOUND);
 
         } catch (getAllErrors: any) {
             return ErrorResponse.create(getAllErrors, StatusCodes.INTERNAL_SERVER_ERROR);
         }
-
     }
 
 }
