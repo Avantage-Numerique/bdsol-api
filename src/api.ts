@@ -9,7 +9,7 @@ import {PersonsRoutes} from './Persons/Routes/PersonsRoutes';
 import {OrganisationsRoutes} from './Organisations/Routes/OrganisationsRoutes'
 import {TaxonomyRoutes} from "./Taxonomy/Routes/TaxonomyRoutes";
 import {UsersHistoryRoutes} from "./UserHistory/Routes/UsersHistoryRoutes";
-import { MediasRoutes } from "./Media/Routes/MediasRoutes";
+import {MediasRoutes} from "./Media/Routes/MediasRoutes";
 import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
 import {PublicUserRequest} from "./Authentification/Middleware/PublicUserRequest";
 import LogHelper from "./Monitoring/Helpers/LogHelper";
@@ -17,6 +17,7 @@ import {ApiErrorHandler} from "./Error/Middlewares/ApiErrorHandler";
 import {GetRequestIp} from "./Monitoring/Middlewares/GetRequestIp";
 import ModerationRoutes from "./Moderation/Schemas/Route/ModerationRoutes";
 import SearchRoutes from "./Database/Search/SearchRoutes";
+import {StaticContentsRoutes} from "./StaticContent/Routes/StaticContentsRoutes";
 /**
  * Main class for the API
  * Use the express instance as public property.
@@ -122,6 +123,10 @@ export default class Api {
             {
                 baseRoute: "/medias",
                 manager: new MediasRoutes()
+            },
+            {
+                baseRoute: "/static",
+                manager: new StaticContentsRoutes()
             }
         ];
     }
