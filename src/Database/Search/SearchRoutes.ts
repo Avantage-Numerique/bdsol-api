@@ -2,9 +2,7 @@ import express, {Request, Response} from "express";
 import {StatusCodes} from "http-status-codes";
 import Person from "../../Persons/Models/Person";
 import Organisation from "../../Organisations/Models/Organisation";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import { SuccessResponse } from "../../Http/Responses/SuccessResponse";
-import { ReasonPhrases } from "http-status-codes";
+import mongoose from "mongoose";
 
 class SearchRoutes {
 
@@ -25,6 +23,7 @@ class SearchRoutes {
     public setupPublicRoutes(): express.Router {
         this.routerInstance.get('/', this.getSearchSuggestion);
         this.routerInstance.get('/results', this.getSearchOnParam);
+        this.routerInstance.get('/:linkId', this.getTagResult)
         return this.routerInstance;
     }
 
@@ -40,15 +39,15 @@ class SearchRoutes {
      * @return {Promise<any>}
      */
     public async getSearchOnParam(req: Request, res: Response): Promise<any> {
-        //Send out $text : { $search : req.query } to all entity  
+        //Send out $text : { $search : req.query } to all entity
 
-        const personModel: any = Person.getInstance().mongooseModel;
-        const organisationModel: any = Organisation.getInstance().mongooseModel;
+        const personModel:any = Person.getInstance().mongooseModel;
+        const organisationModel:any = Organisation.getInstance().mongooseModel;
 
         const promises = [];
         promises.push(
             await personModel.find(
-                {$text: { $search: req.query.searchIndex }},
+                {$text: {$search: req.query.searchIndex}},
                 {score: {$meta: "textScore"}}
             ));
         promises.push(
@@ -81,8 +80,9 @@ class SearchRoutes {
      * @return {Promise<any>}
      */
     public async getSearchSuggestion(req: Request, res: Response): Promise<any> {
-        const personModel: any = Person.getInstance().mongooseModel;
-        const organisationModel: any = Organisation.getInstance().mongooseModel;
+
+        const personModel:any = Person.getInstance().mongooseModel;
+        const organisationModel:any = Organisation.getInstance().mongooseModel;
 
         const personsSuggestions = await personModel.find(
             { $or: [
@@ -102,6 +102,38 @@ class SearchRoutes {
 
         //Send back DTO of fewest field of each entity search result in an array sorted,
         return res.status(StatusCodes.OK).send([...personsSuggestions, ...organisationsSuggestions]);
+    }
+
+    public async getTagResult(req: Request, res: Response): Promise<any> {
+
+        const personModel:any = Person.getInstance().mongooseModel;
+        const organisationModel:any = Organisation.getInstance().mongooseModel;
+
+        let paramId;
+        try{
+            paramId = new mongoose.Types.ObjectId(req.params.linkId);
+        }
+        catch(e)
+        {
+            return res.status(StatusCodes.BAD_REQUEST).send([]);
+        }
+
+        const promises = [];
+        promises.push(
+            await personModel.find(
+                { "occupations.occupation": paramId }
+            ));
+        promises.push(
+            await organisationModel.find(
+                { "offers.offer": paramId },
+            ));
+
+        let tagSearchResult = [];
+        if(promises.length > 0){
+             tagSearchResult = promises.flat();
+        }
+
+        return res.status(StatusCodes.OK).send(tagSearchResult)
     }
 
 }
