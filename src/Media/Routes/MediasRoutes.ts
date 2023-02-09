@@ -147,6 +147,15 @@ class MediasRoutes extends AbstractRoute {
     public async createAndReplaceHandler(req: Request, res: Response): Promise<any> {
         res.serviceResponse = {};
 
+        /*const createMediaResponse = await createMedia();
+        const saveFileResponse = await saveFile();
+        const linkEntityResponse = await linkEntity();
+
+        if(!createMediaResponse || !saveFileResponse || !linkEntityResponse){
+            createMediaResponse && deleteMedia();
+            saveFileResponse && deleteFile();
+            linkEntityResponse && unlinkEntity();
+        }*/
 
         //if entity have media field
         //TODO : Need to make a check for this (this goes with making the create check for multiple field multer.single ("mainImage, and others..."))
@@ -178,13 +187,14 @@ class MediasRoutes extends AbstractRoute {
             }
         
             //Save file
-            FileStorage.saveFile(record, req.file)//.then(function() {
+            await FileStorage.saveFile(record).then(function() {
                 LogHelper.log("Saved file");
-            //}).catch(function (){
-                //res.serviceResponse.multer.error = true;
-                //res.serviceResponse.multer.message = "Couldn't save file to the server :( , saving file failed"
-               // return next();
-           //});
+            }).catch(function (){
+                LogHelper.log("It catched that the saveFile didn't work!");
+                res.serviceResponse.multer.error = true;
+                res.serviceResponse.multer.message = "Couldn't save file to the server :( , saving file failed"
+                return;
+           });
         
             const mediasController = MediasController.getInstance();
             //insert a new object media inside the database with all the information required

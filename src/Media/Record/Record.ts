@@ -25,15 +25,15 @@ export default class Record {
     //public status:any;
 
     //Multer file props
-    public m_fieldName:any;
-    public m_originalname:any;
-    public m_encoding:any;
-    public m_mimetype:any;
-    public m_size:any;
-    public m_destination:any;
-    public m_filename:any;
-    public m_path:any;
-    public m_buffer:any;
+    public file_fieldName:any;
+    public file_originalname:any;
+    public file_encoding:any;
+    public file_mimetype:any;
+    public file_size:any;
+    public file_destination:any;
+    public file_filename:any;
+    public file_path:any;
+    public file_buffer:any;
 
 
     constructor(req:any, res:any, entityId:string, mediaField:string, entityType:string){
@@ -84,17 +84,16 @@ export default class Record {
 
         //Multer file props
         if(req.file !== undefined){
-            this.m_fieldName = req.file.fieldName
-            this.m_originalname = req.file.originalname
-            this.m_encoding = req.file.encoding
-            this.m_mimetype = req.file.mimetype
-            this.m_size = req.file.size
-            this.m_destination = req.file.destination
-            this.m_filename = req.file.filename
-            this.m_path = req.file.path
-            this.m_buffer = req.file.buffer
+            this.file_fieldName = req.file.fieldName
+            this.file_originalname = req.file.originalname
+            this.file_encoding = req.file.encoding
+            this.file_mimetype = req.file.mimetype
+            this.file_size = req.file.size
+            this.file_destination = req.file.destination
+            this.file_filename = req.file.filename
+            this.file_path = req.file.path
+            this.file_buffer = req.file.buffer
         }
-        
     }
 
     public isValid():boolean {

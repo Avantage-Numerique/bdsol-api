@@ -64,47 +64,65 @@ export default class FileStorage {
         //FileStorage.basePath + '/' + entityType + '/' + entityId + '/';
     }
 
-    public static async saveFile(record:Record, file:any) {
+    public static async saveFile(record:Record):Promise<void> {
         
         //https://stackoverflow.com/questions/35673866/how-to-use-typescript-async-await-with-promise-in-node-js-fs-module
         //https://stackoverflow.com/questions/39880832/how-to-return-a-promise-when-writestream-finishes
         
-
+        
         FileStorage.createPathIfNotExist(record.pathNoFilename);
-        console.log("in saveFile");
-        //return new Promise<void>( (resolve, reject) => {
-            const writeStream = fs.createWriteStream(record.pathWithFilename);
-            writeStream.on('ready', function() { writeStream.write(file.buffer);})
-            writeStream.on('close', function() {
-                writeStream.close(function(err) {
-                    if(err)
-                       LogHelper.error("FileStorage : ", err);
-                    else
-                       LogHelper.log("Success to save file");
-                });
+        const writeStream = fs.createWriteStream(record.pathWithFilename);
+        return new Promise((resolve, reject) =>{
+            writeStream.on("ready", () => {
+                writeStream.writable && writeStream.write(record.file_buffer);
+                writeStream.close();
             });
-            /*writeStream.on('error', function() {
-                LogHelper.error("FileStorage failed to save file");
-                reject();
+            writeStream.on("error", (err) => {
+                reject(err);
             });
-            writeStream.on('finish', function() {
-                LogHelper.log("Success to save file");
+            writeStream.on("close", () => {
                 resolve();
-            })*/
-        //});
-    }
-
-    public static async deleteFile(record:Record){
-        fs.unlink(record.pathWithFilename, (err) => {
-            if (err){
-                LogHelper.error("Couldn't delete file at path : " + record.pathWithFilename);
-                return
-            }
-            else {
-                LogHelper.log(`Delete file at ${record.pathWithFilename}`);
-            }
+            });
         });
-        return
+
+        /*
+        writeStream.on('ready', function() {writeStream.write(record.file_buffer);})
+        writeStream.on('error', function() {
+            LogHelper.error("FileStorage failed to save file");
+            //return Promise.reject();
+        });
+        writeStream.on("finish", function(){
+            LogHelper.log("Success to save file");
+            //return Promise.resolve();
+        });
+        writeStream.on('close', function(err:any) {
+            LogHelper.log("Closing")
+        })
+        /*writeStream.on('end', function() {
+            writeStream.close(function(err) {
+                return Promise.reject();
+                if(err){
+                    LogHelper.error("FileStorage : ", err);
+                    return Promise.reject();
+                }
+                else {
+                    LogHelper.log("Success to save file");
+                    return Promise.resolve();
+                }
+            });
+        });*/
     }
 
+    public static async deleteFile(record:Record):Promise<void>{
+        return new Promise( (resolve, reject) => {
+            fs.unlink(record.pathWithFilename, (err) => {
+                if (err){
+                    LogHelper.error("Couldn't delete file at path : " + record.pathWithFilename);
+                    reject();
+                }
+            });
+            LogHelper.log(`Delete file at ${record.pathWithFilename}`);
+            resolve();
+        });
+    }
 }
