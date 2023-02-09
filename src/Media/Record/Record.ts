@@ -1,5 +1,6 @@
 import FileStorage from "../../Storage/Files/FileStorage";
 import * as mime from "mime-types"
+import mongoose from "mongoose";
 
 
 export default class Record {
@@ -98,6 +99,13 @@ export default class Record {
 
     public isValid():boolean {
         //Check if record is valid for use (has enough basic properties)
+
+        try {
+            new mongoose.Types.ObjectId(this.entityId)
+        }
+        catch(err){
+            return false;
+        }
         return true
     }
 

@@ -84,33 +84,6 @@ export default class FileStorage {
                 resolve();
             });
         });
-
-        /*
-        writeStream.on('ready', function() {writeStream.write(record.file_buffer);})
-        writeStream.on('error', function() {
-            LogHelper.error("FileStorage failed to save file");
-            //return Promise.reject();
-        });
-        writeStream.on("finish", function(){
-            LogHelper.log("Success to save file");
-            //return Promise.resolve();
-        });
-        writeStream.on('close', function(err:any) {
-            LogHelper.log("Closing")
-        })
-        /*writeStream.on('end', function() {
-            writeStream.close(function(err) {
-                return Promise.reject();
-                if(err){
-                    LogHelper.error("FileStorage : ", err);
-                    return Promise.reject();
-                }
-                else {
-                    LogHelper.log("Success to save file");
-                    return Promise.resolve();
-                }
-            });
-        });*/
     }
 
     public static async deleteFile(record:Record):Promise<void>{

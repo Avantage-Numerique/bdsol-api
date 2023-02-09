@@ -182,7 +182,7 @@ class MediasRoutes extends AbstractRoute {
         
             const record = new Record(req, res, entityId, mediaField, entityType);
             if (!record.isValid()){
-                ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Couldn't create Record associated with the file that was sent" );
+                res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Couldn't create Record associated with the file that was sent" );
                 return;
             }
         
@@ -233,9 +233,9 @@ class MediasRoutes extends AbstractRoute {
             if (oldMediaId !== undefined){
                 res.serviceResponse.oldMedia = await this.controllerInstance.update( { id: oldMediaId, dbStatus: "archived" });
                 if (!res.serviceResponse.oldMedia.error)
-                    res.serviceResponse.message = "old media status set to archived successfully"
+                    res.serviceResponse.oldMedia.message = "old media status set to archived successfully"
                 else
-                    res.serviceResponse.message = "old media status update to archived failed"
+                    res.serviceResponse.oldMedia.message = "old media status update to archived failed"
             }
 
             //Everything succeeded
