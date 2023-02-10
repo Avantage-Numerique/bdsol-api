@@ -21,9 +21,10 @@ const middlewareTaxonomy = async (idList:any,
             const foundOccupationCount = occupationsExist.data.length;
 
             if (idList.length != foundOccupationCount) {
-                throw(`Pre save Erreur data ${taxonomy} existe pas ou doublons`);
+                throw(new Error(`Pre save Erreur data ${taxonomy} existe pas ou doublons`));
             }
         }
+
     }
 }
 
