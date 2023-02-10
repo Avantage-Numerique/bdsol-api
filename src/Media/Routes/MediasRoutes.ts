@@ -92,6 +92,12 @@ class MediasRoutes extends AbstractRoute {
             storage: multer.memoryStorage()
         });
 
+        this.routerInstance.get('/clear', [
+            ...this.addMiddlewares("all"),
+            this.clearEmptyDir.bind(this),
+            this.routeSendResponse.bind(this),
+        ]);
+
         this.routerInstance.post('/upload', [
             multipartMiddlewareTemporaryHandler.single("mainImage"),
             this.contentTypeParser,
@@ -322,5 +328,30 @@ class MediasRoutes extends AbstractRoute {
             }
         });
     }
+
+    public async clearEmptyDir(req:Request, res:Response, next:NextFunction):Promise<any> {
+        const root:string = "/api/localStorage/public";
+
+        function recursiveRemoveEmptyDir(dirPath:string){
+            const filesAndDirs = fs.readdirSync(dirPath, { withFileTypes: true });
+
+            console.log("filesAndDirs at dirPath:", filesAndDirs, " at ", dirPath);
+            //If folder is empty, delete it
+            if(filesAndDirs.length == 0){
+                //fs.rm ( ... dirPath)
+                console.log("Aurait delete le folder :", dirPath);
+            }
+
+            filesAndDirs.forEach( (elem) => {
+                elem.isDirectory() && recursiveRemoveEmptyDir(dirPath + "/" + elem.name)
+            })
+
+        }
+        recursiveRemoveEmptyDir(root);
+
+        res.serviceResponse = {error : false, code: 200, message:"Ok"}
+        res.status(200).send("Ok")
+    }
+
 }
 export {MediasRoutes};
