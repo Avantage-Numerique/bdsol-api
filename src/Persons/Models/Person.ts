@@ -222,24 +222,32 @@ class Person extends AbstractModel {
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
             this.schema.pre('save', async function (next: any): Promise<any> {
-                const idList = this.occupations.map( (el:any) => {
-                    return new mongoose.Types.ObjectId(el.occupation);
-                });
-                await middlewareTaxonomy(idList, TaxonomyController, "occupations.occupation");
-                return next();
+                try {
+                    const idList = this.occupations.map( (el:any) => {
+                        return new mongoose.Types.ObjectId(el.occupation);
+                    });
+                    await middlewareTaxonomy(idList, TaxonomyController, "occupations.occupation");
+                    return next();
+                } catch(e) {
+                    throw(e);
+                }
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
             this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
-                const person: any = this;
-                const updatedDocument = person.getUpdate();
-                if (updatedDocument["occupations"] != undefined){
-                    const idList = updatedDocument.occupations.map( (el:any) => {
-                        return new mongoose.Types.ObjectId(el.occupation);
-                    });
-                    await middlewareTaxonomy(idList, TaxonomyController, "occupations.occupation");
+                try {
+                    const person: any = this;
+                    const updatedDocument = person.getUpdate();
+                    if (updatedDocument["occupations"] != undefined){
+                        const idList = updatedDocument.occupations.map( (el:any) => {
+                            return new mongoose.Types.ObjectId(el.occupation);
+                        });
+                        await middlewareTaxonomy(idList, TaxonomyController, "occupations.occupation");
+                    }
+                    return next();
+                } catch (e) {
+                    throw(e);
                 }
-                return next();
             });
         }
     }
