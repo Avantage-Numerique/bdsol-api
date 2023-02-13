@@ -157,25 +157,29 @@ class MediasRoutes extends AbstractRoute {
             linkEntityResponse && unlinkEntity();
         }*/
 
-        //if entity have media field
-        //TODO : Need to make a check for this (this goes with making the create check for multiple field multer.single ("mainImage, and others..."))
-        if(true) {
-
-            //Check if entityId, mediaField, entityType is in the request;
-            const requestData = req.body.data;
-            const { entityId, mediaField, entityType } = requestData;
-
-            if(requestData.entityId == undefined ||
-                requestData.mediaField == undefined ||
-                requestData.entityType == undefined) {
+        
+        //Check if entityId, mediaField, entityType is in the request;
+        const requestData = req.body.data;
+        const { entityId, mediaField, entityType } = requestData;
+        
+        
+        if(requestData.entityId == undefined ||
+            requestData.mediaField == undefined ||
+            requestData.entityType == undefined) {
                 //Insert message missing field here
                 res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST,
                     "Required field : entityId : (the entityId of the entity media belongs to), "+
                     "mediaField : ('mainImage', ...), "+
                     "entityType: (type of entity 'persons', 'organisations' ...)");
-                return;
-            }
-
+                    return;
+        }
+                
+        //if entity have media field
+        //TODO : Need to make a check for this (this goes with making the create check for multiple field multer.single ("mainImage, and others..."))
+        //Temporary check (entityType is person or org and mediaField is mainImage)
+        if( (entityType == 'persons'|| entityType == "organisations")
+            &&  mediaField == "mainImage" ) {
+                
             //Get old media ID if exist
             const entityResponse = await EntityControllerFactory.getControllerFromEntity(entityType).search( { id : entityId } );
             const oldMediaId = entityResponse?.data?.[mediaField]?._id;
