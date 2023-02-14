@@ -3,6 +3,7 @@ import {StatusCodes} from "http-status-codes";
 import Person from "../../Persons/Models/Person";
 import Organisation from "../../Organisations/Models/Organisation";
 import mongoose from "mongoose";
+import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 
 class SearchRoutes {
 
@@ -23,7 +24,8 @@ class SearchRoutes {
     public setupPublicRoutes(): express.Router {
         this.routerInstance.get('/', this.getSearchSuggestion);
         this.routerInstance.get('/results', this.getSearchOnParam);
-        this.routerInstance.get('/:linkId', this.getTagResult)
+        this.routerInstance.get('/:linkId', this.getTagResult);
+        this.routerInstance.get('/:category/:slug', this.getTaxonomyResult);
         return this.routerInstance;
     }
 
@@ -81,59 +83,93 @@ class SearchRoutes {
      */
     public async getSearchSuggestion(req: Request, res: Response): Promise<any> {
 
-        const personModel:any = Person.getInstance().mongooseModel;
-        const organisationModel:any = Organisation.getInstance().mongooseModel;
-
-        const personsSuggestions = await personModel.find(
-            { $or: [
-              { firstName: { $regex: req.query.searchIndex, $options : 'i' }},
-              { lastName: { $regex: req.query.searchIndex, $options : 'i' }},
-              { nickname: { $regex: req.query.searchIndex, $options : 'i' }},
-              { description: { $regex: req.query.searchIndex, $options : 'i' }},
-            ]}
-        )
-
-        const organisationsSuggestions = await organisationModel.find(
-            { $or: [
-              { name: { $regex: req.query.searchIndex, $options : 'i' }},
-              { description: { $regex: req.query.searchIndex, $options : 'i' }},
-            ]}
-        )
-
-        //Send back DTO of fewest field of each entity search result in an array sorted,
-        return res.status(StatusCodes.OK).send([...personsSuggestions, ...organisationsSuggestions]);
+        try {
+            const personModel:any = Person.getInstance().mongooseModel;
+            const organisationModel:any = Organisation.getInstance().mongooseModel;
+            
+            const personsSuggestions = await personModel.find(
+                { $or: [
+                    { firstName: { $regex: req.query.searchIndex, $options : 'i' }},
+                    { lastName: { $regex: req.query.searchIndex, $options : 'i' }},
+                    { nickname: { $regex: req.query.searchIndex, $options : 'i' }},
+                    { description: { $regex: req.query.searchIndex, $options : 'i' }},
+                ]}
+                )
+                
+                const organisationsSuggestions = await organisationModel.find(
+                    { $or: [
+                        { name: { $regex: req.query.searchIndex, $options : 'i' }},
+                        { description: { $regex: req.query.searchIndex, $options : 'i' }},
+                    ]}
+                    )
+                    
+                    //Send back DTO of fewest field of each entity search result in an array sorted,
+                    return res.status(StatusCodes.OK).send([...personsSuggestions, ...organisationsSuggestions]);
+        }
+        catch(e){
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Send with searchIndex as param");
+        }
     }
 
     public async getTagResult(req: Request, res: Response): Promise<any> {
-
-        const personModel:any = Person.getInstance().mongooseModel;
-        const organisationModel:any = Organisation.getInstance().mongooseModel;
-
-        let paramId;
         try{
-            paramId = new mongoose.Types.ObjectId(req.params.linkId);
+            const searchResult = await SearchRoutes.internalFindEntityLinkedToTaxonomy(req.params.linkId); 
+            return res.status(StatusCodes.OK).send(searchResult);
         }
         catch(e)
         {
-            return res.status(StatusCodes.BAD_REQUEST).send([]);
+            return res.status(StatusCodes.BAD_REQUEST).send(e);
         }
+    }
 
-        const promises = [];
-        promises.push(
-            await personModel.find(
-                { "occupations.occupation": paramId }
-            ));
-        promises.push(
-            await organisationModel.find(
-                { "offers.offer": paramId },
-            ));
+    public async getTaxonomyResult(req:Request, res:Response):Promise<any> {
 
-        let tagSearchResult = [];
-        if(promises.length > 0){
-             tagSearchResult = promises.flat();
+        const taxonomyModel:any = Taxonomy.getInstance().mongooseModel;
+        try{
+            let taxonomyId = await taxonomyModel.find(
+                {
+                    category: req.params.category,
+                    slug: req.params.slug
+                }
+            );
+            taxonomyId = taxonomyId.shift()._id;
+
+            if (taxonomyId){
+                const searchResult = await SearchRoutes.internalFindEntityLinkedToTaxonomy(taxonomyId);
+                return res.status(StatusCodes.OK).send(searchResult);
+            }
         }
+        catch(e)
+        {
+            return res.status(StatusCodes.BAD_REQUEST).send(e);
+        }
+    }
 
-        return res.status(StatusCodes.OK).send(tagSearchResult)
+    public static async internalFindEntityLinkedToTaxonomy(taxonomyId:string){
+        const personModel:any = Person.getInstance().mongooseModel;
+        const organisationModel:any = Organisation.getInstance().mongooseModel;
+        try{
+            const paramId = new mongoose.Types.ObjectId(taxonomyId);
+            const promises = [];
+            promises.push(
+                await personModel.find(
+                    { "occupations.occupation": paramId }
+                ));
+            promises.push(
+                await organisationModel.find(
+                    { "offers.offer": paramId },
+                ));
+    
+            let tagSearchResult = [];
+            if(promises.length > 0){
+                 tagSearchResult = promises.flat();
+            }
+            return tagSearchResult;
+        }
+        catch(e)
+        {
+            return e;
+        }
     }
 
 }
