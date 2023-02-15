@@ -1,4 +1,4 @@
-import express, {NextFunction, request, Request, Response} from "express";
+import express, {NextFunction, Request, Response} from "express";
 import MediasController from "../Controllers/MediasController";
 import AbstractRoute from "../../Abstract/Route";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
@@ -7,11 +7,9 @@ import ApiResponse from "../../Http/Responses/ApiResponse";
 import { StatusCodes } from "http-status-codes";
 import FileStorage from "../../Storage/Files/FileStorage";
 import EntityControllerFactory from "../../Abstract/EntityControllerFactory";
-import * as mime from "mime-types"
 import Record from "../../Media/Record/Record";
 import PublicLocalMediaStorage from "../Storage/PublicLocalMediaStorage";
 import multer from "multer";
-import { SuccessResponse } from "../../Http/Responses/SuccessResponse";
 import { ErrorResponse } from "../../Http/Responses/ErrorResponse";
 
 class MediasRoutes extends AbstractRoute {
@@ -65,7 +63,13 @@ class MediasRoutes extends AbstractRoute {
         this.routerInstance.get('/:entity/:id/:fileName', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("bySlug"),
-            this.getByUriParamsHandler.bind(this),
+            this.viewMedia.bind(this),
+            this.routeSendResponse.bind(this),
+        ]);
+
+        this.routerInstance.get('/data/:id', [
+            ...this.addMiddlewares("all"),
+            this.getMediaData.bind(this),
             this.routeSendResponse.bind(this),
         ]);
 
@@ -80,13 +84,13 @@ class MediasRoutes extends AbstractRoute {
      */
     public setupAuthRoutes(): express.Router {
 
-        this.multipartSetup = new PublicLocalMediaStorage();
+        /*this.multipartSetup = new PublicLocalMediaStorage();
         const multipartMiddlewareHandler = multer({
             storage: this.multipartSetup.storage("temp/123456789123456789123456/"),
             //PublicLocalMediaStorage.limit;
             //limits: mediaStorage.limits,
             fileFilter: this.multipartSetup.fileFilter(),
-        });
+        });*/
 
         const multipartMiddlewareTemporaryHandler = multer({
             storage: multer.memoryStorage()
@@ -298,12 +302,12 @@ class MediasRoutes extends AbstractRoute {
     }
 
     /**
-     * Route handler to transform all the URI params into query to the get
+     * Route handler to get and view media
      * @param req {Request}
      * @param res {Response}
      * @param next {NextFunction}
      */
-    public async getByUriParamsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+    public async viewMedia(req: Request, res: Response, next: NextFunction): Promise<any> {
         const options = {
             root: "/api/localStorage/public",
             dotfiles: 'deny',
@@ -326,5 +330,13 @@ class MediasRoutes extends AbstractRoute {
             }
         });
     }
+
+
+    public async getMediaData(req: Request, res: Response, next: NextFunction):Promise<any> {
+        res.serviceResponse = await this.controllerInstance.get({_id:req.params.id});
+        return next();
+    }
+
+
 }
 export {MediasRoutes};

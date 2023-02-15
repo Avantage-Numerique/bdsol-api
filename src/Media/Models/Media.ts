@@ -144,6 +144,7 @@ class Media extends AbstractModel {
             url: document.url ?? '',
             licence: document.licence ?? '',
             fileType: document.fileType ?? '',
+            fileName: document.fileName ?? '',
             extension: document.extension ?? '',
             slug: document.slug ?? '',
             entityId: document.entityId ?? '',
