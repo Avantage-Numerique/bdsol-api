@@ -4,6 +4,9 @@ import Person from "../../Persons/Models/Person";
 import Organisation from "../../Organisations/Models/Organisation";
 import mongoose from "mongoose";
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
+import { ErrorResponse } from "../../Http/Responses/ErrorResponse";
+import { SuccessResponse } from "../../Http/Responses/SuccessResponse";
+import { ReasonPhrases } from "http-status-codes";
 
 class SearchRoutes {
 
@@ -70,7 +73,11 @@ class SearchRoutes {
         }
             
         //Send back full (DTO) of each entity search result in an array sorted,
-        return res.status(StatusCodes.OK).send(objectResultArray);
+        return res.status(StatusCodes.OK).send(SuccessResponse.create(
+            objectResultArray,
+            StatusCodes.OK,
+            ReasonPhrases.OK
+        ));
         //return SuccessResponse.create(objectResultArray, StatusCodes.OK, ReasonPhrases.OK);
     }
 
@@ -96,15 +103,19 @@ class SearchRoutes {
                 ]}
                 )
                 
-                const organisationsSuggestions = await organisationModel.find(
-                    { $or: [
-                        { name: { $regex: req.query.searchIndex, $options : 'i' }},
-                        { description: { $regex: req.query.searchIndex, $options : 'i' }},
-                    ]}
-                    )
+            const organisationsSuggestions = await organisationModel.find(
+                { $or: [
+                    { name: { $regex: req.query.searchIndex, $options : 'i' }},
+                    { description: { $regex: req.query.searchIndex, $options : 'i' }},
+                ]}
+                )
                     
-                    //Send back DTO of fewest field of each entity search result in an array sorted,
-                    return res.status(StatusCodes.OK).send([...personsSuggestions, ...organisationsSuggestions]);
+            //Send back DTO of fewest field of each entity search result in an array sorted,
+            return res.status(StatusCodes.OK).send(SuccessResponse.create(
+                [...personsSuggestions, ...organisationsSuggestions],
+                StatusCodes.OK,
+                ReasonPhrases.OK
+            ));
         }
         catch(e){
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Send with searchIndex as param");
@@ -114,11 +125,20 @@ class SearchRoutes {
     public async getTagResult(req: Request, res: Response): Promise<any> {
         try{
             const searchResult = await SearchRoutes.internalFindEntityLinkedToTaxonomy(req.params.linkId); 
-            return res.status(StatusCodes.OK).send(searchResult);
+            return res.status(StatusCodes.OK).send(SuccessResponse.create(
+                searchResult,
+                StatusCodes.OK,
+                ReasonPhrases.OK
+            ));
         }
         catch(e)
         {
-            return res.status(StatusCodes.BAD_REQUEST).send(e);
+            return res.status(StatusCodes.BAD_REQUEST).send(ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "Data non valide",
+                []
+            ));
         }
     }
 
@@ -136,12 +156,21 @@ class SearchRoutes {
 
             if (taxonomyId){
                 const searchResult = await SearchRoutes.internalFindEntityLinkedToTaxonomy(taxonomyId);
-                return res.status(StatusCodes.OK).send(searchResult);
+                return res.status(StatusCodes.OK).send(SuccessResponse.create(
+                    searchResult,
+                    StatusCodes.OK,
+                    ReasonPhrases.OK
+                ));
             }
         }
         catch(e)
         {
-            return res.status(StatusCodes.BAD_REQUEST).send(e);
+            return res.status(StatusCodes.BAD_REQUEST).send(ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                "Data non valide",
+                []
+            ));
         }
     }
 
