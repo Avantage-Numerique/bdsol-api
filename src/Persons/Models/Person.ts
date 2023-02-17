@@ -28,7 +28,7 @@ class Person extends AbstractModel {
             Person._instance.schema.virtual('fullName').get( function() {
                 return this.firstName + ' ' + this.lastName;
             });
-            Person._instance.schema.virtual("type").get( function () { return Person._instance.modelName });
+            Person._instance.schema.virtual("type").get( function () { return Person._instance.modelName.toLowerCase() });
 
             Person._instance.initSchema();
 
