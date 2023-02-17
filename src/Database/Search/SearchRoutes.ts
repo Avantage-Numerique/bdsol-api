@@ -1,4 +1,4 @@
-import express, {Request, Response} from "express";
+import express, {NextFunction, Request, Response} from "express";
 import {StatusCodes} from "http-status-codes";
 import Person from "../../Persons/Models/Person";
 import Organisation from "../../Organisations/Models/Organisation";
@@ -7,13 +7,18 @@ import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 import { ErrorResponse } from "../../Http/Responses/ErrorResponse";
 import { SuccessResponse } from "../../Http/Responses/SuccessResponse";
 import { ReasonPhrases } from "http-status-codes";
+import AbstractRoute from "../../Abstract/Route";
 
-class SearchRoutes {
+class SearchRoutes extends AbstractRoute {
 
     public routerInstance: express.Router;
     public routerInstanceAuthentification: express.Router;
+    public controllerInstance: any;
+    public defaultMiddlewaresDistribution: any;
+    public middlewaresDistribution: any;
 
     constructor() {
+        super();
         this.routerInstance = express.Router();
         this.routerInstanceAuthentification = express.Router();
     }
@@ -25,15 +30,23 @@ class SearchRoutes {
      * @public @method
      */
     public setupPublicRoutes(): express.Router {
-        this.routerInstance.get('/', this.getSearchSuggestion);
-        this.routerInstance.get('/results', this.getSearchOnParam);
-        this.routerInstance.get('/:linkId', this.getTagResult);
-        this.routerInstance.get('/:category/:slug', this.getTaxonomyResult);
+
+        this.routerInstance.get('/', [this.getSearchSuggestion.bind(this), this.routeSendResponse.bind(this)]);
+        this.routerInstance.get('/results', [this.getSearchOnParam.bind(this), this.routeSendResponse.bind(this)]);
+        this.routerInstance.get('/:linkId', [this.getTagResult.bind(this), this.routeSendResponse.bind(this)]);
+        this.routerInstance.get('/:category/:slug', [this.getTaxonomyResult.bind(this), this.routeSendResponse.bind(this)]);
         return this.routerInstance;
     }
 
     public setupAuthRoutes(): express.Router {
         return this.routerInstance
+    }
+
+    public setupAdditionnalAuthRoutes(router: express.Router): express.Router {
+        return router;
+    }
+    public setupAdditionnalPublicRoutes(router: express.Router): express.Router {
+        return router;
     }
 
     /**
@@ -43,7 +56,7 @@ class SearchRoutes {
      * @param res {Response}
      * @return {Promise<any>}
      */
-    public async getSearchOnParam(req: Request, res: Response): Promise<any> {
+    public async getSearchOnParam(req: Request, res: Response, next: NextFunction): Promise<any> {
         //Send out $text : { $search : req.query } to all entity
 
         const personModel:any = Person.getInstance().mongooseModel;
@@ -73,12 +86,8 @@ class SearchRoutes {
         }
             
         //Send back full (DTO) of each entity search result in an array sorted,
-        return res.status(StatusCodes.OK).send(SuccessResponse.create(
-            objectResultArray,
-            StatusCodes.OK,
-            ReasonPhrases.OK
-        ));
-        //return SuccessResponse.create(objectResultArray, StatusCodes.OK, ReasonPhrases.OK);
+        res.serviceResponse = SuccessResponse.create(objectResultArray, StatusCodes.OK, ReasonPhrases.OK);
+        return next();
     }
 
     /**
@@ -88,7 +97,7 @@ class SearchRoutes {
      * @param res {Response}
      * @return {Promise<any>}
      */
-    public async getSearchSuggestion(req: Request, res: Response): Promise<any> {
+    public async getSearchSuggestion(req: Request, res: Response, next: NextFunction): Promise<any> {
 
         try {
             const personModel:any = Person.getInstance().mongooseModel;
@@ -111,38 +120,27 @@ class SearchRoutes {
                 )
                     
             //Send back DTO of fewest field of each entity search result in an array sorted,
-            return res.status(StatusCodes.OK).send(SuccessResponse.create(
-                [...personsSuggestions, ...organisationsSuggestions],
-                StatusCodes.OK,
-                ReasonPhrases.OK
-            ));
+            res.serviceResponse = SuccessResponse.create([...personsSuggestions, ...organisationsSuggestions], StatusCodes.OK, ReasonPhrases.OK);
         }
         catch(e){
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Send with searchIndex as param");
+            res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.INTERNAL_SERVER_ERROR, "SearchSuggestion failed to find with request error:"+e, [])
         }
+        return next();
     }
 
-    public async getTagResult(req: Request, res: Response): Promise<any> {
+    public async getTagResult(req: Request, res: Response, next: NextFunction): Promise<any> {
         try{
             const searchResult = await SearchRoutes.internalFindEntityLinkedToTaxonomy(req.params.linkId); 
-            return res.status(StatusCodes.OK).send(SuccessResponse.create(
-                searchResult,
-                StatusCodes.OK,
-                ReasonPhrases.OK
-            ));
+            res.serviceResponse = SuccessResponse.create(searchResult, StatusCodes.OK, ReasonPhrases.OK);
         }
         catch(e)
         {
-            return res.status(StatusCodes.BAD_REQUEST).send(ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "Data non valide",
-                []
-            ));
+            res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Search TagResult failed to find entity linked to taxonomy with error: "+e, []);
         }
+        return next();
     }
 
-    public async getTaxonomyResult(req:Request, res:Response):Promise<any> {
+    public async getTaxonomyResult(req:Request, res:Response, next: NextFunction):Promise<any> {
 
         const taxonomyModel:any = Taxonomy.getInstance().mongooseModel;
         try{
@@ -156,22 +154,15 @@ class SearchRoutes {
 
             if (taxonomyId){
                 const searchResult = await SearchRoutes.internalFindEntityLinkedToTaxonomy(taxonomyId);
-                return res.status(StatusCodes.OK).send(SuccessResponse.create(
-                    searchResult,
-                    StatusCodes.OK,
-                    ReasonPhrases.OK
-                ));
-            }
+                res.serviceResponse = SuccessResponse.create(searchResult, StatusCodes.OK, ReasonPhrases.OK);
+            }                
         }
         catch(e)
         {
-            return res.status(StatusCodes.BAD_REQUEST).send(ErrorResponse.create(
-                new Error(ReasonPhrases.BAD_REQUEST),
-                StatusCodes.BAD_REQUEST,
-                "Data non valide",
-                []
-            ));
+            res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Search TagResult failed to find entity linked to taxonomy with error: "+e, []);
+            
         }
+        return next();
     }
 
     public static async internalFindEntityLinkedToTaxonomy(taxonomyId:string){

@@ -261,13 +261,13 @@ class Organisation extends AbstractModel {
     public registerEvents():void {
 
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'offers.offer', "name category status");
+            middlewarePopulateProperty(this, 'offers.offer', "name category status slug");
             middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             middlewarePopulateProperty(this, "mainImage");
         });
         
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'offers.offer', "name category status");
+            middlewarePopulateProperty(this, 'offers.offer', "name category status slug");
             middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             middlewarePopulateProperty(this, "mainImage");
         });
