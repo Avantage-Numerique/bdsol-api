@@ -19,8 +19,6 @@ abstract class AbstractController implements ControllerContract {
     /** @abstract Service of a specific entity */
     abstract service: Service;
 
-    abstract name: string;
-
     /** @abstract Model of a specific entity */
     abstract entity: AbstractModel;
 

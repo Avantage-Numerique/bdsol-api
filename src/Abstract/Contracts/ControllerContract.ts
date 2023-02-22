@@ -3,6 +3,5 @@ import AbstractModel from "../Model";
 
 export interface ControllerContract {
     service: Service;
-    name: string;
     entity: AbstractModel;
 }

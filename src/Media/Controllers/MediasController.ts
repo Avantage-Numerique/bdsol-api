@@ -16,8 +16,6 @@ class MediasController extends AbstractController { //implements ControllerContr
     /** @public Model */
     entity:Media;
 
-    name:string = "Medias";
-
     constructor() {
         super();
         this.entity = Media.getInstance();

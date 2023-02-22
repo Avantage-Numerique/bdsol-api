@@ -40,7 +40,7 @@ Code : **200** : lorsque les informations sont OK
         "extension": "png",
         "slug": "[ADDED in APP single view from the target ID]",
         "entityId": "63e400c93cd9fd5e5379d35a",
-        "entityType": "persons",
+        "entityType": "person",
         "uploadedBy": "",
         "status": {
             "state": "pending",

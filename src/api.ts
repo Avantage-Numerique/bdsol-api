@@ -101,7 +101,7 @@ export default class Api {
                 manager: new TaxonomyRoutes()
             },
             {
-                baseRoute: "/userhistory",
+                baseRoute: "/userhistories",
                 manager: new UsersHistoryRoutes()
             },
             {

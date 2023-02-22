@@ -174,14 +174,14 @@ class MediasRoutes extends AbstractRoute {
                 res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST,
                     "Required field : entityId : (the entityId of the entity media belongs to), "+
                     "mediaField : ('mainImage', ...), "+
-                    "entityType: (type of entity 'persons', 'organisations' ...)");
+                    "entityType: (type of entity 'person', 'organisation' ...)");
                     return;
         }
                 
         //if entity have media field
         //TODO : Need to make a check for this (this goes with making the create check for multiple field multer.single ("mainImage, and others..."))
         //Temporary check (entityType is person or org and mediaField is mainImage)
-        if( (entityType == 'persons'|| entityType == "organisations")
+        if( (entityType == 'person'|| entityType == "organisation")
             &&  mediaField == "mainImage" ) {
                 
             //Get old media ID if exist
@@ -324,9 +324,6 @@ class MediasRoutes extends AbstractRoute {
             if (err){
                 LogHelper.error("MediasRoute:", err);
                 res.status(404).send(new ApiResponse({ error: true, code: StatusCodes.NOT_FOUND, message: "File not found", errors: [], data: {} }).response)
-            }
-            else {
-                LogHelper.log(`Sent file at : /${req.params.entity}/${req.params.id}/${req.params.fileName}`);
             }
         });
     }

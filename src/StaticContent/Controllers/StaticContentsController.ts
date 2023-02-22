@@ -25,7 +25,7 @@ class StaticContentsController implements ControllerContract {
     public model: any;//@todo create or find the best type for this.
     public appModel: AbstractModel;
 
-    public dataFolder:String = "../../Data/";
+    public dataFolder:string = "../../Data/";
 
     public licences:any
 

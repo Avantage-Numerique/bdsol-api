@@ -4,7 +4,6 @@ import {UsersService} from "../Services/UsersService";
 import AbstractController from "../../Abstract/Controller";
 import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService";
 import UserHistory from "../../UserHistory/Models/UserHistory";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import { UserHistorySchema } from "../../UserHistory/Schemas/UserHistorySchema";
 
 class UsersController extends AbstractController {
@@ -17,8 +16,6 @@ class UsersController extends AbstractController {
 
     /** @public Model */
     entity:User;
-
-    name:string = "Users";
 
     constructor() {
         super();

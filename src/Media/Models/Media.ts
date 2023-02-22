@@ -23,6 +23,8 @@ class Media extends AbstractModel {
             Media._instance.registerEvents();
             Media._instance.registerPreEvents();
 
+            Media._instance.schema.virtual("type").get( function () { return Media._instance.modelName.toLowerCase() });
+
             Media._instance.initSchema();
         }
         return Media._instance;
@@ -32,7 +34,7 @@ class Media extends AbstractModel {
     modelName: string = 'Media';
 
     /** @public Collection lastName in database*/
-    collectionName: string = 'medias';
+    collectionName: string = 'media';
 
     /** @public Connection mongoose */
     connection: mongoose.Connection;

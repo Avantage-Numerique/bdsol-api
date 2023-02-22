@@ -16,8 +16,6 @@ class TaxonomyController extends AbstractController {
     /** @public Model */
     entity:Taxonomy;
 
-    name:string = "Taxonomy";
-
     constructor() {
         super();
         this.entity = Taxonomy.getInstance();

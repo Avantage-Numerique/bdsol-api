@@ -9,10 +9,10 @@ class EntityControllerFactory {
     public static getControllerFromEntity(entity:string):AbstractController{
         let instance;
         switch(entity){
-            case "persons": instance = PersonsController.getInstance();break;
-            case "organisations": instance = OrganisationsController.getInstance();break;
-            case "taxonomies": instance = TaxonomyController.getInstance();break;
-            case "medias": instance = MediasController.getInstance();break;
+            case "person": instance = PersonsController.getInstance();break;
+            case "organisation": instance = OrganisationsController.getInstance();break;
+            case "taxonomy": instance = TaxonomyController.getInstance();break;
+            case "media": instance = MediasController.getInstance();break;
 
             default:instance = PersonsController.getInstance();//Maybe causing some problem eventually
         }
