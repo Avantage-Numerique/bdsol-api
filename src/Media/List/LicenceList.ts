@@ -9,3 +9,6 @@ export const licenceList = [
     "CC By-NC-ND",
     "Copyright to user",
 ]
+
+export const licences:Map<any, any> = new Map();
+

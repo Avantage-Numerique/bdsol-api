@@ -7,6 +7,7 @@ import {SuccessResponse} from "../../Http/Responses/SuccessResponse";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
 import AbstractModel from "../../Abstract/Model";
+import {Licences} from "../../Data/Licences/Licences";
 
 
 class StaticContentsController implements ControllerContract {
@@ -37,8 +38,7 @@ class StaticContentsController implements ControllerContract {
 
 
     private _loadStaticData() {
-        const rawlicences:any = require(`${this.dataFolder}Licences/licences.json`);
-        this.licences = rawlicences.licences;
+        this.licences = Licences.raw();
     }
 
     /**
