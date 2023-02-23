@@ -3,7 +3,6 @@ import MediasController from "../Controllers/MediasController";
 import AbstractRoute from "../../Abstract/Route";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import * as fs from "fs";
-import ApiResponse from "../../Http/Responses/ApiResponse";
 import { StatusCodes } from "http-status-codes";
 import FileStorage from "../../Storage/Files/FileStorage";
 import EntityControllerFactory from "../../Abstract/EntityControllerFactory";
@@ -11,6 +10,7 @@ import Record from "../../Media/Record/Record";
 import PublicLocalMediaStorage from "../Storage/PublicLocalMediaStorage";
 import multer from "multer";
 import { ErrorResponse } from "../../Http/Responses/ErrorResponse";
+import PublicStorage from "../../Storage/Files/PublicStorage";
 
 class MediasRoutes extends AbstractRoute {
 
@@ -63,8 +63,7 @@ class MediasRoutes extends AbstractRoute {
         this.routerInstance.get('/:entity/:id/:fileName', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("bySlug"),
-            this.viewMedia.bind(this),
-            this.routeSendResponse.bind(this),
+            this.viewMedia.bind(this)
         ]);
 
         this.routerInstance.get('/data/:id', [
@@ -309,21 +308,18 @@ class MediasRoutes extends AbstractRoute {
      */
     public async viewMedia(req: Request, res: Response, next: NextFunction): Promise<any> {
         const options = {
-            root: "/api/localStorage/public",
+            root: PublicStorage.basePath,//"/api/localStorage/public",
             dotfiles: 'deny',
             headers: {
                 'x-timestamp': Date.now(),
                 'x-sent': true
             }
         }
-
-        res.status(200).sendFile(
-        `/${req.params.entity}/${req.params.id}/${req.params.fileName}`,
-        options,
-        function (err) {
-            if (err){
-                LogHelper.error("MediasRoute:", err);
-                res.status(404).send(new ApiResponse({ error: true, code: StatusCodes.NOT_FOUND, message: "File not found", errors: [], data: {} }).response)
+        await res.sendFile( `${req.params.entity}/${req.params.id}/${req.params.fileName}`, options,
+        function (error) {
+            if (error){
+                next(error);
+                //res.status(404).send(new ApiResponse({ error: true, code: StatusCodes.NOT_FOUND, message: "File not found", errors: [], data: {} }).response)
             }
         });
     }
