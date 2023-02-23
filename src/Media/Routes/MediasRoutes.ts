@@ -323,7 +323,7 @@ class MediasRoutes extends AbstractRoute {
         const targetMediaPath = path.join(`./${PublicStorage.basePath}/${req.params.entity}/${req.params.id}/${req.params.fileName}`);
 
         //res.sendFile(targetMediaPath, options);
-        res.sendFile(
+        await res.sendFile(
             targetMediaPath,
             options,
         (error) => {
