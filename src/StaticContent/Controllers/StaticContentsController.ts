@@ -7,7 +7,7 @@ import {SuccessResponse} from "../../Http/Responses/SuccessResponse";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
 import AbstractModel from "../../Abstract/Model";
-import {Licences} from "../../Data/Licences/Licences";
+import LicencesData from "../../Data/Licences/LicencesData";
 
 
 class StaticContentsController implements ControllerContract {
@@ -38,7 +38,9 @@ class StaticContentsController implements ControllerContract {
 
 
     private _loadStaticData() {
-        this.licences = Licences.raw();
+        if (LicencesData !== undefined) {
+            this.licences = LicencesData.raw();
+        }
     }
 
     /**
@@ -64,13 +66,11 @@ class StaticContentsController implements ControllerContract {
             if (this.licences !== null) {
                 return SuccessResponse.create(this.licences, StatusCodes.OK, ReasonPhrases.OK);
             }
-
             return SuccessResponse.create({}, StatusCodes.OK, ReasonPhrases.OK);
 
         } catch (getAllErrors: any) {
             return ErrorResponse.create(getAllErrors, StatusCodes.INTERNAL_SERVER_ERROR);
         }
-
     }
 
 

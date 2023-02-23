@@ -1,5 +1,9 @@
 //https://creativecommons.org/about/cclicenses/
-export const licenceList = [
+import LicencesData from "../../Data/Licences/LicencesData";
+
+export const licenceList = Object.keys(LicencesData.raw());
+
+    /*[
     "Public Domain (CC0)",
     "CC By",
     "CC By-SA",
@@ -8,7 +12,5 @@ export const licenceList = [
     "CC By-NC-SA",
     "CC By-NC-ND",
     "Copyright to user",
-]
-
-export const licences:Map<any, any> = new Map();
-
+];
+*/

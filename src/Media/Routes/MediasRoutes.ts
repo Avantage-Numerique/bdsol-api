@@ -11,6 +11,9 @@ import PublicLocalMediaStorage from "../Storage/PublicLocalMediaStorage";
 import multer from "multer";
 import { ErrorResponse } from "../../Http/Responses/ErrorResponse";
 import PublicStorage from "../../Storage/Files/PublicStorage";
+import * as path from "path";
+import Organisation from "../../Organisations/Models/Organisation";
+import Person from "../../Persons/Models/Person";
 
 class MediasRoutes extends AbstractRoute {
 
@@ -180,7 +183,8 @@ class MediasRoutes extends AbstractRoute {
         //if entity have media field
         //TODO : Need to make a check for this (this goes with making the create check for multiple field multer.single ("mainImage, and others..."))
         //Temporary check (entityType is person or org and mediaField is mainImage)
-        if( (entityType == 'person'|| entityType == "organisation")
+        const entities:any = [Person.getInstance().modelName.toLowerCase(), Organisation.getInstance().modelName.toLowerCase()];
+        if( entities.includes(entityType)
             &&  mediaField == "mainImage" ) {
                 
             //Get old media ID if exist
@@ -308,20 +312,33 @@ class MediasRoutes extends AbstractRoute {
      */
     public async viewMedia(req: Request, res: Response, next: NextFunction): Promise<any> {
         const options = {
-            root: PublicStorage.basePath,//"/api/localStorage/public",
+            root: "/api/",
             dotfiles: 'deny',
             headers: {
                 'x-timestamp': Date.now(),
                 'x-sent': true
             }
         }
-        await res.sendFile( `${req.params.entity}/${req.params.id}/${req.params.fileName}`, options,
-        function (error) {
-            if (error){
-                next(error);
-                //res.status(404).send(new ApiResponse({ error: true, code: StatusCodes.NOT_FOUND, message: "File not found", errors: [], data: {} }).response)
+        //type('image/jpeg')
+        const targetMediaPath = path.join(`./${PublicStorage.basePath}/${req.params.entity}/${req.params.id}/${req.params.fileName}`);
+
+        //res.sendFile(targetMediaPath, options);
+        res.sendFile(
+            targetMediaPath,
+            options,
+        (error) => {
+                if (error){
+                    //res.serviceResponse.code = StatusCodes.NOT_FOUND;
+                    //res.serviceResponse.error = true;
+                    //res.serviceResponse.data = error;
+                    next(error);
+                    //res.status(404).send(new ApiResponse({ error: true, code: StatusCodes.NOT_FOUND, message: "File not found", errors: [], data: {} }).response)
+                }
+                else {
+                    res.end();
+                }
             }
-        });
+        );
     }
 
 
