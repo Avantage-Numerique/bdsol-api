@@ -186,7 +186,6 @@ abstract class AbstractController implements ControllerContract {
             "entityCollection": entityCollection,
             "modifiedEntity": modifiedEntity,
             "fields": this.entity.dataTransfertObject(fields),
-            "media": media.data ?? {}
         } as UserHistorySchema;
 
         //Service call to add UserHistory

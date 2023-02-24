@@ -68,9 +68,6 @@ class UserHistory extends AbstractModel {
             fields: {
                 type: Object,
                 required: true
-            },
-            media: {
-                type: Object,
             }
         },
             {
@@ -163,7 +160,14 @@ class UserHistory extends AbstractModel {
      */
     public dataTransfertObject(document: any) {
         return {
-            "not":"implemented"
+            user: document.user ?? '',
+            modifDate: document.modifDate ?? '',
+            action: document.action ?? '',
+            entityCollection: document.entityCollection ?? '',
+            modifiedEntity: document.modifiedEntity ?? '',
+            fields: document.fields ?? '',
+            createdAt : document.createdAt ?? '',
+            updatedAt : document.updatedAt ?? '',
         }
     }
 

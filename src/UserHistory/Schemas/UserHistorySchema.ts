@@ -9,5 +9,4 @@ export interface UserHistorySchema extends Document {
     entityCollection: string;
     modifiedEntity: mongoose.ObjectId;
     fields: object;
-    media: object;
 }
