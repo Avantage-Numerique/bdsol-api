@@ -87,14 +87,8 @@ class MediasRoutes extends AbstractRoute {
      */
     public setupAuthRoutes(): express.Router {
 
+        //MainImage limit and setup for memory Storage.
         this.multipartSetup = new PublicLocalMediaStorage();
-        /*const multipartMiddlewareHandler = multer({
-            storage: this.multipartSetup.storage("temp/123456789123456789123456/"),
-            //PublicLocalMediaStorage.limit;
-            //limits: mediaStorage.limits,
-            fileFilter: this.multipartSetup.fileFilter(),
-        });*/
-
         const multipartMiddlewareTemporaryHandler = multer({
             storage: multer.memoryStorage(),
             limits: this.multipartSetup.limits,
@@ -332,8 +326,8 @@ class MediasRoutes extends AbstractRoute {
         //type('image/jpeg')
         const targetMediaPath = path.join(`${PublicStorage.basePath}/${entity}/${id}/${fileName}`);
 
-        LogHelper.debug("route viewMedia", options, "path", targetMediaPath);
-        //res.sendFile(targetMediaPath, options);
+        LogHelper.debug("Media view request", options, "path", targetMediaPath);
+
         await res.sendFile(
             targetMediaPath,
             options,
@@ -342,8 +336,12 @@ class MediasRoutes extends AbstractRoute {
                     //res.serviceResponse.code = StatusCodes.NOT_FOUND;
                     //res.serviceResponse.error = true;
                     //res.serviceResponse.data = error;
-                    next(error);
+                    //next(error);
                     //res.status(404).send(new ApiResponse({ error: true, code: StatusCodes.NOT_FOUND, message: "File not found", errors: [], data: {} }).response)
+
+                    LogHelper.info("Media : NOT_FOUND", error);
+                    res.status(StatusCodes.NOT_FOUND);//do not use send, it return a : can't send header another time error.
+                    res.end();
                 }
                 else {
                     res.end();

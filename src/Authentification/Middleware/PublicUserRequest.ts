@@ -19,9 +19,10 @@ export class PublicUserRequest {
             const mediasIgnoreRegex = /(\/medias\/(person|organisation)).*/;
             if (req.originalUrl !== '/ping' &&
                 !mediasIgnoreRegex.test(req.originalUrl)
-            )
+            ) {
                 LogHelper.info(`Public user (${req.visitor.ip}) requested : ${req.originalUrl} from app/server : ${req.ip}`);
-            
+            }
+
             req.user = {
                 id: "",
                 username: "",
