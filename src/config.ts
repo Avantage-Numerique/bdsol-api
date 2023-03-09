@@ -18,6 +18,7 @@ const config = {
     appName: process.env.APP_NAME || "API",
     port: process.env.PORT || "8000",
     version: process.env.VERSION || "0.0.0",
+    basepath: process.env.BASEPATH || "/api/",
 
     tokenSecret: process.env.JWT_KEY || "not set yet",
     tokenSecureSecret: process.env.SECURE_JWT_KEY || "not set securely :P",

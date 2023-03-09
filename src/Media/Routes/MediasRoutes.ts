@@ -14,6 +14,7 @@ import PublicStorage from "../../Storage/Files/PublicStorage";
 import * as path from "path";
 import Organisation from "../../Organisations/Models/Organisation";
 import Person from "../../Persons/Models/Person";
+import config from "../../config";
 
 class MediasRoutes extends AbstractRoute {
 
@@ -162,7 +163,6 @@ class MediasRoutes extends AbstractRoute {
             saveFileResponse && deleteFile();
             linkEntityResponse && unlinkEntity();
         }*/
-
         
         //Check if entityId, mediaField, entityType is in the request;
         const requestData = req.body.data;
@@ -312,16 +312,21 @@ class MediasRoutes extends AbstractRoute {
      */
     public async viewMedia(req: Request, res: Response, next: NextFunction): Promise<any> {
         const options = {
-            root: "/api/",
+            root: config.basepath,
             dotfiles: 'deny',
             headers: {
                 'x-timestamp': Date.now(),
                 'x-sent': true
             }
-        }
-        //type('image/jpeg')
-        const targetMediaPath = path.join(`./${PublicStorage.basePath}/${req.params.entity}/${req.params.id}/${req.params.fileName}`);
+        };
+        const {
+            entity, id, fileName
+        } = req.params;
 
+        //type('image/jpeg')
+        const targetMediaPath = path.join(`${PublicStorage.basePath}/${entity}/${id}/${fileName}`);
+
+        LogHelper.debug("route viewMedia", options, "path", targetMediaPath);
         //res.sendFile(targetMediaPath, options);
         await res.sendFile(
             targetMediaPath,
