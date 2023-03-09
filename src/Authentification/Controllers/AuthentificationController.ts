@@ -127,7 +127,6 @@ class AuthentificationController
 
     public async register(requestData:any): Promise<ApiResponseContract>
     {
-        LogHelper.log("Authentification Controller Register : ", requestData);
         const createdDocumentResponse = await this.service.insert(requestData);
 
         if (createdDocumentResponse !== undefined)

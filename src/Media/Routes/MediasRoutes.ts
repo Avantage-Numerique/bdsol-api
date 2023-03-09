@@ -87,8 +87,8 @@ class MediasRoutes extends AbstractRoute {
      */
     public setupAuthRoutes(): express.Router {
 
-        /*this.multipartSetup = new PublicLocalMediaStorage();
-        const multipartMiddlewareHandler = multer({
+        this.multipartSetup = new PublicLocalMediaStorage();
+        /*const multipartMiddlewareHandler = multer({
             storage: this.multipartSetup.storage("temp/123456789123456789123456/"),
             //PublicLocalMediaStorage.limit;
             //limits: mediaStorage.limits,
@@ -96,7 +96,9 @@ class MediasRoutes extends AbstractRoute {
         });*/
 
         const multipartMiddlewareTemporaryHandler = multer({
-            storage: multer.memoryStorage()
+            storage: multer.memoryStorage(),
+            limits: this.multipartSetup.limits,
+            fileFilter: this.multipartSetup.fileFilter(),
         });
 
         this.routerInstance.post('/upload', [
@@ -124,13 +126,16 @@ class MediasRoutes extends AbstractRoute {
         return this.setupAdditionnalAuthRoutes(this.routerInstanceAuthentification);
     }
 
+
     public setupAdditionnalAuthRoutes(router: express.Router):express.Router {
         return router;
     }
 
+
     public setupAdditionnalPublicRoutes(router: express.Router):express.Router {
         return router;
     }
+
 
     public async createOrUpdateDispatch(req: Request, res: Response, next: NextFunction): Promise<any> {
         
@@ -150,6 +155,7 @@ class MediasRoutes extends AbstractRoute {
         }
         return next();
     }
+
 
     public async createAndReplaceHandler(req: Request, res: Response): Promise<any> {
         res.serviceResponse = {};
