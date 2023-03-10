@@ -3,7 +3,7 @@ import mongoose, {Schema} from "mongoose";
 /**
  * Enum list of all status supported for now.
  */
- export enum StatusStates {
+export enum StatusStates {
     accepted = "accepted",
     pending = "pending",
     rejected = "rejected",
@@ -18,8 +18,8 @@ export interface StatusSchema extends Document {
 }
 
 export class Status {
-    static schema:Schema = 
-    new Schema<StatusSchema>({
+
+    static schema: Schema = new Schema<StatusSchema>({
         state: {
             type: String,
             enum: StatusStates,
@@ -28,10 +28,12 @@ export class Status {
         //The user who request the change
         requestedBy: {
             type: mongoose.Types.ObjectId,
+            //ref: User.getInstance().mongooseModel
         },
         //The last user that modified the status
         lastModifiedBy: {
             type: mongoose.Types.ObjectId,
+            //ref: User.getInstance().mongooseModel
             //required: true
         },
         //If need to have a message attached to it (Reason to add taxonomy, comment...)

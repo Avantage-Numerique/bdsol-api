@@ -3,12 +3,14 @@ import {Schema} from "mongoose";
 import {PersonSchema} from "../Schemas/PersonSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
+import {User} from "../../Users/Models/User";
 import * as fs from 'fs';
 import TaxonomyController from "../../Taxonomy/Controllers/TaxonomyController";
 import PersonsService from "../Services/PersonsService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
 import { Status } from "../../Database/Schemas/StatusSchema";
 import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
+import {populateUser} from "../../Users/Middlewares/populateUser";
 
 class Person extends AbstractModel {
 
@@ -256,10 +258,14 @@ class Person extends AbstractModel {
         this.schema.pre('find', function() {
             middlewarePopulateProperty(this, 'occupations.occupation', "name category status slug");
             middlewarePopulateProperty(this, "mainImage");
+            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
         });
         this.schema.pre('findOne', function() {
             middlewarePopulateProperty(this, 'occupations.occupation', "name category status slug");
             middlewarePopulateProperty(this, 'mainImage');
+            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
         });
     }
 }

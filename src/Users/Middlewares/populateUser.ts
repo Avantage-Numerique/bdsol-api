@@ -8,12 +8,13 @@ import {mongoosePopulate} from "../../Database/Middlewares/mongoosePopulate";
  * @param model {any} if we need to populate between DB. This is the second schema.
  * @inheritDoc https://mongoosejs.com/docs/6.x/docs/populate.html
  */
-const middlewarePopulateProperty = (document: any,
-                                    schemaProperty: string = 'occupations',
-                                    fieldToPopulate?: string,
-                                    model: any = undefined) => {
+const populateUser = (document: any,
+                      schemaProperty: string,
+                      model: any = undefined,
+                      fieldToPopulate: string = "name username avatar",
+) => {
+
     mongoosePopulate(document, schemaProperty, fieldToPopulate, model);
 }
 
-
-export {middlewarePopulateProperty};
+export {populateUser};

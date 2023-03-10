@@ -81,7 +81,7 @@ export abstract class BaseProvider implements DbProvider {
             service.appModel.provider = this;
             service.appModel.connection = this.connection;
 
-            //this connect the appModel to it's mongoose Models in the service scope.
+            //this connect the appModel to its mongoose Models in the service scope.
             service.connectToMongoose();
             this.addService(service);
         }

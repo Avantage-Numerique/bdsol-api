@@ -37,7 +37,7 @@ abstract class AbstractModel {
         if (this.providerIsSetup() && this.connectionIsSetup())
         {
             this.initSchema();
-            return this.mongooseModel = this.provider.connection.model(this.modelName);
+            return this.mongooseModel;// = this.provider.connection.model(this.modelName);
         }
 
         LogHelper.error(`${this.constructor.name}'s provider is not setup. Can't get the model`,

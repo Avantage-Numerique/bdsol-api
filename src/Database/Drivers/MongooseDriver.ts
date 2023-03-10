@@ -105,7 +105,7 @@ export class MongooseDBDriver implements DBDriver {
      */
     public async addPersistantData() {
 
-        LogHelper.info(`[BD][SEEDERS] Adding perdistant Data`);
+        LogHelper.info(`[BD][SEEDERS] Adding persistant Data`);
 
         const persistantDataTasks: Array<SeederTaskContract> = [
             {
