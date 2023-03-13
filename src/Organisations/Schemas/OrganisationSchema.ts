@@ -1,5 +1,5 @@
 import {Document} from "mongoose"
-import { Status } from "../../Database/Schemas/StatusSchema";
+import { Status } from "../../Moderation/Schemas/StatusSchema";
 import Media from "../../Media/Models/Media";
 import { Member } from "../../Database/Schemas/MemberSchema";
 

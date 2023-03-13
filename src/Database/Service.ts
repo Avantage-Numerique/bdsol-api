@@ -114,7 +114,8 @@ export abstract class Service
             );
 
         } catch (getAllErrors: any) {
-            LogHelper.error(`[${this.constructor.name} all, ${getAllErrors.message}`);
+            LogHelper.error(`[${this.constructor.name} all, ${getAllErrors.message}`, getAllErrors.stack);
+
             return ErrorResponse.create(
                 getAllErrors,
                 StatusCodes.INTERNAL_SERVER_ERROR,

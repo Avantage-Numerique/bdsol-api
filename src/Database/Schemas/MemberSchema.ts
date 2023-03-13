@@ -1,5 +1,5 @@
 import mongoose, {Schema} from "mongoose";
-import { Status } from "./StatusSchema";
+import { Status } from "../../Moderation/Schemas/StatusSchema";
 
 
 

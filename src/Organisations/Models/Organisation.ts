@@ -8,8 +8,10 @@ import TaxonomyController from "../../Taxonomy/Controllers/TaxonomyController";
 import OrganisationsService from "../Services/OrganisationsService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
 import { Member } from "../../Database/Schemas/MemberSchema";
-import { Status } from "../../Database/Schemas/StatusSchema";
+import { Status } from "../../Moderation/Schemas/StatusSchema";
 import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
+import {populateUser} from "../../Users/Middlewares/populateUser";
+import {User} from "../../Users/Models/User";
 
 
 class Organisation extends AbstractModel {
@@ -264,12 +266,18 @@ class Organisation extends AbstractModel {
             middlewarePopulateProperty(this, 'offers.offer', "name category status slug");
             middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             middlewarePopulateProperty(this, "mainImage");
+
+            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
         });
         
         this.schema.pre('findOne', function() {
             middlewarePopulateProperty(this, 'offers.offer', "name category status slug");
             middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             middlewarePopulateProperty(this, "mainImage");
+
+            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
         });
     }
 }

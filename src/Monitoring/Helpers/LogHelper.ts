@@ -65,6 +65,7 @@ export default class LogHelper
             console.log(LogFormats.ERROR, verbose, args);
         LogHelper.logFile('ERROR', verbose, args);
     }
+
     public warn(...args:any[]){
         const verbose = LogHelper.createVerbose('WARN', this.routeVerbose);
         if(LogHelper.showError && LogHelper.printToConsole)

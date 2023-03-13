@@ -55,7 +55,7 @@ abstract class AbstractModel {
         if (this.providerIsSetup() &&
             this.connectionIsSetup())
         {
-            this.provider.connection.model(this.modelName, this.schema);
+            this.mongooseModel = this.provider.connection.model(this.modelName, this.schema);
         }
     }
 

@@ -28,12 +28,10 @@ export class Status {
         //The user who request the change
         requestedBy: {
             type: mongoose.Types.ObjectId,
-            //ref: User.getInstance().mongooseModel
         },
         //The last user that modified the status
         lastModifiedBy: {
             type: mongoose.Types.ObjectId,
-            //ref: User.getInstance().mongooseModel
             //required: true
         },
         //If need to have a message attached to it (Reason to add taxonomy, comment...)

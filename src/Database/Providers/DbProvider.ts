@@ -81,8 +81,10 @@ export abstract class BaseProvider implements DbProvider {
             service.appModel.provider = this;
             service.appModel.connection = this.connection;
 
-            //this connect the appModel to its mongoose Models in the service scope.
-            service.connectToMongoose();
+            //this line connect the appModel to its mongoose Models in the service scope.
+            const succeedConnection = service.connectToMongoose();
+
+            LogHelper.info(`[DB][${service.constructor.name}] CONNECTION TO Mongoose ${(succeedConnection ? "succeed" : "failed")}`);
             this.addService(service);
         }
         catch (error:any)

@@ -4,7 +4,7 @@ import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import { MediaSchema } from "../Schemas/MediaSchema";
 import MediasService from "../Services/MediasService";
-import { Status } from "../../Database/Schemas/StatusSchema";
+import { Status } from "../../Moderation/Schemas/StatusSchema";
 import { licenceList } from "../List/LicenceList";
 import { fileExtensionList, fileTypeList } from "../List/FileList";
 

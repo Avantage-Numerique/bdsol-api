@@ -15,7 +15,7 @@ import {PublicUserRequest} from "./Authentification/Middleware/PublicUserRequest
 import LogHelper from "./Monitoring/Helpers/LogHelper";
 import {ApiErrorHandler} from "./Error/Middlewares/ApiErrorHandler";
 import {GetRequestIp} from "./Monitoring/Middlewares/GetRequestIp";
-import ModerationRoutes from "./Moderation/Schemas/Route/ModerationRoutes";
+import ModerationRoutes from "./Moderation/Routes/ModerationRoutes";
 import SearchRoutes from "./Database/Search/SearchRoutes";
 import {StaticContentsRoutes} from "./StaticContent/Routes/StaticContentsRoutes";
 /**

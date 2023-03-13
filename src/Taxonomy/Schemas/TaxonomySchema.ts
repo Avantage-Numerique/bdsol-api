@@ -1,5 +1,5 @@
 import {Document} from "mongoose"
-import { StatusSchema } from "../../Database/Schemas/StatusSchema";
+import { StatusSchema } from "../../Moderation/Schemas/StatusSchema";
 
 export interface TaxonomySchema extends Document {
     category:string;
