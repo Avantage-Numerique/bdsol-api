@@ -10,5 +10,6 @@ export interface PersonSchema extends Document {
     description:string;
     occupations:[object];
     mainImage:Media;
+    catchphrase:string;
     status: Status;
 }

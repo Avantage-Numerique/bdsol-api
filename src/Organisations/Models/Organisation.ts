@@ -107,6 +107,9 @@ class Organisation extends AbstractModel {
                     type: mongoose.Types.ObjectId,
                     ref : "Media"
                 },
+                catchphrase: {
+                    type: String
+                },
                 status: {
                     type: Status.schema
                 }
@@ -210,6 +213,7 @@ class Organisation extends AbstractModel {
             team: document.team ?? '',
             mainImage: document.mainImage ?? '',
             slug: document.slug ?? '',
+            catchphrase: document.catchphrase ?? '',
             status : document.status ?? '',
             type: document.type ?? '',
             createdAt : document.createdAt ?? '',

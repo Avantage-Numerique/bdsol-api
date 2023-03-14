@@ -102,6 +102,9 @@ class Person extends AbstractModel {
                     type: mongoose.Types.ObjectId,
                     ref : "Media"
                 },
+                catchphrase: {
+                    type: String
+                },
                 status:{
                     type: Status.schema
                 }
@@ -196,6 +199,7 @@ class Person extends AbstractModel {
             occupations: document.occupations ?? '',
             mainImage: document.mainImage ?? '',
             slug: document.slug ?? '',
+            catchphrase: document.catchphrase ?? '',
             status: document.status ?? '',
             type: document.type ?? '',
             fullName: document.fullName ?? '',

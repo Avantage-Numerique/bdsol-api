@@ -13,5 +13,6 @@ export interface OrganisationSchema extends Document {
     offers:[object];
     team: [Member];
     mainImage:Media;
+    catchphrase:string;
     status: Status;
 }
