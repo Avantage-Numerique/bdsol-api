@@ -102,6 +102,7 @@ class SearchRoutes extends AbstractRoute {
         try {
             const personModel:any = Person.getInstance().mongooseModel;
             const organisationModel:any = Organisation.getInstance().mongooseModel;
+            const taxonomyModel:any = Taxonomy.getInstance().mongooseModel;
             
             const personsSuggestions = await personModel.find(
                 { $or: [
@@ -110,17 +111,21 @@ class SearchRoutes extends AbstractRoute {
                     { nickname: { $regex: req.query.searchIndex, $options : 'i' }},
                     { description: { $regex: req.query.searchIndex, $options : 'i' }},
                 ]}
-                )
+            )
                 
             const organisationsSuggestions = await organisationModel.find(
                 { $or: [
                     { name: { $regex: req.query.searchIndex, $options : 'i' }},
                     { description: { $regex: req.query.searchIndex, $options : 'i' }},
                 ]}
-                )
+            )
+
+            const taxonomySuggestions = await taxonomyModel.find(
+                { name: { $regex : req.query.searchIndex, $options : 'i' }}
+            )
                     
             //Send back DTO of fewest field of each entity search result in an array sorted,
-            res.serviceResponse = SuccessResponse.create([...personsSuggestions, ...organisationsSuggestions], StatusCodes.OK, ReasonPhrases.OK);
+            res.serviceResponse = SuccessResponse.create([...personsSuggestions, ...organisationsSuggestions, ...taxonomySuggestions], StatusCodes.OK, ReasonPhrases.OK);
         }
         catch(e){
             res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.INTERNAL_SERVER_ERROR, "SearchSuggestion failed to find with request error:"+e, [])

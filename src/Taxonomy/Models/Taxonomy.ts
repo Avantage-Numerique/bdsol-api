@@ -71,9 +71,9 @@ class Taxonomy extends AbstractModel {
                 type: String,
                 //alias:'desc'
             },
-            source: {
-                type: String
-            },
+            //source: {
+                //type: String
+            //},
             status: {
                 type: Status.schema,
                 //required: true,
