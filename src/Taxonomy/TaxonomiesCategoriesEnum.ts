@@ -5,5 +5,6 @@ export enum TaxonomiesCategoriesEnum {
     Occupations = "occupations",
     Domains = "domains",
     Abilities = "abilities",
-    Skills = "skills"
+    Skills = "skills",
+    Technology = "technologies"
 }
