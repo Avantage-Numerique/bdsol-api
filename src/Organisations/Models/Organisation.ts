@@ -90,14 +90,14 @@ class Organisation extends AbstractModel {
                 offers: {
                     type: [{
                         offer: {
-                            type: mongoose.Types.ObjectId,
-                            ref: "Taxonomy"
+                            type: String
                         },
-                        status: {
-                            type: Status.schema,
-                        }
-                    }],
-                    required:true
+                        skills:{
+                            type: [mongoose.Types.ObjectId],
+                            ref: 'Taxonomy'
+                        },
+                        status: Status.schema
+                    }]
                 },
                 team: {
                     type: [Member.schema],
@@ -242,9 +242,11 @@ class Organisation extends AbstractModel {
             //Verify that occupations in the array exists and that there are no duplicates
             this.schema.pre('save', async function (next: any): Promise<any> {
                 const idList = this.offers.map( (el:any) => {
-                    return new mongoose.Types.ObjectId(el.offer);
+                    return el.skills.map( (id:any) =>{
+                        return new mongoose.Types.ObjectId(id);
+                    })
                 });
-                await middlewareTaxonomy(idList, TaxonomyController, "offers.offer");
+                await middlewareTaxonomy(idList, TaxonomyController, "offers.skills");
                 return next();
             });
 
@@ -254,9 +256,11 @@ class Organisation extends AbstractModel {
                 const updatedDocument = organisation.getUpdate();
                 if (updatedDocument["offers"] != undefined){
                     const idList = updatedDocument.offers.map( (el:any) => {
-                        return el.offer;
+                        return el.skills.map( (id:any) =>{
+                            return new mongoose.Types.ObjectId(id);
+                        })
                     });
-                    await middlewareTaxonomy(idList, TaxonomyController, "offers.offer");
+                    await middlewareTaxonomy(idList, TaxonomyController, "offers.skills");
                 }
 
                 return next();
@@ -267,7 +271,7 @@ class Organisation extends AbstractModel {
     public registerEvents():void {
 
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'offers.offer', "name category status slug");
+            middlewarePopulateProperty(this, 'offers.skills', "name category status slug");
             middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             middlewarePopulateProperty(this, "mainImage");
 
@@ -276,7 +280,7 @@ class Organisation extends AbstractModel {
         });
         
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'offers.offer', "name category status slug");
+            middlewarePopulateProperty(this, 'offers.skills', "name category status slug");
             middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             middlewarePopulateProperty(this, "mainImage");
 
