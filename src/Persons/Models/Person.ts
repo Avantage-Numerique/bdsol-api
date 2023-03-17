@@ -92,8 +92,11 @@ class Person extends AbstractModel {
                 occupations: {
                     type: [{
                         occupation: {
-                            type: mongoose.Types.ObjectId,
-                            ref: "Taxonomy"
+                            type: String
+                        },
+                        skills:{
+                            type: [mongoose.Types.ObjectId],
+                            ref: 'Taxonomy'
                         },
                         status: Status.schema
                     }]
@@ -228,39 +231,35 @@ class Person extends AbstractModel {
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
             this.schema.pre('save', async function (next: any): Promise<any> {
-                try {
                     const idList = this.occupations.map( (el:any) => {
-                        return new mongoose.Types.ObjectId(el.occupation);
+                        return el.skills.map( (id:any) =>{
+                            return new mongoose.Types.ObjectId(id);
+                        })
                     });
-                    await middlewareTaxonomy(idList, TaxonomyController, "occupations.occupation");
+                    await middlewareTaxonomy(idList, TaxonomyController, "occupations.skills");
                     return next();
-                } catch(e) {
-                    throw(e);
-                }
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
             this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
-                try {
                     const person: any = this;
                     const updatedDocument = person.getUpdate();
                     if (updatedDocument["occupations"] != undefined){
                         const idList = updatedDocument.occupations.map( (el:any) => {
-                            return new mongoose.Types.ObjectId(el.occupation);
+                            return el.skills.map( (id:any) =>{
+                                return new mongoose.Types.ObjectId(id);
+                            })
                         });
-                        await middlewareTaxonomy(idList, TaxonomyController, "occupations.occupation");
+                        await middlewareTaxonomy(idList, TaxonomyController, "occupations.skills");
                     }
                     return next();
-                } catch (e) {
-                    throw(e);
-                }
             });
         }
     }
 
     public registerEvents():void {
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'occupations.occupation', "name category status slug");
+            middlewarePopulateProperty(this, 'occupations.skills', "name category status slug");
             middlewarePopulateProperty(this, "mainImage");
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
@@ -270,7 +269,7 @@ class Person extends AbstractModel {
             //populateUser(this, "occupations.occupation.status.lastModifiedBy", User.getInstance().mongooseModel);
         });
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'occupations.occupation', "name category status slug");
+            middlewarePopulateProperty(this, 'occupations.skills', "name category status slug");
             middlewarePopulateProperty(this, 'mainImage');
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
