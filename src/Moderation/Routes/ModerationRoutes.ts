@@ -19,18 +19,17 @@ class ModerationRoutes {
      * @public @method
      */
     public setupPublicRoutes(): express.Router {
-        this.routerInstance.get('/StatusEnum', this.getStatusEnumHandler);
+        this.routerInstance.get('/status-enum', this.getStatusEnumHandler);
         return this.routerInstance;
     }
 
     public setupAuthRoutes(): express.Router { return this.routerInstance }
 
     /**
-     * GetStatusEnumHandler
+     * End point that return the status Enum handler.
      * Handle the return of the Enum of status available
      * @param req {Request}
      * @param res {Response}
-     * @param next {NextFunction}
      * @return {Promise<any>}
      */
      public async getStatusEnumHandler(req: Request, res: Response): Promise<any> {
