@@ -604,7 +604,7 @@ export const TaxonomiesPersistantData = [
     },
     {
         "category": TaxonomiesCategoriesEnum.Skills,
-        "name" : "Chaînage de blocs ",
+        "name" : "Chaînage de blocs",
         "description" : "",
         "source" : "",
         "status" : {
@@ -1314,7 +1314,7 @@ export const TaxonomiesPersistantData = [
     },
     {
         "category": TaxonomiesCategoriesEnum.Skills,
-        "name" : "Référencement et optimisation SEO",
+        "name" : "Optimisation SEO",
         "description" : "",
         "source" : "",
         "status" : {
@@ -1774,7 +1774,7 @@ export const TaxonomiesPersistantData = [
     },
     {
         "category": TaxonomiesCategoriesEnum.Technology,
-        "name" : "Agendas partagés",
+        "name" : "Agendas numériques partagés",
         "description" : "",
         "status" : {
             "state" : StatusStates.accepted,
@@ -2394,4 +2394,17 @@ export const TaxonomiesPersistantData = [
             "lastModifiedBy" : "000000000000000000000000"
         }
     },
+    /*Actionneur intelligent
+    Analyse de réseaux et cybersécurité
+    Analyse et stratégie de référencement naturel (SEO)
+    Automatisation et robotique
+    Base de connaissance
+    Capture de mouvement
+    Cobots (Robots collaboratifs)
+    Conception assistée par ordinateur
+    Conception d'API (interface de programmation d'application)
+    Conception d'éclairage
+    Conception d'installation multimédia
+    Conception de jeu vidéo
+    Conception de site Web*/
 ]

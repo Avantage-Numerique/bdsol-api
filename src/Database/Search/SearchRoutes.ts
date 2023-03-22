@@ -178,11 +178,11 @@ class SearchRoutes extends AbstractRoute {
             const promises = [];
             promises.push(
                 await personModel.find(
-                    { "occupations.occupation": paramId }
+                    { "occupations.skills": paramId }
                 ));
             promises.push(
                 await organisationModel.find(
-                    { "offers.offer": paramId },
+                    { "offers.skills": paramId },
                 ));
     
             let tagSearchResult = [];
