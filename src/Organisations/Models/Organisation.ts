@@ -9,7 +9,7 @@ import OrganisationsService from "../Services/OrganisationsService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
 import { Member } from "../../Database/Schemas/MemberSchema";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
-import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
+import {middlewarePopulateProperty, taxonomyPopulate} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 import {populateUser} from "../../Users/Middlewares/populateUser";
 import {User} from "../../Users/Models/User";
 
@@ -280,7 +280,9 @@ class Organisation extends AbstractModel {
     public registerEvents():void {
 
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'offers.skills', "name category status slug");
+            taxonomyPopulate(this, 'offers.skills');
+            taxonomyPopulate(this, 'domains.domain');
+
             middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             middlewarePopulateProperty(this, "mainImage");
 
@@ -289,7 +291,9 @@ class Organisation extends AbstractModel {
         });
         
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'offers.skills', "name category status slug");
+            taxonomyPopulate(this, 'offers.skills');
+            taxonomyPopulate(this, 'domains.domain');
+
             middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             middlewarePopulateProperty(this, "mainImage");
 

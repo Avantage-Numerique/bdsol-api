@@ -9,7 +9,7 @@ import TaxonomyController from "../../Taxonomy/Controllers/TaxonomyController";
 import PersonsService from "../Services/PersonsService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
-import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
+import {middlewarePopulateProperty, taxonomyPopulate} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 import {populateUser} from "../../Users/Middlewares/populateUser";
 
 class Person extends AbstractModel {
@@ -268,7 +268,8 @@ class Person extends AbstractModel {
 
     public registerEvents():void {
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'occupations.skills', "name category status slug");
+            taxonomyPopulate(this, 'occupations.skills');
+            taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, "mainImage");
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
@@ -278,7 +279,8 @@ class Person extends AbstractModel {
             //populateUser(this, "occupations.occupation.status.lastModifiedBy", User.getInstance().mongooseModel);
         });
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'occupations.skills', "name category status slug");
+            taxonomyPopulate(this, 'occupations.skills');
+            taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
