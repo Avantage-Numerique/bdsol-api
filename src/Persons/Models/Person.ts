@@ -101,6 +101,15 @@ class Person extends AbstractModel {
                         status: Status.schema
                     }]
                 },
+                domains: {
+                    type: [{
+                        domain: {
+                            type: mongoose.Types.ObjectId,
+                            ref: "Taxonomy"
+                        },
+                        status: Status.schema
+                    }]
+                },
                 mainImage: {
                     type: mongoose.Types.ObjectId,
                     ref : "Media"

@@ -71,6 +71,15 @@ class Taxonomy extends AbstractModel {
                 type: String,
                 //alias:'desc'
             },
+            domains: {
+                type: [{
+                    domain: {
+                        type: mongoose.Types.ObjectId,
+                        ref: "Taxonomy"
+                    },
+                    status: Status.schema
+                }]
+            },
             //source: {
                 //type: String
             //},

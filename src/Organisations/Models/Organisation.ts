@@ -99,6 +99,15 @@ class Organisation extends AbstractModel {
                         status: Status.schema
                     }]
                 },
+                domains: {
+                    type: [{
+                        domain: {
+                            type: mongoose.Types.ObjectId,
+                            ref: "Taxonomy"
+                        },
+                        status: Status.schema
+                    }]
+                },
                 team: {
                     type: [Member.schema],
                     ref: "Person"
