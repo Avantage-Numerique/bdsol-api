@@ -7,6 +7,7 @@ import AbstractModel from "../../Abstract/Model"
 import TaxonomyService from "../Services/TaxonomyService";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
 import * as fs from 'fs';
+import {taxonomyPopulate} from "../Middlewares/TaxonomiesPopulate";
 
 
 class Taxonomy extends AbstractModel {
@@ -20,6 +21,8 @@ class Taxonomy extends AbstractModel {
             Taxonomy._instance = new Taxonomy();
 
             Taxonomy._instance.schema.virtual("type").get( function () { return Taxonomy._instance.modelName });
+
+            Taxonomy._instance.registerEvents();
 
             Taxonomy._instance.initSchema();
 
@@ -180,13 +183,26 @@ class Taxonomy extends AbstractModel {
             source: document.source ?? '',
             status: document.status ?? '',
             type: document.type ?? '',
+            domains: document.domains ?? [],
             createdAt : document.createdAt ?? '',
             updatedAt : document.updatedAt ?? '',
         }
     }
 
+
     public async documentation():Promise<any>{
         return fs.readFileSync('/api/doc/Taxonomy.md', 'utf-8');
-   }
+    }
+
+
+    public registerEvents():void {
+        this.schema.pre('find', function() {
+            taxonomyPopulate(this, 'domains.domain');
+        });
+
+        this.schema.pre('findOne', function() {
+            taxonomyPopulate(this, 'domains.domain');
+        });
+    }
 }
 export default Taxonomy;
