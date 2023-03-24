@@ -192,7 +192,7 @@ class Person extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields(): object {
-        return ["lastName", "firstName", "nickname", "description", "occupation"];
+        return ["lastName", "firstName", "nickname", "description", "occupations", "domains"];
     }
 
     /**
@@ -209,6 +209,7 @@ class Person extends AbstractModel {
             nickname: document.nickname ?? '',
             description: document.description ?? '',
             occupations: document.occupations ?? '',
+            domains: document.domains ?? '',
             mainImage: document.mainImage ?? '',
             slug: document.slug ?? '',
             catchphrase: document.catchphrase ?? '',

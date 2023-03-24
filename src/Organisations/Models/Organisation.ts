@@ -202,7 +202,7 @@ class Organisation extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields(): object {
-        return ["name", "description", "url", "contactPoint", "fondationDate", "offers"];
+        return ["name", "description", "url", "contactPoint", "fondationDate", "offers", "domains"];
     }
 
     /**
@@ -219,6 +219,7 @@ class Organisation extends AbstractModel {
             contactPoint: document.contactPoint ?? '',
             fondationDate: document.fondationDate ?? '',
             offers: document.offers ?? '',
+            domains: document.domains ?? '',
             team: document.team ?? '',
             mainImage: document.mainImage ?? '',
             slug: document.slug ?? '',
