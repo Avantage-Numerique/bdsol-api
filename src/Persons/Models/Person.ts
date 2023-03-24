@@ -9,7 +9,7 @@ import TaxonomyController from "../../Taxonomy/Controllers/TaxonomyController";
 import PersonsService from "../Services/PersonsService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
-import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
+import {middlewarePopulateProperty, taxonomyPopulate} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 import {populateUser} from "../../Users/Middlewares/populateUser";
 
 class Person extends AbstractModel {
@@ -92,6 +92,18 @@ class Person extends AbstractModel {
                 occupations: {
                     type: [{
                         occupation: {
+                            type: String
+                        },
+                        skills:{
+                            type: [mongoose.Types.ObjectId],
+                            ref: 'Taxonomy'
+                        },
+                        status: Status.schema
+                    }]
+                },
+                domains: {
+                    type: [{
+                        domain: {
                             type: mongoose.Types.ObjectId,
                             ref: "Taxonomy"
                         },
@@ -180,7 +192,7 @@ class Person extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields(): object {
-        return ["lastName", "firstName", "nickname", "description", "occupation"];
+        return ["lastName", "firstName", "nickname", "description", "occupations", "domains"];
     }
 
     /**
@@ -197,6 +209,7 @@ class Person extends AbstractModel {
             nickname: document.nickname ?? '',
             description: document.description ?? '',
             occupations: document.occupations ?? '',
+            domains: document.domains ?? '',
             mainImage: document.mainImage ?? '',
             slug: document.slug ?? '',
             catchphrase: document.catchphrase ?? '',
@@ -228,39 +241,36 @@ class Person extends AbstractModel {
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
             this.schema.pre('save', async function (next: any): Promise<any> {
-                try {
                     const idList = this.occupations.map( (el:any) => {
-                        return new mongoose.Types.ObjectId(el.occupation);
+                        return el.skills.map( (id:any) =>{
+                            return new mongoose.Types.ObjectId(id);
+                        })
                     });
-                    await middlewareTaxonomy(idList, TaxonomyController, "occupations.occupation");
+                    await middlewareTaxonomy(idList, TaxonomyController, "occupations.skills");
                     return next();
-                } catch(e) {
-                    throw(e);
-                }
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
             this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
-                try {
                     const person: any = this;
                     const updatedDocument = person.getUpdate();
                     if (updatedDocument["occupations"] != undefined){
                         const idList = updatedDocument.occupations.map( (el:any) => {
-                            return new mongoose.Types.ObjectId(el.occupation);
+                            return el.skills.map( (id:any) =>{
+                                return new mongoose.Types.ObjectId(id);
+                            })
                         });
-                        await middlewareTaxonomy(idList, TaxonomyController, "occupations.occupation");
+                        await middlewareTaxonomy(idList, TaxonomyController, "occupations.skills");
                     }
                     return next();
-                } catch (e) {
-                    throw(e);
-                }
             });
         }
     }
 
     public registerEvents():void {
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'occupations.occupation', "name category status slug");
+            taxonomyPopulate(this, 'occupations.skills');
+            taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, "mainImage");
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
@@ -270,7 +280,8 @@ class Person extends AbstractModel {
             //populateUser(this, "occupations.occupation.status.lastModifiedBy", User.getInstance().mongooseModel);
         });
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'occupations.occupation', "name category status slug");
+            taxonomyPopulate(this, 'occupations.skills');
+            taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);

@@ -9,7 +9,7 @@ import OrganisationsService from "../Services/OrganisationsService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
 import { Member } from "../../Database/Schemas/MemberSchema";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
-import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
+import {middlewarePopulateProperty, taxonomyPopulate} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 import {populateUser} from "../../Users/Middlewares/populateUser";
 import {User} from "../../Users/Models/User";
 
@@ -90,14 +90,23 @@ class Organisation extends AbstractModel {
                 offers: {
                     type: [{
                         offer: {
+                            type: String
+                        },
+                        skills:{
+                            type: [mongoose.Types.ObjectId],
+                            ref: 'Taxonomy'
+                        },
+                        status: Status.schema
+                    }]
+                },
+                domains: {
+                    type: [{
+                        domain: {
                             type: mongoose.Types.ObjectId,
                             ref: "Taxonomy"
                         },
-                        status: {
-                            type: Status.schema,
-                        }
-                    }],
-                    required:true
+                        status: Status.schema
+                    }]
                 },
                 team: {
                     type: [Member.schema],
@@ -193,7 +202,7 @@ class Organisation extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields(): object {
-        return ["name", "description", "url", "contactPoint", "fondationDate", "offers"];
+        return ["name", "description", "url", "contactPoint", "fondationDate", "offers", "domains"];
     }
 
     /**
@@ -210,6 +219,7 @@ class Organisation extends AbstractModel {
             contactPoint: document.contactPoint ?? '',
             fondationDate: document.fondationDate ?? '',
             offers: document.offers ?? '',
+            domains: document.domains ?? '',
             team: document.team ?? '',
             mainImage: document.mainImage ?? '',
             slug: document.slug ?? '',
@@ -242,9 +252,11 @@ class Organisation extends AbstractModel {
             //Verify that occupations in the array exists and that there are no duplicates
             this.schema.pre('save', async function (next: any): Promise<any> {
                 const idList = this.offers.map( (el:any) => {
-                    return new mongoose.Types.ObjectId(el.offer);
+                    return el.skills.map( (id:any) =>{
+                        return new mongoose.Types.ObjectId(id);
+                    })
                 });
-                await middlewareTaxonomy(idList, TaxonomyController, "offers.offer");
+                await middlewareTaxonomy(idList, TaxonomyController, "offers.skills");
                 return next();
             });
 
@@ -254,9 +266,11 @@ class Organisation extends AbstractModel {
                 const updatedDocument = organisation.getUpdate();
                 if (updatedDocument["offers"] != undefined){
                     const idList = updatedDocument.offers.map( (el:any) => {
-                        return el.offer;
+                        return el.skills.map( (id:any) =>{
+                            return new mongoose.Types.ObjectId(id);
+                        })
                     });
-                    await middlewareTaxonomy(idList, TaxonomyController, "offers.offer");
+                    await middlewareTaxonomy(idList, TaxonomyController, "offers.skills");
                 }
 
                 return next();
@@ -267,7 +281,9 @@ class Organisation extends AbstractModel {
     public registerEvents():void {
 
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'offers.offer', "name category status slug");
+            taxonomyPopulate(this, 'offers.skills');
+            taxonomyPopulate(this, 'domains.domain');
+
             middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             middlewarePopulateProperty(this, "mainImage");
 
@@ -276,7 +292,9 @@ class Organisation extends AbstractModel {
         });
         
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'offers.offer', "name category status slug");
+            taxonomyPopulate(this, 'offers.skills');
+            taxonomyPopulate(this, 'domains.domain');
+
             middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             middlewarePopulateProperty(this, "mainImage");
 
