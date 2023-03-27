@@ -1,3 +1,4 @@
+import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 export default class ApiQuery {
 
@@ -10,6 +11,9 @@ export default class ApiQuery {
         },
         lte: {
             queryProperty: '$lte'
+        },
+        not: {
+            queryProperty: '$not'
         }
     }
 
@@ -43,7 +47,7 @@ export default class ApiQuery {
             {
                 const value:any = query[field]//.toString();//@todo : Add a try/catch for this ?
                 //  S'il s'agit d'un id
-                if (field == "id" || field == "_id") {
+                if (field === "id" || field === "_id") {    // sauf si
                     ApiQuery.query._id = value;
                     continue;
                 }
@@ -66,6 +70,7 @@ export default class ApiQuery {
                 }
             }
         }
+        LogHelper.debug(ApiQuery.query);
         return ApiQuery.query;
     }
 
