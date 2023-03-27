@@ -148,7 +148,7 @@ class SearchRoutes extends AbstractRoute {
     public async getTaxonomyResult(req:Request, res:Response, next: NextFunction):Promise<any> {
 
         const taxonomyModel:any = Taxonomy.getInstance().mongooseModel;
-        try{
+        try {
             let taxonomyId = await taxonomyModel.find(
                 {
                     category: req.params.category,
@@ -165,7 +165,6 @@ class SearchRoutes extends AbstractRoute {
         catch(e)
         {
             res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Search TagResult failed to find entity linked to taxonomy with error: "+e, []);
-            
         }
         return next();
     }
