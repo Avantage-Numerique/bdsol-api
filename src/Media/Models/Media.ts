@@ -7,6 +7,8 @@ import MediasService from "../Services/MediasService";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
 import { licenceList } from "../List/LicenceList";
 import { fileExtensionList, fileTypeList } from "../List/FileList";
+import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
+import {PopulateEntityByType} from "../Middlewares/PopulateEntityByType";
 
 
 class Media extends AbstractModel {
@@ -21,7 +23,6 @@ class Media extends AbstractModel {
 
             //events must be defined before assigning to mongoose : https://mongoosejs.com/docs/middleware.html#defining
             Media._instance.registerEvents();
-            Media._instance.registerPreEvents();
 
             Media._instance.schema.virtual("type").get( function () { return Media._instance.modelName.toLowerCase() });
 
@@ -162,20 +163,15 @@ class Media extends AbstractModel {
         return;
     }
 
-    /**
-     * Register mongoose events, for now pre-save, pre-findOneAndUpdate
-     * Prendre le array fournit dans data (data.occupation)
-     * Pour vérif si les valeurs existe toute.  ( .count ) en filtrant sur les id et compare le nombre de résultat retourné avec le .length
-     * Pour vérif si les valeurs ont des doublons :
-     * (Possible que sa marche juste avec le .count, si je chercher avec plusieurs filtre id mais qu'il y a 2 fois le même id, sa retourne tu 1 ou 2.
-     * Créer un Set avec les valeurs, et comparer .length du set au .length du array. Auquel cas, si doublons, length !=
-     * const setNoDoublon = new Set(arrayOccupation);
-     * if setNoDoublon.length != arrayOccupation.length { throw error }
-     */
-    public registerPreEvents() {
-    }
+
 
     public registerEvents():void {
+        this.schema.pre('find', function() {
+            PopulateEntityByType(this, "entityId");
+        });
+        this.schema.pre('findOne', function() {
+            PopulateEntityByType(this, "entityId");
+        });
     }
 }
 

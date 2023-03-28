@@ -170,8 +170,8 @@ class MediasRoutes extends AbstractRoute {
         
         
         if(requestData.entityId == undefined ||
-            requestData.mediaField == undefined ||
-            requestData.entityType == undefined) {
+            requestData.mediaField === undefined ||
+            requestData.entityType === undefined) {
                 //Insert message missing field here
                 res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST,
                     "Required field : entityId : (the entityId of the entity media belongs to), "+
