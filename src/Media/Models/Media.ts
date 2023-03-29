@@ -23,7 +23,7 @@ class Media extends AbstractModel {
             //events must be defined before assigning to mongoose : https://mongoosejs.com/docs/middleware.html#defining
             Media._instance.registerEvents();
 
-            Media._instance.schema.virtual("type").get( function () { return Media._instance.modelName.toLowerCase() });
+            Media._instance.schema.virtual("type").get( function () { return Media._instance.modelName });
 
             Media._instance.initSchema();
         }

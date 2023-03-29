@@ -20,7 +20,7 @@ class Taxonomy extends AbstractModel {
         if (Taxonomy._instance === undefined) {
             Taxonomy._instance = new Taxonomy();
 
-            Taxonomy._instance.schema.virtual("type").get( function () { return Taxonomy._instance.modelName.toLowerCase() });
+            Taxonomy._instance.schema.virtual("type").get( function () { return Taxonomy._instance.modelName });
 
             Taxonomy._instance.registerEvents();
 

@@ -26,7 +26,7 @@ class Organisation extends AbstractModel {
             Organisation._instance.registerPreEvents();
             Organisation._instance.registerEvents();
 
-            Organisation._instance.schema.virtual("type").get( function () { return Organisation._instance.modelName.toLowerCase() });
+            Organisation._instance.schema.virtual("type").get( function () { return Organisation._instance.modelName });
 
             Organisation._instance.initSchema();
 

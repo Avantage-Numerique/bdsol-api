@@ -11,7 +11,7 @@ export default class Record {
     public pathWithFilename:string;
     public pathNoFilename:string;
     public url:string;
-    public entityType:string;
+    public entityType:string;//This is now need to be as the Entity model name in Db.
     public entityId:string;
     public extension:string;
     public userId:string; //media -> uploadedBy

@@ -176,14 +176,14 @@ class MediasRoutes extends AbstractRoute {
                 res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST,
                     "Required field : entityId : (the entityId of the entity media belongs to), "+
                     "mediaField : ('mainImage', ...), "+
-                    "entityType: (type of entity 'person', 'organisation' ...)");
+                    "entityType: (type of entity 'Person', 'Organisation' ...)");
                     return;
         }
                 
         //if entity have media field
         //TODO : Need to make a check for this (this goes with making the create check for multiple field multer.single ("mainImage, and others..."))
         //Temporary check (entityType is person or org and mediaField is mainImage)
-        const entities:any = [Person.getInstance().modelName.toLowerCase(), Organisation.getInstance().modelName.toLowerCase()];
+        const entities:any = [Person.getInstance().modelName, Organisation.getInstance().modelName];
         if( entities.includes(entityType)
             &&  mediaField == "mainImage" ) {
                 
