@@ -8,7 +8,6 @@ import { Status } from "../../Moderation/Schemas/StatusSchema";
 import { licenceList } from "../List/LicenceList";
 import { fileExtensionList, fileTypeList } from "../List/FileList";
 import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
-import {PopulateEntityByType} from "../Middlewares/PopulateEntityByType";
 
 
 class Media extends AbstractModel {
@@ -86,10 +85,13 @@ class Media extends AbstractModel {
                 },
                 entityId: {
                     type: mongoose.Types.ObjectId,
+                    refPath:"entityType"
                     //required: true
                 },
                 entityType: {
                     type: String,
+                    required: true,
+                    enum: ['Person', 'Organisation']
                     //required: true
                 },
                 uploadedBy: {
@@ -167,10 +169,10 @@ class Media extends AbstractModel {
 
     public registerEvents():void {
         this.schema.pre('find', function() {
-            PopulateEntityByType(this, "entityId");
+            middlewarePopulateProperty(this, "entityId");
         });
         this.schema.pre('findOne', function() {
-            PopulateEntityByType(this, "entityId");
+            middlewarePopulateProperty(this, "entityId");
         });
     }
 }
