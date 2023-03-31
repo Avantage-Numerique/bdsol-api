@@ -169,7 +169,7 @@ class Media extends AbstractModel {
 
     public registerEvents():void {
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, "entityId");
+            //middlewarePopulateProperty(this, "entityId");
         });
         this.schema.pre('findOne', function() {
             middlewarePopulateProperty(this, "entityId");
