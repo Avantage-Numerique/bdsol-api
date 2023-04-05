@@ -14,6 +14,9 @@ export default class ApiQuery {
         },
         not: {
             queryProperty: '$not'
+        },
+        ne: {
+            queryProperty: '$ne'
         }
     }
 
@@ -47,7 +50,9 @@ export default class ApiQuery {
             {
                 const value:any = query[field]//.toString();//@todo : Add a try/catch for this ?
                 //  S'il s'agit d'un id
-                if (field === "id" || field === "_id") {    // sauf si
+
+                if ((field === "id" || field === "_id") &&
+                    (value !== "" && value !== undefined && !ApiQuery.haveProperty(value))) {    // sauf si
                     ApiQuery.query._id = value;
                     continue;
                 }
@@ -70,7 +75,7 @@ export default class ApiQuery {
                 }
             }
         }
-        LogHelper.debug(ApiQuery.query);
+        LogHelper.debug("QueryBuilder result", ApiQuery.query);
         return ApiQuery.query;
     }
 
@@ -87,7 +92,8 @@ export default class ApiQuery {
             const propertyParams:any = ApiQuery.supportedProperties[supportedProperty];
 
             if (ApiQuery.haveProperty(value, supportedProperty + ApiQuery.propertySeperator)) {
-                return queryProperty[propertyParams.queryProperty] = ApiQuery.queryPropertyValue(value);
+                queryProperty[propertyParams.queryProperty] = ApiQuery.queryPropertyValue(value);
+                return queryProperty;
             }
         }
     }
@@ -99,7 +105,10 @@ export default class ApiQuery {
      * @param propertysValueSeperator {string} would be equal to ApiQuery.propertySeperator
      */
     static haveProperty(value:string, propertysValueSeperator:string=":") {
-        return value.includes(propertysValueSeperator);
+        if (typeof value === "string") {//this could happen
+            return value.includes(propertysValueSeperator);
+        }
+        return false;
     }
 
 
