@@ -1,11 +1,19 @@
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import {defaultModifier, objectIdModifier, PropertyModifier} from "./PropertyModifier";
 
+/**
+ * Tool to transpose query from Routes into Mongo DB query. Structure with only static method and properties.
+ * The vocabulary of methods and variables.
+ * With this exemple : {category: "Taxonomy"} :
+ * `Query`: if the full object passed via a call to the api.
+ * `Field` : is the base of the query element, like _id, quantity, etc. In the exemple, category is the field.
+ * `Property` : the properties are the query language. We accepte the `supportedProperties` keyword for now.
+ */
 export default class ApiQuery {
 
     static initQuery:any;
     static query:any;
     static propertySeperator:string = ":";
-    static supportedProperties:any = {
+    static queryProperties:any = {
         gte: {
             queryProperty: '$gte'
         },
@@ -20,13 +28,13 @@ export default class ApiQuery {
         }
     }
 
+    static fieldPropertiesModifiers:any = {
+        "_id": objectIdModifier
+    }
+
     /**
      * @method ApiQuery Forme la requête de condition à envoyer à mongoose.
-     *
-     * Paramètre :
-     * @param {key:value} query  - Les critère de recherche
-     *
-     * Retourne :
+     * @param {key:value} query  - Les critères de recherche
      * @return {object} finalQuery est un objet contenant les conditions de recherche adaptée pour mongo
      * @note NE FONCTIONNE PAS PRÉSENTEMENT AVEC LES NOMBRES PUISQUE JE CONVERTIS LES NOMBRES EN STRING!
      */
@@ -49,8 +57,8 @@ export default class ApiQuery {
             if (ApiQuery.fieldIsDeclared(field))
             {
                 const value:any = query[field]//.toString();//@todo : Add a try/catch for this ?
-                //  S'il s'agit d'un id
 
+                // If the field is an id check, but brute, no property sets.
                 if ((field === "id" || field === "_id") &&
                     (value !== "" && value !== undefined && !ApiQuery.haveProperty(value))) {    // sauf si
                     ApiQuery.query._id = value;
@@ -63,7 +71,8 @@ export default class ApiQuery {
                 }
 
                 if (ApiQuery.haveProperty(value)) {
-                    ApiQuery.query[field] = ApiQuery.propertyToQueryObject(value);
+                    const modifier:PropertyModifier = ApiQuery.fieldPropertiesModifiers[field] ?? defaultModifier;//this should be a list too to assign modifier to target type of field. For now _id seem to be the only one needed for that.
+                    ApiQuery.query[field] = ApiQuery.propertyToQueryObject(value, modifier);
                 }
 
                 //  Si ce n'est pas un Id ou si on cherche une date précise (field == date).
@@ -75,7 +84,6 @@ export default class ApiQuery {
                 }
             }
         }
-        LogHelper.debug("QueryBuilder result", ApiQuery.query);
         return ApiQuery.query;
     }
 
@@ -83,16 +91,19 @@ export default class ApiQuery {
      * Loop through the supported Query properties to check if the query have it in string, like gte:
      * if the loop check that if have property
      * @param value
+     * @param modifier {any} Modifier the value that will be set to the property.
+     * @param field {string} precise the field that this will be added to.
      */
-    static propertyToQueryObject(value:string):any
+    static propertyToQueryObject(value:string, modifier:PropertyModifier=defaultModifier, field:string=""):any
     {
         const queryProperty:any = {};
-        for (const supportedProperty in ApiQuery.supportedProperties)
+        for (const supportedProperty in ApiQuery.queryProperties)
         {
-            const propertyParams:any = ApiQuery.supportedProperties[supportedProperty];
+            const propertyParams:any = ApiQuery.queryProperties[supportedProperty];
+            const propertyPrefix:string = `${supportedProperty}${ApiQuery.propertySeperator}`;
 
-            if (ApiQuery.haveProperty(value, supportedProperty + ApiQuery.propertySeperator)) {
-                queryProperty[propertyParams.queryProperty] = ApiQuery.queryPropertyValue(value);
+            if (ApiQuery.haveProperty(value, propertyPrefix)) {
+                queryProperty[propertyParams.queryProperty] = modifier(ApiQuery.queryPropertyValue(value, propertyPrefix.length));
                 return queryProperty;
             }
         }
@@ -105,7 +116,7 @@ export default class ApiQuery {
      * @param propertysValueSeperator {string} would be equal to ApiQuery.propertySeperator
      */
     static haveProperty(value:string, propertysValueSeperator:string=":") {
-        if (typeof value === "string") {//this could happen
+        if (typeof value === "string") {//this could happen so keep the warning. I was able to pass object there.
             return value.includes(propertysValueSeperator);
         }
         return false;
@@ -118,7 +129,7 @@ export default class ApiQuery {
      * @param position {number} What is the string index of the real field value.
      */
     static queryPropertyValue(fieldValue:string, position:number = 4) {
-        return fieldValue.substring(4, fieldValue.length);
+        return fieldValue.substring(position, fieldValue.length);
     }
 
 
@@ -135,6 +146,7 @@ export default class ApiQuery {
 
 
     /**
+     * Utils to check if the query is set and an object.
      * @return {boolean} if the query is an object, and not null/undefined.
      */
     static queryIsValid():boolean {
@@ -143,6 +155,4 @@ export default class ApiQuery {
             && typeof ApiQuery.initQuery === "object";
     }
 
-
-    // this is awesome, for better and more case of lte
 }
