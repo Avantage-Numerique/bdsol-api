@@ -9,6 +9,9 @@ import { Status } from "../../Moderation/Schemas/StatusSchema";
 import { middlewarePopulateProperty, taxonomyPopulate } from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 import { populateUser } from "../../Users/Middlewares/populateUser";
 import { User } from "../../Users/UsersDomain";
+import { Sponsor } from "../../Database/Schemas/SponsorSchema";
+import { ScheduleBudget } from "../../Database/Schemas/ScheduleBudgetSchema";
+import { Location } from "../../Database/Schemas/LocationSchema";
 
 class Project extends AbstractModel {
 
@@ -69,7 +72,7 @@ class Project extends AbstractModel {
                 type: String
             },
             location: {
-                type: String
+                type: Location.schema
             },
             team: {
                 type: [Member.schema],
@@ -80,10 +83,10 @@ class Project extends AbstractModel {
                 ref: "Media"
             },
             sponsor: {
-                type: [mongoose.Types.ObjectId || String]
+                type: [Sponsor.schema]
             },
             scheduleBudget: {
-                type: String
+                type: ScheduleBudget.schema
             },
             skills: {
                 type: [mongoose.Types.ObjectId],
@@ -157,7 +160,7 @@ class Project extends AbstractModel {
 
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
-            this.schema.pre('save', async function (next: any): Promise<any> {
+            //this.schema.pre('save', async function (next: any): Promise<any> {
                     /*const idList = this.occupations.map( (el:any) => {
                         return el.skills.map( (id:any) =>{
                             return new mongoose.Types.ObjectId(id);
@@ -165,10 +168,10 @@ class Project extends AbstractModel {
                     });
                     await middlewareTaxonomy(idList, TaxonomyController, "occupations.skills");
                     return next();*/
-            });
+            //});
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
-            this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
+            //this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
                     /*const person: any = this;
                     const updatedDocument = person.getUpdate();
                     if (updatedDocument["occupations"] != undefined){
@@ -180,7 +183,7 @@ class Project extends AbstractModel {
                         await middlewareTaxonomy(idList, TaxonomyController, "occupations.skills");
                     }
                     return next();*/
-            });
+            //});
         }
     }
 
@@ -190,7 +193,7 @@ class Project extends AbstractModel {
      */
     public registerEvents(): void {
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'team');
+            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             taxonomyPopulate(this, 'skills');
             middlewarePopulateProperty(this, 'mainImage');
 
@@ -199,7 +202,7 @@ class Project extends AbstractModel {
         });
 
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'team');
+            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             taxonomyPopulate(this, 'skills');
             middlewarePopulateProperty(this, 'mainImage');
 

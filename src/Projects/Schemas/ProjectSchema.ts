@@ -3,6 +3,9 @@ import { Status } from "../../Moderation/Schemas/StatusSchema";
 import { Member } from "../../Database/Schemas/MemberSchema";
 import Media from "../../Media/Models/Media";
 import { ObjectId } from "mongodb";
+import { Sponsor } from "../../Database/Schemas/SponsorSchema";
+import { ScheduleBudget } from "../../Database/Schemas/ScheduleBudgetSchema";
+import { Location } from "../../Database/Schemas/LocationSchema";
 
 export interface ProjectSchema extends Document {
     name:string;
@@ -10,11 +13,11 @@ export interface ProjectSchema extends Document {
     description:string;
     url:string;
     contactPoint:string;
-    location:string;
+    location:Location;
     team:[Member];
     mainImage:Media;
-    sponsor:[string];
-    scheduleBudget:string;
+    sponsor:[Sponsor];
+    scheduleBudget:ScheduleBudget;
     skills:[ObjectId];
     status: Status
 
