@@ -36,7 +36,7 @@ class Person extends AbstractModel {
             Person._instance.initSchema();
 
             //Index
-            Person._instance.schema.index({ "occupations.occupation":1});
+            Person._instance.schema.index({ "occupations.skills":1});
             Person._instance.schema.index(
                 { firstName:"text", lastName:"text", nickname:"text", slug:"text" },
                 { 

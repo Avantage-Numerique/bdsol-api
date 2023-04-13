@@ -28,8 +28,9 @@ abstract class AbstractController implements ControllerContract {
      * @return {ApiResponseContract} Promise
      */
     public async create(requestData: any): Promise<ApiResponseContract> {
+        console.log("reqData",requestData)
         const createdDocumentResponse = await this.service.insert(requestData);
-
+        console.log("createdDocumentResponse", createdDocumentResponse)
         if (createdDocumentResponse !== undefined)
             return createdDocumentResponse;
 

@@ -4,6 +4,11 @@ import {ProjectSchema} from "../Schemas/ProjectSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import ProjectsService from "../Services/ProjectsService";
+import { Member } from "../../Database/Schemas/MemberSchema";
+import { Status } from "../../Moderation/Schemas/StatusSchema";
+import { middlewarePopulateProperty, taxonomyPopulate } from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
+import { populateUser } from "../../Users/Middlewares/populateUser";
+import { User } from "../../Users/UsersDomain";
 
 class Project extends AbstractModel {
 
@@ -16,15 +21,17 @@ class Project extends AbstractModel {
             Project._instance = new Project();
 
             //events must be defined before assigning to mongoose : https://mongoosejs.com/docs/middleware.html#defining
+            Project._instance.registerPreEvents();
             Project._instance.registerEvents();
 
             //Setting virtuals
-            //Project._instance.schema.virtual("Project").get( function () { return Project._instance.modelName });
+            Project._instance.schema.virtual("type").get( function () { return Project._instance.modelName });
 
             Project._instance.initSchema();
 
             //Index
-            //Project._instance.schema.index({ "Project.Project":1});
+            Project._instance.schema.index({ "name":1 });
+            //index text for search ?
         }
         return Project._instance;
     }
@@ -43,7 +50,50 @@ class Project extends AbstractModel {
 
     /** @public Database schema */
     schema: Schema =
-        new Schema<ProjectSchema>({},
+        new Schema<ProjectSchema>({
+            name: {
+                type: String,
+                minLenght: 2,
+                required: true
+            },
+            alternateName: {
+                type: String
+            },
+            description: {
+                type: String
+            },
+            url: {
+                type: String
+            },
+            contactPoint: {
+                type: String
+            },
+            location: {
+                type: String
+            },
+            team: {
+                type: [Member.schema],
+                ref: "Person"
+            },
+            mainImage: {
+                type: mongoose.Types.ObjectId,
+                ref: "Media"
+            },
+            sponsor: {
+                type: [mongoose.Types.ObjectId || String]
+            },
+            scheduleBudget: {
+                type: String
+            },
+            skills: {
+                type: [mongoose.Types.ObjectId],
+                ref: "Taxonomy"
+            },
+            status: {
+                type: Status.schema
+            }
+
+        },
             {
                 toJSON: {virtuals: true},
                 timestamps: true,
@@ -60,7 +110,16 @@ class Project extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields(): object {
-        return [""];
+        return ["name",
+        "alternateName",
+        "description",
+        "url",
+        "contactPoint",
+        "location",
+        "team",
+        "sponsor",
+        "scheduleBudget",
+        "skills",];
     }
 
     /**
@@ -72,6 +131,20 @@ class Project extends AbstractModel {
     public dataTransfertObject(document: any) {
         return {
             _id: document._id ?? '',
+            name: document.name ?? '',
+            alternateName: document.alternateName ?? '',
+            description: document.description ?? '',
+            url: document.url ?? '',
+            contactPoint: document.contactPoint ?? '',
+            location: document.location ?? '',
+            team: document.team ?? '',
+            mainImage: document.mainImage ?? '',
+            sponsor: document.sponsor ?? '',
+            scheduleBudget: document.scheduleBudget ?? '',
+            skills: document.skills ?? '',
+            status: document.status ?? '',
+            createdAt: document.createdAt ?? '',
+            updatedAt: document.updatedAt ?? '',
         }
     }
 
@@ -79,12 +152,60 @@ class Project extends AbstractModel {
         return "";
     }
 
+    public registerPreEvents() {
+        if (this.schema !== undefined) {
+
+            //Pre save, verification for occupation
+            //Verify that occupations in the array exists and that there are no duplicates
+            this.schema.pre('save', async function (next: any): Promise<any> {
+                    /*const idList = this.occupations.map( (el:any) => {
+                        return el.skills.map( (id:any) =>{
+                            return new mongoose.Types.ObjectId(id);
+                        })
+                    });
+                    await middlewareTaxonomy(idList, TaxonomyController, "occupations.skills");
+                    return next();*/
+            });
+
+            //Pre update verification for occupation //Maybe it should be in the schema as a validator
+            this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
+                    /*const person: any = this;
+                    const updatedDocument = person.getUpdate();
+                    if (updatedDocument["occupations"] != undefined){
+                        const idList = updatedDocument.occupations.map( (el:any) => {
+                            return el.skills.map( (id:any) =>{
+                                return new mongoose.Types.ObjectId(id);
+                            })
+                        });
+                        await middlewareTaxonomy(idList, TaxonomyController, "occupations.skills");
+                    }
+                    return next();*/
+            });
+        }
+    }
+
 
     /**
      * Register mongoose events, for now pre-save, pre-findOneAndUpdate
      */
     public registerEvents(): void {
+        this.schema.pre('find', function() {
+            middlewarePopulateProperty(this, 'team');
+            taxonomyPopulate(this, 'skills');
+            middlewarePopulateProperty(this, 'mainImage');
 
+            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel)
+            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel)
+        });
+
+        this.schema.pre('findOne', function() {
+            middlewarePopulateProperty(this, 'team');
+            taxonomyPopulate(this, 'skills');
+            middlewarePopulateProperty(this, 'mainImage');
+
+            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel)
+            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel)
+        });
     }
 }
 

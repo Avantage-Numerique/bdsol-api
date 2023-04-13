@@ -18,6 +18,7 @@ import {GetRequestIp} from "./Monitoring/Middlewares/GetRequestIp";
 import ModerationRoutes from "./Moderation/Routes/ModerationRoutes";
 import SearchRoutes from "./Database/Search/SearchRoutes";
 import {StaticContentsRoutes} from "./StaticContent/Routes/StaticContentsRoutes";
+import { ProjectsRoutes } from "./Projects/Routes/ProjectsRoute";
 /**
  * Main class for the API
  * Use the express instance as public property.
@@ -111,6 +112,10 @@ export default class Api {
             {
                 baseRoute: "/organisations",
                 manager: new OrganisationsRoutes()
+            },
+            {
+                baseRoute: "/projects",
+                manager: new ProjectsRoutes()
             },
             {
                 baseRoute: "/info",

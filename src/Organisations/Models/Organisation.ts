@@ -30,7 +30,7 @@ class Organisation extends AbstractModel {
 
             Organisation._instance.initSchema();
 
-            Organisation._instance.schema.index({ "offers.offer":1});
+            Organisation._instance.schema.index({ "offers.skills":1});
             Organisation._instance.schema.index({ "team.member":1});
             Organisation._instance.schema.index(
                 { name:"text", description:"text", slug:"text"},

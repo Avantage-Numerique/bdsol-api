@@ -25,6 +25,8 @@ import SeederTaskContract from "../Seeders/SeederTaskContract";
 import {TaxonomiesPersistantData} from "../../Taxonomy/TaxonomiesPersistantData";
 import SeedData from "../Seeders/seed-data";
 import SeedPersistantData from "../Seeders/seed-persistant-data";
+import ProjectsService from "../../Projects/Services/ProjectsService";
+import Project from "../../Projects/Models/Project";
 
 
 export class MongooseDBDriver implements DBDriver {
@@ -86,6 +88,7 @@ export class MongooseDBDriver implements DBDriver {
 
         this.providers.data.assign(PersonsService.getInstance(Person.getInstance()));
         this.providers.data.assign(OrganisationsService.getInstance(Organisation.getInstance()));
+        this.providers.data.assign(ProjectsService.getInstance(Project.getInstance()));
 
         await this.seedDB();
     }
