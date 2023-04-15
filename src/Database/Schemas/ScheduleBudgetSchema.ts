@@ -38,7 +38,7 @@ export class ScheduleBudget {
         },
         status: {
             type: Status.schema,
-            required: true
+            //required: true
         }
     },
         {

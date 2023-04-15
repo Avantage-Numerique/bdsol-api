@@ -56,7 +56,7 @@ class Project extends AbstractModel {
         new Schema<ProjectSchema>({
             name: {
                 type: String,
-                minLenght: 2,
+                minlenght: 2,
                 required: true
             },
             alternateName: {

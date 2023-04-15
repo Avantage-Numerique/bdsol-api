@@ -67,7 +67,7 @@ class Person extends AbstractModel {
         new Schema<PersonSchema>({
                 lastName: {
                     type: String,
-                    minLength: 2,
+                    minlength: 2,
                     required: true,
                     //alias: 'nom'
                 },
