@@ -9,6 +9,8 @@ import { Location } from "../../Database/Schemas/LocationSchema";
 
 export interface ProjectSchema extends Document {
     name:string;
+    entityInCharge:ObjectId;
+    producer: ObjectId;
     alternateName:string;
     description:string;
     url:string;

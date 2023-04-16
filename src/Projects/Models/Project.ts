@@ -59,6 +59,13 @@ class Project extends AbstractModel {
                 minlenght: 2,
                 required: true
             },
+            entityInCharge: {
+                type: mongoose.Types.ObjectId,
+            },
+            producer: {
+                type: mongoose.Types.ObjectId,
+                ref: "Organisation" //Investigate refPath or dynamic populate model call
+            },
             alternateName: {
                 type: String
             },

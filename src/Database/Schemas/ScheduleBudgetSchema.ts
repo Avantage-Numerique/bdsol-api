@@ -8,7 +8,7 @@ export interface ScheduleBudgetSchema extends Document {
     completionDate: Date;
     estimatedTotalBudget: number;
     estimatedTimeToComplete: string;
-    plannedScheduleBudget: string;
+    plannedScheduleBudget: [object];
     status: Status;
 }
 
@@ -34,7 +34,7 @@ export class ScheduleBudget {
             type: String,
         },
         plannedScheduleBudget: {
-            type: String,
+            type: [Object],
         },
         status: {
             type: Status.schema,
