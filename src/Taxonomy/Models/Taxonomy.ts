@@ -8,6 +8,7 @@ import TaxonomyService from "../Services/TaxonomyService";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
 import * as fs from 'fs';
 import {taxonomyPopulate} from "../Middlewares/TaxonomiesPopulate";
+import {taxonomyDomainNoSelfReference} from "../../Database/Validation/SchemaValidateReferenceNotItself";
 
 
 class Taxonomy extends AbstractModel {
@@ -26,7 +27,9 @@ class Taxonomy extends AbstractModel {
 
             Taxonomy._instance.initSchema();
 
-            //Index
+            Taxonomy._instance.schema.path('domains.domain').validate(taxonomyDomainNoSelfReference);
+
+            //Indexes
             Taxonomy._instance.schema.index({ category:1 });
             Taxonomy._instance.schema.index({ name:1, category:1 }, {unique: true});
             Taxonomy._instance.schema.index({ name:"text", description:"text", category:"text", slug:"text" }, { default_language: "french" });
