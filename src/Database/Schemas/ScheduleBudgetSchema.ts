@@ -1,14 +1,46 @@
 import mongoose, {Schema} from "mongoose";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
 
+export enum budgetRangeEnum {
+    zeroToThousand = "0-1000",
+    thousandToFiveThousand = "1k-5k",
+    fiveToTenThousand = "5k-10k",
+    tenToTwentyThousand= "10k-20k",
+    twentyOrMore = "20k+"
+}
+
+export interface TimeframeSchema extends Document {
+    step: string;
+    eta: string;
+    budgetRange: string;
+}
+
+export class Timeframe {
+    /** @static schema */
+    static schema:Schema =
+    new Schema<TimeframeSchema>({
+        step: {
+            type: String,
+        },
+        eta: {
+            type: String,
+        },
+        budgetRange: {
+            type: String,
+            enum: budgetRangeEnum
+        }
+    })
+
+}
+
 
 export interface ScheduleBudgetSchema extends Document {
-    launchDate: Date;
-    completionEstimateDate: Date;
+    startDate: Date;
+    endDateEstimate: Date;
     completionDate: Date;
     estimatedTotalBudget: number;
-    estimatedTimeToComplete: string;
-    plannedScheduleBudget: [object];
+    eta: string;
+    timeframe: [Timeframe];
     status: Status;
 }
 
@@ -18,10 +50,10 @@ export class ScheduleBudget {
     /** @static schema */
     static schema:Schema =
     new Schema<ScheduleBudgetSchema>({
-        launchDate: {
+        startDate: {
             type: Date
         },
-        completionEstimateDate: {
+        endDateEstimate: {
             type: Date
         },
         completionDate: {
@@ -30,11 +62,11 @@ export class ScheduleBudget {
         estimatedTotalBudget: {
             type: Number,
         },
-        estimatedTimeToComplete: {
+        eta: {
             type: String,
         },
-        plannedScheduleBudget: {
-            type: [Object],
+        timeframe: {
+            type: [Timeframe.schema],
         },
         status: {
             type: Status.schema,

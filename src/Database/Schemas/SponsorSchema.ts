@@ -4,7 +4,8 @@ import { Status } from "../../Moderation/Schemas/StatusSchema";
 
 export interface SponsorSchema extends Document {
     name: string;
-    entityId: mongoose.ObjectId;
+    entity: mongoose.ObjectId;
+    entityType: string;
     order: number;
     status: Status;
 }
@@ -17,20 +18,25 @@ export class Sponsor {
     new Schema<SponsorSchema>({
         name: {
             type: String,
-            required: [true, 'Required memberId to identify member'],
-            ref: "Person"
         },
         //Id of the entity linked if exist
-        entityId: {
+        entity: {
             type: mongoose.Types.ObjectId,
-            ref: "Organisation" //Investigate on dynamic populate or refPath
+            refPath: "entityType"
+            //required: true
+        },
+        entityType: {
+            type: String,
+            required: true,
+            enum: ['Person', 'Organisation']
+            //required: true
         },
         order: {
             type: Number,
         },
         status: {
             type: Status.schema,
-            required: true
+            //required: true
         }
     },
         {

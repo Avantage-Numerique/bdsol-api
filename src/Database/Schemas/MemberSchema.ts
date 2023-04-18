@@ -27,7 +27,7 @@ export class Role {
 
 export interface MemberSchema extends Document {
     member:mongoose.ObjectId;
-    role: Role;
+    role: string;
     status: Status;
 }
 
@@ -44,7 +44,7 @@ export class Member {
             ref: "Person"
         },
         role: {
-            type: Role.schema,
+            type: String,
         },
         status: {
             type: Status.schema,

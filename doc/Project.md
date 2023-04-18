@@ -33,13 +33,21 @@ Les sponsor devrait pouvoir être ordonné. On ne semble pas vouloir permettre d
 # ScheduleBudget associé à Project
 Le scheduleBudget comprend deux partie. Une pour spécifié la globalité de la chose. Par exemple, le coût total estimé, la date de début, la date de fin prévue, la date de fin (si le projet est terminé) etc.
 
-L'autre partie comprend l'échéancier financier (plannedScheduleBudget) qui devrait être en mesure de représenté différente étape de production du projet, leur coût estimé et leur temps de finalisation. Par exemple, pour une pièce de théâtre, ce pourrait être différente étape de création. Écriture du texte et scénarisation, fabrication de décors, création d'éclairage etc. Et les relié à certains coût et période de temps, si besoin il y a. Par exemple, fabrication de décor, 3 000$, 2 mois.
+L'autre partie comprend l'échéancier financier (timeframe) qui devrait être en mesure de représenté différente étape de production du projet, leur coût estimé et leur temps de finalisation. Par exemple, pour une pièce de théâtre, ce pourrait être différente étape de création. Écriture du texte et scénarisation, fabrication de décors, création d'éclairage etc. Et les relié à certains coût et période de temps, si besoin il y a. Par exemple, fabrication de décor, 3 000$, 2 mois.
 
 ## Schema
-- launchDate : (Date)
-- completionEstimateDate : (Date)
-- completionDate : (Date)
-- estimatedTotalBudget : (Number)
-- estimatedTimeToComplete : (string)
-- plannedScheduleBudget : [object]
+- startDate : (Date) Date de début du projet
+- endDateEstimate : (Date) Date estimée de fin
+- completionDate : (Date) Date de complétion
+- estimatedTotalBudget : (Number) Coût total estimé
+- estimatedTimeToComplete : (string) Durée estimé du projet
+- timeframe : [Timeframe.schema] Object comprenant les étapes, le temps estimé pour complété ces étapes, et les coût associé à celles-ci
 - status : (Status.schema) statut du la modification du budget
+
+# Timeframe
+C'est la partie du projet comprenant l'échéancié spécifique. Une liste des étapes, coût, et temps associé à chaque étape de production.
+
+## Schema
+- step : (string) Nom de l'étape (Fabrication des décors)
+- eta : (string) Temps estimé pour la réalisation de l'étape
+- budgetRange : (string) Coût estimé ou budget disponible pour la réalisation de l'étape

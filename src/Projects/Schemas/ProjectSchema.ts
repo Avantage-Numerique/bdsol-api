@@ -6,12 +6,13 @@ import { ObjectId } from "mongodb";
 import { Sponsor } from "../../Database/Schemas/SponsorSchema";
 import { ScheduleBudget } from "../../Database/Schemas/ScheduleBudgetSchema";
 import { Location } from "../../Database/Schemas/LocationSchema";
+import { ProjectContextEnum } from "../ProjectContextEnum";
 
 export interface ProjectSchema extends Document {
     name:string;
+    alternateName:string;
     entityInCharge:ObjectId;
     producer: ObjectId;
-    alternateName:string;
     description:string;
     url:string;
     contactPoint:string;
@@ -21,6 +22,7 @@ export interface ProjectSchema extends Document {
     sponsor:[Sponsor];
     scheduleBudget:ScheduleBudget;
     skills:[ObjectId];
+    context: ProjectContextEnum
     status: Status
 
 }

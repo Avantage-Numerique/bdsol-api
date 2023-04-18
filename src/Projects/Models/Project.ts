@@ -12,6 +12,7 @@ import { User } from "../../Users/UsersDomain";
 import { Sponsor } from "../../Database/Schemas/SponsorSchema";
 import { ScheduleBudget } from "../../Database/Schemas/ScheduleBudgetSchema";
 import { Location } from "../../Database/Schemas/LocationSchema";
+import { ProjectContextEnum } from "../ProjectContextEnum";
 
 class Project extends AbstractModel {
 
@@ -59,15 +60,16 @@ class Project extends AbstractModel {
                 minlenght: 2,
                 required: true
             },
+            alternateName: {
+                type: String
+            },
             entityInCharge: {
                 type: mongoose.Types.ObjectId,
+                ref: "Organisation"
             },
             producer: {
                 type: mongoose.Types.ObjectId,
                 ref: "Organisation" //Investigate refPath or dynamic populate model call
-            },
-            alternateName: {
-                type: String
             },
             description: {
                 type: String
@@ -90,7 +92,8 @@ class Project extends AbstractModel {
                 ref: "Media"
             },
             sponsor: {
-                type: [Sponsor.schema]
+                type: [Sponsor.schema],
+                ref: "Person"
             },
             scheduleBudget: {
                 type: ScheduleBudget.schema
@@ -98,6 +101,10 @@ class Project extends AbstractModel {
             skills: {
                 type: [mongoose.Types.ObjectId],
                 ref: "Taxonomy"
+            },
+            context: {
+                type: String,
+                enum: ProjectContextEnum
             },
             status: {
                 type: Status.schema
@@ -203,6 +210,9 @@ class Project extends AbstractModel {
             middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             taxonomyPopulate(this, 'skills');
             middlewarePopulateProperty(this, 'mainImage');
+            middlewarePopulateProperty(this, 'sponsor.entity')
+            middlewarePopulateProperty(this, 'producer')
+            middlewarePopulateProperty(this, 'entityInCharge')
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel)
             populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel)
@@ -212,6 +222,9 @@ class Project extends AbstractModel {
             middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             taxonomyPopulate(this, 'skills');
             middlewarePopulateProperty(this, 'mainImage');
+            middlewarePopulateProperty(this, 'sponsor.entity')
+            middlewarePopulateProperty(this, 'producer')
+            middlewarePopulateProperty(this, 'entityInCharge')
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel)
             populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel)
