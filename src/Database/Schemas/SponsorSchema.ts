@@ -22,7 +22,7 @@ export class Sponsor {
         //Id of the entity linked if exist
         entity: {
             type: mongoose.Types.ObjectId,
-            refPath: "entityType"
+            refPath: "sponsor.entityType"
             //required: true
         },
         entityType: {

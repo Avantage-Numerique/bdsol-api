@@ -51,3 +51,32 @@ C'est la partie du projet comprenant l'échéancié spécifique. Une liste des �
 - step : (string) Nom de l'étape (Fabrication des décors)
 - eta : (string) Temps estimé pour la réalisation de l'étape
 - budgetRange : (string) Coût estimé ou budget disponible pour la réalisation de l'étape
+
+
+## Enum
+Le choix des enum a été fait à partir de 0 jusqu'à un montant où une durée raisonnable. Ils seront à revoir, et la façon de ranger les données dans la base de donnée aussi.
+
+```typescript
+export enum budgetRangeEnum {
+    zeroToThousand = "0-1k",
+    thousandToFiveThousand = "1k-5k",
+    fiveToTenThousand = "5k-10k",
+    tenToTwentyFiveThousand= "10k-25k",
+    twentyFiveToFiftyThousand = "25k-50k",
+    fiftyToHundred = "50k-100k",
+    hundredOrMore = "100k+"
+}
+
+export enum timeframeEtaEnum {
+    aDay = "1 day",
+    aWeek = "1 week",
+    twoWeek = "2 week",
+    aMonth = "1 month",
+    threeMonth = "3 month",
+    sixMonth = "6 month",
+    aYear = "1 year",
+    twoYear = "2 year",
+    threeYear = "3 year",
+    fiveYearOrMore = "5 year +"
+}
+```

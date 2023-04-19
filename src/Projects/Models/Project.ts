@@ -93,7 +93,6 @@ class Project extends AbstractModel {
             },
             sponsor: {
                 type: [Sponsor.schema],
-                ref: "Person"
             },
             scheduleBudget: {
                 type: ScheduleBudget.schema

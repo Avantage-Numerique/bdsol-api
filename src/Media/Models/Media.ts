@@ -92,7 +92,6 @@ class Media extends AbstractModel {
                     type: String,
                     required: true,
                     enum: ['Person', 'Organisation']
-                    //required: true
                 },
                 uploadedBy: {
                     type: mongoose.Types.ObjectId,

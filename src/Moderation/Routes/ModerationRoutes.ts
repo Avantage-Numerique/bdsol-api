@@ -1,6 +1,8 @@
 import express, {Request, Response} from "express";
 import { StatusStates } from "../Schemas/StatusSchema";
 import { StatusCodes } from "http-status-codes";
+import { ProjectContextEnum } from "../../Projects/ProjectContextEnum";
+import { BudgetRangeEnum, TimeframeEtaEnum } from "../../Database/Schemas/ScheduleBudgetSchema";
 
 class ModerationRoutes {
 
@@ -20,6 +22,9 @@ class ModerationRoutes {
      */
     public setupPublicRoutes(): express.Router {
         this.routerInstance.get('/status-enum', this.getStatusEnumHandler);
+        this.routerInstance.get('/context-enum', this.getContextEnumHandler);
+        this.routerInstance.get('/budgetrange-enum', this.getBudgetRangeEnumHandler);
+        this.routerInstance.get('/timeframeeta-enum', this.getTimeframeEtaEnumHandler);
         return this.routerInstance;
     }
 
@@ -32,8 +37,17 @@ class ModerationRoutes {
      * @param res {Response}
      * @return {Promise<any>}
      */
-     public async getStatusEnumHandler(req: Request, res: Response): Promise<any> {
-        return res.status(StatusCodes.OK).send(StatusStates);
+    public async getStatusEnumHandler(req: Request, res: Response): Promise<any> {
+       return res.status(StatusCodes.OK).send(StatusStates);
+    }
+    public async getContextEnumHandler(req: Request, res: Response): Promise<any> {
+       return res.status(StatusCodes.OK).send(ProjectContextEnum);
+    }
+    public async getBudgetRangeEnumHandler(req: Request, res: Response): Promise<any> {
+       return res.status(StatusCodes.OK).send(BudgetRangeEnum);
+    }
+    public async getTimeframeEtaEnumHandler(req: Request, res: Response): Promise<any> {
+       return res.status(StatusCodes.OK).send(TimeframeEtaEnum);
     }
 }
 export default ModerationRoutes

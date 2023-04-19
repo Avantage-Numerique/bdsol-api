@@ -13,7 +13,7 @@ const mongoosePopulate = (document: any,
 
     //populate method have a property called options.
 
-    let populateOptions: { path: string, select?: string | undefined, model?: any } = {
+    const populateOptions: { path: string, select?: string | undefined, model?: any } = {
         path: schemaProperty
     }
 
