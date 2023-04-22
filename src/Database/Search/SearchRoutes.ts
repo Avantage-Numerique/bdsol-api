@@ -54,6 +54,7 @@ class SearchRoutes extends AbstractRoute {
      * Handle the search and returns the full list of entity
      * @param req {Request}
      * @param res {Response}
+     * @param next {NextFunction}
      * @return {Promise<any>}
      */
     public async getSearchOnParam(req: Request, res: Response, next: NextFunction): Promise<any> {
@@ -95,6 +96,7 @@ class SearchRoutes extends AbstractRoute {
      * Handle the search and returns only and overview about what would the full search return
      * @param req {Request}
      * @param res {Response}
+     * @param next {NextFunction}
      * @return {Promise<any>}
      */
     public async getSearchSuggestion(req: Request, res: Response, next: NextFunction): Promise<any> {
@@ -172,20 +174,31 @@ class SearchRoutes extends AbstractRoute {
     public static async internalFindEntityLinkedToTaxonomy(taxonomyId:string){
         const personModel:any = Person.getInstance().mongooseModel;
         const organisationModel:any = Organisation.getInstance().mongooseModel;
+        //const ProjectModel:any = Organisation.getInstance().mongooseModel;
         try{
             const paramId = new mongoose.Types.ObjectId(taxonomyId);
             const promises = [];
             promises.push(
                 await personModel.find(
-                    { "occupations.occupation": paramId }
+                    {
+                        $or: [
+                            {"occupations.occupation": paramId},
+                            {"domains.domain": paramId},
+                        ]
+                    }
                 ));
             promises.push(
                 await organisationModel.find(
-                    { "offers.offer": paramId },
+                    {
+                        $or: [
+                            {"offers.offer": paramId},
+                            {"domains.domain": paramId},
+                        ]
+                    }
                 ));
     
             let tagSearchResult = [];
-            if(promises.length > 0){
+            if(promises.length > 0) {
                  tagSearchResult = promises.flat();
             }
             return tagSearchResult;
