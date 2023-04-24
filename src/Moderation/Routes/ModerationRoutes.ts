@@ -3,6 +3,7 @@ import { StatusStates } from "../Schemas/StatusSchema";
 import { StatusCodes } from "http-status-codes";
 import { ProjectContextEnum } from "../../Projects/ProjectContextEnum";
 import { BudgetRangeEnum, TimeframeEtaEnum } from "../../Database/Schemas/ScheduleBudgetSchema";
+import EnumHelper from "../../Helpers/EnumHelper";
 
 class ModerationRoutes {
 
@@ -41,7 +42,7 @@ class ModerationRoutes {
        return res.status(StatusCodes.OK).send(StatusStates);
     }
     public async getContextEnumHandler(req: Request, res: Response): Promise<any> {
-       return res.status(StatusCodes.OK).send(ProjectContextEnum);
+       return res.status(StatusCodes.OK).send(EnumHelper.enumToSelectOptions(ProjectContextEnum));
     }
     public async getBudgetRangeEnumHandler(req: Request, res: Response): Promise<any> {
        return res.status(StatusCodes.OK).send(BudgetRangeEnum);
