@@ -45,10 +45,10 @@ class ModerationRoutes {
        return res.status(StatusCodes.OK).send(EnumHelper.enumToSelectOptions(ProjectContextEnum));
     }
     public async getBudgetRangeEnumHandler(req: Request, res: Response): Promise<any> {
-       return res.status(StatusCodes.OK).send(BudgetRangeEnum);
+       return res.status(StatusCodes.OK).send(EnumHelper.enumToSelectOptions(BudgetRangeEnum));
     }
     public async getTimeframeEtaEnumHandler(req: Request, res: Response): Promise<any> {
-       return res.status(StatusCodes.OK).send(TimeframeEtaEnum);
+       return res.status(StatusCodes.OK).send(EnumHelper.enumToSelectOptions(TimeframeEtaEnum));
     }
 }
 export default ModerationRoutes

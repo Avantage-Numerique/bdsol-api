@@ -7,7 +7,6 @@ class EnumHelper {
     }
 
     public static enumToSelectOptions (baseEnum:any) {
-        console.log(baseEnum)
         const selectOptions:any[] = [];
         Object.keys(baseEnum).forEach( (el:any) => {
             selectOptions.push( { value : baseEnum[el], label : el} )
