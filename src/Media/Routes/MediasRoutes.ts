@@ -15,6 +15,7 @@ import * as path from "path";
 import Organisation from "../../Organisations/Models/Organisation";
 import Person from "../../Persons/Models/Person";
 import config from "../../config";
+import {now} from "../../Helpers/DateTime";
 
 class MediasRoutes extends AbstractRoute {
 
@@ -311,11 +312,11 @@ class MediasRoutes extends AbstractRoute {
      * @param next {NextFunction}
      */
     public async viewMedia(req: Request, res: Response, next: NextFunction): Promise<any> {
-        const options = {
+        const options:any = {
             root: config.basepath,
-            dotfiles: 'deny',
+            dotfiles: "deny",
             headers: {
-                'x-timestamp': Date.now(),
+                'x-timestamp': now(),
                 'x-sent': true
             }
         };
