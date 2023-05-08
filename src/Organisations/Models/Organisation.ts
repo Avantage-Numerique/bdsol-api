@@ -128,74 +128,11 @@ class Organisation extends AbstractModel {
                 timestamps: true
             });
 
-    /** @public Used to return attributes and rules for each field of this entity. */
-    fieldInfo =
-        {
-            "route": "",
-            "field": [
-                {
-                    "name": "name",
-                    "label": "name",
-                    "type": "String",
-                    "rules": []
-                },
-                {
-                    "name": "description",
-                    "label": "Description",
-                    "type": "String",
-                    "rules": []
-                },
-                {
-                    "name": "url",
-                    "label": "Site internet",
-                    "type": "String",
-                    "rules": []
-                },
-                {
-                    "name": "contactPoint",
-                    "label": "Point de contact",
-                    "type": "String",
-                    "rules": []
-                },
-                {
-                    "name": "fondationDate",
-                    "label": "Date de fondation",
-                    "type": "Date",
-                    "rules": []
-                },
-                {
-                    "name": "offers",
-                    "label": "Offre de service",
-                    "type": "ObjectId",
-                    "rules": []
-                }
-            ]
-        };
+    /** @deprecated */
+    fieldInfo = {};
 
-    /**
-     * @public Rule set for every field of this entity for each route
-     * @deprecated*/
-    ruleSet: any = {
-        "default": {
-            "id": ["idValid"],
-            "name": ["isString"],
-            "description": ["isString"],
-            "url": ["isString"],
-            "contactPoint": ["isString"],
-            "fondationDate": ["isDate"]
-        },
-        "create": {
-            "name": ["isDefined", "minLength:2"],
-        },
-        "update": {
-            "id": ["isDefined"]
-        },
-        "search": {},
-        "list": {},
-        "delete": {
-            "id": ["isDefined"]
-        }
-    }
+    /**  @deprecated*/
+    ruleSet: any = {}
 
     /**
      * @get the field that are searchable.
