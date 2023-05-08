@@ -13,7 +13,6 @@ class ProjectsController extends AbstractController {
     /** @public Model */
     entity: Project;
 
-    name: string = "Project";
 
     constructor() {
         super();

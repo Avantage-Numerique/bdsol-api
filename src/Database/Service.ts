@@ -103,7 +103,7 @@ export abstract class Service
         try {
             const items = await this.model.find(query).sort(sort).skip(skip).limit(limit);
             const returnItems = items.map( (doc:any) => {
-                return this.appModel.dataTransfertObject(doc)
+                return this.appModel.dataTransfertObject(doc);
             })
 
             //populate

@@ -29,7 +29,7 @@ class Project extends AbstractModel {
             Project._instance.registerEvents();
 
             //Setting virtuals
-            Project._instance.schema.virtual("type").get( function () { return Project._instance.modelName });
+            Project._instance.schema.virtual("type").get( function() { return Project._instance.modelName });
 
             Project._instance.initSchema();
 
@@ -108,10 +108,8 @@ class Project extends AbstractModel {
             status: {
                 type: Status.schema
             }
-
-        },
-            {
-                toJSON: {virtuals: true},
+        }, {
+                toJSON: { virtuals: true },
                 timestamps: true,
             });
 
@@ -159,6 +157,7 @@ class Project extends AbstractModel {
             scheduleBudget: document.scheduleBudget ?? '',
             skills: document.skills ?? '',
             status: document.status ?? '',
+            type: document.type ?? '',
             createdAt: document.createdAt ?? '',
             updatedAt: document.updatedAt ?? '',
         }
