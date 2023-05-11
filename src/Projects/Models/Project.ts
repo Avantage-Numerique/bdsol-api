@@ -63,6 +63,13 @@ class Project extends AbstractModel {
             alternateName: {
                 type: String
             },
+            slug: {
+                type: String,
+                slug: "name",
+                slugPaddingSize: 2,
+                index: true,
+                unique: true
+            },
             entityInCharge: {
                 type: mongoose.Types.ObjectId,
                 ref: "Organisation"
