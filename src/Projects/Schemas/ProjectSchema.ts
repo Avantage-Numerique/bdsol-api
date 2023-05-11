@@ -11,6 +11,7 @@ import { ProjectContextEnum } from "../ProjectContextEnum";
 export interface ProjectSchema extends Document {
     name:string;
     alternateName:string;
+    slug:string;
     entityInCharge:ObjectId;
     producer: ObjectId;
     description:string;

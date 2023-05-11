@@ -133,6 +133,7 @@ class Project extends AbstractModel {
     get searchSearchableFields(): object {
         return ["name",
         "alternateName",
+        "slug",
         "description",
         "url",
         "contactPoint",
@@ -154,6 +155,7 @@ class Project extends AbstractModel {
             _id: document._id ?? '',
             name: document.name ?? '',
             alternateName: document.alternateName ?? '',
+            slug: document.slug ?? '',
             description: document.description ?? '',
             url: document.url ?? '',
             contactPoint: document.contactPoint ?? '',
