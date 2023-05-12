@@ -75,7 +75,7 @@ class Project extends AbstractModel {
             slug: {
                 type: String,
                 slug: "name",
-                slugPaddingSize: 2,
+                slugPaddingSize: 3,
                 index: true,
                 unique: true
             },
@@ -87,13 +87,6 @@ class Project extends AbstractModel {
             producer: {
                 type: mongoose.Types.ObjectId,
                 ref: "Organisation" //Investigate refPath or dynamic populate model call
-            },
-            slug: {
-                type: String,
-                slug: "name",
-                slugPaddingSize: 3,
-                index: true,
-                unique: true
             },
             description: {
                 type: String
@@ -171,7 +164,6 @@ class Project extends AbstractModel {
             name: document.name ?? '',
             slug: document.slug ?? '',
             alternateName: document.alternateName ?? '',
-            slug: document.slug ?? '',
             description: document.description ?? '',
             url: document.url ?? '',
             contactPoint: document.contactPoint ?? '',
