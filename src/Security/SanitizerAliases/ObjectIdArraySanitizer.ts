@@ -9,15 +9,13 @@ import {ValidationChain} from "express-validator/src/chain/validation-chain";
  * @param isOptional {boolean}
  * @param source {any} it's a param to change from body to params
  */
-const isObjectId = (param:string, isOptional:boolean=true, source=body):ValidationChain => {
+const isObjectIdArray = (param:string, isOptional:boolean=true, source=body):ValidationChain => {
 
-    let chain:ValidationChain = source(param);
+    let baseChain:ValidationChain = source(param);
+    let chain = baseChain.exists({checkFalsy:true}).bail();
 
-    if (isOptional) {
-        chain = chain.exists({checkFalsy:true}).bail();
-    }
     if (!isOptional) {
-        chain = chain.notEmpty();
+        chain = baseChain.notEmpty();
     }
 
     return chain
@@ -25,4 +23,4 @@ const isObjectId = (param:string, isOptional:boolean=true, source=body):Validati
         .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
 }
 
-export {isObjectId}
+export {isObjectIdArray}

@@ -1,12 +1,10 @@
-import mongoose, {Schema} from "mongoose";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
-
-
+import {Schema} from "mongoose";
 
 export interface LocationSchema extends Document {
+    address:string;
     latitude:string;
     longitude:string;
-    status:Status;
+    //status:Status;
 }
 
 export class Location {
@@ -14,17 +12,15 @@ export class Location {
     /** @static schema*/
     static schema:Schema = 
     new Schema<LocationSchema>({
-        latitude: {
-            type: String,
-        },
-        longitude: {
-            type: String,
-        },
-        status: {
-            type: Status.schema
-        }
-    }, {
-        timestamps: true
-        }
+            address: {
+                type: String
+            },
+            latitude: {
+                type: String
+            },
+            longitude: {
+                type: String
+            }
+        }, { _id : false }
     );
 }

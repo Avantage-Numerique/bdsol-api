@@ -4,7 +4,11 @@
         {
             "name":"Update Full",
             "error":false,
-            "status":200
+            "status":200,
+            "ignoreFields":{
+                "location": "undefined",
+                "scheduleBudget": "undefined"
+            }
         },
         "name" : "NotreNoranda",
         "alternateName" : "Unsere Noranda",
@@ -25,8 +29,8 @@
         "infoTest":
         {
             "name":"Update empty req",
-            "error":false,
-            "status":200
+            "error":true,
+            "status":400
         },
         "name" : ""
     },
@@ -34,8 +38,8 @@
         "infoTest":
         {
             "name":"Update empty (less than 2 char) required",
-            "error":false,
-            "status":200
+            "error":true,
+            "status":400
         },
         "name" : "2"
     },
@@ -44,7 +48,10 @@
         {
             "name":"Update random type",
             "error":true,
-            "status":400
+            "status":400,
+            "ignoreFields":{
+                "team": "undefined"
+            }
         },
         "name" : 12,
         "alternateName" : "Unsere Noranda",
@@ -60,7 +67,6 @@
             "state":"pending",
             "lastModifiedBy":"000000000000000000000123"
         }
-
     },
     {
         "infoTest":

@@ -1,15 +1,12 @@
 import mongoose, {Schema} from "mongoose";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
 
-
-
 export interface RoleSchema extends Document {
     group:string;
     title:string;
 }
 
 export class Role {
-
     /** @static schema*/
     static schema:Schema = 
     new Schema<RoleSchema>({
@@ -35,8 +32,7 @@ export interface MemberSchema extends Document {
 export class Member {
 
     /** @static schema */
-    static schema:Schema =
-    new Schema<MemberSchema>({
+    static schema:Schema = new Schema<MemberSchema>({
         //Id of the member of the team
         member: {
             type: mongoose.Types.ObjectId,
@@ -50,9 +46,5 @@ export class Member {
             type: Status.schema,
             //required: true
         }
-    },
-        {
-            timestamps: true
-        }
-    );
+    }, { _id : false });
 }

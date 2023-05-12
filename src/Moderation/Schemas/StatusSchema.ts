@@ -38,5 +38,5 @@ export class Status {
         message: {
             type: String,
         }
-    });
+    }, { _id : false });
 }

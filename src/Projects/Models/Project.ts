@@ -4,7 +4,6 @@ import {ProjectSchema} from "../Schemas/ProjectSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import ProjectsService from "../Services/ProjectsService";
-import { Member } from "../../Database/Schemas/MemberSchema";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
 import { middlewarePopulateProperty, taxonomyPopulate } from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 import { populateUser } from "../../Users/Middlewares/populateUser";
@@ -13,6 +12,7 @@ import { Sponsor } from "../../Database/Schemas/SponsorSchema";
 import { ScheduleBudget } from "../../Database/Schemas/ScheduleBudgetSchema";
 import { Location } from "../../Database/Schemas/LocationSchema";
 import { ProjectContextEnum } from "../ProjectContextEnum";
+import {TeamField} from "../../Team/Schemas/TeamSchema";
 
 class Project extends AbstractModel {
 
@@ -34,7 +34,16 @@ class Project extends AbstractModel {
             Project._instance.initSchema();
 
             //Index
-            Project._instance.schema.index({ "name":1 });
+            Project._instance.schema.index(
+                { name:"text", slug:"text" },
+                {
+                    default_language: "french",
+                    //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
+                    weights:{
+                        name:3,
+                        slug:3
+                    }
+                });
             //index text for search ?
         }
         return Project._instance;
@@ -79,6 +88,13 @@ class Project extends AbstractModel {
                 type: mongoose.Types.ObjectId,
                 ref: "Organisation" //Investigate refPath or dynamic populate model call
             },
+            slug: {
+                type: String,
+                slug: "name",
+                slugPaddingSize: 3,
+                index: true,
+                unique: true
+            },
             description: {
                 type: String
             },
@@ -89,12 +105,10 @@ class Project extends AbstractModel {
                 type: String
             },
             location: {
-                type: Location.schema
+                type: Location.schema,
+                default: {}
             },
-            team: {
-                type: [Member.schema],
-                ref: "Person"
-            },
+            team: TeamField,
             mainImage: {
                 type: mongoose.Types.ObjectId,
                 ref: "Media"
@@ -155,18 +169,19 @@ class Project extends AbstractModel {
         return {
             _id: document._id ?? '',
             name: document.name ?? '',
+            slug: document.slug ?? '',
             alternateName: document.alternateName ?? '',
             slug: document.slug ?? '',
             description: document.description ?? '',
             url: document.url ?? '',
             contactPoint: document.contactPoint ?? '',
-            location: document.location ?? '',
-            team: document.team ?? '',
-            mainImage: document.mainImage ?? '',
-            sponsor: document.sponsor ?? '',
-            scheduleBudget: document.scheduleBudget ?? '',
-            skills: document.skills ?? '',
-            status: document.status ?? '',
+            location: document.location ?? undefined,
+            team: document.team ?? undefined,
+            mainImage: document.mainImage ?? "",
+            sponsor: document.sponsor ?? undefined,
+            scheduleBudget: document.scheduleBudget ?? undefined,
+            skills: document.skills ?? undefined,
+            status: document.status ?? undefined,
             type: document.type ?? '',
             createdAt: document.createdAt ?? '',
             updatedAt: document.updatedAt ?? '',

@@ -4,11 +4,7 @@
         {
             "name":"Create Full",
             "error":false,
-            "status":201,
-            "ignoreFields":{
-                "location": "undefined",
-                "scheduleBudget": "undefined"
-            }
+            "status":201
         },
         "name" : "MaNoranda",
         "alternateName" : "Ma Noranda",
@@ -30,11 +26,7 @@
         {
             "name":"Create empty all, but required",
             "error":false,
-            "status":201,
-            "ignoreFields":{
-                "location": "undefined",
-                "scheduleBudget": "undefined"
-            }
+            "status":201
         },
         "name" : "Rime la lime",
         "alternateName" : "",
@@ -56,11 +48,7 @@
         {
             "name":"Create no required",
             "error":true,
-            "status":400,
-            "ignoreFields":{
-                "location": "undefined",
-                "scheduleBudget": "undefined"
-            }
+            "status":400
         },
         "alternateName" : "La limousine du péché",
         "description" : "Risquer mais sûrement riche",
@@ -89,11 +77,7 @@
         {
             "name":"Create empty (less than 2 char) required",
             "error":true,
-            "status":400,
-            "ignoreFields":{
-                "location": "undefined",
-                "scheduleBudget": "undefined"
-            }
+            "status":400
         },
         "name" : "O",
         "alternateName" : "La limousine du voisin",

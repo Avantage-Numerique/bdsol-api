@@ -2,6 +2,15 @@ import express from "express";
 import ProjectsController from "../Controllers/ProjectsController";
 import AbstractController from "../../Abstract/Controller";
 import CrudRoute from "../../Abstract/CrudRoute";
+import {body} from "express-validator";
+import {EnumSanitizer} from "../../Security/Sanitizers/EnumSanitizer";
+import {ProjectContextEnum} from "../ProjectContextEnum";
+import {isObjectId} from "../../Security/SanitizerAliases/ObjectIdSanitizer";
+import {isURL} from "../../Security/SanitizerAliases/UrlSanitizer";
+import {isContactPoint} from "../../Security/SanitizerAliases/ContactSanitizer";
+import {EntityNameSanitizer} from "../../Security/SanitizerAliases/EntityNameSanitizer";
+import {basicHtmlSanitizer} from "../../Security/SanitizerAliases/BasicHtmlSanitizer";
+import {noHtmlStringSanitizer} from "../../Security/SanitizerAliases/NoHtmlStringSanitizer";
 
 class ProjectsRoutes extends CrudRoute {
 
@@ -12,8 +21,76 @@ class ProjectsRoutes extends CrudRoute {
     middlewaresDistribution: any = {
         all: [],
         createUpdate: [],
-        create: [],
-        update: [],
+        create: [
+            EntityNameSanitizer('data.name', false),
+
+            noHtmlStringSanitizer('data.alternateName'),
+
+            isObjectId('data.entityInCharge'),
+
+            isObjectId('data.producer'),
+
+            basicHtmlSanitizer('data.description'),
+
+            isURL('data.url'),
+
+            isContactPoint('data.contactPoint'),
+
+            body('data.context').exists({checkNull:true}).bail()
+                .customSanitizer(EnumSanitizer.validatorCustomSanitizer(ProjectContextEnum)),
+
+            body('data.location').exists({checkNull:true}).bail(),
+
+            body('data.team').exists({checkNull:true}).bail()
+                .isArray(),
+            isObjectId('data.team.*'),
+            //body('data.sponsor').exists({checkNull:true}).bail(),
+            //body('data.scheduleBudget').exists({checkNull:true}).bail(),
+
+            isObjectId('data.mainImage').trim(),
+
+            /*body('data.skills').exists({checkNull:true}).bail()
+                .custom(IsObjectIdStringValid.validatorCustom())
+                .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
+                .trim(),*/
+
+            //status not sanitize yet, because it will be manage by backend
+        ],
+        update: [
+            EntityNameSanitizer('data.name'),
+
+            noHtmlStringSanitizer('data.alternateName'),
+
+            isObjectId('data.entityInCharge'),
+
+            isObjectId('data.producer'),
+
+            basicHtmlSanitizer('data.description'),
+
+            isURL('data.url'),
+
+            isContactPoint('data.contactPoint'),
+
+            body('data.context').exists({checkNull:true}).bail()
+                .customSanitizer(EnumSanitizer.validatorCustomSanitizer(ProjectContextEnum)),
+
+            body('data.location').exists({checkNull:true}).bail(),
+
+            body('data.team').exists({checkNull:true}).bail()
+                .isArray(),
+            isObjectId('data.team.*'),
+            //body('data.sponsor').exists({checkNull:true}).bail(),
+            //body('data.scheduleBudget').exists({checkNull:true}).bail(),
+
+            isObjectId('data.mainImage').trim(),
+
+            /*body('data.skills').exists({checkNull:true}).bail()
+                .custom(IsObjectIdStringValid.validatorCustom())
+                .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
+                .trim(),*/
+
+            //status not sanitize yet, because it will be manage by backend
+        ],
         delete: [],
         search: [],
         list: [],

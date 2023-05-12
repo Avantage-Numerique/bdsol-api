@@ -1,4 +1,4 @@
-import mongoose, {Schema} from "mongoose";
+import {Schema} from "mongoose";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
 
 export enum BudgetRangeEnum {
@@ -87,9 +87,6 @@ export class ScheduleBudget {
             type: Status.schema,
             //required: true
         }
-    },
-        {
-            timestamps: true
-        }
+    },{ _id : false }
     );
 }

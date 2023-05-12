@@ -7,7 +7,7 @@ import * as fs from 'fs';
 import TaxonomyController from "../../Taxonomy/Controllers/TaxonomyController";
 import OrganisationsService from "../Services/OrganisationsService";
 import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
-import { Member } from "../../Database/Schemas/MemberSchema";
+import { Member } from "../../Team/Schemas/MemberSchema";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
 import {middlewarePopulateProperty, taxonomyPopulate} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 import {populateUser} from "../../Users/Middlewares/populateUser";

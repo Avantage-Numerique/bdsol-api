@@ -1,6 +1,6 @@
-import mongoose, {Document} from "mongoose";
+import {Document} from "mongoose";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
-import { Member } from "../../Database/Schemas/MemberSchema";
+import { Member } from "../../Team/Schemas/MemberSchema";
 import Media from "../../Media/Models/Media";
 import { ObjectId } from "mongodb";
 import { Sponsor } from "../../Database/Schemas/SponsorSchema";
@@ -10,6 +10,7 @@ import { ProjectContextEnum } from "../ProjectContextEnum";
 
 export interface ProjectSchema extends Document {
     name:string;
+    slug:string;
     alternateName:string;
     slug:string;
     entityInCharge:ObjectId;
