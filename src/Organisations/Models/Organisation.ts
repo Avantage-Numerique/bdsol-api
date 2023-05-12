@@ -193,7 +193,7 @@ class Organisation extends AbstractModel {
                         return new mongoose.Types.ObjectId(id);
                     })
                 });
-                await middlewareTaxonomy(idList, TaxonomyController, "offers.skills");
+                await middlewareTaxonomy(idList.flat(), TaxonomyController, "offers.skills");
                 return next();
             });
 
@@ -207,7 +207,7 @@ class Organisation extends AbstractModel {
                             return new mongoose.Types.ObjectId(id);
                         })
                     });
-                    await middlewareTaxonomy(idList, TaxonomyController, "offers.skills");
+                    await middlewareTaxonomy(idList.flat(), TaxonomyController, "offers.skills");
                 }
 
                 return next();

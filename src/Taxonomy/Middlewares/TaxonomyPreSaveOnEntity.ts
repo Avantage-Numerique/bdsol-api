@@ -11,7 +11,7 @@ import {TaxonomiesCategoriesEnum} from "../TaxonomiesCategoriesEnum";
 const middlewareTaxonomy = async (idList:any,
                                   controller:any,
                                   taxonomyProperty:string = 'occupations',
-                                  taxonomy:string = TaxonomiesCategoriesEnum.Occupations) => {
+                                  taxonomy:string = "") => {
     if (idList.length != 0)
     {
         LogHelper.debug("MiddlewareTaxonomy : ", taxonomyProperty, idList);

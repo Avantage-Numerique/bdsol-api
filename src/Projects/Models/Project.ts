@@ -72,6 +72,7 @@ class Project extends AbstractModel {
             },
             entityInCharge: {
                 type: mongoose.Types.ObjectId,
+                required: true,
                 ref: "Organisation"
             },
             producer: {
