@@ -12,7 +12,6 @@ export interface ProjectSchema extends Document {
     name:string;
     slug:string;
     alternateName:string;
-    slug:string;
     entityInCharge:ObjectId;
     producer: ObjectId;
     description:string;
