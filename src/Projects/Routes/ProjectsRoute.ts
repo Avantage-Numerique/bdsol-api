@@ -22,42 +22,14 @@ class ProjectsRoutes extends CrudRoute {
         all: [],
         createUpdate: [],
         create: [
-            EntityNameSanitizer('data.name', false),
-
-            noHtmlStringSanitizer('data.alternateName'),
-
-            isObjectId('data.entityInCharge'),
-
-            isObjectId('data.producer'),
-
-            basicHtmlSanitizer('data.description'),
-
-            isURL('data.url'),
-
-            isContactPoint('data.contactPoint'),
-
-            body('data.context').exists({checkNull:true}).bail()
-                .customSanitizer(EnumSanitizer.validatorCustomSanitizer(ProjectContextEnum)),
-
-            body('data.location').exists({checkNull:true}).bail(),
-
-            body('data.team').exists({checkNull:true}).bail()
-                .isArray(),
-            isObjectId('data.team.*'),
-            //body('data.sponsor').exists({checkNull:true}).bail(),
-            //body('data.scheduleBudget').exists({checkNull:true}).bail(),
-
-            isObjectId('data.mainImage').trim(),
-
-            /*body('data.skills').exists({checkNull:true}).bail()
-                .custom(IsObjectIdStringValid.validatorCustom())
-                .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
-                .trim(),*/
-
-            //status not sanitize yet, because it will be manage by backend
+            body('data.name')
+                .isLength({min:2})
+                .withMessage('[EntityNameSanitizer] must be at least 2 chars long'),
         ],
         update: [
-            EntityNameSanitizer('data.name'),
+            /*body('data.name')
+                .isLength({min:2})
+                .withMessage('[EntityNameSanitizer] must be at least 2 chars long'),
 
             noHtmlStringSanitizer('data.alternateName'),
 
@@ -89,7 +61,7 @@ class ProjectsRoutes extends CrudRoute {
                 .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
                 .trim(),*/
 
-            //status not sanitize yet, because it will be manage by backend
+            //status not sanitize yet, because it will be manage by backend*/
         ],
         delete: [],
         search: [],
@@ -104,6 +76,11 @@ class ProjectsRoutes extends CrudRoute {
 
     public setupAdditionnalAuthRoutes(router: express.Router): express.Router {
         return router;
+    }
+
+    public addMiddlewares(route: string, middlewares: string = ""): Array<any> {
+        if (route === "create") console.log("Projets addMiddlewares", this.middlewaresDistribution[route]);
+        return super.addMiddlewares(route, middlewares);
     }
 }
 

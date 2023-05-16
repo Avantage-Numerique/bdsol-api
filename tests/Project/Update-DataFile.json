@@ -59,7 +59,7 @@
         "url" : "www.unserenoranda.com",
         "contactPoint" : "Notre AxelAndré Guay-Caston",
         "location" : [],
-        "team" : {},
+        "team" : "{}",
         "sponsor" : 13,
         "scheduleBudget" : 14,
         "skills": 56,

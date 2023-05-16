@@ -9,6 +9,7 @@ import UsersHistoryService from "../UserHistory/Services/UsersHistoryService";
 import UserHistory from "../UserHistory/Models/UserHistory";
 import {UserHistorySchema} from "../UserHistory/Schemas/UserHistorySchema";
 import {ControllerContract} from "./Contracts/ControllerContract";
+import LogHelper from "../Monitoring/Helpers/LogHelper";
 
 /**
  * AbstractController
@@ -30,6 +31,7 @@ abstract class AbstractController implements ControllerContract {
     public async create(requestData: any): Promise<ApiResponseContract> {
         console.log("reqData",requestData)
         const createdDocumentResponse = await this.service.insert(requestData);
+
         if (createdDocumentResponse !== undefined)
             return createdDocumentResponse;
 
@@ -48,7 +50,7 @@ abstract class AbstractController implements ControllerContract {
      */
     public async update(requestData: any): Promise<ApiResponseContract> {
         const updatedModelResponse: any = await this.service.update(requestData);
-
+        LogHelper.debug("Controller update", updatedModelResponse);
         if (updatedModelResponse !== undefined)
             return updatedModelResponse;
 

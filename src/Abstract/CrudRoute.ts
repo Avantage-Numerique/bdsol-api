@@ -3,7 +3,7 @@ import AbstractRoute from "./Route";
 import express, {NextFunction, Request, Response} from "express";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 import {ApiResponseContract} from "../Http/Responses/ApiResponse";
-import {param} from "express-validator";
+import {body, param, validationResult} from "express-validator";
 import {NoAccentSanitizer} from "../Security/Sanitizers/NoAccentSanitizer";
 import {NoSpaceSanitizer} from "../Security/Sanitizers/NoSpaceSanitizer";
 import AbstractController from "./Controller";
@@ -67,8 +67,12 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
         //create target entity with upload
         this.routerInstanceAuthentification.post('/create', [
-            ...this.addMiddlewares("all"),
-            ...this.addMiddlewares("create"),
+            //...this.addMiddlewares("all"),
+            //...this.addMiddlewares("create"),
+            body('data.name')
+                .isLength({min:2})
+                .withMessage('[EntityNameSanitizer] must be at least 2 chars long'),
+            this.validatingResults.bind(this),
             this.createHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
@@ -346,6 +350,15 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
         res.serviceResponse = await this.controllerInstance.list(query);
         return next();
+    }
+
+    public async validatingResults(req: Request, res: Response, next: NextFunction):Promise<any> {
+        const results = validationResult(req);
+        if (results.isEmpty()) {
+            return next();
+        }
+
+        console.log("ERROR validatingResults handler", results);
     }
 
 }

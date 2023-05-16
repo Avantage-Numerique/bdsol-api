@@ -175,19 +175,35 @@ export class Str {
     }
 
     public static allowedChars(str:string):string {
-        return str.replace(Str.ALLOW_CHAR, "");
+        if (Str.isString(str)) {
+            return str.replace(Str.ALLOW_CHAR, "");
+        }
+        return "";
     }
 
     public static noSpaces(str:string):string {
-        return str.replace(Str.NO_SPACE, "")
+        if (Str.isString(str)) {
+            return str.replace(Str.NO_SPACE, "");
+        }
+        return "";
     }
 
     public static toObjectIdAllowedCharacter(str:string):string {
-        return str.replace(Str.OBJECTID_ALLOWED_CHAR, "");
+        if (Str.isString(str)) {
+            return str.replace(Str.OBJECTID_ALLOWED_CHAR, "");
+        }
+        return "";
     }
 
     public static alphaNumOnly(str:string):string {
-        return str.replace(Str.ALPHA_NUM_ONLY, "");
+        if (Str.isString(str)) {
+            return str.replace(Str.ALPHA_NUM_ONLY, "");
+        }
+        return "";
+    }
+
+    public static isString(str:string):boolean {
+        return (typeof str === "string" && str !== "");
     }
 
 }

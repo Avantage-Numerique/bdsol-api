@@ -40,7 +40,8 @@ export class Sponsor {
         }
     },
         {
-            timestamps: true
+            timestamps: false,
+            _id:false
         }
     );
 }

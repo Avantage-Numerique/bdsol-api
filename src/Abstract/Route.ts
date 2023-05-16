@@ -81,7 +81,6 @@ abstract class AbstractRoute implements RouteContract
 
         const defaultRoutes:any = this.defaultMiddlewaresDistribution[route] ?? [];
         const currentRouter:any = this.middlewaresDistribution[route] ?? [];
-
         return [...defaultRoutes, ...currentRouter];
     }
 
