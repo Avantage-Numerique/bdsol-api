@@ -1,26 +1,19 @@
 import {body} from "express-validator";
-import {ValidationChain} from "express-validator/src/chain/validation-chain";
 import {NoHtmlSanitizer} from "../Sanitizers/NoHtmlSanitizer";
+import {ApiValidatingSanitizingChainType} from "../ExpressValidator/ApiValidatingSanitizingChain";
 
-import { ExpressValidator, CustomValidationChain, CustomSchema } from 'express-validator';
+const EntityName = (param:string, isOptional:boolean=true, source=body):ApiValidatingSanitizingChainType => {
 
-const entityAliasesChain = new ExpressValidator();
-type entityAliasesChainType = CustomValidationChain<typeof entityAliasesChain>;
+    let chain:ApiValidatingSanitizingChainType = source(param);
+    chain = chain.optional({values:"falsy"})
 
-const EntityNameSanitizer = (): entityAliasesChainType => body('data.name').isLength({min:2}).withMessage('[EntityNameSanitizer] must be at least 2 chars long');
-
-const EntityNameSanitizerChain = (param:string, isOptional:boolean=true, source=body):ValidationChain => {
-
-    let chain:ValidationChain = source(param);
-
-    if (isOptional) {
-        chain = chain.exists({checkFalsy:true});
-    }
     if (!isOptional) {
-        chain = chain.notEmpty();
+        chain = chain.notEmpty().withMessage("Is required");
     }
-    console.log("EntityNameSanitizer", param, isOptional, source);
-    chain = chain.isLength({min:2}).withMessage('[EntityNameSanitizer] must be at least 2 chars long')
+
+    const minLength:number = 2;
+    chain = chain.isLength({min:minLength})
+        .withMessage(`must be at least ${minLength} chars long`)
         .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
         .stripLow()
         .trim();
@@ -28,4 +21,4 @@ const EntityNameSanitizerChain = (param:string, isOptional:boolean=true, source=
     return chain;
 }
 
-export {EntityNameSanitizer}
+export {EntityName}

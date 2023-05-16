@@ -1,16 +1,14 @@
 import {body} from "express-validator";
-import {ValidationChain} from "express-validator/src/chain/validation-chain";
 import {NoHtmlSanitizer} from "../Sanitizers/NoHtmlSanitizer";
+import {ApiValidatingSanitizingChainType} from "../ExpressValidator/ApiValidatingSanitizingChain";
 
-const isContactPoint = (param:string, isOptional:boolean=true, source=body):ValidationChain => {
+const isContactPoint = (param:string, isOptional:boolean=true, source=body):ApiValidatingSanitizingChainType => {
 
-    let chain:ValidationChain = source(param);
+    let chain:ApiValidatingSanitizingChainType = source(param);
+    chain = chain.optional({values:"falsy"});
 
-    if (isOptional) {
-        chain = chain.exists({checkFalsy:true}).bail();
-    }
     if (!isOptional) {
-        chain = chain.notEmpty();
+        chain = chain.notEmpty().withMessage("Is required");
     }
 
     return chain

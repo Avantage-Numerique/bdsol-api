@@ -1,6 +1,6 @@
 import {body} from "express-validator";
-import {ValidationChain} from "express-validator/src/chain/validation-chain";
 import {NoHtmlSanitizer} from "../Sanitizers/NoHtmlSanitizer";
+import {ApiValidatingSanitizingChainType} from "../ExpressValidator/ApiValidatingSanitizingChain";
 
 /**
  * Optionnal check if the element is set, and if it's an ObjectID.
@@ -8,10 +8,10 @@ import {NoHtmlSanitizer} from "../Sanitizers/NoHtmlSanitizer";
  * @param isOptional {boolean}
  * @param source {any} it's a param to change from body to params
  */
-const noHtmlStringSanitizer = (param:string, isOptional:boolean=true, source=body):ValidationChain => {
+const noHtml = (param:string, isOptional:boolean=true, source=body):ApiValidatingSanitizingChainType => {
 
-    let baseChain:ValidationChain = source(param);
-    let chain = baseChain.exists({checkFalsy:true}).bail();
+    let baseChain:ApiValidatingSanitizingChainType = source(param);
+    let chain = baseChain.optional({values:"falsy"})
 
     if (!isOptional) {
         chain = baseChain.notEmpty();
@@ -23,4 +23,4 @@ const noHtmlStringSanitizer = (param:string, isOptional:boolean=true, source=bod
         .trim()
 }
 
-export {noHtmlStringSanitizer}
+export {noHtml}

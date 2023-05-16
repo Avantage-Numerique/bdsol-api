@@ -3,7 +3,7 @@ import AbstractRoute from "./Route";
 import express, {NextFunction, Request, Response} from "express";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 import {ApiResponseContract} from "../Http/Responses/ApiResponse";
-import {body, param, validationResult} from "express-validator";
+import {param} from "express-validator";
 import {NoAccentSanitizer} from "../Security/Sanitizers/NoAccentSanitizer";
 import {NoSpaceSanitizer} from "../Security/Sanitizers/NoSpaceSanitizer";
 import AbstractController from "./Controller";
@@ -67,11 +67,8 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
         //create target entity with upload
         this.routerInstanceAuthentification.post('/create', [
-            //...this.addMiddlewares("all"),
-            //...this.addMiddlewares("create"),
-            body('data.name')
-                .isLength({min:2})
-                .withMessage('[EntityNameSanitizer] must be at least 2 chars long'),
+            ...this.addMiddlewares("all"),
+            ...this.addMiddlewares("create"),
             this.validatingResults.bind(this),
             this.createHandler.bind(this),
             this.routeSendResponse.bind(this),
@@ -80,6 +77,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         this.routerInstanceAuthentification.post('/update', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("update"),
+            this.validatingResults.bind(this),
             this.updateHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
@@ -87,6 +85,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         this.routerInstanceAuthentification.post('/delete', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("delete"),
+            this.validatingResults.bind(this),
             this.deleteHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
@@ -110,6 +109,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         this.routerInstance.post('/search', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("search"),
+            this.validatingResults.bind(this),
             this.searchHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
@@ -117,6 +117,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         this.routerInstance.post('/textsearch', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("search"),
+            this.validatingResults.bind(this),
             this.textSearchHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
@@ -124,6 +125,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         this.routerInstance.post('/list', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("list"),
+            this.validatingResults.bind(this),
             this.listHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
@@ -131,6 +133,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         this.routerInstance.post('/getinfo', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("getinfo"),
+            this.validatingResults.bind(this),
             this.getInfoHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
@@ -140,6 +143,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         this.routerInstance.get('/getdoc', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("getdoc"),
+            this.validatingResults.bind(this),
             this.getDocumentationHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
@@ -148,6 +152,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         this.routerInstance.get('/list', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("list"),
+            this.validatingResults.bind(this),
             this.listHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
@@ -162,6 +167,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         this.routerInstance.get('/:slug', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("bySlug"),
+            this.validatingResults.bind(this),
             this.getByUriParamsHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
@@ -350,15 +356,6 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
         res.serviceResponse = await this.controllerInstance.list(query);
         return next();
-    }
-
-    public async validatingResults(req: Request, res: Response, next: NextFunction):Promise<any> {
-        const results = validationResult(req);
-        if (results.isEmpty()) {
-            return next();
-        }
-
-        console.log("ERROR validatingResults handler", results);
     }
 
 }
