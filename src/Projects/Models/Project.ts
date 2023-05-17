@@ -162,6 +162,8 @@ class Project extends AbstractModel {
         return {
             _id: document._id ?? '',
             name: document.name ?? '',
+            entityInCharge: document.entityInCharge ?? '',
+            producer: document.producer ?? '',
             slug: document.slug ?? '',
             alternateName: document.alternateName ?? '',
             description: document.description ?? '',
@@ -173,6 +175,7 @@ class Project extends AbstractModel {
             sponsor: document.sponsor ?? undefined,
             scheduleBudget: document.scheduleBudget ?? undefined,
             skills: document.skills ?? undefined,
+            context: document.context ?? '',
             status: document.status ?? undefined,
             type: document.type ?? '',
             createdAt: document.createdAt ?? '',
