@@ -135,7 +135,7 @@ export abstract class Service {
                     throw insertError;
                 });
 
-            return this.parseResult(meta, Service.CREATE_STATE);
+            return this._parseResult(meta, Service.CREATE_STATE);
 
         } catch (insertError: any) {
             return this.errorCheck(insertError, Service.UPDATE_STATE);
@@ -162,7 +162,7 @@ export abstract class Service {
                     throw persistantDataError;
                 });
 
-            return this.parseResult(meta, Service.UPDATE_STATE);
+            return this._parseResult(meta, Service.UPDATE_STATE);
 
         } catch (e: any) {
             return this.errorCheck(e, Service.UPDATE_STATE);
@@ -203,7 +203,7 @@ export abstract class Service {
 
             LogHelper.debug("Service update mongoose return meta", meta);
 
-            return this.parseResult(meta, Service.UPDATE_STATE);
+            return this._parseResult(meta, Service.UPDATE_STATE);
 
         } catch (updateError: any) {
 
@@ -225,7 +225,7 @@ export abstract class Service {
                     throw findOneAndDeleteError;
                 });
 
-            return this.parseResult(meta, Service.DELETE_STATE);
+            return this._parseResult(meta, Service.DELETE_STATE);
 
         } catch (findAndDeleteError: any) {
 
@@ -274,7 +274,7 @@ export abstract class Service {
                     updateOrCreateError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                     throw updateOrCreateError;
                 });
-            return this.parseResult(meta, Service.UPDATE_OR_CREATE);
+            return this._parseResult(meta, Service.UPDATE_OR_CREATE);
 
         } catch (updateError: any) {
 
@@ -301,7 +301,7 @@ export abstract class Service {
                     throw deleteError;
                 });
 
-            return this.parseResult(meta, Service.DELETE_STATE);
+            return this._parseResult(meta, Service.DELETE_STATE);
 
         } catch (deleteError: any) {
 
@@ -329,7 +329,7 @@ export abstract class Service {
                     }
                 );
 
-            return this.parseResult(results, Service.CUSTOM_FUNCTION);
+            return this._parseResult(results, Service.CUSTOM_FUNCTION);
 
         } catch (errors: any) {
 
@@ -351,7 +351,7 @@ export abstract class Service {
         }
     }
 
-    private parseResult(meta: any, state: string): ApiResponseContract {
+    private _parseResult(meta: any, state: string): ApiResponseContract {
         const actionMessage:string = this._getActionMessageFromState(state);
         if (meta !== null && meta !== undefined) {
             return this.succeedMessage(meta, state);
