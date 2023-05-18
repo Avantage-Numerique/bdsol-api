@@ -7,6 +7,7 @@ import {ErrorResponse} from "../Http/Responses/ErrorResponse";
 import type {ApiResponseContract} from "../Http/Responses/ApiResponse";
 import AbstractModel from "../Abstract/Model";
 import {Obj} from "../Helpers/Obj";
+import HttpError from "../Error/HttpError";
 
 /**
  * Give ability to query and CRUD on collections and its documents.
@@ -127,16 +128,16 @@ export abstract class Service {
     async insert(data: any): Promise<ApiResponseContract> {
         let meta;
         try {
-            meta = await this.model.create(data);
-            /*.catch((e: any) => {
-                   LogHelper.error("Can't create target Model with data", data, e);
-                   return e;
-               });*/
+            meta = await this.model.create(data)
+                .catch((e: any) => {
+                    let insertError:HttpError = new HttpError(e.msg);
+                    insertError.status = StatusCodes.UNPROCESSABLE_ENTITY;
+                    throw insertError;
+                });
 
             return this.parseResult(meta, Service.CREATE_STATE);
 
         } catch (insertError: any) {
-            LogHelper.error("insert", insertError);
             return this.errorCheck(insertError, Service.UPDATE_STATE);
             /*return ErrorResponse.create(
                 insertError.errors,
@@ -156,11 +157,15 @@ export abstract class Service {
         try {
             const meta = this.model.findOneAndUpdate(filter, data, {runValidators: true, upsert: true})
                 .catch((e: any) => {
-                    return e
+                    let persistantDataError:HttpError = new HttpError(e.msg);
+                    persistantDataError.status = StatusCodes.UNPROCESSABLE_ENTITY;
+                    throw persistantDataError;
                 });
-            return this.parseResult(meta, Service.UPDATE_STATE)
+
+            return this.parseResult(meta, Service.UPDATE_STATE);
+
         } catch (e: any) {
-            return ErrorResponse.create(e, StatusCodes.INTERNAL_SERVER_ERROR, "Insertion of persistant data failed.")
+            return this.errorCheck(e, Service.UPDATE_STATE);
         }
     }
 
@@ -174,22 +179,27 @@ export abstract class Service {
         const updateOptions = {
             new: true,
             runValidators: true,
+            returnOriginal: true,
             ...options
         }
 
         try {
             const id = data.id;
             delete data.id; //Remove id from data
-            if ((id != undefined && mongoose.isObjectIdOrHexString(id)) || Object.keys(data).length < 1) {
+            // we added validator in front of thesse function. We must assume that this is well formed objectid.
+            /*if ((id != undefined && mongoose.isObjectIdOrHexString(id)) || Object.keys(data).length < 1) {
+                const
                 return ErrorResponse.create(data, StatusCodes.BAD_REQUEST, "id cannot be casted as ObjectId or object to update empty");
-            }
+            }*/
             // UpdateOne
-            const meta = await this.model.findOneAndUpdate({_id: id}, data, updateOptions);
-                /*.catch((e: any) => {
-                        LogHelper.debug("Service update in findOneAndUpdate catch", e);
-                        return e;
+            LogHelper.debug("Service update mongoose data", data);
+            const meta = await this.model.findOneAndUpdate({_id: id}, data, updateOptions)
+                .catch((e: any) => {
+                        let findOneAndUpdateError:HttpError = new HttpError(e.msg);
+                        findOneAndUpdateError.status = StatusCodes.UNPROCESSABLE_ENTITY;
+                        throw findOneAndUpdateError;
                     }
-                );*/
+                );
 
             LogHelper.debug("Service update mongoose return meta", meta);
 
@@ -210,16 +220,21 @@ export abstract class Service {
         try {
             const meta = await this.model.findOneAndDelete(filter)
                 .catch((e: any) => {
-                    LogHelper.info("findOneAndDelete catch:", e);
-                    return e;
+                    let findOneAndDeleteError:HttpError = new HttpError(e.msg);
+                    findOneAndDeleteError.status = StatusCodes.UNPROCESSABLE_ENTITY;
+                    throw findOneAndDeleteError;
                 });
+
             return this.parseResult(meta, Service.DELETE_STATE);
+
         } catch (findAndDeleteError: any) {
-            return ErrorResponse.create(
+
+            return this.errorCheck(findAndDeleteError, Service.DELETE_STATE);
+            /*return ErrorResponse.create(
                 findAndDeleteError.errors,
                 StatusCodes.NOT_FOUND,
                 findAndDeleteError.message || "Error on findOneAndDelete item in Service"
-            );
+            );*/
         }
     }
 
@@ -255,17 +270,20 @@ export abstract class Service {
 
             const meta = await this.model.findOneAndUpdate(where, data, updateOrCreateOptions)
                 .catch((e: any) => {
-                        return e;
-                    }
-                );
+                    let updateOrCreateError:HttpError = new HttpError(e.msg);
+                    updateOrCreateError.status = StatusCodes.UNPROCESSABLE_ENTITY;
+                    throw updateOrCreateError;
+                });
             return this.parseResult(meta, Service.UPDATE_OR_CREATE);
 
         } catch (updateError: any) {
-            return ErrorResponse.create(
+
+            return this.errorCheck(updateError, Service.UPDATE_STATE);
+            /*return ErrorResponse.create(
                 updateError.errors,
                 StatusCodes.UNPROCESSABLE_ENTITY,
                 updateError.errmsg || `Not able to ${Service.UPDATE_OR_CREATE} item`
-            );
+            );*/
         }
     }
 
@@ -278,19 +296,21 @@ export abstract class Service {
         try {
             const meta = await this.model.findByIdAndDelete(id)
                 .catch((e: any) => {
-                    LogHelper.info("findByIdAndDelete catch:", e);
-                    return e;
+                    let deleteError:HttpError = new HttpError(e.msg);
+                    deleteError.status = StatusCodes.UNPROCESSABLE_ENTITY;
+                    throw deleteError;
                 });
 
             return this.parseResult(meta, Service.DELETE_STATE);
 
         } catch (deleteError: any) {
 
-            return ErrorResponse.create(
+            return this.errorCheck(deleteError, Service.DELETE_STATE);
+            /*return ErrorResponse.create(
                 deleteError.errors,
                 StatusCodes.INTERNAL_SERVER_ERROR,
                 deleteError.message || "Error on delete item in Service"
-            );
+            );*/
         }
     }
 
@@ -303,8 +323,9 @@ export abstract class Service {
         try {
             const results = await this.model[mongooseFunction](...params)
                 .catch((e: any) => {
-                        LogHelper.info(`Error on custom call on ${mongooseFunction} item in Service`, e);
-                        return e;
+                        let customError:HttpError = new HttpError(e.msg);
+                        customError.status = StatusCodes.UNPROCESSABLE_ENTITY;
+                        throw customError;
                     }
                 );
 
@@ -312,11 +333,12 @@ export abstract class Service {
 
         } catch (errors: any) {
 
-            return ErrorResponse.create(
+            return this.errorCheck(errors, Service.CUSTOM_FUNCTION);
+            /*return ErrorResponse.create(
                 errors.errors,
                 StatusCodes.INTERNAL_SERVER_ERROR,
                 errors.message || `Error on custom ${mongooseFunction} item in Service`
-            );
+            );*/
         }
     }
 
@@ -331,8 +353,10 @@ export abstract class Service {
 
     private parseResult(meta: any, state: string): ApiResponseContract {
         const actionMessage:string = this._getActionMessageFromState(state);
-
-        return this.succeedMessage(meta, state);
+        if (meta !== null && meta !== undefined) {
+            return this.succeedMessage(meta, state);
+        }
+        return this.errorCheck(meta, state);
     }
 
     private _getActionMessageFromState(state:string):string {
@@ -431,12 +455,15 @@ export abstract class Service {
 
 
         if (Object.keys(meta).length <= 0) {
-            return ErrorResponse.create(meta, StatusCodes.BAD_REQUEST, "Erreur inconnu, Le document de retour est vide, il n'a pas pu être " + actionMessage);
+            return ErrorResponse.create(
+                meta,
+                StatusCodes.UNPROCESSABLE_ENTITY,
+                "Erreur inconnu, Le document de retour est vide, il n'a pas pu être " + actionMessage);
         }
 
         return ErrorResponse.create(
             meta.errors,
-            StatusCodes.BAD_REQUEST,
+            StatusCodes.UNPROCESSABLE_ENTITY,
             meta.message || `Error on ${actionMessage}`
         );
     }

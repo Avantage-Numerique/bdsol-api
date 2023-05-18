@@ -11,6 +11,7 @@ import {UrlSanitizer} from "../../Security/Sanitizers/UrlSanitizer";
 import {LatinSanitizer} from "../../Security/Sanitizers/LatinSanitizer";
 import {IsObjectIdStringValid} from "../../Security/Validators/IsObjectidValidator";
 import {ObjectIdStringSanitizer} from "../../Security/Sanitizers/ObjectIdStringSanitizer";
+import {isObjectId} from "../../Security/SanitizerAliases/ObjectIdSanitizer";
 
 class OrganisationsRoutes extends CrudRoute {
     controllerInstance: AbstractController = OrganisationsController.getInstance();
@@ -55,6 +56,7 @@ class OrganisationsRoutes extends CrudRoute {
                 .trim(),
         ],
         update: [
+            isObjectId('data.id'),
             body('data.name').exists({checkFalsy:true}).bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim(),

@@ -7,6 +7,7 @@ import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
 import CrudRoute from "../../Abstract/CrudRoute";
 import {ObjectIdStringSanitizer} from "../../Security/Sanitizers/ObjectIdStringSanitizer";
 import {IsObjectIdStringValid} from "../../Security/Validators/IsObjectidValidator";
+import {isObjectId} from "../../Security/SanitizerAliases/ObjectIdSanitizer";
 
 class PersonsRoutes extends CrudRoute {
 
@@ -41,6 +42,7 @@ class PersonsRoutes extends CrudRoute {
             //status not sanitize yet, because it will be manage by backend
         ],
         update: [
+            isObjectId('data.id'),
             body('data.lastName').exists({checkFalsy:true}).bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()

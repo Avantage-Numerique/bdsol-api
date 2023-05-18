@@ -29,7 +29,9 @@ class MediasRoutes extends AbstractRoute {
         all: [],
         createUpdate: [],
         create: [],
-        update: [],
+        update: [
+            //isObjectId('data.id'),
+        ],
         delete: [],
         search: [],
         list: [],
@@ -251,8 +253,9 @@ class MediasRoutes extends AbstractRoute {
             }
 
             //Everything succeeded
-            res.serviceResponse.message = "Success to save file, create media, and link media to entity!"
-            const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'create');
+            res.serviceResponse.message = "Success to save file, create media, and link media to entity!";
+            res.serviceResponse.action = "create";
+            const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res);
             LogHelper.debug(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
             return;
 

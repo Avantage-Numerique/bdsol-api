@@ -7,6 +7,7 @@ import {param} from "express-validator";
 import {NoAccentSanitizer} from "../Security/Sanitizers/NoAccentSanitizer";
 import {NoSpaceSanitizer} from "../Security/Sanitizers/NoSpaceSanitizer";
 import AbstractController from "./Controller";
+import {Service} from "../Database/Service";
 
 abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
@@ -71,6 +72,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
             ...this.addMiddlewares("create"),
             this.validatingResults.bind(this),
             this.createHandler.bind(this),
+            this.createUserHistoryEntryHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
 
@@ -79,6 +81,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
             ...this.addMiddlewares("update"),
             this.validatingResults.bind(this),
             this.updateHandler.bind(this),
+            this.createUserHistoryEntryHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
 
@@ -87,6 +90,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
             ...this.addMiddlewares("delete"),
             this.validatingResults.bind(this),
             this.deleteHandler.bind(this),
+            this.createUserHistoryEntryHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
 
@@ -191,11 +195,8 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      */
     public async createHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
         res.serviceResponse = await this.controllerInstance.create(req.body.data);
-        if (res.serviceResponse.error) {
-            return next();
-        }
-        const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'create');
-        LogHelper.debug(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
+        res.serviceResponse.action = Service.CREATE_STATE;
+
         return next();
     }
 
@@ -209,13 +210,8 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @return {Promise<any>}
      */
     public async updateHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        const logger = new LogHelper(req);
         res.serviceResponse = await this.controllerInstance.update(req.body.data);
-
-        if (!res.serviceResponse.error) {
-            const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'update');
-            logger.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
-        }
+        res.serviceResponse.action = Service.UPDATE_STATE;
 
         return next();
     }
@@ -230,13 +226,8 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @return {Promise<any>}
      */
     public async deleteHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        const logger = new LogHelper(req);
         res.serviceResponse = await this.controllerInstance.delete(req.body.data);
-
-        if (!res.serviceResponse.error) {
-            const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'delete');
-            logger.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
-        }
+        res.serviceResponse.action = Service.DELETE_STATE;
 
         return next();
     }
@@ -356,6 +347,15 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
         res.serviceResponse = await this.controllerInstance.list(query);
         return next();
+    }
+
+    public async createUserHistoryEntryHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        if (!res.serviceResponse.error) {
+            const logger = new LogHelper(req);
+            const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res);
+            logger.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
+        }
+        next();
     }
 
 }

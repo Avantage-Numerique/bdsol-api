@@ -54,6 +54,8 @@ class ProjectsRoutes extends CrudRoute {
             //status not sanitize yet, because it will be manage by backend*/
         ],
         update: [
+            isObjectId('data.id'),
+
             EntityName('data.name'),
 
             noHtml('data.alternateName'),
