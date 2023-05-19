@@ -1,16 +1,16 @@
 import express, {Response, Request, NextFunction} from "express";
+import CrudRoute from "../../Abstract/CrudRoute";
+import {param} from "express-validator";
 import TaxonomyController from "../Controllers/TaxonomyController";
 import AbstractController from "../../Abstract/Controller";
-import {param} from "express-validator";
 import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
 import {NoAccentSanitizer} from "../../Security/Sanitizers/NoAccentSanitizer";
 import {NoSpaceSanitizer} from "../../Security/Sanitizers/NoSpaceSanitizer";
 import {EnumSanitizer} from "../../Security/Sanitizers/EnumSanitizer";
 import {TaxonomiesCategoriesEnum} from "../TaxonomiesCategoriesEnum";
-import CrudRoute from "../../Abstract/CrudRoute";
-import {IsInEnumSanitizer} from "../../Security/SanitizerAliases/IsInEnumSanitizer";
-import {noHtml} from "../../Security/SanitizerAliases/NoHtmlStringSanitizer";
-import {isObjectId} from "../../Security/SanitizerAliases/ObjectIdSanitizer";
+import {isInEnumSanitizerAlias} from "../../Security/SanitizerAliases/IsInEnumSanitizerAlias";
+import {noHtmlStringSanitizerAlias} from "../../Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
+import {objectIdSanitizerAlias} from "../../Security/SanitizerAliases/ObjectIdSanitizerAlias";
 
 class TaxonomyRoutes extends CrudRoute {
 
@@ -21,20 +21,20 @@ class TaxonomyRoutes extends CrudRoute {
     middlewaresDistribution: any = {
         all: [],
         create: [
-            IsInEnumSanitizer('data.category', TaxonomiesCategoriesEnum),
-            noHtml('data.name'),
-            noHtml('data.description'),
-            noHtml('data.source'),
-            noHtml('data.addReason'),
+            isInEnumSanitizerAlias('data.category', TaxonomiesCategoriesEnum),
+            noHtmlStringSanitizerAlias('data.name'),
+            noHtmlStringSanitizerAlias('data.description'),
+            noHtmlStringSanitizerAlias('data.source'),
+            noHtmlStringSanitizerAlias('data.addReason'),
         ],
         createUpdate: [],
         update: [
-            isObjectId('data.id', false),
-            IsInEnumSanitizer('data.category', TaxonomiesCategoriesEnum),
-            noHtml('data.name'),
-            noHtml('data.description'),
-            noHtml('data.source'),
-            noHtml('data.addReason'),
+            objectIdSanitizerAlias('data.id', false),
+            isInEnumSanitizerAlias('data.category', TaxonomiesCategoriesEnum),
+            noHtmlStringSanitizerAlias('data.name'),
+            noHtmlStringSanitizerAlias('data.description'),
+            noHtmlStringSanitizerAlias('data.source'),
+            noHtmlStringSanitizerAlias('data.addReason'),
         ],
         delete: [],
         search: [],

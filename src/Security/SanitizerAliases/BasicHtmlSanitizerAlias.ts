@@ -1,5 +1,5 @@
 import {body} from "express-validator";
-import {NoHtmlSanitizer} from "../Sanitizers/NoHtmlSanitizer";
+import {HtmlSanitizer} from "../Sanitizers/HtmlSanitizer";
 import {ApiValidatingSanitizingChainType} from "../ExpressValidator/ApiValidatingSanitizingChain";
 
 /**
@@ -8,19 +8,18 @@ import {ApiValidatingSanitizingChainType} from "../ExpressValidator/ApiValidatin
  * @param isOptional {boolean}
  * @param source {any} it's a param to change from body to params
  */
-const noHtml = (param:string, isOptional:boolean=true, source=body):ApiValidatingSanitizingChainType => {
+const basicHtmlSanitizerAlias = (param:string, isOptional:boolean=true, source=body):ApiValidatingSanitizingChainType => {
 
     let baseChain:ApiValidatingSanitizingChainType = source(param);
-    let chain = baseChain.optional({values:"falsy"})
+    let chain = baseChain.optional({values:"falsy"});
 
     if (!isOptional) {
-        chain = baseChain.notEmpty();
+        chain = baseChain.notEmpty().withMessage("Is required");
     }
 
     return chain
-        .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-        .stripLow()
+        .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
         .trim()
 }
 
-export {noHtml}
+export {basicHtmlSanitizerAlias};

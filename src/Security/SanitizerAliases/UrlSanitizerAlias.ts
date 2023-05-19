@@ -6,7 +6,7 @@ import {LatinSanitizer} from "../Sanitizers/LatinSanitizer";
 import {UrlSanitizer} from "../Sanitizers/UrlSanitizer";
 import {ApiValidatingSanitizingChainType} from "../ExpressValidator/ApiValidatingSanitizingChain";
 
-const isURL = (param:string, isOptional:boolean=true, source=body):ApiValidatingSanitizingChainType => {
+const urlSanitizerAlias = (param:string, isOptional:boolean=true, source=body):ApiValidatingSanitizingChainType => {
 
     let chain:ApiValidatingSanitizingChainType = source(param);
     chain = chain.optional({values:"falsy"});
@@ -26,4 +26,4 @@ const isURL = (param:string, isOptional:boolean=true, source=body):ApiValidating
     return chain;
 }
 
-export {isURL}
+export {urlSanitizerAlias}

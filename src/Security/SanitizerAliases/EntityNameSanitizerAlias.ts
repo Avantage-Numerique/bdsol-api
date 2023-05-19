@@ -2,20 +2,23 @@ import {body} from "express-validator";
 import {NoHtmlSanitizer} from "../Sanitizers/NoHtmlSanitizer";
 import {ApiValidatingSanitizingChainType} from "../ExpressValidator/ApiValidatingSanitizingChain";
 
-const isContactPoint = (param:string, isOptional:boolean=true, source=body):ApiValidatingSanitizingChainType => {
+const entityNameSanitizerAlias = (param:string, isOptional:boolean=true, source=body):ApiValidatingSanitizingChainType => {
 
     let chain:ApiValidatingSanitizingChainType = source(param);
-    chain = chain.optional({values:"falsy"});
+    chain = chain.optional({values:"falsy"})
 
     if (!isOptional) {
         chain = chain.notEmpty().withMessage("Is required");
     }
 
-    return chain
+    const minLength:number = 2;
+    chain = chain.isLength({min:minLength})
+        .withMessage(`must be at least ${minLength} chars long`)
         .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
         .stripLow()
-        //.normalizeEmail()
         .trim();
+
+    return chain;
 }
 
-export {isContactPoint}
+export {entityNameSanitizerAlias}

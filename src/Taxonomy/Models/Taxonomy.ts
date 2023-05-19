@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, {Error} from "mongoose";
 import {Schema} from "mongoose"
 import { TaxonomySchema } from "../Schemas/TaxonomySchema";
 import { TaxonomiesCategoriesEnum } from "../TaxonomiesCategoriesEnum";
@@ -8,7 +8,6 @@ import TaxonomyService from "../Services/TaxonomyService";
 import { Status } from "../../Moderation/Schemas/StatusSchema";
 import * as fs from 'fs';
 import {taxonomyPopulate} from "../Middlewares/TaxonomiesPopulate";
-import {taxonomyDomainNoSelfReference} from "../../Database/Validation/SchemaValidateReferenceNotItself";
 
 
 class Taxonomy extends AbstractModel {
@@ -27,7 +26,7 @@ class Taxonomy extends AbstractModel {
 
             Taxonomy._instance.initSchema();
 
-            Taxonomy._instance.schema.path('domains.domain').validate(taxonomyDomainNoSelfReference);
+            //Taxonomy._instance.schema.path('domains.domain').validate(taxonomyDomainNoSelfReference);
 
             //Indexes
             Taxonomy._instance.schema.index({ category:1 });
@@ -81,7 +80,14 @@ class Taxonomy extends AbstractModel {
                 type: [{
                     domain: {
                         type: mongoose.Types.ObjectId,
-                        ref: "Taxonomy"
+                        ref: "Taxonomy",
+                        validate: function (value: mongoose.Types.ObjectId | null) {
+                            const currentDocument = this as any; // Cast 'this' to any to access the document
+                            if (value && value.equals(currentDocument._id)) {
+                                throw new Error("Can't assign self as a domain.");
+                            }
+                            return true
+                        }
                     },
                     status: Status.schema
                 }]

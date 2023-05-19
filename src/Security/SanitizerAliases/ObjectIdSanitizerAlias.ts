@@ -9,7 +9,7 @@ import {ApiValidatingSanitizingChainType} from "../ExpressValidator/ApiValidatin
  * @param isOptional {boolean}
  * @param source {any} it's a param to change from body to params
  */
-const isObjectId = (param:string, isOptional:boolean=true, source=body):ApiValidatingSanitizingChainType => {
+const objectIdSanitizerAlias = (param:string, isOptional:boolean=true, source=body):ApiValidatingSanitizingChainType => {
 
     let chain:ApiValidatingSanitizingChainType = source(param);
     chain = chain.optional({values:"falsy"})
@@ -24,4 +24,4 @@ const isObjectId = (param:string, isOptional:boolean=true, source=body):ApiValid
         .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
 }
 
-export {isObjectId}
+export {objectIdSanitizerAlias}

@@ -10,7 +10,7 @@ import {EnumSanitizer} from "../Sanitizers/EnumSanitizer";
  * @param isRequired {boolean}
  * @param source {any} it's a param to change from body to params
  */
-const IsInEnumSanitizer = (param:string, targetEnum:any, isRequired:boolean=false, source=body):ApiValidatingSanitizingChainType => {
+const isInEnumSanitizerAlias = (param:string, targetEnum:any, isRequired:boolean=false, source=body):ApiValidatingSanitizingChainType => {
 
     let chain:ApiValidatingSanitizingChainType = source(param);
     chain = chain.optional({values:"falsy"})
@@ -26,4 +26,4 @@ const IsInEnumSanitizer = (param:string, targetEnum:any, isRequired:boolean=fals
         .trim();
 }
 
-export {IsInEnumSanitizer}
+export {isInEnumSanitizerAlias}

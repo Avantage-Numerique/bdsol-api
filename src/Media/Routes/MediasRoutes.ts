@@ -16,9 +16,9 @@ import Organisation from "../../Organisations/Models/Organisation";
 import Person from "../../Persons/Models/Person";
 import config from "../../config";
 import {now} from "../../Helpers/DateTime";
-import {isObjectId} from "../../Security/SanitizerAliases/ObjectIdSanitizer";
-import {noHtml} from "../../Security/SanitizerAliases/NoHtmlStringSanitizer";
-import {IsInEnumSanitizer} from "../../Security/SanitizerAliases/IsInEnumSanitizer";
+import {objectIdSanitizerAlias} from "../../Security/SanitizerAliases/ObjectIdSanitizerAlias";
+import {noHtmlStringSanitizerAlias} from "../../Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
+import {isInEnumSanitizerAlias} from "../../Security/SanitizerAliases/IsInEnumSanitizerAlias";
 import {EntityTypesEnum} from "../../Entities/EntityTypes";
 
 
@@ -34,19 +34,19 @@ class MediasRoutes extends AbstractRoute {
         all: [],
         createUpdate: [],
         create: [
-            noHtml('data.title'),
-            noHtml('data.alt'),
-            noHtml('data.description'),
-            isObjectId('data.entityId'),
-            IsInEnumSanitizer('data.entityType', EntityTypesEnum),
+            noHtmlStringSanitizerAlias('data.title'),
+            noHtmlStringSanitizerAlias('data.alt'),
+            noHtmlStringSanitizerAlias('data.description'),
+            objectIdSanitizerAlias('data.entityId'),
+            isInEnumSanitizerAlias('data.entityType', EntityTypesEnum),
         ],
         update: [
-            isObjectId('data.id', false),
-            noHtml('data.title'),
-            noHtml('data.alt'),
-            noHtml('data.description'),
-            isObjectId('data.entityId'),
-            IsInEnumSanitizer('data.entityType', EntityTypesEnum),
+            objectIdSanitizerAlias('data.id', false),
+            noHtmlStringSanitizerAlias('data.title'),
+            noHtmlStringSanitizerAlias('data.alt'),
+            noHtmlStringSanitizerAlias('data.description'),
+            objectIdSanitizerAlias('data.entityId'),
+            isInEnumSanitizerAlias('data.entityType', EntityTypesEnum),
         ],
         delete: [],
         search: [],

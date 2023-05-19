@@ -91,6 +91,7 @@ class Person extends AbstractModel {
                     //alias: 'surnom'
                 },
                 description: String,
+                // DRY this with groupName to have this "skillGroup as
                 occupations: {
                     type: [{
                         occupation: {

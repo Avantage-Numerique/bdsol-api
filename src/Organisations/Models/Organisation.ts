@@ -87,6 +87,7 @@ class Organisation extends AbstractModel {
                 fondationDate: {
                     type: Date,
                 },
+                // DRY this with groupName to have this "skillGroup as
                 offers: {
                     type: [{
                         offer: {

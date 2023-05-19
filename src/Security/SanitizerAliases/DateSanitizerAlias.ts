@@ -2,7 +2,7 @@ import {body} from "express-validator";
 import {NoHtmlSanitizer} from "../Sanitizers/NoHtmlSanitizer";
 import {ApiValidatingSanitizingChainType} from "../ExpressValidator/ApiValidatingSanitizingChain";
 
-const dateSanitizer = (param:string, isOptional:boolean=true, source=body):ApiValidatingSanitizingChainType => {
+const dateSanitizerAlias = (param:string, isOptional:boolean=true, source=body):ApiValidatingSanitizingChainType => {
 
     let chain:ApiValidatingSanitizingChainType = source(param);
     chain = chain.optional({values:"falsy"})
@@ -18,4 +18,4 @@ const dateSanitizer = (param:string, isOptional:boolean=true, source=body):ApiVa
     return chain;
 }
 
-export {dateSanitizer}
+export {dateSanitizerAlias}

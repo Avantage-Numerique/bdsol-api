@@ -130,7 +130,7 @@ export abstract class Service {
         try {
             meta = await this.model.create(data)
                 .catch((e: any) => {
-                    let insertError:HttpError = new HttpError(e.msg);
+                    let insertError:HttpError = new HttpError(e.message);
                     insertError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                     throw insertError;
                 });
@@ -157,7 +157,7 @@ export abstract class Service {
         try {
             const meta = this.model.findOneAndUpdate(filter, data, {runValidators: true, upsert: true})
                 .catch((e: any) => {
-                    let persistantDataError:HttpError = new HttpError(e.msg);
+                    let persistantDataError:HttpError = new HttpError(e.message);
                     persistantDataError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                     throw persistantDataError;
                 });
@@ -191,28 +191,21 @@ export abstract class Service {
                 const
                 return ErrorResponse.create(data, StatusCodes.BAD_REQUEST, "id cannot be casted as ObjectId or object to update empty");
             }*/
+
             // UpdateOne
-            LogHelper.debug("Service update mongoose data", data);
             const meta = await this.model.findOneAndUpdate({_id: id}, data, updateOptions)
                 .catch((e: any) => {
-                        let findOneAndUpdateError:HttpError = new HttpError(e.msg);
+                        let findOneAndUpdateError:HttpError = new HttpError(e.message);
                         findOneAndUpdateError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                         throw findOneAndUpdateError;
                     }
                 );
-
-            LogHelper.debug("Service update mongoose return meta", meta);
 
             return this._parseResult(meta, Service.UPDATE_STATE);
 
         } catch (updateError: any) {
 
             return this.errorCheck(updateError, Service.UPDATE_STATE);
-            /*return ErrorResponse.create(
-                updateError.errors,
-                StatusCodes.UNPROCESSABLE_ENTITY,
-                updateError.errmsg || "Not able to update item or item doesn't exist"
-            );*/
         }
     }
 
@@ -220,7 +213,7 @@ export abstract class Service {
         try {
             const meta = await this.model.findOneAndDelete(filter)
                 .catch((e: any) => {
-                    let findOneAndDeleteError:HttpError = new HttpError(e.msg);
+                    let findOneAndDeleteError:HttpError = new HttpError(e.message);
                     findOneAndDeleteError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                     throw findOneAndDeleteError;
                 });
@@ -230,11 +223,6 @@ export abstract class Service {
         } catch (findAndDeleteError: any) {
 
             return this.errorCheck(findAndDeleteError, Service.DELETE_STATE);
-            /*return ErrorResponse.create(
-                findAndDeleteError.errors,
-                StatusCodes.NOT_FOUND,
-                findAndDeleteError.message || "Error on findOneAndDelete item in Service"
-            );*/
         }
     }
 
@@ -270,7 +258,7 @@ export abstract class Service {
 
             const meta = await this.model.findOneAndUpdate(where, data, updateOrCreateOptions)
                 .catch((e: any) => {
-                    let updateOrCreateError:HttpError = new HttpError(e.msg);
+                    let updateOrCreateError:HttpError = new HttpError(e.message);
                     updateOrCreateError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                     throw updateOrCreateError;
                 });
@@ -279,11 +267,6 @@ export abstract class Service {
         } catch (updateError: any) {
 
             return this.errorCheck(updateError, Service.UPDATE_STATE);
-            /*return ErrorResponse.create(
-                updateError.errors,
-                StatusCodes.UNPROCESSABLE_ENTITY,
-                updateError.errmsg || `Not able to ${Service.UPDATE_OR_CREATE} item`
-            );*/
         }
     }
 
@@ -296,7 +279,7 @@ export abstract class Service {
         try {
             const meta = await this.model.findByIdAndDelete(id)
                 .catch((e: any) => {
-                    let deleteError:HttpError = new HttpError(e.msg);
+                    let deleteError:HttpError = new HttpError(e.message);
                     deleteError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                     throw deleteError;
                 });
@@ -306,11 +289,6 @@ export abstract class Service {
         } catch (deleteError: any) {
 
             return this.errorCheck(deleteError, Service.DELETE_STATE);
-            /*return ErrorResponse.create(
-                deleteError.errors,
-                StatusCodes.INTERNAL_SERVER_ERROR,
-                deleteError.message || "Error on delete item in Service"
-            );*/
         }
     }
 
@@ -323,7 +301,7 @@ export abstract class Service {
         try {
             const results = await this.model[mongooseFunction](...params)
                 .catch((e: any) => {
-                        let customError:HttpError = new HttpError(e.msg);
+                        let customError:HttpError = new HttpError(e.message);
                         customError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                         throw customError;
                     }
@@ -334,11 +312,6 @@ export abstract class Service {
         } catch (errors: any) {
 
             return this.errorCheck(errors, Service.CUSTOM_FUNCTION);
-            /*return ErrorResponse.create(
-                errors.errors,
-                StatusCodes.INTERNAL_SERVER_ERROR,
-                errors.message || `Error on custom ${mongooseFunction} item in Service`
-            );*/
         }
     }
 
@@ -353,6 +326,7 @@ export abstract class Service {
 
     private _parseResult(meta: any, state: string): ApiResponseContract {
         const actionMessage:string = this._getActionMessageFromState(state);
+
         if (meta !== null && meta !== undefined) {
             return this.succeedMessage(meta, state);
         }
@@ -446,7 +420,7 @@ export abstract class Service {
                     message: meta.message
                 },
                 StatusCodes.INTERNAL_SERVER_ERROR,
-                meta.msg);
+                meta.message);
         }
 
 
