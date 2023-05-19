@@ -25,5 +25,4 @@ export interface ProjectSchema extends Document {
     skills:[ObjectId];
     context: ProjectContextEnum
     status: Status
-
 }

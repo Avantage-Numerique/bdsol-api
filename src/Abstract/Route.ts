@@ -5,6 +5,8 @@ import {RouteContract} from "./Contracts/RouteContract";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {ErrorResponse} from "../Http/Responses/ErrorResponse";
+import {Result, validationResult} from "express-validator";
+import HttpError from "../Error/HttpError";
 
 abstract class AbstractRoute implements RouteContract
 {
@@ -81,7 +83,6 @@ abstract class AbstractRoute implements RouteContract
 
         const defaultRoutes:any = this.defaultMiddlewaresDistribution[route] ?? [];
         const currentRouter:any = this.middlewaresDistribution[route] ?? [];
-
         return [...defaultRoutes, ...currentRouter];
     }
 
@@ -183,6 +184,40 @@ abstract class AbstractRoute implements RouteContract
         }
 
         return next();
+    }
+
+
+
+    public async validatingResults(req: Request, res: Response, next: NextFunction):Promise<any> {
+        const validationResults:Result = validationResult(req);
+
+        if (validationResults.isEmpty()) {
+            return next();
+        }
+
+
+        /*
+        Express Validator error returns.
+        formatter: [Function: formatter],
+        errors: [
+          {
+            type: 'field',
+            value: 'O',
+            msg: '[EntityNameSanitizer] must be at least 2 chars long',
+            path: 'data.name',
+            location: 'body'
+          }
+        ]
+         */
+
+        let messages:Array<any> = [];
+        for (let error of validationResults.array()) {
+            messages.push(`[Validating][${error.location}][${error.path}] ${error.type} : ${error.msg} (value "${error.value}")`);
+        }
+
+        const validationError:HttpError = new HttpError(messages.join(","));
+        validationError.status = StatusCodes.BAD_REQUEST;
+        return next(validationError);
     }
 
 

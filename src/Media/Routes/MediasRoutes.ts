@@ -16,6 +16,11 @@ import Organisation from "../../Organisations/Models/Organisation";
 import Person from "../../Persons/Models/Person";
 import config from "../../config";
 import {now} from "../../Helpers/DateTime";
+import {isObjectId} from "../../Security/SanitizerAliases/ObjectIdSanitizer";
+import {noHtml} from "../../Security/SanitizerAliases/NoHtmlStringSanitizer";
+import {IsInEnumSanitizer} from "../../Security/SanitizerAliases/IsInEnumSanitizer";
+import {EntityTypesEnum} from "../../Entities/EntityTypes";
+
 
 class MediasRoutes extends AbstractRoute {
 
@@ -28,8 +33,21 @@ class MediasRoutes extends AbstractRoute {
     middlewaresDistribution:any = {
         all: [],
         createUpdate: [],
-        create: [],
-        update: [],
+        create: [
+            noHtml('data.title'),
+            noHtml('data.alt'),
+            noHtml('data.description'),
+            isObjectId('data.entityId'),
+            IsInEnumSanitizer('data.entityType', EntityTypesEnum),
+        ],
+        update: [
+            isObjectId('data.id', false),
+            noHtml('data.title'),
+            noHtml('data.alt'),
+            noHtml('data.description'),
+            isObjectId('data.entityId'),
+            IsInEnumSanitizer('data.entityType', EntityTypesEnum),
+        ],
         delete: [],
         search: [],
         list: [],
@@ -251,8 +269,9 @@ class MediasRoutes extends AbstractRoute {
             }
 
             //Everything succeeded
-            res.serviceResponse.message = "Success to save file, create media, and link media to entity!"
-            const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'create');
+            res.serviceResponse.message = "Success to save file, create media, and link media to entity!";
+            res.serviceResponse.action = "create";
+            const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res);
             LogHelper.debug(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
             return;
 

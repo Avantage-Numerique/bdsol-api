@@ -7,6 +7,7 @@ import {param} from "express-validator";
 import {NoAccentSanitizer} from "../Security/Sanitizers/NoAccentSanitizer";
 import {NoSpaceSanitizer} from "../Security/Sanitizers/NoSpaceSanitizer";
 import AbstractController from "./Controller";
+import {Service} from "../Database/Service";
 
 abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
@@ -69,21 +70,27 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         this.routerInstanceAuthentification.post('/create', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("create"),
+            this.validatingResults.bind(this),
             this.createHandler.bind(this),
+            this.createUserHistoryEntryHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
 
         this.routerInstanceAuthentification.post('/update', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("update"),
+            this.validatingResults.bind(this),
             this.updateHandler.bind(this),
+            this.createUserHistoryEntryHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
 
         this.routerInstanceAuthentification.post('/delete', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("delete"),
+            this.validatingResults.bind(this),
             this.deleteHandler.bind(this),
+            this.createUserHistoryEntryHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
 
@@ -106,6 +113,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         this.routerInstance.post('/search', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("search"),
+            this.validatingResults.bind(this),
             this.searchHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
@@ -113,6 +121,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         this.routerInstance.post('/textsearch', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("search"),
+            this.validatingResults.bind(this),
             this.textSearchHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
@@ -120,6 +129,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         this.routerInstance.post('/list', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("list"),
+            this.validatingResults.bind(this),
             this.listHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
@@ -127,6 +137,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         this.routerInstance.post('/getinfo', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("getinfo"),
+            this.validatingResults.bind(this),
             this.getInfoHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
@@ -136,6 +147,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         this.routerInstance.get('/getdoc', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("getdoc"),
+            this.validatingResults.bind(this),
             this.getDocumentationHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
@@ -144,6 +156,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         this.routerInstance.get('/list', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("list"),
+            this.validatingResults.bind(this),
             this.listHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
@@ -158,6 +171,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         this.routerInstance.get('/:slug', [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("bySlug"),
+            this.validatingResults.bind(this),
             this.getByUriParamsHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
@@ -181,11 +195,8 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      */
     public async createHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
         res.serviceResponse = await this.controllerInstance.create(req.body.data);
-        if (res.serviceResponse.error) {
-            return next();
-        }
-        const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'create');
-        LogHelper.debug(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
+        res.serviceResponse.action = Service.CREATE_STATE;
+
         return next();
     }
 
@@ -199,13 +210,8 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @return {Promise<any>}
      */
     public async updateHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        const logger = new LogHelper(req);
         res.serviceResponse = await this.controllerInstance.update(req.body.data);
-
-        if (!res.serviceResponse.error) {
-            const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'update');
-            logger.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
-        }
+        res.serviceResponse.action = Service.UPDATE_STATE;
 
         return next();
     }
@@ -220,13 +226,8 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @return {Promise<any>}
      */
     public async deleteHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        const logger = new LogHelper(req);
         res.serviceResponse = await this.controllerInstance.delete(req.body.data);
-
-        if (!res.serviceResponse.error) {
-            const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res, res.serviceResponse, 'delete');
-            logger.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
-        }
+        res.serviceResponse.action = Service.DELETE_STATE;
 
         return next();
     }
@@ -346,6 +347,15 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
         res.serviceResponse = await this.controllerInstance.list(query);
         return next();
+    }
+
+    public async createUserHistoryEntryHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        if (!res.serviceResponse.error) {
+            const logger = new LogHelper(req);
+            const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res);
+            logger.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
+        }
+        next();
     }
 
 }

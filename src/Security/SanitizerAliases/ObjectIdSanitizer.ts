@@ -1,7 +1,7 @@
 import {IsObjectIdStringValid} from "../Validators/IsObjectidValidator";
 import {ObjectIdStringSanitizer} from "../Sanitizers/ObjectIdStringSanitizer";
 import {body} from "express-validator";
-import {ValidationChain} from "express-validator/src/chain/validation-chain";
+import {ApiValidatingSanitizingChainType} from "../ExpressValidator/ApiValidatingSanitizingChain";
 
 /**
  * Optionnal check if the element is set, and if it's an ObjectID.
@@ -9,19 +9,18 @@ import {ValidationChain} from "express-validator/src/chain/validation-chain";
  * @param isOptional {boolean}
  * @param source {any} it's a param to change from body to params
  */
-const isObjectId = (param:string, isOptional:boolean=true, source=body):ValidationChain => {
+const isObjectId = (param:string, isOptional:boolean=true, source=body):ApiValidatingSanitizingChainType => {
 
-    let chain:ValidationChain = source(param);
+    let chain:ApiValidatingSanitizingChainType = source(param);
+    chain = chain.optional({values:"falsy"})
 
-    if (isOptional) {
-        chain = chain.exists({checkFalsy:true}).bail();
-    }
     if (!isOptional) {
-        chain = chain.notEmpty();
+        chain = chain.notEmpty().withMessage("Is required");
     }
 
     return chain
         .custom(IsObjectIdStringValid.validatorCustom())
+        .withMessage(`${(isOptional ? "Optional" : "Required")} Isn't a valid objectID`)
         .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
 }
 

@@ -9,6 +9,7 @@ import UsersHistoryService from "../UserHistory/Services/UsersHistoryService";
 import UserHistory from "../UserHistory/Models/UserHistory";
 import {UserHistorySchema} from "../UserHistory/Schemas/UserHistorySchema";
 import {ControllerContract} from "./Contracts/ControllerContract";
+import LogHelper from "../Monitoring/Helpers/LogHelper";
 
 /**
  * AbstractController
@@ -30,6 +31,7 @@ abstract class AbstractController implements ControllerContract {
     public async create(requestData: any): Promise<ApiResponseContract> {
         console.log("reqData",requestData)
         const createdDocumentResponse = await this.service.insert(requestData);
+
         if (createdDocumentResponse !== undefined)
             return createdDocumentResponse;
 
@@ -48,7 +50,7 @@ abstract class AbstractController implements ControllerContract {
      */
     public async update(requestData: any): Promise<ApiResponseContract> {
         const updatedModelResponse: any = await this.service.update(requestData);
-
+        LogHelper.debug("Controller update", updatedModelResponse);
         if (updatedModelResponse !== undefined)
             return updatedModelResponse;
 
@@ -150,47 +152,54 @@ abstract class AbstractController implements ControllerContract {
     }
 
 
-    public async createUserHistory(req: any, res: any, response: any, action: string): Promise<boolean> {
+    public async createUserHistory(req: any, res: any): Promise<boolean> {
         const userHistoryService: UsersHistoryService = UsersHistoryService.getInstance(UserHistory.getInstance());
+        const response:any = res.serviceResponse;
+        const action:string = res.serviceResponse.action;
+        try {
+            //User id
+            const user: any = req.user?._id;
 
-        //User id
-        const user: any = req.user._id;
-        
-        //IP Address
-        const ipAddress = req.visitor.ip;
-        const fromAppIp = req.ip;
+            //IP Address
+            const ipAddress = req.visitor.ip;
+            const fromAppIp = req.ip;
 
-        //Modification date
-        const modifDate = new Date();
+            //Modification date
+            const modifDate = new Date();
 
-        //Affected database
-        const entityCollection = req.originalUrl.split("/")[1]; //split every '/' --> [ "" / "organisations" / "create" ]
+            //Affected database
+            const entityCollection = req.originalUrl.split("/")[1]; //split every '/' --> [ "" / "organisations" / "create" ]
 
-        //Modified entity id
-        const modifiedEntity = response.data._id;
+            //Modified entity id
+            const modifiedEntity = response.data?._id;
 
-        //Action on the data
-        //action <---
+            //Action on the data
+            //action <---
 
-        //Set modified fields
-        const fields = response.data;
+            //Set modified fields
+            const fields = response.data;
 
-        //Media
-        const media = response.media ?? {}
+            //Media
+            const media = response.media ?? {}
 
-        const history: UserHistorySchema = {
-            "user": user,
-            "ipAddress": ipAddress,
-            "modifDate": modifDate,
-            "action": action,
-            "entityCollection": entityCollection,
-            "modifiedEntity": modifiedEntity,
-            "fields": this.entity.dataTransfertObject(fields),
-        } as UserHistorySchema;
+            const history: UserHistorySchema = {
+                "user": user,
+                "ipAddress": ipAddress,
+                "modifDate": modifDate,
+                "action": action,
+                "entityCollection": entityCollection,
+                "modifiedEntity": modifiedEntity,
+                "fields": this.entity.dataTransfertObject(fields),
+            } as UserHistorySchema;
 
-        //Service call to add UserHistory
-        userHistoryService.insert(history);
-        return true;
+            //Service call to add UserHistory
+            await userHistoryService.insert(history);
+            return true;
+        }
+        catch(e:any)
+        {
+            return e;
+        }
     }
 }
 

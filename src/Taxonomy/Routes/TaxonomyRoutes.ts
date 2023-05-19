@@ -1,14 +1,16 @@
 import express, {Response, Request, NextFunction} from "express";
 import TaxonomyController from "../Controllers/TaxonomyController";
 import AbstractController from "../../Abstract/Controller";
-import {body, param} from "express-validator";
+import {param} from "express-validator";
 import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
-import {HtmlSanitizer} from "../../Security/Sanitizers/HtmlSanitizer";
 import {NoAccentSanitizer} from "../../Security/Sanitizers/NoAccentSanitizer";
 import {NoSpaceSanitizer} from "../../Security/Sanitizers/NoSpaceSanitizer";
 import {EnumSanitizer} from "../../Security/Sanitizers/EnumSanitizer";
 import {TaxonomiesCategoriesEnum} from "../TaxonomiesCategoriesEnum";
 import CrudRoute from "../../Abstract/CrudRoute";
+import {IsInEnumSanitizer} from "../../Security/SanitizerAliases/IsInEnumSanitizer";
+import {noHtml} from "../../Security/SanitizerAliases/NoHtmlStringSanitizer";
+import {isObjectId} from "../../Security/SanitizerAliases/ObjectIdSanitizer";
 
 class TaxonomyRoutes extends CrudRoute {
 
@@ -19,55 +21,20 @@ class TaxonomyRoutes extends CrudRoute {
     middlewaresDistribution: any = {
         all: [],
         create: [
-            body('data.category')
-                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .customSanitizer(EnumSanitizer.validatorCustomSanitizer(TaxonomiesCategoriesEnum))
-                .stripLow()
-                .trim(),
-            //I remove espace() sanitizer here, because I didn't find any way yet to handle the unescape method for each of those field.
-            body('data.name')
-                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .stripLow()
-                .trim(),
-            body('data.slug').optional().bail()
-                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .stripLow()//only alpha num acii beteween 32 and 13-ish
-                .trim(),//no space
-            body('data.description').optional().bail()
-                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .trim(),
-            body('data.source').optional().bail()
-                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .trim(),
-            body('data.addReason').optional().bail()
-                .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
-                .trim()
+            IsInEnumSanitizer('data.category', TaxonomiesCategoriesEnum),
+            noHtml('data.name'),
+            noHtml('data.description'),
+            noHtml('data.source'),
+            noHtml('data.addReason'),
         ],
         createUpdate: [],
         update: [
-            body('data.category').optional().bail()
-                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .customSanitizer(EnumSanitizer.validatorCustomSanitizer(TaxonomiesCategoriesEnum))
-                .stripLow()
-                .trim(),
-            //I remove espace() sanitizer here, because I didn't find any way yet to handle the unescape method for each of those field.
-            body('data.name').optional().bail()
-                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .stripLow()
-                .trim(),
-            /*body('data.slug').optional()
-                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .stripLow()//only alpha num acii beteween 32 and 13-ish
-                .trim(),//no space*/
-            body('data.description').optional().bail()
-                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .trim(),
-            body('data.source').optional().bail()
-                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .trim(),
-            body('data.addReason').optional().bail()
-                .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
-                .trim()
+            isObjectId('data.id', false),
+            IsInEnumSanitizer('data.category', TaxonomiesCategoriesEnum),
+            noHtml('data.name'),
+            noHtml('data.description'),
+            noHtml('data.source'),
+            noHtml('data.addReason'),
         ],
         delete: [],
         search: [],

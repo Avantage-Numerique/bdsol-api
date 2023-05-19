@@ -5,9 +5,24 @@
             "name":"Create Full",
             "error":false,
             "status":201,
-            "ignoreFields":{
-                "location": "undefined",
-                "scheduleBudget": "undefined"
+            "ignoreFields":{},
+            "expectedProperties": {
+                "name" : "MaNoranda",
+                "alternateName" : "Ma Noranda",
+                "description" : "Spectacle déambulatoire dans Noranda",
+                "url" : "www.manoranda.com",
+                "contactPoint" : "Alexandre Castonguay",
+                "location" : null,
+                "team" : [],
+                "sponsor" : [],
+                "scheduleBudget" : {
+                    "timeframe": []
+                },
+                "skills": [],
+                "status": {
+                    "state":"pending",
+                    "lastModifiedBy":"000000000000000000000123"
+                }
             }
         },
         "name" : "MaNoranda",
@@ -31,9 +46,24 @@
             "name":"Create empty all, but required",
             "error":false,
             "status":201,
-            "ignoreFields":{
-                "location": "undefined",
-                "scheduleBudget": "undefined"
+            "ignoreFields":{},
+            "expectedProperties": {
+                "name" : "Rime la lime",
+                "alternateName" : null,
+                "description" : null,
+                "url" : null,
+                "contactPoint" : null,
+                "location" : null,
+                "team" : [],
+                "sponsor" : [],
+                "scheduleBudget" : {
+                    "timeframe": []
+                },
+                "skills": [],
+                "status": {
+                    "state":"pending",
+                    "lastModifiedBy":"000000000000000000000123"
+                }
             }
         },
         "name" : "Rime la lime",
@@ -57,10 +87,8 @@
             "name":"Create no required",
             "error":true,
             "status":400,
-            "ignoreFields":{
-                "location": "undefined",
-                "scheduleBudget": "undefined"
-            }
+            "ignoreFields":{},
+            "expectedProperties": {}
         },
         "alternateName" : "La limousine du péché",
         "description" : "Risquer mais sûrement riche",
@@ -81,7 +109,8 @@
         {
             "name":"Create empty data",
             "error":true,
-            "status":400
+            "status":400,
+            "expectedProperties": {}
         }
     },
     {
@@ -90,10 +119,8 @@
             "name":"Create empty (less than 2 char) required",
             "error":true,
             "status":400,
-            "ignoreFields":{
-                "location": "undefined",
-                "scheduleBudget": "undefined"
-            }
+            "ignoreFields":{},
+            "expectedProperties": {}
         },
         "name" : "O",
         "alternateName" : "La limousine du voisin",
