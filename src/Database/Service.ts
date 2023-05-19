@@ -367,7 +367,7 @@ export abstract class Service {
                 return Service.UPDATE_MSG;
             case Service.DELETE_STATE :
                 return Service.DELETE_MSG;
-            case Service.LIST_STATE   :
+            case Service.LIST_STATE :
                 return Service.LIST_MSG;
             case Service.SEARCH_STATE :
                 return Service.SEARCH_MSG;

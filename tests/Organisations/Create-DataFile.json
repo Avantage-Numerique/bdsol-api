@@ -2,9 +2,16 @@
     {
         "infoTest":
         {
+            "iteration": 1,
             "name":"Create Full no fondationDate",
             "error":false,
-            "status":201
+            "status":201,
+            "expectedProperties": {
+                "name" : "Petit f",
+                "description" : "Théâtre et f",
+                "url" : "https://f.org/",
+                "contactPoint" : "info@f.org"
+            }
         },
         "name": "Petit f",
         "description": "Théâtre et f",
@@ -14,10 +21,16 @@
     {
         "infoTest":
         {
+            "iteration": 2,
             "name":"Create Full2",
             "error":false,
             "status":201,
-            "ignoreFields":{
+            "ignoreFields":{},
+            "expectedProperties": {
+                "name": "Agora des Arts",
+                "description": "Petite église, salle de spectacle sympatoche",
+                "url":"http://www.agoradesarts.com/",
+                "contactPoint":"info@agoradesarts.com",
                 "fondationDate":"2022-06-08T00:00:00.000Z"
             }
         },
@@ -30,6 +43,7 @@
     {
         "infoTest":
         {
+            "iteration": 3,
             "name":"Create empty data",
             "error":true,
             "status":400
@@ -38,6 +52,7 @@
     {
         "infoTest":
         {
+            "iteration": 4,
             "name":"Create no name",
             "error":true,
             "status":400
@@ -49,6 +64,7 @@
     {
         "infoTest":
         {
+            "iteration": 5,
             "name":"Create empty name",
             "error":true,
             "status":400
@@ -61,9 +77,14 @@
     {
         "infoTest":
         {
+            "iteration": 6,
             "name":"Create empty non req",
             "error":false,
-            "status":201
+            "status":201,
+            "expectedProperties": {
+                "name": "Synvain Rénove",
+                "description": "Rénovation de tout genre"
+            }
         },
         "name": "Synvain Rénove",
         "description": "Rénovation de tout genre",
@@ -73,9 +94,14 @@
     {
         "infoTest":
         {
+            "iteration": 7,
             "name":"Create no non req",
             "error":false,
-            "status":201
+            "status":201,
+            "expectedProperties": {
+                "name": "L'alphabet à 9 ans",
+                "description": "Garderie"
+            }
         },
         "name": "L'alphabet à 9 ans",
         "description": "Garderie"
@@ -83,9 +109,14 @@
     {
         "infoTest":
         {
+            "iteration": 8,
             "name":"Create empty date",
             "error":false,
-            "status":201
+            "status":201,
+            "expectedProperties": {
+                "name": "L'iro kals",
+                "description": "Gryt"
+            }
         },
         "name": "L'iro kals",
         "description": "Gryt",

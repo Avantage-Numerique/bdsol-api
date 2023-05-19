@@ -20,32 +20,19 @@ class ProjectsRoutes extends CrudRoute {
         createUpdate: [],
         create: [
             EntityName('data.name', false),
-
             noHtml('data.alternateName'),
-
             isObjectId('data.entityInCharge'),
-
             isObjectId('data.producer'),
-
             basicHtmlSanitizer('data.description'),
-
             isURL('data.url'),
-
             isContactPoint('data.contactPoint'),
-
             //body('data.context').exists({checkNull:true}).bail().customSanitizer(EnumSanitizer.validatorCustomSanitizer(ProjectContextEnum)),
-
             //body('data.location').exists({checkNull:true}).bail(),
-
             //body('data.team').exists({checkNull:true}).bail().isArray(),
-
             isObjectId('data.team.*'),
-
             //body('data.sponsor').exists({checkNull:true}).bail(),
             //body('data.scheduleBudget').exists({checkNull:true}).bail(),
-
             isObjectId('data.mainImage'),
-
             /*body('data.skills').exists({checkNull:true}).bail()
                 .custom(IsObjectIdStringValid.validatorCustom())
                 .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
