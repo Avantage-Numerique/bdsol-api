@@ -8,6 +8,7 @@ import { Status } from "../../Moderation/Schemas/StatusSchema";
 import { licenceList } from "../List/LicenceList";
 import { fileExtensionList, fileTypeList } from "../List/FileList";
 import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
+import {EntityTypesEnum} from "../../Entities/EntityTypes";
 
 
 class Media extends AbstractModel {
@@ -91,7 +92,7 @@ class Media extends AbstractModel {
                 entityType: {
                     type: String,
                     required: true,
-                    enum: ['Person', 'Organisation']
+                    enum: EntityTypesEnum
                 },
                 uploadedBy: {
                     type: mongoose.Types.ObjectId,
