@@ -29,7 +29,7 @@ class ProjectsRoutes extends CrudRoute {
             //body('data.context').exists({checkNull:true}).bail().customSanitizer(EnumSanitizer.validatorCustomSanitizer(ProjectContextEnum)),
             //body('data.location').exists({checkNull:true}).bail(),
             //body('data.team').exists({checkNull:true}).bail().isArray(),
-            objectIdSanitizerAlias('data.team.*'),
+            objectIdSanitizerAlias('data.team.*.member'),
             //body('data.sponsor').exists({checkNull:true}).bail(),
             //body('data.scheduleBudget').exists({checkNull:true}).bail(),
             objectIdSanitizerAlias('data.mainImage'),
@@ -37,7 +37,6 @@ class ProjectsRoutes extends CrudRoute {
                 .custom(IsObjectIdStringValid.validatorCustom())
                 .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
                 .trim(),*/
-
             //status not sanitize yet, because it will be manage by backend*/
         ],
         update: [
@@ -49,7 +48,7 @@ class ProjectsRoutes extends CrudRoute {
             basicHtmlSanitizerAlias('data.description'),
             urlSanitizerAlias('data.url'),
             contactPointSanitizerAlias('data.contactPoint'),
-            objectIdSanitizerAlias('data.team.*'),
+            objectIdSanitizerAlias('data.team.*.member'),
             objectIdSanitizerAlias('data.mainImage'),
 
             //body('data.context').exists({checkNull:true}).bail().customSanitizer(EnumSanitizer.validatorCustomSanitizer(ProjectContextEnum)),
