@@ -46,7 +46,7 @@
             "iteration": 3,
             "name":"Create empty data",
             "error":true,
-            "status":400
+            "status":422
         }
     },
     {
@@ -55,7 +55,7 @@
             "iteration": 4,
             "name":"Create no name",
             "error":true,
-            "status":400
+            "status":422
         },
         "description": "Culturama sse-toi",
         "url":"http://www.culturamassetoi.com/",
@@ -67,7 +67,7 @@
             "iteration": 5,
             "name":"Create empty name",
             "error":true,
-            "status":400
+            "status":422
         },
         "name": "",
         "description": "Culturama sse-toi",
