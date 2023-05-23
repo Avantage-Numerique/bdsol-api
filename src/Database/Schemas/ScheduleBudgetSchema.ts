@@ -39,6 +39,7 @@ export class Timeframe {
         },
         eta: {
             type: String,
+            enum: TimeframeEtaEnum
         },
         budgetRange: {
             type: String,
