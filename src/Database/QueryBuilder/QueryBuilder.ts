@@ -129,11 +129,9 @@ export default class QueryBuilder {
                         }
                     }
 
-
                     const logicalSectionCandidate:any = {[logicalParamParsed.queryProperty]: parseSectionSubParams};
 
                     LogHelper.debug("logicalSectionCandidate", logicalSectionCandidate);
-
 
                     query.sections.push(logicalSectionCandidate);
                     delete query.raw[logicalParam];
@@ -159,26 +157,34 @@ export default class QueryBuilder {
             if ((field === "id" || field === "_id") &&
                 (value !== "" && value !== undefined && !QueryBuilder.haveProperty(value))) {    // sauf si
                 parsedQuery._id = value;
-                return;
+                continue;
             }
 
             if (field == "sort") {
                 parsedQuery.sort.updatedAt = value === "asc" ? 1 : -1;
-                return;
+                continue;
+            }
+
+            if (field == "limit" && Number(field) > 0) {
+                parsedQuery.limit = Number(field);
+                continue;
+            }
+
+            if (field == "skip" && Number(field) > 0) {
+                parsedQuery.skip = Number(field);
+                continue;
             }
 
             if (QueryBuilder.fieldIsDeclared(field, query)) {
-                parsedQuery[field] = QueryBuilder.parseParam(field, query[field]);
+                const like = !(field.split(".").length > 1);//Allow "offers.offer" to be directly assigned without options ($regex, $option are not allowed)
+                parsedQuery[field] = QueryBuilder.parseParam(field, query[field], like);
             }
         }
         return parsedQuery;
     }
 
-    static parseParam(field:any, value:any):any {
+    static parseParam(field:any, value:any, like:boolean=true):any {
 
-        LogHelper.debug("parseParam", field, "value", value);
-
-        const noOption = true;//field.split(".").length > 1;//Allow "offers.offer" to be directly assigned without options ($regex, $option are not allowed)
         let parsedValue:any;
         let fieldChanged = false;
 
@@ -189,9 +195,10 @@ export default class QueryBuilder {
             fieldChanged = true;
         }
 
-        //  Si ce n'est pas un Id ou si on cherche une date précise (field == date).
+        //don't apply these options if the value contains property to transpose.
         if (!QueryBuilder.haveProperty(value)) {
-            if (noOption)
+            //  Si ce n'est pas un Id ou si on cherche une date précise (field == date).
+            if (!like)
                 parsedValue = value;
             else
                 parsedValue = { $regex: value, $options : 'i' };
