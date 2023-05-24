@@ -161,7 +161,9 @@ export default class QueryBuilder {
             }
 
             if (field == "sort") {
-                parsedQuery.sort.updatedAt = value === "asc" ? 1 : -1;
+                parsedQuery.sort = {
+                    updatedAt: value === "asc" ? 1 : -1
+                }
                 continue;
             }
 
