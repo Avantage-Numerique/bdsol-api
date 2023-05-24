@@ -1,6 +1,5 @@
 import mongoose, {ObjectId, Types} from 'mongoose';
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 //mongoose.Document<any>
 const isSameId = async function(id:ObjectId, targetId:ObjectId) {
@@ -24,8 +23,6 @@ const schemaValidateNoReferenceToItself = async function(targetDocument: mongoos
     /*@ts-ignore*/
     const target:any = targetDocument[targetProperty];
 
-    LogHelper.debug("schemaValidateNoReferenceToItself targetDocument", targetDocument, "refere", refere, "refId", refId);
-
     if (refere._id.equals(target)) {
         throw new Error(`A document cannot reference itself in a relationship`);
     }
@@ -34,7 +31,6 @@ const schemaValidateNoReferenceToItself = async function(targetDocument: mongoos
 }
 
 const taxonomyDomainNoSelfReference = async function(this: mongoose.Document<any>, refId: Types.ObjectId | undefined) {
-    LogHelper.debug("taxonomyDomainNoSelfReference Document", this, refId);
     return schemaValidateNoReferenceToItself(this, refId, Taxonomy.getInstance().mongooseModel, "domain");
 }
 

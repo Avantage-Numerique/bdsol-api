@@ -1,7 +1,18 @@
 import config from "../../config";
 
-
+/**
+ * ApiQuery is the class that QUeryBuilder implements to generate a valid MongoDb query without having to use direct query structure.
+ * @property name {string} WIP the name of the query. For the feature of caching query and be able to recall them.
+ * @property sort {any} Sorting option. Default is set to updatedAt: -1.
+ * @property skip {Number} To implement paging, this is the skip parameter. Default is set by config.query.defaultSkip.
+ * @property limit {Number}The maximum return documents of the query config.query.defaultLimit.
+ * @property raw {any} This contains the raw query.
+ * @property initQuery {any} Copy of the initial query return via a route.
+ * @property sections {Array<any>} The sections contained in the initQuery, used with logical params like or, and & in.
+ * @property transmuted {any} The final query used in for search/list/etc.
+ */
 export default class ApiQuery {
+
     public name:string;
     public sort:any;
     public skip:Number;

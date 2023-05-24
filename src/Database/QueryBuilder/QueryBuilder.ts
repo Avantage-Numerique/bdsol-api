@@ -1,6 +1,5 @@
 import {defaultModifier, objectIdModifier, PropertyModifier} from "./PropertyModifier";
 import ApiQuery from "./ApiQuery";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 
 /**
@@ -63,9 +62,7 @@ export default class QueryBuilder {
      * @param query
      */
     static build(query:any) {
-        LogHelper.debug("initQuery", query);
         const parsedQuery = QueryBuilder.parseQuery(query);
-        LogHelper.debug("parsedQuery", parsedQuery.transmuted);
         return parsedQuery.transmuted;
     }
 
@@ -109,8 +106,6 @@ export default class QueryBuilder {
                     [logicalParamParsed.queryProperty]: logicalParamSettings
                 };
 
-                LogHelper.debug("is sections", logicalSectionCandidate, QueryBuilder.isLogicalSection(logicalSectionCandidate))
-
                 //parse each section queries.
                 if (QueryBuilder.isLogicalSection(logicalSectionCandidate))
                 {
@@ -120,18 +115,12 @@ export default class QueryBuilder {
 
                         for (const sectionSubParam of logicalParamSettings) {
 
-                            LogHelper.debug("sectionSubParam", sectionSubParam);
-
                             const parsedSectionSubParamsQuery = QueryBuilder.parseParams(sectionSubParam);
                             parseSectionSubParams.push(parsedSectionSubParamsQuery);
-
-                            LogHelper.debug("parseSectionSubParams", parseSectionSubParams);
                         }
                     }
 
                     const logicalSectionCandidate:any = {[logicalParamParsed.queryProperty]: parseSectionSubParams};
-
-                    LogHelper.debug("logicalSectionCandidate", logicalSectionCandidate);
 
                     query.sections.push(logicalSectionCandidate);
                     delete query.raw[logicalParam];
@@ -147,7 +136,6 @@ export default class QueryBuilder {
      * @note NE FONCTIONNE PAS PRÉSENTEMENT AVEC LES NOMBRES PUISQUE JE CONVERTIS LES NOMBRES EN STRING!
      */
     static parseParams(query:any):any {
-        LogHelper.debug("parseParams", query);
         let parsedQuery:any = {};
         for (const field in query)
         {
@@ -276,7 +264,6 @@ export default class QueryBuilder {
      * @param candidate
      */
     static isLogicalSection(candidate:any) {
-        LogHelper.debug("candidate", candidate, typeof candidate, Array.isArray(candidate));
 
         if ((typeof candidate === "object")) {
             let candidatePropertiesAreValid = false;
@@ -288,11 +275,6 @@ export default class QueryBuilder {
             {
                 const candidateProperty = candidate[candidatePropertyName];
                 candidatePropertiesAreValid = typeof candidatePropertyName === "string" && Array.isArray(candidateProperty);
-
-                //candidatePropertiesAreValid = typeof candidateProperty === "object" && Array.isArray(candidateProperties);
-
-                LogHelper.debug("candidatePropertiesAreValid property", candidatePropertyName, "value", candidateProperty);
-                LogHelper.debug("candidatePropertiesAreValid", candidatePropertiesAreValid, typeof candidateProperty, Array.isArray(candidateProperty));
 
                 if (candidatePropertiesAreValid) candidatePropertiesGood++;
                 if (!candidatePropertiesAreValid) candidatePropertiesWrong++;

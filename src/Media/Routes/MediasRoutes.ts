@@ -272,9 +272,7 @@ class MediasRoutes extends AbstractRoute {
             res.serviceResponse.message = "Success to save file, create media, and link media to entity!";
             res.serviceResponse.action = "create";
             const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res);
-            LogHelper.debug(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
             return;
-
         }
 
         //Return msg no field to put image into entity
@@ -345,8 +343,6 @@ class MediasRoutes extends AbstractRoute {
 
         //type('image/jpeg')
         const targetMediaPath = path.join(`${PublicStorage.basePath}/${entity}/${id}/${fileName}`);
-
-        LogHelper.debug("Media view request", options, "path", targetMediaPath);
 
         await res.sendFile(
             targetMediaPath,
