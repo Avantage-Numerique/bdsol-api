@@ -8,6 +8,7 @@ import { ErrorResponse } from "../../Http/Responses/ErrorResponse";
 import { SuccessResponse } from "../../Http/Responses/SuccessResponse";
 import { ReasonPhrases } from "http-status-codes";
 import AbstractRoute from "../../Abstract/Route";
+import Project from "../../Projects/Models/Project";
 
 class SearchRoutes extends AbstractRoute {
 
@@ -105,6 +106,7 @@ class SearchRoutes extends AbstractRoute {
             const personModel:any = Person.getInstance().mongooseModel;
             const organisationModel:any = Organisation.getInstance().mongooseModel;
             const taxonomyModel:any = Taxonomy.getInstance().mongooseModel;
+            const projectModel:any = Project.getInstance().mongooseModel;
             
             const personsSuggestions = await personModel.find(
                 { $or: [
@@ -121,13 +123,39 @@ class SearchRoutes extends AbstractRoute {
                     { description: { $regex: req.query.searchIndex, $options : 'i' }},
                 ]}
             )
+                
+            const projectSuggestions = await projectModel.find(
+                { $or: [
+                    { name: { $regex: req.query.searchIndex, $options : 'i' }},
+                    { alternateName: { $regex: req.query.searchIndex, $options : 'i' }},
+                ]}
+            )
 
             const taxonomySuggestions = await taxonomyModel.find(
                 { name: { $regex : req.query.searchIndex, $options : 'i' }}
             )
-                    
+
+
+            //Handle if taxonomy is exactly SearchIndex
+            const taxonomyExactMatchIndex = taxonomySuggestions.findIndex( (taxo:any) => { return taxo.name.toLowerCase() == req?.query?.searchIndex?.toString().toLowerCase() } )
+            let taxonomyExactMatch = [];
+            let linkedEntityToExactMatch:any = [];
+            if (taxonomyExactMatchIndex >= 0) {
+                taxonomyExactMatch = taxonomySuggestions.splice(taxonomyExactMatchIndex, 1);
+                
+                //Handle linked taxonomy if exact match
+                console.log(taxonomyExactMatch)
+                linkedEntityToExactMatch = await SearchRoutes.internalFindEntityLinkedToTaxonomy(taxonomyExactMatch[0]._id)
+            }
+
             //Send back DTO of fewest field of each entity search result in an array sorted,
-            res.serviceResponse = SuccessResponse.create([...personsSuggestions, ...organisationsSuggestions, ...taxonomySuggestions], StatusCodes.OK, ReasonPhrases.OK);
+            if(taxonomyExactMatch.length > 0)
+            {
+                //If taxonomy match, fetch entity that have this taxonomy
+                res.serviceResponse = SuccessResponse.create([ ...taxonomyExactMatch, ...linkedEntityToExactMatch, ...personsSuggestions, ...organisationsSuggestions, ...projectSuggestions, ...taxonomySuggestions], StatusCodes.OK, ReasonPhrases.OK);
+            }
+            else    
+                res.serviceResponse = SuccessResponse.create([...personsSuggestions, ...organisationsSuggestions, ...projectSuggestions, ...taxonomySuggestions], StatusCodes.OK, ReasonPhrases.OK);
         }
         catch(e){
             res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.INTERNAL_SERVER_ERROR, "SearchSuggestion failed to find with request error:"+e, [])
@@ -174,15 +202,16 @@ class SearchRoutes extends AbstractRoute {
     public static async internalFindEntityLinkedToTaxonomy(taxonomyId:string){
         const personModel:any = Person.getInstance().mongooseModel;
         const organisationModel:any = Organisation.getInstance().mongooseModel;
-        //const ProjectModel:any = Organisation.getInstance().mongooseModel;
+        const projectModel:any = Project.getInstance().mongooseModel;
         try{
+            console.log("idtaxo",taxonomyId)
             const paramId = new mongoose.Types.ObjectId(taxonomyId);
             const promises = [];
             promises.push(
                 await personModel.find(
                     {
                         $or: [
-                            {"occupations.occupation": paramId},
+                            {"occupations.skills": paramId},
                             {"domains.domain": paramId},
                         ]
                     }
@@ -191,16 +220,22 @@ class SearchRoutes extends AbstractRoute {
                 await organisationModel.find(
                     {
                         $or: [
-                            {"offers.offer": paramId},
+                            {"offers.skills": paramId},
                             {"domains.domain": paramId},
                         ]
                     }
                 ));
+            promises.push(
+                await projectModel.find(
+                    { "skills": paramId }
+                )
+            )
     
             let tagSearchResult = [];
             if(promises.length > 0) {
                  tagSearchResult = promises.flat();
             }
+            console.log("tagresults", tagSearchResult)
             return tagSearchResult;
         }
         catch(e)
