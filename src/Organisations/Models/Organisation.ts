@@ -12,6 +12,7 @@ import { Status } from "../../Moderation/Schemas/StatusSchema";
 import {middlewarePopulateProperty, taxonomyPopulate} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 import {populateUser} from "../../Users/Middlewares/populateUser";
 import {User} from "../../Users/Models/User";
+import { SkillGroup } from "../../Taxonomy/Schemas/SkillGroupSchema";
 
 
 class Organisation extends AbstractModel {
@@ -89,16 +90,7 @@ class Organisation extends AbstractModel {
                 },
                 // DRY this with groupName to have this "skillGroup as
                 offers: {
-                    type: [{
-                        offer: {
-                            type: String
-                        },
-                        skills:{
-                            type: [mongoose.Types.ObjectId],
-                            ref: 'Taxonomy'
-                        },
-                        status: Status.schema
-                    }]
+                    type: [SkillGroup.schema],
                 },
                 domains: {
                     type: [{

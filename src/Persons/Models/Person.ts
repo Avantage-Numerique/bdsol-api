@@ -11,6 +11,7 @@ import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEn
 import { Status } from "../../Moderation/Schemas/StatusSchema";
 import {middlewarePopulateProperty, taxonomyPopulate} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
 import {populateUser} from "../../Users/Middlewares/populateUser";
+import { SkillGroup } from "../../Taxonomy/Schemas/SkillGroupSchema";
 
 class Person extends AbstractModel {
 
@@ -93,16 +94,7 @@ class Person extends AbstractModel {
                 description: String,
                 // DRY this with groupName to have this "skillGroup as
                 occupations: {
-                    type: [{
-                        occupation: {
-                            type: String
-                        },
-                        skills:{
-                            type: [mongoose.Types.ObjectId],
-                            ref: 'Taxonomy'
-                        },
-                        status: Status.schema
-                    }]
+                    type: [SkillGroup.schema],
                 },
                 domains: {
                     type: [{

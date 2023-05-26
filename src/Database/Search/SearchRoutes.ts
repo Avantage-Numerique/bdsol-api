@@ -102,6 +102,9 @@ class SearchRoutes extends AbstractRoute {
      */
     public async getSearchSuggestion(req: Request, res: Response, next: NextFunction): Promise<any> {
 
+        //To remove accent on french characters
+        //req.query.searchIndex = req.query.searchIndex?.toString().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        //console.log(req.query.searchIndex)
         try {
             const personModel:any = Person.getInstance().mongooseModel;
             const organisationModel:any = Organisation.getInstance().mongooseModel;
