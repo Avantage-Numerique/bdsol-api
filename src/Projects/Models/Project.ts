@@ -35,13 +35,15 @@ class Project extends AbstractModel {
 
             //Index
             Project._instance.schema.index(
-                { name:"text", slug:"text" },
+                { name:"text", alternateNate:"text", slug:"text", url:"text" },
                 {
                     default_language: "french",
                     //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
                     weights:{
                         name:3,
-                        slug:3
+                        alternateName:3,
+                        slug:3,
+                        url:2
                     }
                 });
             //index text for search ?
