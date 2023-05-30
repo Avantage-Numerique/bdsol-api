@@ -19,6 +19,7 @@ import ModerationRoutes from "./Moderation/Routes/ModerationRoutes";
 import SearchRoutes from "./Database/Search/SearchRoutes";
 import {StaticContentsRoutes} from "./StaticContent/Routes/StaticContentsRoutes";
 import { ProjectsRoutes } from "./Projects/Routes/ProjectsRoute";
+import {RequestDuration} from "./Monitoring/Middlewares/RequestDuration";
 /**
  * Main class for the API
  * Use the express instance as public property.
@@ -145,6 +146,8 @@ export default class Api {
     private _initRouter()
     {
         LogHelper.info("[ROUTES] Configuration des routes de l'API ...");
+
+        if (config.logPerformance) this.express.use(RequestDuration.middleware());
 
         this.mainRouter = express.Router(); //this seeem to be a "branch" independant. Middle ware pass here, and error handling are only manage into the same "router's hierarchy" may I labled.
         this.mainRouter.use(GetRequestIp.middleware());    // Set an empty user property in Request there. Would be possible to feed with more default info.

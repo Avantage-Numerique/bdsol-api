@@ -15,5 +15,6 @@ namespace Express {
 namespace Express {
     export interface Response {
         serviceResponse?: any;
+        performance?: any
     }
 }
