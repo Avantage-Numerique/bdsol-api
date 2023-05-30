@@ -2,8 +2,20 @@
     "name": "bdcli",
     "version": "0.0.0",
     "description": "La bdcli est la ligne de commande pour interagir avec l'API et mongodb. Version 0 : gestion des migrations.",
-    "main": "bin/bdcli.ts",
+    "main": "src/bdcli.ts",
+    "scripts": {
+        "build": "npx tsc",
+        "start": "node bin/bdcli.js -h",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
     "bin": {
-        "bdcli": "bin/bdcli.ts"
+        "bdcli": "bin/bdcli.js"
+    },
+    "dependencies": {
+        "commander": "^10.0.1"
+    },
+    "devDependencies": {
+        "@types/node": "^20.2.5",
+        "typescript": "^5.0.4"
     }
 }
