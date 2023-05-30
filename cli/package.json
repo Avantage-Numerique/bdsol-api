@@ -1,0 +1,9 @@
+{
+    "name": "bdcli",
+    "version": "0.0.0",
+    "description": "La bdcli est la ligne de commande pour interagir avec l'API et mongodb. Version 0 : gestion des migrations.",
+    "main": "bin/bdcli.ts",
+    "bin": {
+        "bdcli": "bin/bdcli.ts"
+    }
+}
