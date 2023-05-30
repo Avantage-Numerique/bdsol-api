@@ -7,6 +7,7 @@ dotenv.config();
 const config = {
 
     environnement: process.env.ENVIRONNEMENT || "development",
+    logPerformance: process.env.LOG_PERFORMANCE || true,
 
     isProduction: process.env.ENVIRONNEMENT === 'production',
     isStaging: process.env.ENVIRONNEMENT === 'staging',
