@@ -19,7 +19,7 @@ export class RequestDuration {
          * @param next {NextFunction}
          */
         return async function (req: Request, res: Response, next: NextFunction) {
-            LogHelper.info(`[Monitoring][STARTED] ${req.method} ${req.originalUrl} `);
+            LogHelper.info(`[Monitoring][Performance][STARTED] ${req.method} ${req.originalUrl} `);
 
             const from = performance.now();
             res.performance = {};
@@ -29,16 +29,14 @@ export class RequestDuration {
 
             //On finished
             res.on('finish', () => {
-                const finishDuration = getDurationInMilliseconds(from);
-                res.performance.finish = finishDuration;
-                LogHelper.info(`[Monitoring][FINISHED] ${req.method} ${req.originalUrl}, Request received [ ${finishDuration.toLocaleString()} ms ]`);
+                res.performance.finish = getDurationInMilliseconds(from);
             });
 
             res.on('close', () => {
-                const closeDuration = getDurationInMilliseconds(from);
-                res.performance.close = closeDuration;
-                res.performance.processing = closeDuration - res.performance.finish;
-                LogHelper.info(`[Monitoring][CLOSED] ${req.method} ${req.originalUrl}, Request completed [ ${closeDuration.toLocaleString()} ms ]`);
+                res.performance.close = getDurationInMilliseconds(from);
+                res.performance.processing = res.performance.close - res.performance.finish;
+
+                LogHelper.info(`[Monitoring][Performance] ${req.method} ${req.originalUrl} [finish: ${res.performance.finish.toLocaleString()} ms] [close: ${res.performance.close.toLocaleString()} ms] [Dif. : ${res.performance.processing.toLocaleString()}]`);
             });
 
             next();
