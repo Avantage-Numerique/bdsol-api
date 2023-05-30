@@ -1,6 +1,5 @@
 import express, {NextFunction, Request, Response} from "express";
 import {StatusCodes} from "http-status-codes";
-import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 import { ErrorResponse } from "../../Http/Responses/ErrorResponse";
 import { SuccessResponse } from "../../Http/Responses/SuccessResponse";
 import { ReasonPhrases } from "http-status-codes";
