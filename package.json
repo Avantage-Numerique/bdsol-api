@@ -47,6 +47,7 @@
     "http-status-codes": "^2.2.0",
     "jsonwebtoken": "^9.0.0",
     "lodash.deburr": "^4.1.0",
+    "migrate": "^2.0.0",
     "mime-db": "^1.52.0",
     "mime-types": "^2.1.35",
     "mongodb": "^4.8.1",
@@ -58,9 +59,9 @@
   },
   "devDependencies": {
     "better-docs": "^2.7.2",
-    "jsdoc": "^3.6.7",
     "eslint": "^8.20.0",
     "eslint-import-resolver-typescript": "^3.2.7",
+    "jsdoc": "^3.6.7",
     "nodemon": "^2.0.19",
     "ts-node": "^10.9.1"
   }

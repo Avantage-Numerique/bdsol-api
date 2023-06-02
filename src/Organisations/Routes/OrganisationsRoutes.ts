@@ -23,8 +23,8 @@ class OrganisationsRoutes extends CrudRoute {
             urlSanitizerAlias('data.url'),
             noHtmlStringSanitizerAlias('data.contactPoint'),
             dateSanitizerAlias('data.fondationDate'),
-            objectIdSanitizerAlias('data.offers.*.skills'),
-            objectIdSanitizerAlias('data.team.*.member')
+            objectIdSanitizerAlias('data.offers.*.skills.*'),
+            objectIdSanitizerAlias('data.team.*.member.*')
         ],
         update: [
             objectIdSanitizerAlias('data.id', false),
@@ -33,8 +33,8 @@ class OrganisationsRoutes extends CrudRoute {
             urlSanitizerAlias('data.url'),
             noHtmlStringSanitizerAlias('data.contactPoint'),
             dateSanitizerAlias('data.fondationDate'),
-            objectIdSanitizerAlias('data.offers.*.skills'),
-            objectIdSanitizerAlias('data.team.*.member')
+            objectIdSanitizerAlias('data.offers.*.skills.*'),
+            objectIdSanitizerAlias('data.team.*.member.*')
         ],
         delete: [],
         search: [],
