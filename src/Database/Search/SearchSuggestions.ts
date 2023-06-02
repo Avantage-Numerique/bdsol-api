@@ -40,46 +40,37 @@ class SearchSuggestions {
                 { nickname: { $regex: searchIndex, $options : 'i' }},
                 { description: { $regex: searchIndex, $options : 'i' }},
             ]}
-        )
-            
+        );
+
         const organisationsSuggestions = await this.organisationModel.find(
             { $or: [
                 { name: { $regex: searchIndex, $options : 'i' }},
                 { description: { $regex: searchIndex, $options : 'i' }},
             ]}
-        )
-            
+        );
+
         const projectSuggestions = await this.projectModel.find(
             { $or: [
                 { name: { $regex: searchIndex, $options : 'i' }},
                 { alternateName: { $regex: searchIndex, $options : 'i' }},
             ]}
-        )
+        );
 
         const taxonomySuggestions = await this.taxonomyModel.find(
             { name: { $regex : searchIndex, $options : 'i' }}
-        )
+        );
 
-        //Handle if taxonomy is exactly SearchIndex
-        const taxonomyExactMatchIndex = taxonomySuggestions.findIndex( (taxo:any) => { return taxo.name.toLowerCase() == searchIndex?.toString().toLowerCase() } )
-        let taxonomyExactMatch = [];
-        let linkedEntityToExactMatch:any = [];
-        if (taxonomyExactMatchIndex >= 0) {
-            taxonomyExactMatch = taxonomySuggestions.splice(taxonomyExactMatchIndex, 1);
-            
-            //Handle linked taxonomy if exact match
-            linkedEntityToExactMatch = await this.searchResults_instance.internalFindEntityLinkedToTaxonomy(taxonomyExactMatch[0]._id)
-        }
-        
-        //Send back DTO of fewest field of each entity search result in an array sorted,
-        if(taxonomyExactMatch.length > 0)
-        {
-            //If taxonomy match, fetch entity that have this taxonomy
-            return [ ...taxonomyExactMatch, ...linkedEntityToExactMatch, ...personsSuggestions, ...organisationsSuggestions, ...projectSuggestions, ...taxonomySuggestions];
-        }
-        else{
-            return [...personsSuggestions, ...organisationsSuggestions, ...projectSuggestions, ...taxonomySuggestions];
-        }
+        return [...personsSuggestions, ...organisationsSuggestions, ...projectSuggestions, ...taxonomySuggestions];
+    }
+
+    public async findNearTaxonomy(searchIndex:string | undefined) {
+        const nearTaxonomySuggestions = await this.taxonomyModel.find(
+            { name: { $regex : searchIndex, $options : 'i' }}
+        );
+        const nearestTaxonomy = nearTaxonomySuggestions.pop();
+        if(nearestTaxonomy != undefined)
+            return {nearestTaxonomy:nearestTaxonomy, otherNearbyTaxonomy:nearTaxonomySuggestions}
+        return {};
     }
 }
 

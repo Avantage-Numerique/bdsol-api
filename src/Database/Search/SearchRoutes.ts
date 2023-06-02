@@ -35,6 +35,7 @@ class SearchRoutes extends AbstractRoute {
 
         this.routerInstance.get('/', [this.textSearchSuggestionsHandler.bind(this), this.routeSendResponse.bind(this)]);
         this.routerInstance.get('/results', [this.textSearchResultsHandler.bind(this), this.routeSendResponse.bind(this)]);
+        this.routerInstance.get('/nearestTaxonomy', [this.nearTaxonomyToSearchIndex.bind(this), this.routeSendResponse.bind(this)]);
         this.routerInstance.get('/:linkId', [this.taxonomyLinkedEntitiesHandler.bind(this), this.routeSendResponse.bind(this)]);
         this.routerInstance.get('/:category/:slug', [this.taxonomyLinkedEntitiesByCatAndSlugHandler.bind(this), this.routeSendResponse.bind(this)]);
         return this.routerInstance;
@@ -92,6 +93,18 @@ class SearchRoutes extends AbstractRoute {
         const taxonomyLinkedEntities = await this.searchResults_instance.getLinkedEntitiesToTaxonomyByCatAndSlug(req.params.category, req.params.slug)
         res.serviceResponse = SuccessResponse.create(taxonomyLinkedEntities, StatusCodes.OK, ReasonPhrases.OK);
         //res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Search TagResult failed to find entity linked to taxonomy with error: "+e, []);
+        return next();
+    }
+
+    public async nearTaxonomyToSearchIndex(req:Request, res:Response, next: NextFunction):Promise<any> {
+        const nearTaxonomy = await this.searchSuggestions_instance.findNearTaxonomy(req.query.searchIndex?.toString())
+        let linkedEntityToNearestTaxonomy = [];
+        //Find linked entity if nearestTaxo exist
+        if(nearTaxonomy?.nearestTaxonomy?._id != undefined)
+            linkedEntityToNearestTaxonomy = await this.searchResults_instance.internalFindEntityLinkedToTaxonomy(nearTaxonomy.nearestTaxonomy._id);
+        
+        const nearTaxonomyResponseObject = { ...nearTaxonomy, linkedEntityToNearestTaxonomy: linkedEntityToNearestTaxonomy }
+        res.serviceResponse = SuccessResponse.create(nearTaxonomyResponseObject, StatusCodes.OK, ReasonPhrases.OK);
         return next();
     }
 
