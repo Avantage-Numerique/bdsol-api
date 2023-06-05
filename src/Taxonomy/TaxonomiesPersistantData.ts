@@ -2,98 +2,8 @@ import {TaxonomiesCategoriesEnum} from "./TaxonomiesCategoriesEnum";
 import { StatusStates } from "../Moderation/Schemas/StatusSchema";
 
 export const TaxonomiesPersistantData = [
-    {   
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  : "Animateur 2D et 3D",
-        "description" : "Créateur d'animation visuelle de personnage ou objet 2D et 3D.",
-        "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
-            "lastModifiedBy":"000000000000000000000000"
-        }
-    },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Architecte d'information",
-        "description" : "",
-        "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
-            "lastModifiedBy":"000000000000000000000000"
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"   :"Architecte logiciel",
-        "description" : "",
-        "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
-            "lastModifiedBy":"000000000000000000000000"
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Auteur - scénariste",
-        "description" : "",
-        "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
-            "lastModifiedBy":"000000000000000000000000"
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Chargée de projet numérique",
-        "description" : "",
-        "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
-            "lastModifiedBy":"000000000000000000000000"
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Chef développeur Back-End/Web",
-        "description" : "",
-        "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
-            "lastModifiedBy":"000000000000000000000000"
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Chef développeur Front-End/Web",
-        "description" : "",
-        "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
-            "lastModifiedBy":"000000000000000000000000"
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Chef monteur",
-        "description" : "",
-        "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
-            "lastModifiedBy":"000000000000000000000000"
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Chef opérateur de son",
-        "description" : "",
-        "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
-            "lastModifiedBy":"000000000000000000000000"
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
+        "category" : TaxonomiesCategoriesEnum.Skills,
         "name"  :"Chorégraphe",
         "description" : "",
         "source" : "",
@@ -103,7 +13,7 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
+        "category" : TaxonomiesCategoriesEnum.Skills,
         "name"  :"Concepteur architecture",
         "description" : "",
         "source" : "",
@@ -113,7 +23,7 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
+        "category" : TaxonomiesCategoriesEnum.Skills,
         "name"  :"Concepteur d'images",
         "description" : "",
         "source" : "",
@@ -123,7 +33,7 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
+        "category" : TaxonomiesCategoriesEnum.Skills,
         "name"  :"Concepteur designer",
         "description" : "",
         "source" : "",
@@ -133,17 +43,7 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Concepteur interactive",
-        "description" : "",
-        "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
-            "lastModifiedBy":"000000000000000000000000"
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
+        "category" : TaxonomiesCategoriesEnum.Skills,
         "name"  :"Concepteur lumière",
         "description" : "",
         "source" : "",
@@ -153,7 +53,7 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
+        "category" : TaxonomiesCategoriesEnum.Skills,
         "name"  :"Concepteur multimédia",
         "description" : "",
         "source" : "",
@@ -163,7 +63,7 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
+        "category" : TaxonomiesCategoriesEnum.Skills,
         "name"  :"Concepteur sonore",
         "description" : "",
         "source" : "",
@@ -173,7 +73,7 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
+        "category" : TaxonomiesCategoriesEnum.Skills,
         "name"  :"Concepteur technologique et électronique",
         "description" : "",
         "source" : "",
@@ -183,8 +83,8 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Designer d'interactivité ",
+        "category" : TaxonomiesCategoriesEnum.Skills,
+        "name"  :"Concepteur d'interactivité ",
         "description" : "",
         "source" : "",
         "status": {
@@ -193,8 +93,8 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Designeur industriel",
+        "category" : TaxonomiesCategoriesEnum.Skills,
+        "name"  :"Designer industriel",
         "description" : "",
         "source" : "",
         "status": {
@@ -203,8 +103,8 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Dessinateur industriel",
+        "category" : TaxonomiesCategoriesEnum.Skills,
+        "name"  :"Dessin industriel",
         "description" : "",
         "source" : "",
         "status": {
@@ -213,8 +113,8 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Développeur Back-End/Web",
+        "category" : TaxonomiesCategoriesEnum.Skills,
+        "name"  :"Direction de création",
         "description" : "",
         "source" : "",
         "status": {
@@ -223,8 +123,8 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Directeur artistique",
+        "category" : TaxonomiesCategoriesEnum.Skills,
+        "name"  :"Enseignement",
         "description" : "",
         "source" : "",
         "status": {
@@ -233,8 +133,8 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Directeur de création",
+        "category" : TaxonomiesCategoriesEnum.Skills,
+        "name"  :"Graphisme d'interface",
         "description" : "",
         "source" : "",
         "status": {
@@ -243,27 +143,7 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Enseignant",
-        "description" : "",
-        "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
-            "lastModifiedBy":"000000000000000000000000"
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Graphiste d'interface",
-        "description" : "",
-        "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
-            "lastModifiedBy":"000000000000000000000000"
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
+        "category" : TaxonomiesCategoriesEnum.Skills,
         "name"  :"Illustrateur",
         "description" : "",
         "source" : "",
@@ -273,8 +153,8 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Infographiste - multimédia",
+        "category" : TaxonomiesCategoriesEnum.Skills,
+        "name"  :"Infographisme - multimédia",
         "description" : "",
         "source" : "",
         "status": {
@@ -283,8 +163,8 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Ingénieur du son",
+        "category" : TaxonomiesCategoriesEnum.Skills,
+        "name"  :"Ingénierie du son",
         "description" : "",
         "source" : "",
         "status": {
@@ -293,7 +173,7 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
+        "category" : TaxonomiesCategoriesEnum.Skills,
         "name"  :"Interprète",
         "description" : "",
         "source" : "",
@@ -303,7 +183,7 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
+        "category" : TaxonomiesCategoriesEnum.Skills,
         "name"  :"Mixeur",
         "description" : "",
         "source" : "",
@@ -313,17 +193,7 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Modeleur 3D",
-        "description" : "",
-        "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
-            "lastModifiedBy":"000000000000000000000000"
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
+        "category" : TaxonomiesCategoriesEnum.Skills,
         "name"  :"Monteur de vidéos",
         "description" : "",
         "source" : "",
@@ -333,17 +203,7 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Motion designer",
-        "description" : "",
-        "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
-            "lastModifiedBy":"000000000000000000000000"
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
+        "category" : TaxonomiesCategoriesEnum.Skills,
         "name"  :"Producteur",
         "description" : "",
         "source" : "",
@@ -353,7 +213,7 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
+        "category" : TaxonomiesCategoriesEnum.Skills,
         "name"  :"Rédacteur - Scénariste",
         "description" : "",
         "source" : "",
@@ -363,17 +223,7 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Rédacteur web",
-        "description" : "",
-        "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
-            "lastModifiedBy":"000000000000000000000000"
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
+        "category" : TaxonomiesCategoriesEnum.Skills,
         "name"  :"Répétiteur / Dir. des répétitions",
         "description" : "",
         "source" : "",
@@ -383,38 +233,8 @@ export const TaxonomiesPersistantData = [
         }
     },
     {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Sound designer",
-        "description" : "",
-        "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
-            "lastModifiedBy":"000000000000000000000000"
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
+        "category" : TaxonomiesCategoriesEnum.Skills,
         "name"  :"Travailleur culturel",
-        "description" : "",
-        "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
-            "lastModifiedBy":"000000000000000000000000"
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Video jockeys",
-        "description" : "",
-        "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
-            "lastModifiedBy":"000000000000000000000000"
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.Occupations,
-        "name"  :"Webdesigner",
         "description" : "",
         "source" : "",
         "status": {
@@ -1294,7 +1114,7 @@ export const TaxonomiesPersistantData = [
     },
     {
         "category": TaxonomiesCategoriesEnum.Skills,
-        "name" : "Rédaction web orientée SEO",
+        "name" : "Rédaction web",
         "description" : "",
         "source" : "",
         "status" : {
