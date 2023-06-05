@@ -34,12 +34,13 @@ class Organisation extends AbstractModel {
             Organisation._instance.schema.index({ "offers.skills":1});
             Organisation._instance.schema.index({ "team.member":1});
             Organisation._instance.schema.index(
-                { name:"text", description:"text", slug:"text"},
+                { name:"text", description:"text", url:"text", catchPhrase:"text", slug:"text"},
                 { 
                     default_language: "french",
                     //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
                     weights:{
                         name:4,
+                        url:3,
                         description:2
                 }});
         }
