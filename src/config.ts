@@ -44,11 +44,33 @@ const config = {
             createObjectIdForQuery: false
         }
     },
+    migrations: {
+        driver: process.env.DB_MIGRATION_DRIVER || "mongodb",
+        host: process.env.DB_MIGRATION_HOST || "not set",
+        port: process.env.DB_MIGRATION_PORT || 27017,
+        user: process.env.DB_MIGRATION_USER || '',
+        password: process.env.DB_MIGRATION_PASSWORD || '',
+        name: process.env.DB_MIGRATION_DB_NAME || '',
+        config: {
+            createObjectIdForQuery: false
+        }
+    },
     users: {
         db: {
             user: process.env.USERS_DB_USER || '',
             password: process.env.USERS_DB_PASSWORD || '',
             name: process.env.USERS_DB_NAME || '',
+        },
+        migrations: {
+            driver: process.env.DB_MIGRATION_DRIVER || "mongodb",
+            host: process.env.DB_MIGRATION_HOST || "not set",
+            port: process.env.DB_MIGRATION_PORT || 27017,
+            user: process.env.USERS_DB_MIGRATION_USER || '',
+            password: process.env.USERS_DB_MIGRATION_PASSWORD || '',
+            name: process.env.USERS_DB_MIGRATION_DB_NAME || '',
+            config: {
+                createObjectIdForQuery: false
+            }
         },
         roles: {
             default: "default"

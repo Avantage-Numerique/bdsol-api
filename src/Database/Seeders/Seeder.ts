@@ -93,7 +93,7 @@ export abstract class Seeder implements SeederContract {
      * Check if the collection is empty from countCollection method.
      */
     public async collectionEmpty(): Promise<boolean> {
-        return await this.countCollection() === 0;
+        return await this.countCollection() <= 0;
     }
 
     /**

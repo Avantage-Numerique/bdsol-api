@@ -36,21 +36,24 @@ export class MongooseDBDriver implements DBDriver {
     public db: mongoDB.Db | mongoose.Connection | null;//will be the provider.
     public baseUrl: string;
     public providers: any;
+    public config:any;
 
     public plugins: any;
 
     /**
      * Constructor fo this driver. Object is created 1 time in  ServerController.
      */
-    constructor() {
+    constructor(driverConfig?:any) {
         this.driverPrefix = 'mongodb';
         this.client = null;
         this.db = null;
         this.baseUrl = '';
+        this.config = driverConfig ?? config.db;
 
+        console.log("MongooseDBDriver instanciated with config:", this.config);
         this.providers = {
-            'users': UsersProvider.getInstance(),
-            'data': DataProvider.getInstance()
+            users: UsersProvider.getInstance(this),
+            data: DataProvider.getInstance(this)
         };
     }
 
@@ -74,10 +77,10 @@ export class MongooseDBDriver implements DBDriver {
         LogHelper.info(`[BD] Connexion à la base de données utilisateurs ...`);
 
         //this set connection in the provider
-        await this.providers.users.connect();
+        await this.providers.users.connect(this);
 
         //LogHelper.info(`[BD] Connexion à la base de données structurée, ouverte et liée ...`);
-        await this.providers.data.connect();
+        await this.providers.data.connect(this);
 
         //order is important for populate. If the schema in relation isn't declare before, it will not work.
         this.providers.users.assign(UsersService.getInstance(User.getInstance()));
@@ -185,7 +188,17 @@ export class MongooseDBDriver implements DBDriver {
      */
     public getConnectionUrl(db:string='bdsol-users') {
         if (this.baseUrl === '') {
-            this.baseUrl = `${this.driverPrefix}://${config.db.host}:${config.db.port}/${db}`;
+            this.baseUrl = `${this.driverPrefix}://${this.config.host}:${this.config.port}/${db}`;
+        }
+        return this.baseUrl;
+    }
+
+    /**
+     * This is was used before providers.
+     */
+    public getConnectionBaseUrl() {
+        if (this.baseUrl === '') {
+            this.baseUrl = `${this.driverPrefix}://${this.config.host}:${this.config.port}/`;
         }
         return this.baseUrl;
     }

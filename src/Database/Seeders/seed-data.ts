@@ -1,9 +1,11 @@
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {Seeder} from "./Seeder";
-import config from "../../config";
 import {SeederContract} from "../Contracts/SeederContract";
 import {Service} from "../Service";
 
+/**
+ * Seed data into DB
+ */
 export default class SeedData extends Seeder implements SeederContract {
 
     name = "Seed Data";
@@ -28,9 +30,8 @@ export default class SeedData extends Seeder implements SeederContract {
      * Define the condition to check to apply the seeder. The class Seeder check if connection is setup by default.
      * @return Promise<boolean>
      */
-    public async seederConditions(): Promise<boolean>
-    {
-        return config.isDevelopment && this.collectionEmpty();
+    public async seederConditions(): Promise<boolean> {
+        return true;//config.isDevelopment && this.collectionEmpty();
     }
 
     /**
@@ -41,14 +42,23 @@ export default class SeedData extends Seeder implements SeederContract {
     {
         LogHelper.info(`[DB][SEEDERS] Seeder name : ${SeedData.name}`);
         if (this.data && this.whereKeys) {
-            this.data.forEach((data:any) => {
-                this.service.updateOrCreate( data, this.whereKeys );
-            });
+            try {
+                LogHelper.info(`[DB][SEEDERS] Seeding data each line of data`);
+                for (const data of this.data) {
+                    LogHelper.info(`[DB][SEEDERS] Seeding data updateOrCreate`,data);
+                    let response:any = await this.service.updateOrCreate( data, this.whereKeys );
+                    console.log(response);
+                }
+            }
+            catch(e) {
+                console.log("Error in seed method", e);
+                throw e;
+            }
+
         }
     }
 
     public async unSeed() {
-        //clear fake
-        //clear document ?
+        //clear seeded data from.
     }
 }

@@ -3,6 +3,7 @@ import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import type {Service} from "../Service";
 import AbstractModel from "../../Abstract/Model";
+import {DBDriver} from "../Drivers/DBDriver";
 
 
 export interface DbProvider {
@@ -12,7 +13,7 @@ export interface DbProvider {
     url:string;
     databaseName:string;
 
-    connect():Promise<mongoose.Connection|undefined>;
+    connect(driver:DBDriver):Promise<mongoose.Connection|undefined>;
     assign: (service:Service) => void;
 }
 
@@ -28,15 +29,17 @@ export abstract class BaseProvider implements DbProvider {
     protected _urlPrefix:string;
     protected _url:string;
     protected _databaseName:string;
+    protected _driver:DBDriver;
 
     protected _debug:boolean = config.mongooseDebug;
 
     abstract _models:Array<AbstractModel>;
 
 
-    constructor(name='') {
+    constructor(driver:DBDriver, name='') {
         if (name !== "") {
             this.databaseName = name;
+            this._driver = driver;
         }
     }
 
@@ -47,13 +50,14 @@ export abstract class BaseProvider implements DbProvider {
      */
     public async connect():Promise<mongoose.Connection|undefined>
     {
-        LogHelper.info("[BD] Connect to url : ", this.url);
+        const url:string = `${this._driver.getConnectionBaseUrl()}${this._databaseName}`;
+        LogHelper.info("[BD] Connect to url : ", url);
         try {
 
             mongoose.set('debug', this._debug);
             //@todo debug this, broke service create. https://thecodebarbarian.com/whats-new-in-mongoose-6-sanitizefilter.html
             //mongoose.set('sanitizeFilter', true);
-            this.connection = await mongoose.createConnection(this.url);
+            this.connection = await mongoose.createConnection(url);
 
             return this.connection;
         }
