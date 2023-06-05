@@ -31,7 +31,17 @@ class Taxonomy extends AbstractModel {
             //Indexes
             Taxonomy._instance.schema.index({ category:1 });
             Taxonomy._instance.schema.index({ name:1, category:1 }, {unique: true});
-            Taxonomy._instance.schema.index({ name:"text", description:"text", category:"text", slug:"text" }, { default_language: "french" });
+            Taxonomy._instance.schema.index(
+                { name:"text", description:"text", category:"text", slug:"text" },
+                { 
+                    default_language: "french",
+                    weights:{
+                        name:4,
+                        category:3,
+                        description:1,
+                        slug:1,
+                    }    
+                });
         }
         return Taxonomy._instance;
     }
