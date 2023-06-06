@@ -1,10 +1,39 @@
+import {DBDriver} from "../Drivers/DBDriver";
+import {getDbDriver} from "./MigrationDbConnexion";
 
 
-// Import your models here
-
+/**
+ * Up method, executed when we up migrations.
+ */
 export async function up (): Promise<void> {
-  // Write migration here
+    try {
+        const db:DBDriver = getDbDriver();
+        await db.connect();//check this when it's run in the env. of the API already running.
+        if (db?.providers?.data) {
+
+        } else {
+            throw new Error("Error while doing this migration");
+        }
+    }
+    catch (e:any) {
+        throw e;
+    }
 }
+
+/**
+ * Down method, executed when we roll back migration.
+ */
 export async function down (): Promise<void> {
-  // Write migration here
+    try {
+        const db:DBDriver = getDbDriver();
+        await db.connect();//check this when it's run in the env. of the API already running.
+        if (db?.providers?.data) {
+
+        } else {
+            throw new Error("Error while doing this migration");
+        }
+    }
+    catch (e:any) {
+        throw e;
+    }
 }

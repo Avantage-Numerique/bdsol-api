@@ -1,4 +1,3 @@
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {Seeder} from "./Seeder";
 import {SeederContract} from "../Contracts/SeederContract";
 import {Service} from "../Service";
@@ -40,12 +39,9 @@ export default class SeedData extends Seeder implements SeederContract {
      */
     public async seed(): Promise<void>
     {
-        LogHelper.info(`[DB][SEEDERS] Seeder name : ${SeedData.name}`);
         if (this.data && this.whereKeys) {
             try {
-                LogHelper.info(`[DB][SEEDERS] Seeding data each line of data`);
                 for (const data of this.data) {
-                    LogHelper.info(`[DB][SEEDERS] Seeding data updateOrCreate`,data);
                     let response:any = await this.service.updateOrCreate( data, this.whereKeys );
                     console.log(response);
                 }

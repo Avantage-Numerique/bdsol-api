@@ -1,5 +1,5 @@
 {
-    "uri": "mongodb://localhost:27018/bdsol-data",
+    "uri": "mongodb://mongo:27017/bdsol-data",
     "collection": "migrations",
     "migrationsPath": "./migrations",
     "templatePath": "./src/database/Migrations/MigrationTemplate.ts",

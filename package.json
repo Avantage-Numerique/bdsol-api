@@ -8,7 +8,7 @@
     "tsc": "tsc",
     "serve": "node build/src/server.js",
     "serve-ts": "npx ts-node src/server.ts",
-    "dev": "npx nodemon src/server.ts",
+    "dev": "npx migrate up && npx nodemon src/server.ts",
     "dev-old": "npx ts-node-dev --respawn --transpile-only --debug --watch src src/server.ts",
     "prod": "tsc && node ./build/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",

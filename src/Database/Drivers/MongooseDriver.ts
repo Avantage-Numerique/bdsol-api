@@ -93,7 +93,29 @@ export class MongooseDBDriver implements DBDriver {
         this.providers.data.assign(OrganisationsService.getInstance(Organisation.getInstance()));
         this.providers.data.assign(ProjectsService.getInstance(Project.getInstance()));
 
+        await this.migrate();
         //await this.seedDB();
+    }
+
+    public async migrate() {
+        return true;
+        /*
+        const migrator = await Migrator.connect({
+            // This is the only required property you need to set
+            // MongoDB connection string URI
+            uri: 'mongodb://localhost/my-db',
+            // All the options below are optional
+            // Collection name to use for migrations (defaults to 'migrations')
+            collection: 'migrations',
+            // Path to migrations directory, default is ./migrations
+            migrationsPath:  '/path/to/migrations/',
+            // The template to use when creating migrations needs up and down functions exposed
+            // No need to specify unless you want to use a custom template
+            templatePath: '/path/to/template.ts',
+            // Ff making a CLI app, set this to false to prompt the user, otherwise true
+            autosync: true
+        })
+         */
     }
 
     /**
