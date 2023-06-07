@@ -30,6 +30,7 @@ export abstract class Service {
 
     static CREATE_MSG: string = "Création";
     static UPDATE_MSG: string = "Mise à jour";
+    static UPDATE_OR_CREATE_MSG: string = "Mise à jour si ça existe sinon on crée";
     static DELETE_MSG: string = "Suppression";
     static LIST_MSG: string = "La liste";
     static SEARCH_MSG: string = "La recherche";
@@ -265,8 +266,7 @@ export abstract class Service {
             return this._parseResult(meta, Service.UPDATE_OR_CREATE);
 
         } catch (updateError: any) {
-
-            return this.errorCheck(updateError, Service.UPDATE_STATE);
+            return this.errorCheck(updateError, Service.UPDATE_OR_CREATE);
         }
     }
 
@@ -339,6 +339,8 @@ export abstract class Service {
                 return Service.CREATE_MSG;
             case Service.UPDATE_STATE :
                 return Service.UPDATE_MSG;
+            case Service.UPDATE_OR_CREATE :
+                return Service.UPDATE_OR_CREATE_MSG;
             case Service.DELETE_STATE :
                 return Service.DELETE_MSG;
             case Service.LIST_STATE :
@@ -455,8 +457,10 @@ export abstract class Service {
                 return SuccessResponse.create(meta, StatusCodes.OK, actionMessage + " a réussi");
             case Service.SEARCH_STATE :
                 return SuccessResponse.create(meta, StatusCodes.OK, actionMessage + " a réussi");
+            case Service.UPDATE_OR_CREATE :
+                return SuccessResponse.create(meta, StatusCodes.OK, actionMessage + " a réussi");
             default :
-                return ErrorResponse.create(meta, StatusCodes.INTERNAL_SERVER_ERROR, "Le state dans service n'est pas défini...");
+                return ErrorResponse.create(meta, StatusCodes.OK, "Succès, mais l'état est indéfini");
         }
     }
 }

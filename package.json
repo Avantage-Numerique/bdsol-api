@@ -8,7 +8,7 @@
     "tsc": "tsc",
     "serve": "node build/src/server.js",
     "serve-ts": "npx ts-node src/server.ts",
-    "dev": "npx nodemon src/server.ts",
+    "dev": "npx migrate up && npx nodemon src/server.ts",
     "dev-old": "npx ts-node-dev --respawn --transpile-only --debug --watch src src/server.ts",
     "prod": "tsc && node ./build/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -34,6 +34,7 @@
     "@types/mime-db": "^1.43.1",
     "@types/mime-types": "^2.1.1",
     "@types/multer": "^1.4.7",
+    "@types/node": "^20.2.5",
     "@types/sanitize-html": "^2.6.2",
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.30.7",
@@ -54,13 +55,14 @@
     "mongoose-slug-updater": "^3.3.0",
     "multer": "^1.4.5-lts.1",
     "sanitize-html": "^2.7.1",
+    "ts-migrate-mongoose": "^3.1.6",
     "typescript": "^4.7.4"
   },
   "devDependencies": {
     "better-docs": "^2.7.2",
-    "jsdoc": "^3.6.7",
     "eslint": "^8.20.0",
     "eslint-import-resolver-typescript": "^3.2.7",
+    "jsdoc": "^3.6.7",
     "nodemon": "^2.0.19",
     "ts-node": "^10.9.1"
   }

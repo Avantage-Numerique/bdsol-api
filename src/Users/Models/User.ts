@@ -3,7 +3,7 @@ import type {DbProvider} from "../../Database/DatabaseDomain";
 import {UserContract} from "../Contracts/UserContract";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
-import {HashingMiddleware} from "../../Authentification/Middleware/HashingMiddleware";
+import {HashingMiddleware} from "@auth/Middleware/HashingMiddleware";
 import {UsersService} from "../Services/UsersService";
 
 
@@ -128,6 +128,10 @@ export class User extends AbstractModel {
         "delete":{
             "id":["isDefined"]
         }
+    }
+
+    public registerIndexes() {
+
     }
 
     /**

@@ -28,8 +28,8 @@ export default class ServerController {
      */
     constructor(api:Api)
     {
+        //set the api if it's passed via instanciation.
         this.api = api;
-        //this.server = http.createServer(this.api);
 
         //this.api.serverController = this;
         LogHelper.log('Départ de la configuration du serveur pour l\'API');

@@ -3,15 +3,15 @@ import {Schema} from "mongoose";
 import {PersonSchema} from "../Schemas/PersonSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
-import {User} from "../../Users/Models/User";
+import {User} from "@src/Users/Models/User";
 import * as fs from 'fs';
 import TaxonomyController from "../../Taxonomy/Controllers/TaxonomyController";
 import PersonsService from "../Services/PersonsService";
-import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
-import {middlewarePopulateProperty, taxonomyPopulate} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
-import {populateUser} from "../../Users/Middlewares/populateUser";
-import { SkillGroup } from "../../Taxonomy/Schemas/SkillGroupSchema";
+import {middlewareTaxonomy} from "@src/Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
+import { Status } from "@src/Moderation/Schemas/StatusSchema";
+import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import {populateUser} from "@src/Users/Middlewares/populateUser";
+import { SkillGroup } from "@src/Taxonomy/Schemas/SkillGroupSchema";
 
 class Person extends AbstractModel {
 
@@ -35,21 +35,23 @@ class Person extends AbstractModel {
             Person._instance.schema.virtual("name").get( function () { return this.firstName + " " + this.lastName });
 
             Person._instance.initSchema();
-
-            //Index
-            Person._instance.schema.index({ "occupations.skills":1});
-            Person._instance.schema.index(
-                { firstName:"text", lastName:"text", nickname:"text", catchPhrase:"text", slug:"text" },
-                {
-                    default_language: "french",
-                    //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
-                    weights:{
-                        firstName:3,
-                        lastName:3
-                    }
-                });
         }
         return Person._instance;
+    }
+
+    public registerIndexes():void {
+        //Indexes
+        Person._instance.schema.index({ "occupations.skills":1});
+        Person._instance.schema.index(
+            { firstName:"text", lastName:"text", nickname:"text", catchPhrase:"text", slug:"text" },
+            {
+                default_language: "french",
+                //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
+                weights:{
+                    firstName:3,
+                    lastName:3
+                }
+            });
     }
 
     /** @public Model lastName */

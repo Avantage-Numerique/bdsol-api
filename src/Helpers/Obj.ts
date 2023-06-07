@@ -2,7 +2,6 @@
 
 export class Obj {
 
-
     public static enumToObj(targetEnum: any):any {
         let toObject:any = {};
         for (let key of targetEnum) {
@@ -11,8 +10,8 @@ export class Obj {
         return toObject;
     }
 
-    public static enumHave(targetEnum:any, property:string):any {
-        return !!Object.values(targetEnum).includes(property);
+    public static enumHave(targetEnum:any, property:string):boolean {
+        return Object.values(targetEnum).includes(property);
     }
 
 
@@ -27,12 +26,12 @@ export class Obj {
 
 
     public static isUndefined(element:any):Boolean {
-        return element === undefined;
+        return typeof element === "undefined";
     }
 
 
     public static isNotUndefined(element:any):Boolean {
-        return element !== undefined;
+        return typeof element !== "undefined";
     }
 
 

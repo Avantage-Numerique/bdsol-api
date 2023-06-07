@@ -4,11 +4,11 @@ import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import { MediaSchema } from "../Schemas/MediaSchema";
 import MediasService from "../Services/MediasService";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
+import { Status } from "@src/Moderation/Schemas/StatusSchema";
 import { licenceList } from "../List/LicenceList";
 import { fileExtensionList, fileTypeList } from "../List/FileList";
-import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
-import {EntityTypesEnum} from "../../Entities/EntityTypes";
+import {middlewarePopulateProperty} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import {EntityTypesEnum} from "@src/Entities/EntityTypes";
 
 
 class Media extends AbstractModel {
@@ -29,6 +29,10 @@ class Media extends AbstractModel {
             Media._instance.initSchema();
         }
         return Media._instance;
+    }
+
+    public registerIndexes():void {
+        //Indexes
     }
 
     /** @public Model lastName */

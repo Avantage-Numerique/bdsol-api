@@ -4,15 +4,15 @@ import {ProjectSchema} from "../Schemas/ProjectSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import ProjectsService from "../Services/ProjectsService";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
-import { middlewarePopulateProperty, taxonomyPopulate } from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
-import { populateUser } from "../../Users/Middlewares/populateUser";
-import { User } from "../../Users/UsersDomain";
-import { Sponsor } from "../../Database/Schemas/SponsorSchema";
-import { ScheduleBudget } from "../../Database/Schemas/ScheduleBudgetSchema";
-import { Location } from "../../Database/Schemas/LocationSchema";
+import { Status } from "@src/Moderation/Schemas/StatusSchema";
+import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import { populateUser } from "@src/Users/Middlewares/populateUser";
+import { User } from "@src/Users/UsersDomain";
+import { Sponsor } from "@database/Schemas/SponsorSchema";
+import { ScheduleBudget } from "@database/Schemas/ScheduleBudgetSchema";
+import { Location } from "@database/Schemas/LocationSchema";
 import { ProjectContextEnum } from "../ProjectContextEnum";
-import {TeamField} from "../../Team/Schemas/TeamSchema";
+import {TeamField} from "@src/Team/Schemas/TeamSchema";
 
 class Project extends AbstractModel {
 
@@ -32,23 +32,24 @@ class Project extends AbstractModel {
             Project._instance.schema.virtual("type").get( function() { return Project._instance.modelName });
 
             Project._instance.initSchema();
-
-            //Index
-            Project._instance.schema.index(
-                { name:"text", alternateNate:"text", slug:"text", url:"text" },
-                {
-                    default_language: "french",
-                    //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
-                    weights:{
-                        name:3,
-                        alternateName:3,
-                        slug:3,
-                        url:2
-                    }
-                });
-            //index text for search ?
         }
         return Project._instance;
+    }
+
+    public registerIndexes():void {
+        //Indexes
+        Project._instance.schema.index(
+            { name:"text", alternateNate:"text", slug:"text", url:"text" },
+            {
+                default_language: "french",
+                //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
+                weights:{
+                    name:3,
+                    alternateName:3,
+                    slug:3,
+                    url:2
+                }
+            });
     }
 
     /** @public Model lastName */
