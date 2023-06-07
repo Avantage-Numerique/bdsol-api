@@ -98,6 +98,12 @@ export abstract class BaseProvider implements DbProvider {
         }
     }
 
+    public initServicesIndexes():void {
+        for (const service:Service in this._services) {
+            service.appModel.registerIndexes();
+        }
+    }
+
     /**
      * This is the models
      * @param model

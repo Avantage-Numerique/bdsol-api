@@ -59,6 +59,8 @@ abstract class AbstractModel {
         }
     }
 
+    abstract registerIndexes():void;
+
     /**
      * @public @method providerIsSetup Return if the provider have a value.
      * @return {boolean} isSetup

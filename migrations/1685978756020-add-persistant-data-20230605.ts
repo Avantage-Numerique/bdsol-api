@@ -1,9 +1,9 @@
-import {getDbDriver} from "../src/Database/Migrations/MigrationDbConnexion";
+import {getDbDriver} from "@src/Database/Migrations/MigrationDbConnexion";
 import SeederTaskContract from "../src/Database/Seeders/SeederTaskContract";
-import {TaxonomiesPersistantData} from "../src/Taxonomy/TaxonomiesPersistantData";
-import {taskSeeder} from "../src/Database/Migrations/MigrationTaskSeeder";
-import SeedData from "../src/Database/Seeders/seed-data";
-import {DBDriver} from "../src/Database/Drivers/DBDriver";
+import {TaxonomiesPersistantData} from "@src/Taxonomy/TaxonomiesPersistantData";
+import {taskSeeder} from "@src/Database/Migrations/MigrationTaskSeeder";
+import SeedData from "@src/Database/Seeders/seed-data";
+import {DBDriver} from "@src/Database/Drivers/DBDriver";
 
 export async function up(): Promise<void> {
     try {

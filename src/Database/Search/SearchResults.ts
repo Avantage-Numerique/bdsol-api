@@ -79,37 +79,40 @@ class SearchResults {
 
     
     public async internalFindEntityLinkedToTaxonomy(taxonomyId:string){
-        const paramId = new mongoose.Types.ObjectId(taxonomyId);
-        const promises = [];
-        promises.push(
-            await this.personModel.find(
-                {
-                    $or: [
-                        {"occupations.skills": paramId},
-                        {"domains.domain": paramId},
-                    ]
-                }
-            ));
-        promises.push(
-            await this.organisationModel.find(
-                {
-                    $or: [
-                        {"offers.skills": paramId},
-                        {"domains.domain": paramId},
-                    ]
-                }
-            ));
-        promises.push(
-            await this.projectModel.find(
-                { "skills": paramId }
+        if (mongoose.isObjectIdOrHexString(taxonomyId)) {
+            const paramId = new mongoose.Types.ObjectId(taxonomyId);
+            const promises = [];
+            promises.push(
+                await this.personModel.find(
+                    {
+                        $or: [
+                            {"occupations.skills": paramId},
+                            {"domains.domain": paramId},
+                        ]
+                    }
+                ));
+            promises.push(
+                await this.organisationModel.find(
+                    {
+                        $or: [
+                            {"offers.skills": paramId},
+                            {"domains.domain": paramId},
+                        ]
+                    }
+                ));
+            promises.push(
+                await this.projectModel.find(
+                    { "skills": paramId }
+                )
             )
-        )
 
-        let tagSearchResult = [];
-        if(promises.length > 0) {
-                tagSearchResult = promises.flat();
+            let tagSearchResult = [];
+            if(promises.length > 0) {
+                    tagSearchResult = promises.flat();
+            }
+            return tagSearchResult;
         }
-        return tagSearchResult;
+        return [];
     }
 }
 

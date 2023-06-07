@@ -3,30 +3,30 @@ import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import mongoose from "mongoose";
 import type {DBDriver} from "./DBDriver";
-import {UsersProvider} from "../Providers/UsersProvider";
-import {DataProvider} from "../Providers/DataProvider";
-import {User, UsersService} from "../../Users/UsersDomain";
-import Person from "../../Persons/Models/Person";
-import Organisation from "../../Organisations/Models/Organisation";
-import Taxonomy from "../../Taxonomy/Models/Taxonomy";
-import UserHistory from "../../UserHistory/Models/UserHistory";
-import {MongooseSlugUpdater} from "../Plugins/MongooseSlugUpdater";
-import PersonsService from "../../Persons/Services/PersonsService";
-import OrganisationsService from "../../Organisations/Services/OrganisationsService";
-import TaxonomyService from "../../Taxonomy/Services/TaxonomyService";
-import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService";
-import MediasService from "../../Media/Services/MediasService";
-import Media from "../../Media/Models/Media";
-import {fakeUser} from "../../Data/FakeEntities/fakeUser";
-import {fakePersons} from "../../Data/FakeEntities/fakePerson";
-import {fakeOrganisations} from "../../Data/FakeEntities/fakeOrganisations";
-import {fakeUserHistories} from "../../Data/FakeEntities/fakeUserHistories";
-import SeederTaskContract from "../Seeders/SeederTaskContract";
-import {TaxonomiesPersistantData} from "../../Taxonomy/TaxonomiesPersistantData";
-import SeedData from "../Seeders/seed-data";
-import SeedPersistantData from "../Seeders/seed-persistant-data";
-import ProjectsService from "../../Projects/Services/ProjectsService";
-import Project from "../../Projects/Models/Project";
+import {UsersProvider} from "@database/Providers/UsersProvider";
+import {DataProvider} from "@database/Providers/DataProvider";
+import {MongooseSlugUpdater} from "@database/Plugins/MongooseSlugUpdater";
+import {fakeUserHistories} from "@src/Data/FakeEntities/fakeUserHistories";
+import SeederTaskContract from "@database/Seeders/SeederTaskContract";
+import SeedData from "@database/Seeders/seed-data";
+import SeedPersistantData from "@database/Seeders/seed-persistant-data";
+import {User, UsersService} from "@src/Users/UsersDomain";
+import Person from "@src/Persons/Models/Person";
+import Organisation from "@src/Organisations/Models/Organisation";
+import Taxonomy from "@src/Taxonomy/Models/Taxonomy";
+import UserHistory from "@src/UserHistory/Models/UserHistory";
+import PersonsService from "@src/Persons/Services/PersonsService";
+import OrganisationsService from "@src/Organisations/Services/OrganisationsService";
+import TaxonomyService from "@src/Taxonomy/Services/TaxonomyService";
+import UsersHistoryService from "@src/UserHistory/Services/UsersHistoryService";
+import MediasService from "@src/Media/Services/MediasService";
+import Media from "@src/Media/Models/Media";
+import {fakeUser} from "@src/Data/FakeEntities/fakeUser";
+import {fakePersons} from "@src/Data/FakeEntities/fakePerson";
+import {fakeOrganisations} from "@src/Data/FakeEntities/fakeOrganisations";
+import ProjectsService from "@src/Projects/Services/ProjectsService";
+import Project from "@src/Projects/Models/Project";
+import {TaxonomiesPersistantData} from "@src/Taxonomy/TaxonomiesPersistantData";
 
 
 export class MongooseDBDriver implements DBDriver {
@@ -93,8 +93,13 @@ export class MongooseDBDriver implements DBDriver {
         this.providers.data.assign(OrganisationsService.getInstance(Organisation.getInstance()));
         this.providers.data.assign(ProjectsService.getInstance(Project.getInstance()));
 
-        await this.migrate();
         //await this.seedDB();
+        await this.setupIndexes();
+    }
+
+    public async setupIndexes() {
+        this.providers.users.initServicesIndexes();
+        this.providers.data.initServicesIndexes();
     }
 
     public async migrate() {

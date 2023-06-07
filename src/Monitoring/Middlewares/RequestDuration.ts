@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import {performance} from "perf_hooks";
-import {getDurationInMilliseconds} from "../../Helpers/DateTime";
+import {getDurationInMilliseconds} from "@src/Helpers/DateTime";
 import LogHelper from "../Helpers/LogHelper";
 
 /**
@@ -19,7 +19,7 @@ export class RequestDuration {
          * @param next {NextFunction}
          */
         return async function (req: Request, res: Response, next: NextFunction) {
-            LogHelper.info(`[Monitoring][Performance][STARTED] ${req.method} ${req.originalUrl} `);
+            //LogHelper.info(`[Monitoring][Performance][STARTED] ${req.method} ${req.originalUrl} `);
 
             const from = performance.now();
             res.performance = {};

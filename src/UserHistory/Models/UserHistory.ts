@@ -23,6 +23,10 @@ class UserHistory extends AbstractModel {
         return UserHistory._instance;
     }
 
+    public registerIndexes():void {
+        //Indexes
+    }
+
     /** @public Model lastName */
     modelName:string = 'UserHistory';
 

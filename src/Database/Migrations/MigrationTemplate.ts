@@ -1,6 +1,5 @@
-import {DBDriver} from "../Drivers/DBDriver";
-import {getDbDriver} from "./MigrationDbConnexion";
-
+import {DBDriver} from "@database/Drivers/DBDriver";
+import {getDbDriver} from "@database/Migrations/MigrationDbConnexion";
 
 /**
  * Up method, executed when we up migrations.

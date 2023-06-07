@@ -2,10 +2,10 @@ import mongoose, {Error} from "mongoose";
 import {Schema} from "mongoose"
 import { TaxonomySchema } from "../Schemas/TaxonomySchema";
 import { TaxonomiesCategoriesEnum } from "../TaxonomiesCategoriesEnum";
-import type {DbProvider} from "../../Database/DatabaseDomain";
-import AbstractModel from "../../Abstract/Model"
+import type {DbProvider} from "@database/DatabaseDomain";
+import AbstractModel from "@core/Model"
 import TaxonomyService from "../Services/TaxonomyService";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
+import { Status } from "@src/Moderation/Schemas/StatusSchema";
 import * as fs from 'fs';
 import {taxonomyPopulate} from "../Middlewares/TaxonomiesPopulate";
 
@@ -27,13 +27,15 @@ class Taxonomy extends AbstractModel {
             Taxonomy._instance.initSchema();
 
             //Taxonomy._instance.schema.path('domains.domain').validate(taxonomyDomainNoSelfReference);
-
-            //Indexes
-            Taxonomy._instance.schema.index({ category:1 });
-            Taxonomy._instance.schema.index({ name:1, category:1 }, {unique: true});
-            Taxonomy._instance.schema.index({ name:"text", description:"text", category:"text", slug:"text" }, { default_language: "french" });
         }
         return Taxonomy._instance;
+    }
+
+    public registerIndexes():void {
+        //Indexes
+        Taxonomy._instance.schema.index({ category:1 });
+        Taxonomy._instance.schema.index({ name:1, category:1 }, {unique: true});
+        Taxonomy._instance.schema.index({ name:"text", description:"text", category:"text", slug:"text" }, { default_language: "french" });
     }
 
     /** @public Model name */

@@ -6,13 +6,13 @@ import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
 import TaxonomyController from "../../Taxonomy/Controllers/TaxonomyController";
 import OrganisationsService from "../Services/OrganisationsService";
-import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
-import { Member } from "../../Team/Schemas/MemberSchema";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
-import {middlewarePopulateProperty, taxonomyPopulate} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
-import {populateUser} from "../../Users/Middlewares/populateUser";
-import {User} from "../../Users/Models/User";
-import { SkillGroup } from "../../Taxonomy/Schemas/SkillGroupSchema";
+import {middlewareTaxonomy} from "@src/Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
+import { Member } from "@src/Team/Schemas/MemberSchema";
+import { Status } from "@src/Moderation/Schemas/StatusSchema";
+import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import {populateUser} from "@src/Users/Middlewares/populateUser";
+import {User} from "@src/Users/Models/User";
+import { SkillGroup } from "@src/Taxonomy/Schemas/SkillGroupSchema";
 
 
 class Organisation extends AbstractModel {
@@ -30,20 +30,23 @@ class Organisation extends AbstractModel {
             Organisation._instance.schema.virtual("type").get( function () { return Organisation._instance.modelName });
 
             Organisation._instance.initSchema();
-
-            Organisation._instance.schema.index({ "offers.skills":1});
-            Organisation._instance.schema.index({ "team.member":1});
-            Organisation._instance.schema.index(
-                { name:"text", description:"text", slug:"text"},
-                { 
-                    default_language: "french",
-                    //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
-                    weights:{
-                        name:4,
-                        description:2
-                }});
         }
         return Organisation._instance;
+    }
+
+    public registerIndexes():void {
+        //Indexes
+        Organisation._instance.schema.index({ "offers.skills":1});
+        Organisation._instance.schema.index({ "team.member":1});
+        Organisation._instance.schema.index(
+            { name:"text", description:"text", slug:"text"},
+            {
+                default_language: "french",
+                //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
+                weights:{
+                    name:4,
+                    description:2
+                }});
     }
 
     /** @public Model name */
