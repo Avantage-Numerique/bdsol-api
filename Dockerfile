@@ -22,6 +22,7 @@ COPY ./logs .
 COPY ./.env .
 COPY ./tsconfig.json .
 COPY ./nodemon.json .
+COPY ./migratations .
 COPY ./migrate.json .
 
 RUN npm install
