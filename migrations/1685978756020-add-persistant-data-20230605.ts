@@ -19,7 +19,7 @@ export async function up(): Promise<void> {
             ];
             await taskSeeder(persistantDataTasks, SeedData);
         } else {
-            throw new Error("Taxonomy Service is unaccessible to heat yp the task Seeder in this migration.");
+            return Promise.reject(Error("Taxonomy Service is unaccessible to heat yp the task Seeder in this migration."));
         }
     }
     catch (e:any) {
