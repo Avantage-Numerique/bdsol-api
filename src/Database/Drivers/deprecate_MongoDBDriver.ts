@@ -2,7 +2,7 @@ import * as mongoDB from "mongodb";
 import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import type {DBDriver} from "./DBDriver";
-import {User} from "../../Users/UsersDomain";
+import {User} from "@src/Users/UsersDomain";
 import Deprecate_createUsersCollection from "../Seeders/deprecate_create-users-collection";
 
 
@@ -18,7 +18,8 @@ export class Deprecate_MongoDBDriver implements DBDriver {
     public client: mongoDB.MongoClient | null;
     public db: mongoDB.Db | null;
     public baseUrl: string;
-
+    public providers: any;
+    public config:any;
     /**
      * Constructor fo this driver. Object is created 1 time in  ServerController.
      */
@@ -41,6 +42,11 @@ export class Deprecate_MongoDBDriver implements DBDriver {
         //await this.initMongoDb();;
     }
 
+    public async setupIndexes() {
+    }
+
+    public async removeIndexes() {
+    }
     /**
      * @deprecated Will be use mongoose, but kept raw mongodb connection here in case. 2022-04-11
      * This is code to connect to mongo db directly. Without mongoose.
@@ -74,6 +80,16 @@ export class Deprecate_MongoDBDriver implements DBDriver {
     public getConnectionUrl(db:string='bdsol-users') {
         if (this.baseUrl === '') {
             this.baseUrl = `${this.driverPrefix}://${config.db.host}:${config.db.port}/${db}`;
+        }
+        return this.baseUrl;
+    }
+
+    /**
+     * This is was used before providers.
+     */
+    public getConnectionBaseUrl() {
+        if (this.baseUrl === '') {
+            this.baseUrl = `${this.driverPrefix}://${config.db.host}:${config.db.port}`;
         }
         return this.baseUrl;
     }
