@@ -19,12 +19,12 @@ COPY ./package.json .
 COPY ./src .
 COPY ./doc .
 COPY ./logs .
+COPY ./migrations .
 COPY ./.env .
 COPY ./tsconfig.json .
 COPY ./nodemon.json .
-COPY ./migratations .
-COPY ./migrate.json .
-
+#COPY ./migrate.json .
+#npx migrate up &&
 RUN npm install
 
 # Argon2 prebuild library seem off. We rebuild them all with this.
@@ -33,6 +33,8 @@ RUN npm rebuild
 RUN npm rebuild argon2
 
 EXPOSE 8000
+
+#RUN npx migrate up
 
 ENTRYPOINT ["npm"]
 CMD ["run","dev"]

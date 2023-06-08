@@ -50,7 +50,6 @@ export class MongooseDBDriver implements DBDriver {
         this.baseUrl = '';
         this.config = driverConfig ?? config.db;
 
-        console.log("MongooseDBDriver instanciated with config:", this.config);
         this.providers = {
             users: UsersProvider.getInstance(this),
             data: DataProvider.getInstance(this)
@@ -63,7 +62,7 @@ export class MongooseDBDriver implements DBDriver {
     }
 
     public async connect() {
-        LogHelper.info(`[BD] Connexion aux base de données ...`);
+        LogHelper.info(`[BD] Connexion aux bases de données ...`);
         await this.initDb();
     }
 
@@ -74,7 +73,7 @@ export class MongooseDBDriver implements DBDriver {
         //await this.initMongoose();
         await this.configAddon();
 
-        LogHelper.info(`[BD] Connexion à la base de données utilisateurs ...`);
+        //LogHelper.info(`[BD] Connexion à la base de données utilisateurs ...`);
 
         //this set connection in the provider
         await this.providers.users.connect(this);
@@ -93,7 +92,7 @@ export class MongooseDBDriver implements DBDriver {
         this.providers.data.assign(OrganisationsService.getInstance(Organisation.getInstance()));
         this.providers.data.assign(ProjectsService.getInstance(Project.getInstance()));
 
-        //await this.seedDB();
+        await this.seedDB();
         await this.setupIndexes();
     }
 
@@ -102,25 +101,9 @@ export class MongooseDBDriver implements DBDriver {
         this.providers.data.initServicesIndexes();
     }
 
-    public async migrate() {
-        return true;
-        /*
-        const migrator = await Migrator.connect({
-            // This is the only required property you need to set
-            // MongoDB connection string URI
-            uri: 'mongodb://localhost/my-db',
-            // All the options below are optional
-            // Collection name to use for migrations (defaults to 'migrations')
-            collection: 'migrations',
-            // Path to migrations directory, default is ./migrations
-            migrationsPath:  '/path/to/migrations/',
-            // The template to use when creating migrations needs up and down functions exposed
-            // No need to specify unless you want to use a custom template
-            templatePath: '/path/to/template.ts',
-            // Ff making a CLI app, set this to false to prompt the user, otherwise true
-            autosync: true
-        })
-         */
+    public async removeIndexes() {
+        //this.providers.users.removeServicesIndexes();
+        //this.providers.data.removeServicesIndexes();
     }
 
     /**
@@ -129,7 +112,7 @@ export class MongooseDBDriver implements DBDriver {
      */
     public async seedDB() {
         LogHelper.info(`[BD][SEEDERS] Seeding DB for env : ${config.environnement}`);
-        await this.addPersistantData();
+        //await this.addPersistantData();
         await this.generateFakeData();
     }
 

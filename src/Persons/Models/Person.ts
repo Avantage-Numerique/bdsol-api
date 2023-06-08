@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-import {Schema} from "mongoose";
+import mongoose, {Schema} from "mongoose";
 import {PersonSchema} from "../Schemas/PersonSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
@@ -8,10 +7,10 @@ import * as fs from 'fs';
 import TaxonomyController from "../../Taxonomy/Controllers/TaxonomyController";
 import PersonsService from "../Services/PersonsService";
 import {middlewareTaxonomy} from "@src/Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
-import { Status } from "@src/Moderation/Schemas/StatusSchema";
+import {Status} from "@src/Moderation/Schemas/StatusSchema";
 import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import {populateUser} from "@src/Users/Middlewares/populateUser";
-import { SkillGroup } from "@src/Taxonomy/Schemas/SkillGroupSchema";
+import {SkillGroup} from "@src/Taxonomy/Schemas/SkillGroupSchema";
 
 class Person extends AbstractModel {
 
@@ -52,6 +51,10 @@ class Person extends AbstractModel {
                     lastName:3
                 }
             });
+    }
+
+    public dropIndexes() {
+
     }
 
     /** @public Model lastName */

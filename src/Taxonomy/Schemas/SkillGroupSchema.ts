@@ -1,6 +1,9 @@
 import mongoose, {Schema} from "mongoose";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
+import {Status} from "@src/Moderation/Schemas/StatusSchema";
 
+
+interface Document {
+}
 
 export interface SkillGroupSchema extends Document {
     groupName:string;

@@ -8,8 +8,8 @@ export async function up (): Promise<void> {
     try {
         const db:DBDriver = getDbDriver();
         await db.connect();//check this when it's run in the env. of the API already running.
-        if (db?.providers?.data) {
-
+        if (db) {
+            db.setupIndexes();
         } else {
             return Promise.reject(Error("Can't initiate the data provider."));
         }
@@ -27,6 +27,7 @@ export async function down (): Promise<void> {
         const db:DBDriver = getDbDriver();
         await db.connect();//check this when it's run in the env. of the API already running.
         if (db?.providers?.data) {
+            db.removeIndexes();
 
         } else {
             return Promise.reject(Error("Can't initiate the data provider."));

@@ -1,8 +1,7 @@
-
-import config from '../../config';
-import {DBDriver} from "../Drivers/DBDriver";
-import {MongooseDBDriver} from "../Drivers/MongooseDriver";
-import ServerController from "../../Server/Controllers/ServerController";
+import config from '@src/config';
+import {DBDriver} from "@database/Drivers/DBDriver";
+import {MongooseDBDriver} from "@database/Drivers/MongooseDriver";
+import ServerController from "@src/Server/Controllers/ServerController";
 
 const getDbDriver = ():DBDriver => {
 
@@ -11,16 +10,14 @@ const getDbDriver = ():DBDriver => {
     // 1st implementation will be with the serveur running.
 
     // check if server is already running.
-    if (ServerController.database !== undefined) {
+    if (typeof ServerController.database !== 'undefined') {
         db = ServerController.database;
-        console.log("Database is set, so we get the instance");
+        return ServerController.database;
     }
 
     // check if server need to heat up to make the migration going.
-    if (ServerController.database === undefined) {
-        db = new MongooseDBDriver(config.migrations);
-    }
-    return db;
+    return new MongooseDBDriver(config.migrations);
+
 }
 
 

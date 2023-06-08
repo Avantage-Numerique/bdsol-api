@@ -1,17 +1,16 @@
-import mongoose from "mongoose";
-import {Schema} from "mongoose";
+import mongoose, {Schema} from "mongoose";
 import {ProjectSchema} from "../Schemas/ProjectSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import ProjectsService from "../Services/ProjectsService";
-import { Status } from "@src/Moderation/Schemas/StatusSchema";
-import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
-import { populateUser } from "@src/Users/Middlewares/populateUser";
-import { User } from "@src/Users/UsersDomain";
-import { Sponsor } from "@database/Schemas/SponsorSchema";
-import { ScheduleBudget } from "@database/Schemas/ScheduleBudgetSchema";
-import { Location } from "@database/Schemas/LocationSchema";
-import { ProjectContextEnum } from "../ProjectContextEnum";
+import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import {populateUser} from "@src/Users/Middlewares/populateUser";
+import {User} from "@src/Users/UsersDomain";
+import {Sponsor} from "@database/Schemas/SponsorSchema";
+import {ScheduleBudget} from "@database/Schemas/ScheduleBudgetSchema";
+import {Location} from "@database/Schemas/LocationSchema";
+import {ProjectContextEnum} from "../ProjectContextEnum";
 import {TeamField} from "@src/Team/Schemas/TeamSchema";
 
 class Project extends AbstractModel {
@@ -50,6 +49,10 @@ class Project extends AbstractModel {
                     url:2
                 }
             });
+    }
+
+    public dropIndexes() {
+
     }
 
     /** @public Model lastName */

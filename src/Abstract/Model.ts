@@ -1,4 +1,4 @@
-import type {Schema, Connection, Model} from "mongoose";//, mongoose
+import type {Connection, Model, Schema} from "mongoose"; //, mongoose
 import {DbProvider, Service} from "../Database/DatabaseDomain";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 
@@ -60,6 +60,7 @@ abstract class AbstractModel {
     }
 
     abstract registerIndexes():void;
+    abstract dropIndexes():void;
 
     /**
      * @public @method providerIsSetup Return if the provider have a value.

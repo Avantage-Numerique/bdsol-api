@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-import config from "../../config";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import type {Service} from "../Service";
-import AbstractModel from "../../Abstract/Model";
-import {DBDriver} from "../Drivers/DBDriver";
+import config from "@src/config";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
+import type {Service} from "@database/Service";
+import AbstractModel from "@core/Model";
+import {DBDriver} from "@database/Drivers/DBDriver";
 
 
 export interface DbProvider {
@@ -35,6 +35,8 @@ export abstract class BaseProvider implements DbProvider {
 
     abstract _models:Array<AbstractModel>;
 
+    public verbose:boolean = false;
+
 
     constructor(driver:DBDriver, name='') {
         if (name !== "") {
@@ -51,7 +53,7 @@ export abstract class BaseProvider implements DbProvider {
     public async connect():Promise<mongoose.Connection|undefined>
     {
         const url:string = `${this._driver.getConnectionBaseUrl()}${this._databaseName}`;
-        LogHelper.info("[BD] Connect to url : ", url);
+        if (this.verbose) LogHelper.info("[BD] Connect to url : ", url);
         try {
 
             mongoose.set('debug', this._debug);
@@ -79,16 +81,16 @@ export abstract class BaseProvider implements DbProvider {
     {
         try {
 
-            LogHelper.info(`[DB] assigning ${service.constructor.name} to ${this.constructor.name}`);
+            if (this.verbose) LogHelper.info(`[DB] assigning ${service.constructor.name} to ${this.constructor.name}`);
             // we may can delete the model's provider property because everything is already handler within the model's connecion set here.
 
             service.appModel.provider = this;
             service.appModel.connection = this.connection;
 
-            //this line connect the appModel to its mongoose Models in the service scope.
+            //this line connect the appModel to its mongoose models in the service scope.
             const succeedConnection = service.connectToMongoose();
 
-            LogHelper.info(`[DB][${service.constructor.name}] CONNECTION TO Mongoose ${(succeedConnection ? "succeed" : "failed")}`);
+            if (this.verbose) LogHelper.info(`[DB][${service.constructor.name}] CONNECTION TO Mongoose ${(succeedConnection ? "succeed" : "failed")}`);
             this.addService(service);
         }
         catch (error:any)
@@ -99,8 +101,16 @@ export abstract class BaseProvider implements DbProvider {
     }
 
     public initServicesIndexes():void {
-        for (const service:Service in this._services) {
+        for (const [serviceName, service] of this._services) {
+            if (this.verbose) LogHelper.info(`[DB] Initiating indexes of ${serviceName}`);
             service.appModel.registerIndexes();
+        }
+    }
+
+    public removeServicesIndexes():void {
+        for (const [serviceName, service] of this._services) {
+            if (this.verbose) LogHelper.info(`[DB] Initiating indexes of ${serviceName}`);
+            service.appModel.removeIndexes();
         }
     }
 

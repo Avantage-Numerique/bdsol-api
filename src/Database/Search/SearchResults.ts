@@ -5,10 +5,9 @@ import Project from "../../Projects/Models/Project";
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 
 
-
 class SearchResults {
 
-    //Entities Models
+    //Entities models
     public personModel:any;
     public organisationModel:any;
     public taxonomyModel:any;

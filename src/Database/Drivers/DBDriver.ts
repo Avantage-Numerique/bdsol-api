@@ -6,6 +6,8 @@ export interface DBDriver {
     baseUrl: string,
     providers: any,
     connect: () => void;
+    setupIndexes: () => void;
+    removeIndexes: () => void;
     initDb: () => void;
     getConnectionUrl: (db?:string) => string;
     getConnectionBaseUrl: () => string;

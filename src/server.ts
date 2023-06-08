@@ -1,9 +1,9 @@
 /**
  * Module dependencies.
  */
-import Api from "./api";
-import config from './config';
-import ServerController from "./Server/Controllers/ServerController";
+import Api from "@src/api";
+import config from '@src/config';
+import ServerController from "@src/Server/Controllers/ServerController";
 
 const api = new Api();
 api.express.set("port", config.port);

@@ -1,12 +1,11 @@
-import mongoose from "mongoose";
-import {Schema} from "mongoose";
+import mongoose, {Schema} from "mongoose";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
-import { MediaSchema } from "../Schemas/MediaSchema";
+import {MediaSchema} from "../Schemas/MediaSchema";
 import MediasService from "../Services/MediasService";
-import { Status } from "@src/Moderation/Schemas/StatusSchema";
-import { licenceList } from "../List/LicenceList";
-import { fileExtensionList, fileTypeList } from "../List/FileList";
+import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {licenceList} from "../List/LicenceList";
+import {fileExtensionList, fileTypeList} from "../List/FileList";
 import {middlewarePopulateProperty} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import {EntityTypesEnum} from "@src/Entities/EntityTypes";
 
@@ -33,6 +32,10 @@ class Media extends AbstractModel {
 
     public registerIndexes():void {
         //Indexes
+    }
+
+    public dropIndexes() {
+
     }
 
     /** @public Model lastName */

@@ -1,5 +1,5 @@
-import SeederTaskContract from "../Seeders/SeederTaskContract";
-import SeedData from "../Seeders/seed-data";
+import SeederTaskContract from "@database/Seeders/SeederTaskContract";
+import SeedData from "@database/Seeders/seed-data";
 
 const taskSeeder = async (tasks:Array<SeederTaskContract>, seederClass:typeof SeedData = SeedData) => {
     //Loop through the services that need to be seeded

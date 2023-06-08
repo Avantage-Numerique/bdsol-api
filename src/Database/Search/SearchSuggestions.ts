@@ -6,7 +6,7 @@ import SearchResults from "./SearchResults";
 
 class SearchSuggestions {
 
-    //Entities Models
+    //Entities models
     public personModel:any;
     public organisationModel:any;
     public taxonomyModel:any;

@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-import {Schema} from "mongoose";
+import mongoose, {Schema} from "mongoose";
 import {StaticContentSchema} from "../Schemas/StaticContentSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
@@ -28,6 +27,10 @@ class StaticContent extends AbstractModel {
             //StaticContent._instance.schema.index({ "StaticContent.StaticContent":1});
         }
         return StaticContent._instance;
+    }
+
+    public registerIndexes() {
+        return true;
     }
 
     /** @public Model lastName */

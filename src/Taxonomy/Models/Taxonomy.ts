@@ -1,11 +1,10 @@
-import mongoose, {Error} from "mongoose";
-import {Schema} from "mongoose"
-import { TaxonomySchema } from "../Schemas/TaxonomySchema";
-import { TaxonomiesCategoriesEnum } from "../TaxonomiesCategoriesEnum";
+import mongoose, {Error, Schema} from "mongoose";
+import {TaxonomySchema} from "../Schemas/TaxonomySchema";
+import {TaxonomiesCategoriesEnum} from "../TaxonomiesCategoriesEnum";
 import type {DbProvider} from "@database/DatabaseDomain";
 import AbstractModel from "@core/Model"
 import TaxonomyService from "../Services/TaxonomyService";
-import { Status } from "@src/Moderation/Schemas/StatusSchema";
+import {Status} from "@src/Moderation/Schemas/StatusSchema";
 import * as fs from 'fs';
 import {taxonomyPopulate} from "../Middlewares/TaxonomiesPopulate";
 
@@ -46,6 +45,11 @@ class Taxonomy extends AbstractModel {
                     slug:1,
                 }
             });
+    }
+
+    public dropIndexes() {
+        //https://mongoosejs.com/docs/api/model.html#Model.ensureIndexes()
+        //https://mongoosejs.com/docs/api/model.html#Model.cleanIndexes()
     }
 
     /** @public Model name */

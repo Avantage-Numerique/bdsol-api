@@ -1,5 +1,5 @@
-import mongoose, {Schema} from "mongoose";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
+import mongoose, {Document, Schema} from "mongoose";
+import {Status} from "../../Moderation/Schemas/StatusSchema";
 
 export interface RoleSchema extends Document {
     group:string;

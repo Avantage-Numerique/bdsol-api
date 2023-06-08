@@ -1,5 +1,5 @@
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import {Service} from "../DatabaseDomain";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
+import {Service} from "@database/DatabaseDomain";
 import {SeederContract} from "../Contracts/SeederContract";
 
 export abstract class Seeder implements SeederContract {

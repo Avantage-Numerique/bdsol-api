@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-import {Schema} from "mongoose";
+import mongoose, {Schema} from "mongoose";
 import {OrganisationSchema} from "../Schemas/OrganisationSchema";
 import {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
@@ -7,12 +6,12 @@ import * as fs from 'fs';
 import TaxonomyController from "../../Taxonomy/Controllers/TaxonomyController";
 import OrganisationsService from "../Services/OrganisationsService";
 import {middlewareTaxonomy} from "@src/Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
-import { Member } from "@src/Team/Schemas/MemberSchema";
-import { Status } from "@src/Moderation/Schemas/StatusSchema";
+import {Member} from "@src/Team/Schemas/MemberSchema";
+import {Status} from "@src/Moderation/Schemas/StatusSchema";
 import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import {populateUser} from "@src/Users/Middlewares/populateUser";
 import {User} from "@src/Users/Models/User";
-import { SkillGroup } from "@src/Taxonomy/Schemas/SkillGroupSchema";
+import {SkillGroup} from "@src/Taxonomy/Schemas/SkillGroupSchema";
 
 
 class Organisation extends AbstractModel {
@@ -47,6 +46,10 @@ class Organisation extends AbstractModel {
                     name:4,
                     description:2
                 }});
+    }
+
+    public dropIndexes() {
+
     }
 
     /** @public Model name */

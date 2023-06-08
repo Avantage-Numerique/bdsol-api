@@ -134,6 +134,10 @@ export class User extends AbstractModel {
 
     }
 
+    public dropIndexes() {
+
+    }
+
     /**
      * @get the field that are searchable.
      * @return {Object} the field slug/names.

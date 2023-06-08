@@ -1,6 +1,7 @@
 import {Seeder} from "./Seeder";
 import {SeederContract} from "../Contracts/SeederContract";
 import {Service} from "../Service";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 /**
  * Seed data into DB
@@ -43,11 +44,10 @@ export default class SeedData extends Seeder implements SeederContract {
             try {
                 for (const data of this.data) {
                     let response:any = await this.service.updateOrCreate( data, this.whereKeys );
-                    console.log(response);
                 }
             }
             catch(e) {
-                console.log("Error in seed method", e);
+                LogHelper.error("Error in seed method", e);
                 throw e;
             }
 
