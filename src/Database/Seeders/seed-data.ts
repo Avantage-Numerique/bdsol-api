@@ -43,7 +43,7 @@ export default class SeedData extends Seeder implements SeederContract {
         if (this.data && this.whereKeys) {
             try {
                 for (const data of this.data) {
-                    let response:any = await this.service.updateOrCreate( data, this.whereKeys );
+                    await this.service.updateOrCreate( data, this.whereKeys );//let response:any =
                 }
             }
             catch(e) {

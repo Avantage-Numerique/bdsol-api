@@ -1,5 +1,5 @@
 import {Document, Schema} from "mongoose";
-import {Status} from "../../Moderation/Schemas/StatusSchema";
+import {Status} from "@src/Moderation/Schemas/StatusSchema";
 
 export enum BudgetRangeEnum {
     zeroToThousand = "0-1k",

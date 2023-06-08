@@ -11,7 +11,6 @@ const getDbDriver = ():DBDriver => {
 
     // check if server is already running.
     if (typeof ServerController.database !== 'undefined') {
-        db = ServerController.database;
         return ServerController.database;
     }
 
