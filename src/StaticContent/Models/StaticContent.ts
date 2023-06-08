@@ -32,6 +32,9 @@ class StaticContent extends AbstractModel {
     public registerIndexes() {
         return true;
     }
+    public dropIndexes() {
+        return true;
+    }
 
     /** @public Model lastName */
     modelName: string = 'StaticContent';
