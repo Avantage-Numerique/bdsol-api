@@ -25,6 +25,7 @@ class Media extends AbstractModel {
 
             Media._instance.schema.virtual("type").get( function () { return Media._instance.modelName });
 
+            Media._instance.registerIndexes();
             Media._instance.initSchema();
         }
         return Media._instance;

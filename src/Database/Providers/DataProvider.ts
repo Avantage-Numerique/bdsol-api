@@ -14,7 +14,7 @@ export class DataProvider extends BaseProvider implements DbProvider
 {
     private static _singleton:DataProvider;
 
-    protected _services:Array<Service> = [];
+    protected _services:Array<Service>;
 
     _models:Array<AbstractModel>;
 
@@ -26,6 +26,7 @@ export class DataProvider extends BaseProvider implements DbProvider
     constructor(driver:DBDriver, name='data') {
         super(driver, name);
         this.urlPrefix = "mongodb";
+        this._services = [];
     }
 
     /**
@@ -57,8 +58,13 @@ export class DataProvider extends BaseProvider implements DbProvider
         }
         return undefined;
     }
+    public async initServicesIndexes() {
+        await super.initServicesIndexes();
+    }
 
-
+    public addService(service:Service) {
+        super.addService(service);
+    }
     /**
      * Assign a model to this provider.
      * @param model

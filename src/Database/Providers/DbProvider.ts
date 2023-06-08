@@ -100,14 +100,14 @@ export abstract class BaseProvider implements DbProvider {
         }
     }
 
-    public initServicesIndexes():void {
-        for (const [serviceName, service] of this._services) {
-            if (this.verbose) LogHelper.info(`[DB] Initiating indexes of ${serviceName}`);
+    public async initServicesIndexes() {
+        for (const service of this._services) {
+            LogHelper.info(`[DB] provider Initiating indexes of ${service.constructor.name}`);
             service.appModel.registerIndexes();
         }
     }
 
-    public removeServicesIndexes():void {
+    public async removeServicesIndexes() {
         for (const [serviceName, service] of this._services) {
             if (this.verbose) LogHelper.info(`[DB] Initiating indexes of ${serviceName}`);
             service.appModel.removeIndexes();
@@ -145,7 +145,7 @@ export abstract class BaseProvider implements DbProvider {
     }
 
     public addService(service:Service) {
-        this._services[service.constructor.name] = service;
+        this._services.push(service);
     }
 
 

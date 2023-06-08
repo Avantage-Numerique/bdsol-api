@@ -57,7 +57,7 @@ export class MongooseDBDriver implements DBDriver {
     }
 
     public async configAddon() {
-        const mongooseSlugPlugin = new MongooseSlugUpdater();
+        const mongooseSlugPlugin= new MongooseSlugUpdater();
         await mongooseSlugPlugin.assign(mongoose);
     }
 
@@ -92,13 +92,12 @@ export class MongooseDBDriver implements DBDriver {
         this.providers.data.assign(OrganisationsService.getInstance(Organisation.getInstance()));
         this.providers.data.assign(ProjectsService.getInstance(Project.getInstance()));
 
-        await this.seedDB();
-        await this.setupIndexes();
+        //await this.seedDB();
     }
 
     public async setupIndexes() {
-        this.providers.users.initServicesIndexes();
-        this.providers.data.initServicesIndexes();
+        await this.providers.users.initServicesIndexes();
+        await this.providers.data.initServicesIndexes();
     }
 
     public async removeIndexes() {

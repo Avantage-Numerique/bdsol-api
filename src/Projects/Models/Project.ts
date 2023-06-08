@@ -30,6 +30,7 @@ class Project extends AbstractModel {
             //Setting virtuals
             Project._instance.schema.virtual("type").get( function() { return Project._instance.modelName });
 
+            Project._instance.registerIndexes();
             Project._instance.initSchema();
         }
         return Project._instance;

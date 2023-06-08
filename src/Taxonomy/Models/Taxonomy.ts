@@ -23,6 +23,7 @@ class Taxonomy extends AbstractModel {
 
             Taxonomy._instance.registerEvents();
 
+            Taxonomy._instance.registerIndexes();
             Taxonomy._instance.initSchema();
 
             //Taxonomy._instance.schema.path('domains.domain').validate(taxonomyDomainNoSelfReference);

@@ -27,7 +27,7 @@ class Organisation extends AbstractModel {
             Organisation._instance.registerEvents();
 
             Organisation._instance.schema.virtual("type").get( function () { return Organisation._instance.modelName });
-
+            Organisation._instance.registerIndexes();
             Organisation._instance.initSchema();
         }
         return Organisation._instance;
@@ -35,9 +35,9 @@ class Organisation extends AbstractModel {
 
     public registerIndexes():void {
         //Indexes
-        Organisation._instance.schema.index({ "offers.skills":1});
-        Organisation._instance.schema.index({ "team.member":1});
-        Organisation._instance.schema.index(
+        this.schema.index({ "offers.skills":1});
+        this.schema.index({ "team.member":1});
+        this.schema.index(
             { name:"text", description:"text", slug:"text"},
             {
                 default_language: "french",

@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import config from "../../config";
 import type {DbProvider} from "./DbProvider";
 import {BaseProvider} from "./DbProvider";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import AbstractModel from "../../Abstract/Model";
 import {Service} from "../Service";
 import {DBDriver} from "../Drivers/DBDriver";
@@ -13,7 +12,7 @@ export class UsersProvider extends BaseProvider implements DbProvider
 
     private static _singleton:UsersProvider;
 
-    protected _services:Array<Service> = [];
+    protected _services:Array<Service>;
 
     _models:Array<AbstractModel>;
 
@@ -21,6 +20,7 @@ export class UsersProvider extends BaseProvider implements DbProvider
     {
         super(driver, name);
         this.urlPrefix = "mongodb";
+        this._services = [];
     }
 
 
@@ -44,10 +44,17 @@ export class UsersProvider extends BaseProvider implements DbProvider
      */
     public async connect():Promise<mongoose.Connection|undefined>
     {
-        LogHelper.info("[BD] UserProvider Connecting to DB");
         await super.connect();
 
         return this.connection;
+    }
+
+    public async initServicesIndexes() {
+        await super.initServicesIndexes();
+    }
+
+    public addService(service:Service) {
+        super.addService(service);
     }
 
 }
