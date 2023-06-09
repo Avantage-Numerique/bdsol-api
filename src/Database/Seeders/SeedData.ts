@@ -6,7 +6,7 @@ import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 /**
  * Seed data into DB
  */
-export default class SeedData extends Seeder implements SeederContract {
+class SeedData extends Seeder implements SeederContract {
 
     name = "Seed Data";
     service = {} as Service;//To satisfy typescript that don't want to have this set in the constructor in the first place.
@@ -58,3 +58,4 @@ export default class SeedData extends Seeder implements SeederContract {
         //clear seeded data from.
     }
 }
+export default SeedData;

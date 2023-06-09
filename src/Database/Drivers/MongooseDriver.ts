@@ -8,8 +8,7 @@ import {DataProvider} from "@database/Providers/DataProvider";
 import {MongooseSlugUpdater} from "@database/Plugins/MongooseSlugUpdater";
 import {fakeUserHistories} from "@src/Data/FakeEntities/fakeUserHistories";
 import SeederTaskContract from "@database/Seeders/SeederTaskContract";
-import SeedData from "@database/Seeders/seed-data";
-import SeedPersistantData from "@database/Seeders/seed-persistant-data";
+import SeedData from "@database/Seeders/SeedData";
 import {User, UsersService} from "@src/Users/UsersDomain";
 import Person from "@src/Persons/Models/Person";
 import Organisation from "@src/Organisations/Models/Organisation";
@@ -129,7 +128,7 @@ export class MongooseDBDriver implements DBDriver {
                 whereKeys: ['category', 'name']
             }
         ];
-        await this.seedData(persistantDataTasks, SeedPersistantData);
+        ///await this.seedData(persistantDataTasks, SeedPersistantData);
     }
 
     /**

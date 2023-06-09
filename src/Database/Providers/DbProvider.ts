@@ -35,7 +35,7 @@ export abstract class BaseProvider implements DbProvider {
 
     abstract _models:Array<AbstractModel>;
 
-    public verbose:boolean = false;
+    public verbose:boolean = true;
 
 
     constructor(driver:DBDriver, name='') {
@@ -145,7 +145,8 @@ export abstract class BaseProvider implements DbProvider {
     }
 
     public addService(service:Service) {
-        this._services.push(service);
+        //this._services.push(service);
+        this._services[service.constructor.name] = service;
     }
 
 

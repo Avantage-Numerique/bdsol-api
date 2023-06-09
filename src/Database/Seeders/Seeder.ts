@@ -27,6 +27,8 @@ export abstract class Seeder implements SeederContract {
     public async up(): Promise<void> {
         if (await this.conditions()) {
             await this.seed();
+        } else {
+            LogHelper.debug(`Seeder condition didn't passed ${this.name}`);
         }
     }
 

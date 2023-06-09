@@ -16,7 +16,6 @@ const getDbDriver = ():DBDriver => {
 
     // check if server need to heat up to make the migration going.
     return new MongooseDBDriver(config.migrations);
-
 }
 
 
