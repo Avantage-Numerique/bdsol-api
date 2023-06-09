@@ -3,7 +3,7 @@ import {getDbDriver} from "@database/Migrations/MigrationDbConnexion";
 import SeederTaskContract from "@database/Seeders/SeederTaskContract";
 import {TaxonomiesPersistantData} from "@src/Taxonomy/TaxonomiesPersistantData";
 import {taskSeeder} from "@database/Migrations/MigrationTaskSeeder";
-import SeedData from "@database/Seeders/seed-data";
+import SeedData from "@database/Seeders/SeedData";
 import {DBDriver} from "@database/Drivers/DBDriver";
 
 export async function up(): Promise<void> {

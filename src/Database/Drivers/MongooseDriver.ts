@@ -91,7 +91,7 @@ export class MongooseDBDriver implements DBDriver {
         this.providers.data.assign(OrganisationsService.getInstance(Organisation.getInstance()));
         this.providers.data.assign(ProjectsService.getInstance(Project.getInstance()));
 
-        //await this.seedDB();
+        await this.seedDB();
     }
 
     public async setupIndexes() {
