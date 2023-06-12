@@ -20,22 +20,22 @@ export async function up (): Promise<void> {
         if (db?.providers?.data) {
             const devDataTasks: Array<SeederTaskContract> = [
                 {
-                    service: this.providers.users.services.UsersService,
+                    service: db.providers.users.services.UsersService,
                     data: fakeUser,
                     whereKeys: ['username']
                 },
                 {
-                    service: this.providers.data.services.PersonsService,
+                    service: db.providers.data.services.PersonsService,
                     data: fakePersons,
                     whereKeys: ['firstName', 'lastName']
                 },
                 {
-                    service: this.providers.data.services.OrganisationsService,
+                    service: db.providers.data.services.OrganisationsService,
                     data: fakeOrganisations,
                     whereKeys: ['name']
                 },
                 {
-                    service: this.providers.data.services.UsersHistoryService,
+                    service: db.providers.data.services.UsersHistoryService,
                     data: fakeUserHistories,
                     whereKeys: []
                 }
