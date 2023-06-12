@@ -1,8 +1,8 @@
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
-import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
-import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
-import {User, UserContract, UsersService} from "../../Users/UsersDomain";
-import config from "../../config";
+import {ApiResponseContract} from "@src/Http/Responses/ApiResponse";
+import {ErrorResponse} from "@src/Http/Responses/ErrorResponse";
+import {User, UserContract, UsersService} from "@src/Users/UsersDomain";
+import config from "@src/config";
 
 
 export class RegistrationController {

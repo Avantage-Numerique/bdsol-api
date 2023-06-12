@@ -1,8 +1,8 @@
 import * as jwt from "jsonwebtoken";
 import {JwtPayload, VerifyErrors} from "jsonwebtoken";
-import config from "../../config";
-import {now} from "../../Helpers/DateTime";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import config from "@src/config";
+import {now} from "@src/Helpers/DateTime";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 /**
  * Controller to manage the token operation
