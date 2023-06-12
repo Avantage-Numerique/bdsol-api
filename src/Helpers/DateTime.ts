@@ -1,11 +1,11 @@
 //TIME Helpers
-import { performance } from "perf_hooks";
+import {performance} from "perf_hooks";
 
 /**
  * Return a now date object directly
  * Create a new instance of Date every time.
  */
-export const now = ():Number => {
+export const now = ():number => {
     return new Date().getTime();
 }
 

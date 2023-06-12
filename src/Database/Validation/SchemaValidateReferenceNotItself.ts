@@ -1,4 +1,4 @@
-import mongoose, {ObjectId, Types} from 'mongoose';
+import mongoose, {Document, ObjectId, Types} from 'mongoose';
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 
 //mongoose.Document<any>
@@ -7,21 +7,22 @@ const isSameId = async function(id:ObjectId, targetId:ObjectId) {
 }
 
 
-const schemaValidateNoReferenceToItself = async function(targetDocument: mongoose.Document, refId: Types.ObjectId | undefined, mongooseModel:any, targetProperty:string) {
-
+const schemaValidateNoReferenceToItself = async function(targetDocument: Document,
+                                                         refId: Types.ObjectId | undefined,
+                                                         mongooseModel:any,
+                                                         targetProperty:string)
+{
     if (!refId) {
         return true;
     }
 
-    /*@ts-ignore*/
     const refere:any = await mongooseModel.findById(refId);
 
     if (!refere) {
         throw new Error(`Document refered to with id ${refId} not found`);
     }
 
-    /*@ts-ignore*/
-    const target:any = targetDocument[targetProperty];
+    const target:any = targetDocument.get(targetProperty);
 
     if (refere._id.equals(target)) {
         throw new Error(`A document cannot reference itself in a relationship`);

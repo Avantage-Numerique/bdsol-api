@@ -15,8 +15,8 @@ export default class ApiQuery {
 
     public name:string;
     public sort:any;
-    public skip:Number;
-    public limit:Number;
+    public skip:number;
+    public limit:number;
     public raw:any;
     public initQuery:any;
     public sections:Array<any>;

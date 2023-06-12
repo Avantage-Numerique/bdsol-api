@@ -40,7 +40,7 @@ export default class Deprecate_createUsersCollection implements MigrationContrac
         if (config.environnement === 'development'
             && this.model !== null) {
 
-            let userCount = await this.model.countDocuments();
+            const userCount = await this.model.countDocuments();
             if (userCount <= 0) {
                 await this.model.insertMany(fakeUser as any);
                 return true

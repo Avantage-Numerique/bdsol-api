@@ -1,4 +1,3 @@
 import {Document} from "mongoose";
 
-export interface StaticContentSchema extends Document {
-}
+export type StaticContentSchema = Document

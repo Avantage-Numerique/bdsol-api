@@ -10,7 +10,7 @@ import {ApiValidatingSanitizingChainType} from "../ExpressValidator/ApiValidatin
  */
 const noHtmlStringSanitizerAlias = (param:string, isOptional:boolean=true, source=body):ApiValidatingSanitizingChainType => {
 
-    let baseChain:ApiValidatingSanitizingChainType = source(param);
+    const baseChain:ApiValidatingSanitizingChainType = source(param);
     let chain = baseChain.optional({values:"falsy"})
 
     if (!isOptional) {

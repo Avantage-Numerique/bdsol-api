@@ -48,8 +48,8 @@ class Organisation extends AbstractModel {
                 }});
     }
 
-    public dropIndexes() {
-
+    public dropIndexes():void {
+        return;
     }
 
     /** @public Model name */
@@ -198,13 +198,12 @@ class Organisation extends AbstractModel {
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
             this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
-                const organisation: any = this;
-                const updatedDocument = organisation.getUpdate();
-                if (updatedDocument["offers"] != undefined){
-                    const idList = updatedDocument.offers.map( (el:any) => {
+                const updatedDocument:any = this.getUpdate();
+                if (updatedDocument && updatedDocument["offers"] != undefined){
+                    const idList = updatedDocument["offers"].map( (el:any) => {
                         return el.skills.map( (id:any) =>{
                             return new mongoose.Types.ObjectId(id);
-                        })
+                        });
                     });
                     await middlewareTaxonomy(idList.flat(), TaxonomyController, "offers.skills");
                 }

@@ -6,9 +6,9 @@ export const ImageMimeTypeSupported = [
     'image/webp'
 ];
 
-let imgMimeTypeExtensions:any = {};
+const imgMimeTypeExtensions:any = {};
 
-for (let mimetype in ImageMimeTypeSupported) {
+for (const mimetype in ImageMimeTypeSupported) {
     imgMimeTypeExtensions[mimetype] = mimeTypesDb[mimetype].extensions ?? undefined;
     //throw error if the mime type set in support isn't present in the mine-db.
 }

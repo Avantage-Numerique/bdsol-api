@@ -55,7 +55,7 @@ class Person extends AbstractModel {
     }
 
     public dropIndexes() {
-
+        return;
     }
 
     /** @public Model lastName */
@@ -253,8 +253,7 @@ class Person extends AbstractModel {
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
             this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
-                    const person: any = this;
-                    const updatedDocument = person.getUpdate();
+                    const updatedDocument:any = this.getUpdate();
                     if (updatedDocument["occupations"] != undefined){
                         const idList = updatedDocument.occupations.map( (el:any) => {
                             return el.skills.map( (id:any) =>{

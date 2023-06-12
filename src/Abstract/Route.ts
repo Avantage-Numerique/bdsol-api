@@ -210,8 +210,8 @@ abstract class AbstractRoute implements RouteContract
         ]
          */
 
-        let messages:Array<any> = [];
-        for (let error of validationResults.array()) {
+        const messages:Array<any> = [];
+        for (const error of validationResults.array()) {
             messages.push(`[Validating][${error.location}][${error.path}] ${error.type} : ${error.msg} (value "${error.value}")`);
         }
 

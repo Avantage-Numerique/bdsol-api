@@ -7,6 +7,7 @@
     ],
     "extends": [
         "eslint:recommended",
+        "plugin:import/typescript",
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended"
     ],
@@ -18,18 +19,18 @@
         "@typescript-eslint/no-inferrable-types": "off"
     },
     "settings": {
-        "import/parsers": {
-            "@typescript-eslint/parser": [
-                ".ts",
-                ".tsx"
-            ]
-        },
+        "root": true,
+        "project": "./",
         "import/resolver": {
-            "typescript": {
-                "alwaysTryTypes": true,
-                // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
-                "project": "./tsconfig.json"
-            }
-        }
+            "typescript": true,
+            "node": true
+        },
+        "node": {
+            "paths": ["src"]
+        },
+        "import/parsers": {
+            "@typescript-eslint/parser": [".ts", ".tsx", ".d.ts"]
+        },
+        "import/external-module-folders": ["node_modules"]
     }
 }

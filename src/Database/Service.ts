@@ -1,7 +1,7 @@
 import * as mongoose from "mongoose";
 import config from "../config";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
-import {StatusCodes, ReasonPhrases} from "http-status-codes";
+import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {SuccessResponse} from "../Http/Responses/SuccessResponse";
 import {ErrorResponse} from "../Http/Responses/ErrorResponse";
 import type {ApiResponseContract} from "../Http/Responses/ApiResponse";
@@ -131,7 +131,7 @@ export abstract class Service {
         try {
             meta = await this.model.create(data)
                 .catch((e: any) => {
-                    let insertError:HttpError = new HttpError(e.message);
+                    const insertError:HttpError = new HttpError(e.message);
                     insertError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                     throw insertError;
                 });
@@ -158,7 +158,7 @@ export abstract class Service {
         try {
             const meta = this.model.findOneAndUpdate(filter, data, {runValidators: true, upsert: true})
                 .catch((e: any) => {
-                    let persistantDataError:HttpError = new HttpError(e.message);
+                    const persistantDataError:HttpError = new HttpError(e.message);
                     persistantDataError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                     throw persistantDataError;
                 });
@@ -196,7 +196,7 @@ export abstract class Service {
             // UpdateOne
             const meta = await this.model.findOneAndUpdate({_id: id}, data, updateOptions)
                 .catch((e: any) => {
-                        let findOneAndUpdateError:HttpError = new HttpError(e.message);
+                        const findOneAndUpdateError:HttpError = new HttpError(e.message);
                         findOneAndUpdateError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                         throw findOneAndUpdateError;
                     }
@@ -214,7 +214,7 @@ export abstract class Service {
         try {
             const meta = await this.model.findOneAndDelete(filter)
                 .catch((e: any) => {
-                    let findOneAndDeleteError:HttpError = new HttpError(e.message);
+                    const findOneAndDeleteError:HttpError = new HttpError(e.message);
                     findOneAndDeleteError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                     throw findOneAndDeleteError;
                 });
@@ -259,7 +259,7 @@ export abstract class Service {
 
             const meta = await this.model.findOneAndUpdate(where, data, updateOrCreateOptions)
                 .catch((e: any) => {
-                    let updateOrCreateError:HttpError = new HttpError(e.message);
+                    const updateOrCreateError:HttpError = new HttpError(e.message);
                     updateOrCreateError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                     throw updateOrCreateError;
                 });
@@ -279,7 +279,7 @@ export abstract class Service {
         try {
             const meta = await this.model.findByIdAndDelete(id)
                 .catch((e: any) => {
-                    let deleteError:HttpError = new HttpError(e.message);
+                    const deleteError:HttpError = new HttpError(e.message);
                     deleteError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                     throw deleteError;
                 });
@@ -301,7 +301,7 @@ export abstract class Service {
         try {
             const results = await this.model[mongooseFunction](...params)
                 .catch((e: any) => {
-                        let customError:HttpError = new HttpError(e.message);
+                        const customError:HttpError = new HttpError(e.message);
                         customError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                         throw customError;
                     }
@@ -366,7 +366,7 @@ export abstract class Service {
         }
         // Mongo DB validation failed, make that excalade the response flow, shall we.
         if (meta.name === "ValidationError") {
-            let validationErrors:any = {};
+            const validationErrors:any = {};
 
             Object.keys(meta.errors).forEach((key) => {
                 validationErrors[key] = meta.errors[key].message;

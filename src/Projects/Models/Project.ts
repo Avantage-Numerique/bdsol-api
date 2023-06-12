@@ -53,7 +53,7 @@ class Project extends AbstractModel {
     }
 
     public dropIndexes() {
-
+        return;
     }
 
     /** @public Model lastName */

@@ -1,6 +1,6 @@
 import * as jwt from "jsonwebtoken";
-import config from "../../config";
 import {JwtPayload, VerifyErrors} from "jsonwebtoken";
+import config from "../../config";
 import {now} from "../../Helpers/DateTime";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
@@ -31,7 +31,7 @@ export class TokenController {
             await jwt.verify(
                 token,
                 config.tokenSecret,
-                (err, decoded) => {
+                (err:any, decoded:any) => {
                     verifiedToken = TokenController.onVerifyToken(err, decoded);
                 }
             );

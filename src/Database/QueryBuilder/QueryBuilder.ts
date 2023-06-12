@@ -74,7 +74,7 @@ export default class QueryBuilder {
      */
     static parseQuery(query:any) {
 
-        let currentQuery:ApiQuery = new ApiQuery(query);
+        const currentQuery:ApiQuery = new ApiQuery(query);
 
         //Parse, check if it's a section, validate it, transform it, stock it in query.sections and delete the params ready fo the params parsing.
 
@@ -109,7 +109,7 @@ export default class QueryBuilder {
                 //parse each section queries.
                 if (QueryBuilder.isLogicalSection(logicalSectionCandidate))
                 {
-                    let parseSectionSubParams = [];
+                    const parseSectionSubParams = [];
 
                     if (Array.isArray(logicalParamSettings)) {
 
@@ -136,7 +136,7 @@ export default class QueryBuilder {
      * @note NE FONCTIONNE PAS PRÉSENTEMENT AVEC LES NOMBRES PUISQUE JE CONVERTIS LES NOMBRES EN STRING!
      */
     static parseParams(query:any):any {
-        let parsedQuery:any = {};
+        const parsedQuery:any = {};
         for (const field in query)
         {
             const value:any = query[field];

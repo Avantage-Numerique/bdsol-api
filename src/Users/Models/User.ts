@@ -131,11 +131,11 @@ export class User extends AbstractModel {
     }
 
     public registerIndexes() {
-
+        return true;
     }
 
     public dropIndexes() {
-
+        return true;
     }
 
     /**

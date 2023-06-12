@@ -3,8 +3,8 @@
 export class Obj {
 
     public static enumToObj(targetEnum: any):any {
-        let toObject:any = {};
-        for (let key of targetEnum) {
+        const toObject:any = {};
+        for (const key of targetEnum) {
             toObject[key] = targetEnum[key];
         }
         return toObject;
@@ -15,32 +15,32 @@ export class Obj {
     }
 
 
-    public static isNull(element:any):Boolean {
+    public static isNull(element:any):boolean {
         return element === null;
     }
 
 
-    public static isNotNull(element:any):Boolean {
+    public static isNotNull(element:any):boolean {
         return element !== null;
     }
 
 
-    public static isUndefined(element:any):Boolean {
+    public static isUndefined(element:any):boolean {
         return typeof element === "undefined";
     }
 
 
-    public static isNotUndefined(element:any):Boolean {
+    public static isNotUndefined(element:any):boolean {
         return typeof element !== "undefined";
     }
 
 
-    public static isEmpty(element:any):Boolean {
+    public static isEmpty(element:any):boolean {
         return Object.keys(element).length === 0 || element.length === 0;
     }
 
 
-    public static isNotEmpty(element:any):Boolean {
+    public static isNotEmpty(element:any):boolean {
         if (Array.isArray(element)) {
             return element.length >= 1;
         }
@@ -53,16 +53,16 @@ export class Obj {
 
     public static propertyToString(obj:any, propertyValue:any):string {
 
-        for (let property in obj) {
-            let prop = obj[property];
+        for (const property in obj) {
+            const prop = obj[property];
             if (propertyValue === prop) return property;
         }
         return "";
     }
 
     public static pluck(obj:Array<any|object>, property:string):Array<any> {
-        let pluckedValues:Array<any> = [];
-        for (let element of obj) {
+        const pluckedValues:Array<any> = [];
+        for (const element of obj) {
             pluckedValues.push(element[property]);
         }
         return pluckedValues;

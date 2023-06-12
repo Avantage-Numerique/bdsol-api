@@ -3,23 +3,24 @@ import cors from "cors";
 import config from "./config";
 import {ApiRouter} from "./routes";
 import {HealthCheckRouter} from "./Healthcheck/Routes/HealthCheckRoutes";
-import {AuthentificationRoutes} from "./Authentification/Routes/AuthentificationRoutes";
+import {AuthentificationRoutes} from "@auth/Routes/AuthentificationRoutes";
 import {UsersRoutes} from "./Users/Routes/UsersRouter";
 import {PersonsRoutes} from './Persons/Routes/PersonsRoutes';
 import {OrganisationsRoutes} from './Organisations/Routes/OrganisationsRoutes'
 import {TaxonomyRoutes} from "./Taxonomy/Routes/TaxonomyRoutes";
 import {UsersHistoryRoutes} from "./UserHistory/Routes/UsersHistoryRoutes";
 import {MediasRoutes} from "./Media/Routes/MediasRoutes";
-import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
-import {PublicUserRequest} from "./Authentification/Middleware/PublicUserRequest";
+import {VerifyTokenMiddleware} from "@auth/Middleware/VerifyTokenMiddleware";
+import {PublicUserRequest} from "@auth/Middleware/PublicUserRequest";
 import LogHelper from "./Monitoring/Helpers/LogHelper";
 import {ApiErrorHandler} from "./Error/Middlewares/ApiErrorHandler";
 import {GetRequestIp} from "./Monitoring/Middlewares/GetRequestIp";
 import ModerationRoutes from "./Moderation/Routes/ModerationRoutes";
 import SearchRoutes from "./Database/Search/SearchRoutes";
 import {StaticContentsRoutes} from "./StaticContent/Routes/StaticContentsRoutes";
-import { ProjectsRoutes } from "./Projects/Routes/ProjectsRoute";
+import {ProjectsRoutes} from "./Projects/Routes/ProjectsRoute";
 import {RequestDuration} from "./Monitoring/Middlewares/RequestDuration";
+
 /**
  * Main class for the API
  * Use the express instance as public property.

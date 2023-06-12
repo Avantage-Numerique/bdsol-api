@@ -1,10 +1,9 @@
-
 //Init the .env file config vars.
 import * as dotenv from "dotenv";
 
 dotenv.config();
 
-const config = {
+const config:any = {
 
     environnement: process.env.ENVIRONNEMENT || "development",
     logPerformance: process.env.LOG_PERFORMANCE || true,

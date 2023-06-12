@@ -92,12 +92,12 @@ class StaticContent extends AbstractModel {
      */
     public registerPreEvents() {
         if (this.schema !== undefined) {
-
+            return true
         }
     }
 
     public registerEvents(): void {
-
+        return;
     }
 }
 

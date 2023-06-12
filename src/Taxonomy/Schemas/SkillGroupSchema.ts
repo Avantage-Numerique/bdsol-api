@@ -1,9 +1,6 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose, {Document, Schema} from "mongoose";
 import {Status} from "@src/Moderation/Schemas/StatusSchema";
 
-
-interface Document {
-}
 
 export interface SkillGroupSchema extends Document {
     groupName:string;
@@ -13,7 +10,6 @@ export interface SkillGroupSchema extends Document {
 
 
 export class SkillGroup {
-
     /** @static schema */
     static schema:Schema = new Schema<SkillGroupSchema>({
         groupName: {

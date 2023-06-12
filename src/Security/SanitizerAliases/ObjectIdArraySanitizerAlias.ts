@@ -11,7 +11,7 @@ import {ValidationChain} from "express-validator/src/chain/validation-chain";
  */
 const isObjectIdArray = (param:string, isOptional:boolean=true, source=body):ValidationChain => {
 
-    let baseChain:ValidationChain = source(param);
+    const baseChain:ValidationChain = source(param);
     let chain = baseChain.exists({checkFalsy:true}).bail();
 
     if (!isOptional) {

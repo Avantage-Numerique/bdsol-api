@@ -32,11 +32,11 @@ class Media extends AbstractModel {
     }
 
     public registerIndexes():void {
-        //Indexes
+        return;
     }
 
-    public dropIndexes() {
-
+    public dropIndexes():void {
+        return;
     }
 
     /** @public Model lastName */
