@@ -7,6 +7,7 @@ import { Sponsor } from "../../Database/Schemas/SponsorSchema";
 import { ScheduleBudget } from "../../Database/Schemas/ScheduleBudgetSchema";
 import { Location } from "../../Database/Schemas/LocationSchema";
 import { ProjectContextEnum } from "../ProjectContextEnum";
+import { DomainSchema } from "@src/Taxonomy/Schemas/DomainSchema";
 
 export interface ProjectSchema extends Document {
     name:string;
@@ -23,6 +24,7 @@ export interface ProjectSchema extends Document {
     sponsor:[Sponsor];
     scheduleBudget:ScheduleBudget;
     skills:[ObjectId];
+    domains:[DomainSchema];
     context: ProjectContextEnum
     status: Status
 }

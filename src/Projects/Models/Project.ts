@@ -123,6 +123,15 @@ class Project extends AbstractModel {
                 type: [mongoose.Types.ObjectId],
                 ref: "Taxonomy"
             },
+            domains: {
+                type: [{
+                    domain: {
+                        type: mongoose.Types.ObjectId,
+                        ref: "Taxonomy"
+                    },
+                    status: Status.schema
+                }]
+            },
             context: {
                 type: String,
                 enum: ProjectContextEnum
@@ -182,6 +191,7 @@ class Project extends AbstractModel {
             sponsor: document.sponsor ?? undefined,
             scheduleBudget: document.scheduleBudget ?? undefined,
             skills: document.skills ?? undefined,
+            domains: document.domains ?? undefined,
             context: document.context ?? '',
             status: document.status ?? undefined,
             type: document.type ?? '',
@@ -234,6 +244,7 @@ class Project extends AbstractModel {
         this.schema.pre('find', function() {
             middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             taxonomyPopulate(this, 'skills');
+            taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');
             middlewarePopulateProperty(this, 'sponsor.entity')
             middlewarePopulateProperty(this, 'producer')
@@ -246,6 +257,7 @@ class Project extends AbstractModel {
         this.schema.pre('findOne', function() {
             middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             taxonomyPopulate(this, 'skills');
+            taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');
             middlewarePopulateProperty(this, 'sponsor.entity')
             middlewarePopulateProperty(this, 'producer')
