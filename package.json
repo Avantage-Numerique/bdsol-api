@@ -5,7 +5,7 @@
   "main": "src/api.ts",
   "private": true,
   "scripts": {
-    "tsc": "tsc",
+    "tsc": "tsc && tsc-alias",
     "serve": "node build/src/server.js",
     "serve-ts": "npx ts-node src/server.ts",
     "dev": "npx nodemon -r tsconfig-paths/register src/server.ts",
@@ -66,6 +66,7 @@
     "jsdoc": "^3.6.7",
     "nodemon": "^2.0.19",
     "ts-node": "^10.9.1",
+    "tsc-alias": "^1.8.6",
     "tsconfig-paths": "^4.2.0"
   }
 }
