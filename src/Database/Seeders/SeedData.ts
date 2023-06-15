@@ -24,6 +24,8 @@ class SeedData extends Seeder implements SeederContract {
         this.service = service;
         this.data = data;
         this.whereKeys = whereKey;
+
+        LogHelper.info("[Migration][add persistant data] taskSeeder instance", data);
     }
 
     /**

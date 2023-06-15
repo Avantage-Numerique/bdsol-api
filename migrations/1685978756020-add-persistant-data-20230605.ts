@@ -4,6 +4,7 @@ import {TaxonomiesPersistantData} from "@src/Taxonomy/TaxonomiesPersistantData";
 import {taskSeeder} from "@database/Migrations/MigrationTaskSeeder";
 import SeedData from "@database/Seeders/SeedData";
 import {DBDriver} from "@database/Drivers/DBDriver";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 export async function up(): Promise<void> {
     const db:DBDriver = getDbDriver();
@@ -16,6 +17,7 @@ export async function up(): Promise<void> {
                 whereKeys: ['category', 'name']
             }
         ];
+        LogHelper.info("[Migration][add persistant data] task using the taskSeeder", persistantDataTasks);
         await taskSeeder(persistantDataTasks, SeedData);
     } else {
         return Promise.reject(Error("Taxonomy Service is unaccessible to heat yp the task Seeder in this migration."));
