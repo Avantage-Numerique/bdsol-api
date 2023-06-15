@@ -17,7 +17,7 @@ export async function up(): Promise<void> {
                 whereKeys: ['category', 'name']
             }
         ];
-        LogHelper.info("[Migration][add persistant data] task using the taskSeeder", persistantDataTasks);
+        LogHelper.info("[Migration][add persistant data] task using the taskSeeder");
         await taskSeeder(persistantDataTasks, SeedData);
     } else {
         return Promise.reject(Error("Taxonomy Service is unaccessible to heat yp the task Seeder in this migration."));

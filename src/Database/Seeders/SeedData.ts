@@ -25,7 +25,7 @@ class SeedData extends Seeder implements SeederContract {
         this.data = data;
         this.whereKeys = whereKey;
 
-        LogHelper.info("[Migration][add persistant data] taskSeeder instance", data);
+        LogHelper.info("[Migration][add persistant data] taskSeeder instance", this.service);
     }
 
     /**
@@ -42,6 +42,7 @@ class SeedData extends Seeder implements SeederContract {
      */
     public async seed(): Promise<void>
     {
+        LogHelper.info("[Migration][SeedData] seed function conditions : ", this.seederConditions(), "and seed if passing : ", (this.data && this.whereKeys))
         if (this.data && this.whereKeys) {
             try {
                 for (const data of this.data) {
