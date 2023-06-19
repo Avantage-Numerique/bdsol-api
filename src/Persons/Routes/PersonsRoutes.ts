@@ -1,10 +1,10 @@
 import express from "express";
-import PersonsController from "../Controllers/PersonsController";
-import AbstractController from "../../Abstract/Controller";
-import CrudRoute from "../../Abstract/CrudRoute";
-import {objectIdSanitizerAlias} from "../../Security/SanitizerAliases/ObjectIdSanitizerAlias";
-import {noHtmlStringSanitizerAlias} from "../../Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
-import {basicHtmlSanitizerAlias} from "../../Security/SanitizerAliases/BasicHtmlSanitizerAlias";
+import PersonsController from "@src/Persons/Controllers/PersonsController";
+import AbstractController from "@core/Controller";
+import CrudRoute from "@core/CrudRoute";
+import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
+import {noHtmlStringSanitizerAlias} from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
+import {basicHtmlSanitizerAlias} from "@src/Security/SanitizerAliases/BasicHtmlSanitizerAlias";
 
 class PersonsRoutes extends CrudRoute {
 

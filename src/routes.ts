@@ -11,7 +11,7 @@ ApiRouter.get("/", async (req, res) => {
 
 // Could be usefull to get the up status here.
 ApiRouter.get("/test", async (req, res) => {
-    res.send(`Testing ...`);
+    res.send(`Testing or do I ? :face-machiavélique-un-peu-trop-intense-pour-la-situation-mais-cest-drole-parce-que-cest-comme-dans-un-film:`);
 });
 
 ApiRouter.get('/42',async (req, res) => {

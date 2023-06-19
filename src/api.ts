@@ -20,19 +20,19 @@ import SearchRoutes from "./Database/Search/SearchRoutes";
 import {StaticContentsRoutes} from "./StaticContent/Routes/StaticContentsRoutes";
 import {ProjectsRoutes} from "./Projects/Routes/ProjectsRoute";
 import {RequestDuration} from "./Monitoring/Middlewares/RequestDuration";
+import {AdminRoutes} from "@src/Admin/Routes/AdminRoutes";
 
 /**
  * Main class for the API
  * Use the express instance as public property.
  */
 export default class Api {
-    public express: express.Application = express();
+    public express: express.Express = express();
     public mainRouter: express.Router;
-    public authRouters:any;
+    public authRouters: express.Router;
 
     public baseRoutes:Array<any>;
     public entitiesRoutes:Array<any>;
-
 
     public start() {
         this._initEntitiesRouters();
@@ -134,6 +134,10 @@ export default class Api {
             {
                 baseRoute: "/static",
                 manager: new StaticContentsRoutes()
+            },
+            {
+                baseRoute: "/admin",
+                manager: new AdminRoutes()
             }
         ];
     }
@@ -234,5 +238,4 @@ export default class Api {
             );
         }
     }
-
 }
