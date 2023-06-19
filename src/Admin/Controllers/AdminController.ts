@@ -21,15 +21,37 @@ class AdminController {
         return AdminController._instance;
     }
 
+    private getHomePageLink():string {
+        return `<div><a href="/admin" title="Admin accueil">Retour au Dashboard</a></div>`;
+    }
 
     public async renderAdminDashboard() {
-        let content:string = "<a href='https://51.222.24.157:9443/api/stacks/webhooks/3eaba35f-3914-4a8e-98e5-ff85ceb54663' title=''>Repartir le stack avec un webhook 8-)</a>";
+
+        //let content:string = "<a href='https://51.222.24.157:9443/api/stacks/webhooks/3eaba35f-3914-4a8e-98e5-ff85ceb54663' title=''>Repartir le stack avec un webhook 8-)</a>";
+        let content:string = `<ul>
+                <li><a href="/admin/bd" title="manage docker">Manage docker</a></li>
+                <li><a href="/admin/routes" title="manage routes">Check routes structure</a></li>
+            </ul>`;
         return `<html lang="en"><head><title>BDSOL API</title></head><body>${content}</body></html>`;
+    }
+
+    public async renderDockerManager() {
+
+        //let content:string = "<a href='https://51.222.24.157:9443/api/stacks/webhooks/3eaba35f-3914-4a8e-98e5-ff85ceb54663' title=''>Repartir le stack avec un webhook 8-)</a>";
+        let content:string = `<form action="https://51.222.24.157:9443/api/stacks/webhooks/3f09db09-ec61-4d71-a85a-3f691d8ac6c9" method="post">
+                      Redeploy stack containers with latest image of same tag <input type="submit" />
+                    </form>`;
+        return `<html lang="en"><head><title>BDSOL API</title></head>
+                <body>
+                    ${this.getHomePageLink()}
+                    ${content}
+                </body>
+            </html>`;
     }
 
     public async renderRoutesStructure(){
         const routeStructure:any = listEndpoints(api.express);
-        let routesRender:string = "<html lang='fr'><body><ul style='display: flex; flex-direction: row; justify-content: start; align-items: start; flex-wrap: wrap;padding: 0; list-style: none; margin: 0;'>";
+        let routesRender:string = `<html lang='fr'><body>${this.getHomePageLink()}<ul style='display: flex; flex-direction: row; justify-content: start; align-items: start; flex-wrap: wrap;padding: 0; list-style: none; margin: 0;'>`;
 
         const rowPrefix:string = "<li style='padding: 1rem; margin:2rem;'>";
         const rowSuffix:string = "</li>";
@@ -40,12 +62,27 @@ class AdminController {
         const prefix:string = "<ul>";
         const suffix:string = "</ul>";
 
+        let basesRoutes:Map<string, string> = new Map();
+
         for (const route of routeStructure) {
-            routesRender += rowPrefix;
-            routesRender += this.methodToHtml(route.methods, 'div','display:inline-block; padding:5px; margin-right:5px; font-size:10px; background-color:#f6f6f6;');
-            routesRender += pathPrefix + route.path + pathSuffix;
+
+            const segments:Array<any> = route.path.split("/");
+            segments.shift();//remove the base empty string before the base /.
+
+            const basePathName:string = `${segments[0]}` ?? "notset";
+            const pathColor:string = this.getRandomColor();
+
+            if (!basesRoutes.get(basePathName)) {
+                basesRoutes.set(basePathName, pathColor);
+            }
+            let color:string = basesRoutes.get(basePathName) ?? "#FF0000";
+            const border:string = "2px solid "+color+";";
+            routesRender += "<li style='padding: 1rem; margin:2rem; border-left:"+border+"'>";
+            routesRender += this.methodToHtml(route.methods, 'div','display:inline-block; padding:5px; margin-right:5px; font-size:10px; background-color:#F8F8F8; border-top:'+border);
+            routesRender += pathPrefix + route.path + " (" + basePathName + " ) " + pathSuffix;
             routesRender += prefix + this.methodToHtml(route.middlewares, 'li') + suffix;
-            routesRender += rowSuffix;
+            routesRender += "</li>";
+
         }
         routesRender += "</u></body></html>";
         return routesRender;
@@ -63,6 +100,15 @@ class AdminController {
         const openTag:string = styles !== "" ? `<${tag} style="${styles}">` : `<${tag}>`;
         const closingTag:string = `</${tag}>`;
         return openTag + content + closingTag;
+    }
+
+    private getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
     }
 
 }

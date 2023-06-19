@@ -45,8 +45,14 @@ class AdminRoutes extends AbstractRoute {
      */
     public setupPublicRoutes():express.Router {
 
-        this.routerInstance.get('/bd', [
+        this.routerInstance.get('/', [
             this.dashboardHandler.bind(this),
+            this.staticContentNotFound.bind(this),
+            this.renderDefaultTemplate.bind(this),
+        ]);
+
+        this.routerInstance.get('/bd', [
+            this.dashboardDockerManagement.bind(this),
             this.staticContentNotFound.bind(this),
             this.renderDefaultTemplate.bind(this),
         ]);
@@ -69,9 +75,17 @@ class AdminRoutes extends AbstractRoute {
         return router;
     }
 
+
     public async dashboardHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
 
         res.serviceResponse = await this.controllerInstance.renderAdminDashboard();
+        return next();
+    }
+
+
+    public async dashboardDockerManagement(req: Request, res: Response, next: NextFunction): Promise<any> {
+
+        res.serviceResponse = await this.controllerInstance.renderDockerManager();
         return next();
     }
 

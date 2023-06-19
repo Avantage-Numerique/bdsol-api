@@ -134,12 +134,15 @@ export default class Api {
             {
                 baseRoute: "/static",
                 manager: new StaticContentsRoutes()
-            },
-            {
-                baseRoute: "/admin",
-                manager: new AdminRoutes()
             }
         ];
+        // If dev, add admin routes.
+        if (config.environnement) {
+            this.entitiesRoutes.push({
+                baseRoute: "/admin",
+                manager: new AdminRoutes()
+            })
+        }
     }
 
 
