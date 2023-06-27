@@ -1264,7 +1264,7 @@ export const TaxonomiesPersistantData = [
     },
     {
         "category": TaxonomiesCategoriesEnum.Skills,
-        "name" : "Storyboad",
+        "name" : "Storyboard",
         "description" : "",
         "source" : "",
         "status" : {

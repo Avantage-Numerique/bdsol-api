@@ -180,7 +180,7 @@ export abstract class Service {
         const updateOptions = {
             new: true,
             runValidators: true,
-            returnOriginal: true,
+            //returnOriginal: true,
             ...options
         }
 
