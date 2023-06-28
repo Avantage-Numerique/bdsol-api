@@ -69,11 +69,12 @@ class SearchResults {
                 slug: slug
             }
         );
-        taxonomyId = taxonomyId.shift()._id;
+        taxonomyId = taxonomyId?.shift()?._id;
 
         if (taxonomyId){
             return await this.internalFindEntityLinkedToTaxonomy(taxonomyId);
         }
+        return {}
     }
 
     
