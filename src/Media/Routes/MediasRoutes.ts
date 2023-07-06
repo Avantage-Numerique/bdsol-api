@@ -330,7 +330,8 @@ class MediasRoutes extends AbstractRoute {
      */
     public async viewMedia(req: Request, res: Response, next: NextFunction): Promise<any> {
         const options:any = {
-            root: config.basepath,
+            //Removed this root option and added path.resolve to the return work with targetMediaPath
+            //root: config.basepath,
             dotfiles: "deny",
             headers: {
                 'x-timestamp': now(),
@@ -340,10 +341,10 @@ class MediasRoutes extends AbstractRoute {
         const {
             entity, id, fileName
         } = req.params;
-
+        LogHelper.debug(entity, id, fileName)
         //type('image/jpeg')
-        const targetMediaPath = path.join(`${PublicStorage.basePath}/${entity}/${id}/${fileName}`);
-
+        const targetMediaPath = path.resolve(path.join(`${PublicStorage.basePath}/${entity}/${id}/${fileName}`));
+        LogHelper.debug(targetMediaPath);
         await res.sendFile(
             targetMediaPath,
             options,
