@@ -1,4 +1,4 @@
-import {Service} from "../../Database/DatabaseDomain";
+import {Service} from "@database/DatabaseDomain";
 import Taxonomy from "../Models/Taxonomy";
 
 class TaxonomyService extends Service

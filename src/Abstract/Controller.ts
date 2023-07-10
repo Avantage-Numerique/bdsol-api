@@ -1,13 +1,13 @@
 import {ApiResponseContract} from "../Http/Responses/ApiResponse";
-import {StatusCodes, ReasonPhrases} from "http-status-codes";
+import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {ErrorResponse} from "../Http/Responses/ErrorResponse";
 import AbstractModel from "./Model";
-import {Service} from "../Database/Service";
-import QueryBuilder from "../Database/QueryBuilder/QueryBuilder";
-import {SuccessResponse} from "../Http/Responses/SuccessResponse";
-import UsersHistoryService from "../UserHistory/Services/UsersHistoryService";
-import UserHistory from "../UserHistory/Models/UserHistory";
-import {UserHistorySchema} from "../UserHistory/Schemas/UserHistorySchema";
+import {Service} from "@database/Service";
+import QueryBuilder from "@database/QueryBuilder/QueryBuilder";
+import {SuccessResponse} from "@src/Http/Responses/SuccessResponse";
+import UsersHistoryService from "@src/UserHistory/Services/UsersHistoryService";
+import UserHistory from "@src/UserHistory/Models/UserHistory";
+import {UserHistorySchema} from "@src/UserHistory/Schemas/UserHistorySchema";
 import {ControllerContract} from "./Contracts/ControllerContract";
 
 /**
@@ -109,6 +109,11 @@ abstract class AbstractController implements ControllerContract {
     public async list(requestData: any): Promise<ApiResponseContract> {
         const query = QueryBuilder.build(requestData);
         return await this.service.all(query);
+    }
+
+    public async count(requestData:any): Promise<ApiResponseContract> {
+        const query = QueryBuilder.build(requestData);
+        return await this.service.count(query);
     }
 
 

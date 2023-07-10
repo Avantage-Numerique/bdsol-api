@@ -122,6 +122,35 @@ export abstract class Service {
         }
     }
 
+    async count(query: any): Promise<ApiResponseContract> {
+        if (config.db.config.createObjectIdForQuery) {
+            query._id = Service.transformToObjectId(query._id);
+            if (query._id.error) {
+                return query._id;
+            }
+        }
+
+        try {
+            const items = await this.model.find(query).estimatedDocumentCount();
+
+            //populate
+            return SuccessResponse.create(
+                items,
+                StatusCodes.OK,
+                ReasonPhrases.OK
+            );
+
+        } catch (getAllErrors: any) {
+            LogHelper.error(`[${this.constructor.name} all, ${getAllErrors.message}`, getAllErrors.stack);
+
+            return ErrorResponse.create(
+                getAllErrors,
+                StatusCodes.INTERNAL_SERVER_ERROR,
+                getAllErrors.message || "Not able to get the queried items"
+            );
+        }
+    }
+
     /**
      * Insert is the create in CRUD
      * @param data any the document structure. This is type any because that class will be extended.

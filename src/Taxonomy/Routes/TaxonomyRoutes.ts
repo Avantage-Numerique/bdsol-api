@@ -1,16 +1,16 @@
-import express, {Response, Request, NextFunction} from "express";
+import express, {NextFunction, Request, Response} from "express";
 import CrudRoute from "../../Abstract/CrudRoute";
 import {param} from "express-validator";
 import TaxonomyController from "../Controllers/TaxonomyController";
-import AbstractController from "../../Abstract/Controller";
-import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
-import {NoAccentSanitizer} from "../../Security/Sanitizers/NoAccentSanitizer";
-import {NoSpaceSanitizer} from "../../Security/Sanitizers/NoSpaceSanitizer";
-import {EnumSanitizer} from "../../Security/Sanitizers/EnumSanitizer";
+import AbstractController from "@core/Controller";
+import {NoHtmlSanitizer} from "@src/Security/Sanitizers/NoHtmlSanitizer";
+import {NoAccentSanitizer} from "@src/Security/Sanitizers/NoAccentSanitizer";
+import {NoSpaceSanitizer} from "@src/Security/Sanitizers/NoSpaceSanitizer";
+import {EnumSanitizer} from "@src/Security/Sanitizers/EnumSanitizer";
 import {TaxonomiesCategoriesEnum} from "../TaxonomiesCategoriesEnum";
-import {isInEnumSanitizerAlias} from "../../Security/SanitizerAliases/IsInEnumSanitizerAlias";
-import {noHtmlStringSanitizerAlias} from "../../Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
-import {objectIdSanitizerAlias} from "../../Security/SanitizerAliases/ObjectIdSanitizerAlias";
+import {isInEnumSanitizerAlias} from "@src/Security/SanitizerAliases/IsInEnumSanitizerAlias";
+import {noHtmlStringSanitizerAlias} from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
+import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
 
 class TaxonomyRoutes extends CrudRoute {
 
@@ -84,6 +84,14 @@ class TaxonomyRoutes extends CrudRoute {
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("byTaxonomy"),
             this.listByUriParamsHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+
+        router.get('/:category/:slug/count', [
+            ...this.addMiddlewares("all"),
+            ...this.addMiddlewares("byTaxonomy"),
+            ...this.addMiddlewares("bySlug"),
+            this.countHandler.bind(this),
             this.routeSendResponse.bind(this)
         ]);
 

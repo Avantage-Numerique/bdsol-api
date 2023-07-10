@@ -111,7 +111,10 @@ class Taxonomy extends AbstractModel {
             },
             //source: {
                 //type: String
-            //},
+            //},,
+            meta: {
+                type: Schema.Types.Mixed
+            },
             status: {
                 type: Status.schema,
                 //required: true,
@@ -210,6 +213,7 @@ class Taxonomy extends AbstractModel {
             status: document.status ?? '',
             type: document.type ?? '',
             domains: document.domains ?? [],
+            meta: document.meta ?? {},
             createdAt : document.createdAt ?? '',
             updatedAt : document.updatedAt ?? '',
         }

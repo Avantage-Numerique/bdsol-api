@@ -3,6 +3,7 @@ import Organisation from "../../Organisations/Models/Organisation";
 import Person from "../../Persons/Models/Person";
 import Project from "../../Projects/Models/Project";
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 
 class SearchResults {
@@ -63,16 +64,22 @@ class SearchResults {
     }
 
     public async getLinkedEntitiesToTaxonomyByCatAndSlug(category:string, slug:string):Promise<any> {
-        let taxonomyId = await this.taxonomyModel.find(
+
+        const taxonomy = await this.taxonomyModel.find(
             {
                 category: category,
                 slug: slug
             }
         );
-        taxonomyId = taxonomyId?.shift()?._id;
+        if (taxonomy.length > 0) {
+            //const taxonomyId = taxonomyModel?.shift()?._id;
+            const taxonomyId = taxonomy[0]._id;
 
-        if (taxonomyId){
-            return await this.internalFindEntityLinkedToTaxonomy(taxonomyId);
+            if (taxonomyId){
+                const linkedEntities:Array<any> = await this.internalFindEntityLinkedToTaxonomy(taxonomyId);
+                await this._embedEntitiesCountInTaxonomy(taxonomy[0], linkedEntities);
+                return linkedEntities;
+            }
         }
         return {}
     }
@@ -113,6 +120,21 @@ class SearchResults {
             return tagSearchResult;
         }
         return [];
+    }
+
+
+    private async _embedEntitiesCountInTaxonomy(document:any, results:Array<any>) {
+        try {
+            const currentCount:Number = results.length;
+            document.meta = {
+                count: currentCount
+            }
+            await document.save();
+            LogHelper.info(`[Embedding] Taxonomy entities count ${currentCount} assign with ${document.name} taxonomy`);
+
+        } catch(e:any) {
+            throw new Error(e);
+        }
     }
 }
 

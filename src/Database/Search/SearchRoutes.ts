@@ -1,9 +1,7 @@
 import express, {NextFunction, Request, Response} from "express";
-import {StatusCodes} from "http-status-codes";
-import { ErrorResponse } from "../../Http/Responses/ErrorResponse";
-import { SuccessResponse } from "../../Http/Responses/SuccessResponse";
-import { ReasonPhrases } from "http-status-codes";
-import AbstractRoute from "../../Abstract/Route";
+import {ReasonPhrases, StatusCodes} from "http-status-codes";
+import {SuccessResponse} from "@src/Http/Responses/SuccessResponse";
+import AbstractRoute from "@core/Route";
 import SearchSuggestions from "./SearchSuggestions";
 import SearchResults from "./SearchResults";
 

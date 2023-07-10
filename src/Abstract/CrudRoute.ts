@@ -7,7 +7,7 @@ import {param} from "express-validator";
 import {NoAccentSanitizer} from "../Security/Sanitizers/NoAccentSanitizer";
 import {NoSpaceSanitizer} from "../Security/Sanitizers/NoSpaceSanitizer";
 import AbstractController from "./Controller";
-import {Service} from "../Database/Service";
+import {Service} from "@database/Service";
 
 abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
@@ -161,9 +161,6 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
             this.routeSendResponse.bind(this),
         ]);
 
-        // sets routes in target domain's route.
-        this.setupAdditionnalPublicRoutes(this.routerInstance);
-
 
         //  Get
 
@@ -176,10 +173,11 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
             this.routeSendResponse.bind(this),
         ]);
 
-        return this.routerInstance;
+        return this.setupAdditionnalPublicRoutes(this.routerInstance);
     }
 
     public setupAdditionnalPublicRoutes(router: express.Router):express.Router {
+
         return router;
     }
 
@@ -263,6 +261,11 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      */
     public async listHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
         res.serviceResponse = await this.controllerInstance.list(req.body.data);
+        return next();
+    }
+
+    public async countHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        res.serviceResponse = await this.controllerInstance.count(req.body.data);
         return next();
     }
 
