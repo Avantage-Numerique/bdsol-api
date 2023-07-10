@@ -63,6 +63,12 @@ class AdminRoutes extends AbstractRoute {
             this.renderDefaultTemplate.bind(this),
         ]);
 
+        this.routerInstance.get('/test-getinfo', [
+            this.renderRoutesTestingHandler.bind(this),
+            this.staticContentNotFound.bind(this),
+            this.renderDefaultTemplate.bind(this),
+        ]);
+
         return this.routerInstance;
     }
 
@@ -97,6 +103,13 @@ class AdminRoutes extends AbstractRoute {
     }
 
 
+    public async renderRoutesTestingHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+
+        res.serviceResponse = await this.controllerInstance.renderRoutesTesting();
+        return next();
+    }
+
+
     /**
      * Build up the response for the tempalte route, (only getDoc for now).
      * @param req {Request}
@@ -106,7 +119,9 @@ class AdminRoutes extends AbstractRoute {
     protected async renderDefaultTemplate(req: Request, res: Response): Promise<any> {
         const logger = new LogHelper(req);
         logger.log(`Response status ${StatusCodes.OK}, ${StatusCodes["OK"]}`);
-        return res.status(StatusCodes.OK).send(res.serviceResponse);
+
+        res.set('Content-Type', 'text/html');
+        return res.status(StatusCodes.OK).send(Buffer.from(res.serviceResponse));
     }
 
     public async staticContentNotFound(req: Request, res: Response, next: NextFunction): Promise<any> {

@@ -10,7 +10,7 @@ import {OrganisationsRoutes} from './Organisations/Routes/OrganisationsRoutes'
 import {TaxonomyRoutes} from "./Taxonomy/Routes/TaxonomyRoutes";
 import {UsersHistoryRoutes} from "./UserHistory/Routes/UsersHistoryRoutes";
 import {MediasRoutes} from "./Media/Routes/MediasRoutes";
-import {VerifyTokenMiddleware} from "@auth/Middleware/VerifyTokenMiddleware";
+import {verifyTokenMiddleware} from "@auth/Middleware/VerifyTokenMiddleware";
 import {PublicUserRequest} from "@auth/Middleware/PublicUserRequest";
 import LogHelper from "./Monitoring/Helpers/LogHelper";
 import {ApiErrorHandler} from "./Error/Middlewares/ApiErrorHandler";
@@ -236,7 +236,7 @@ export default class Api {
         {
             this.mainRouter.use(
                 route.baseRoute,
-                VerifyTokenMiddleware.middlewareFunction(),
+                verifyTokenMiddleware,
                 route.manager.setupAuthRoutes()
             );
         }

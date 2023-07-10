@@ -1,25 +1,24 @@
 import express, {NextFunction, Request, Response} from "express";
-import MediasController from "../Controllers/MediasController";
-import AbstractRoute from "../../Abstract/Route";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import AbstractRoute from "@core/Route";
+import EntityControllerFactory from "@core/EntityControllerFactory";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 import * as fs from "fs";
-import { StatusCodes } from "http-status-codes";
-import FileStorage from "../../Storage/Files/FileStorage";
-import EntityControllerFactory from "../../Abstract/EntityControllerFactory";
-import Record from "../../Media/Record/Record";
+import {StatusCodes} from "http-status-codes";
+import FileStorage from "@src/Storage/Files/FileStorage";
+import MediasController from "@src/Media/Controllers/MediasController";
+import Record from "@src/Media/Record/Record";
 import PublicLocalMediaStorage from "../Storage/PublicLocalMediaStorage";
 import multer from "multer";
-import { ErrorResponse } from "../../Http/Responses/ErrorResponse";
-import PublicStorage from "../../Storage/Files/PublicStorage";
+import {ErrorResponse} from "@src/Http/Responses/ErrorResponse";
+import PublicStorage from "@src/Storage/Files/PublicStorage";
 import * as path from "path";
-import Organisation from "../../Organisations/Models/Organisation";
-import Person from "../../Persons/Models/Person";
-import config from "../../config";
-import {now} from "../../Helpers/DateTime";
-import {objectIdSanitizerAlias} from "../../Security/SanitizerAliases/ObjectIdSanitizerAlias";
-import {noHtmlStringSanitizerAlias} from "../../Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
-import {isInEnumSanitizerAlias} from "../../Security/SanitizerAliases/IsInEnumSanitizerAlias";
-import {EntityTypesEnum} from "../../Entities/EntityTypes";
+import Organisation from "@src/Organisations/Models/Organisation";
+import Person from "@src/Persons/Models/Person";
+import {now} from "@src/Helpers/DateTime";
+import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
+import {noHtmlStringSanitizerAlias} from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
+import {isInEnumSanitizerAlias} from "@src/Security/SanitizerAliases/IsInEnumSanitizerAlias";
+import {EntityTypesEnum} from "@src/Entities/EntityTypes";
 
 
 class MediasRoutes extends AbstractRoute {
@@ -114,23 +113,23 @@ class MediasRoutes extends AbstractRoute {
             fileFilter: this.multipartSetup.fileFilter(),
         });
 
-        this.routerInstance.post('/upload', [
+        this.routerInstanceAuthentification.post('/upload', [
             multipartMiddlewareTemporaryHandler.single("mainImage"),
-            this.contentTypeParser,
+            this.contentTypeParser.bind(this),
             ...this.addMiddlewares("all"),
             this.createOrUpdateDispatch.bind(this),
             this.routeSendResponse.bind(this),
         ]);
 
-        this.routerInstance.post('/update', [
+        this.routerInstanceAuthentification.post('/update', [
             multipartMiddlewareTemporaryHandler.single("mainImage"),
-            this.contentTypeParser,
+            this.contentTypeParser.bind(this),
             ...this.addMiddlewares("all"),
             this.createOrUpdateDispatch.bind(this),
             this.routeSendResponse.bind(this),
         ]);
 
-        this.routerInstance.get('/delete/:entity/:id/:fileName', [
+        this.routerInstanceAuthentification.get('/delete/:entity/:id/:fileName', [
             ...this.addMiddlewares("all"),
             this.deleteHandler.bind(this),
             this.routeSendResponse.bind(this),
