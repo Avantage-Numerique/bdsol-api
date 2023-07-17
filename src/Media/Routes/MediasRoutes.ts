@@ -19,6 +19,7 @@ import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSan
 import {noHtmlStringSanitizerAlias} from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
 import {isInEnumSanitizerAlias} from "@src/Security/SanitizerAliases/IsInEnumSanitizerAlias";
 import {EntityTypesEnum} from "@src/Entities/EntityTypes";
+import Project from "@src/Projects/Models/Project";
 
 
 class MediasRoutes extends AbstractRoute {
@@ -201,7 +202,7 @@ class MediasRoutes extends AbstractRoute {
         //if entity have media field
         //TODO : Need to make a check for this (this goes with making the create check for multiple field multer.single ("mainImage, and others..."))
         //Temporary check (entityType is person or org and mediaField is mainImage)
-        const entities:any = [Person.getInstance().modelName, Organisation.getInstance().modelName];
+        const entities:any = [Person.getInstance().modelName, Organisation.getInstance().modelName, Project.getInstance().modelName];
         if( entities.includes(entityType)
             &&  mediaField == "mainImage" ) {
                 
@@ -274,8 +275,9 @@ class MediasRoutes extends AbstractRoute {
             return;
         }
 
+        console.log("createAndReplaceHandler", entityType, mediaField)
         //Return msg no field to put image into entity
-        res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Entity mediaField is invalid");
+        res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Entity upload is désactivated or invalid field for upload.");
         return;
     }
 
