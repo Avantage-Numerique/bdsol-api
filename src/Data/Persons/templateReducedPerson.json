@@ -1,0 +1,335 @@
+[
+    {
+        "lastName": "Dionne",
+        "firstName": "Jean-Sébastien",
+        "nickname": "",
+        "description": "Présentation de l'offre professionnelle pour les entreprises :**\n\n_Accompagnement sur-mesure pour vos projets numériques_\n\nFort de près de 15 ans d'expérience dans le domaine du développement web et logiciel, occupant des postes tels que directeur de bureau de projets, directeur de production et directeur général, je vous propose un accompagnement personnalisé pour vos projets numériques. Ayant supervisé des équipes qui ont mené à bien plusieurs centaines de projets numériques, je possède une expertise avérée pour vous guider dans vos projets.\n\nLes services proposés incluent :\n\n1. Analyse des besoins : Identifier vos besoins spécifiques pour concevoir la solution adaptée à votre entreprise.\n2. Analyse d'affaires : Évaluer l'impact du projet sur votre entreprise et déterminer la meilleure stratégie à adopter.\n3. Conception et production : Collaborer étroitement avec vous pour concevoir et mettre en œuvre des solutions innovantes et performantes.\n4. Conseil et accompagnement des décideurs : Soutenir les décideurs dans les projets de transformation numérique, en proposant des conseils stratégiques et en facilitant la prise de décision.\n\nGrâce à un réseau de partenaires aux expertises variées, je suis en mesure de proposer une offre complète à 360° pour tous vos projets numériques, que ce soit des projets web de base ou des développements de solutions d'intelligence artificielle. Vous bénéficierez d'un accompagnement de qualité pour atteindre vos objectifs.\n\nN'hésitez pas à me contacter pour discuter de vos projets et bénéficier d'un accompagnement sur-mesure pour votre entreprise.",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": ""
+    },
+    {
+        "lastName": "Paquin",
+        "firstName": "Laurence",
+        "nickname": "Lau",
+        "description": "Je me présente, Laurence Paquin, designer graphique senior. Au-delà des services de création d’identité et de sites Web qui incarnent mes forces chez Loula Création, j’offre une expérience client complète… Une approche basée sur un service adapté à votre réalité unique d’entreprise, car c’est ensemble que nous allons pouvoir construire un projet à votre image qui vous permettra de surpasser vos objectifs et ainsi de faire rayonner votre marque à son plein potentiel auprès de votre clientèle cible. Loula Création se spécialise donc dans mes domaines d’expertise, soient le design graphique, les objets promotionnels et le Web, le tout en offrant un service de gestion de projet complet en collaboration avec de nombreux professionnels de la région.",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": "",
+        "extra":{
+            "ville":"Val-d'or",
+            "province":"Québec",
+            "numeroTelephone":"(819)345-8241",
+            "email":"info@loulacreation.ca"
+        }
+    },
+    {
+        "lastName": "Marcoux",
+        "firstName": "Leslie",
+        "nickname": "",
+        "description": "Chargée de projet événementiel, je suis une pieuvre ambulante aux mille et un talents.\n\nDiplômé en traduction, dans les dernières années je me suis formé en rédaction web. Principalement rédaction de blog et rédaction publicitaire.",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": "",
+        "extra":{
+            "ville":"",
+            "province":"",
+            "numeroTelephone":"",
+            "email":"leslie@lillym.ca"
+        }
+    },
+    {
+        "lastName": "Tétreault",
+        "firstName": "Alex",
+        "nickname": "",
+        "description": "Alex est un artiste et travailleur culturel autonome originaire du Grand Sudbury en Ontario. Travaillant principalement en communications, il est actuellement agent de développement numérique et de découvrabilité territoriale pour la Place des Arts du Grand Sudbury.",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": "",
+        "extra":{
+            "adresse":"27, rue Larch",
+            "ville":"Sudbury",
+            "province":"Ontario",
+            "codePostal":"P3E1B7",
+            "numeroTelephone":"(705)665-5027",
+            "email":"atetreault@maplacedesarts.ca"
+        }
+    },
+    {
+        "lastName": "Pollet",
+        "firstName": "Tom",
+        "nickname": "Tom",
+        "description": "Coordinateurs du Hub Avantage Numérique : \n\n- mise en relation \n- proposition de matériel\n- Ressources humaines pour votre accompagnement, aussi complet qu’il doit être",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": "",
+        "extra":{
+            "email":"tom.pollet@petittheatre.org"
+        }
+    },
+    {
+        "lastName": "Saindon",
+        "firstName": "Guillaume",
+        "nickname": "",
+        "description": "",
+        "occupations": [],
+        "domains": [{"domain":{}}],
+        "catchphrase": "",
+        "extra":{
+            "email":"guillaume.sain@gmail.com"
+        }
+    },
+    {
+        "lastName": "Dupré-Guilbert",
+        "firstName": "Stéphanie",
+        "nickname": "",
+        "description": "Stéphanie Dupré-Guilbert agit comme agente de projet à l'entrepreneuriat pour l'organisation à but non lucratif Carrefour Jeunesse Emploi d'Abitibi-Ouest (CJEAO) plus spécifiquement dans les locaux du projet La SHOP, un FabLab du CJEAO. \n\nElle fait le soutient technique au niveau des diverses installations du FabLab. Elle accompagne les visiteurs dans leurs projets afin de bien les outiller tant au niveau compétences technologiques et analogiques qu'au niveau du développement entrepreneurial.",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": "",
+        "extra":{
+            "adresse":"295 rue Principale",
+            "ville":"La Sarre",
+            "codePostal":"J9Z 1Z1",
+            "province":"QC",
+            "numeroTelephone":"(819) 333-1110",
+            "email":"sguilbert@cjeao.qc.ca"
+        }
+    },
+    {
+        "lastName": "Leclerc",
+        "firstName": "Dominic",
+        "nickname": "",
+        "description": "Réalisateur, directeur de la photographie et monteur.",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": "",
+        "extra":{
+            "email":"dominicleclerc@me.com"
+        }
+    },
+    {
+        "lastName": "Vallet",
+        "firstName": "Hector",
+        "nickname": "",
+        "description": "",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": "",
+        "extra":{
+            "email":"hector.vallet@laposte.net"
+        }
+    },
+    {
+        "lastName": "Petit",
+        "firstName": "Jessica",
+        "nickname": "",
+        "description": "",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": ""
+    },
+    {
+        "lastName": "Rivard",
+        "firstName": "Billy",
+        "nickname": "Bill",
+        "description": "Bonjour, depuis 2017 je me forme à la conception de site web (page vitrine pour entreprise, boutique en ligne, e-commerce, dropshipping, blog etc.)\n\nJe travail principalement avec Wordpress qui est selon moi la plateforme la plus complète et la plus abordable sur le marché. \n\nJ'offre le service de formation individuelle et de groupe ainsi que le service de conception de site pour les entreprises et aussi pour vos projets personnels.\n\nCommuniquez avec moi pour plus de détails!",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": "",
+        "extra":{
+            "adresse":"",
+            "ville":"LA SARRE",
+            "codePostal":"QUÉBEC",
+            "province":"",
+            "numeroTelephone":"(819) 301-3023",
+            "email":"contact@rectoverso-site-web-abitibi.com"
+        }
+    },
+    {
+        "lastName": "Thomas",
+        "firstName": "Julien",
+        "nickname": "",
+        "description": "Concepteur web spécialisé avec WordPress et l'optimisation SEO pour les moteurs de recherche.",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": "",
+        "extra":{
+            "email":"julien@pi-web.ca"
+        }
+    },
+    {
+        "lastName": "Levert",
+        "firstName": "Véronique",
+        "nickname": "",
+        "description": "",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": "",
+        "extra":{
+            "email":"veroniquelevert@hotmail.com"
+        }
+    },
+    {
+        "lastName": "Arcand",
+        "firstName": "Marie-Eve",
+        "nickname": "",
+        "description": "Mon expertise en gestion de médias sociaux et en création de contenu me permet d’aider les entreprises à se démarquer! J’offre une image professionnelle avec du contenu de qualité, créatif, adapté aux besoins selon les médias et les audiences ciblées.",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": "",
+        "extra":{
+            "numeroTelephone":"(819) 860-7722",
+            "email":"info@evemcommunications.com"
+        }
+    },
+    {
+        "lastName": "Caron",
+        "firstName": "Francis",
+        "nickname": "",
+        "description": "La passion de Francis pour l’infographie, le design d'interface et l’illustration dure déjà depuis 11 ans et ce n’est que le début. Aussi chargé de cours à l’UQAT depuis bientôt 6 ans, Francis fait de la communication visuelle une vocation. \nC’est en alliant ses connaissances théoriques et techniques qu’il réussit à concevoir des images percutantes, efficaces et uniques.",
+        "occupations": [{}],
+        "domains": [{"domain":{}}],
+        "catchphrase": "",
+        "extra":{
+            "adresse":"90 avenue Richelieu",
+            "ville":"Rouyn-Noranda",
+            "codePostal":"J9X 1L5",
+            "province":"Québec",
+            "numeroTelephone":"(819) 279-3484",
+            "email":"francis@ethop.studio"
+        }
+    },
+    {
+        "lastName": "Giroux",
+        "firstName": "Audrée",
+        "nickname": "Dédé",
+        "description": "Je suis une jeune artiste multidisciplinaire qui offre différents services artistiques, tels que la photographie argentique et numérique, ainsi que quelques services vidéos. Je fais aussi de la création d'illustrations dans mon métier principal, soit le tatouage.",
+        "occupations": [],
+        "domains": [{"domain":{}}],
+        "catchphrase": ""
+    },
+    {
+        "lastName": "Guivarch",
+        "firstName": "Jarmila",
+        "nickname": "",
+        "description": "Ma mission est de créer des souvenirs inoubliables en profitant des magnifiques paysages que l’Abitibi nous offre.  Je suis une personne créative, débordante d’énergie qui aime capturer chaque petit moment magique. Je vous offre une séance personnalisée et adaptée à votre rythme.\n\nJe voudrais que des années plus tard après notre séance, quand vous regardez les photos, vous vous souveniez de la séance comme si elle s'était déroulée il y a à peine quelques jours.",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": "",
+        "extra":{
+            "numeroTelephone":"(819) 527-6805",
+            "email":"infojphotographe@gmail.com"
+        }
+    },
+    {
+        "lastName": "Paquette",
+        "firstName": "Sylvain",
+        "nickname": "Sulyvahnn",
+        "description": "Je suis un designer graphique travailleur autonome originaire de Rouyn-Noranda, aujourd'hui établi dans la ville de Montréal.\n\nJ'ai oeuvré quelques années dans le domaine du design en région, entre autre en tant que graphiste, chargé de projet & gérant de production en impression grand format. J'ai travaillé avec plusieurs entreprises locals, souvent étroitement dans le domaine automobile avec les concessionnaires de la ville mais aussi avec une grande variété de clients entreprise & et clients particuliers, pour livrer une grande quantité de projet en conception graphique & en lettrage.\n\nAyant toujours un sentiment d'appartenance à ma région natale, j'y offre toujours mes services aux entrepreneurs et autres entités locales, que ce soit pour la conception d'un logo, la création d'un site web, ou tout autre service en design graphique. Pour la production et l'installation des projets, je priorise aussi toujours l'utilisation des ressources locales (par exemple, l'impression de stickers chez une entreprise locale).\n\nC'est donc avec fierté que je continue mon travail de graphiste, et que je tente de représenter du mieux les talents de la région!",
+        "occupations": [],
+        "domains": [{"domain":{}}],
+        "catchphrase": "",
+        "extra":{
+            "adresse":"2704 Rue Dandurand",
+            "ville":"Montréal",
+            "codePostal":"H1Y 1S9",
+            "province":"Quebec",
+            "numeroTelephone":"(819) 279-9016",
+            "email":"admin@sulyvahnn.com"
+        }
+    },
+    {
+        "lastName": "Fluet",
+        "firstName": "Annick",
+        "nickname": "",
+        "description": "",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": "",
+        "extra":{
+            "numeroTelephone":"(819) 290-6443",
+            "email":"annickfphotographe@hotmail.com"
+        }
+    },
+    {
+        "lastName": "Paquin",
+        "firstName": "Laurence",
+        "nickname": "Loula",
+        "description": "Loula Création\nJe me présente, Laurence Paquin, designer graphique senior. Au-delà des services de création d’identité et de sites Web qui incarnent mes forces chez Loula Création, j’offre une expérience client complète… Une approche basée sur un service adapté à votre réalité unique d’entreprise, car c’est ensemble que nous allons pouvoir construire un projet à votre image qui vous permettra de surpasser vos objectifs et ainsi de faire rayonner votre marque à son plein potentiel auprès de votre clientèle cible.\n\nJ’ai étudié le graphisme et le design graphique à Sherbrooke ainsi qu’à Montréal pour ensuite travailler dans des agences de communication du coin avant de revenir ici, dans mon « pays » natal… L’Abitibi-Témiscamingue! J’ai œuvré dans le domaine en région durant 4 ans avant de prendre la décision de mettre à profit tout ce bagage académique et professionnel en créant enfin en 2018 ma propre entreprise, Loula Création.\n\nLoula Création se spécialise donc dans mes domaines d’expertise, soient le design graphique, les objets promotionnels et le Web, le tout en offrant un service de gestion de projet complet en collaboration avec de nombreux professionnels de la région. Au plaisir de vous rencontrer et de réaliser concrètement ce que vous imaginez pour votre entreprise et… un peu plus encore!",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": "",
+        "extra":{
+            "numeroTelephone":"(819) 345-8241",
+            "email":"info@loulacreation.ca"
+        }
+    },
+    {
+        "lastName": "Thivierge-Clément",
+        "firstName": "Stéphanie",
+        "nickname": "",
+        "description": "Graphiste de formation, je gravite dans le domaine du lettrage automobile et de l'impression grand format en plus d'exercer mon métier depuis la fin de mes études en 2013. Je suis maintenant propriétaire de ma propre entreprise à Amos, Tandem Design & Impression. Vous pouvez d'ailleurs voir mon travail au tandemdesign.ca.",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": "",
+        "extra":{
+            "adresse":"635 1ère Avenue Ouest",
+            "ville":"Amos",
+            "codePostal":"J9T1V4",
+            "province":"Québec",
+            "numeroTelephone":"(819) 443-3880",
+            "email":"info@tandemdesign.ca"
+        }
+    },
+    {
+        "lastName": "Lemay",
+        "firstName": "Emilie",
+        "nickname": "Emilie",
+        "description": "",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": ""
+    },
+    {
+        "lastName": "Provencher",
+        "firstName": "Marie-Eve",
+        "nickname": "Marie-Eve",
+        "description": "Avec plus de 10 ans d'expérience en Web et Graphisme, je suis disponible pour concevoir des images de marque, du graphisme en tout genre et des illustrations sur mesure. Passionnée par la Web, j'ai poussé mes compétences afin d'obtenir une expertise en Wordpress afin de créer des sites Web et boutiques en ligne performants, esthétiques et ergonomiques. Étant gestionnaire d'hébergement Web, j'offre également un suivi, une présence Web afin que personne ne se retrouve seul face à Web suite à la conception! Ayant plus de 100 sites Web et plus de 500 projets en graphisme à mon actif, il va de soit que mon expérience sera votre plus grand atout!",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": "",
+        "extra":{
+            "adresse":"377, Route 393 Nord",
+            "ville":"Saint-Vital-de-Clermont",
+            "codePostal":"J0Z 3M0",
+            "province":"Québec",
+            "numeroTelephone":"(819) 333-3582",
+            "email":"info@graphixdesign.ca"
+        }
+    },
+    {
+        "lastName": "Chamberland",
+        "firstName": "Hugo",
+        "nickname": "",
+        "description": "",
+        "occupations": [],
+        "domains": [],
+        "catchphrase": "",
+        "extra":{
+            "email":"hugo@truerc.ca"
+        }
+    },
+    {
+        "lastName": "Marcoux",
+        "firstName": "Leslie",
+        "nickname": "",
+        "description": "",
+        "occupations": [],
+        "domains": [{"domain":{}}],
+        "catchphrase": "",
+        "extra":{
+            "email":"Leslie@lillym.ca"
+        }
+    }
+]

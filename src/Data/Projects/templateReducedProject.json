@@ -1,0 +1,175 @@
+[
+    {
+        "name": "Loula création",
+        "alternateName": "",
+        "entityInCharge":"Laurence Paquin (person)",
+        "producer":"",
+        "description":"",
+        "url": "www.loulacreation.ca",
+        "contactPoint": "",
+        "skills": [],
+        "domains": [],
+        "team": [],
+        "sponsor":[],
+        "context":"",
+        "extra":{
+            "adresse":"",
+            "ville":"Val-d'or",
+            "codePostal":"",
+            "province":"Québec",
+            "numeroTelephone":"(819)345-8241",
+            "email":"info@loulacreation.ca"
+        }
+    },
+    {
+        "name": "Eldorado Gold",
+        "alternateName": "",
+        "entityInCharge":"",
+        "producer":"",
+        "description":"Dans ce projet nous avons permis à l'équipe de comptabilité d'améliorer grandement la gestion de tous les payables de l'entreprise. \n\nSelon la gestionnaire, l'intégration de nos solutions ont permis d'éviter de grossir leur équipe et diminuer les coûts associer au département d'administration. \n\nDorénavant, chaque personne responsable de chaque département reçoit et approuve leurs factures de manière automatique en fonction des différents paramètres. Tout le monde sauve énormément de temps, et le risque d'oublie et d'erreur est nul.",
+        "url": "https://www.eldoradogoldquebec.com/",
+        "contactPoint": "mirenda.filion@eldoradogold.com, (819) 874-3100",
+        "skills": [],
+        "domains": [],
+        "team": [],
+        "scheduleBudget":{
+            "Date de commencement": "août 4, 2021",
+            "Date de fin": "janv. 29, 2022"
+        },
+        "sponsor":[],
+        "context":"",
+        "extra":{
+            "adresse":"300 3e Avenue E",
+            "ville":"Val d'Or",
+            "codePostal":"J9P 0J6",
+            "province":"Québec",
+            "numeroTelephone":"",
+            "email":""
+        }
+    },
+    {
+        "name": "Avantage Numérique",
+        "alternateName": "",
+        "entityInCharge":"",
+        "producer":"",
+        "description":"",
+        "url": "",
+        "contactPoint": "",
+        "skills": [],
+        "domains": [],
+        "team": [],
+        "sponsor":[],
+        "context":"",
+        "extra":{
+            "adresse":"",
+            "ville":"",
+            "codePostal":"",
+            "province":"",
+            "numeroTelephone":"",
+            "email":"tom.pollet@petittheatre.org"
+        }
+    },
+    {
+        "name": "La SHOP",
+        "alternateName": "FabLAb La SHOP",
+        "entityInCharge":"",
+        "producer":"",
+        "description":"Le CJEAO a lancé un projet pilote en 2015 afin de doter l'Abitibi-Ouest du premier incubateur entrepreneurial de la région. « La Shop » est un local accueillant et adapté à la création et au développement de microentreprises en Abitibi-Ouest. Avec le temps, La Shop a évolué et innové afin de rejoindre un plus grand nombre de gens voulant créer, apprendre, développer des idées et même trouver des solutions à des problématiques existantes.\n\nEn août 2020, La Shop prend un nouveau tournant. Elle se veut maintenant un laboratoire de fabrication (FABLAB) ouvert à tous. Pour ce faire, le local a été réaménagé pour accueillir plusieurs espaces de création distincts. La Shop offre toujours un service de qualité professionnelle à ses membres et à la communauté entrepreneuriale de l’Abitibi-Ouest en organisant des formations et des ateliers reliés à l’entrepreneuriat (planification, démarrage, gestion de projet, etc.) ainsi qu’à toutes les formes de métiers connexes aux technologies que l’on retrouve et pratique au FABLAB de La Shop (dessin technique, fabrication, programmation, etc.). Ce changement de cap a été fait dans le but de permettre à un plus grand nombre de gens de profiter de nos installations.\n\nLa Shop, c’est un beau moyen de donner un sentiment d’appartenance à la population d’Abitibi-Ouest tout en aidant l’économie et en générant de nouvelles entreprises.",
+        "url": "www.lashop.quebec",
+        "contactPoint": "CJEAO - Stéphanie Dupré-Guilbert",
+        "skills": [],
+        "domains": [],
+        "team": [],
+        "scheduleBudget":{
+            "Date de commencement": "août 1, 2015"
+        },
+        "sponsor":[],
+        "context":"",
+        "extra":{
+            "adresse":"295 rue Principale",
+            "ville":"La Sarre",
+            "codePostal":"J9Z 1Z1",
+            "province":"QC",
+            "numeroTelephone":"(819) 333-1110",
+            "email":""
+        }
+    },
+    {
+        "name": "Capsules publicitaires animées",
+        "alternateName": "",
+        "entityInCharge":"Pub A-T",
+        "producer":"",
+        "description":"Conceptualisation et production de capsules publicitaires animées en différentes saisons diffusées sur une année.",
+        "url": "www.puba-t.com",
+        "contactPoint": "",
+        "skills": [],
+        "domains": [],
+        "team": [],
+        "scheduleBudget":{
+            "Date de commencement": "sept. 1, 2021",
+            "Date de fin": "oct. 1, 2022"        
+        },
+        "sponsor":[],
+        "context":"",
+        "extra":{
+            "adresse":"",
+            "ville":"",
+            "codePostal":"",
+            "province":"",
+            "numeroTelephone":"(819) 442-2504",
+            "email":"pub.at@hotmail.com"
+        }
+    },
+    {
+        "name": "Argent Virtuelle",
+        "alternateName": "",
+        "entityInCharge":"Pub A-T",
+        "producer":"",
+        "description":"Création et instauration d'un système d'argent virtuelle pour un regroupement de commerçants. L'argent est utilisé par les consommateurs dans le but d'encourager l'achat local.",
+        "url": "www.puba-t.com",
+        "contactPoint": "",
+        "skills": [],
+        "domains": [],
+        "team": [],
+        "scheduleBudget":{
+            "Date de commencement__1": "sept. 2, 2022",
+            "Date de fin__1": "nov. 5, 2022"      
+        },
+        "sponsor":[],
+        "context":"",
+        "extra":{
+            "adresse":"",
+            "ville":"",
+            "codePostal":"",
+            "province":"",
+            "numeroTelephone":"(819) 442-2504",
+            "email":"pub.at@hotmail.com"
+        }
+    },
+    {
+        "name": "Système d'inventaire numérique",
+        "alternateName": "",
+        "entityInCharge":"Pub A-T",
+        "producer":"",
+        "description":"Conceptualisation et programmation d'un système de gestion d'inventaire numérique.",
+        "url": "www.puba-t.com",
+        "contactPoint": "",
+        "skills": [],
+        "domains": [],
+        "team": [],
+        "scheduleBudget":{
+            "Date de commencement__2": "déc. 7, 2017",
+            "Date de fin__2": "mars 8, 2018"       
+        },
+        "sponsor":[],
+        "context":"",
+        "extra":{
+            "adresse":"",
+            "ville":"",
+            "codePostal":"",
+            "province":"",
+            "numeroTelephone":"(819) 442-2504",
+            "email":"pub.at@hotmail.com"
+        }
+    }
+]
