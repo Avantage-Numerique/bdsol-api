@@ -150,6 +150,7 @@ class Media extends AbstractModel {
      */
     public dataTransfertObject(document: any) {
         return {
+            _id: document._id ?? '',
             title: document.title ?? '',
             alt: document.alt ?? '',
             description: document.description ?? '',
