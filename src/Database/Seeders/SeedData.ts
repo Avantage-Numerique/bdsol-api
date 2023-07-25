@@ -42,7 +42,7 @@ class SeedData extends Seeder implements SeederContract {
      */
     public async seed(): Promise<void>
     {
-        LogHelper.info("[Migration][SeedData] seed function conditions : ", this.seederConditions(), "and seed if passing : ", (this.data && this.whereKeys))
+        LogHelper.info("[Migration][SeedData] seed function conditions : ", await this.seederConditions(), "and seed if passing : ", (this.data && this.whereKeys))
         if (this.data && this.whereKeys) {
             try {
                 for (const data of this.data) {

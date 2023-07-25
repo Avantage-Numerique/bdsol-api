@@ -1,4 +1,4 @@
-import {Service} from "../../Database/DatabaseDomain";
+import {Service} from "@database/DatabaseDomain";
 import Project from "../Models/Project";
 
 class ProjectsService extends Service {

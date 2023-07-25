@@ -288,6 +288,7 @@ export abstract class Service {
 
             const meta = await this.model.findOneAndUpdate(where, data, updateOrCreateOptions)
                 .catch((e: any) => {
+                    // @todo this doesn't catch on CastError, on BSON wrongly pass.
                     const updateOrCreateError:HttpError = new HttpError(e.message);
                     updateOrCreateError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                     throw updateOrCreateError;
