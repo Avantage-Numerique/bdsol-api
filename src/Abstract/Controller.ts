@@ -9,6 +9,7 @@ import UsersHistoryService from "@src/UserHistory/Services/UsersHistoryService";
 import UserHistory from "@src/UserHistory/Models/UserHistory";
 import {UserHistorySchema} from "@src/UserHistory/Schemas/UserHistorySchema";
 import {ControllerContract} from "./Contracts/ControllerContract";
+import ApiQuery from "@database/QueryBuilder/ApiQuery";
 
 /**
  * AbstractController
@@ -59,11 +60,13 @@ abstract class AbstractController implements ControllerContract {
         );
     }
 
+
     public async textSearch(requestData:any): Promise<ApiResponseContract> {
-        const query = { $text: { $search: requestData.searchIndex }};
-        const score = { score: { $meta: "textScore" }};
-        const sort = { score: {$meta: "textScore"} };
-        return await this.service.all(query);
+        const apiQuery: ApiQuery = new ApiQuery({ $text: { $search: requestData.searchIndex }});
+        apiQuery.options = {
+            sort: { score: -1 }
+        }
+        return await this.service.all(apiQuery);
     }
 
     /**
@@ -73,7 +76,7 @@ abstract class AbstractController implements ControllerContract {
      * @return {ApiResponseContract} Promise containing search document
      */
     public async search(requestData: any): Promise<ApiResponseContract> {
-        const query = QueryBuilder.build(requestData);
+        const query = QueryBuilder.build(requestData, true);
         return await this.service.get(query);
     }
 
@@ -84,7 +87,7 @@ abstract class AbstractController implements ControllerContract {
      * @return {ApiResponseContract} Promise containing a list of documents
      */
     public async get(requestData: any): Promise<ApiResponseContract> {
-        const query = QueryBuilder.build(requestData);
+        const query = QueryBuilder.build(requestData, true);
         return await this.service.get(query);
     }
 
@@ -96,7 +99,7 @@ abstract class AbstractController implements ControllerContract {
      * @return {ApiResponseContract} Promise containing a list of documents
      */
     public async getBy(params:string, requestData: any): Promise<ApiResponseContract> {
-        const query = QueryBuilder.build(requestData);
+        const query = QueryBuilder.build(requestData, true);
         return await this.service.get(query);
     }
 
@@ -107,7 +110,7 @@ abstract class AbstractController implements ControllerContract {
      * @return {ApiResponseContract} Promise containing a list of documents
      */
     public async list(requestData: any): Promise<ApiResponseContract> {
-        const query = QueryBuilder.build(requestData);
+        const query = QueryBuilder.build(requestData, true);
         return await this.service.all(query);
     }
 

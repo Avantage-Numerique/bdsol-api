@@ -1,7 +1,9 @@
 import UserHistory from "../Models/UserHistory";
 import UsersHistoryService from "../Services/UsersHistoryService";
 import AbstractController from "../../Abstract/Controller";
-import { ApiResponseContract } from "../../Http/Responses/ApiResponse"
+import {ApiResponseContract} from "../../Http/Responses/ApiResponse"
+import QueryBuilder from "@database/QueryBuilder/QueryBuilder";
+import ApiQuery from "@database/QueryBuilder/ApiQuery";
 
 class UsersHistoryController extends AbstractController {
 
@@ -37,9 +39,12 @@ class UsersHistoryController extends AbstractController {
      * @return {ApiResponseContract} Promise containing a list of documents
      */
      public async list(requestData: any): Promise<ApiResponseContract> {
-        //const query = QueryBuilder.build(requestData);
-        const sort = { "createdAt": -1 };
-        return await this.service.all(requestData, sort);
+        console.log("users history controller list", requestData);
+        const query:ApiQuery = QueryBuilder.build(requestData, true);
+        /*query.options = {
+            sort: { "createdAt": -1 }
+        }*/
+        return await this.service.all(query);
     }
 }
 export {UsersHistoryController};

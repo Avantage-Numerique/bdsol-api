@@ -21,6 +21,8 @@ export default class ApiQuery {
     public initQuery:any;
     public sections:Array<any>;
     private _transmuted:any;
+    private _options:any;
+    private _projections:any;
 
     /**
      *
@@ -42,10 +44,7 @@ export default class ApiQuery {
 
     public get transmuted() {
         this._transmuted = {
-            ...this.raw,
-            sort: this.sort,
-            limit: this.limit,
-            skip: this.skip
+            ...this.raw
         }
         if (this.sections.length > 0) {
             for (const section of this.sections) {
@@ -56,5 +55,22 @@ export default class ApiQuery {
             }
         }
         return this._transmuted;
+    }
+
+    public set options(values) {
+        this._options = values;
+    }
+
+    public get options() {
+        this._options = {
+            sort: this.sort,
+            limit: this.limit,
+            skip: this.skip
+        }
+        return this._options;
+    }
+
+    public get projections() {
+        return {};
     }
 }

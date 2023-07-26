@@ -47,6 +47,9 @@ export default class QueryBuilder {
         },
         ne: {
             queryProperty: '$ne'
+        },
+        objId: {
+            queryProperty: ""
         }
     }
 
@@ -60,10 +63,11 @@ export default class QueryBuilder {
     /**
      * Called in controllers, it's the entry point to get a query.
      * @param query
+     * @param returnFullObject
      */
-    static build(query:any) {
+    static build(query:any, returnFullObject=false) {
         const parsedQuery = QueryBuilder.parseQuery(query);
-        return parsedQuery.transmuted;
+        return returnFullObject ? parsedQuery : parsedQuery.transmuted;
     }
 
     /**
@@ -89,7 +93,7 @@ export default class QueryBuilder {
          */
 
         QueryBuilder.parseSections(currentQuery);
-        currentQuery.raw = QueryBuilder.parseParams(currentQuery.raw);
+        currentQuery.raw = QueryBuilder.parseParams(currentQuery.raw).query;
         return currentQuery;
     }
 
@@ -110,13 +114,15 @@ export default class QueryBuilder {
                 if (QueryBuilder.isLogicalSection(logicalSectionCandidate))
                 {
                     const parseSectionSubParams = [];
+                    const parseSectionSubOptions = [];
 
                     if (Array.isArray(logicalParamSettings)) {
 
                         for (const sectionSubParam of logicalParamSettings) {
 
                             const parsedSectionSubParamsQuery = QueryBuilder.parseParams(sectionSubParam);
-                            parseSectionSubParams.push(parsedSectionSubParamsQuery);
+                            parseSectionSubParams.push(parsedSectionSubParamsQuery.query);
+                            parseSectionSubOptions.push(parsedSectionSubParamsQuery.options);
                         }
                     }
 
@@ -137,6 +143,7 @@ export default class QueryBuilder {
      */
     static parseParams(query:any):any {
         const parsedQuery:any = {};
+        const options:any = {};
         for (const field in query)
         {
             const value:any = query[field];
@@ -149,19 +156,22 @@ export default class QueryBuilder {
             }
 
             if (field == "sort") {
-                parsedQuery.sort = {
+                options.sort = {
                     updatedAt: value === "asc" ? 1 : -1
                 }
+                delete query[field];
                 continue;
             }
 
             if (field == "limit" && Number(field) > 0) {
-                parsedQuery.limit = Number(field);
+                options.limit = Number(field);
+                delete query[field];
                 continue;
             }
 
             if (field == "skip" && Number(field) > 0) {
-                parsedQuery.skip = Number(field);
+                options.skip = Number(field);
+                delete query[field];
                 continue;
             }
 
@@ -170,7 +180,7 @@ export default class QueryBuilder {
                 parsedQuery[field] = QueryBuilder.parseParam(field, query[field], like);
             }
         }
-        return parsedQuery;
+        return {query:parsedQuery, options: options};
     }
 
     static parseParam(field:any, value:any, like:boolean=true):any {
@@ -214,8 +224,12 @@ export default class QueryBuilder {
             const propertyPrefix:string = `${supportedProperty}${QueryBuilder.propertySeperator}`;
 
             if (QueryBuilder.haveProperty(value, propertyPrefix)) {
-                queryProperty[propertyParams.queryProperty] = modifier(QueryBuilder.queryPropertyValue(value, propertyPrefix.length));
-                return queryProperty;
+                if (propertyParams.queryProperty !== "") {
+                    queryProperty[propertyParams.queryProperty] = modifier(QueryBuilder.queryPropertyValue(value, propertyPrefix.length));
+
+                    return queryProperty;
+                }
+                return modifier(QueryBuilder.queryPropertyValue(value, propertyPrefix.length));
             }
         }
     }

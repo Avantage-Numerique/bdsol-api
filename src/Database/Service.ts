@@ -8,6 +8,7 @@ import type {ApiResponseContract} from "../Http/Responses/ApiResponse";
 import AbstractModel from "../Abstract/Model";
 import {Obj} from "../Helpers/Obj";
 import HttpError from "../Error/HttpError";
+import ApiQuery from "@database/QueryBuilder/ApiQuery";
 
 /**
  * Give ability to query and CRUD on collections and its documents.
@@ -51,21 +52,14 @@ export abstract class Service {
      * Get all the documents from a collection that fits the query.
      * @param query any Should be an object with the document's
      */
-    async get(query: any): Promise<ApiResponseContract> {
-        if (config.db.config.createObjectIdForQuery) {
-            query._id = Service.transformToObjectId(query._id);
-            if (query._id.error) {
-                return query._id;
-            }
-        }
+    async get(query: ApiQuery): Promise<ApiResponseContract> {
 
         try {
-            const item = await this.model.findOne(query);
+            const item = await this.model.findOne(query.transmuted, query.projections, query.options);
             if (item !== null) {
                 return SuccessResponse.create(this.appModel.dataTransfertObject(item), StatusCodes.OK, ReasonPhrases.OK);
             }
-
-            return SuccessResponse.create({}, StatusCodes.OK, ReasonPhrases.OK);
+            return ErrorResponse.create(new Error("La requête n'a pas retourné de résultats"), StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
 
         } catch (getAllErrors: any) {
             return ErrorResponse.create(getAllErrors, StatusCodes.INTERNAL_SERVER_ERROR);
@@ -77,29 +71,10 @@ export abstract class Service {
      * @param query
      * @param sorting
      */
-    async all(query: any, sorting?: any): Promise<ApiResponseContract> {
-        //set and dry parameters passed via query, but for preheating purposes.
-        let {skip, limit, sort} = query;
-        if (sorting === undefined && query.sort === undefined)
-            sorting = {};
-
-
-        skip = skip ? Number(skip) : config.query.defaultSkip;
-        limit = limit ? Number(limit) : config.query.defaultLimit;
-        sort = sort ? sort : {};
-        delete query.skip;
-        delete query.limit;
-        delete query.sort;
-
-        if (config.db.config.createObjectIdForQuery) {
-            query._id = Service.transformToObjectId(query._id);
-            if (query._id.error) {
-                return query._id;
-            }
-        }
+    async all(query: ApiQuery): Promise<ApiResponseContract> {
 
         try {
-            const items = await this.model.find(query).sort(sort).skip(skip).limit(limit);
+            const items = await this.model.find(query.transmuted, query.projections, query.options);//.sort(sort).skip(skip).limit(limit);
             const returnItems = items.map((doc: any) => {
                 return this.appModel.dataTransfertObject(doc);
             })
