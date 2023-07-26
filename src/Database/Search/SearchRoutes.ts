@@ -4,6 +4,7 @@ import {SuccessResponse} from "@src/Http/Responses/SuccessResponse";
 import AbstractRoute from "@core/Route";
 import SearchSuggestions from "./SearchSuggestions";
 import SearchResults from "./SearchResults";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 class SearchRoutes extends AbstractRoute {
 
@@ -31,8 +32,9 @@ class SearchRoutes extends AbstractRoute {
      */
     public setupPublicRoutes(): express.Router {
 
-        this.routerInstance.get('/', [this.textSearchSuggestionsHandler.bind(this), this.routeSendResponse.bind(this)]);
-        this.routerInstance.get('/results', [this.textSearchResultsHandler.bind(this), this.routeSendResponse.bind(this)]);
+        this.routerInstance.get('/', [this.fullSearchHandler.bind(this), this.routeSendResponse.bind(this)])
+        this.routerInstance.get('/regex', [this.textSearchSuggestionsHandler.bind(this), this.routeSendResponse.bind(this)]);
+        this.routerInstance.get('/text', [this.textSearchResultsHandler.bind(this), this.routeSendResponse.bind(this)]);
         this.routerInstance.get('/nearestTaxonomy', [this.nearTaxonomyToSearchIndex.bind(this), this.routeSendResponse.bind(this)]);
         this.routerInstance.get('/:linkId', [this.taxonomyLinkedEntitiesHandler.bind(this), this.routeSendResponse.bind(this)]);
         this.routerInstance.get('/:category/:slug', [this.taxonomyLinkedEntitiesByCatAndSlugHandler.bind(this), this.routeSendResponse.bind(this)]);
@@ -50,18 +52,22 @@ class SearchRoutes extends AbstractRoute {
         return router;
     }
 
-    /**
-     * GetSearchOnParam
-     * Handle the search and returns the full list of entity
-     * @param req {Request}
-     * @param res {Response}
-     * @param next {NextFunction}
-     * @return {Promise<any>}
-     */
-    public async textSearchResultsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        const textSearchResults = await this.searchResults_instance.getTextSearchResult(req.query.searchIndex?.toString())
-        //Send back full (DTO) of each entity search result in an array sorted,
-        res.serviceResponse = SuccessResponse.create(textSearchResults, StatusCodes.OK, ReasonPhrases.OK);
+
+    public async fullSearchHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
+        let textSearchResults = await this.searchResults_instance.getTextSearchResult(req.query.searchIndex?.toString());
+        const regexSearchResults = await this.searchSuggestions_instance.getTextSearchSuggestions(req.query.searchIndex?.toString())
+        
+        if (textSearchResults == undefined)
+            textSearchResults = [];
+        
+        const uniqueResults:any[] = [];
+        const combinedResults:any[] = [...textSearchResults, ...regexSearchResults];
+        combinedResults.forEach((elem) => {
+            if(!uniqueResults.some(unique => unique._id == elem._id))
+                uniqueResults.push(elem);
+        })
+
+        res.serviceResponse = SuccessResponse.create(uniqueResults, StatusCodes.OK, ReasonPhrases.OK);
         return next();
     }
 
@@ -80,17 +86,18 @@ class SearchRoutes extends AbstractRoute {
         return next();
     }
 
-    public async taxonomyLinkedEntitiesHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        const linkedEntityToTaxonomyArray = await this.searchResults_instance.internalFindEntityLinkedToTaxonomy(req.params.linkId); 
-        res.serviceResponse = SuccessResponse.create(linkedEntityToTaxonomyArray, StatusCodes.OK, ReasonPhrases.OK);
-        //res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Search TagResult failed to find entity linked to taxonomy with error: "+e, []);
-        return next();
-    }
-
-    public async taxonomyLinkedEntitiesByCatAndSlugHandler(req:Request, res:Response, next: NextFunction):Promise<any> {
-        const taxonomyLinkedEntities = await this.searchResults_instance.getLinkedEntitiesToTaxonomyByCatAndSlug(req.params.category, req.params.slug)
-        res.serviceResponse = SuccessResponse.create(taxonomyLinkedEntities, StatusCodes.OK, ReasonPhrases.OK);
-        //res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Search TagResult failed to find entity linked to taxonomy with error: "+e, []);
+    /**
+     * GetSearchOnParam
+     * Handle the search and returns the full list of entity
+     * @param req {Request}
+     * @param res {Response}
+     * @param next {NextFunction}
+     * @return {Promise<any>}
+     */
+    public async textSearchResultsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        const textSearchResults = await this.searchResults_instance.getTextSearchResult(req.query.searchIndex?.toString())
+        //Send back full (DTO) of each entity search result in an array sorted,
+        res.serviceResponse = SuccessResponse.create(textSearchResults, StatusCodes.OK, ReasonPhrases.OK);
         return next();
     }
 
@@ -105,6 +112,21 @@ class SearchRoutes extends AbstractRoute {
         res.serviceResponse = SuccessResponse.create(nearTaxonomyResponseObject, StatusCodes.OK, ReasonPhrases.OK);
         return next();
     }
+
+    public async taxonomyLinkedEntitiesHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        const linkedEntityToTaxonomyArray = await this.searchResults_instance.internalFindEntityLinkedToTaxonomy(req.params.linkId); 
+        res.serviceResponse = SuccessResponse.create(linkedEntityToTaxonomyArray, StatusCodes.OK, ReasonPhrases.OK);
+        //res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Search TagResult failed to find entity linked to taxonomy with error: "+e, []);
+        return next();
+    }
+
+    public async taxonomyLinkedEntitiesByCatAndSlugHandler(req:Request, res:Response, next: NextFunction):Promise<any> {
+        const taxonomyLinkedEntities = await this.searchResults_instance.getLinkedEntitiesToTaxonomyByCatAndSlug(req.params.category, req.params.slug)
+        res.serviceResponse = SuccessResponse.create(taxonomyLinkedEntities, StatusCodes.OK, ReasonPhrases.OK);
+        //res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Search TagResult failed to find entity linked to taxonomy with error: "+e, []);
+        return next();
+    }
+
 
 }
 

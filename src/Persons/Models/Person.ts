@@ -43,7 +43,7 @@ class Person extends AbstractModel {
         //Indexes
         Person._instance.schema.index({ "occupations.skills":1});
         Person._instance.schema.index(
-            { firstName:"text", lastName:"text", nickname:"text", catchPhrase:"text", slug:"text" },
+            { firstName:"text", lastName:"text", nickname:"text", description:"text", catchPhrase:"text", slug:"text" },
             {
                 default_language: "french",
                 //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
@@ -97,7 +97,9 @@ class Person extends AbstractModel {
                     type: String,
                     //alias: 'surnom'
                 },
-                description: String,
+                description: {
+                    type: String,
+                },
                 // DRY this with groupName to have this "skillGroup as
                 occupations: {
                     type: [SkillGroup.schema],

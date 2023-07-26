@@ -47,6 +47,12 @@ class SearchResults {
                 {$text: {$search: searchIndex}},
                 {score: {$meta: "textScore"}}
             ));
+        
+        promises.push(
+            await this.taxonomyModel.find(
+                {$text: {$search: searchIndex}},
+                {score: {$meta: "textScore"}}
+            ));
 
 
         let textSearchResultArray;
