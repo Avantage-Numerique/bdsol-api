@@ -6,10 +6,10 @@ import UserAuthContract from "../Contracts/UserAuthContract";
 import {TokenController} from "./TokenController";
 import {User, UsersService} from "../../Users/UsersDomain";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
-import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
+import {ErrorResponse} from "@src/Http/Responses/ErrorResponse";
 import {PasswordsController} from "./PasswordsController";
-import {SuccessResponse} from "../../Http/Responses/SuccessResponse";
-import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import {SuccessResponse} from "@src/Http/Responses/SuccessResponse";
+import {ApiResponseContract} from "@src/Http/Responses/ApiResponse";
 import config from "../../config";
 
 
