@@ -4,6 +4,10 @@
         "url": "www.loulacreation.ca",
         "extra":{
             "entityInCharge":"Laurence Paquin (person)",
+            "team": [{
+                "member":"Laurence Paquin",
+                "role": "Designer Graphique et Propriétaire"
+            }],
             "adresse":"",
             "ville":"Val-d'or",
             "codePostal":"",
