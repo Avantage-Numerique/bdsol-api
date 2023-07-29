@@ -274,8 +274,6 @@ class MediasRoutes extends AbstractRoute {
             const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res);
             return;
         }
-
-        console.log("createAndReplaceHandler", entityType, mediaField)
         //Return msg no field to put image into entity
         res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Entity upload is désactivated or invalid field for upload.");
         return;

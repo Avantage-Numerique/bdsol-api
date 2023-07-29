@@ -39,7 +39,6 @@ class UsersHistoryController extends AbstractController {
      * @return {ApiResponseContract} Promise containing a list of documents
      */
      public async list(requestData: any): Promise<ApiResponseContract> {
-        console.log("users history controller list", requestData);
         const query:ApiQuery = QueryBuilder.build(requestData, true);
         /*query.options = {
             sort: { "createdAt": -1 }

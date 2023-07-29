@@ -219,7 +219,7 @@ class Organisation extends AbstractModel {
             taxonomyPopulate(this, 'offers.skills');
             taxonomyPopulate(this, 'domains.domain');
 
-            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
+            middlewarePopulateProperty(this, 'team.member');
             middlewarePopulateProperty(this, "mainImage");
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
@@ -230,7 +230,7 @@ class Organisation extends AbstractModel {
             taxonomyPopulate(this, 'offers.skills');
             taxonomyPopulate(this, 'domains.domain');
 
-            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
+            middlewarePopulateProperty(this, 'team.member');
             middlewarePopulateProperty(this, "mainImage");
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);

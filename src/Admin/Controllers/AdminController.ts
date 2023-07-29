@@ -126,7 +126,6 @@ nav ul li a {
                             }
                         );
                         const jsonData = response.json();
-                        console.log(jsonData);
                     }
                 </script>
                 <input type="button" value="Test getinfo" onclick="handleSubmit()" />`;

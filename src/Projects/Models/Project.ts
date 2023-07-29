@@ -246,12 +246,13 @@ class Project extends AbstractModel {
             taxonomyPopulate(this, 'skills');
             taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');
-            middlewarePopulateProperty(this, 'sponsor.entity')
-            middlewarePopulateProperty(this, 'producer')
-            middlewarePopulateProperty(this, 'entityInCharge')
+            middlewarePopulateProperty(this, 'sponsor.entity');
+            middlewarePopulateProperty(this, 'team.member');
+            middlewarePopulateProperty(this, 'producer');
+            middlewarePopulateProperty(this, 'entityInCharge');
 
-            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel)
-            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel)
+            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
         });
 
         this.schema.pre('findOne', function() {
@@ -259,12 +260,13 @@ class Project extends AbstractModel {
             taxonomyPopulate(this, 'skills');
             taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');
-            middlewarePopulateProperty(this, 'sponsor.entity')
-            middlewarePopulateProperty(this, 'producer')
-            middlewarePopulateProperty(this, 'entityInCharge')
+            middlewarePopulateProperty(this, 'sponsor.entity');
+            middlewarePopulateProperty(this, 'team.member');
+            middlewarePopulateProperty(this, 'producer');
+            middlewarePopulateProperty(this, 'entityInCharge');
 
-            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel)
-            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel)
+            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
         });
     }
 }

@@ -55,7 +55,7 @@ class JobScheduler {
 
 
     private _registerEvents() {
-        console.log("Job scheduler  :  register events");
+        //console.log("Job scheduler  :  register events");
     }
 
 
@@ -75,7 +75,6 @@ class JobScheduler {
     }
 
     public add(sheet:JobSheet) {
-        console.log("Job scheduler  :  add");
         this.jobs.push(sheet);
     }
 
