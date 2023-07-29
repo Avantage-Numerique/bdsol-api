@@ -81,8 +81,8 @@ class SearchResults {
             //const taxonomyId = taxonomyModel?.shift()?._id;
             const taxonomyId = taxonomy[0]._id;
 
-            if (taxonomyId){
-                const linkedEntities:Array<any> = await this.internalFindEntityLinkedToTaxonomy(taxonomyId);
+            if (taxonomyId) {
+                const linkedEntities:Array<any> = await this.findEntityLinkedToTaxonomy(taxonomyId);
                 await this._embedEntitiesCountInTaxonomy(taxonomy[0], linkedEntities);
                 return linkedEntities;
             }
@@ -91,7 +91,7 @@ class SearchResults {
     }
 
     
-    public async internalFindEntityLinkedToTaxonomy(taxonomyId:string){
+    public async findEntityLinkedToTaxonomy(taxonomyId:string){
         if (mongoose.isObjectIdOrHexString(taxonomyId)) {
             const paramId = new mongoose.Types.ObjectId(taxonomyId);
             const promises = [];

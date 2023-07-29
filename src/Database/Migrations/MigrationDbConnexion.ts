@@ -3,6 +3,9 @@ import {DBDriver} from "@database/Drivers/DBDriver";
 import {MongooseDBDriver} from "@database/Drivers/MongooseDriver";
 import ServerController from "@src/Server/Controllers/ServerController";
 
+/**
+ * Use in migration and in Scheduler.
+ */
 const getDbDriver = ():DBDriver => {
 
     let db:DBDriver;
