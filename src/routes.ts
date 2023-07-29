@@ -1,4 +1,5 @@
 import express from "express";
+import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 
 const ApiRouter = express.Router();
 
@@ -27,6 +28,11 @@ ApiRouter.get('/42',async (req, res) => {
     "          \\|__| \\|_______|"+"<br/>"+
     '</h1></pre>'
     );
-})
+});
+
+ApiRouter.get("/embed-taxonomies-metas", async (req, res) => {
+    res.send(`Embeding taxonomies metas`);
+    await EmbedTaxonomiesMetas();
+});
 
 export {ApiRouter};
