@@ -1,8 +1,9 @@
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
-export const TestJob = () => {
-    console.log('/42, The answer to life, the universe, and everything!');
+const TestJob = () => {
+    LogHelper.info('/42, The answer to life, the universe, and everything!');
 }
-
+export default TestJob;
 //j.cancel();
 //job.cancelNext(reschedule)
 
