@@ -2,6 +2,10 @@ import schedule from 'node-schedule';
 import {JobSheet, Sheet} from "@src/Schedule/Sheet";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
+/**
+ * Help mananging the task preparation for the node-scheduler.
+ * With job's sheet we prepare job to be schedule in the node-schedule.
+ */
 class JobScheduler {
 
     public jobs:Array<JobSheet>;
@@ -40,10 +44,8 @@ class JobScheduler {
 
 
     public schedule() {
-        console.log("Job scheduler  :  schedule");
         if (this.jobs.length > 0) {
             for (const sheet of this.jobs) {
-                console.log("Job scheduler  :  schedule",sheet.name,  sheet.rule, sheet.callback);
                 schedule.scheduleJob(sheet.name, sheet.rule, sheet.callback);
             }
         }

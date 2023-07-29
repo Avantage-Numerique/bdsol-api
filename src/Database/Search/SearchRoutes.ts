@@ -4,7 +4,6 @@ import {SuccessResponse} from "@src/Http/Responses/SuccessResponse";
 import AbstractRoute from "@core/Route";
 import SearchSuggestions from "./SearchSuggestions";
 import SearchResults from "./SearchResults";
-import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 class SearchRoutes extends AbstractRoute {
 
@@ -106,7 +105,7 @@ class SearchRoutes extends AbstractRoute {
         let linkedEntityToNearestTaxonomy = [];
         //Find linked entity if nearestTaxo exist
         if(nearTaxonomy?.nearestTaxonomy?._id != undefined)
-            linkedEntityToNearestTaxonomy = await this.searchResults_instance.internalFindEntityLinkedToTaxonomy(nearTaxonomy.nearestTaxonomy._id);
+            linkedEntityToNearestTaxonomy = await this.searchResults_instance.findEntityLinkedToTaxonomy(nearTaxonomy.nearestTaxonomy._id);
         
         const nearTaxonomyResponseObject = { ...nearTaxonomy, linkedEntityToNearestTaxonomy: linkedEntityToNearestTaxonomy }
         res.serviceResponse = SuccessResponse.create(nearTaxonomyResponseObject, StatusCodes.OK, ReasonPhrases.OK);
@@ -114,7 +113,7 @@ class SearchRoutes extends AbstractRoute {
     }
 
     public async taxonomyLinkedEntitiesHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        const linkedEntityToTaxonomyArray = await this.searchResults_instance.internalFindEntityLinkedToTaxonomy(req.params.linkId); 
+        const linkedEntityToTaxonomyArray = await this.searchResults_instance.findEntityLinkedToTaxonomy(req.params.linkId);
         res.serviceResponse = SuccessResponse.create(linkedEntityToTaxonomyArray, StatusCodes.OK, ReasonPhrases.OK);
         //res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Search TagResult failed to find entity linked to taxonomy with error: "+e, []);
         return next();

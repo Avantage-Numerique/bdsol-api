@@ -24,6 +24,7 @@ import {AdminRoutes} from "@src/Admin/Routes/AdminRoutes";
 import JobScheduler from "@src/Schedule/JobScheduler";
 import {JobSheet} from "@src/Schedule/Sheet";
 import TestJob from "@src/Schedule/Jobs/TestJob";
+import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 
 /**
  * Main class for the API
@@ -252,7 +253,8 @@ export default class Api {
 
         this.scheduler = new JobScheduler();
         const jobSheets:Array<JobSheet> = [
-            this.scheduler.createSheet("Test Job", TestJob)
+            this.scheduler.createSheet("Test Job", TestJob),
+            this.scheduler.createSheet("Embed Taxonomy's metas", EmbedTaxonomiesMetas)
         ];
         this.scheduler.init(jobSheets);
 
