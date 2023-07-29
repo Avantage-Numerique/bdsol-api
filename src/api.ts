@@ -21,6 +21,9 @@ import {StaticContentsRoutes} from "./StaticContent/Routes/StaticContentsRoutes"
 import {ProjectsRoutes} from "./Projects/Routes/ProjectsRoute";
 import {RequestDuration} from "./Monitoring/Middlewares/RequestDuration";
 import {AdminRoutes} from "@src/Admin/Routes/AdminRoutes";
+import JobScheduler from "@src/Schedule/JobScheduler";
+import {JobSheet} from "@src/Schedule/Sheet";
+import TestJob from "@src/Schedule/Jobs/TestJob";
 
 /**
  * Main class for the API
@@ -34,11 +37,14 @@ export default class Api {
     public baseRoutes:Array<any>;
     public entitiesRoutes:Array<any>;
 
+    public scheduler:JobScheduler;
+
     public start() {
         this._initEntitiesRouters();
         this._initBaseRoutes();
         this._initMiddleware();
         this._initRouter();
+        this._initScheduler();
     }
 
     /**
@@ -240,5 +246,15 @@ export default class Api {
                 route.manager.setupAuthRoutes()
             );
         }
+    }
+
+    private _initScheduler() {
+
+        this.scheduler = new JobScheduler();
+        const jobSheets:Array<JobSheet> = [
+            this.scheduler.createSheet("Test Job", TestJob)
+        ];
+        this.scheduler.init(jobSheets);
+
     }
 }
