@@ -1,5 +1,5 @@
-import {TaxonomiesCategoriesEnum} from "../../Taxonomy/TaxonomiesCategoriesEnum";
-import { StatusStates } from "@src/Moderation/Schemas/StatusSchema";
+import {TaxonomiesCategoriesEnum} from "@src/Taxonomy/TaxonomiesCategoriesEnum";
+import {StatusStates} from "@src/Moderation/Schemas/StatusSchema";
 
 export const TaxonomiesPersistantData = [
     {
