@@ -25,7 +25,7 @@ class JobScheduler {
          * minute: null,
          * second: 5
          */
-        this.defaultRule.second = 1;//it minutes in fact.
+        this.defaultRule.hour = 12;//it minutes in fact.
         this.defaultIntervale = '5 * * * * *';
     }
 
