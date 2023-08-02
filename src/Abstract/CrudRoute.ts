@@ -7,6 +7,7 @@ import {param} from "express-validator";
 import AbstractController from "./Controller";
 import {Service} from "@database/Service";
 import {urlSanitizerAlias} from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
+import {SlugSanitizer} from "@src/Security/Sanitizers/SlugSanitizer";
 
 abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
@@ -49,7 +50,9 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         getinfo: [],
         getdoc: [],
         bySlug: [
-            urlSanitizerAlias('slug', false, param)
+            urlSanitizerAlias('slug', false, param),
+            param('slug')
+                .customSanitizer(SlugSanitizer.validatorCustomSanitizer())
         ]
     };
 
