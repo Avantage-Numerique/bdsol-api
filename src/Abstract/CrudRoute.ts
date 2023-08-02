@@ -4,10 +4,9 @@ import express, {NextFunction, Request, Response} from "express";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 import {ApiResponseContract} from "../Http/Responses/ApiResponse";
 import {param} from "express-validator";
-import {NoAccentSanitizer} from "../Security/Sanitizers/NoAccentSanitizer";
-import {NoSpaceSanitizer} from "../Security/Sanitizers/NoSpaceSanitizer";
 import AbstractController from "./Controller";
 import {Service} from "@database/Service";
+import {urlSanitizerAlias} from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
 
 abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
@@ -50,11 +49,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         getinfo: [],
         getdoc: [],
         bySlug: [
-            param('slug')
-                .customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
-                .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
-                .stripLow()
-                .trim()
+            urlSanitizerAlias('slug', false, param)
         ]
     };
 

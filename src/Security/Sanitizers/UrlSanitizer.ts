@@ -1,4 +1,3 @@
-
 import {CustomSanitizer} from "express-validator";
 import {sanitizeUrl} from "@braintree/sanitize-url";
 
@@ -10,6 +9,10 @@ export class UrlSanitizer {
      */
     public static sanitize(raw:string)
     {
+        const removeChar = /[^a-zA-Z0-9-]/g;
+        raw = raw.toLowerCase();
+        raw = raw.replace(removeChar, "")
+            .trim();
         return sanitizeUrl(raw);
     }
 
