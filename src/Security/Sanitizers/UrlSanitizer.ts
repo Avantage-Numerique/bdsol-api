@@ -9,7 +9,7 @@ export class UrlSanitizer {
      */
     public static sanitize(raw:string)
     {
-        const removeChar = /[^a-zA-Z0-9-]/g;
+        const removeChar = /[^a-zA-Z0-9-_]/g;//this is not sync with the actual slug middleware of the create. The package mongoose-slug-updater isn't that open for that configuration.
         raw = raw.toLowerCase();
         raw = raw.replace(removeChar, "")
             .trim();
