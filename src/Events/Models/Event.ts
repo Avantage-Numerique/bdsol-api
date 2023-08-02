@@ -3,6 +3,10 @@ import AbstractModel from "@core/Model";
 import type {DbProvider} from "@database/DatabaseDomain";
 import {EventSchema} from "@src/Events/Schemas/EventSchema";
 import EventsService from "@src/Events/Services/EventsService";
+import { TeamField } from "@src/Team/Schemas/TeamSchema";
+import { Status } from "@src/Moderation/Schemas/StatusSchema";
+import { EventTypeEnum } from "../EventTypeEnum";
+import * as fs from 'fs';
 
 class Event extends AbstractModel {
 
@@ -18,14 +22,30 @@ class Event extends AbstractModel {
             Event._instance.registerEvents();
 
             //Setting virtuals
-            //Event._instance.schema.virtual("Event").get( function () { return Event._instance.modelName });
-
+            Event._instance.schema.virtual("type").get( function () { return Event._instance.modelName });
             Event._instance.initSchema();
 
             //Index
-            //Event._instance.schema.index({ "Event.Event":1});
+            Event._instance.registerIndexes();
+
         }
         return Event._instance;
+    }
+
+    public registerIndexes():void {
+        //Indexes
+        Event._instance.schema.index(
+            { name:"text", alternateNate:"text", slug:"text", url:"text" },
+            {
+                default_language: "french",
+                //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
+                weights:{
+                    name:3,
+                    alternateName:3,
+                    slug:3,
+                    url:2
+                }
+            });
     }
 
     /** @public Model lastName */
@@ -42,7 +62,80 @@ class Event extends AbstractModel {
 
     /** @public Database schema */
     schema: Schema =
-        new Schema<EventSchema>({},
+        new Schema<EventSchema>({
+            name: {
+                type: String,
+                minLength: 2,
+                required: true
+            },
+            slug: {
+                type: String,
+                slug: "name",
+                slugPaddingSize: 3,
+                index: true,
+                unique: true
+            },
+            alternateName: {
+                type: String
+            },
+            description: {
+                type: String,
+            },
+            entityInCharge: {
+                type: mongoose.Types.ObjectId,
+                //required: true,
+                ref: "Organisation"
+            },
+            organizer: {
+                type: mongoose.Types.ObjectId,
+                ref: "Organisation"
+            },
+            eventType: {
+                type : String,
+                enum: EventTypeEnum
+            },
+            team: TeamField,
+            //duration
+            //location
+            startDate: {
+                type: Date
+            },
+            endDate: {
+                type: Date
+            },
+            contactPoint: {
+                type: String
+            },
+            mainImage: {
+                type: mongoose.Types.ObjectId,
+                ref: "Media"
+            },
+            attendees : {
+                type: [mongoose.Types.ObjectId],
+                ref: "Person"
+            },
+            domains: {
+                type: [{
+                    domain: {
+                        type: mongoose.Types.ObjectId,
+                        ref: "Taxonomy"
+                    },
+                    status: Status.schema
+                }]
+            },
+            skills: {
+                type: [mongoose.Types.ObjectId],
+                ref: "Taxonomy"
+            },
+            //experience
+            subEvents: {
+                type: [mongoose.Types.ObjectId],
+                ref: "Event"
+            },
+            status: {
+                type: Status.schema
+            }
+        },
             {
                 toJSON: {virtuals: true},
                 timestamps: true,
@@ -59,12 +152,8 @@ class Event extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields(): object {
-        return [""];
+        return ["name", "alternateName", "description", "eventType", "startDate", "endDate", "contactPoint"];
     }
-
-    public registerIndexes():void {
-        return;
-    };
 
     public dropIndexes():void {
         return;
@@ -79,11 +168,33 @@ class Event extends AbstractModel {
     public dataTransfertObject(document: any) {
         return {
             _id: document._id ?? '',
+            name: document.name ?? '',
+            slug: document.slug ?? '',
+            alternateName: document.alternateName ?? '',
+            description: document.description ?? '',
+            entityInCharge: document.entityInCharge ?? '',
+            organizer: document.organizer ?? '',
+            eventType: document.eventType ?? '',
+            team: document.team ?? '',
+            //duration: document.duration ?? '',
+            //location: document.location ?? '',
+            startDate: document.startDate ?? '',
+            endDate: document.endDate ?? '',
+            contactPoint: document.contactPoint ?? '',
+            mainImage: document.mainImage ?? '',
+            attendees: document.attendees ?? '',
+            domains: document.domains ?? '',
+            skills: document.skills ?? '',
+            //experience: document.experience ?? '',
+            subEvent: document.subEvent ?? '',
+            status: document.status ?? '',
+            createdAt: document.createdAt ?? '',
+            updatedAt: document.updatedAt ?? ''
         }
     }
 
     public async documentation(): Promise<any> {
-        return "";
+        return fs.readFileSync('/api/doc/Event.md', 'utf-8');
     }
 
 

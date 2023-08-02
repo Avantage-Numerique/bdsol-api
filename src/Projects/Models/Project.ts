@@ -12,6 +12,7 @@ import {ScheduleBudget} from "@database/Schemas/ScheduleBudgetSchema";
 import {Location} from "@database/Schemas/LocationSchema";
 import {ProjectContextEnum} from "../ProjectContextEnum";
 import {TeamField} from "@src/Team/Schemas/TeamSchema";
+import * as fs from 'fs';
 
 class Project extends AbstractModel {
 
@@ -201,7 +202,7 @@ class Project extends AbstractModel {
     }
 
     public async documentation(): Promise<any> {
-        return "";
+        return fs.readFileSync('/api/doc/Project.md', 'utf-8');
     }
 
     public registerPreEvents() {
