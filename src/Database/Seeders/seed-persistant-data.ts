@@ -1,6 +1,6 @@
 import {SeederContract} from "../Contracts/SeederContract";
 import {Service} from "../Service";
-import SeedData from "./seed-data";
+import SeedData from "@database/Seeders/SeedData";
 
 export default class SeedPersistantData extends SeedData implements SeederContract {
 

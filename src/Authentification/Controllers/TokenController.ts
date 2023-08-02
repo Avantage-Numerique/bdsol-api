@@ -1,8 +1,8 @@
 import * as jwt from "jsonwebtoken";
-import config from "../../config";
 import {JwtPayload, VerifyErrors} from "jsonwebtoken";
-import {now} from "../../Helpers/DateTime";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
+import config from "@src/config";
+import {now} from "@src/Helpers/DateTime";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 /**
  * Controller to manage the token operation
@@ -31,7 +31,7 @@ export class TokenController {
             await jwt.verify(
                 token,
                 config.tokenSecret,
-                (err, decoded) => {
+                (err:any, decoded:any) => {
                     verifiedToken = TokenController.onVerifyToken(err, decoded);
                 }
             );
@@ -84,7 +84,6 @@ export class TokenController {
             // could be : TokenExpiredError
             throw err;
         }
-
         if (TokenController.isValid(decoded) &&
             TokenController.isActive(decoded))
         {
@@ -97,7 +96,7 @@ export class TokenController {
 
 
     /**
-     * @Deprecated
+     * @deprecated
      * @param verifiedToken {any} Likely to be an object.
      * @protected
      */

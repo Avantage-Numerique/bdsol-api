@@ -4,12 +4,12 @@ import LoginResponse from "../Responses/LoginResponse";
 import {LogoutResponse} from "../Responses/LogoutResponse";
 import UserAuthContract from "../Contracts/UserAuthContract";
 import {TokenController} from "./TokenController";
-import {UsersService, User} from "../../Users/UsersDomain";
+import {User, UsersService} from "../../Users/UsersDomain";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
-import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
+import {ErrorResponse} from "@src/Http/Responses/ErrorResponse";
 import {PasswordsController} from "./PasswordsController";
-import {SuccessResponse} from "../../Http/Responses/SuccessResponse";
-import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import {SuccessResponse} from "@src/Http/Responses/SuccessResponse";
+import {ApiResponseContract} from "@src/Http/Responses/ApiResponse";
 import config from "../../config";
 
 
@@ -127,7 +127,6 @@ class AuthentificationController
 
     public async register(requestData:any): Promise<ApiResponseContract>
     {
-        LogHelper.log("Authentification Controller Register : ", requestData);
         const createdDocumentResponse = await this.service.insert(requestData);
 
         if (createdDocumentResponse !== undefined)
@@ -156,7 +155,7 @@ class AuthentificationController
      * search in the current database driver for the user.
      * @param username
      * @param password
-     * @return {Promise} of type Any. Fakeusers driver is now
+     * @return {Promise} of type Any.
      * @private
      */
     private async authenticate(username:string, password:string): Promise<any>
@@ -173,12 +172,9 @@ class AuthentificationController
                 //Note: Service removed password with the DTO, soo we used mongooseModel directly
                 //Refactoring : We should manage internal and external responses seperately in different services ...
                 const user = await User.getInstance().mongooseModel.findOne(targetUser).lean();
-                let response;
+                let response:any;
                 if (user !== null) {
                     response = SuccessResponse.create(user, StatusCodes.OK, ReasonPhrases.OK);
-                }
-                else {
-                    response = ErrorResponse.create(user, StatusCodes.INTERNAL_SERVER_ERROR);
                 }
     
                 // If we find a user, we check the password through the hashing comparaison.

@@ -1,8 +1,8 @@
-import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { ApiResponseContract } from "../../Http/Responses/ApiResponse";
-import { ErrorResponse } from "../../Http/Responses/ErrorResponse";
-import {UsersService, User, UserContract} from "../../Users/UsersDomain";
-import config from "../../config";
+import {ReasonPhrases, StatusCodes} from "http-status-codes";
+import {ApiResponseContract} from "@src/Http/Responses/ApiResponse";
+import {ErrorResponse} from "@src/Http/Responses/ErrorResponse";
+import {User, UserContract, UsersService} from "@src/Users/UsersDomain";
+import config from "@src/config";
 
 
 export class RegistrationController {
@@ -44,7 +44,7 @@ export class RegistrationController {
 
     public validateData(data:any):any
     {
-        let message = "validateData register";
+        const message = "validateData register";
         /*
         //pour appliquer la validation sur les données reçus.
         for (let property in UserValidation) {

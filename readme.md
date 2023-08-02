@@ -1,6 +1,7 @@
 # L'API de la BDSOL
 
-[![Build Status](https://github.com/Avantage-Numerique/bdsol-api/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/Avantage-Numerique/bdsol-api/actions)
+[![Principale](https://github.com/Avantage-Numerique/bdsol-api/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/Avantage-Numerique/bdsol-api/actions)
+[![Développement](https://github.com/Avantage-Numerique/bdsol-api/actions/workflows/ci-dev.yml/badge.svg)](https://github.com/Avantage-Numerique/bdsol-api/actions/workflows/ci-dev.yml)
 
 ## Installation de l'api et du frontend en `dev`
 [Voir le répertoire pour la bdsol workspace](https://github.com/Avantage-Numerique/bdsol-workspace)

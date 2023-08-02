@@ -1,12 +1,12 @@
-
 //Init the .env file config vars.
 import * as dotenv from "dotenv";
 
 dotenv.config();
 
-const config = {
+const config:any = {
 
     environnement: process.env.ENVIRONNEMENT || "development",
+    logPerformance: process.env.LOG_PERFORMANCE || true,
 
     isProduction: process.env.ENVIRONNEMENT === 'production',
     isStaging: process.env.ENVIRONNEMENT === 'staging',
@@ -18,6 +18,7 @@ const config = {
     appName: process.env.APP_NAME || "API",
     port: process.env.PORT || "8000",
     version: process.env.VERSION || "0.0.0",
+    basepath: process.env.BASEPATH || "/api/",
 
     tokenSecret: process.env.JWT_KEY || "not set yet",
     tokenSecureSecret: process.env.SECURE_JWT_KEY || "not set securely :P",
@@ -42,11 +43,33 @@ const config = {
             createObjectIdForQuery: false
         }
     },
+    migrations: {
+        driver: process.env.DB_MIGRATION_DRIVER || "mongodb",
+        host: process.env.DB_MIGRATION_HOST || "not set",
+        port: process.env.DB_MIGRATION_PORT || 27017,
+        user: process.env.DB_MIGRATION_USER || '',
+        password: process.env.DB_MIGRATION_PASSWORD || '',
+        name: process.env.DB_MIGRATION_DB_NAME || '',
+        config: {
+            createObjectIdForQuery: false
+        }
+    },
     users: {
         db: {
             user: process.env.USERS_DB_USER || '',
             password: process.env.USERS_DB_PASSWORD || '',
             name: process.env.USERS_DB_NAME || '',
+        },
+        migrations: {
+            driver: process.env.DB_MIGRATION_DRIVER || "mongodb",
+            host: process.env.DB_MIGRATION_HOST || "not set",
+            port: process.env.DB_MIGRATION_PORT || 27017,
+            user: process.env.USERS_DB_MIGRATION_USER || '',
+            password: process.env.USERS_DB_MIGRATION_PASSWORD || '',
+            name: process.env.USERS_DB_MIGRATION_DB_NAME || '',
+            config: {
+                createObjectIdForQuery: false
+            }
         },
         roles: {
             default: "default"

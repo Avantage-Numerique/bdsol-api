@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
-import config from "../../config";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import type {Service} from "../Service";
-import AbstractModel from "../../Abstract/Model";
+import config from "@src/config";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
+import type {Service} from "@database/Service";
+import AbstractModel from "@core/Model";
+import {DBDriver} from "@database/Drivers/DBDriver";
 
 
 export interface DbProvider {
@@ -12,7 +13,7 @@ export interface DbProvider {
     url:string;
     databaseName:string;
 
-    connect():Promise<mongoose.Connection|undefined>;
+    connect(driver:DBDriver):Promise<mongoose.Connection|undefined>;
     assign: (service:Service) => void;
 }
 
@@ -28,15 +29,19 @@ export abstract class BaseProvider implements DbProvider {
     protected _urlPrefix:string;
     protected _url:string;
     protected _databaseName:string;
+    protected _driver:DBDriver;
 
     protected _debug:boolean = config.mongooseDebug;
 
     abstract _models:Array<AbstractModel>;
 
+    public verbose:boolean = true;
 
-    constructor(name='') {
+
+    constructor(driver:DBDriver, name='') {
         if (name !== "") {
             this.databaseName = name;
+            this._driver = driver;
         }
     }
 
@@ -47,13 +52,14 @@ export abstract class BaseProvider implements DbProvider {
      */
     public async connect():Promise<mongoose.Connection|undefined>
     {
-        LogHelper.info("[BD] Connect to url : ", this.url);
+        const url:string = `${this._driver.getConnectionBaseUrl()}${this._databaseName}`;
+        if (this.verbose) LogHelper.info("[BD] Connect to url : ", url);
         try {
 
             mongoose.set('debug', this._debug);
             //@todo debug this, broke service create. https://thecodebarbarian.com/whats-new-in-mongoose-6-sanitizefilter.html
             //mongoose.set('sanitizeFilter', true);
-            this.connection = await mongoose.createConnection(this.url);
+            this.connection = await mongoose.createConnection(url);
 
             return this.connection;
         }
@@ -75,20 +81,36 @@ export abstract class BaseProvider implements DbProvider {
     {
         try {
 
-            LogHelper.info(`[DB] assigning ${service.constructor.name} to ${this.constructor.name}`);
+            if (this.verbose) LogHelper.info(`[DB] assigning ${service.constructor.name} to ${this.constructor.name}`);
             // we may can delete the model's provider property because everything is already handler within the model's connecion set here.
 
             service.appModel.provider = this;
             service.appModel.connection = this.connection;
 
-            //this connect the appModel to it's mongoose Models in the service scope.
-            service.connectToMongoose();
+            //this line connect the appModel to its mongoose models in the service scope.
+            const succeedConnection = service.connectToMongoose();
+
+            if (this.verbose) LogHelper.info(`[DB][${service.constructor.name}] CONNECTION TO Mongoose ${(succeedConnection ? "succeed" : "failed")}`);
             this.addService(service);
         }
         catch (error:any)
         {
             LogHelper.error(`[DB] Failed to assign ${service.constructor.name} to ${this.constructor.name}`);
             throw error;
+        }
+    }
+
+    public async initServicesIndexes() {
+        for (const service of this._services) {
+            LogHelper.info(`[DB] provider Initiating indexes of ${service.constructor.name}`);
+            service.appModel.registerIndexes();
+        }
+    }
+
+    public async removeServicesIndexes() {
+        for (const [serviceName, service] of this._services) {
+            if (this.verbose) LogHelper.info(`[DB] Initiating indexes of ${serviceName}`);
+            service.appModel.removeIndexes();
         }
     }
 
@@ -123,6 +145,7 @@ export abstract class BaseProvider implements DbProvider {
     }
 
     public addService(service:Service) {
+        //this._services.push(service);
         this._services[service.constructor.name] = service;
     }
 

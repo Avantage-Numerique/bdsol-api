@@ -1,7 +1,9 @@
-import mongoose from "mongoose";
 import {Document} from "mongoose"
 import { Status } from "../../Moderation/Schemas/StatusSchema";
-import { Member } from "../../Database/Schemas/MemberSchema";
+import Media from "../../Media/Models/Media";
+import { Member } from "../../Team/Schemas/MemberSchema";
+import {DomainSchema} from "../../Taxonomy/Schemas/DomainSchema";
+import { SkillGroup } from "../../Taxonomy/Schemas/SkillGroupSchema";
 
 export interface OrganisationSchema extends Document {
     name:string;
@@ -10,7 +12,10 @@ export interface OrganisationSchema extends Document {
     url:string;
     contactPoint:string;
     fondationDate:Date;
-    offers:[object];
+    offers:[SkillGroup];
+    domains:[DomainSchema];
     team: [Member];
+    mainImage:Media;
+    catchphrase:string;
     status: Status;
 }

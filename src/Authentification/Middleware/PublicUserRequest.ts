@@ -16,8 +16,13 @@ export class PublicUserRequest {
          * @return Promise<Response<any, Record<string, any>> | undefined>
          */
         return async function (req: Request, res: Response, next: NextFunction) {
-            if (req.originalUrl !== '/ping')
+            const mediasIgnoreRegex = /(\/medias\/(person|organisation)).*/;
+            if (req.originalUrl !== '/ping' &&
+                !mediasIgnoreRegex.test(req.originalUrl)
+            ) {
                 LogHelper.info(`Public user (${req.visitor.ip}) requested : ${req.originalUrl} from app/server : ${req.ip}`);
+            }
+
             req.user = {
                 id: "",
                 username: "",

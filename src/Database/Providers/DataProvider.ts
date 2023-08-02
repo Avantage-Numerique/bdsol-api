@@ -5,6 +5,7 @@ import type {DbProvider} from "./DbProvider";
 import {BaseProvider} from "./DbProvider";
 import AbstractModel from "../../Abstract/Model";
 import type {Service} from "../Service";
+import {DBDriver} from "../Drivers/DBDriver";
 
 /**
  *  The Data provider allow entities to interact with the DB via the MongooseDriver.
@@ -13,27 +14,29 @@ export class DataProvider extends BaseProvider implements DbProvider
 {
     private static _singleton:DataProvider;
 
-    protected _services:Array<Service> = [];
+    protected _services:Array<Service>;
 
     _models:Array<AbstractModel>;
 
     /**
      * contructor
+     * @param driver {DBDriver} The driver in which this provider will evoluate. It provide mainly the connection url.
      * @param name
      */
-    constructor(name='data') {
-        super(name);
+    constructor(driver:DBDriver, name='data') {
+        super(driver, name);
         this.urlPrefix = "mongodb";
+        this._services = [];
     }
 
     /**
      * Singleton getter in the scope of the concrete provider.
      * @return {DbProvider}
      */
-    public static getInstance():DbProvider
+    public static getInstance(driver:DBDriver):DbProvider
     {
         if (DataProvider._singleton === undefined) {
-            DataProvider._singleton = new DataProvider(config.db.name);
+            DataProvider._singleton = new DataProvider(driver, config.db.name);
         }
         return DataProvider._singleton;
     }
@@ -55,8 +58,13 @@ export class DataProvider extends BaseProvider implements DbProvider
         }
         return undefined;
     }
+    public async initServicesIndexes() {
+        await super.initServicesIndexes();
+    }
 
-
+    public addService(service:Service) {
+        super.addService(service);
+    }
     /**
      * Assign a model to this provider.
      * @param model

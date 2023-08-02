@@ -1,6 +1,5 @@
-import mongoose from "mongoose";
-import {Schema} from "mongoose";
-import { UserHistorySchema } from "../Schemas/UserHistorySchema";
+import mongoose, {Schema} from "mongoose";
+import {UserHistorySchema} from "../Schemas/UserHistorySchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import UsersHistoryService from "../Services/UsersHistoryService";
@@ -15,9 +14,19 @@ class UserHistory extends AbstractModel {
     public static getInstance():UserHistory {
         if (UserHistory._instance === undefined) {
             UserHistory._instance = new UserHistory();
+            
+            UserHistory._instance.schema.virtual("type").get( function () { return UserHistory._instance.modelName });
+
             UserHistory._instance.initSchema();
         }
         return UserHistory._instance;
+    }
+
+    public registerIndexes():void {
+        //Indexes
+    }
+    public dropIndexes() {
+        return true;
     }
 
     /** @public Model lastName */
@@ -68,6 +77,7 @@ class UserHistory extends AbstractModel {
             }
         },
             {
+                toJSON: { virtuals: true },
                 timestamps: true
         });
 
@@ -156,7 +166,14 @@ class UserHistory extends AbstractModel {
      */
     public dataTransfertObject(document: any) {
         return {
-            "not":"implemented"
+            user: document.user ?? '',
+            modifDate: document.modifDate ?? '',
+            action: document.action ?? '',
+            entityCollection: document.entityCollection ?? '',
+            modifiedEntity: document.modifiedEntity ?? '',
+            fields: document.fields ?? '',
+            createdAt : document.createdAt ?? '',
+            updatedAt : document.updatedAt ?? '',
         }
     }
 

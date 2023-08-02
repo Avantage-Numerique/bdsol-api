@@ -1,12 +1,10 @@
 import express from "express";
-import {PersonsController} from "../Controllers/PersonsController";
-import AbstractController from "../../Abstract/Controller";
-import {body} from "express-validator";
-import {HtmlSanitizer} from "../../Security/Sanitizers/HtmlSanitizer";
-import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
-import CrudRoute from "../../Abstract/CrudRoute";
-import {ObjectIdStringSanitizer} from "../../Security/Sanitizers/ObjectIdStringSanitizer";
-import {IsObjectIdStringValid} from "../../Security/Validators/IsObjectidValidator";
+import PersonsController from "@src/Persons/Controllers/PersonsController";
+import AbstractController from "@core/Controller";
+import CrudRoute from "@core/CrudRoute";
+import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
+import {noHtmlStringSanitizerAlias} from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
+import {basicHtmlSanitizerAlias} from "@src/Security/SanitizerAliases/BasicHtmlSanitizerAlias";
 
 class PersonsRoutes extends CrudRoute {
 
@@ -18,47 +16,21 @@ class PersonsRoutes extends CrudRoute {
         all: [],
         createUpdate: [],
         create: [
-            body('data.lastName').exists({checkFalsy:true}).bail()
-                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .stripLow()
-                .trim(),
-            body('data.firstName').exists({checkFalsy:true}).bail()
-                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .stripLow()
-                .trim(),
-            body('data.nickname').exists({checkFalsy:true}).bail()
-                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .stripLow()
-                .trim(),
-            body('data.description').exists({checkFalsy:true}).bail()
-                .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
-                .trim(),
-            body('data.occupations.*.occupation').exists({checkFalsy:true}).bail()
-                .custom(IsObjectIdStringValid.validatorCustom())
-                .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
-                .trim(),
-            //status not sanitize yet, because it will be manage by backend
+            noHtmlStringSanitizerAlias('data.lastName', false),
+            noHtmlStringSanitizerAlias('data.firstName', false),
+            noHtmlStringSanitizerAlias('data.nickname'),
+            basicHtmlSanitizerAlias('data.description'),
+            objectIdSanitizerAlias('data.occupations.*.skills.*'),
+            objectIdSanitizerAlias('data.domains.*.domain'),
         ],
         update: [
-            body('data.lastName').exists({checkFalsy:true}).bail()
-                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .stripLow()
-                .trim(),
-            body('data.firstName').exists({checkFalsy:true}).bail()
-                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .stripLow()
-                .trim(),
-            body('data.nickname').exists({checkFalsy:true}).bail()
-                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .stripLow()
-                .trim(),
-            body('data.description').exists({checkFalsy:true}).bail()
-                .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
-                .trim(),
-            body('data.occupations.*.occupation').exists({checkFalsy:true}).bail()
-                .custom(IsObjectIdStringValid.validatorCustom())
-                .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
-                .trim(),
+            objectIdSanitizerAlias('data.id', false),
+            noHtmlStringSanitizerAlias('data.lastName'),
+            noHtmlStringSanitizerAlias('data.firstName'),
+            noHtmlStringSanitizerAlias('data.nickname'),
+            basicHtmlSanitizerAlias('data.description'),
+            objectIdSanitizerAlias('data.occupations.*.skills.*'),
+            objectIdSanitizerAlias('data.domains.*.domain'),
         ],
         delete: [],
         search: [],

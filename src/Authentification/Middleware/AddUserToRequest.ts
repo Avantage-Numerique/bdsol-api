@@ -1,4 +1,4 @@
-import {NextFunction, Response} from "express";
+import {NextFunction, Request, Response} from "express";
 
 /**
  * Express JS middleware for verifying the token.

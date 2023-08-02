@@ -1,0 +1,141 @@
+[
+    {
+        "infoTest":
+        {
+            "name":"Create Full",
+            "error":false,
+            "status":201,
+            "ignoreFields":{},
+            "expectedProperties": {
+                "name" : "MaNoranda",
+                "alternateName" : "Ma Noranda",
+                "description" : "Spectacle déambulatoire dans Noranda",
+                "url" : "www.manoranda.com",
+                "contactPoint" : "Alexandre Castonguay",
+                "location" : null,
+                "team" : [],
+                "sponsor" : [],
+                "scheduleBudget" : {
+                    "timeframe": []
+                },
+                "skills": [],
+                "status": {
+                    "state":"pending",
+                    "lastModifiedBy":"000000000000000000000123"
+                }
+            }
+        },
+        "name" : "MaNoranda",
+        "alternateName" : "Ma Noranda",
+        "description" : "Spectacle déambulatoire dans Noranda",
+        "url" : "www.manoranda.com",
+        "contactPoint" : "Alexandre Castonguay",
+        "location" : {},
+        "team" : [],
+        "sponsor" : [],
+        "scheduleBudget" : {},
+        "skills": [],
+        "status": {
+            "state":"pending",
+            "lastModifiedBy":"000000000000000000000123"
+        }
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create empty all, but required",
+            "error":false,
+            "status":201,
+            "ignoreFields":{},
+            "expectedProperties": {
+                "name" : "Rime la lime",
+                "alternateName" : null,
+                "description" : null,
+                "url" : null,
+                "contactPoint" : null,
+                "location" : null,
+                "team" : [],
+                "sponsor" : [],
+                "scheduleBudget" : {
+                    "timeframe": []
+                },
+                "skills": [],
+                "status": {
+                    "state":"pending",
+                    "lastModifiedBy":"000000000000000000000123"
+                }
+            }
+        },
+        "name" : "Rime la lime",
+        "alternateName" : "",
+        "description" : "",
+        "url" : "",
+        "contactPoint" : "",
+        "location" : {},
+        "team" : [],
+        "sponsor" : [],
+        "scheduleBudget" : {},
+        "skills": [],
+        "status": {
+            "state":"pending",
+            "lastModifiedBy":"000000000000000000000123"
+        }
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create no required",
+            "error":true,
+            "status":400,
+            "ignoreFields":{},
+            "expectedProperties": {}
+        },
+        "alternateName" : "La limousine du péché",
+        "description" : "Risquer mais sûrement riche",
+        "url" : "www.letheatreducoinduborddulacdumichigan.com",
+        "contactPoint" : "Richard Gontrand",
+        "location" : {},
+        "team" : [],
+        "sponsor" : [],
+        "scheduleBudget" : {},
+        "skills": [],
+        "status": {
+            "state":"pending",
+            "lastModifiedBy":"000000000000000000000123"
+        }
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create empty data",
+            "error":true,
+            "status":400,
+            "expectedProperties": {}
+        }
+    },
+    {
+        "infoTest":
+        {
+            "name":"Create empty (less than 2 char) required",
+            "error":true,
+            "status":400,
+            "ignoreFields":{},
+            "expectedProperties": {}
+        },
+        "name" : "O",
+        "alternateName" : "La limousine du voisin",
+        "description" : "Risquer mais sûrement pauvre",
+        "url" : "www.letheatreducoinduborddulacdumichigan.com.comcom",
+        "contactPoint" : "Richard Bertrand",
+        "location" : {},
+        "team" : [],
+        "sponsor" : [],
+        "scheduleBudget" : {},
+        "skills": [],
+        "status": {
+            "state":"pending",
+            "lastModifiedBy":"000000000000000000000123"
+        }
+    }
+
+]

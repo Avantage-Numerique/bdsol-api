@@ -1,4 +1,5 @@
 import express from "express";
+import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 
 const ApiRouter = express.Router();
 
@@ -11,7 +12,7 @@ ApiRouter.get("/", async (req, res) => {
 
 // Could be usefull to get the up status here.
 ApiRouter.get("/test", async (req, res) => {
-    res.send(`Testing ...`);
+    res.send(`Testing or do I ? :face-machiavélique-un-peu-trop-intense-pour-la-situation-mais-cest-drole-parce-que-cest-comme-dans-un-film:`);
 });
 
 ApiRouter.get('/42',async (req, res) => {
@@ -27,6 +28,11 @@ ApiRouter.get('/42',async (req, res) => {
     "          \\|__| \\|_______|"+"<br/>"+
     '</h1></pre>'
     );
-})
+});
+
+ApiRouter.get("/embed-taxonomies-metas", async (req, res) => {
+    res.send(`Embeding taxonomies metas`);
+    await EmbedTaxonomiesMetas();
+});
 
 export {ApiRouter};

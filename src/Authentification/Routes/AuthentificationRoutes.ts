@@ -11,8 +11,6 @@ import {NoAccentSanitizer} from "../../Security/Sanitizers/NoAccentSanitizer";
 import { UsersController } from "../../Users/UsersDomain";
 
 
-
-
 export class AuthentificationRoutes {
     
     /**
@@ -137,11 +135,13 @@ export class AuthentificationRoutes {
     public async registerHandler(req: Request, res: Response): Promise<any> {
 
         const {data} = req.body;
-        const response = await this.controllerInstance.register(data);
+        res.serviceResponse = await this.controllerInstance.register(data);
+        res.serviceResponse.action = "create";
         //History of registration
-        if(!response.error)
-            UsersController.getInstance().createUserHistory(req, res, response, 'create');
-        return res.status(response.code).send(response);
+        if(!res.serviceResponse.error)
+            await UsersController.getInstance().createUserHistory(req, res);
+
+        return res.status(res.serviceResponse.code).send(res.serviceResponse);
     }
 
 

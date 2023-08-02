@@ -1,8 +1,9 @@
 import type AbstractController from "../Controller";
 import type {Router} from "express";
+import {ControllerContract} from "./ControllerContract";
 
 export interface RouteContract {
-    controllerInstance: AbstractController;
+    controllerInstance: ControllerContract;
     routerInstance: Router;
     routerInstanceAuthentification: Router;
     middlewaresDistribution: any;

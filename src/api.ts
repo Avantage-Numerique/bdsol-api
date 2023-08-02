@@ -3,37 +3,48 @@ import cors from "cors";
 import config from "./config";
 import {ApiRouter} from "./routes";
 import {HealthCheckRouter} from "./Healthcheck/Routes/HealthCheckRoutes";
-import {AuthentificationRoutes} from "./Authentification/Routes/AuthentificationRoutes";
+import {AuthentificationRoutes} from "@auth/Routes/AuthentificationRoutes";
 import {UsersRoutes} from "./Users/Routes/UsersRouter";
 import {PersonsRoutes} from './Persons/Routes/PersonsRoutes';
 import {OrganisationsRoutes} from './Organisations/Routes/OrganisationsRoutes'
-import {VerifyTokenMiddleware} from "./Authentification/Middleware/VerifyTokenMiddleware";
 import {TaxonomyRoutes} from "./Taxonomy/Routes/TaxonomyRoutes";
-import {PublicUserRequest} from "./Authentification/Middleware/PublicUserRequest";
+import {UsersHistoryRoutes} from "./UserHistory/Routes/UsersHistoryRoutes";
+import {MediasRoutes} from "./Media/Routes/MediasRoutes";
+import {verifyTokenMiddleware} from "@auth/Middleware/VerifyTokenMiddleware";
+import {PublicUserRequest} from "@auth/Middleware/PublicUserRequest";
 import LogHelper from "./Monitoring/Helpers/LogHelper";
 import {ApiErrorHandler} from "./Error/Middlewares/ApiErrorHandler";
-import {UsersHistoryRoutes} from "./UserHistory/Routes/UsersHistoryRoutes";
 import {GetRequestIp} from "./Monitoring/Middlewares/GetRequestIp";
-import ModerationRoutes from "./Moderation/Schemas/Route/ModerationRoutes";
+import ModerationRoutes from "./Moderation/Routes/ModerationRoutes";
+import SearchRoutes from "./Database/Search/SearchRoutes";
+import {StaticContentsRoutes} from "./StaticContent/Routes/StaticContentsRoutes";
+import {ProjectsRoutes} from "./Projects/Routes/ProjectsRoute";
+import {RequestDuration} from "./Monitoring/Middlewares/RequestDuration";
+import {AdminRoutes} from "@src/Admin/Routes/AdminRoutes";
+import JobScheduler from "@src/Schedule/JobScheduler";
+import {JobSheet} from "@src/Schedule/Sheet";
+import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 
 /**
  * Main class for the API
  * Use the express instance as public property.
  */
 export default class Api {
-    public express: express.Application = express();
+    public express: express.Express = express();
     public mainRouter: express.Router;
-    public authRouters:any;
+    public authRouters: express.Router;
 
     public baseRoutes:Array<any>;
     public entitiesRoutes:Array<any>;
 
+    public scheduler:JobScheduler;
 
     public start() {
         this._initEntitiesRouters();
         this._initBaseRoutes();
         this._initMiddleware();
         this._initRouter();
+        this._initScheduler();
     }
 
     /**
@@ -99,7 +110,7 @@ export default class Api {
                 manager: new TaxonomyRoutes()
             },
             {
-                baseRoute: "/userhistory",
+                baseRoute: "/userhistories",
                 manager: new UsersHistoryRoutes()
             },
             {
@@ -111,10 +122,33 @@ export default class Api {
                 manager: new OrganisationsRoutes()
             },
             {
+                baseRoute: "/projects",
+                manager: new ProjectsRoutes()
+            },
+            {
                 baseRoute: "/info",
                 manager: new ModerationRoutes()
+            },
+            {
+                baseRoute: "/search",
+                manager: new SearchRoutes()
+            },
+            {
+                baseRoute: "/medias",
+                manager: new MediasRoutes()
+            },
+            {
+                baseRoute: "/static",
+                manager: new StaticContentsRoutes()
             }
         ];
+        // If dev, add admin routes.
+        if (config.environnement) {
+            this.entitiesRoutes.push({
+                baseRoute: "/admin",
+                manager: new AdminRoutes()
+            })
+        }
     }
 
 
@@ -126,6 +160,8 @@ export default class Api {
     private _initRouter()
     {
         LogHelper.info("[ROUTES] Configuration des routes de l'API ...");
+
+        if (config.logPerformance) this.express.use(RequestDuration.middleware());
 
         this.mainRouter = express.Router(); //this seeem to be a "branch" independant. Middle ware pass here, and error handling are only manage into the same "router's hierarchy" may I labled.
         this.mainRouter.use(GetRequestIp.middleware());    // Set an empty user property in Request there. Would be possible to feed with more default info.
@@ -206,10 +242,19 @@ export default class Api {
         {
             this.mainRouter.use(
                 route.baseRoute,
-                VerifyTokenMiddleware.middlewareFunction(),
+                verifyTokenMiddleware,
                 route.manager.setupAuthRoutes()
             );
         }
     }
 
+    private _initScheduler() {
+
+        this.scheduler = new JobScheduler();
+        const jobSheets:Array<JobSheet> = [
+            this.scheduler.createSheet("Embed Taxonomy's metas", EmbedTaxonomiesMetas)
+        ];
+        this.scheduler.init(jobSheets);
+
+    }
 }

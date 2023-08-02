@@ -4,7 +4,6 @@ import {UsersService} from "../Services/UsersService";
 import AbstractController from "../../Abstract/Controller";
 import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService";
 import UserHistory from "../../UserHistory/Models/UserHistory";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import { UserHistorySchema } from "../../UserHistory/Schemas/UserHistorySchema";
 
 class UsersController extends AbstractController {
@@ -17,8 +16,6 @@ class UsersController extends AbstractController {
 
     /** @public Model */
     entity:User;
-
-    name:string = "Users";
 
     constructor() {
         super();
@@ -37,8 +34,9 @@ class UsersController extends AbstractController {
         return UsersController._instance;
     }
 
-    public async createUserHistory(req:any, res:any, response:any, action:string):Promise<boolean> {
-
+    public async createUserHistory(req:any, res:any):Promise<boolean> {
+        const response = res.serviceResponse;
+        const action = res.action ?? "create";
         const userHistoryService:UsersHistoryService = UsersHistoryService.getInstance(UserHistory.getInstance());
         //User id
         const user:mongoose.ObjectId = response.data._id
@@ -62,14 +60,14 @@ class UsersController extends AbstractController {
             "user": user,
             "ipAddress": ipAddress,
             "modifDate": modifDate,
-            "action": "create",
+            "action": action,
             "entityCollection": "users",
             "modifiedEntity": user,
             "fields": this.entity.dataTransfertObject(fields),
         } as UserHistorySchema;
 
         //Service call to add UserHistory
-        userHistoryService.insert(history);
+        await userHistoryService.insert(history);
         return true;
     }
 }

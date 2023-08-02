@@ -8,7 +8,7 @@ export class IsObjectIdStringValid {
      * @param raw {string}
      * @return Boolean
      */
-    public static validate(raw:string):Boolean
+    public static validate(raw:string):boolean
     {
         return mongoose.isObjectIdOrHexString(raw);//https://mongoosejs.com/docs/api.html#mongoose_Mongoose-isObjectIdOrHexString
     }

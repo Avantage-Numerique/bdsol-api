@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 import config from "../../config";
 import type {DbProvider} from "./DbProvider";
 import {BaseProvider} from "./DbProvider";
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import AbstractModel from "../../Abstract/Model";
 import {Service} from "../Service";
+import {DBDriver} from "../Drivers/DBDriver";
 
 
 export class UsersProvider extends BaseProvider implements DbProvider
@@ -12,14 +12,15 @@ export class UsersProvider extends BaseProvider implements DbProvider
 
     private static _singleton:UsersProvider;
 
-    protected _services:Array<Service> = [];
+    protected _services:Array<Service>;
 
     _models:Array<AbstractModel>;
 
-    constructor(name='')
+    constructor( driver:DBDriver, name='')
     {
-        super(name);
+        super(driver, name);
         this.urlPrefix = "mongodb";
+        this._services = [];
     }
 
 
@@ -27,10 +28,10 @@ export class UsersProvider extends BaseProvider implements DbProvider
      * Singleton getter in the scope of the concrete provider.
      * @return {DbProvider}
      */
-    public static getInstance():DbProvider|undefined
+    public static getInstance(driver:DBDriver):DbProvider|undefined
     {
         if (UsersProvider._singleton === undefined) {
-            UsersProvider._singleton = new UsersProvider(config.users.db.name);
+            UsersProvider._singleton = new UsersProvider(driver, config.users.db.name);
         }
         return UsersProvider._singleton;
     }
@@ -43,10 +44,17 @@ export class UsersProvider extends BaseProvider implements DbProvider
      */
     public async connect():Promise<mongoose.Connection|undefined>
     {
-        LogHelper.info("[BD] UserProvider Connecting to DB");
         await super.connect();
 
         return this.connection;
+    }
+
+    public async initServicesIndexes() {
+        await super.initServicesIndexes();
+    }
+
+    public addService(service:Service) {
+        super.addService(service);
     }
 
 }

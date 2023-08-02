@@ -1,15 +1,17 @@
-import mongoose from "mongoose";
-import {Schema} from "mongoose";
+import mongoose, {Schema} from "mongoose";
 import {OrganisationSchema} from "../Schemas/OrganisationSchema";
 import {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
-import {TaxonomyController} from "../../Taxonomy/Controllers/TaxonomyController";
+import TaxonomyController from "../../Taxonomy/Controllers/TaxonomyController";
 import OrganisationsService from "../Services/OrganisationsService";
-import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
-import { Member } from "../../Database/Schemas/MemberSchema";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
-import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
+import {middlewareTaxonomy} from "@src/Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
+import {Member} from "@src/Team/Schemas/MemberSchema";
+import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import {populateUser} from "@src/Users/Middlewares/populateUser";
+import {User} from "@src/Users/Models/User";
+import {SkillGroup} from "@src/Taxonomy/Schemas/SkillGroupSchema";
 
 
 class Organisation extends AbstractModel {
@@ -23,9 +25,31 @@ class Organisation extends AbstractModel {
             Organisation._instance = new Organisation();
             Organisation._instance.registerPreEvents();
             Organisation._instance.registerEvents();
+
+            Organisation._instance.schema.virtual("type").get( function () { return Organisation._instance.modelName });
+            Organisation._instance.registerIndexes();
             Organisation._instance.initSchema();
         }
         return Organisation._instance;
+    }
+
+    public registerIndexes():void {
+        //Indexes
+        this.schema.index({ "offers.skills":1});
+        this.schema.index({ "team.member":1});
+        this.schema.index(
+            { name:"text", description:"text", slug:"text"},
+            {
+                default_language: "french",
+                //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
+                weights:{
+                    name:4,
+                    description:2
+                }});
+    }
+
+    public dropIndexes():void {
+        return;
     }
 
     /** @public Model name */
@@ -46,8 +70,9 @@ class Organisation extends AbstractModel {
                 name: {
                     type: String,
                     required: true,
+                    index:true,
                     unique: true,
-                    alias: 'nom'
+                    //alias: 'nom'
                 },
                 slug: {
                     type: String,
@@ -58,7 +83,7 @@ class Organisation extends AbstractModel {
                 },
                 description: {
                     type: String,
-                    alias: 'desc'
+                    //alias: 'desc'
                 },
                 url: {
                     type: String,
@@ -69,105 +94,51 @@ class Organisation extends AbstractModel {
                 fondationDate: {
                     type: Date,
                 },
+                // DRY this with groupName to have this "skillGroup as
                 offers: {
+                    type: [SkillGroup.schema],
+                },
+                domains: {
                     type: [{
-                        offer: {
+                        domain: {
                             type: mongoose.Types.ObjectId,
                             ref: "Taxonomy"
                         },
-                        status: {
-                            type: Status.schema,
-                        }
-                    }],
-                    required:true
+                        status: Status.schema
+                    }]
                 },
                 team: {
                     type: [Member.schema],
                     ref: "Person"
+                },
+                mainImage: {
+                    type: mongoose.Types.ObjectId,
+                    ref : "Media"
+                },
+                catchphrase: {
+                    type: String
                 },
                 status: {
                     type: Status.schema
                 }
             },
             {
+                toJSON: { virtuals: true },
                 timestamps: true
             });
 
-    /** @public Used to return attributes and rules for each field of this entity. */
-    fieldInfo =
-        {
-            "route": "",
-            "field": [
-                {
-                    "name": "name",
-                    "label": "name",
-                    "type": "String",
-                    "rules": []
-                },
-                {
-                    "name": "description",
-                    "label": "Description",
-                    "type": "String",
-                    "rules": []
-                },
-                {
-                    "name": "url",
-                    "label": "Site internet",
-                    "type": "String",
-                    "rules": []
-                },
-                {
-                    "name": "contactPoint",
-                    "label": "Point de contact",
-                    "type": "String",
-                    "rules": []
-                },
-                {
-                    "name": "fondationDate",
-                    "label": "Date de fondation",
-                    "type": "Date",
-                    "rules": []
-                },
-                {
-                    "name": "offers",
-                    "label": "Offre de service",
-                    "type": "ObjectId",
-                    "rules": []
-                }
-            ]
-        };
+    /** @deprecated */
+    fieldInfo = {};
 
-    /**
-     * @public Rule set for every field of this entity for each route
-     * @deprecated*/
-    ruleSet: any = {
-        "default": {
-            "id": ["idValid"],
-            "name": ["isString"],
-            "description": ["isString"],
-            "url": ["isString"],
-            "contactPoint": ["isString"],
-            "fondationDate": ["isDate"]
-        },
-        "create": {
-            "name": ["isDefined", "minLength:2"],
-        },
-        "update": {
-            "id": ["isDefined"]
-        },
-        "search": {},
-        "list": {},
-        "delete": {
-            "id": ["isDefined"]
-        }
-    }
+    /**  @deprecated*/
+    ruleSet: any = {}
 
     /**
      * @get the field that are searchable.
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields(): object {
-        return ["name", "description", "url", "contactPoint", "fondationDate", "offers"];
+        return ["name", "description", "url", "contactPoint", "fondationDate", "offers", "domains"];
     }
 
     /**
@@ -177,13 +148,22 @@ class Organisation extends AbstractModel {
      */
     public dataTransfertObject(document: any): any {
         return {
+            _id: document._id ?? '',
             name: document.name ?? '',
             description: document.description ?? '',
             url: document.url ?? '',
             contactPoint: document.contactPoint ?? '',
             fondationDate: document.fondationDate ?? '',
-            offer: document.offer ?? '',
-            slug: document.offer ?? ''
+            offers: document.offers ?? '',
+            domains: document.domains ?? '',
+            team: document.team ?? '',
+            mainImage: document.mainImage ?? '',
+            slug: document.slug ?? '',
+            catchphrase: document.catchphrase ?? '',
+            status : document.status ?? '',
+            type: document.type ?? '',
+            createdAt : document.createdAt ?? '',
+            updatedAt : document.updatedAt ?? '',
         }
     }
 
@@ -208,21 +188,24 @@ class Organisation extends AbstractModel {
             //Verify that occupations in the array exists and that there are no duplicates
             this.schema.pre('save', async function (next: any): Promise<any> {
                 const idList = this.offers.map( (el:any) => {
-                    return new mongoose.Types.ObjectId(el.offer);
+                    return el.skills.map( (id:any) =>{
+                        return new mongoose.Types.ObjectId(id);
+                    })
                 });
-                await middlewareTaxonomy(idList, TaxonomyController, "offers.offer");
+                await middlewareTaxonomy(idList.flat(), TaxonomyController, "offers.skills");
                 return next();
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
             this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
-                const organisation: any = this;
-                const updatedDocument = organisation.getUpdate();
-                if (updatedDocument["offers"] != undefined){
-                    const idList = updatedDocument.offers.map( (el:any) => {
-                        return el.offer;
+                const updatedDocument:any = this.getUpdate();
+                if (updatedDocument && updatedDocument["offers"] != undefined){
+                    const idList = updatedDocument["offers"].map( (el:any) => {
+                        return el.skills.map( (id:any) =>{
+                            return new mongoose.Types.ObjectId(id);
+                        });
                     });
-                    await middlewareTaxonomy(idList, TaxonomyController, "offers.offer");
+                    await middlewareTaxonomy(idList.flat(), TaxonomyController, "offers.skills");
                 }
 
                 return next();
@@ -233,13 +216,25 @@ class Organisation extends AbstractModel {
     public registerEvents():void {
 
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'offers.offer');
+            taxonomyPopulate(this, 'offers.skills');
+            taxonomyPopulate(this, 'domains.domain');
+
             middlewarePopulateProperty(this, 'team.member');
+            middlewarePopulateProperty(this, "mainImage");
+
+            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
         });
         
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'offers.offer');
+            taxonomyPopulate(this, 'offers.skills');
+            taxonomyPopulate(this, 'domains.domain');
+
             middlewarePopulateProperty(this, 'team.member');
+            middlewarePopulateProperty(this, "mainImage");
+
+            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
         });
     }
 }

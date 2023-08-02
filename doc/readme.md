@@ -10,7 +10,9 @@ version 0.0.5
 - [Utilisateurs](Users.md)
 - [Persons](Persons.md)
 - [Organisations](Organisations.md)
+- [Médias](Medias.md)
 - [Taxonomy](Taxonomy.md)
+- [Licences](Licences.md) (pour les médias présentement)
 
 
 ## Struture générale de l'object `JSON` à fournir lors d'une requête en `POST`.

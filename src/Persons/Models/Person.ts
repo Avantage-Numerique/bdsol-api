@@ -1,14 +1,16 @@
-import mongoose from "mongoose";
-import {Schema} from "mongoose";
+import mongoose, {Schema} from "mongoose";
 import {PersonSchema} from "../Schemas/PersonSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
+import {User} from "@src/Users/Models/User";
 import * as fs from 'fs';
-import {TaxonomyController} from "../../Taxonomy/Controllers/TaxonomyController";
+import TaxonomyController from "../../Taxonomy/Controllers/TaxonomyController";
 import PersonsService from "../Services/PersonsService";
-import {middlewareTaxonomy} from "../../Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
-import {middlewarePopulateProperty} from "../../Taxonomy/Middlewares/TaxonomiesPopulate";
+import {middlewareTaxonomy} from "@src/Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
+import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import {populateUser} from "@src/Users/Middlewares/populateUser";
+import {SkillGroup} from "@src/Taxonomy/Schemas/SkillGroupSchema";
 
 class Person extends AbstractModel {
 
@@ -24,14 +26,36 @@ class Person extends AbstractModel {
             Person._instance.registerEvents();
             Person._instance.registerPreEvents();
 
-            //Setting virtual "fullName" field
+            //Setting virtual "fullName" and "type" field
             Person._instance.schema.virtual('fullName').get( function() {
                 return this.firstName + ' ' + this.lastName;
             });
+            Person._instance.schema.virtual("type").get( function () { return Person._instance.modelName });
+            Person._instance.schema.virtual("name").get( function () { return this.firstName + " " + this.lastName });
 
+            Person._instance.registerIndexes();
             Person._instance.initSchema();
         }
         return Person._instance;
+    }
+
+    public registerIndexes():void {
+        //Indexes
+        Person._instance.schema.index({ "occupations.skills":1});
+        Person._instance.schema.index(
+            { firstName:"text", lastName:"text", nickname:"text", description:"text", catchPhrase:"text", slug:"text" },
+            {
+                default_language: "french",
+                //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
+                weights:{
+                    firstName:3,
+                    lastName:3
+                }
+            });
+    }
+
+    public dropIndexes() {
+        return;
     }
 
     /** @public Model lastName */
@@ -51,7 +75,7 @@ class Person extends AbstractModel {
         new Schema<PersonSchema>({
                 lastName: {
                     type: String,
-                    minLength: 2,
+                    minlength: 2,
                     required: true,
                     //alias: 'nom'
                 },
@@ -61,6 +85,7 @@ class Person extends AbstractModel {
                     required: true,
                     //alias: 'prenom'
                 },
+                //FirstName in virtuals (getInstance())
                 slug: {
                     type: String,
                     slug: ["firstName", "lastName"],
@@ -72,15 +97,28 @@ class Person extends AbstractModel {
                     type: String,
                     //alias: 'surnom'
                 },
-                description: String,
+                description: {
+                    type: String,
+                },
+                // DRY this with groupName to have this "skillGroup as
                 occupations: {
+                    type: [SkillGroup.schema],
+                },
+                domains: {
                     type: [{
-                        occupation: {
+                        domain: {
                             type: mongoose.Types.ObjectId,
                             ref: "Taxonomy"
                         },
                         status: Status.schema
                     }]
+                },
+                mainImage: {
+                    type: mongoose.Types.ObjectId,
+                    ref : "Media"
+                },
+                catchphrase: {
+                    type: String
                 },
                 status:{
                     type: Status.schema
@@ -157,7 +195,7 @@ class Person extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields(): object {
-        return ["lastName", "firstName", "nickname", "description", "occupation"];
+        return ["lastName", "firstName", "nickname", "description", "occupations", "domains"];
     }
 
     /**
@@ -168,17 +206,25 @@ class Person extends AbstractModel {
      */
     public dataTransfertObject(document: any) {
         return {
+            _id: document._id ?? '',
             lastName: document.lastName ?? '',
             firstName: document.firstName ?? '',
             nickname: document.nickname ?? '',
             description: document.description ?? '',
             occupations: document.occupations ?? '',
-            slug: document.slug ?? ''
+            domains: document.domains ?? '',
+            mainImage: document.mainImage ?? '',
+            slug: document.slug ?? '',
+            catchphrase: document.catchphrase ?? '',
+            status: document.status ?? '',
+            type: document.type ?? '',
+            fullName: document.fullName ?? '',
+            createdAt : document.createdAt ?? '',
+            updatedAt : document.updatedAt ?? '',
         }
     }
 
     public async documentation(): Promise<any> {
-
         return fs.readFileSync('/api/doc/Persons.md', 'utf-8');
     }
 
@@ -198,39 +244,55 @@ class Person extends AbstractModel {
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
             this.schema.pre('save', async function (next: any): Promise<any> {
-                const idList = this.occupations.map( (el:any) => {
-                    return new mongoose.Types.ObjectId(el.occupation);
-                });
-                await middlewareTaxonomy(idList, TaxonomyController, "occupations.occupation");
-                return next();
+                    const idList = this.occupations.map( (el:any) => {
+                        return el.skills.map( (id:any) =>{
+                            return new mongoose.Types.ObjectId(id);
+                        })
+                    });
+                    await middlewareTaxonomy(idList, TaxonomyController, "occupations.skills");
+                    return next();
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
             this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
-                const person: any = this;
-                const updatedDocument = person.getUpdate();
-                if (updatedDocument["occupations"] != undefined){
-                    const idList = updatedDocument.occupations.map( (el:any) => {
-                        return new mongoose.Types.ObjectId(el.occupation);
-                    });
-                    await middlewareTaxonomy(idList, TaxonomyController, "occupations.occupation");
-                }
-                return next();
+                    const updatedDocument:any = this.getUpdate();
+                    if (updatedDocument["occupations"] != undefined){
+                        const idList = updatedDocument.occupations.map( (el:any) => {
+                            return el.skills.map( (id:any) =>{
+                                return new mongoose.Types.ObjectId(id);
+                            })
+                        });
+                        await middlewareTaxonomy(idList, TaxonomyController, "occupations.skills");
+                    }
+                    return next();
             });
         }
     }
 
     public registerEvents():void {
-
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'occupations.occupation');
+            taxonomyPopulate(this, 'occupations.skills');
+            taxonomyPopulate(this, 'domains.domain');
+            middlewarePopulateProperty(this, "mainImage");
+
+            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
+
+            //populateUser(this, "occupations.occupation.status.requestedBy", User.getInstance().mongooseModel);
+            //populateUser(this, "occupations.occupation.status.lastModifiedBy", User.getInstance().mongooseModel);
         });
-        
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'occupations.occupation');
+            taxonomyPopulate(this, 'occupations.skills');
+            taxonomyPopulate(this, 'domains.domain');
+            middlewarePopulateProperty(this, 'mainImage');
+
+            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
+
+            //populateUser(this, "occupations.occupation.status.requestedBy", User.getInstance().mongooseModel);
+            //populateUser(this, "occupations.occupation.status.lastModifiedBy", User.getInstance().mongooseModel);
         });
     }
-
 }
 
 export default Person;

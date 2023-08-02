@@ -1,0 +1,41 @@
+{
+    "source": {
+        "include": ["./src"],
+        "exclude": ["./node_modules"],
+        "includePattern": "\\.(jsx|js|ts|tsx)$",
+        "excludePattern": "(node_modules/|docs)"
+    },
+    "tags": {
+        "allowUnknownTags": ["optional"]
+    },
+    "typescript": {
+        "moduleRoot": "./src",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true
+    },
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "baseUrl": ".",
+        "allowJs": true,
+        "noEmit": true
+    },
+    "opts": {
+        "encoding": "utf8",
+        "destination": "docs/",
+        "readme": "readme.md",
+        "recurse": true,
+        "verbose": true,
+        "template": "./node_modules/better-docs"
+    },
+    "plugins": [
+        "plugins/markdown",
+        "node_modules/better-docs/typescript",
+        "node_modules/better-docs/category"
+    ],
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false,
+        "search": true
+    }
+}

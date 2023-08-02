@@ -1,4 +1,4 @@
-name: Build de l'api
+name: Principal
 
 on:
   push:

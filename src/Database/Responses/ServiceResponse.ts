@@ -1,12 +1,12 @@
-import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import {ApiResponseContract} from "@src/Http/Responses/ApiResponse";
 
 export default interface ServiceResponse extends ApiResponseContract {
 
     error:boolean;
     code:number;//statusCode - ?
     message:string;
-    errors: [];
-    data: {};
+    errors:Array<any>;
+    data:any;
     //Add Meta data ? To host like totals, schema type, etc.
     //stucture
 }

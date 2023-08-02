@@ -13,8 +13,6 @@ class PersonsController extends AbstractController {
     /** @public Model */
     entity:Person;
 
-    name:string = "Persons";
-
     constructor() {
         super();
         this.entity = Person.getInstance();
@@ -32,4 +30,4 @@ class PersonsController extends AbstractController {
         return PersonsController._instance;
     }
 }
-export {PersonsController};
+export default PersonsController;

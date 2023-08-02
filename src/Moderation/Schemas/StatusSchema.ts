@@ -1,13 +1,13 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose, {Document, Schema} from "mongoose";
 
 /**
  * Enum list of all status supported for now.
  */
- export enum StatusStates {
-    Accepted = "Accepted",
-    Pending = "Pending",
-    Rejected = "Rejected",
-    Deprecated = "Deprecated"
+export enum StatusStates {
+    accepted = "accepted",
+    pending = "pending",
+    rejected = "rejected",
+    deprecated = "deprecated"
 }
 
 export interface StatusSchema extends Document {
@@ -18,8 +18,8 @@ export interface StatusSchema extends Document {
 }
 
 export class Status {
-    static schema:Schema = 
-    new Schema<StatusSchema>({
+
+    static schema: Schema = new Schema<StatusSchema>({
         state: {
             type: String,
             enum: StatusStates,
@@ -38,5 +38,5 @@ export class Status {
         message: {
             type: String,
         }
-    });
+    }, { _id : false });
 }
