@@ -105,7 +105,7 @@ export class MongooseDBDriver implements DBDriver {
      */
     public getConnectionUrl(db:string='bdsol-users') {
         if (this.baseUrl === '') {
-            this.baseUrl = `${this.driverPrefix}://${this.config.host}:${this.config.port}/${db}`;
+            this.baseUrl = `${this.getConnectionBaseUrl()}${db}`;
         }
         return this.baseUrl;
     }
@@ -115,7 +115,8 @@ export class MongooseDBDriver implements DBDriver {
      */
     public getConnectionBaseUrl() {
         if (this.baseUrl === '') {
-            this.baseUrl = `${this.driverPrefix}://${this.config.host}:${this.config.port}/`;
+            const credential = '';//config.db.user !== '' && config.db.password !== '' ? `${config.db.user}:${config.db.password}@` : '';
+            this.baseUrl = `${this.driverPrefix}://${credential}${this.config.host}:${this.config.port}/`;
         }
         return this.baseUrl;
     }

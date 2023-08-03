@@ -1,6 +1,6 @@
 {
   "name": "bdsolapi",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "La BDSOL disponible grâce à docker, avec toutes ses facettes. Principalement pour le developpement.",
   "main": "src/api.ts",
   "private": true,
