@@ -67,7 +67,7 @@ export abstract class BaseProvider implements DbProvider {
               roles: [ "userAdminAnyDatabase" ] } )
 
              */
-            const options:any = {
+            const options:any = config.db.user !== '' && config.db.password !== '' ? {
                 /*auth : {
                     username: config.db.user,
                     password: config.db.password,
@@ -76,7 +76,7 @@ export abstract class BaseProvider implements DbProvider {
                 user: config.db.user,
                 pass: config.db.password,
                 dbName: this._databaseName
-            }
+            } : {};
             this.connection = await mongoose.createConnection(url, options);
             LogHelper.debug("options de connection", options);
 
