@@ -24,6 +24,7 @@ import {AdminRoutes} from "@src/Admin/Routes/AdminRoutes";
 import JobScheduler from "@src/Schedule/JobScheduler";
 import {JobSheet} from "@src/Schedule/Sheet";
 import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
+import {BackukDbJob} from "@src/Schedule/Jobs/BackupDb";
 
 /**
  * Main class for the API
@@ -251,8 +252,10 @@ export default class Api {
     private _initScheduler() {
 
         this.scheduler = new JobScheduler();
+
         const jobSheets:Array<JobSheet> = [
-            this.scheduler.createSheet("Embed Taxonomy's metas", EmbedTaxonomiesMetas)
+            this.scheduler.createSheet("Embed Taxonomy's metas", EmbedTaxonomiesMetas),
+            this.scheduler.createSheet("Backuping BD", BackukDbJob, this.scheduler.createRule('second', 2))
         ];
         this.scheduler.init(jobSheets);
 

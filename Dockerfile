@@ -8,6 +8,7 @@ RUN apk update \
         g++ \
         git \
         openssh \
+        mongodb-tools \
     && npm install -g node-gyp \
     && npm install -g @mapbox/node-pre-gyp
 

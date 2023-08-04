@@ -102,20 +102,22 @@ export class MongooseDBDriver implements DBDriver {
      * @deprecated
      * This is was used before providers.
      * @param db string to get the connection to mongo db.
+     * @param withCredentials {boolean} if we need the uri with credentials.
      */
-    public getConnectionUrl(db:string='bdsol-users') {
-        if (this.baseUrl === '') {
-            this.baseUrl = `${this.getConnectionBaseUrl()}${db}`;
-        }
-        return this.baseUrl;
+    public getConnectionUrl(db:string='bdsol-users', withCredentials=false) {
+        //if (this.baseUrl === '') {
+        //    this.baseUrl = `${this.getConnectionBaseUrl(withCredentials)}${db}`;
+        //}
+        return `${this.getConnectionBaseUrl(withCredentials)}${db}`;
     }
 
     /**
      * This is was used before providers.
+     * @param withCredentials {boolean} If we need an uri with the
      */
-    public getConnectionBaseUrl() {
+    public getConnectionBaseUrl(withCredentials=false) {
         if (this.baseUrl === '') {
-            const credential = '';//config.db.user !== '' && config.db.password !== '' ? `${config.db.user}:${config.db.password}@` : '';
+            const credential = withCredentials ? (config.db.user !== '' && config.db.password !== '' ? `${config.db.user}:${config.db.password}@` : '') : '';
             this.baseUrl = `${this.driverPrefix}://${credential}${this.config.host}:${this.config.port}/`;
         }
         return this.baseUrl;
