@@ -188,6 +188,7 @@ class Event extends AbstractModel {
             //experience: document.experience ?? '',
             subEvent: document.subEvent ?? '',
             status: document.status ?? '',
+            type: document.type ?? '',
             createdAt: document.createdAt ?? '',
             updatedAt: document.updatedAt ?? ''
         }
