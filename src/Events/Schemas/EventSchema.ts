@@ -10,6 +10,7 @@ export interface EventSchema extends Document {
     name:string
     slug:string
     alternateName:string
+    url:string
     description:string
     entityInCharge:ObjectId
     organizer:ObjectId

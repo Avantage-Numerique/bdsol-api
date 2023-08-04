@@ -78,6 +78,9 @@ class Event extends AbstractModel {
             alternateName: {
                 type: String
             },
+            url: {
+                type: String
+            },
             description: {
                 type: String,
             },
@@ -171,6 +174,7 @@ class Event extends AbstractModel {
             name: document.name ?? '',
             slug: document.slug ?? '',
             alternateName: document.alternateName ?? '',
+            url: document.url ?? '',
             description: document.description ?? '',
             entityInCharge: document.entityInCharge ?? '',
             organizer: document.organizer ?? '',
@@ -186,7 +190,7 @@ class Event extends AbstractModel {
             domains: document.domains ?? '',
             skills: document.skills ?? '',
             //experience: document.experience ?? '',
-            subEvent: document.subEvent ?? '',
+            subEvents: document.subEvent ?? '',
             status: document.status ?? '',
             type: document.type ?? '',
             createdAt: document.createdAt ?? '',
