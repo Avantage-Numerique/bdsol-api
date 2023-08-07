@@ -1,6 +1,6 @@
-import AbstractController from "../../Abstract/Controller";
-import ProjectsService from "../Services/ProjectsService";
-import Project from "../Models/Project";
+import AbstractController from "@core/Controller";
+import ProjectsService from "@src/Projects/Services/ProjectsService";
+import Project from "@src/Projects/Models/Project";
 
 class ProjectsController extends AbstractController {
 
