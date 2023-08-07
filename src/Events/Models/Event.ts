@@ -7,6 +7,11 @@ import { TeamField } from "@src/Team/Schemas/TeamSchema";
 import { Status } from "@src/Moderation/Schemas/StatusSchema";
 import { EventTypeEnum } from "../EventTypeEnum";
 import * as fs from 'fs';
+import { taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import { middlewarePopulateProperty } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import { populateUser } from "@src/Users/Middlewares/populateUser";
+import { User } from "@src/Users/UsersDomain";
+import { Schedule } from "@src/Database/Schemas/ScheduleSchema";
 
 class Event extends AbstractModel {
 
@@ -117,6 +122,10 @@ class Event extends AbstractModel {
                 type: [mongoose.Types.ObjectId],
                 ref: "Person"
             },
+            skills: {
+                type: [mongoose.Types.ObjectId],
+                ref: "Taxonomy"
+            },
             domains: {
                 type: [{
                     domain: {
@@ -126,11 +135,10 @@ class Event extends AbstractModel {
                     status: Status.schema
                 }]
             },
-            skills: {
-                type: [mongoose.Types.ObjectId],
-                ref: "Taxonomy"
-            },
             //experience
+            schedule: {
+                type: [Schedule.schema]
+            },
             subEvents: {
                 type: [mongoose.Types.ObjectId],
                 ref: "Event"
@@ -187,8 +195,8 @@ class Event extends AbstractModel {
             contactPoint: document.contactPoint ?? '',
             mainImage: document.mainImage ?? '',
             attendees: document.attendees ?? '',
-            domains: document.domains ?? '',
             skills: document.skills ?? '',
+            domains: document.domains ?? '',
             //experience: document.experience ?? '',
             subEvents: document.subEvent ?? '',
             status: document.status ?? '',
@@ -207,7 +215,29 @@ class Event extends AbstractModel {
      * Register mongoose events, for now pre-save, pre-findOneAndUpdate
      */
     public registerEvents(): void {
+        this.schema.pre('find', function() {
+            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
+            taxonomyPopulate(this, 'skills');
+            taxonomyPopulate(this, 'domains.domain');
+            middlewarePopulateProperty(this, 'mainImage');
+            middlewarePopulateProperty(this, 'organizer');
+            middlewarePopulateProperty(this, 'entityInCharge');
 
+            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
+        });
+
+        this.schema.pre('findOne', function() {
+            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
+            taxonomyPopulate(this, 'skills');
+            taxonomyPopulate(this, 'domains.domain');
+            middlewarePopulateProperty(this, 'mainImage');
+            middlewarePopulateProperty(this, 'organizer');
+            middlewarePopulateProperty(this, 'entityInCharge');
+
+            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
+        });
     }
 }
 

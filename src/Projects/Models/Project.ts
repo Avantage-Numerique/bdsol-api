@@ -248,7 +248,6 @@ class Project extends AbstractModel {
             taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');
             middlewarePopulateProperty(this, 'sponsor.entity');
-            middlewarePopulateProperty(this, 'team.member');
             middlewarePopulateProperty(this, 'producer');
             middlewarePopulateProperty(this, 'entityInCharge');
 

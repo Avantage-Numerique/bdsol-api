@@ -5,6 +5,7 @@ import { Status } from "@src/Moderation/Schemas/StatusSchema";
 import {Document} from "mongoose";
 import { Member } from "@src/Team/Schemas/MemberSchema";
 import { EventTypeEnum } from "../EventTypeEnum";
+import { Schedule } from "@src/Database/Schemas/ScheduleSchema";
 
 export interface EventSchema extends Document {
     name:string
@@ -26,6 +27,7 @@ export interface EventSchema extends Document {
     domains:[DomainSchema]
     skills:[ObjectId]
     //experience:string
+    schedule:[Schedule]
     subEvents:[ObjectId]
     status:Status
 }
