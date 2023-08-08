@@ -26,6 +26,7 @@ Un événement pourra lui aussi avoir des "enfants" événement `subEvents` dans
     name : string
     slug : string (name)
     alternateName : string
+    url: string
     description : string
     entityInCharge : ObjectId
     organizer : ObjectId
@@ -52,6 +53,7 @@ Un événement pourra lui aussi avoir des "enfants" événement `subEvents` dans
 - alternateName : Nom alternatif de l'événement
 - description : Description de l'événement
 - entityInCharge : Entité en charge de l'événement
+- url : Hyperlien vers un site web
 - organizer : Organisateur de l'événement
 - eventType : Type d'événement
 - team : Équipe qui s'occupe de l'événement (bénévole, équipe d'organisation, personne d'un groupe de musique)

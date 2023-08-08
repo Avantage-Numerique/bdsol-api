@@ -203,7 +203,7 @@ class MediasRoutes extends AbstractRoute {
         //if entity have media field
         //TODO : Need to make a check for this (this goes with making the create check for multiple field multer.single ("mainImage, and others..."))
         //Temporary check (entityType is person or org and mediaField is mainImage)
-        const entities:any = [Person.getInstance().modelName, Organisation.getInstance().modelName, Project.getInstance().modelName, Event.getInstance()];
+        const entities:any = [Person.getInstance().modelName, Organisation.getInstance().modelName, Project.getInstance().modelName, Event.getInstance().modelName];
         if( entities.includes(entityType)
             &&  mediaField == "mainImage" ) {
                 

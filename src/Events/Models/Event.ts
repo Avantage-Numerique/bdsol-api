@@ -187,18 +187,19 @@ class Event extends AbstractModel {
             entityInCharge: document.entityInCharge ?? '',
             organizer: document.organizer ?? '',
             eventType: document.eventType ?? '',
-            team: document.team ?? '',
+            team: document.team ?? [],
             //duration: document.duration ?? '',
             //location: document.location ?? '',
             startDate: document.startDate ?? '',
             endDate: document.endDate ?? '',
             contactPoint: document.contactPoint ?? '',
             mainImage: document.mainImage ?? '',
-            attendees: document.attendees ?? '',
-            skills: document.skills ?? '',
-            domains: document.domains ?? '',
+            attendees: document.attendees ?? [],
+            skills: document.skills ?? [],
+            domains: document.domains ?? [],
             //experience: document.experience ?? '',
-            subEvents: document.subEvent ?? '',
+            schedule: document.schedule ?? [],
+            subEvents: document.subEvents ?? [],
             status: document.status ?? '',
             type: document.type ?? '',
             createdAt: document.createdAt ?? '',
@@ -221,7 +222,9 @@ class Event extends AbstractModel {
             taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');
             middlewarePopulateProperty(this, 'organizer');
+            middlewarePopulateProperty(this, 'attendees');
             middlewarePopulateProperty(this, 'entityInCharge');
+            middlewarePopulateProperty(this, 'subEvents');
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
             populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
@@ -233,7 +236,9 @@ class Event extends AbstractModel {
             taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');
             middlewarePopulateProperty(this, 'organizer');
+            middlewarePopulateProperty(this, 'attendees');
             middlewarePopulateProperty(this, 'entityInCharge');
+            middlewarePopulateProperty(this, 'subEvents');
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
             populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);

@@ -4,6 +4,7 @@ export enum EntityTypesEnum {
     organisation = "Organisation",
     project = "Project",
     taxonomy = "Taxonomy",
+    event = "Event",
     media = "Media"
 }
 
@@ -12,5 +13,6 @@ export enum EntityApiUrlEnum {
     organisation = "organisations",
     projects = "projects",
     taxonomy = "taxonomies",
+    event = "events",
     media = "medias"
 }
