@@ -36,7 +36,7 @@ export class MongooseDBDriver implements DBDriver {
      * Constructor fo this driver. Object is created 1 time in  ServerController.
      */
     constructor(driverConfig?:any) {
-        this.driverPrefix = 'mongodb';
+        this.driverPrefix = driverConfig.prefix ?? 'mongodb';
         this.client = null;
         this.db = null;
         this.baseUrl = '';
