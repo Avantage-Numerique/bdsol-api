@@ -59,7 +59,26 @@ export abstract class BaseProvider implements DbProvider {
             mongoose.set('debug', this._debug);
             //@todo debug this, broke service create. https://thecodebarbarian.com/whats-new-in-mongoose-6-sanitizefilter.html
             //mongoose.set('sanitizeFilter', true);
-            this.connection = await mongoose.createConnection(url);
+            //maxPoolSize is 100 default
+
+            /*
+            db.addUser( { user: "appBdUser",
+              pwd: "appBdUserPw,
+              roles: [ "userAdminAnyDatabase" ] } )
+
+             */
+            const options:any = config.db.user !== '' && config.db.password !== '' ? {
+                /*auth : {
+                    username: config.db.user,
+                    password: config.db.password,
+                },*/
+                authSource: 'admin',
+                user: config.db.user,
+                pass: config.db.password,
+                dbName: this._databaseName
+            } : {};
+            this.connection = await mongoose.createConnection(url, options);
+            LogHelper.debug("options de connection", options);
 
             return this.connection;
         }
