@@ -224,6 +224,7 @@ class Event extends AbstractModel {
             middlewarePopulateProperty(this, 'attendees');
             middlewarePopulateProperty(this, 'entityInCharge');
             middlewarePopulateProperty(this, 'subEvents');
+            middlewarePopulateProperty(this, 'eventType');
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
             populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
@@ -238,6 +239,7 @@ class Event extends AbstractModel {
             middlewarePopulateProperty(this, 'attendees');
             middlewarePopulateProperty(this, 'entityInCharge');
             middlewarePopulateProperty(this, 'subEvents');
+            middlewarePopulateProperty(this, 'eventType');
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
             populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
