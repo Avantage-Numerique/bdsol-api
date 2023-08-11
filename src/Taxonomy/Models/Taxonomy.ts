@@ -73,7 +73,6 @@ class Taxonomy extends AbstractModel {
                 type: String,
                 required: [true, 'Required category (occupation, ...)'],
                 enum: TaxonomiesCategoriesEnum,
-                lowercase: true,
                 trim: true
             },
             name: {

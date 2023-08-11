@@ -4,6 +4,7 @@ import Person from "../../Persons/Models/Person";
 import Project from "../../Projects/Models/Project";
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
+import Event from "@src/Events/Models/Event";
 
 
 class SearchResults {
@@ -13,6 +14,7 @@ class SearchResults {
     public organisationModel:any;
     public taxonomyModel:any;
     public projectModel:any;
+    public eventModel:any;
 
     //Singleton
     public static _instance : SearchResults;
@@ -24,6 +26,7 @@ class SearchResults {
             SearchResults._instance.organisationModel = Organisation.getInstance().mongooseModel;
             SearchResults._instance.taxonomyModel = Taxonomy.getInstance().mongooseModel;
             SearchResults._instance.projectModel = Project.getInstance().mongooseModel;
+            SearchResults._instance.eventModel = Event.getInstance().mongooseModel;
         }
         return SearchResults._instance;
     }
@@ -50,6 +53,12 @@ class SearchResults {
         
         promises.push(
             await this.taxonomyModel.find(
+                {$text: {$search: searchIndex}},
+                {score: {$meta: "textScore"}}
+            ));
+        
+        promises.push(
+            await this.eventModel.find(
                 {$text: {$search: searchIndex}},
                 {score: {$meta: "textScore"}}
             ));
@@ -119,6 +128,18 @@ class SearchResults {
                 )
             )
 
+            promises.push(
+                await this.eventModel.find(
+                    {
+                        $or: [
+                            {"skills": paramId},
+                            {"domains.domain": paramId},
+                            {"eventType": paramId}
+                        ]
+                    }
+                )
+            )
+
             let tagSearchResult = [];
             if(promises.length > 0) {
                     tagSearchResult = promises.flat();
@@ -131,7 +152,7 @@ class SearchResults {
 
     private async _embedEntitiesCountInTaxonomy(document:any, results:Array<any>) {
         try {
-            const currentCount:Number = results.length;
+            const currentCount:number = results.length;
             document.meta = {
                 count: currentCount
             }

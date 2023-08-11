@@ -30,7 +30,7 @@ Un événement pourra lui aussi avoir des "enfants" événement `subEvents` dans
     description : string
     entityInCharge : ObjectId
     organizer : ObjectId
-    eventType : EventTypeEnum
+    eventType : ObjectId
     team : [Member]
     duration : undefined
     location : undefined
@@ -42,6 +42,7 @@ Un événement pourra lui aussi avoir des "enfants" événement `subEvents` dans
     domains : [ { domain: ObjectId, Status: {Status.Schema} } ]
     skills : [ObjectId]
     experience : undefined
+    schedule: [Schedule]
     subEvents : [ObjectId] (Event)
     status : Status.Schema
     createdAt : Date
@@ -67,6 +68,7 @@ Un événement pourra lui aussi avoir des "enfants" événement `subEvents` dans
 - domains : Domaine associé à l'événement
 - skills : Compétences associées à l'événement
 - experience : L'expérience que les personnes participantes vont retiré de l'événement
+- schedule : Horaire d'une activité de l'événement date et heure de début et de fin avec un nom d'activité
 - subEvents : Sous-événement (un spectacle en plusieurs partie, où les autres parties du spectacle serait des événements)
 - status : Statut de la fiche d'événement
 

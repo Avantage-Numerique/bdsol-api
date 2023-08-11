@@ -5,7 +5,6 @@ import {EventSchema} from "@src/Events/Schemas/EventSchema";
 import EventsService from "@src/Events/Services/EventsService";
 import { TeamField } from "@src/Team/Schemas/TeamSchema";
 import { Status } from "@src/Moderation/Schemas/StatusSchema";
-import { EventTypeEnum } from "../EventTypeEnum";
 import * as fs from 'fs';
 import { taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import { middlewarePopulateProperty } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
@@ -99,8 +98,8 @@ class Event extends AbstractModel {
                 ref: "Organisation"
             },
             eventType: {
-                type : String,
-                enum: EventTypeEnum
+                type : [mongoose.Types.ObjectId],
+                ref: "Taxonomy"
             },
             team: TeamField,
             //duration
@@ -217,7 +216,7 @@ class Event extends AbstractModel {
      */
     public registerEvents(): void {
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
+            middlewarePopulateProperty(this, 'team.member');
             taxonomyPopulate(this, 'skills');
             taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');
@@ -231,7 +230,7 @@ class Event extends AbstractModel {
         });
 
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
+            middlewarePopulateProperty(this, 'team.member');
             taxonomyPopulate(this, 'skills');
             taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');

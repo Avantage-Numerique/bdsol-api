@@ -6,7 +6,7 @@ export const ProgramingLanguagePersistantData = [
     {
         "category" : TaxonomiesCategoriesEnum.Technology,
         "name"  :"Php",
-        "description" : "Langauge de programmation web",
+        "description" : "Langage de programmation web",
         "source" : "",
         "status": {
             "state":StatusStates.accepted,
@@ -16,7 +16,7 @@ export const ProgramingLanguagePersistantData = [
     {
         "category" : TaxonomiesCategoriesEnum.Technology,
         "name"  :"Javascript",
-        "description" : "Language de programmation web",
+        "description" : "Langage de programmation web",
         "source" : "",
         "status": {
             "state":StatusStates.accepted,

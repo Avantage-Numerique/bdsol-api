@@ -243,7 +243,6 @@ class Project extends AbstractModel {
      */
     public registerEvents(): void {
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             taxonomyPopulate(this, 'skills');
             taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');
@@ -256,7 +255,6 @@ class Project extends AbstractModel {
         });
 
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             taxonomyPopulate(this, 'skills');
             taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');

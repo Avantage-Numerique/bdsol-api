@@ -4,7 +4,6 @@ import { DomainSchema } from "@src/Taxonomy/Schemas/DomainSchema";
 import { Status } from "@src/Moderation/Schemas/StatusSchema";
 import {Document} from "mongoose";
 import { Member } from "@src/Team/Schemas/MemberSchema";
-import { EventTypeEnum } from "../EventTypeEnum";
 import { Schedule } from "@src/Database/Schemas/ScheduleSchema";
 
 export interface EventSchema extends Document {
@@ -15,7 +14,7 @@ export interface EventSchema extends Document {
     description:string
     entityInCharge:ObjectId
     organizer:ObjectId
-    eventType:EventTypeEnum
+    eventType:[ObjectId]
     team:[Member]
     //duration:string
     //location:string
