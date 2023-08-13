@@ -112,7 +112,7 @@ export class MongooseDBDriver implements DBDriver {
      */
     public getConnectionUrl(db:string='bdsol-users') {
         console.log("getConnectionUrl db", db, "this.haveCredentials", this.haveCredentials);
-        const url: string = `${this.getConnectionBaseUrl()}${db}${(this.haveCredentials ? `?authSource=${this.authSource}` : '')}`;
+        const url: string = `${this.getConnectionBaseUrl()}${db}${(this.haveCredentials ? `?authSource=${this.authSource}` : '')}${config.db.additionalUrlParams}`;
         console.log("getConnectionUrl db", db, "this.haveCredentials", this.haveCredentials, 'url', url);
         return url;
     }
