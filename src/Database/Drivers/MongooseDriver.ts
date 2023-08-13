@@ -120,7 +120,9 @@ export class MongooseDBDriver implements DBDriver {
             if (this.isSRV) {
                 this.baseUrl = `${this.driverPrefix}://${credential}${this.config.host}/`;
             }
-            this.baseUrl = `${this.driverPrefix}://${credential}${this.config.host}:${this.config.port}/`;
+            if (!this.isSRV) {
+                this.baseUrl = `${this.driverPrefix}://${credential}${this.config.host}:${this.config.port}/`;
+            }
         }
         return this.baseUrl;
     }
