@@ -11,10 +11,12 @@ class JobScheduler {
     public jobs:Array<JobSheet>;
     public defaultIntervale:string;
     public defaultRule:schedule.RecurrenceRule;
+    public defaultTestRule:schedule.RecurrenceRule;
 
     constructor() {
         this.jobs = [];
         this.defaultRule = new schedule.RecurrenceRule();
+        this.defaultTestRule = new schedule.RecurrenceRule();
         /**
          * recurs: true,
          * year: null,
@@ -26,6 +28,7 @@ class JobScheduler {
          * second: 5
          */
         this.defaultRule.hour = 12;//it minutes in fact.
+        this.defaultTestRule.second = 2;//it minutes in fact.
         this.defaultIntervale = '5 * * * * *';
     }
 
@@ -76,6 +79,13 @@ class JobScheduler {
 
     public add(sheet:JobSheet) {
         this.jobs.push(sheet);
+    }
+
+    public createRule(param:string, value:number):schedule.RecurrenceRule {
+        const rule:schedule.RecurrenceRule = new schedule.RecurrenceRule();
+        Object.assign(rule, {[param]: value});
+        console.log("createRule", rule);
+        return rule;
     }
 
 }
