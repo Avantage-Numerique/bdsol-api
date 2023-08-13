@@ -52,7 +52,7 @@ export abstract class BaseProvider implements DbProvider {
      */
     public async connect():Promise<mongoose.Connection|undefined>
     {
-        const url:string = `${this._driver.getConnectionBaseUrl()}${this._databaseName}`;
+        const url:string = `${this._driver.getConnectionUrl(this._databaseName)}`;
         if (this.verbose) LogHelper.info("[BD] Connect to url : ", url);
         try {
 
