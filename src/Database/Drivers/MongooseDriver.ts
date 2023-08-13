@@ -24,6 +24,7 @@ import Project from "@src/Projects/Models/Project";
 export class MongooseDBDriver implements DBDriver {
 
     public driverPrefix: string;
+    public isSRV: boolean;
     public client: mongoDB.MongoClient | null;
     public db: mongoDB.Db | mongoose.Connection | null;//will be the provider.
     public baseUrl: string;
@@ -41,7 +42,7 @@ export class MongooseDBDriver implements DBDriver {
         this.db = null;
         this.baseUrl = '';
         this.config = driverConfig ?? config.db;
-
+        this.isSRV = this.driverPrefix.includes('+srv');// check if the prefix contain the srv. to adjust the baseUrl.
         this.providers = {
             users: UsersProvider.getInstance(this),
             data: DataProvider.getInstance(this)
@@ -115,7 +116,10 @@ export class MongooseDBDriver implements DBDriver {
      */
     public getConnectionBaseUrl() {
         if (this.baseUrl === '') {
-            const credential = '';//config.db.user !== '' && config.db.password !== '' ? `${config.db.user}:${config.db.password}@` : '';
+            const credential = config.db.user !== '' && config.db.password !== '' ? `${config.db.user}:${config.db.password}@` : '';
+            if (this.isSRV) {
+                this.baseUrl = `${this.driverPrefix}://${credential}${this.config.host}/`;
+            }
             this.baseUrl = `${this.driverPrefix}://${credential}${this.config.host}:${this.config.port}/`;
         }
         return this.baseUrl;
