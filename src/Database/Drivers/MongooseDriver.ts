@@ -25,11 +25,13 @@ export class MongooseDBDriver implements DBDriver {
 
     public driverPrefix: string;
     public isSRV: boolean;
+    public authSource:string;
     public client: mongoDB.MongoClient | null;
     public db: mongoDB.Db | mongoose.Connection | null;//will be the provider.
     public baseUrl: string;
     public providers: any;
     public config:any;
+    public haveCredentials:boolean;
 
     public plugins: any;
 
@@ -38,6 +40,8 @@ export class MongooseDBDriver implements DBDriver {
      */
     constructor(driverConfig?:any) {
         this.driverPrefix = driverConfig?.prefix ?? config.db.prefix;
+        this.haveCredentials = config.db.user !== '' && config.db.password !== '';
+        this.authSource = config.db.authSource;
         this.client = null;
         this.db = null;
         this.baseUrl = '';
@@ -47,6 +51,8 @@ export class MongooseDBDriver implements DBDriver {
             users: UsersProvider.getInstance(this),
             data: DataProvider.getInstance(this)
         };
+
+        //?authSource=admin
     }
 
     public async configAddon() {
@@ -106,7 +112,7 @@ export class MongooseDBDriver implements DBDriver {
      */
     public getConnectionUrl(db:string='bdsol-users') {
         if (this.baseUrl === '') {
-            this.baseUrl = `${this.getConnectionBaseUrl()}${db}`;
+            this.baseUrl = `${this.getConnectionBaseUrl()}${db}${(this.haveCredentials ? `?authSource=${this.authSource}` : '')}`;
         }
         return this.baseUrl;
     }
@@ -116,7 +122,7 @@ export class MongooseDBDriver implements DBDriver {
      */
     public getConnectionBaseUrl() {
         if (this.baseUrl === '') {
-            const credential = config.db.user !== '' && config.db.password !== '' ? `${config.db.user}:${config.db.password}@` : '';
+            const credential = this.haveCredentials ? `${config.db.user}:${config.db.password}@` : '';
             if (this.isSRV) {
                 this.baseUrl = `${this.driverPrefix}://${credential}${this.config.host}/`;
             }

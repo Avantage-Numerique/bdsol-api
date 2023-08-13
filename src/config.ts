@@ -35,6 +35,7 @@ const config:any = {
     db: {
         driver: process.env.DB_DRIVER || "mongodb",
         prefix: process.env.DB_PREFIX || "mongodb",
+        authSource: process.env.DB_AUTHSOURCE || 'admin',
         host: process.env.DB_HOST || "not set",
         port: process.env.DB_PORT || 27017,
         user: process.env.DB_USER || '',
