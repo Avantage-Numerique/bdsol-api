@@ -48,6 +48,8 @@ const config:any = {
     },
     migrations: {
         driver: process.env.DB_MIGRATION_DRIVER || "mongodb",
+        prefix: process.env.DB_PREFIX || "mongodb",//use the same prefix of config.db
+        additionalUrlParams: '&replicaSet=replicaset&tls=true',
         host: process.env.DB_MIGRATION_HOST || "not set",
         port: process.env.DB_MIGRATION_PORT || 27017,
         user: process.env.DB_MIGRATION_USER || '',
