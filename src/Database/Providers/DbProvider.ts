@@ -53,7 +53,7 @@ export abstract class BaseProvider implements DbProvider {
     public async connect():Promise<mongoose.Connection|undefined>
     {
         const url:string = `${this._driver.getConnectionUrl(this._databaseName)}`;
-        if (this.verbose) LogHelper.info("[BD] Connect to url : ", url);
+        if (this.verbose) LogHelper.info("[BD] Connecting to mongo url");
         try {
 
             mongoose.set('debug', this._debug);
@@ -78,7 +78,6 @@ export abstract class BaseProvider implements DbProvider {
                 dbName: this._databaseName
             } : {};
             this.connection = await mongoose.createConnection(url, options);
-            LogHelper.debug("options de connection", options);
 
             return this.connection;
         }

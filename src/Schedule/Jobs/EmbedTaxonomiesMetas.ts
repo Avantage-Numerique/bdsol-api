@@ -55,7 +55,7 @@ const EmbedTaxonomiesMetas = async () => {
                     LogHelper.info(`[Job][EmbedTaxonomiesMetas] embeding : ${results.length} in ${taxonomy.name}`);
                     // embed target metas in the meta property of the taxonomy document.
                     await service.embedCount(taxonomy, results);//          total Count
-                    //          Count per entity types ?
+                    //Count per entity types ?
                     //          The consultation stats ?
                 }
             }

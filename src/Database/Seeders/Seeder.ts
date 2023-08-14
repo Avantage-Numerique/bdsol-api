@@ -28,7 +28,7 @@ export abstract class Seeder implements SeederContract {
         if (await this.conditions()) {
             await this.seed();
         } else {
-            LogHelper.debug(`Seeder condition didn't passed ${this.name}`);
+            LogHelper.info(`Seeder condition didn't passed ${this.name}`);
         }
     }
 

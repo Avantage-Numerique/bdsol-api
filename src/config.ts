@@ -36,7 +36,7 @@ const config:any = {
         driver: process.env.DB_DRIVER || "mongodb",
         prefix: process.env.DB_PREFIX || "mongodb",
         authSource: process.env.DB_AUTHSOURCE || 'admin',
-        additionalUrlParams: '&replicaSet=replicaset&tls=true',
+        additionalUrlParams: process.env.DB_ADDITIONAL_URL_PARAMS ? process.env.DB_ADDITIONAL_URL_PARAMS : '',// '&replicaSet=replicaset&tls=true',
         host: process.env.DB_HOST || "not set",
         port: process.env.DB_PORT || 27017,
         user: process.env.DB_USER || '',
