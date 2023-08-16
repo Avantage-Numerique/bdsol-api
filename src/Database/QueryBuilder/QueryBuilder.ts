@@ -1,4 +1,4 @@
-import {defaultModifier, objectIdModifier, PropertyModifier} from "./PropertyModifier";
+import {defaultModifier, objectIdModifier, PropertyModifier, stringToArrayModifier} from "./PropertyModifier";
 import ApiQuery from "./ApiQuery";
 
 
@@ -22,12 +22,8 @@ export default class QueryBuilder {
         },
         or: {
             queryProperty: '$or'
-        },
-        in: {
-            queryProperty: '$in'
-        },
+        }
         //match ? THis need to have recursive crawling in to be worth it, I think.
-        //in ? could be implemented quickly
         //not ? could be implemented quickly
     }
 
@@ -48,6 +44,10 @@ export default class QueryBuilder {
         ne: {
             queryProperty: '$ne'
         },
+        in: {
+            queryProperty: '$in',
+            modifier: stringToArrayModifier
+        },
         objId: {
             queryProperty: ""
         }
@@ -55,6 +55,7 @@ export default class QueryBuilder {
 
     /**
      * Modifiers are used to change the query value. Like for now for every _id we apply the objectIdModifier.
+     * in, we
      */
     static fieldPropertiesModifiers: any = {
         "_id": objectIdModifier
@@ -191,6 +192,7 @@ export default class QueryBuilder {
         if (QueryBuilder.haveProperty(value)) {
             // for now we only have ObjectId modifier for properties.
             const modifier:PropertyModifier = QueryBuilder.fieldPropertiesModifiers[field] ?? defaultModifier;  //this should be a list too to assign modifier to target type of field. For now _id seem to be the only one needed for that.
+
             parsedValue = QueryBuilder.propertyToQueryObject(value, modifier);
             fieldChanged = true;
         }
@@ -221,12 +223,14 @@ export default class QueryBuilder {
         for (const supportedProperty in QueryBuilder.queryProperties)
         {
             const propertyParams:any = QueryBuilder.queryProperties[supportedProperty];
+            const propertyModifier:any = propertyParams.modifier ?? defaultModifier;
             const propertyPrefix:string = `${supportedProperty}${QueryBuilder.propertySeperator}`;
 
             if (QueryBuilder.haveProperty(value, propertyPrefix)) {
                 if (propertyParams.queryProperty !== "") {
-                    queryProperty[propertyParams.queryProperty] = modifier(QueryBuilder.queryPropertyValue(value, propertyPrefix.length));
-
+                    queryProperty[propertyParams.queryProperty] = modifier(
+                        propertyModifier(QueryBuilder.queryPropertyValue(value, propertyPrefix.length))
+                    );
                     return queryProperty;
                 }
                 return modifier(QueryBuilder.queryPropertyValue(value, propertyPrefix.length));
