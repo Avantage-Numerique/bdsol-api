@@ -72,7 +72,6 @@ export abstract class Service {
      * @param sorting
      */
     async all(query: ApiQuery): Promise<ApiResponseContract> {
-
         try {
             const items = await this.model.find(query.transmuted, query.projections, query.options);//.sort(sort).skip(skip).limit(limit);
             const returnItems = items.map((doc: any) => {

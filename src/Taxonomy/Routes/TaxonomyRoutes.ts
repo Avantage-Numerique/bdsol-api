@@ -11,6 +11,8 @@ import {TaxonomiesCategoriesEnum} from "../TaxonomiesCategoriesEnum";
 import {isInEnumSanitizerAlias} from "@src/Security/SanitizerAliases/IsInEnumSanitizerAlias";
 import {noHtmlStringSanitizerAlias} from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
 import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
+import { SuccessResponse } from "@src/Http/Responses/SuccessResponse";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
 
 class TaxonomyRoutes extends CrudRoute {
 
@@ -59,6 +61,12 @@ class TaxonomyRoutes extends CrudRoute {
         router.post('/supported', [
             ...this.addMiddlewares("all"),
             this.getTaxonomiesHanlder.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+
+        router.post('/group/skills', [
+            ...this.addMiddlewares("all"),
+            this.getByTaxonomyGroup.bind(this),
             this.routeSendResponse.bind(this)
         ]);
 
@@ -119,6 +127,19 @@ class TaxonomyRoutes extends CrudRoute {
      */
     public async getTaxonomiesHanlder(req: Request, res: Response, next: NextFunction): Promise<any> {
         res.serviceResponse = TaxonomyController.getTaxonomies();
+        return next();
+    }
+
+    /**
+     * List taxonomies that are allowed in skills or skills group (skills, technologies ...)
+     * @param req {Request}
+     * @param res {Response}
+     * @param next {NextFunction}
+     */
+    public async getByTaxonomyGroup(req: Request, res: Response, next: NextFunction): Promise<any> {
+        req.body.data.or = [ {category:'skills'}, {category:'technologies'}, {category:'domains'}];
+        const listByGroupSkills = TaxonomyController.getInstance().list(req.body.data)
+        res.serviceResponse = SuccessResponse.create(listByGroupSkills, StatusCodes.OK, ReasonPhrases.OK);
         return next();
     }
 
