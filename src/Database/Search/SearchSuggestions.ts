@@ -2,6 +2,7 @@ import Organisation from "../../Organisations/Models/Organisation";
 import Person from "../../Persons/Models/Person";
 import Project from "../../Projects/Models/Project";
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
+import Event from "@src/Events/Models/Event";
 import SearchResults from "./SearchResults";
 
 class SearchSuggestions {
@@ -11,6 +12,8 @@ class SearchSuggestions {
     public organisationModel:any;
     public taxonomyModel:any;
     public projectModel:any;
+    public eventModel:any;
+    
 
     //Results model
     public searchResults_instance:SearchResults;
@@ -24,6 +27,7 @@ class SearchSuggestions {
             SearchSuggestions._instance.organisationModel = Organisation.getInstance().mongooseModel;
             SearchSuggestions._instance.taxonomyModel = Taxonomy.getInstance().mongooseModel;
             SearchSuggestions._instance.projectModel = Project.getInstance().mongooseModel;
+            SearchSuggestions._instance.eventModel = Event.getInstance().mongooseModel;
 
             SearchSuggestions._instance.searchResults_instance = SearchResults.getInstance();
         }
@@ -60,7 +64,14 @@ class SearchSuggestions {
             { name: { $regex : searchIndex, $options : 'i' }}
         );
 
-        return [...personsSuggestions, ...organisationsSuggestions, ...projectSuggestions, ...taxonomySuggestions];
+        const eventSuggestions = await this.eventModel.find(
+            { $or: [
+                { name: { $reged: searchIndex, $options: 'i' }},
+                { alternateName: { $regex: searchIndex, $options : 'i' }},
+            ]}
+        )
+
+        return [...personsSuggestions, ...organisationsSuggestions, ...projectSuggestions, ...taxonomySuggestions, ...eventSuggestions];
     }
 
     public async findNearTaxonomy(searchIndex:string | undefined) {

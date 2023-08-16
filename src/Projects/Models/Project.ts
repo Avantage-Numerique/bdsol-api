@@ -12,6 +12,7 @@ import {ScheduleBudget} from "@database/Schemas/ScheduleBudgetSchema";
 import {Location} from "@database/Schemas/LocationSchema";
 import {ProjectContextEnum} from "../ProjectContextEnum";
 import {TeamField} from "@src/Team/Schemas/TeamSchema";
+import * as fs from 'fs';
 
 class Project extends AbstractModel {
 
@@ -201,7 +202,7 @@ class Project extends AbstractModel {
     }
 
     public async documentation(): Promise<any> {
-        return "";
+        return fs.readFileSync('/api/doc/Project.md', 'utf-8');
     }
 
     public registerPreEvents() {
@@ -242,12 +243,10 @@ class Project extends AbstractModel {
      */
     public registerEvents(): void {
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             taxonomyPopulate(this, 'skills');
             taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');
             middlewarePopulateProperty(this, 'sponsor.entity');
-            middlewarePopulateProperty(this, 'team.member');
             middlewarePopulateProperty(this, 'producer');
             middlewarePopulateProperty(this, 'entityInCharge');
 
@@ -256,7 +255,6 @@ class Project extends AbstractModel {
         });
 
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             taxonomyPopulate(this, 'skills');
             taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');

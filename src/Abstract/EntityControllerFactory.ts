@@ -4,6 +4,7 @@ import OrganisationsController from "../Organisations/Controllers/OrganisationsC
 import TaxonomyController from "../Taxonomy/Controllers/TaxonomyController";
 import MediasController from "../Media/Controllers/MediasController";
 import ProjectsController from "../Projects/Controllers/ProjectsController";
+import EventsController from "@src/Events/Controllers/EventsController";
 
 class EntityControllerFactory {
 
@@ -20,6 +21,8 @@ class EntityControllerFactory {
                 instance = TaxonomyController.getInstance();break;
             case "project":
                 instance = ProjectsController.getInstance();break;
+            case "event":
+                instance = EventsController.getInstance();break;
             case "media":
                 instance = MediasController.getInstance();break;
 
