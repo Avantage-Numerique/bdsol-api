@@ -268,21 +268,6 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
     }
 
     /**
-     * get LIST
-     * Handle the list method for the get endpoint of the controller of the entity, passing the data to it.
-     * @param req {Request}
-     * @param res {Response}
-     * @param next {NextFunction}
-     * @return {Promise<any>}
-     */
-    public async getListHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-
-        res.serviceResponse = await this.controllerInstance.list({});
-        return next();
-    }
-
-
-    /**
      * GETINFO
      * Handle the getInfo method of the controller of the entity, passing the data to it
      * @param req {Request}
