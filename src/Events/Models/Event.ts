@@ -196,6 +196,7 @@ class Event extends AbstractModel {
             entityInCharge: document.entityInCharge ?? '',
             organizer: document.organizer ?? '',
             eventType: document.eventType ?? '',
+            eventFormat: document.eventFormat ?? '',
             team: document.team ?? [],
             startDate: document.startDate ?? '',
             endDate: document.endDate ?? '',
