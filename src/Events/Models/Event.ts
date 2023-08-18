@@ -11,6 +11,8 @@ import { middlewarePopulateProperty } from "@src/Taxonomy/Middlewares/Taxonomies
 import { populateUser } from "@src/Users/Middlewares/populateUser";
 import { User } from "@src/Users/UsersDomain";
 import { Schedule } from "@src/Database/Schemas/ScheduleSchema";
+import { EventFormatEnum } from "../EventFormatEnum";
+import { Location } from "@src/Database/Schemas/LocationSchema";
 
 class Event extends AbstractModel {
 
@@ -101,9 +103,11 @@ class Event extends AbstractModel {
                 type : [mongoose.Types.ObjectId],
                 ref: "Taxonomy"
             },
+            eventFormat: {
+                type : String,
+                enum: EventFormatEnum
+            },
             team: TeamField,
-            //duration
-            //location
             startDate: {
                 type: Date
             },
@@ -134,13 +138,19 @@ class Event extends AbstractModel {
                     status: Status.schema
                 }]
             },
-            //experience
+            experience: {
+                type: [mongoose.Types.ObjectId],
+                ref: "Taxonomy"
+            },
             schedule: {
                 type: [Schedule.schema]
             },
             subEvents: {
                 type: [mongoose.Types.ObjectId],
                 ref: "Event"
+            },
+            location: {
+                type: [Location.schema]
             },
             status: {
                 type: Status.schema
@@ -167,7 +177,7 @@ class Event extends AbstractModel {
 
     public dropIndexes():void {
         return;
-    };
+    }
 
     /**
      * @public @method dataTransfertObject Format the document for the public return.
@@ -187,8 +197,6 @@ class Event extends AbstractModel {
             organizer: document.organizer ?? '',
             eventType: document.eventType ?? '',
             team: document.team ?? [],
-            //duration: document.duration ?? '',
-            //location: document.location ?? '',
             startDate: document.startDate ?? '',
             endDate: document.endDate ?? '',
             contactPoint: document.contactPoint ?? '',
@@ -196,9 +204,10 @@ class Event extends AbstractModel {
             attendees: document.attendees ?? [],
             skills: document.skills ?? [],
             domains: document.domains ?? [],
-            //experience: document.experience ?? '',
+            experience: document.experience ?? '',
             schedule: document.schedule ?? [],
             subEvents: document.subEvents ?? [],
+            location: document.location ?? [],
             status: document.status ?? '',
             type: document.type ?? '',
             createdAt: document.createdAt ?? '',
@@ -218,6 +227,7 @@ class Event extends AbstractModel {
         this.schema.pre('find', function() {
             middlewarePopulateProperty(this, 'team.member');
             taxonomyPopulate(this, 'skills');
+            taxonomyPopulate(this, 'experience');
             taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');
             middlewarePopulateProperty(this, 'organizer');
@@ -233,6 +243,7 @@ class Event extends AbstractModel {
         this.schema.pre('findOne', function() {
             middlewarePopulateProperty(this, 'team.member');
             taxonomyPopulate(this, 'skills');
+            taxonomyPopulate(this, 'experience');
             taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');
             middlewarePopulateProperty(this, 'organizer');

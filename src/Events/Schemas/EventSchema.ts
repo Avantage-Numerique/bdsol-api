@@ -5,6 +5,8 @@ import { Status } from "@src/Moderation/Schemas/StatusSchema";
 import {Document} from "mongoose";
 import { Member } from "@src/Team/Schemas/MemberSchema";
 import { Schedule } from "@src/Database/Schemas/ScheduleSchema";
+import { EventFormatEnum } from "../EventFormatEnum";
+import { Location } from "@src/Database/Schemas/LocationSchema";
 
 export interface EventSchema extends Document {
     name:string
@@ -15,9 +17,8 @@ export interface EventSchema extends Document {
     entityInCharge:ObjectId
     organizer:ObjectId
     eventType:[ObjectId]
+    eventFormat:EventFormatEnum
     team:[Member]
-    //duration:string
-    //location:string
     startDate:Date
     endDate:Date
     contactPoint:string
@@ -25,8 +26,9 @@ export interface EventSchema extends Document {
     attendees:[ObjectId]
     domains:[DomainSchema]
     skills:[ObjectId]
-    //experience:string
+    experience:[ObjectId]
     schedule:[Schedule]
     subEvents:[ObjectId]
+    location:[Location]
     status:Status
 }

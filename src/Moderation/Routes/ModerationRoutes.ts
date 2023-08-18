@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import { ProjectContextEnum } from "../../Projects/ProjectContextEnum";
 import { BudgetRangeEnum, TimeframeEtaEnum } from "../../Database/Schemas/ScheduleBudgetSchema";
 import EnumHelper from "../../Helpers/EnumHelper";
+import { EventFormatEnum } from "@src/Events/EventFormatEnum";
 
 class ModerationRoutes {
 
@@ -26,6 +27,7 @@ class ModerationRoutes {
         this.routerInstance.get('/context-enum', this.getContextEnumHandler);
         this.routerInstance.get('/budgetrange-enum', this.getBudgetRangeEnumHandler);
         this.routerInstance.get('/timeframeeta-enum', this.getTimeframeEtaEnumHandler);
+        this.routerInstance.get('/eventformat-enum', this.getEventFormatEnumHandler);
         return this.routerInstance;
     }
 
@@ -49,6 +51,9 @@ class ModerationRoutes {
     }
     public async getTimeframeEtaEnumHandler(req: Request, res: Response): Promise<any> {
        return res.status(StatusCodes.OK).send(EnumHelper.enumToSelectOptions(TimeframeEtaEnum));
+    }
+    public async getEventFormatEnumHandler(req: Request, res: Response): Promise<any> {
+       return res.status(StatusCodes.OK).send(EnumHelper.enumToSelectOptions(EventFormatEnum));
     }
 }
 export default ModerationRoutes
