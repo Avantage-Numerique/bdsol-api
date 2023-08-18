@@ -137,12 +137,11 @@ class TaxonomyRoutes extends CrudRoute {
      * @param next {NextFunction}
      */
     public async getByTaxonomyGroup(req: Request, res: Response, next: NextFunction): Promise<any> {
-        req.body.data.category = "in:skills,technologies,domains";
-        const listByGroupSkills = TaxonomyController.getInstance().list(req.body.data)
-        res.serviceResponse = SuccessResponse.create(listByGroupSkills, StatusCodes.OK, ReasonPhrases.OK);
+        req.body.data.category = `in:${TaxonomiesCategoriesEnum.Skills},${TaxonomiesCategoriesEnum.Technology},${TaxonomiesCategoriesEnum.Domains}`;
+        const listByGroupSkills = await this.controllerInstance.list(req.body.data);
+        res.serviceResponse = listByGroupSkills;
         return next();
     }
-
 
 }
 

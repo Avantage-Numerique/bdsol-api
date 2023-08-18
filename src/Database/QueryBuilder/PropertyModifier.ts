@@ -19,9 +19,7 @@ export const objectIdModifier:PropertyModifier = (value) => {
 export const stringToArrayModifier = (str:string) => {
 
     if (typeof str === "string" && str.includes(",")) {
-        console.log('str have , in it so return a split')
         return str.split(",");
     }
-    console.log("return base array with direct str", str);
     return [str];
 }
