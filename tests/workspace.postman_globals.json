@@ -1,110 +1,141 @@
 {
-  "_": {
-    "postman_variable_scope": "globals",
-    "postman_exported_at": "2022-09-15T16:30:26.360Z",
-    "postman_exported_using": "Newman/5.3.2"
-  },
-  "id": "005c6ac7-ec14-4597-8afa-52bfea11711f",
-  "name": "Globals",
-  "values": [
-    {
-      "type": "any",
-      "value": "localhost:8000",
-      "key": "baseURL"
-    },
-    {
-      "type": "any",
-      "value": "/persons",
-      "key": "persPATH"
-    },
-    {
-      "type": "any",
-      "value": "/users",
-      "key": "usersPATH"
-    },
-    {
-      "type": "any",
-      "value": "/organisations",
-      "key": "orgPATH"
-    },
-    {
-      "type": "any",
-      "value": "/taxonomies",
-      "key": "taxoPATH"
-    },
-    {
-      "type": "any",
-      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjM1MjQ2NzM4NzRjZGU1YWRiMDhmOCIsInVzZXJuYW1lIjoiZGF0YWdlZWsiLCJhdmF0YXIiOiJodHRwczovL3d3dy5wbmdhcmVhLmNvbS9wbmdtLzIvNDk4NzIzMF9wZXBlLXBuZy1lei10d2l0Y2gtZW1vdGUtcG5nLXBuZy1kb3dubG9hZC5wbmciLCJuYW1lIjoiSHlkaWxlIER1cm9jaGVyIiwiZW1haWwiOiJkYXRhZ2Vla0B0ZXN0LmNvbSIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjItMDktMTVUMTY6MjY6NDYuMjg2WiIsImlhdCI6MTY2MzI1OTMwOSwiZXhwIjoxNjYzMzQ1NzA5fQ.k7raLqpCLCVAUmRbEPv7FnZdg3HlAuVPStjvGKs2nGg",
-      "key": "DevToken"
-    },
-    {
-      "type": "any",
-      "value": "/userhistory",
-      "key": "usrHstPATH"
-    },
-    {
-      "type": "any",
-      "value": "/create",
-      "key": "createROUTE"
-    },
-    {
-      "type": "any",
-      "value": "/update",
-      "key": "updateROUTE"
-    },
-    {
-      "type": "any",
-      "value": "/search",
-      "key": "searchROUTE"
-    },
-    {
-      "type": "any",
-      "value": "/list",
-      "key": "listROUTE"
-    },
-    {
-      "type": "any",
-      "value": "/getinfo",
-      "key": "getinfoROUTE"
-    },
-    {
-      "type": "any",
-      "value": "/getdoc",
-      "key": "getdocROUTE"
-    },
-    {
-      "type": "any",
-      "value": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "boolean"
-          },
-          "code": {
-            "type": "number"
-          },
-          "message": {
-            "type": "string"
-          },
-          "errors": {
-            "type": "object"
-          },
-          "data": {
-            "type": "object"
-          }
-        },
-        "required": [
-          "error",
-          "code",
-          "message",
-          "errors",
-          "data"
-        ]
-      },
-      "key": "error_schema"
-    }
-  ],
-  "_postman_variable_scope": "globals",
-  "_postman_exported_at": "2022-09-15T16:30:33.207Z",
-  "_postman_exported_using": "Newman/5.3.2"
+	"id": "005c6ac7-ec14-4597-8afa-52bfea11711f",
+	"values": [
+		{
+			"key": "baseURL",
+			"value": "localhost:8000",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "persPATH",
+			"value": "/persons",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "usersPATH",
+			"value": "/users",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "orgPATH",
+			"value": "/organisations",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "taxoPATH",
+			"value": "/taxonomies",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "projPATH",
+			"value": "/projects",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "eventPATH",
+			"value": "/events",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "mediaPATH",
+			"value": "/medias",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "DevToken",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "usrHstPATH",
+			"value": "/userhistory",
+			"enabled": true
+		},
+		{
+			"key": "createROUTE",
+			"value": "/create",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "updateROUTE",
+			"value": "/update",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "searchROUTE",
+			"value": "/search",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "listROUTE",
+			"value": "/list",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "getinfoROUTE",
+			"value": "/getinfo",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "getdocROUTE",
+			"value": "/getdoc",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "error_schema",
+			"value": {
+				"type": "object",
+				"properties": {
+					"error": {
+						"type": "boolean"
+					},
+					"code": {
+						"type": "number"
+					},
+					"message": {
+						"type": "string"
+					},
+					"errors": {
+						"type": "object"
+					},
+					"data": {
+						"type": "object"
+					}
+				},
+				"required": [
+					"error",
+					"code",
+					"message",
+					"errors",
+					"data"
+				]
+			},
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "pingROUTE",
+			"value": "/ping",
+			"enabled": true
+		}
+	],
+	"name": "Globals",
+	"_postman_variable_scope": "globals",
+	"_postman_exported_at": "2023-08-22T16:55:23.822Z",
+	"_postman_exported_using": "Postman/10.17.2-230814-1237"
 }
