@@ -134,7 +134,7 @@ export abstract class Service {
         try {
             meta = await this.model.create(data)
                 .catch((e: any) => {
-                    const insertError:HttpError = new HttpError(e.message);
+                    const insertError:HttpError = new HttpError("Impossible de créer l'entité.");//suppression de l e.message car l'app renvoie tout.
                     insertError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                     throw insertError;
                 });

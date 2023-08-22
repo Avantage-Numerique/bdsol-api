@@ -24,7 +24,7 @@ import {AdminRoutes} from "@src/Admin/Routes/AdminRoutes";
 import JobScheduler from "@src/Schedule/JobScheduler";
 import {JobSheet} from "@src/Schedule/Sheet";
 import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
-import { EventsRoutes } from "./Events/Routes/EventsRoute";
+import {EventsRoutes} from "./Events/Routes/EventsRoutes";
 
 /**
  * Main class for the API
