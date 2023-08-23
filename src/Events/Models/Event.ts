@@ -12,7 +12,6 @@ import { populateUser } from "@src/Users/Middlewares/populateUser";
 import { User } from "@src/Users/UsersDomain";
 import { Schedule } from "@src/Database/Schemas/ScheduleSchema";
 import { EventFormatEnum } from "../EventFormatEnum";
-import { Location } from "@src/Database/Schemas/LocationSchema";
 
 class Event extends AbstractModel {
 
@@ -150,7 +149,8 @@ class Event extends AbstractModel {
                 ref: "Event"
             },
             location: {
-                type: [Location.schema]
+                type: [mongoose.Types.ObjectId],
+                ref: "Place"
             },
             status: {
                 type: Status.schema
@@ -236,6 +236,7 @@ class Event extends AbstractModel {
             middlewarePopulateProperty(this, 'entityInCharge');
             middlewarePopulateProperty(this, 'subEvents');
             middlewarePopulateProperty(this, 'eventType');
+            middlewarePopulateProperty(this, 'location');
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
             populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
@@ -252,6 +253,7 @@ class Event extends AbstractModel {
             middlewarePopulateProperty(this, 'entityInCharge');
             middlewarePopulateProperty(this, 'subEvents');
             middlewarePopulateProperty(this, 'eventType');
+            middlewarePopulateProperty(this, 'location');
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
             populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);

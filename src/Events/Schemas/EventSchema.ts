@@ -6,7 +6,6 @@ import {Document} from "mongoose";
 import { Member } from "@src/Team/Schemas/MemberSchema";
 import { Schedule } from "@src/Database/Schemas/ScheduleSchema";
 import { EventFormatEnum } from "../EventFormatEnum";
-import { Location } from "@src/Database/Schemas/LocationSchema";
 
 export interface EventSchema extends Document {
     name:string
@@ -29,6 +28,6 @@ export interface EventSchema extends Document {
     experience:[ObjectId]
     schedule:[Schedule]
     subEvents:[ObjectId]
-    location:[Location]
+    location:[ObjectId]
     status:Status
 }

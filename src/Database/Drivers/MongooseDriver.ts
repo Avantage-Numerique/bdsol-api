@@ -21,6 +21,8 @@ import ProjectsService from "@src/Projects/Services/ProjectsService";
 import Project from "@src/Projects/Models/Project";
 import Event from "@src/Events/Models/Event";
 import EventsService from "@src/Events/Services/EventsService";
+import PlacesService from "@src/Places/Services/PlacesService";
+import Place from "@src/Places/Models/Place";
 
 
 export class MongooseDBDriver implements DBDriver {
@@ -93,6 +95,7 @@ export class MongooseDBDriver implements DBDriver {
         this.providers.data.assign(OrganisationsService.getInstance(Organisation.getInstance()));
         this.providers.data.assign(ProjectsService.getInstance(Project.getInstance()));
         this.providers.data.assign(EventsService.getInstance(Event.getInstance()));
+        this.providers.data.assign(PlacesService.getInstance(Place.getInstance()));
     }
 
 

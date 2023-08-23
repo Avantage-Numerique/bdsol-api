@@ -9,7 +9,7 @@ Retour à la base de (Documention de l'API)(readme.md)
 - description : (string) une description du projet
 - url : (string) url du projet (redirection vers le un site)
 - contactPoint : (string) moyen de contact d'un-e représentant-e du projet
-- location : (Location.schema) coordonée d'un endroit où le projet à lieu, si besoin il y a de spécifier un lieu. (pas le lieu de la finalité)
+- location : (ObjectId ref:Place) coordonée ou addresse d'un endroit où le projet à lieu, si besoin il y a de spécifier un lieu. (pas le lieu de la finalité)
 - team : [Member.schema] des membres de l'équipe du projet
 - mainImage : (ObjectId) un média image représentant le projet
 - sponsor : [Sponsor.schema] partenaire financier ou non du projet

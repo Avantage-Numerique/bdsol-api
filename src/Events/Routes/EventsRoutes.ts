@@ -34,6 +34,7 @@ class EventsRoutes extends CrudRoute {
             objectIdSanitizerAlias('data.mainImage'),
             objectIdSanitizerAlias('data.attendees.*'),
             objectIdSanitizerAlias('data.skills.*'),
+            objectIdSanitizerAlias('data.location.*'),
             //domain?
             //schedule
             objectIdSanitizerAlias('data.subEvents.*'),
@@ -54,6 +55,7 @@ class EventsRoutes extends CrudRoute {
             objectIdSanitizerAlias('data.mainImage'),
             objectIdSanitizerAlias('data.attendees.*'),
             objectIdSanitizerAlias('data.skills.*'),
+            objectIdSanitizerAlias('data.location.*'),
             //domain?
             //schedule
             objectIdSanitizerAlias('data.subEvents.*'),

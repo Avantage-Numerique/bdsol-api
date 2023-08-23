@@ -118,6 +118,10 @@ class Organisation extends AbstractModel {
                 catchphrase: {
                     type: String
                 },
+                location: {
+                    type: [mongoose.Types.ObjectId],
+                    ref: "Place"
+                },
                 status: {
                     type: Status.schema
                 }

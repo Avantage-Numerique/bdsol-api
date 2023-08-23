@@ -33,6 +33,7 @@ class ProjectsRoutes extends CrudRoute {
             //body('data.sponsor').exists({checkNull:true}).bail(),
             //body('data.scheduleBudget').exists({checkNull:true}).bail(),
             objectIdSanitizerAlias('data.mainImage'),
+            objectIdSanitizerAlias('data.location.*'),
             /*body('data.skills').exists({checkNull:true}).bail()
                 .custom(IsObjectIdStringValid.validatorCustom())
                 .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
@@ -50,6 +51,7 @@ class ProjectsRoutes extends CrudRoute {
             contactPointSanitizerAlias('data.contactPoint'),
             objectIdSanitizerAlias('data.team.*.member'),
             objectIdSanitizerAlias('data.mainImage'),
+            objectIdSanitizerAlias('data.location.*'),
 
             //body('data.context').exists({checkNull:true}).bail().customSanitizer(EnumSanitizer.validatorCustomSanitizer(ProjectContextEnum)),
             //body('data.location').exists({checkNull:true}).bail(),

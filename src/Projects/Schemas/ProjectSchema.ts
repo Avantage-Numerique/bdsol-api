@@ -18,7 +18,7 @@ export interface ProjectSchema extends Document {
     description:string;
     url:string;
     contactPoint:string;
-    location:Location;
+    location:[ObjectId];
     team:[Member];
     mainImage:Media;
     sponsor:[Sponsor];

@@ -3,6 +3,8 @@ import AbstractModel from "@core/Model";
 import type {DbProvider} from "@database/DatabaseDomain";
 import {PlaceSchema} from "@src/Places/Schemas/PlaceSchema";
 import PlacesService from "@src/Places/Services/PlacesService";
+import { middlewarePopulateProperty } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import { Status } from "@src/Moderation/Schemas/StatusSchema";
 
 class Place extends AbstractModel {
 
@@ -18,7 +20,7 @@ class Place extends AbstractModel {
             Place._instance.registerEvents();
 
             //Setting virtuals
-            //Place._instance.schema.virtual("Place").get( function () { return Place._instance.modelName });
+            Place._instance.schema.virtual("type").get( function () { return Place._instance.modelName });
 
             Place._instance.initSchema();
 
@@ -26,6 +28,27 @@ class Place extends AbstractModel {
             //Place._instance.schema.index({ "Place.Place":1});
         }
         return Place._instance;
+    }
+
+    public registerIndexes():void {
+        //Indexes
+        Place._instance.schema.index(
+            { name:"text", city:"text", province:"text", country:"text", slug:"text", description:"text" },
+            {
+                default_language: "french",
+                //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
+                weights:{
+                    name: 1,
+                    city: 1,
+                    province: 1,
+                    country: 1,
+                    slug: 1,
+                    description: 1
+                }
+            });
+    }
+    public dropIndexes(): void {
+        return;
     }
 
     /** @public Model lastName */
@@ -42,7 +65,50 @@ class Place extends AbstractModel {
 
     /** @public Database schema */
     schema: Schema =
-        new Schema<PlaceSchema>({},
+        new Schema<PlaceSchema>({
+            name: {
+                type: String,
+                minlength: 2,
+                required: true
+            },
+            description: {
+                type: String
+            },
+            mainImage: {
+                type: mongoose.Types.ObjectId,
+                ref : "Media"
+            },
+            address: {
+                type: String
+            },
+            city: {
+                type: String
+            },
+            region: {
+                type: String
+            },
+            mrc: {
+                type: String
+            },
+            province: {
+                type: String
+            },
+            postalCode: {
+                type: String
+            },
+            country: {
+                type: String
+            },
+            latitude: {
+                type: String
+            },
+            longitude: {
+                type: String
+            },
+            status:{
+                type: Status.schema
+            }
+        },
             {
                 toJSON: {virtuals: true},
                 timestamps: true,
@@ -54,21 +120,12 @@ class Place extends AbstractModel {
     /** @abstract Set of rules that are verified for every field of this entity. */
     public ruleSet: any = [];
 
-
-    public registerIndexes(): void {
-        return;
-    };
-
-    public dropIndexes(): void {
-        return;
-    };
-
     /**
      * @get the field that are searchable.
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields(): object {
-        return [""];
+        return ["name","description","address","region","mrc","province","country","postalCode"];
     }
 
     /**
@@ -80,6 +137,22 @@ class Place extends AbstractModel {
     public dataTransfertObject(document: any) {
         return {
             _id: document._id ?? '',
+            name: document.name ?? '',
+            description: document.description ?? '',
+            mainImage: document.mainImage ?? '',
+            address: document.address ?? '',
+            city: document.city ?? '',
+            region: document.region ?? '',
+            mrc: document.mrc ?? '',
+            province: document.province ?? '',
+            postalCode: document.postalCode ?? '',
+            country: document.country ?? '',
+            latitude: document.latitude ?? '',
+            longitude: document.longitude ?? '',
+            status: document.status ?? '', 
+            createdAt: document.createdAt ?? '',
+            updatedAt: document.updatedAt ?? ''
+
         }
     }
 
@@ -87,12 +160,17 @@ class Place extends AbstractModel {
         return "";
     }
 
-
     /**
      * Register mongoose events, for now pre-save, pre-findOneAndUpdate
      */
     public registerEvents(): void {
+        this.schema.pre('find', function() {
+            middlewarePopulateProperty(this, "mainImage");
+        });
 
+        this.schema.pre('findOne', function() {
+            middlewarePopulateProperty(this, 'mainImage');
+        });
     }
 }
 

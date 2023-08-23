@@ -9,7 +9,6 @@ import {populateUser} from "@src/Users/Middlewares/populateUser";
 import {User} from "@src/Users/UsersDomain";
 import {Sponsor} from "@database/Schemas/SponsorSchema";
 import {ScheduleBudget} from "@database/Schemas/ScheduleBudgetSchema";
-import {Location} from "@database/Schemas/LocationSchema";
 import {ProjectContextEnum} from "../ProjectContextEnum";
 import {TeamField} from "@src/Team/Schemas/TeamSchema";
 import * as fs from 'fs';
@@ -106,8 +105,8 @@ class Project extends AbstractModel {
                 type: String
             },
             location: {
-                type: Location.schema,
-                default: {}
+                type: [mongoose.Types.ObjectId],
+                ref: "Place"
             },
             team: TeamField,
             mainImage: {

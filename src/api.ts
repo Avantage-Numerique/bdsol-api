@@ -25,6 +25,7 @@ import JobScheduler from "@src/Schedule/JobScheduler";
 import {JobSheet} from "@src/Schedule/Sheet";
 import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 import {EventsRoutes} from "./Events/Routes/EventsRoutes";
+import { PlacesRoutes } from "./Places/Routes/PlacesRoutes";
 
 /**
  * Main class for the API
@@ -129,6 +130,10 @@ export default class Api {
             {
                 baseRoute: "/events",
                 manager: new EventsRoutes()
+            },
+            {
+                baseRoute: "/places",
+                manager: new PlacesRoutes()
             },
             {
                 baseRoute: "/info",
