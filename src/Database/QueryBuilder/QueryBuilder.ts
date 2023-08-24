@@ -58,7 +58,8 @@ export default class QueryBuilder {
      * in, we
      */
     static fieldPropertiesModifiers: any = {
-        "_id": objectIdModifier
+        "_id": objectIdModifier,
+        "id": objectIdModifier
     }
 
     /**
@@ -152,6 +153,8 @@ export default class QueryBuilder {
             // If the field is an id check, but brute, no property sets.
             if ((field === "id" || field === "_id") &&
                 (value !== "" && value !== undefined && !QueryBuilder.haveProperty(value))) {    // sauf si
+                //const modifier = QueryBuilder.fieldPropertiesModifiers['_id'] ?? defaultModifier;
+                //parsedQuery._id = modifier(value);
                 parsedQuery._id = value;
                 continue;
             }

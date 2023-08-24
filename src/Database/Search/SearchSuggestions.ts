@@ -66,7 +66,7 @@ class SearchSuggestions {
 
         const eventSuggestions = await this.eventModel.find(
             { $or: [
-                { name: { $reged: searchIndex, $options: 'i' }},
+                { name: { $regex: searchIndex, $options: 'i' }},
                 { alternateName: { $regex: searchIndex, $options : 'i' }},
             ]}
         )
