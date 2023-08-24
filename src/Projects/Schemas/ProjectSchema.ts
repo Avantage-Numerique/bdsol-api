@@ -1,13 +1,12 @@
 import {Document} from "mongoose";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
-import { Member } from "../../Team/Schemas/MemberSchema";
-import Media from "../../Media/Models/Media";
-import { ObjectId } from "mongodb";
-import { Sponsor } from "../../Database/Schemas/SponsorSchema";
-import { ScheduleBudget } from "../../Database/Schemas/ScheduleBudgetSchema";
-import { Location } from "../../Database/Schemas/LocationSchema";
-import { ProjectContextEnum } from "../ProjectContextEnum";
-import { DomainSchema } from "@src/Taxonomy/Schemas/DomainSchema";
+import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {Member} from "@src/Team/Schemas/MemberSchema";
+import Media from "@src/Media/Models/Media";
+import {ObjectId} from "mongodb";
+import {Sponsor} from "@database/Schemas/SponsorSchema";
+import {ScheduleBudget} from "@database/Schemas/ScheduleBudgetSchema";
+import {ProjectContextEnum} from "../ProjectContextEnum";
+import {DomainSchema} from "@src/Taxonomy/Schemas/DomainSchema";
 
 export interface ProjectSchema extends Document {
     name:string;
