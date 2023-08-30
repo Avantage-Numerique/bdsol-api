@@ -33,7 +33,7 @@ class Place extends AbstractModel {
     public registerIndexes():void {
         //Indexes
         Place._instance.schema.index(
-            { name:"text", city:"text", province:"text", country:"text", slug:"text", description:"text" },
+            { name:"text", slug:"text", city:"text", province:"text", country:"text", description:"text" },
             {
                 default_language: "french",
                 //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
@@ -73,6 +73,13 @@ class Place extends AbstractModel {
             },
             description: {
                 type: String
+            },
+            slug: {
+                type: String,
+                slug: "name",
+                slugPaddingSize: 3,
+                index: true,
+                unique: true
             },
             mainImage: {
                 type: mongoose.Types.ObjectId,
@@ -139,6 +146,7 @@ class Place extends AbstractModel {
             _id: document._id ?? '',
             name: document.name ?? '',
             description: document.description ?? '',
+            slug: document.slug ?? '',
             mainImage: document.mainImage ?? '',
             address: document.address ?? '',
             city: document.city ?? '',
@@ -149,7 +157,8 @@ class Place extends AbstractModel {
             country: document.country ?? '',
             latitude: document.latitude ?? '',
             longitude: document.longitude ?? '',
-            status: document.status ?? '', 
+            status: document.status ?? '',
+            type: document.type ?? '',
             createdAt: document.createdAt ?? '',
             updatedAt: document.updatedAt ?? ''
 

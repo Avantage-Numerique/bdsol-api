@@ -5,6 +5,7 @@ import TaxonomyController from "../Taxonomy/Controllers/TaxonomyController";
 import MediasController from "../Media/Controllers/MediasController";
 import ProjectsController from "../Projects/Controllers/ProjectsController";
 import EventsController from "@src/Events/Controllers/EventsController";
+import PlacesController from "@src/Places/Controllers/PlacesController";
 
 class EntityControllerFactory {
 
@@ -25,6 +26,8 @@ class EntityControllerFactory {
                 instance = EventsController.getInstance();break;
             case "media":
                 instance = MediasController.getInstance();break;
+            case "place":
+                instance = PlacesController.getInstance();break;
 
             default:instance = PersonsController.getInstance();//Maybe causing some problem eventually
         }

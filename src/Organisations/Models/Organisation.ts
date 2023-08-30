@@ -165,6 +165,7 @@ class Organisation extends AbstractModel {
             slug: document.slug ?? '',
             catchphrase: document.catchphrase ?? '',
             status : document.status ?? '',
+            location: document.location ?? [],
             type: document.type ?? '',
             createdAt : document.createdAt ?? '',
             updatedAt : document.updatedAt ?? '',
@@ -225,6 +226,7 @@ class Organisation extends AbstractModel {
 
             middlewarePopulateProperty(this, 'team.member');
             middlewarePopulateProperty(this, "mainImage");
+            middlewarePopulateProperty(this, "location");
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
             populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
@@ -236,6 +238,7 @@ class Organisation extends AbstractModel {
 
             middlewarePopulateProperty(this, 'team.member');
             middlewarePopulateProperty(this, "mainImage");
+            middlewarePopulateProperty(this, "location");
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
             populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);

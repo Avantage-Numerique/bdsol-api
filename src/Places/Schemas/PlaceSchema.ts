@@ -5,6 +5,7 @@ import {Document} from "mongoose";
 export interface PlaceSchema extends Document {
     name:string,
     description:string,
+    slug:string,
     mainImage:ObjectId,
     address:string,
     city:string,
