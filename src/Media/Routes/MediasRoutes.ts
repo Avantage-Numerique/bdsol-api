@@ -186,103 +186,51 @@ class MediasRoutes extends AbstractRoute {
         }*/
         
         //Check if entityId, mediaField, entityType is in the request;
-        const requestData = req.body.data;
-        const { entityId, mediaField, entityType } = requestData;
-        
-        
-        if(requestData.entityId == undefined ||
-            requestData.mediaField === undefined ||
-            requestData.entityType === undefined) {
-                //Insert message missing field here
-                res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST,
-                    "Required field : entityId : (the entityId of the entity media belongs to), "+
-                    "mediaField : ('mainImage', ...), "+
-                    "entityType: (type of entity 'Person', 'Organisation' ...)");
-                    return;
-        }
-                
-        //if entity have media field
-        //TODO : Need to make a check for this (this goes with making the create check for multiple field multer.single ("mainImage, and others..."))
-        //Temporary check (entityType is person or org and mediaField is mainImage)
-        const entities:any = [
-            Person.getInstance().modelName,
-            Organisation.getInstance().modelName,
-            Project.getInstance().modelName,
-            Event.getInstance().modelName,
-            Place.getInstance().modelName];
-        if( entities.includes(entityType)
-            &&  mediaField == "mainImage" ) {
-                
-            //Get old media ID if exist
-            const entityResponse = await EntityControllerFactory.getControllerFromEntity(entityType).search( { id : entityId } );
-            const oldMediaId = entityResponse?.data?.[mediaField]?._id;
-        
-            const record = new Record(req, res, entityId, mediaField, entityType);
-            if (!record.isValid()){
-                res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Couldn't create Record associated with the file that was sent" );
-                return;
-            }
-        
-            //Save file
-            await FileStorage.saveFile(record).then(function() {
-                LogHelper.log("Saved file");
-            }).catch(function (){
-                LogHelper.log("It catched that the saveFile didn't work!");
-                res.serviceResponse.multer.error = true;
-                res.serviceResponse.multer.message = "Couldn't save file to the server :( , saving file failed"
-                return;
-           });
-        
-            const mediasController = MediasController.getInstance();
-            //insert a new object media inside the database with all the information required
-            const mediaResponse = await mediasController.internalCreateFromRecord(record);
-            res.serviceResponse = mediaResponse;
-            if (mediaResponse.error){
-                res.serviceResponse.failMessage = "Couldn't save file, creating media failed"
-    
-                //Delete file
-                FileStorage.deleteFile(record);
-                
-                res.serviceResponse.multer = {};
-                res.serviceResponse.multer.error = true;
-                res.serviceResponse.multer.message = "Deleted file";
-                return;
-            }
-
-            const toLinkMediaId = mediaResponse.data._id;
-            const updateRequest = { id: entityId, mainImage : toLinkMediaId };
-            const linkingMediaResponse = await EntityControllerFactory.getControllerFromEntity(entityType).update(updateRequest);
-            
-            if (linkingMediaResponse.error){
-                //Delete media
-                res.serviceResponse = await mediasController.internalDelete(record.entityId, record.filenameNoExt);
-                res.serviceResponse.failMessage = "Couldn't save file, failed to link media to entity";
-                //Delete file
-                FileStorage.deleteFile(record);
-
-                res.serviceResponse.multer = {};
-                res.serviceResponse.multer.error = true;
-                res.serviceResponse.multer.message = "Deleted file";
-                return;
-            }
-
-            //If entity had old media then update it
-            if (oldMediaId !== undefined){
-                res.serviceResponse.oldMedia = await this.controllerInstance.update( { id: oldMediaId, dbStatus: "archived" });
-                if (!res.serviceResponse.oldMedia.error)
-                    res.serviceResponse.oldMedia.message = "old media status set to archived successfully"
-                else
-                    res.serviceResponse.oldMedia.message = "old media status update to archived failed"
-            }
-
-            //Everything succeeded
-            res.serviceResponse.message = "Success to save file, create media, and link media to entity!";
-            res.serviceResponse.action = "create";
-            const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res);
+        const isReqDataCorrect = this.controllerInstance.checkRequestData(req);
+        if(!isReqDataCorrect){
+            //Insert message missing field here
+            res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST,
+                "Required field : entityId : (the entityId of the entity media belongs to), "+
+                "mediaField : ('mainImage', ...), "+
+                "entityType: (type of entity 'Person', 'Organisation' ...)");
             return;
         }
-        //Return msg no field to put image into entity
-        res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Entity upload is désactivated or invalid field for upload.");
+
+        const {entityId, mediaField, entityType} = req.body.data;
+        //Get old media ID if exist
+        const entityResponse = await EntityControllerFactory.getControllerFromEntity(entityType).search( { id : entityId } );
+        const oldMediaId = entityResponse?.data?.[mediaField]?._id;
+    
+        const record = new Record(req, res, entityId, mediaField, entityType);
+        if (!record.isValid()){
+            res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Couldn't create Record associated with the file that was sent" );
+            return;
+        }
+    
+        //Save file
+        const isFileSaved = await this.controllerInstance.saveFile(res, record);
+        if(!isFileSaved)
+            return;
+
+        //Insert new media object in db and handle error (delete file if fail)
+        const toLinkMediaId = await this.controllerInstance.insertMedia(res, record);
+        //toLinkMediaId is false if failed
+        if(toLinkMediaId == false)
+            return;
+
+        const isLinkedSuccess = await this.controllerInstance.linkEntityToMedia(res, record, toLinkMediaId)
+        if(!isLinkedSuccess)
+            return;
+
+        //If entity had old media then update it
+        if (oldMediaId !== undefined){
+            await this.controllerInstance.archiveOldMedia(res, oldMediaId)
+        }
+
+        //Everything succeeded
+        res.serviceResponse.message = "Success to save file, create media, and link media to entity!";
+        res.serviceResponse.action = "create";
+        const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res);
         return;
     }
 
