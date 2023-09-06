@@ -1,8 +1,6 @@
 import AbstractController from "../../Abstract/Controller";
 import MediasService from "../Services/MediasService";
 import Media from "../Models/Media";
-import {SuccessResponse} from "../../Http/Responses/SuccessResponse";
-import {StatusCodes} from "http-status-codes";
 import Record from "../Record/Record";
 import { Request, Response } from "express";
 import FileStorage from "@src/Storage/Files/FileStorage";
@@ -42,14 +40,6 @@ class MediasController extends AbstractController { //implements ControllerContr
         return MediasController._instance;
     }
 
-    public basepath(requestData:any) {
-        return SuccessResponse.create({"basepath":"truetrue"}, StatusCodes.OK, "asdasdasd");
-    }
-    
-    public uploadSingle(requestData:any) {
-        return SuccessResponse.create({"uploadSingle":"truetrue"}, StatusCodes.OK, "Uploading single media comming into dev!");
-    }
-
     public internalCreateFromRecord(record:Record){
         if(record.isValid()){
             const createData = {
@@ -62,6 +52,7 @@ class MediasController extends AbstractController { //implements ControllerContr
                 fileType: record.fileType,
                 fileName: record.filenameNoExt,
                 extension: record.extension,
+                mediaField: record.mediaField,
                 entityId: record.entityId ?? '',
                 entityType: record.entityType ?? '',
                 uploadedBy: record.userId,
@@ -91,17 +82,19 @@ class MediasController extends AbstractController { //implements ControllerContr
             requestData.entityType === undefined) {
                 return false;
         }
-        //Check entityType
-        const entities:any = [
-            Person.getInstance().modelName,
-            Organisation.getInstance().modelName,
-            Project.getInstance().modelName,
-            Event.getInstance().modelName,
-            Place.getInstance().modelName];
-        if( !entities.includes(requestData.entityType))
+        //Create keys (modelName) and values (accepted media field) for each model
+        const entities:any = {
+            [Person.getInstance().modelName]: ["mainImage"],
+            [Organisation.getInstance().modelName]: ["mainImage"],
+            [Project.getInstance().modelName]: ["mainImage"],
+            [Event.getInstance().modelName]: ["mainImage", "photoGallery"],
+            [Place.getInstance().modelName]: ["mainImage"]
+        };
+        //For all keys (modelName) check if image is accepted
+        if(!Object.keys(entities).includes(requestData.entityType))
             return false;
-        //Check mediaField
-        if(requestData.mediaField !== "mainImage")
+        //For all values, check if mediaField is accepted for that model
+        if(!entities[requestData.entityType].includes(requestData.mediaField))
             return false
         return true
     }
@@ -138,7 +131,7 @@ class MediasController extends AbstractController { //implements ControllerContr
     }
 
     public async linkEntityToMedia(res:Response, record:Record, toLinkMediaId:any){
-        const updateRequest = { id: record.entityId, mainImage : toLinkMediaId };
+        const updateRequest = { id: record.entityId, [record.mediaField] : toLinkMediaId };
         const linkingMediaResponse = await EntityControllerFactory.getControllerFromEntity(record.entityType).update(updateRequest);
         
         if (linkingMediaResponse.error){

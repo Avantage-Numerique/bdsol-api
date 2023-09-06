@@ -85,6 +85,10 @@ class Media extends AbstractModel {
                     type: String,
                     enum: fileExtensionList
                 },
+                mediaField: {
+                    type: String,
+                    enum: ["mainImage", "photoGallery"]
+                },
                 slug: {
                     type: String,
                     slug: ["entityId"],
@@ -160,6 +164,7 @@ class Media extends AbstractModel {
             fileType: document.fileType ?? '',
             fileName: document.fileName ?? '',
             extension: document.extension ?? '',
+            mediaField: document.mediaField ?? '',
             slug: document.slug ?? '',
             entityId: document.entityId ?? '',
             entityType: document.entityType ?? '',

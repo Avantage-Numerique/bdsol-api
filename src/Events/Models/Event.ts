@@ -152,6 +152,10 @@ class Event extends AbstractModel {
                 type: [mongoose.Types.ObjectId],
                 ref: "Place"
             },
+            photoGallery:{
+                type: mongoose.Types.ObjectId,
+                ref: "Media"
+            },
             status: {
                 type: Status.schema
             }
@@ -209,6 +213,7 @@ class Event extends AbstractModel {
             schedule: document.schedule ?? [],
             subEvents: document.subEvents ?? [],
             location: document.location ?? [],
+            photoGallery: document.photoGallery ?? '',
             status: document.status ?? '',
             type: document.type ?? '',
             createdAt: document.createdAt ?? '',
@@ -237,6 +242,7 @@ class Event extends AbstractModel {
             middlewarePopulateProperty(this, 'subEvents');
             middlewarePopulateProperty(this, 'eventType');
             middlewarePopulateProperty(this, 'location');
+            middlewarePopulateProperty(this, 'photoGallery');
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
             populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
@@ -254,6 +260,8 @@ class Event extends AbstractModel {
             middlewarePopulateProperty(this, 'subEvents');
             middlewarePopulateProperty(this, 'eventType');
             middlewarePopulateProperty(this, 'location');
+            middlewarePopulateProperty(this, 'photoGallery');
+
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
             populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);

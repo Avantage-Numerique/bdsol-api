@@ -29,5 +29,6 @@ export interface EventSchema extends Document {
     schedule:[Schedule]
     subEvents:[ObjectId]
     location:[ObjectId]
+    photoGallery:ObjectId
     status:Status
 }

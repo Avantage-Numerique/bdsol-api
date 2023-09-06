@@ -11,6 +11,7 @@ export interface MediaSchema extends Document {
     fileType: string;
     fileName: string;
     extension: string;
+    mediaField: string;
     slug: string;
     entityId: mongoose.ObjectId;
     entityType: string;

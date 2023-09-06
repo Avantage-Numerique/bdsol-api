@@ -12,16 +12,11 @@ import multer from "multer";
 import {ErrorResponse} from "@src/Http/Responses/ErrorResponse";
 import PublicStorage from "@src/Storage/Files/PublicStorage";
 import * as path from "path";
-import Organisation from "@src/Organisations/Models/Organisation";
-import Person from "@src/Persons/Models/Person";
 import {now} from "@src/Helpers/DateTime";
 import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
 import {noHtmlStringSanitizerAlias} from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
 import {isInEnumSanitizerAlias} from "@src/Security/SanitizerAliases/IsInEnumSanitizerAlias";
 import {EntityTypesEnum} from "@src/Entities/EntityTypes";
-import Project from "@src/Projects/Models/Project";
-import Event from "@src/Events/Models/Event";
-import Place from "@src/Places/Models/Place";
 
 
 class MediasRoutes extends AbstractRoute {
@@ -117,7 +112,10 @@ class MediasRoutes extends AbstractRoute {
         });
 
         this.routerInstanceAuthentification.post('/upload', [
-            multipartMiddlewareTemporaryHandler.single("mainImage"),
+            multipartMiddlewareTemporaryHandler.fields([
+                { name: 'mainImage', maxCount: 1 },
+                { name: 'photoGallery', maxCount: 1 }
+              ]),
             this.contentTypeParser.bind(this),
             ...this.addMiddlewares("all"),
             this.createOrUpdateDispatch.bind(this),
@@ -125,7 +123,10 @@ class MediasRoutes extends AbstractRoute {
         ]);
 
         this.routerInstanceAuthentification.post('/update', [
-            multipartMiddlewareTemporaryHandler.single("mainImage"),
+            multipartMiddlewareTemporaryHandler.fields([
+                { name: 'mainImage', maxCount: 1 },
+                { name: 'photoGallery', maxCount: 1 }
+              ]),
             this.contentTypeParser.bind(this),
             ...this.addMiddlewares("all"),
             this.createOrUpdateDispatch.bind(this),
@@ -154,8 +155,9 @@ class MediasRoutes extends AbstractRoute {
 
     public async createOrUpdateDispatch(req: Request, res: Response, next: NextFunction): Promise<any> {
         
+        console.log("file", req.file, "\n\n", "files", req.files)
         //If file attached (either upload or update)
-        if(req.file !== undefined){
+        if(req.files !== undefined){
             await this.createAndReplaceHandler(req, res);
         }
         //if no file attached
@@ -201,7 +203,7 @@ class MediasRoutes extends AbstractRoute {
         const entityResponse = await EntityControllerFactory.getControllerFromEntity(entityType).search( { id : entityId } );
         const oldMediaId = entityResponse?.data?.[mediaField]?._id;
     
-        const record = new Record(req, res, entityId, mediaField, entityType);
+        const record = new Record(req.body.data, req.files, req.user._id, entityId, mediaField, entityType);
         if (!record.isValid()){
             res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Couldn't create Record associated with the file that was sent" );
             return;
