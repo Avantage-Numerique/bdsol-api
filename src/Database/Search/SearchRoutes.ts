@@ -31,7 +31,8 @@ class SearchRoutes extends AbstractRoute {
      */
     public setupPublicRoutes(): express.Router {
 
-        this.routerInstance.get('/', [this.fullSearchHandler.bind(this), this.routeSendResponse.bind(this)])
+        this.routerInstance.get('/', [this.fullSearchHandler.bind(this), this.routeSendResponse.bind(this)]);
+        this.routerInstance.get('/all', [this.aggregateAllHandler.bind(this), this.routeSendResponse.bind(this)]);
         this.routerInstance.get('/regex', [this.textSearchSuggestionsHandler.bind(this), this.routeSendResponse.bind(this)]);
         this.routerInstance.get('/text', [this.textSearchResultsHandler.bind(this), this.routeSendResponse.bind(this)]);
         this.routerInstance.get('/nearestTaxonomy', [this.nearTaxonomyToSearchIndex.bind(this), this.routeSendResponse.bind(this)]);
@@ -123,6 +124,10 @@ class SearchRoutes extends AbstractRoute {
         const taxonomyLinkedEntities = await this.searchResults_instance.getLinkedEntitiesToTaxonomyByCatAndSlug(req.params.category, req.params.slug)
         res.serviceResponse = SuccessResponse.create(taxonomyLinkedEntities, StatusCodes.OK, ReasonPhrases.OK);
         //res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Search TagResult failed to find entity linked to taxonomy with error: "+e, []);
+        return next();
+    }
+
+    public async aggregateAllHandler(req:Request, res:Response, next: NextFunction):Promise<any> {
         return next();
     }
 

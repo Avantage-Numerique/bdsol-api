@@ -76,7 +76,7 @@ export abstract class Service {
             const items = await this.model.find(query.transmuted, query.projections, query.options);//.sort(sort).skip(skip).limit(limit);
             const returnItems = items.map((doc: any) => {
                 return this.appModel.dataTransfertObject(doc);
-            })
+            });
 
             //populate
             return SuccessResponse.create(

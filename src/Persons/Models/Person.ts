@@ -70,6 +70,13 @@ class Person extends AbstractModel {
     service: PersonsService;
     mongooseModel: mongoose.Model<any>;
 
+    public aggregations:Array<any> = [{
+        from: 'organisations',
+        localField: '_id',
+        foreignField: 'team.member',
+        as: 'organisations'
+    }];
+
     /** @public Database schema */
     schema: Schema =
         new Schema<PersonSchema>({
@@ -270,6 +277,7 @@ class Person extends AbstractModel {
     }
 
     public registerEvents():void {
+
         this.schema.pre('find', function() {
             taxonomyPopulate(this, 'occupations.skills');
             taxonomyPopulate(this, 'domains.domain');
@@ -277,10 +285,8 @@ class Person extends AbstractModel {
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
             populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
-
-            //populateUser(this, "occupations.occupation.status.requestedBy", User.getInstance().mongooseModel);
-            //populateUser(this, "occupations.occupation.status.lastModifiedBy", User.getInstance().mongooseModel);
         });
+
         this.schema.pre('findOne', function() {
             taxonomyPopulate(this, 'occupations.skills');
             taxonomyPopulate(this, 'domains.domain');
@@ -288,9 +294,6 @@ class Person extends AbstractModel {
 
             populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
             populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
-
-            //populateUser(this, "occupations.occupation.status.requestedBy", User.getInstance().mongooseModel);
-            //populateUser(this, "occupations.occupation.status.lastModifiedBy", User.getInstance().mongooseModel);
         });
     }
 }

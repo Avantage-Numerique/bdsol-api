@@ -1,4 +1,4 @@
-import express from "express";
+import express, {NextFunction, Request, Response} from "express";
 import PersonsController from "@src/Persons/Controllers/PersonsController";
 import AbstractController from "@core/Controller";
 import CrudRoute from "@core/CrudRoute";
@@ -38,5 +38,25 @@ class PersonsRoutes extends CrudRoute {
         getinfo: [],
         getdoc: [],
     }
+
+    public setupAdditionnalPublicRoutes(router: express.Router):express.Router {
+        // Set the /:slug handler at the end of other route, to allow the routes sets in setupAdditionnalPublicRoutes to be 1 in priority.
+        this.routerInstance.get('/agg/:id', [
+            this.getPersonsOrganisationsHandler.bind(this),
+            this.routeSendResponse.bind(this),
+        ]);
+        return router;
+    }
+
+    public async getPersonsOrganisationsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+
+        if (req.params.id) {
+            const personsController:PersonsController = PersonsController.getInstance() as PersonsController;
+            res.serviceResponse = await personsController.aggregateOrgs(req.params.id);
+        }
+
+        return next();
+    }
+
 }
 export {PersonsRoutes};

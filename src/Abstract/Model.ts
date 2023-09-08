@@ -125,5 +125,6 @@ abstract class AbstractModel {
     abstract dataTransfertObject(document: any):any;
 
     abstract documentation():Promise<any>;
+
 }
 export default AbstractModel;
