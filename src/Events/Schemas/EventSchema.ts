@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import Media from "@src/Media/Models/Media";
 import { DomainSchema } from "@src/Taxonomy/Schemas/DomainSchema";
-import { Status } from "@src/Moderation/Schemas/StatusSchema";
+import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 import {Document} from "mongoose";
 import { Member } from "@src/Team/Schemas/MemberSchema";
 import { Schedule } from "@src/Database/Schemas/ScheduleSchema";
@@ -30,5 +30,5 @@ export interface EventSchema extends Document {
     subEvents:[ObjectId]
     location:[ObjectId]
     photoGallery:ObjectId
-    status:Status
+    meta:Meta
 }

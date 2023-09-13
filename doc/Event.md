@@ -39,12 +39,12 @@ Un événement pourra lui aussi avoir des "enfants" événement `subEvents` dans
     contactPoint : string
     mainImage : ObjectId (Media)
     attendees : [ObjectId] (Person)
-    domains : [ { domain: ObjectId, Status: {Status.Schema} } ]
+    domains : [ { domain: ObjectId, subMeta: {SubMeta.Schema} } ]
     skills : [ObjectId]
     experience : undefined
     schedule: [Schedule]
     subEvents : [ObjectId] (Event)
-    status : Status.Schema
+    meta : Meta.Schema
     createdAt : Date
     updatedAt : Date
 }
@@ -70,7 +70,7 @@ Un événement pourra lui aussi avoir des "enfants" événement `subEvents` dans
 - experience : L'expérience que les personnes participantes vont retiré de l'événement
 - schedule : Horaire d'une activité de l'événement date et heure de début et de fin avec un nom d'activité
 - subEvents : Sous-événement (un spectacle en plusieurs partie, où les autres parties du spectacle serait des événements)
-- status : Statut de la fiche d'événement
+- meta : métadonée de la fiche d'événement
 
 
 

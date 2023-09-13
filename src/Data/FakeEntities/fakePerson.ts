@@ -1,4 +1,4 @@
-import { StatusStates } from "../../Moderation/Schemas/StatusSchema";
+import { MetaStates } from "../../Moderation/Schemas/MetaSchema";
 
 export const fakePersons = [
     {
@@ -7,8 +7,8 @@ export const fakePersons = [
         firstName:"Patrick",
         nickname:"PoW",
         description:"Chanteur",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -18,8 +18,8 @@ export const fakePersons = [
         firstName:"Jean-Marc",
         nickname:"Mickette",
         description:"Humour",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     }

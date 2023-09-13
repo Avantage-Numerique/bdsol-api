@@ -7,7 +7,7 @@ import TaxonomyController from "../../Taxonomy/Controllers/TaxonomyController";
 import OrganisationsService from "../Services/OrganisationsService";
 import {middlewareTaxonomy} from "@src/Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
 import {Member} from "@src/Team/Schemas/MemberSchema";
-import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {Meta, SubMeta} from "@src/Moderation/Schemas/MetaSchema";
 import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import {populateUser} from "@src/Users/Middlewares/populateUser";
 import {User} from "@src/Users/Models/User";
@@ -104,7 +104,7 @@ class Organisation extends AbstractModel {
                             type: mongoose.Types.ObjectId,
                             ref: "Taxonomy"
                         },
-                        status: Status.schema
+                        subMeta: SubMeta.schema
                     }]
                 },
                 team: {
@@ -122,8 +122,8 @@ class Organisation extends AbstractModel {
                     type: [mongoose.Types.ObjectId],
                     ref: "Place"
                 },
-                status: {
-                    type: Status.schema
+                meta: {
+                    type: Meta.schema
                 }
             },
             {
@@ -164,7 +164,7 @@ class Organisation extends AbstractModel {
             mainImage: document.mainImage ?? '',
             slug: document.slug ?? '',
             catchphrase: document.catchphrase ?? '',
-            status : document.status ?? '',
+            meta : document.meta ?? '',
             location: document.location ?? [],
             type: document.type ?? '',
             createdAt : document.createdAt ?? '',
@@ -228,8 +228,8 @@ class Organisation extends AbstractModel {
             middlewarePopulateProperty(this, "mainImage");
             middlewarePopulateProperty(this, "location");
 
-            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
         });
         
         this.schema.pre('findOne', function() {
@@ -240,8 +240,8 @@ class Organisation extends AbstractModel {
             middlewarePopulateProperty(this, "mainImage");
             middlewarePopulateProperty(this, "location");
 
-            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
         });
     }
 }

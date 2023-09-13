@@ -3,7 +3,7 @@ import {ProjectSchema} from "../Schemas/ProjectSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import ProjectsService from "../Services/ProjectsService";
-import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {Meta, SubMeta} from "@src/Moderation/Schemas/MetaSchema";
 import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import {populateUser} from "@src/Users/Middlewares/populateUser";
 import {User} from "@src/Users/UsersDomain";
@@ -129,15 +129,15 @@ class Project extends AbstractModel {
                         type: mongoose.Types.ObjectId,
                         ref: "Taxonomy"
                     },
-                    status: Status.schema
+                    subMeta: SubMeta.schema
                 }]
             },
             context: {
                 type: String,
                 enum: ProjectContextEnum
             },
-            status: {
-                type: Status.schema
+            meta: {
+                type: Meta.schema
             }
         }, {
                 toJSON: { virtuals: true },
@@ -193,7 +193,7 @@ class Project extends AbstractModel {
             skills: document.skills ?? undefined,
             domains: document.domains ?? undefined,
             context: document.context ?? '',
-            status: document.status ?? undefined,
+            meta: document.meta ?? undefined,
             type: document.type ?? '',
             createdAt: document.createdAt ?? '',
             updatedAt: document.updatedAt ?? '',
@@ -249,8 +249,8 @@ class Project extends AbstractModel {
             middlewarePopulateProperty(this, 'producer');
             middlewarePopulateProperty(this, 'entityInCharge');
 
-            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
         });
 
         this.schema.pre('findOne', function() {
@@ -262,8 +262,8 @@ class Project extends AbstractModel {
             middlewarePopulateProperty(this, 'producer');
             middlewarePopulateProperty(this, 'entityInCharge');
 
-            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
         });
     }
 }

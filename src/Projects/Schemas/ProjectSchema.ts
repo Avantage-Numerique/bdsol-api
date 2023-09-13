@@ -1,5 +1,5 @@
 import {Document} from "mongoose";
-import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {Meta} from "@src/Moderation/Schemas/MetaSchema";
 import {Member} from "@src/Team/Schemas/MemberSchema";
 import Media from "@src/Media/Models/Media";
 import {ObjectId} from "mongodb";
@@ -25,5 +25,5 @@ export interface ProjectSchema extends Document {
     skills:[ObjectId];
     domains:[DomainSchema];
     context: ProjectContextEnum
-    status: Status
+    meta: Meta
 }

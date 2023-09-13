@@ -3,26 +3,26 @@ import mongoose, {Document, Schema} from "mongoose";
 /**
  * Enum list of all status supported for now.
  */
-export enum StatusStates {
+export enum MetaStates {
     accepted = "accepted",
     pending = "pending",
     rejected = "rejected",
     deprecated = "deprecated"
 }
 
-export interface StatusSchema extends Document {
-    state: StatusStates;
+export interface MetaSchema extends Document {
+    state: MetaStates;
     requestedBy: mongoose.ObjectId;
     lastModifiedBy: mongoose.ObjectId;
     message: string;
 }
 
-export class Status {
+export class Meta {
 
-    static schema: Schema = new Schema<StatusSchema>({
+    static schema: Schema = new Schema<MetaSchema>({
         state: {
             type: String,
-            enum: StatusStates,
+            enum: MetaStates,
             //required: true
         },
         //The user who request the change
@@ -39,4 +39,16 @@ export class Status {
             type: String,
         }
     }, { _id : false });
+}
+
+export interface SubMetaSchema extends Document {
+    order: number; 
+}
+
+export class SubMeta {
+    static schema: Schema = new Schema<SubMetaSchema>({
+        order: {
+            type: Number
+        }
+    }, {_id : false });
 }

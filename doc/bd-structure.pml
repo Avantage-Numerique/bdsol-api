@@ -11,11 +11,11 @@ package Entity {
     *slug : String (firstName-lastName)
     *nickName : String
     *description : String
-    *status : Object (StatusSchema)
+    *meta : Object (MetaSchema)
     --
     *occupations : 
         { occupation: ObjectId,
-        status : Object (StatusSchema) }
+        subMeta : Object (SubMetaSchema) }
     --
     *mainImage : Object (MediaSchema)
     
@@ -29,7 +29,7 @@ package Entity {
     *slug : String (name)
     *description : String
     *source : String
-    *status : Object (StatusSchema)
+    *meta : Object (MetaSchema)
   }
 
   entity "Organisation" as org {
@@ -41,13 +41,13 @@ package Entity {
     *url : String
     *contactPoint : String
     *fondationDate : Date
-    *status : Object (StatusSchema)
+    *meta : Object (MetaSchema)
     --
     *team : [Object (MemberSchema)]
     --
     *offers : 
         { offer : ObjectId
-        status : Object (StatusSchema)}
+        subMeta : Object (SubMetaSchema)}
   }
 
   entity "User" as usr {
@@ -80,7 +80,7 @@ package Logs {
 }
 
 package Schemas {
-  entity "Status - StatusSchema" {
+  entity "meta - MetaSchema" {
     *state : ["accepted", "rejected", "deprecated", "pending"]
     *requestedBy : ObjectId
     *lastModifiedBy : ObjectId
@@ -100,13 +100,13 @@ package Schemas {
     *entityId : ObjectId
     *entityType : String
     *uploadedBy : ObjectId
-    *status : Object (StatusSchema)
+    *meta : Object (MetaSchema)
   }
 
   entity "Member - MemberSchema" {
     *member : ObjectId
     *role : Object (RoleSchema)
-    *status : Object (StatusSchema)
+    *meta : Object (MetaSchema)
   }
 
   entity "Role - RoleSchema" {

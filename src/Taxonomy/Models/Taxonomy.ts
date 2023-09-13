@@ -4,7 +4,7 @@ import {TaxonomiesCategoriesEnum} from "../TaxonomiesCategoriesEnum";
 import type {DbProvider} from "@database/DatabaseDomain";
 import AbstractModel from "@core/Model"
 import TaxonomyService from "../Services/TaxonomyService";
-import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {Meta, SubMeta} from "@src/Moderation/Schemas/MetaSchema";
 import * as fs from 'fs';
 import {taxonomyPopulate} from "../Middlewares/TaxonomiesPopulate";
 
@@ -105,17 +105,11 @@ class Taxonomy extends AbstractModel {
                             return true
                         }
                     },
-                    status: Status.schema
+                    subMeta: SubMeta.schema
                 }]
             },
-            //source: {
-                //type: String
-            //},,
             meta: {
-                type: Schema.Types.Mixed
-            },
-            status: {
-                type: Status.schema,
+                type: Meta.schema,
                 //required: true,
             }
         },
@@ -209,7 +203,6 @@ class Taxonomy extends AbstractModel {
             slug: document.slug ?? '',
             description: document.description ?? '',
             source: document.source ?? '',
-            status: document.status ?? '',
             type: document.type ?? '',
             domains: document.domains ?? [],
             meta: document.meta ?? {},

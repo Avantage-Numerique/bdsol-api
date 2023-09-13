@@ -1,5 +1,5 @@
 import mongoose, {Document, Schema} from "mongoose";
-import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {SubMeta} from "@src/Moderation/Schemas/MetaSchema";
 
 export interface RoleSchema extends Document {
     group:string;
@@ -25,7 +25,7 @@ export class Role {
 export interface MemberSchema extends Document {
     member:mongoose.ObjectId;
     role: string;
-    status: Status;
+    subMeta: SubMeta;
 }
 
 
@@ -42,8 +42,8 @@ export class Member {
         role: {
             type: String,
         },
-        status: {
-            type: Status.schema,
+        subMeta: {
+            type: SubMeta.schema,
             //required: true
         }
     }, { _id : false });

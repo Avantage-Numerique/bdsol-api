@@ -42,7 +42,7 @@ Code : **200** : lorsque les informations sont OK
         "entityId": "63e400c93cd9fd5e5379d35a",
         "entityType": "person",
         "uploadedBy": "",
-        "status": {
+        "meta": {
             "state": "pending",
             "_id": "63ed521dadb068ff8b782ff6"
         },

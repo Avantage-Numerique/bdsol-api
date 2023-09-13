@@ -4,7 +4,7 @@ import type {DbProvider} from "@database/DatabaseDomain";
 import {EventSchema} from "@src/Events/Schemas/EventSchema";
 import EventsService from "@src/Events/Services/EventsService";
 import { TeamField } from "@src/Team/Schemas/TeamSchema";
-import { Status } from "@src/Moderation/Schemas/StatusSchema";
+import { Meta, SubMeta } from "@src/Moderation/Schemas/MetaSchema";
 import * as fs from 'fs';
 import { taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import { middlewarePopulateProperty } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
@@ -134,7 +134,7 @@ class Event extends AbstractModel {
                         type: mongoose.Types.ObjectId,
                         ref: "Taxonomy"
                     },
-                    status: Status.schema
+                    subMeta: SubMeta.schema
                 }]
             },
             experience: {
@@ -156,8 +156,8 @@ class Event extends AbstractModel {
                 type: mongoose.Types.ObjectId,
                 ref: "Media"
             },
-            status: {
-                type: Status.schema
+            meta: {
+                type: Meta.schema
             }
         },
             {
@@ -214,7 +214,7 @@ class Event extends AbstractModel {
             subEvents: document.subEvents ?? [],
             location: document.location ?? [],
             photoGallery: document.photoGallery ?? '',
-            status: document.status ?? '',
+            meta: document.meta ?? '',
             type: document.type ?? '',
             createdAt: document.createdAt ?? '',
             updatedAt: document.updatedAt ?? ''
@@ -244,8 +244,8 @@ class Event extends AbstractModel {
             middlewarePopulateProperty(this, 'location');
             middlewarePopulateProperty(this, 'photoGallery');
 
-            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
         });
 
         this.schema.pre('findOne', function() {
@@ -263,8 +263,8 @@ class Event extends AbstractModel {
             middlewarePopulateProperty(this, 'photoGallery');
 
 
-            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
         });
     }
 }

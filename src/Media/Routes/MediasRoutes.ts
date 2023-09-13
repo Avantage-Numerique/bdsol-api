@@ -155,7 +155,6 @@ class MediasRoutes extends AbstractRoute {
 
     public async createOrUpdateDispatch(req: Request, res: Response, next: NextFunction): Promise<any> {
         
-        console.log("file", req.file, "\n\n", "files", req.files)
         //If file attached (either upload or update)
         if(req.files !== undefined){
             await this.createAndReplaceHandler(req, res);
@@ -217,7 +216,7 @@ class MediasRoutes extends AbstractRoute {
         //Insert new media object in db and handle error (delete file if fail)
         const toLinkMediaId = await this.controllerInstance.insertMedia(res, record);
         //toLinkMediaId is false if failed
-        if(toLinkMediaId == false)
+        if(toLinkMediaId === false)
             return;
 
         const isLinkedSuccess = await this.controllerInstance.linkEntityToMedia(res, record, toLinkMediaId)

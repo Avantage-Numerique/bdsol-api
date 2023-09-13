@@ -30,7 +30,7 @@ export {middlewarePopulateProperty};
  */
 const taxonomyPopulate = (document: any,
                           schemaProperty: string = 'occupations',
-                          fieldToPopulate: string = "name category status slug",
+                          fieldToPopulate: string = "name category meta slug",
                           model: any = undefined) => {
     mongoosePopulate(document, schemaProperty, fieldToPopulate, model);
 }

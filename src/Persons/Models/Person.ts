@@ -7,7 +7,7 @@ import * as fs from 'fs';
 import TaxonomyController from "../../Taxonomy/Controllers/TaxonomyController";
 import PersonsService from "../Services/PersonsService";
 import {middlewareTaxonomy} from "@src/Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
-import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {Meta, SubMeta} from "@src/Moderation/Schemas/MetaSchema";
 import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import {populateUser} from "@src/Users/Middlewares/populateUser";
 import {SkillGroup} from "@src/Taxonomy/Schemas/SkillGroupSchema";
@@ -110,7 +110,7 @@ class Person extends AbstractModel {
                             type: mongoose.Types.ObjectId,
                             ref: "Taxonomy"
                         },
-                        status: Status.schema
+                        subMeta: SubMeta.schema
                     }]
                 },
                 mainImage: {
@@ -120,8 +120,8 @@ class Person extends AbstractModel {
                 catchphrase: {
                     type: String
                 },
-                status:{
-                    type: Status.schema
+                meta:{
+                    type: Meta.schema
                 }
             },
             {
@@ -216,7 +216,7 @@ class Person extends AbstractModel {
             mainImage: document.mainImage ?? '',
             slug: document.slug ?? '',
             catchphrase: document.catchphrase ?? '',
-            status: document.status ?? '',
+            meta: document.meta ?? '',
             type: document.type ?? '',
             fullName: document.fullName ?? '',
             createdAt : document.createdAt ?? '',
@@ -275,22 +275,22 @@ class Person extends AbstractModel {
             taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, "mainImage");
 
-            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
 
-            //populateUser(this, "occupations.occupation.status.requestedBy", User.getInstance().mongooseModel);
-            //populateUser(this, "occupations.occupation.status.lastModifiedBy", User.getInstance().mongooseModel);
+            //populateUser(this, "occupations.occupation.subMeta.requestedBy", User.getInstance().mongooseModel);
+            //populateUser(this, "occupations.occupation.subMeta.lastModifiedBy", User.getInstance().mongooseModel);
         });
         this.schema.pre('findOne', function() {
             taxonomyPopulate(this, 'occupations.skills');
             taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');
 
-            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
 
-            //populateUser(this, "occupations.occupation.status.requestedBy", User.getInstance().mongooseModel);
-            //populateUser(this, "occupations.occupation.status.lastModifiedBy", User.getInstance().mongooseModel);
+            //populateUser(this, "occupations.occupation.subMeta.requestedBy", User.getInstance().mongooseModel);
+            //populateUser(this, "occupations.occupation.subMeta.lastModifiedBy", User.getInstance().mongooseModel);
         });
     }
 }

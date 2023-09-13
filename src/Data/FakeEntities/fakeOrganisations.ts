@@ -1,4 +1,4 @@
-import { StatusStates } from "../../Moderation/Schemas/StatusSchema";
+import { MetaStates } from "../../Moderation/Schemas/MetaSchema";
 
 export const fakeOrganisations = [
     {
@@ -7,8 +7,8 @@ export const fakeOrganisations = [
         url:"https://petittheatre.org",
         contactPoint:"Rosalie Chartier-Lacombe",
         fondationDate:"2022-08-02",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     },
@@ -18,8 +18,8 @@ export const fakeOrganisations = [
         url:"https://lalibrairiepommerleau.meilleur",
         contactPoint:"info@meilleurelibrairie.meilleurfois2",
         fondationDate:"2000-01-02",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":"000000000000000000000000"
         }
     }

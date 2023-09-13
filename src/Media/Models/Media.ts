@@ -3,7 +3,7 @@ import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import {MediaSchema} from "../Schemas/MediaSchema";
 import MediasService from "../Services/MediasService";
-import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {Meta} from "@src/Moderation/Schemas/MetaSchema";
 import {licenceList} from "../List/LicenceList";
 import {fileExtensionList, fileTypeList} from "../List/FileList";
 import {middlewarePopulateProperty} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
@@ -114,8 +114,8 @@ class Media extends AbstractModel {
                     type: String,
                     enum: [ "in use", "archived", "to delete", "pending" ]
                 },
-                status: {
-                    type: Status.schema,
+                meta: {
+                    type: Meta.schema,
                     //required: true
                 }
             },
@@ -143,8 +143,7 @@ class Media extends AbstractModel {
             "slug",
             "entityId",
             "entityType",
-            "uploadedBy",
-            "status"];
+            "uploadedBy"];
     }
 
     /**
@@ -169,7 +168,7 @@ class Media extends AbstractModel {
             entityId: document.entityId ?? '',
             entityType: document.entityType ?? '',
             uploadedBy: document.uploadedBy ?? '',
-            status: document.status ?? '',
+            meta: document.meta ?? '',
             type: document.type ?? '',
             createdAt : document.createdAt ?? '',
             updatedAt : document.updatedAt ?? '',

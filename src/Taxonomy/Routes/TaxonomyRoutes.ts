@@ -11,8 +11,6 @@ import {TaxonomiesCategoriesEnum} from "../TaxonomiesCategoriesEnum";
 import {isInEnumSanitizerAlias} from "@src/Security/SanitizerAliases/IsInEnumSanitizerAlias";
 import {noHtmlStringSanitizerAlias} from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
 import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
-import { SuccessResponse } from "@src/Http/Responses/SuccessResponse";
-import { ReasonPhrases, StatusCodes } from "http-status-codes";
 
 class TaxonomyRoutes extends CrudRoute {
 

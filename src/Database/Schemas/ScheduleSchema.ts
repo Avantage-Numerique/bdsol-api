@@ -1,5 +1,5 @@
 import {Document, Schema} from "mongoose";
-import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {Meta} from "@src/Moderation/Schemas/MetaSchema";
 
 
 export interface ScheduleSchema extends Document {

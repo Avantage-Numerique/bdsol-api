@@ -57,7 +57,7 @@ class MediasController extends AbstractController { //implements ControllerContr
                 entityType: record.entityType ?? '',
                 uploadedBy: record.userId,
                 dbStatus: 'in use',
-                status: {
+                meta: {
                     state: 'pending',
                     requestedBy: record.userId,
                     lastModifiedBy: record.userId,
@@ -152,9 +152,9 @@ class MediasController extends AbstractController { //implements ControllerContr
     public async archiveOldMedia(res:Response, toArchiveId:any){
         res.serviceResponse.oldMedia = await this.service.update({ _id : toArchiveId, dbStatus:"archived"});
         if (!res.serviceResponse.oldMedia.error)
-            res.serviceResponse.oldMedia.message = "old media status set to archived successfully"
+            res.serviceResponse.oldMedia.message = "old media meta set to archived successfully"
         else
-            res.serviceResponse.oldMedia.message = "old media status update to archived failed"
+            res.serviceResponse.oldMedia.message = "old media meta update to archived failed"
     }
 
 

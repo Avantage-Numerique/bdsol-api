@@ -1,5 +1,5 @@
 import {TaxonomiesCategoriesEnum} from "@src/Taxonomy/TaxonomiesCategoriesEnum";
-import {StatusStates} from "@src/Moderation/Schemas/StatusSchema";
+import {MetaStates} from "@src/Moderation/Schemas/MetaSchema";
 import {apiDefaultUserId} from "@src/Data/ApiData";
 
 export const ProgramingLanguagePersistantData = [
@@ -8,8 +8,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Php",
         "description" : "Langage de programmation web",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -18,8 +18,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Javascript",
         "description" : "Langage de programmation web",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -28,8 +28,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Html",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -38,8 +38,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Css",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -48,8 +48,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Sass",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -58,8 +58,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Less",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -68,8 +68,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Ruby",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -78,8 +78,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Python",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -88,8 +88,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"C",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -98,8 +98,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"C#",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -108,8 +108,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"C++",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -118,8 +118,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Objective C",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -128,8 +128,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Java",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -138,8 +138,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Nodejs",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -148,8 +148,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Wordpress",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -158,8 +158,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Laravel",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -168,8 +168,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Expressjs",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -178,8 +178,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Reactjs",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -188,8 +188,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Angular",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -198,8 +198,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Vuejs",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -208,8 +208,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Ruby on Rails",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -218,8 +218,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Django",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -228,8 +228,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Rust",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -238,8 +238,8 @@ export const ProgramingLanguagePersistantData = [
         "name"  :"Deno",
         "description" : "",
         "source" : "",
-        "status": {
-            "state":StatusStates.accepted,
+        "meta": {
+            "state":MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },

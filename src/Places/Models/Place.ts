@@ -4,7 +4,7 @@ import type {DbProvider} from "@database/DatabaseDomain";
 import {PlaceSchema} from "@src/Places/Schemas/PlaceSchema";
 import PlacesService from "@src/Places/Services/PlacesService";
 import { middlewarePopulateProperty } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
-import { Status } from "@src/Moderation/Schemas/StatusSchema";
+import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 
 class Place extends AbstractModel {
 
@@ -112,8 +112,8 @@ class Place extends AbstractModel {
             longitude: {
                 type: String
             },
-            status:{
-                type: Status.schema
+            meta:{
+                type: Meta.schema
             }
         },
             {
@@ -157,7 +157,7 @@ class Place extends AbstractModel {
             country: document.country ?? '',
             latitude: document.latitude ?? '',
             longitude: document.longitude ?? '',
-            status: document.status ?? '',
+            meta: document.meta ?? '',
             type: document.type ?? '',
             createdAt: document.createdAt ?? '',
             updatedAt: document.updatedAt ?? ''

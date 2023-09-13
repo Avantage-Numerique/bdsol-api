@@ -1,5 +1,5 @@
 import {TaxonomiesCategoriesEnum} from "@src/Taxonomy/TaxonomiesCategoriesEnum";
-import {StatusStates} from "@src/Moderation/Schemas/StatusSchema";
+import {MetaStates} from "@src/Moderation/Schemas/MetaSchema";
 import {apiDefaultUserId} from "@src/Data/ApiData";
 
 export const EventTypePersistantData = [
@@ -8,8 +8,8 @@ export const EventTypePersistantData = [
         "name" : "Entreprenariale",
         "description": "",
         "source":"",
-        "status": {
-            "state": StatusStates.accepted,
+        "meta": {
+            "state": MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -18,8 +18,8 @@ export const EventTypePersistantData = [
         "name" : "Pour enfants",
         "description": "",
         "source":"",
-        "status": {
-            "state": StatusStates.accepted,
+        "meta": {
+            "state": MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -28,8 +28,8 @@ export const EventTypePersistantData = [
         "name" : "Humoristique",
         "description": "",
         "source":"",
-        "status": {
-            "state": StatusStates.accepted,
+        "meta": {
+            "state": MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -38,7 +38,7 @@ export const EventTypePersistantData = [
         "name" : "CourseInstance",
         "description": "",
         "source":"",
-        "status": {
+        "meta": {
             "state": StatusStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
@@ -48,8 +48,8 @@ export const EventTypePersistantData = [
         "name" : "Dance",
         "description": "",
         "source":"",
-        "status": {
-            "state": StatusStates.accepted,
+        "meta": {
+            "state": MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -58,7 +58,7 @@ export const EventTypePersistantData = [
         "name" : "DeliveryEvent",
         "description": "",
         "source":"",
-        "status": {
+        "meta": {
             "state": StatusStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
@@ -68,8 +68,8 @@ export const EventTypePersistantData = [
         "name" : "Éducationnel",
         "description": "",
         "source":"",
-        "status": {
-            "state": StatusStates.accepted,
+        "meta": {
+            "state": MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -78,7 +78,7 @@ export const EventTypePersistantData = [
         "name" : "EventSeries",
         "description": "",
         "source":"",
-        "status": {
+        "meta": {
             "state": StatusStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
@@ -88,8 +88,8 @@ export const EventTypePersistantData = [
         "name" : "Présentation",
         "description": "",
         "source":"",
-        "status": {
-            "state": StatusStates.accepted,
+        "meta": {
+            "state": MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -98,8 +98,8 @@ export const EventTypePersistantData = [
         "name" : "Festival",
         "description": "",
         "source":"",
-        "status": {
-            "state": StatusStates.accepted,
+        "meta": {
+            "state": MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -108,8 +108,8 @@ export const EventTypePersistantData = [
         "name" : "Agroalimentaire",
         "description": "",
         "source":"",
-        "status": {
-            "state": StatusStates.accepted,
+        "meta": {
+            "state": MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -118,8 +118,8 @@ export const EventTypePersistantData = [
         "name" : "Hackathon",
         "description": "",
         "source":"",
-        "status": {
-            "state": StatusStates.accepted,
+        "meta": {
+            "state": MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -128,8 +128,8 @@ export const EventTypePersistantData = [
         "name" : "Littéraire",
         "description": "",
         "source":"",
-        "status": {
-            "state": StatusStates.accepted,
+        "meta": {
+            "state": MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -138,8 +138,8 @@ export const EventTypePersistantData = [
         "name" : "Musical",
         "description": "",
         "source":"",
-        "status": {
-            "state": StatusStates.accepted,
+        "meta": {
+            "state": MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -148,7 +148,7 @@ export const EventTypePersistantData = [
         "name" : "PublicationEvent",
         "description": "",
         "source":"",
-        "status": {
+        "meta": {
             "state": StatusStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
@@ -158,8 +158,8 @@ export const EventTypePersistantData = [
         "name" : "Vente",
         "description": "",
         "source":"",
-        "status": {
-            "state": StatusStates.accepted,
+        "meta": {
+            "state": MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -168,8 +168,8 @@ export const EventTypePersistantData = [
         "name" : "Cinématographique",
         "description": "",
         "source":"",
-        "status": {
-            "state": StatusStates.accepted,
+        "meta": {
+            "state": MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -178,8 +178,8 @@ export const EventTypePersistantData = [
         "name" : "Social",
         "description": "",
         "source":"",
-        "status": {
-            "state": StatusStates.accepted,
+        "meta": {
+            "state": MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -188,8 +188,8 @@ export const EventTypePersistantData = [
         "name" : "Sport",
         "description": "",
         "source":"",
-        "status": {
-            "state": StatusStates.accepted,
+        "meta": {
+            "state": MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -198,8 +198,8 @@ export const EventTypePersistantData = [
         "name" : "Théâtre",
         "description": "",
         "source":"",
-        "status": {
-            "state": StatusStates.accepted,
+        "meta": {
+            "state": MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     },
@@ -208,8 +208,8 @@ export const EventTypePersistantData = [
         "name" : "Arts visuels",
         "description": "",
         "source":"",
-        "status": {
-            "state": StatusStates.accepted,
+        "meta": {
+            "state": MetaStates.accepted,
             "lastModifiedBy":apiDefaultUserId
         }
     }
