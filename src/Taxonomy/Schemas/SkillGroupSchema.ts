@@ -8,7 +8,6 @@ export interface SkillGroupSchema extends Document {
     subMeta: SubMeta;
 }
 
-
 export class SkillGroup {
     /** @static schema */
     static schema:Schema = new Schema<SkillGroupSchema>({
@@ -19,6 +18,8 @@ export class SkillGroup {
             type: [mongoose.Types.ObjectId],
             ref: 'Taxonomy'
         },
-        subMeta: SubMeta.schema
+        subMeta: {
+            type: SubMeta.schema
+        }
     }, { _id : false });
 }
