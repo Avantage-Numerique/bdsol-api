@@ -2,6 +2,9 @@ import express from "express";
 import AbstractController from "@core/Controller";
 import CrudRoute from "@core/CrudRoute";
 import EquipmentsController from "@src/Equipments/Controllers/EquipmentsController";
+import { basicHtmlSanitizerAlias } from "@src/Security/SanitizerAliases/BasicHtmlSanitizerAlias";
+import { objectIdSanitizerAlias } from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
+import { noHtmlStringSanitizerAlias } from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
 
 class EquipmentsRoutes extends CrudRoute {
 
@@ -12,8 +15,25 @@ class EquipmentsRoutes extends CrudRoute {
     middlewaresDistribution: any = {
         all: [],
         createUpdate: [],
-        create: [],
-        update: [],
+        create: [
+            noHtmlStringSanitizerAlias('data.equipementType'),
+            noHtmlStringSanitizerAlias('data.label'),
+            basicHtmlSanitizerAlias('data.description'),
+            noHtmlStringSanitizerAlias('data.brand'),
+            noHtmlStringSanitizerAlias('data.model'),
+            objectIdSanitizerAlias('data.mainImage'),
+            noHtmlStringSanitizerAlias('data.url')
+        ],
+        update: [
+            objectIdSanitizerAlias('data.id', false),
+            noHtmlStringSanitizerAlias('data.equipementType'),
+            noHtmlStringSanitizerAlias('data.label'),
+            basicHtmlSanitizerAlias('data.description'),
+            noHtmlStringSanitizerAlias('data.brand'),
+            noHtmlStringSanitizerAlias('data.model'),
+            objectIdSanitizerAlias('data.mainImage'),
+            noHtmlStringSanitizerAlias('data.url')
+        ],
         delete: [],
         search: [],
         list: [],

@@ -3,6 +3,10 @@ import AbstractModel from "@core/Model";
 import type {DbProvider} from "@database/DatabaseDomain";
 import {EquipmentSchema} from "@src/Equipments/Schemas/EquipmentSchema";
 import EquipmentsService from "@src/Equipments/Services/EquipmentsService";
+import { Meta } from "@src/Moderation/Schemas/MetaSchema";
+import { populateUser } from "@src/Users/Middlewares/populateUser";
+import { middlewarePopulateProperty } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import { User } from "@src/Users/UsersDomain";
 
 class Equipment extends AbstractModel {
 
@@ -18,14 +22,35 @@ class Equipment extends AbstractModel {
             Equipment._instance.registerEvents();
 
             //Setting virtuals
-            //Equipment._instance.schema.virtual("Equipment").get( function () { return Equipment._instance.modelName });
+            Equipment._instance.schema.virtual("type").get( function () { return Equipment._instance.modelName });
+            Equipment._instance.schema.virtual("name").get( function () { return this.brand + ' ' + this.model + ' ' + this.label });
 
             Equipment._instance.initSchema();
 
             //Index
-            //Equipment._instance.schema.index({ "Equipment.Equipment":1});
+            Equipment._instance.registerIndexes();
         }
         return Equipment._instance;
+    }
+
+    public registerIndexes(): void {
+        //Indexes
+        Equipment._instance.schema.index(
+            { brand:"text", model:"text", label:"text", slug:"text" },
+            {
+                default_language: "french",
+                //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
+                weights:{
+                    brand:5,
+                    model:5,
+                    label:3
+                }
+            });
+        return;
+    }
+
+    public dropIndexes(): void {
+        return;
     }
 
     /** @public Model lastName */
@@ -42,7 +67,41 @@ class Equipment extends AbstractModel {
 
     /** @public Database schema */
     schema: Schema =
-        new Schema<EquipmentSchema>({},
+        new Schema<EquipmentSchema>({
+            //name (virtual)
+            equipementType: {
+                type: String
+            },
+            label: {
+                type: String
+            },
+            description: {
+                type: String
+            },
+            brand: {
+                type: String
+            },
+            model: {
+                type: String
+            },
+            slug: {
+                type: String,
+                slug: ["brand", "model", "label"],
+                slugPaddingSize: 3,
+                index: true,
+                unique: true
+            },
+            mainImage: {
+                type: mongoose.Types.ObjectId,
+                ref : "Media"
+            },
+            url: {
+                type: String
+            },
+            meta: {
+                type: Meta.schema
+            }
+        },
             {
                 toJSON: {virtuals: true},
                 timestamps: true,
@@ -53,15 +112,6 @@ class Equipment extends AbstractModel {
 
     /** @abstract Set of rules that are verified for every field of this entity. */
     public ruleSet: any = [];
-
-
-    public registerIndexes(): void {
-        return;
-    };
-
-    public dropIndexes(): void {
-        return;
-    };
 
     /**
      * @get the field that are searchable.
@@ -80,6 +130,18 @@ class Equipment extends AbstractModel {
     public dataTransfertObject(document: any) {
         return {
             _id: document._id ?? '',
+            name: document.name ?? '',
+            label: document.label ?? '',
+            description: document.description ?? '',
+            brand: document.brand ?? '',
+            model: document.model ?? '',
+            slug: document.slug ?? '',
+            mainImage: document.mainImage ?? '',
+            url: document.url ?? '',
+            equipementType: document.equipementType ?? '',
+            meta: document.meta ?? {},
+            createAt: document.createAt ?? '',
+            updatedAt: document.updatedAt ?? '',
         }
     }
 
@@ -92,7 +154,16 @@ class Equipment extends AbstractModel {
      * Register mongoose events, for now pre-save, pre-findOneAndUpdate
      */
     public registerEvents(): void {
-
+        this.schema.pre('find', function() {
+            middlewarePopulateProperty(this, "mainImage");
+            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
+        });
+        this.schema.pre('findOne', function() {
+            middlewarePopulateProperty(this, 'mainImage');
+            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
+        });
     }
 }
 
