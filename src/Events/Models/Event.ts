@@ -3,15 +3,14 @@ import AbstractModel from "@core/Model";
 import type {DbProvider} from "@database/DatabaseDomain";
 import {EventSchema} from "@src/Events/Schemas/EventSchema";
 import EventsService from "@src/Events/Services/EventsService";
-import { TeamField } from "@src/Team/Schemas/TeamSchema";
-import { Meta, SubMeta } from "@src/Moderation/Schemas/MetaSchema";
+import {TeamField} from "@src/Team/Schemas/TeamSchema";
+import {Meta, SubMeta} from "@src/Moderation/Schemas/MetaSchema";
 import * as fs from 'fs';
-import { taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
-import { middlewarePopulateProperty } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
-import { populateUser } from "@src/Users/Middlewares/populateUser";
-import { User } from "@src/Users/UsersDomain";
-import { Schedule } from "@src/Database/Schemas/ScheduleSchema";
-import { EventFormatEnum } from "../EventFormatEnum";
+import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import {populateUser} from "@src/Users/Middlewares/populateUser";
+import {User} from "@src/Users/UsersDomain";
+import {Schedule} from "@src/Database/Schemas/ScheduleSchema";
+import {EventFormatEnum} from "../EventFormatEnum";
 
 class Event extends AbstractModel {
 
@@ -226,15 +225,27 @@ class Event extends AbstractModel {
     }
 
 
+    public registerAggregate() {
+
+    }
+
     /**
      * Register mongoose events, for now pre-save, pre-findOneAndUpdate
      */
     public registerEvents(): void {
-        this.schema.pre('find', function() {
+
+        this.schema.pre('find', function(next) {
+
+            // @ts-ignore //it sucks, but we need this to be the documents so shut up typescript.
+            if (this.options?._recursed) {
+                return next();
+            }
             middlewarePopulateProperty(this, 'team.member');
+
             taxonomyPopulate(this, 'skills');
             taxonomyPopulate(this, 'experience');
             taxonomyPopulate(this, 'domains.domain');
+
             middlewarePopulateProperty(this, 'mainImage');
             middlewarePopulateProperty(this, 'organizer');
             middlewarePopulateProperty(this, 'attendees');
@@ -246,9 +257,16 @@ class Event extends AbstractModel {
 
             populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
             populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
+
+            next();
         });
 
-        this.schema.pre('findOne', function() {
+        this.schema.pre('findOne', function(next) {
+
+            // @ts-ignore //it sucks, but we need this to be the documents so shut up typescript.
+            if (this.options?._recursed) {
+                return next();
+            }
             middlewarePopulateProperty(this, 'team.member');
             taxonomyPopulate(this, 'skills');
             taxonomyPopulate(this, 'experience');
@@ -257,14 +275,14 @@ class Event extends AbstractModel {
             middlewarePopulateProperty(this, 'organizer');
             middlewarePopulateProperty(this, 'attendees');
             middlewarePopulateProperty(this, 'entityInCharge');
-            middlewarePopulateProperty(this, 'subEvents');
+            //middlewarePopulateProperty(this, 'subEvents');
             middlewarePopulateProperty(this, 'eventType');
             middlewarePopulateProperty(this, 'location');
             middlewarePopulateProperty(this, 'photoGallery');
-
-
             populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
             populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
+
+            next();
         });
     }
 }
