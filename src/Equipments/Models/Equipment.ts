@@ -7,6 +7,7 @@ import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 import { populateUser } from "@src/Users/Middlewares/populateUser";
 import { middlewarePopulateProperty } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import { User } from "@src/Users/UsersDomain";
+import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 
 class Equipment extends AbstractModel {
 
@@ -96,7 +97,7 @@ class Equipment extends AbstractModel {
                 ref : "Media"
             },
             url: {
-                type: String
+                type: [SocialHandle.schema]
             },
             meta: {
                 type: Meta.schema
