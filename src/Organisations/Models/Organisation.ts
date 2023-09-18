@@ -77,7 +77,7 @@ class Organisation extends AbstractModel {
                 slug: {
                     type: String,
                     slug: "name",
-                    slugPaddingSize: 2,
+                    slugPaddingSize: 3,
                     index: true,
                     unique: true
                 },

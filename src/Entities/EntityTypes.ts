@@ -7,7 +7,7 @@ export enum EntityTypesEnum {
     event = "Event",
     media = "Media",
     place = "Place",
-    equipement = "Equipement"
+    equipment = "Equipment"
 }
 
 export enum EntityApiUrlEnum {
@@ -18,5 +18,5 @@ export enum EntityApiUrlEnum {
     event = "events",
     media = "medias",
     place = "places",
-    equipement = "equipements"
+    equipment = "equipment"
 }

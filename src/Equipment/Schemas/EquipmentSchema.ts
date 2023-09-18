@@ -3,13 +3,13 @@ import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 import {Document, ObjectId} from "mongoose";
 
 export interface EquipmentSchema extends Document {
-    equipementType:string;
+    equipmentType:ObjectId;
     label:string;
     description:string;
     brand:string;
     model:string;
     slug:string;
     mainImage:ObjectId;
-    url:SocialHandle;
+    url:[SocialHandle];
     meta:Meta;
 }

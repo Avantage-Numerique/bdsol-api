@@ -1,11 +1,11 @@
 import mongoose, {Schema} from "mongoose";
 import AbstractModel from "@core/Model";
 import type {DbProvider} from "@database/DatabaseDomain";
-import {EquipmentSchema} from "@src/Equipments/Schemas/EquipmentSchema";
-import EquipmentsService from "@src/Equipments/Services/EquipmentsService";
+import {EquipmentSchema} from "@src/Equipment/Schemas/EquipmentSchema";
+import EquipmentService from "@src/Equipment/Services/EquipmentService";
 import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 import { populateUser } from "@src/Users/Middlewares/populateUser";
-import { middlewarePopulateProperty } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import { User } from "@src/Users/UsersDomain";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 
@@ -25,11 +25,11 @@ class Equipment extends AbstractModel {
             //Setting virtuals
             Equipment._instance.schema.virtual("type").get( function () { return Equipment._instance.modelName });
             Equipment._instance.schema.virtual("name").get( function () { return this.brand + ' ' + this.model + ' ' + this.label });
-
-            Equipment._instance.initSchema();
-
+            
             //Index
             Equipment._instance.registerIndexes();
+            Equipment._instance.initSchema();
+
         }
         return Equipment._instance;
     }
@@ -58,20 +58,21 @@ class Equipment extends AbstractModel {
     modelName: string = 'Equipment';
 
     /** @public Collection Name in database*/
-    collectionName: string = 'Equipments';
+    collectionName: string = 'equipment';
 
     /** @public Connection mongoose */
     connection: mongoose.Connection;
     provider: DbProvider;
-    service: EquipmentsService;
+    service: EquipmentService;
     mongooseModel: mongoose.Model<any>;
 
     /** @public Database schema */
     schema: Schema =
         new Schema<EquipmentSchema>({
             //name (virtual)
-            equipementType: {
-                type: String
+            equipmentType: {
+                type: mongoose.Types.ObjectId,
+                ref: "Taxonomy"
             },
             label: {
                 type: String
@@ -80,14 +81,15 @@ class Equipment extends AbstractModel {
                 type: String
             },
             brand: {
-                type: String
+                type: String,
+                required: true
             },
             model: {
                 type: String
             },
             slug: {
                 type: String,
-                slug: ["brand", "model", "label"],
+                slug: "brand",
                 slugPaddingSize: 3,
                 index: true,
                 unique: true
@@ -119,7 +121,7 @@ class Equipment extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields(): object {
-        return [""];
+        return ["name","brand","model","label", "slug"];
     }
 
     /**
@@ -131,6 +133,7 @@ class Equipment extends AbstractModel {
     public dataTransfertObject(document: any) {
         return {
             _id: document._id ?? '',
+            equipmentType: document.equipmentType ?? '',
             name: document.name ?? '',
             label: document.label ?? '',
             description: document.description ?? '',
@@ -138,8 +141,7 @@ class Equipment extends AbstractModel {
             model: document.model ?? '',
             slug: document.slug ?? '',
             mainImage: document.mainImage ?? '',
-            url: document.url ?? '',
-            equipementType: document.equipementType ?? '',
+            url: document.url ?? [],
             meta: document.meta ?? {},
             createAt: document.createAt ?? '',
             updatedAt: document.updatedAt ?? '',
@@ -156,11 +158,13 @@ class Equipment extends AbstractModel {
      */
     public registerEvents(): void {
         this.schema.pre('find', function() {
+            taxonomyPopulate(this, 'equipmentType');
             middlewarePopulateProperty(this, "mainImage");
             populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
             populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
         });
         this.schema.pre('findOne', function() {
+            taxonomyPopulate(this, 'equipmentType');
             middlewarePopulateProperty(this, 'mainImage');
             populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
             populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);

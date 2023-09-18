@@ -11,7 +11,7 @@ import Project from "@src/Projects/Models/Project";
 import Place from "@src/Places/Models/Place";
 import Event from "@src/Events/Models/Event";
 import EntityControllerFactory from "@src/Abstract/EntityControllerFactory";
-import Equipment from "@src/Equipments/Models/Equipment";
+import Equipment from "@src/Equipment/Models/Equipment";
 
 class MediasController extends AbstractController { //implements ControllerContract {
 
