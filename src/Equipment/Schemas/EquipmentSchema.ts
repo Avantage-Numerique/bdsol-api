@@ -7,7 +7,7 @@ export interface EquipmentSchema extends Document {
     label:string;
     description:string;
     brand:string;
-    model:string;
+    equipmentModel:string;
     slug:string;
     mainImage:ObjectId;
     url:[SocialHandle];

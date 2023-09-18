@@ -24,7 +24,7 @@ class Equipment extends AbstractModel {
 
             //Setting virtuals
             Equipment._instance.schema.virtual("type").get( function () { return Equipment._instance.modelName });
-            Equipment._instance.schema.virtual("name").get( function () { return this.brand + ' ' + this.model + ' ' + this.label });
+            Equipment._instance.schema.virtual("name").get( function () { return this.brand + ' ' + this.equipmentModel + ' ' + this.label });
             
             //Index
             Equipment._instance.registerIndexes();
@@ -81,15 +81,14 @@ class Equipment extends AbstractModel {
                 type: String
             },
             brand: {
-                type: String,
-                required: true
+                type: String
             },
-            model: {
+            equipmentModel: {
                 type: String
             },
             slug: {
                 type: String,
-                slug: "brand",
+                slug: ["brand", "equipmentModel", "label"],
                 slugPaddingSize: 3,
                 index: true,
                 unique: true

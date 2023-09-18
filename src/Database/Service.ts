@@ -131,12 +131,9 @@ export abstract class Service {
      */
     async insert(data: any): Promise<ApiResponseContract> {
         let meta;
-        console.log("data", data)
-        console.log("model", this.model)
         try {
             meta = await this.model.create(data)
                 .catch((e: any) => {
-                    console.log(e)
                     const insertError:HttpError = new HttpError("Impossible de créer l'entité.");//suppression de l e.message car l'app renvoie tout.
                     insertError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                     throw insertError;
