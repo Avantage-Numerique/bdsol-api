@@ -205,17 +205,7 @@ export async function upMongoose (): Promise<void> {
     await db.connect();//check this when it's run in the env. of the API already running.
 
     if (db?.providers?.data) {
-
-        const field = {status:'meta'}
-        const subField = {status:'subMeta'}
-
-        const subField2 = {
-            team: {
-                status: "subMeta"//
-            }
-        }
-
-        //subMeta changer la structure vers Order seulement ou objet vide.
+        const field = {status:'meta'};
 
         const tasks = [
             /*{
