@@ -102,7 +102,7 @@ export async function up(): Promise<void> {
  * Down method, executed when we roll back migration.
  */
 export async function down (): Promise<void> {
-    const driver:MongoDBDriver = new MongoDBDriver(config.migrations);
+    //const driver:MongoDBDriver = new MongoDBDriver(config.migrations);
     // SOrry I didn't implement the down query.
     //await runQueriesOnDatabase(driver, 'bdsol-data', tasksRenameMetaToStatus, 'Renaming status to meta', 'down');
 }
