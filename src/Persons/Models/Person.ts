@@ -18,7 +18,7 @@ class Person extends AbstractModel {
     protected static _instance: Person;
 
     /** @public @static Model singleton instance constructor */
-    public static getInstance(): Person {
+    public static getInstance(doIndexes=true): Person {
         if (Person._instance === undefined) {
             Person._instance = new Person();
 
@@ -33,7 +33,7 @@ class Person extends AbstractModel {
             Person._instance.schema.virtual("type").get( function () { return Person._instance.modelName });
             Person._instance.schema.virtual("name").get( function () { return this.firstName + " " + this.lastName });
 
-            Person._instance.registerIndexes();
+            if (doIndexes) Person._instance.registerIndexes();
             Person._instance.initSchema();
         }
         return Person._instance;

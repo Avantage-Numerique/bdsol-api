@@ -18,7 +18,7 @@ class Event extends AbstractModel {
     protected static _instance: Event;
 
     /** @public @static Model singleton instance constructor */
-    public static getInstance(): Event {
+    public static getInstance(doIndexes=true): Event {
         if (Event._instance === undefined) {
             Event._instance = new Event();
 
@@ -27,10 +27,12 @@ class Event extends AbstractModel {
 
             //Setting virtuals
             Event._instance.schema.virtual("type").get( function () { return Event._instance.modelName });
-            Event._instance.initSchema();
 
             //Index
-            Event._instance.registerIndexes();
+            if (doIndexes) Event._instance.registerIndexes();
+
+            Event._instance.initSchema();
+
 
         }
         return Event._instance;
