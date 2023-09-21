@@ -137,13 +137,14 @@ class Equipment extends AbstractModel {
             label: document.label ?? '',
             description: document.description ?? '',
             brand: document.brand ?? '',
-            model: document.model ?? '',
+            modelName: document.modelName ?? '',
             slug: document.slug ?? '',
             mainImage: document.mainImage ?? '',
             url: document.url ?? [],
             meta: document.meta ?? {},
             createAt: document.createAt ?? '',
             updatedAt: document.updatedAt ?? '',
+            type: document.type ?? '',
         }
     }
 
