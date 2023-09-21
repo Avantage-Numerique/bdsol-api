@@ -104,7 +104,8 @@ class Organisation extends AbstractModel {
                             type: mongoose.Types.ObjectId,
                             ref: "Taxonomy"
                         },
-                        subMeta: SubMeta.schema
+                        subMeta: SubMeta.schema,
+                        _id:false
                     }]
                 },
                 team: {

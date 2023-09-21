@@ -3,6 +3,7 @@ import {getDbDriver} from "@database/Migrations/MigrationDbConnexion";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 import {MongoDBDriver} from "@database/Drivers/MongoDriver";
 import config from "@src/config";
+import {runQueriesOnDatabase} from "@database/Helper/MongodbRunQueries";
 
 /* Les notes sur les collections à changer de nom >>
 //Event.status - Event.meta
@@ -164,34 +165,6 @@ export async function up(): Promise<void> {
 export async function down (): Promise<void> {
     const driver:MongoDBDriver = new MongoDBDriver(config.migrations);
     await runQueriesOnDatabase(driver, 'bdsol-data', tasksRenameMetaToStatus, 'Renaming status to meta', 'down');
-}
-
-
-const runQueriesOnDatabase = async (driver:MongoDBDriver, dbName:string = "bdsol-data", tasks:Array<{ collection:string,queries:Array<any> }>, name:string="Renaming Field", direction:string="up") => {
-    try {
-        const client = await driver.connect();
-        const db:any = client.db(dbName);
-        let currentResults:any;
-        for (let task of tasks) {
-            if (Array.isArray(task.queries)) {
-
-                LogHelper.info(`[DB][Migration][${name}][${direction}] Starting for ${task.collection} with ${task.queries.length} query-ies >> `);
-                let queryCount = 0;
-                for (let query of task.queries) {
-                    queryCount++;
-                    currentResults = await db.collection(task.collection).updateMany({}, query);
-                    LogHelper.info(`${queryCount}. Results : `, currentResults, ` on ${task.collection}`);
-                }
-                LogHelper.info(`<< [DB][Migration][${name}][${direction}] Ending for ${task.collection}`);
-            }
-        }
-    } catch (e:any) {
-        throw new Error(e);
-    } finally {
-        // Ensures that the client will close when you finish/error
-        await driver.close();
-        LogHelper.info(`[DB][Migration][${name}][${direction}] Closing direct MongoClient`);
-    }
 }
 
 
