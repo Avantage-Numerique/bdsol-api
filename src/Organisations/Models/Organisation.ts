@@ -20,14 +20,14 @@ class Organisation extends AbstractModel {
     protected static _instance: Organisation;
 
     /** @public @static Model singleton instance constructor */
-    public static getInstance(): Organisation {
+    public static getInstance(doIndexes=true): Organisation {
         if (Organisation._instance === undefined) {
             Organisation._instance = new Organisation();
             Organisation._instance.registerPreEvents();
             Organisation._instance.registerEvents();
 
             Organisation._instance.schema.virtual("type").get( function () { return Organisation._instance.modelName });
-            Organisation._instance.registerIndexes();
+            if (doIndexes) Organisation._instance.registerIndexes();
             Organisation._instance.initSchema();
         }
         return Organisation._instance;

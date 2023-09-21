@@ -16,7 +16,7 @@ class Media extends AbstractModel {
     protected static _instance: Media;
 
     /** @public @static Model singleton instance constructor */
-    public static getInstance(): Media {
+    public static getInstance(doIndexes=true): Media {
         if (Media._instance === undefined) {
             Media._instance = new Media();
 
@@ -25,7 +25,7 @@ class Media extends AbstractModel {
 
             Media._instance.schema.virtual("type").get( function () { return Media._instance.modelName });
 
-            Media._instance.registerIndexes();
+            if (doIndexes) Media._instance.registerIndexes();
             Media._instance.initSchema();
         }
         return Media._instance;

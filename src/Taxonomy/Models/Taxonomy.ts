@@ -15,7 +15,7 @@ class Taxonomy extends AbstractModel {
     protected static _instance:Taxonomy;
 
     /** @public @static Model singleton instance constructor */
-    public static getInstance():Taxonomy {
+    public static getInstance(doIndexes=true):Taxonomy {
         if (Taxonomy._instance === undefined) {
             Taxonomy._instance = new Taxonomy();
 
@@ -23,7 +23,7 @@ class Taxonomy extends AbstractModel {
 
             Taxonomy._instance.registerEvents();
 
-            Taxonomy._instance.registerIndexes();
+            if (doIndexes) Taxonomy._instance.registerIndexes();
             Taxonomy._instance.initSchema();
 
             //Taxonomy._instance.schema.path('domains.domain').validate(taxonomyDomainNoSelfReference);

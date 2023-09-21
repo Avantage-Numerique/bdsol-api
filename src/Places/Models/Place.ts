@@ -3,8 +3,8 @@ import AbstractModel from "@core/Model";
 import type {DbProvider} from "@database/DatabaseDomain";
 import {PlaceSchema} from "@src/Places/Schemas/PlaceSchema";
 import PlacesService from "@src/Places/Services/PlacesService";
-import { middlewarePopulateProperty } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
-import { Meta } from "@src/Moderation/Schemas/MetaSchema";
+import {middlewarePopulateProperty} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import {Meta} from "@src/Moderation/Schemas/MetaSchema";
 
 class Place extends AbstractModel {
 
@@ -12,7 +12,7 @@ class Place extends AbstractModel {
     protected static _instance: Place;
 
     /** @public @static Model singleton instance constructor */
-    public static getInstance(): Place {
+    public static getInstance(doIndexes=true): Place {
         if (Place._instance === undefined) {
             Place._instance = new Place();
 
@@ -21,6 +21,8 @@ class Place extends AbstractModel {
 
             //Setting virtuals
             Place._instance.schema.virtual("type").get( function () { return Place._instance.modelName });
+
+            if (doIndexes) Place._instance.registerIndexes();
 
             Place._instance.initSchema();
 
