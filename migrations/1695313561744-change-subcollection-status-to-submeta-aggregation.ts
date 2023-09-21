@@ -2,10 +2,6 @@ import {MongoDBDriver} from "@database/Drivers/MongoDriver";
 import config from "@src/config";
 import {runQueriesOnDatabase} from "@database/Helper/MongodbRunQueries";
 
-/**
- * $map : //https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/map/
- */
-//https://www.mongodb.com/community/forums/t/how-to-rename-a-field-name-inside-nested-array/128280
 const renameDomainStatus:any = [
     {
         $addFields: {
@@ -22,6 +18,7 @@ const renameDomainStatus:any = [
         }
     }
 ];
+
 const renameTeamMembers:any = [
     {
         $addFields: {
@@ -40,19 +37,36 @@ const renameTeamMembers:any = [
     }
 ];
 
-const renameDomainsStatusTasks:any = [
+const getAggregationSkillGroupQuery = (mainField:string) => {
+    return [
+        {
+            $addFields: {
+               [mainField]: {
+                    $map: {
+                        input: `$${mainField}`,
+                        as: "mf",
+                        in: {
+                            "groupName": "$$mf.groupName",
+                            "skills": "$$mf.skills",
+                            "subMeta": "$$mf.status" // Rename 'status' to 'subMeta'
+                        }
+                    }
+                }
+            }
+        }
+    ];
+}
+
+const renameStatusToMetaTasks:any = [
     {
-        //Organisation.domains.status = Organisation.domains.subMeta
-        //Organisation.team.[member].status = Organisation.team.[member].subMeta
         collection: "organisations",
         queries: [
             renameDomainStatus,
-            renameTeamMembers
+            renameTeamMembers,
+            getAggregationSkillGroupQuery('offers')
         ]
     },
     {
-        //Organisation.domains.status = Organisation.domains.subMeta
-        //Organisation.team.[member].status = Organisation.team.[member].subMeta
         collection: "events",
         queries: [
             renameDomainStatus,
@@ -60,16 +74,13 @@ const renameDomainsStatusTasks:any = [
         ]
     },
     {
-        //Organisation.domains.status = Organisation.domains.subMeta
-        //Organisation.team.[member].status = Organisation.team.[member].subMeta
         collection: "people",
         queries: [
             renameDomainStatus,
+            getAggregationSkillGroupQuery('occupations')
         ]
     },
     {
-        //Organisation.domains.status = Organisation.domains.subMeta
-        //Organisation.team.[member].status = Organisation.team.[member].subMeta
         collection: "projects",
         queries: [
             renameDomainStatus,
@@ -84,7 +95,7 @@ const renameDomainsStatusTasks:any = [
  */
 export async function up(): Promise<void> {
     const driver:MongoDBDriver = new MongoDBDriver(config.migrations);
-    await runQueriesOnDatabase(driver, 'bdsol-data', renameDomainsStatusTasks, 'Renaming domains.status to domains.subMeta and ', 'up');
+    await runQueriesOnDatabase(driver, 'bdsol-data', renameStatusToMetaTasks, 'Renaming domains.status to domains.subMeta and ', 'up');
 }
 
 /**
@@ -92,5 +103,6 @@ export async function up(): Promise<void> {
  */
 export async function down (): Promise<void> {
     const driver:MongoDBDriver = new MongoDBDriver(config.migrations);
+    // SOrry I didn't implement the down query.
     //await runQueriesOnDatabase(driver, 'bdsol-data', tasksRenameMetaToStatus, 'Renaming status to meta', 'down');
 }
