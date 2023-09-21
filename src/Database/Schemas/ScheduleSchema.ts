@@ -1,5 +1,5 @@
 import {Document, Schema} from "mongoose";
-import {Meta} from "@src/Moderation/Schemas/MetaSchema";
+import { SubMeta } from "@src/Moderation/Schemas/MetaSchema";
 
 
 export interface ScheduleSchema extends Document {
@@ -8,6 +8,7 @@ export interface ScheduleSchema extends Document {
     startTime: string;
     endDate: Date;
     endTime: string;
+    subMeta: SubMeta;
 }
 
 
@@ -30,6 +31,9 @@ export class Schedule {
         },
         endTime:{
             type: String
+        },
+        subMeta: {
+            type: SubMeta.schema,
         }
     },{ _id : false }
     );
