@@ -245,12 +245,12 @@ export async function upMongoose (): Promise<void> {
         ];
 
 
-        /*for (const task of tasks) {
+        for (const task of tasks) {
             LogHelper.info("[Migration][Changing names] Creating the the seeder with task data");
             const results = await task.service.model.updateMany({}, { $rename: { status: "meta" } });
             console.log(task.service.model);
             console.log("results", results);
-        }*/
+        }
 
 
     } else {
