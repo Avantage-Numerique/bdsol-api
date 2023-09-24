@@ -5,6 +5,7 @@ import Project from "../../Projects/Models/Project";
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 import Event from "@src/Events/Models/Event";
+import Equipment from "@src/Equipment/Models/Equipment";
 
 
 class SearchResults {
@@ -15,6 +16,7 @@ class SearchResults {
     public taxonomyModel:any;
     public projectModel:any;
     public eventModel:any;
+    public equipmentModel:any;
 
     //Singleton
     public static _instance : SearchResults;
@@ -27,6 +29,7 @@ class SearchResults {
             SearchResults._instance.taxonomyModel = Taxonomy.getInstance().mongooseModel;
             SearchResults._instance.projectModel = Project.getInstance().mongooseModel;
             SearchResults._instance.eventModel = Event.getInstance().mongooseModel;
+            SearchResults._instance.equipmentModel = Equipment.getInstance().mongooseModel;
         }
         return SearchResults._instance;
     }
@@ -59,6 +62,11 @@ class SearchResults {
         
         promises.push(
             await this.eventModel.find(
+                {$text: {$search: searchIndex}},
+                {score: {$meta: "textScore"}}
+            ));
+        promises.push(
+            await this.equipmentModel.find(
                 {$text: {$search: searchIndex}},
                 {score: {$meta: "textScore"}}
             ));
@@ -137,6 +145,11 @@ class SearchResults {
                             {"eventType": paramId}
                         ]
                     }
+                )
+            )
+            promises.push(
+                await this.equipmentModel.find(
+                    { equipmentType: paramId }
                 )
             )
 

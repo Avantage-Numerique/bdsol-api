@@ -7,6 +7,7 @@ import {Sponsor} from "@database/Schemas/SponsorSchema";
 import {ScheduleBudget} from "@database/Schemas/ScheduleBudgetSchema";
 import {ProjectContextEnum} from "../ProjectContextEnum";
 import {DomainSchema} from "@src/Taxonomy/Schemas/DomainSchema";
+import { EquipmentLink } from "@src/Database/Schemas/EquipmentLinkSchema";
 
 export interface ProjectSchema extends Document {
     name:string;
@@ -24,6 +25,7 @@ export interface ProjectSchema extends Document {
     scheduleBudget:ScheduleBudget;
     skills:[ObjectId];
     domains:[DomainSchema];
-    context: ProjectContextEnum
+    context: ProjectContextEnum;
+    equipment: EquipmentLink;
     meta: Meta
 }

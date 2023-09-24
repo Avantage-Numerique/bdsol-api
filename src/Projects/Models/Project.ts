@@ -12,6 +12,7 @@ import {ScheduleBudget} from "@database/Schemas/ScheduleBudgetSchema";
 import {ProjectContextEnum} from "../ProjectContextEnum";
 import {TeamField} from "@src/Team/Schemas/TeamSchema";
 import * as fs from 'fs';
+import { EquipmentLink } from "@src/Database/Schemas/EquipmentLinkSchema";
 
 class Project extends AbstractModel {
 
@@ -136,6 +137,9 @@ class Project extends AbstractModel {
                 type: String,
                 enum: ProjectContextEnum
             },
+            equipment: {
+                type: [EquipmentLink.schema]
+            },
             meta: {
                 type: Meta.schema
             }
@@ -244,6 +248,8 @@ class Project extends AbstractModel {
         this.schema.pre('find', function() {
             taxonomyPopulate(this, 'skills');
             taxonomyPopulate(this, 'domains.domain');
+            taxonomyPopulate(this, 'equipment.technology');
+            middlewarePopulateProperty(this, 'equipment.equipment');
             middlewarePopulateProperty(this, 'mainImage');
             middlewarePopulateProperty(this, 'sponsor.entity');
             middlewarePopulateProperty(this, 'producer');
@@ -256,6 +262,8 @@ class Project extends AbstractModel {
         this.schema.pre('findOne', function() {
             taxonomyPopulate(this, 'skills');
             taxonomyPopulate(this, 'domains.domain');
+            taxonomyPopulate(this, 'equipment.technology');
+            middlewarePopulateProperty(this, 'equipment.equipment');
             middlewarePopulateProperty(this, 'mainImage');
             middlewarePopulateProperty(this, 'sponsor.entity');
             middlewarePopulateProperty(this, 'team.member');
