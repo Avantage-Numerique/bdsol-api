@@ -74,6 +74,14 @@ class PersonsController extends AbstractController {
                 },
                 {
                     $lookup: {
+                        from: 'projects',
+                        localField: '_id',
+                        foreignField: 'team.member',
+                        as: 'projects'
+                    }
+                },
+                {
+                    $lookup: {
                         from: 'taxonomies',
                         localField: 'domains.domain',
                         foreignField: '_id',
