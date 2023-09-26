@@ -39,9 +39,26 @@ class PersonsRoutes extends CrudRoute {
         getdoc: [],
     }
 
+    /**
+     * Route handler to transform all the URI params into query to the get
+     * @param req {Request}
+     * @param res {Response}
+     * @param next {NextFunction}
+     */
+    public async getByUriParamsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        // this may be overkill, because req.params already get all the same structure.
+        const initialQuery: any = {};
+        for (const param in req.params) {
+            initialQuery[param] = req.params[param];
+        }
+        console.log("this is my route.");
+        res.serviceResponse = await this.controllerInstance.get(initialQuery);
+        return next();
+    }
+
     public setupAdditionnalPublicRoutes(router: express.Router):express.Router {
         // Set the /:slug handler at the end of other route, to allow the routes sets in setupAdditionnalPublicRoutes to be 1 in priority.
-        this.routerInstance.get('/agg/:id', [
+        this.routerInstance.get('/agg/:slug', [
             this.getPersonsOrganisationsHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
@@ -50,9 +67,9 @@ class PersonsRoutes extends CrudRoute {
 
     public async getPersonsOrganisationsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
 
-        if (req.params.id) {
+        if (req.params.slug) {
             const personsController:PersonsController = PersonsController.getInstance() as PersonsController;
-            res.serviceResponse = await personsController.aggregateOrgs(req.params.id);
+            res.serviceResponse = await personsController.aggregateOrgs(req.params.slug);
         }
 
         return next();

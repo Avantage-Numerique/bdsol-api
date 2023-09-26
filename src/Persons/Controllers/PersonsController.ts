@@ -5,7 +5,10 @@ import {ApiResponseContract} from "@src/Http/Responses/ApiResponse";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {SuccessResponse} from "@src/Http/Responses/SuccessResponse";
 import ServiceAggregate from "@database/ServiceAggregate";
-import {objectIdModifier} from "@database/QueryBuilder/PropertyModifier";
+import QueryBuilder from "@database/QueryBuilder/QueryBuilder";
+import {User} from "@src/Users/Models/User";
+import mongoose from "mongoose";
+import Taxonomy from "@src/Taxonomy/Models/Taxonomy";
 
 class PersonsController extends AbstractController {
 
@@ -35,37 +38,72 @@ class PersonsController extends AbstractController {
         return PersonsController._instance;
     }
 
-    public async aggregateOrgs(id:any): Promise<ApiResponseContract> {
+    /**
+     * @method list List entity documents with research terms from database
+     * @param {any} requestData - Research terms { "nom":"Jean" }
+     * @return {ApiResponseContract} Promise containing a list of documents
+     */
+    public async get(requestData: any): Promise<ApiResponseContract> {
+        const query = QueryBuilder.build(requestData, true);
+
+        //hijacking the get function for person to use aggregation instead.
+        console.log("Persons controller get : ", requestData)
+
+
+        console.log("This is my person controller");
+        return await this.aggregateOrgs(requestData.slug);
+    }
+
+    public async aggregateOrgs(slug:any): Promise<ApiResponseContract> {
 
         const PersonModel:any = Person.getInstance();
-        /*const results:any = await PersonModel.aggregate([
-            {
-                $lookup: {
-                    from: 'organisations',
-                    localField: '_id',
-                    foreignField: 'team.member',
-                    as: 'org'
-                }
-            }
-        ]).exec();*/
-
         const aggregateService = new ServiceAggregate(PersonModel);
-        const results:any = await aggregateService.lookupFor(
+
+        const results:any = await aggregateService.lookupMultiple(
             {
-                _id: objectIdModifier(id)
+                slug: slug
             },
-            {
-                from: 'organisations',
-                localField: '_id',
-                foreignField: 'team.member',
-                as: 'organisations'
-            }
+            [
+                {
+                    $lookup: {
+                        from: 'organisations',
+                        localField: '_id',
+                        foreignField: 'team.member',
+                        as: 'organisations'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'taxonomies',
+                        localField: 'domains.domain',
+                        foreignField: '_id',
+                        as: 'domains'
+                    }
+                }
+            ]
         );
 
-        console.log(results);
 
+
+        console.log("results", results);
+
+        const users:mongoose.Model<any> = User.getInstance().mongooseModel;
+        const taxonomies:mongoose.Model<any> = Taxonomy.getInstance().mongooseModel;
+        await users.populate(results, {path: "meta.requestedBy", select: "name username avatar"});
+        await users.populate(results, {path: "meta.lastModifiedBy", select: "name username avatar"});
+        //I'm doing it with populate because of the $lookup is just really far fetch.
+        // All the things I found and tests where not working
+        await taxonomies.populate(results, {path: "occupations.skills"});
+
+        if (results.length > 0) {
+            return SuccessResponse.create(
+                results[0],
+                StatusCodes.OK,
+                ReasonPhrases.OK
+            );
+        }
         return SuccessResponse.create(
-            results,
+            results[0],
             StatusCodes.OK,
             ReasonPhrases.OK
         );
