@@ -1,10 +1,10 @@
 import {Document} from "mongoose"
-import { Status } from "../../Moderation/Schemas/StatusSchema";
+import {Meta} from "../../Moderation/Schemas/MetaSchema";
 import Media from "../../Media/Models/Media";
-import { Member } from "../../Team/Schemas/MemberSchema";
+import {Member} from "../../Team/Schemas/MemberSchema";
 import {DomainSchema} from "../../Taxonomy/Schemas/DomainSchema";
-import { SkillGroup } from "../../Taxonomy/Schemas/SkillGroupSchema";
-import { ObjectId } from "mongodb";
+import {SkillGroup} from "../../Taxonomy/Schemas/SkillGroupSchema";
+import {ObjectId} from "mongodb";
 
 export interface OrganisationSchema extends Document {
     name:string;
@@ -19,5 +19,5 @@ export interface OrganisationSchema extends Document {
     mainImage:Media;
     catchphrase:string;
     location: [ObjectId]
-    status: Status;
+    meta: Meta;
 }

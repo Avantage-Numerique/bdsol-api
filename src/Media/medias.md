@@ -21,7 +21,7 @@ Domaine de gestion des médias pour l'API. Implémentation pour Image en premier
     "entityType": "String",
     "uploadedBy": "String (objectId)",
     "dbStatus": "String [ in use, archived, to delete, pending ]",
-    "status": {},
+    "meta": {},
     "timestamps": {}
 }
 ```

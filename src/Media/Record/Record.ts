@@ -24,7 +24,7 @@ export default class Record {
     public licence:string;
     public fileType:string;
     //public dbStatus:string;
-    //public status:any;
+    //public meta:any;
 
     //Multer file props
     public file_fieldName:any;

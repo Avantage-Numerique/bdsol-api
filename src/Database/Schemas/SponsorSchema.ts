@@ -1,13 +1,12 @@
 import mongoose, {Document, Schema} from "mongoose";
-import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {SubMeta} from "@src/Moderation/Schemas/MetaSchema";
 
 
 export interface SponsorSchema extends Document {
     name: string;
     entity: mongoose.ObjectId;
     entityType: string;
-    order: number;
-    status: Status;
+    subMeta: SubMeta;
 }
 
 
@@ -31,11 +30,8 @@ export class Sponsor {
             enum: ['Person', 'Organisation']
             //required: true
         },
-        order: {
-            type: Number,
-        },
-        status: {
-            type: Status.schema,
+        subMeta: {
+            type: SubMeta.schema,
             //required: true
         }
     },

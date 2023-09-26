@@ -13,8 +13,9 @@ const mongoosePopulate = (document: any,
 
     //populate method have a property called options.
 
-    const populateOptions: { path: string, select?: string | undefined, model?: any } = {
-        path: schemaProperty
+    const populateOptions: { path: string, select?: string | undefined, model?: any, _recursed?:boolean } = {
+        path: schemaProperty,
+        _recursed: true //this is kind of conter-intuitive, but true is for : yes we active this plugin recursed.
     }
 
     if (fieldToPopulate !== undefined) {

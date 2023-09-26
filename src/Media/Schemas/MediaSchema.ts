@@ -1,5 +1,5 @@
 import mongoose, {Document} from "mongoose";
-import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {Meta} from "@src/Moderation/Schemas/MetaSchema";
 
 export interface MediaSchema extends Document {
     title: string;
@@ -17,5 +17,5 @@ export interface MediaSchema extends Document {
     entityType: string;
     uploadedBy: mongoose.ObjectId;
     dbStatus: string;
-    status: Status;
+    meta: Meta;
 }

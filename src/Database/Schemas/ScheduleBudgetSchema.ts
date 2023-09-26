@@ -1,5 +1,5 @@
 import {Document, Schema} from "mongoose";
-import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {SubMeta} from "@src/Moderation/Schemas/MetaSchema";
 
 export enum BudgetRangeEnum {
     "0$ à 1 000$" = "0-1k",
@@ -28,6 +28,7 @@ export interface TimeframeSchema extends Document {
     step: string;
     eta: string;
     budgetRange: string;
+    subMeta: SubMeta
 }
 
 export class Timeframe {
@@ -44,6 +45,9 @@ export class Timeframe {
         budgetRange: {
             type: String,
             enum: BudgetRangeEnum
+        },
+        subMeta: {
+            type: SubMeta.schema
         }
     })
 
@@ -57,7 +61,7 @@ export interface ScheduleBudgetSchema extends Document {
     estimatedTotalBudget: number;
     eta: string;
     timeframe: [Timeframe];
-    status: Status;
+    subMeta: SubMeta;
 }
 
 
@@ -84,8 +88,8 @@ export class ScheduleBudget {
         timeframe: {
             type: [Timeframe.schema],
         },
-        status: {
-            type: Status.schema,
+        subMeta: {
+            type: SubMeta.schema,
             //required: true
         }
     },{ _id : false }

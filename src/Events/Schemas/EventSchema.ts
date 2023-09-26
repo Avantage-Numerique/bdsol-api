@@ -1,11 +1,11 @@
-import { ObjectId } from "mongodb";
+import {ObjectId} from "mongodb";
 import Media from "@src/Media/Models/Media";
-import { DomainSchema } from "@src/Taxonomy/Schemas/DomainSchema";
-import { Status } from "@src/Moderation/Schemas/StatusSchema";
+import {DomainSchema} from "@src/Taxonomy/Schemas/DomainSchema";
+import {Meta} from "@src/Moderation/Schemas/MetaSchema";
 import {Document} from "mongoose";
-import { Member } from "@src/Team/Schemas/MemberSchema";
-import { Schedule } from "@src/Database/Schemas/ScheduleSchema";
-import { EventFormatEnum } from "../EventFormatEnum";
+import {Member} from "@src/Team/Schemas/MemberSchema";
+import {Schedule} from "@src/Database/Schemas/ScheduleSchema";
+import {EventFormatEnum} from "../EventFormatEnum";
 
 export interface EventSchema extends Document {
     name:string
@@ -30,5 +30,5 @@ export interface EventSchema extends Document {
     subEvents:[ObjectId]
     location:[ObjectId]
     photoGallery:ObjectId
-    status:Status
+    meta:Meta
 }

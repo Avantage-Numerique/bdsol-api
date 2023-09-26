@@ -1,5 +1,5 @@
-import { Status } from "@src/Moderation/Schemas/StatusSchema";
-import { ObjectId } from "mongodb";
+import {Meta} from "@src/Moderation/Schemas/MetaSchema";
+import {ObjectId} from "mongodb";
 import {Document} from "mongoose";
 
 export interface PlaceSchema extends Document {
@@ -16,5 +16,5 @@ export interface PlaceSchema extends Document {
     country:string,
     latitude:string,
     longitude:string,
-    status:Status
+    meta:Meta
 }

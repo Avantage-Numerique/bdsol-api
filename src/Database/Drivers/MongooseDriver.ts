@@ -87,15 +87,17 @@ export class MongooseDBDriver implements DBDriver {
         //order is important for populate. If the schema in relation isn't declare before, it will not work.
         this.providers.users.assign(UsersService.getInstance(User.getInstance()));
 
-        this.providers.data.assign(TaxonomyService.getInstance(Taxonomy.getInstance()));
-        this.providers.data.assign(MediasService.getInstance(Media.getInstance()));
+        const doIndexes = true;
+
+        this.providers.data.assign(TaxonomyService.getInstance(Taxonomy.getInstance(doIndexes)));
+        this.providers.data.assign(MediasService.getInstance(Media.getInstance(doIndexes)));
         this.providers.data.assign(UsersHistoryService.getInstance(UserHistory.getInstance()));
 
-        this.providers.data.assign(PersonsService.getInstance(Person.getInstance()));
-        this.providers.data.assign(OrganisationsService.getInstance(Organisation.getInstance()));
-        this.providers.data.assign(ProjectsService.getInstance(Project.getInstance()));
-        this.providers.data.assign(EventsService.getInstance(Event.getInstance()));
-        this.providers.data.assign(PlacesService.getInstance(Place.getInstance()));
+        this.providers.data.assign(PersonsService.getInstance(Person.getInstance(doIndexes)));
+        this.providers.data.assign(OrganisationsService.getInstance(Organisation.getInstance(doIndexes)));
+        this.providers.data.assign(ProjectsService.getInstance(Project.getInstance(doIndexes)));
+        this.providers.data.assign(EventsService.getInstance(Event.getInstance(doIndexes)));
+        this.providers.data.assign(PlacesService.getInstance(Place.getInstance(doIndexes)));
     }
 
 
