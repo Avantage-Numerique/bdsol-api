@@ -3,9 +3,8 @@ import {SubMeta} from "@src/Moderation/Schemas/MetaSchema";
 
 
 export interface EquipmentLinkSchema extends Document {
-    label: string;
     equipment: ObjectId;
-    technology: ObjectId;
+    qty: number;
     subMeta:SubMeta
 }
 
@@ -15,16 +14,12 @@ export class EquipmentLink {
     /** @static schema */
     static schema:Schema =
     new Schema<EquipmentLinkSchema>({
-        label: {
-            type:String
-        },
         equipment: {
             type: mongoose.Types.ObjectId,
-            refPath: "Equipment"
+            ref: "Equipment"
         },
-        technology: {
-            type: mongoose.Types.ObjectId,
-            refPath: "Taxonomy"
+        qty: {
+            type: Number
         },
         subMeta: {
             type: SubMeta.schema

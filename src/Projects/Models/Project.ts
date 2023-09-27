@@ -138,7 +138,8 @@ class Project extends AbstractModel {
                 enum: ProjectContextEnum
             },
             equipment: {
-                type: [EquipmentLink.schema]
+                type: [mongoose.Types.ObjectId],
+                ref: "Equipment"
             },
             meta: {
                 type: Meta.schema
@@ -197,6 +198,7 @@ class Project extends AbstractModel {
             skills: document.skills ?? undefined,
             domains: document.domains ?? undefined,
             context: document.context ?? '',
+            equipment: document.equipment ?? [],
             meta: document.meta ?? undefined,
             type: document.type ?? '',
             createdAt: document.createdAt ?? '',
@@ -249,7 +251,7 @@ class Project extends AbstractModel {
             taxonomyPopulate(this, 'skills');
             taxonomyPopulate(this, 'domains.domain');
             taxonomyPopulate(this, 'equipment.technology');
-            middlewarePopulateProperty(this, 'equipment.equipment');
+            middlewarePopulateProperty(this, 'equipment');
             middlewarePopulateProperty(this, 'mainImage');
             middlewarePopulateProperty(this, 'sponsor.entity');
             middlewarePopulateProperty(this, 'producer');
@@ -263,7 +265,7 @@ class Project extends AbstractModel {
             taxonomyPopulate(this, 'skills');
             taxonomyPopulate(this, 'domains.domain');
             taxonomyPopulate(this, 'equipment.technology');
-            middlewarePopulateProperty(this, 'equipment.equipment');
+            middlewarePopulateProperty(this, 'equipment');
             middlewarePopulateProperty(this, 'mainImage');
             middlewarePopulateProperty(this, 'sponsor.entity');
             middlewarePopulateProperty(this, 'team.member');

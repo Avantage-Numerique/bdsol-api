@@ -170,6 +170,7 @@ class Organisation extends AbstractModel {
             catchphrase: document.catchphrase ?? '',
             meta : document.meta ?? '',
             location: document.location ?? [],
+            equipment: document.equipment ?? [],
             type: document.type ?? '',
             createdAt : document.createdAt ?? '',
             updatedAt : document.updatedAt ?? '',
@@ -227,7 +228,6 @@ class Organisation extends AbstractModel {
         this.schema.pre('find', function() {
             taxonomyPopulate(this, 'offers.skills');
             taxonomyPopulate(this, 'domains.domain');
-            taxonomyPopulate(this, 'equipment.technology');
             middlewarePopulateProperty(this, 'equipment.equipment');
             middlewarePopulateProperty(this, 'team.member');
             middlewarePopulateProperty(this, "mainImage");
@@ -240,7 +240,6 @@ class Organisation extends AbstractModel {
         this.schema.pre('findOne', function() {
             taxonomyPopulate(this, 'offers.skills');
             taxonomyPopulate(this, 'domains.domain');
-            taxonomyPopulate(this, 'equipment.technology');
             middlewarePopulateProperty(this, 'equipment.equipment');
             middlewarePopulateProperty(this, 'team.member');
             middlewarePopulateProperty(this, "mainImage");

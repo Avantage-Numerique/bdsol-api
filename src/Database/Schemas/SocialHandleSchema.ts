@@ -1,5 +1,5 @@
 import {Document, Schema} from "mongoose";
-import {Meta, SubMeta} from "@src/Moderation/Schemas/MetaSchema";
+import {SubMeta} from "@src/Moderation/Schemas/MetaSchema";
 
 
 export interface SocialHandleSchema extends Document {
