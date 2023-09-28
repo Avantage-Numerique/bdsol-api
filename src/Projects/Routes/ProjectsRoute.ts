@@ -34,6 +34,8 @@ class ProjectsRoutes extends CrudRoute {
             //body('data.scheduleBudget').exists({checkNull:true}).bail(),
             objectIdSanitizerAlias('data.mainImage'),
             objectIdSanitizerAlias('data.location.*'),
+            objectIdSanitizerAlias('data.equipment.*'),
+
             /*body('data.skills').exists({checkNull:true}).bail()
                 .custom(IsObjectIdStringValid.validatorCustom())
                 .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
@@ -52,6 +54,8 @@ class ProjectsRoutes extends CrudRoute {
             objectIdSanitizerAlias('data.team.*.member'),
             objectIdSanitizerAlias('data.mainImage'),
             objectIdSanitizerAlias('data.location.*'),
+            objectIdSanitizerAlias('data.equipment.*'),
+
 
             //body('data.context').exists({checkNull:true}).bail().customSanitizer(EnumSanitizer.validatorCustomSanitizer(ProjectContextEnum)),
             //body('data.location').exists({checkNull:true}).bail(),
