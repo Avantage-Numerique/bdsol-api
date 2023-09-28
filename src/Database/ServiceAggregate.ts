@@ -24,7 +24,7 @@ export default class ServiceAggregate {
         ]).exec();
     }
 
-    public populateProperty(property:string) {
+    public populatePropertyInSubCollection(property:string) {
         return {
             $addFields: {
                 [property]: {

@@ -47,68 +47,51 @@ class PersonsController extends AbstractController {
 
     public async aggregateSingle(slug:any): Promise<ApiResponseContract> {
 
-        const PersonModel:any = Person.getInstance();
-        const aggregateService = new ServiceAggregate(PersonModel);
-
-        const results:any = await aggregateService.lookupMultiple(
+        let query: Array<any> = []
+        /**
+         * regroup Linked entity from a 1:n relation where person is linked.
+         * linkField : Property in the AppModel that
+         */
+        const linkedEntities:Array<any> = [
             {
-                slug: slug
+                appModel: Organisation.getInstance(),
+                linkField: "team.member"
             },
-            [
-                {
-                    $lookup: {
-                        from: 'organisations',
-                        localField: '_id',
-                        foreignField: 'team.member',
-                        as: 'organisations'
-                    }
-                },
-                {
-                    $lookup: {
-                        from: 'projects',
-                        localField: '_id',
-                        foreignField: 'team.member',
-                        as: 'projects'
-                    }
-                },
-               /* {
-                    $lookup: {
-                        from: 'taxonomies',
-                        localField: 'domains.domain',
-                        foreignField: '_id',
-                        as: 'domainsPopulated'
-                    }
-                },*/
-                /*{
-                    $lookup: {
-                        from: 'taxonomies',
-                        localField: 'occupations.skills',
-                        foreignField: '_id',
-                        as: 'skillsPopulated'//lookup alway need to push it on the based level
-                    }
-                },*/
-                {// Virtuals
-                    $addFields: {
-                        "organisations.type": Organisation.getInstance().modelName,
-                        "projects.type": Project.getInstance().modelName,
-                        //"occupations.skills": "$skillsPopulated",
-                        "type": Person.getInstance().modelName
-                    }
-                },
-                /*{//+ the projet to remove the looked up field.
-                    $project: {
-                        skillsPopulated: 0
-                    }
-                }*/
-            ]
-        );
+            {
+                appModel: Project.getInstance(),
+                linkField: "team.member"
+            }
+        ];
+
+        for (let entity of linkedEntities) {
+            console.log("person controller", entity);
+            query.push({
+                $lookup: {
+                    from:entity.appModel.collectionName.toLowerCase(),
+                    localField: '_id',
+                    foreignField: entity.linkField,
+                    as: entity.appModel.collectionName.toLowerCase()
+                }
+            });
+        }
+        query.push({// Virtuals
+            $addFields: {
+                "organisations.type": Organisation.getInstance().modelName,
+                "projects.type": Project.getInstance().modelName,
+                "type": Person.getInstance().modelName
+            }
+        });
+
+        const aggregateService = new ServiceAggregate(Person.getInstance());
+
+        const results:any = await aggregateService.lookupMultiple({slug: slug}, query);
 
         //agregation inter bd don't work (that I red).
         const users:mongoose.Model<any> = User.getInstance().mongooseModel;
         await users.populate(results, {path: "meta.requestedBy", select: "name username avatar"});
         await users.populate(results, {path: "meta.lastModifiedBy", select: "name username avatar"});
 
-        //I'm doing it with populate because of the $lookup is just really far fetch.
+        //I'm doing it with populate because of the $lookup is just really fetching, and we need data to stay the same.
         // All the things I found and tests where not working
         const taxonomies:mongoose.Model<any> = Taxonomy.getInstance().mongooseModel;
         await taxonomies.populate(results, {path: "occupations.skills"});
@@ -124,8 +107,8 @@ class PersonsController extends AbstractController {
 
         return ErrorResponse.create(
             new Error(""),
-            StatusCodes.OK,
-            ReasonPhrases.OK
+            StatusCodes.NOT_FOUND,
+            ReasonPhrases.NOT_FOUND
         );
     }
 }
