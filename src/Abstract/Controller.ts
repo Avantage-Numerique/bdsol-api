@@ -82,13 +82,23 @@ abstract class AbstractController implements ControllerContract {
 
 
     /**
-     * @method list List entity documents with research terms from database
+     * @method get get target entity by
      * @param {any} requestData - Research terms { "nom":"Jean" }
      * @return {ApiResponseContract} Promise containing a list of documents
      */
     public async get(requestData: any): Promise<ApiResponseContract> {
         const query = QueryBuilder.build(requestData, true);
         return await this.service.get(query);
+    }
+
+
+    /**
+     * @method single get target single entity
+     * @param {any} requestData - Research terms { "nom":"Jean" }
+     * @return {ApiResponseContract} Promise containing a list of documents
+     */
+    public async single(requestData: any): Promise<ApiResponseContract> {
+        return this.get(requestData);
     }
 
 

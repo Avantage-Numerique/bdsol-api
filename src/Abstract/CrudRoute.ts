@@ -310,7 +310,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         for (const param in req.params) {
             initialQuery[param] = req.params[param];
         }
-        res.serviceResponse = await this.controllerInstance.get(initialQuery);
+        res.serviceResponse = await this.controllerInstance.single(initialQuery);
         return next();
     }
 
