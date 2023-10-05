@@ -25,6 +25,6 @@ export interface ProjectSchema extends Document {
     skills:[ObjectId];
     domains:[DomainSchema];
     context: ProjectContextEnum;
-    equipment: ObjectId;
+    equipment: [ObjectId];
     meta: Meta
 }

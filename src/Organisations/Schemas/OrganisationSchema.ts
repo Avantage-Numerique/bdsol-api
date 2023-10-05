@@ -20,6 +20,6 @@ export interface OrganisationSchema extends Document {
     mainImage:Media;
     catchphrase:string;
     location: [ObjectId];
-    equipment: EquipmentLink;
+    equipment: [EquipmentLink];
     meta: Meta;
 }
