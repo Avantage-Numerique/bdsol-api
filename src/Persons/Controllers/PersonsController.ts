@@ -13,6 +13,7 @@ import Organisation from "@src/Organisations/Models/Organisation";
 import Project from "@src/Projects/Models/Project";
 import {lookupModelsByQueries} from "@database/HelperAggregate";
 import Media from "@src/Media/Models/Media";
+import Event from "@src/Events/Models/Event";
 
 class PersonsController extends AbstractController {
 
@@ -66,6 +67,10 @@ class PersonsController extends AbstractController {
             {
                 appModel: Project.getInstance(),
                 foreignField: "team.member"
+            },
+            {
+                appModel: Event.getInstance(),
+                foreignField: "attendees"
             }
         ]);
 
@@ -73,6 +78,7 @@ class PersonsController extends AbstractController {
             $addFields: {
                 "organisations.type": Organisation.getInstance().modelName,
                 "projects.type": Project.getInstance().modelName,
+                "events.type": Event.getInstance().modelName,
                 "type": Person.getInstance().modelName
             }
         });
@@ -95,6 +101,7 @@ class PersonsController extends AbstractController {
         await media.populate(results, {path: "projects.mainImage"});
         await media.populate(results, {path: "organisations.mainImage"});
         await media.populate(results, {path: "mainImage"});
+        await media.populate(results, {path: "events.mainImage"});
 
         await users.populate(results, {path: "meta.requestedBy", select: "name username avatar"});
         await users.populate(results, {path: "meta.lastModifiedBy", select: "name username avatar"});
