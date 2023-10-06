@@ -62,7 +62,43 @@ class OrganisationsController extends AbstractController {
             {
                 appModel: Person.getInstance(),
                 by: "team.member",
-                foreignField: "_id"
+                foreignField: "_id",
+                as: "people"
+            },
+            {
+                raw: {  //reconstruction of the team array with the lookup values (as if we used the populate).
+                    $addFields: {
+                        team: {
+                            $map: {
+                                input: "$team",
+                                as: "t",
+                                in: {
+                                    member: {
+                                        $arrayElemAt: [
+                                            {
+                                                $filter: {
+                                                    input: "$people",
+                                                    as: "p",
+                                                    cond: {$eq: ["$$p._id", "$$t.member"]}
+                                                }
+                                            },
+                                            0
+                                        ]
+                                    },
+                                    role: "$$t.role",
+                                    subMeta: "$$t.subMeta",
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                raw: {
+                    $project: {
+                        people: 0
+                    }
+                }
             }
             //need to get back the people looked up into team.member.
         ]);
@@ -88,6 +124,7 @@ class OrganisationsController extends AbstractController {
         await taxonomies.populate(results, {path: "domains.domain"});
 
         await media.populate(results, {path: "projects.mainImage"});
+        await media.populate(results, {path: "team.member.mainImage"});
 
         await users.populate(results, {path: "meta.requestedBy", select: "name username avatar"});
         await users.populate(results, {path: "meta.lastModifiedBy", select: "name username avatar"});

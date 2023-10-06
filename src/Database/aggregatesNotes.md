@@ -4,6 +4,84 @@
 
 ## Test of query
 ```javascript
+
+{
+    $addFields: {
+        "domains": {
+            $map: {
+                input: "$domains",
+                    as: "d",
+            in: {
+                    "domain": "$$d.domain",
+                        "subMeta": "$$d.status" // Rename 'status' to 'subMeta'
+                }
+            }
+        }
+    }
+}
+db.organisations.aggregate([
+    { $match: { slug: "damn-son" } },
+    {
+        $lookup: {
+            from: 'projects',
+            localField: '_id',
+            foreignField: 'entityInCharge',
+            as: 'projects'
+        }
+    },
+    {
+        $lookup: {
+            from: 'people',
+            localField: 'team.member',
+            foreignField: '_id',
+            as: 'people'
+        }
+    },
+    {
+        $addFields: {
+            team: {
+                $map: {
+                    input: "$team",
+                    as: "t",
+                    in: {
+                        member: {
+                            $arrayElemAt: [
+                                {
+                                    $filter: {
+                                        input: "$people",
+                                        as: "p",
+                                        cond: { $eq: ["$$p._id", "$$t.member"] }
+                                    }
+                                },
+                                0
+                            ]
+                        },
+                        role: "$$t.role",
+                        subMeta: "$$t.subMeta",
+                    }
+                }
+            }
+        }
+    },
+    {
+        $project: {
+            people: 0
+        }
+    }
+]);
+
+In this aggregation:
+
+    The $lookup stage performs the left outer join between the organizations and people collections, storing the joined data in an array called teamMembers.
+
+    The $addFields stage reshapes the team array as previously explained.
+
+    The $replaceRoot stage replaces the root document with a new document created by merging the existing fields ($$ROOT) with the teamMembers field. The $$REMOVE is used to remove the teamMembers field from the root document, effectively keeping all other fields without specifying them individually.
+
+    This way, you maintain all the existing fields in the organizations collection in the output document without explicitly listing them.
+
+]);
+
 db.people.aggregate([
     { $match: { slug: "marcus-sweable" } },
     {

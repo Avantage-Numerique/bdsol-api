@@ -94,6 +94,7 @@ class PersonsController extends AbstractController {
 
         await media.populate(results, {path: "projects.mainImage"});
         await media.populate(results, {path: "organisations.mainImage"});
+        await media.populate(results, {path: "mainImage"});
 
         await users.populate(results, {path: "meta.requestedBy", select: "name username avatar"});
         await users.populate(results, {path: "meta.lastModifiedBy", select: "name username avatar"});

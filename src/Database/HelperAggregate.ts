@@ -15,10 +15,10 @@ const lookupByQuery = (target:any, by:string = "_id") => {
 const lookupModelByQuery = (target:any, by:string = "_id") => {
     return {
         $lookup: {
-            from: target.appModel.collectionName.toLowerCase(),
+            from: target.from ?? target.appModel.collectionName.toLowerCase(),
             localField: by,
             foreignField: target.foreignField,
-            as: target.appModel.collectionName.toLowerCase()
+            as: target.as ?? target.appModel.collectionName.toLowerCase()
         }
     };
 }
@@ -34,6 +34,10 @@ const lookupByQueries = (queries:any, by:string="_id") => {
 const lookupModelsByQueries = (queries:any, by:string="_id") => {
     let lookups:Array<any> = [];
     for (let query of queries) {
+        if (typeof query.raw !== 'undefined') {
+            lookups.push(query.raw);
+            continue;
+        }
         lookups.push(lookupModelByQuery(query, query.by ?? by));
     }
     return lookups;
