@@ -13,6 +13,7 @@ import Media from "@src/Media/Models/Media";
 import {SuccessResponse} from "@src/Http/Responses/SuccessResponse";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {ErrorResponse} from "@src/Http/Responses/ErrorResponse";
+import Event from "@src/Events/Models/Event";
 
 class OrganisationsController extends AbstractController {
 
@@ -66,6 +67,10 @@ class OrganisationsController extends AbstractController {
                 as: "people"
             },
             {
+                appModel: Event.getInstance(),
+                foreignField: "organizer"
+            },
+            {
                 raw: {  //reconstruction of the team array with the lookup values (as if we used the populate).
                     $addFields: {
                         team: {
@@ -106,6 +111,7 @@ class OrganisationsController extends AbstractController {
         query.push({// Virtuals
             $addFields: {
                 "projects.type": Project.getInstance().modelName,
+                "events.type": Event.getInstance().modelName,
                 "team.member.type": Person.getInstance().modelName,
                 "type": Organisation.getInstance().modelName
             }
@@ -125,6 +131,7 @@ class OrganisationsController extends AbstractController {
 
         await media.populate(results, {path: "projects.mainImage"});
         await media.populate(results, {path: "team.member.mainImage"});
+        await media.populate(results, {path: "events.mainImage"});
 
         await users.populate(results, {path: "meta.requestedBy", select: "name username avatar"});
         await users.populate(results, {path: "meta.lastModifiedBy", select: "name username avatar"});
