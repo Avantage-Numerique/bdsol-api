@@ -132,6 +132,7 @@ class OrganisationsController extends AbstractController {
         await taxonomies.populate(results, {path: "offers.skills"});
         await taxonomies.populate(results, {path: "domains.domain"});
 
+        await media.populate(results, {path: "mainImage"});
         await media.populate(results, {path: "projects.mainImage"});
         await media.populate(results, {path: "team.member.mainImage"});
         await media.populate(results, {path: "events.mainImage"});
