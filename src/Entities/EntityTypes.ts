@@ -6,7 +6,8 @@ export enum EntityTypesEnum {
     taxonomy = "Taxonomy",
     event = "Event",
     media = "Media",
-    place = "Place"
+    place = "Place",
+    equipment = "Equipment"
 }
 
 export enum EntityApiUrlEnum {
@@ -16,5 +17,6 @@ export enum EntityApiUrlEnum {
     taxonomy = "taxonomies",
     event = "events",
     media = "medias",
-    place = "places"
+    place = "places",
+    equipment = "equipment"
 }

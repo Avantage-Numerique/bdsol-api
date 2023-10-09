@@ -25,11 +25,11 @@ export class Meta {
             enum: MetaStates,
             //required: true
         },
-        //The user who request the change
+        //The user who requested the creation
         requestedBy: {
             type: mongoose.Types.ObjectId,
         },
-        //The last user that modified the status
+        //The last user that modified the entity
         lastModifiedBy: {
             type: mongoose.Types.ObjectId,
             //required: true

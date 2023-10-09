@@ -24,6 +24,7 @@ export interface ProjectSchema extends Document {
     scheduleBudget:ScheduleBudget;
     skills:[ObjectId];
     domains:[DomainSchema];
-    context: ProjectContextEnum
+    context: ProjectContextEnum;
+    equipment: [ObjectId];
     meta: Meta
 }

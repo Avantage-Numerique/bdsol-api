@@ -11,6 +11,7 @@ import {Sponsor} from "@database/Schemas/SponsorSchema";
 import {ScheduleBudget} from "@database/Schemas/ScheduleBudgetSchema";
 import {ProjectContextEnum} from "../ProjectContextEnum";
 import {TeamField} from "@src/Team/Schemas/TeamSchema";
+import { EquipmentLink } from "@src/Database/Schemas/EquipmentLinkSchema";
 import * as fs from 'fs';
 
 class Project extends AbstractModel {
@@ -136,6 +137,10 @@ class Project extends AbstractModel {
                 type: String,
                 enum: ProjectContextEnum
             },
+            equipment: {
+                type: [mongoose.Types.ObjectId],
+                ref: "Equipment"
+            },
             meta: {
                 type: Meta.schema
             }
@@ -193,6 +198,7 @@ class Project extends AbstractModel {
             skills: document.skills ?? undefined,
             domains: document.domains ?? undefined,
             context: document.context ?? '',
+            equipment: document.equipment ?? [],
             meta: document.meta ?? undefined,
             type: document.type ?? '',
             createdAt: document.createdAt ?? '',
@@ -244,6 +250,7 @@ class Project extends AbstractModel {
         this.schema.pre('find', function() {
             taxonomyPopulate(this, 'skills');
             taxonomyPopulate(this, 'domains.domain');
+            middlewarePopulateProperty(this, 'equipment');
             middlewarePopulateProperty(this, 'mainImage');
             middlewarePopulateProperty(this, 'sponsor.entity');
             middlewarePopulateProperty(this, 'producer');
@@ -256,6 +263,7 @@ class Project extends AbstractModel {
         this.schema.pre('findOne', function() {
             taxonomyPopulate(this, 'skills');
             taxonomyPopulate(this, 'domains.domain');
+            middlewarePopulateProperty(this, 'equipment');
             middlewarePopulateProperty(this, 'mainImage');
             middlewarePopulateProperty(this, 'sponsor.entity');
             middlewarePopulateProperty(this, 'team.member');

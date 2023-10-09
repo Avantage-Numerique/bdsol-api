@@ -11,6 +11,7 @@ import Project from "@src/Projects/Models/Project";
 import Place from "@src/Places/Models/Place";
 import Event from "@src/Events/Models/Event";
 import EntityControllerFactory from "@src/Abstract/EntityControllerFactory";
+import Equipment from "@src/Equipment/Models/Equipment";
 
 class MediasController extends AbstractController { //implements ControllerContract {
 
@@ -88,7 +89,8 @@ class MediasController extends AbstractController { //implements ControllerContr
             [Organisation.getInstance().modelName]: ["mainImage"],
             [Project.getInstance().modelName]: ["mainImage"],
             [Event.getInstance().modelName]: ["mainImage", "photoGallery"],
-            [Place.getInstance().modelName]: ["mainImage"]
+            [Place.getInstance().modelName]: ["mainImage"],
+            [Equipment.getInstance().modelName]: ["mainImage"]
         };
         //For all keys (modelName) check if image is accepted
         if(!Object.keys(entities).includes(requestData.entityType))

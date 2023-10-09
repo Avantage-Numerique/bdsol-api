@@ -2,9 +2,10 @@ import {Document} from "mongoose"
 import {Meta} from "../../Moderation/Schemas/MetaSchema";
 import Media from "../../Media/Models/Media";
 import {Member} from "../../Team/Schemas/MemberSchema";
-import {DomainSchema} from "../../Taxonomy/Schemas/DomainSchema";
-import {SkillGroup} from "../../Taxonomy/Schemas/SkillGroupSchema";
-import {ObjectId} from "mongodb";
+import {DomainSchema} from "@src/Taxonomy/Schemas/DomainSchema";
+import { SkillGroup } from "../../Taxonomy/Schemas/SkillGroupSchema";
+import { ObjectId } from "mongodb";
+import { EquipmentLink } from "@src/Database/Schemas/EquipmentLinkSchema";
 
 export interface OrganisationSchema extends Document {
     name:string;
@@ -18,6 +19,7 @@ export interface OrganisationSchema extends Document {
     team: [Member];
     mainImage:Media;
     catchphrase:string;
-    location: [ObjectId]
+    location: [ObjectId];
+    equipment: [EquipmentLink];
     meta: Meta;
 }

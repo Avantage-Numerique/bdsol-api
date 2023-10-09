@@ -26,7 +26,7 @@ import {JobSheet} from "@src/Schedule/Sheet";
 import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 import {EventsRoutes} from "./Events/Routes/EventsRoutes";
 import { PlacesRoutes } from "./Places/Routes/PlacesRoutes";
-
+import EquipmentRoutes from "./Equipment/Routes/EquipmentRoute";
 /**
  * Main class for the API
  * Use the express instance as public property.
@@ -134,6 +134,10 @@ export default class Api {
             {
                 baseRoute: "/places",
                 manager: new PlacesRoutes()
+            },
+            {
+                baseRoute: "/equipment",
+                manager: new EquipmentRoutes()
             },
             {
                 baseRoute: "/info",

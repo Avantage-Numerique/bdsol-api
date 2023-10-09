@@ -12,6 +12,7 @@ import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middle
 import {populateUser} from "@src/Users/Middlewares/populateUser";
 import {User} from "@src/Users/Models/User";
 import {SkillGroup} from "@src/Taxonomy/Schemas/SkillGroupSchema";
+import { EquipmentLink } from "@src/Database/Schemas/EquipmentLinkSchema";
 
 
 class Organisation extends AbstractModel {
@@ -77,7 +78,7 @@ class Organisation extends AbstractModel {
                 slug: {
                     type: String,
                     slug: "name",
-                    slugPaddingSize: 2,
+                    slugPaddingSize: 3,
                     index: true,
                     unique: true
                 },
@@ -123,6 +124,9 @@ class Organisation extends AbstractModel {
                     type: [mongoose.Types.ObjectId],
                     ref: "Place"
                 },
+                equipment: {
+                    type: [EquipmentLink.schema]
+                },
                 meta: {
                     type: Meta.schema
                 }
@@ -167,6 +171,7 @@ class Organisation extends AbstractModel {
             catchphrase: document.catchphrase ?? '',
             meta : document.meta ?? '',
             location: document.location ?? [],
+            equipment: document.equipment ?? [],
             type: document.type ?? '',
             createdAt : document.createdAt ?? '',
             updatedAt : document.updatedAt ?? '',
@@ -224,7 +229,7 @@ class Organisation extends AbstractModel {
         this.schema.pre('find', function() {
             taxonomyPopulate(this, 'offers.skills');
             taxonomyPopulate(this, 'domains.domain');
-
+            middlewarePopulateProperty(this, 'equipment.equipment');
             middlewarePopulateProperty(this, 'team.member');
             middlewarePopulateProperty(this, "mainImage");
             middlewarePopulateProperty(this, "location");
@@ -236,7 +241,7 @@ class Organisation extends AbstractModel {
         this.schema.pre('findOne', function() {
             taxonomyPopulate(this, 'offers.skills');
             taxonomyPopulate(this, 'domains.domain');
-
+            middlewarePopulateProperty(this, 'equipment.equipment');
             middlewarePopulateProperty(this, 'team.member');
             middlewarePopulateProperty(this, "mainImage");
             middlewarePopulateProperty(this, "location");
