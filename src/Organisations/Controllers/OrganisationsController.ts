@@ -14,6 +14,7 @@ import {SuccessResponse} from "@src/Http/Responses/SuccessResponse";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {ErrorResponse} from "@src/Http/Responses/ErrorResponse";
 import Event from "@src/Events/Models/Event";
+import Equipment from "@src/Equipment/Models/Equipment";
 
 class OrganisationsController extends AbstractController {
 
@@ -125,13 +126,16 @@ class OrganisationsController extends AbstractController {
         const users:mongoose.Model<any> = User.getInstance().mongooseModel;
         const taxonomies:mongoose.Model<any> = Taxonomy.getInstance().mongooseModel;
         const media:mongoose.Model<any> = Media.getInstance().mongooseModel;
+        const equipment:mongoose.Model<any> = Equipment.getInstance().mongooseModel;
 
+        await equipment.populate(results, {path: "equipment.equipment"});
         await taxonomies.populate(results, {path: "offers.skills"});
         await taxonomies.populate(results, {path: "domains.domain"});
 
         await media.populate(results, {path: "projects.mainImage"});
         await media.populate(results, {path: "team.member.mainImage"});
         await media.populate(results, {path: "events.mainImage"});
+        await media.populate(results, {path: "equipment.equipment.mainImage"});
 
         await users.populate(results, {path: "meta.requestedBy", select: "name username avatar"});
         await users.populate(results, {path: "meta.lastModifiedBy", select: "name username avatar"});
