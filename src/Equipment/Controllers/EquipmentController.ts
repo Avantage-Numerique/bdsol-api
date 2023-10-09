@@ -60,6 +60,10 @@ class EquipmentController extends AbstractController {
             {
                 appModel: Organisation.getInstance(),
                 foreignField: "equipment.equipment"
+            },
+            {
+                appModel: Project.getInstance(),
+                foreignField: "equipment"
             }
             //need to get back the people looked up into team.member.
         ]);
@@ -67,7 +71,8 @@ class EquipmentController extends AbstractController {
         query.push({// Virtuals
             $addFields: {
                 "type": Equipment.getInstance().modelName,
-                "organisations.type": Project.getInstance().modelName
+                "organisations.type": Organisation.getInstance().modelName,
+                "projects.type": Project.getInstance().modelName
             }
         });
 
@@ -85,6 +90,7 @@ class EquipmentController extends AbstractController {
 
         await media.populate(results, {path: "mainImage"});
         await media.populate(results, {path: "organisations.mainImage"});
+        await media.populate(results, {path: "projects.mainImage"});
 
         await users.populate(results, {path: "meta.requestedBy", select: "name username avatar"});
         await users.populate(results, {path: "meta.lastModifiedBy", select: "name username avatar"});
