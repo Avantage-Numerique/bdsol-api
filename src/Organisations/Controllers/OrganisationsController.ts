@@ -149,6 +149,7 @@ class OrganisationsController extends AbstractController {
                 "projects.type": Project.getInstance().modelName,
                 "events.type": Event.getInstance().modelName,
                 "team.member.type": Person.getInstance().modelName,
+                "equipment.equipment.type": Equipment.getInstance().modelName,
                 "type": Organisation.getInstance().modelName
             }
         });
