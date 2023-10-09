@@ -72,6 +72,12 @@ class OrganisationsController extends AbstractController {
                 foreignField: "organizer"
             },
             {
+                appModel: Equipment.getInstance(),
+                by: "equipment.equipment",
+                foreignField: "_id",
+                as: "tools"
+            },
+            {
                 raw: {  //reconstruction of the team array with the lookup values (as if we used the populate).
                     $addFields: {
                         team: {
@@ -100,9 +106,38 @@ class OrganisationsController extends AbstractController {
                 }
             },
             {
+                raw: {  //reconstruction of the team array with the lookup values (as if we used the populate).
+                    $addFields: {
+                        equipment: {
+                            $map: {
+                                input: "$equipment",
+                                as: "e",
+                                in: {
+                                    equipment: {
+                                        $arrayElemAt: [
+                                            {
+                                                $filter: {
+                                                    input: "$tools",
+                                                    as: "t",
+                                                    cond: {$eq: ["$$t._id", "$$e.equipment"]}
+                                                }
+                                            },
+                                            0
+                                        ]
+                                    },
+                                    qty: "$$e.qty",
+                                    subMeta: "$$e.subMeta",
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
                 raw: {
                     $project: {
-                        people: 0
+                        people: 0,
+                        tools: 0
                     }
                 }
             }
