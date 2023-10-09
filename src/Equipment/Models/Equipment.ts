@@ -3,11 +3,11 @@ import AbstractModel from "@core/Model";
 import type {DbProvider} from "@database/DatabaseDomain";
 import {EquipmentSchema} from "@src/Equipment/Schemas/EquipmentSchema";
 import EquipmentService from "@src/Equipment/Services/EquipmentService";
-import { Meta } from "@src/Moderation/Schemas/MetaSchema";
-import { populateUser } from "@src/Users/Middlewares/populateUser";
-import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
-import { User } from "@src/Users/UsersDomain";
-import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
+import {Meta} from "@src/Moderation/Schemas/MetaSchema";
+import {populateUser} from "@src/Users/Middlewares/populateUser";
+import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import {User} from "@src/Users/UsersDomain";
+import {SocialHandle} from "@src/Database/Schemas/SocialHandleSchema";
 
 class Equipment extends AbstractModel {
 
@@ -15,7 +15,7 @@ class Equipment extends AbstractModel {
     protected static _instance: Equipment;
 
     /** @public @static Model singleton instance constructor */
-    public static getInstance(): Equipment {
+    public static getInstance(doIndexes=true): Equipment {
         if (Equipment._instance === undefined) {
             Equipment._instance = new Equipment();
 
@@ -27,7 +27,7 @@ class Equipment extends AbstractModel {
             Equipment._instance.schema.virtual("name").get( function () { return this.brand + ' ' + this.modelName + ' ' + this.label });
             
             //Index
-            Equipment._instance.registerIndexes();
+            if (doIndexes) Equipment._instance.registerIndexes();
             Equipment._instance.initSchema();
 
         }
