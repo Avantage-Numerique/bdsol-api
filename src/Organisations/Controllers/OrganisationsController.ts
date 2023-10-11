@@ -158,7 +158,7 @@ class OrganisationsController extends AbstractController {
 
         const results:any = await aggregateService.lookupMultiple({slug: slug}, query);
 
-        //agregation inter bd don't work (that I red).
+        //aggregation inter bd don't work (that I red).
         const users:mongoose.Model<any> = User.getInstance().mongooseModel;
         const taxonomies:mongoose.Model<any> = Taxonomy.getInstance().mongooseModel;
         const media:mongoose.Model<any> = Media.getInstance().mongooseModel;
