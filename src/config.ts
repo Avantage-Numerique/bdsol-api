@@ -90,6 +90,15 @@ const config:any = {
     query: {
         defaultSkip: process.env.QUERY_DEFAULT_SKIP || 0,
         defaultLimit: process.env.QUERY_DEFAULT_LIMIT || 100,
+    },
+    notifications: {
+        email: {
+            server: process.env.MAIL_SERVEUR ?? "mailhog",
+            port: process.env.MAIL_PORT ?? 1025,
+            user: process.env.MAIL_USER ?? "usernamemailhog",
+            password: process.env.MAIL_PASSWORD ?? "usernamemailhog",
+            from: "notification@avnu.ca"
+        }
     }
 };
 

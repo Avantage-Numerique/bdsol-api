@@ -1,5 +1,6 @@
 import express from "express";
 import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
+import EmailNotification from "@src/Notifications/EmailNotification";
 
 const ApiRouter = express.Router();
 
@@ -33,6 +34,18 @@ ApiRouter.get('/42',async (req, res) => {
 ApiRouter.get("/embed-taxonomies-metas", async (req, res) => {
     res.send(`Embeding taxonomies metas`);
     await EmbedTaxonomiesMetas();
+});
+
+ApiRouter.get("/test-email", async (req, res) => {
+    const testNotification:EmailNotification = new EmailNotification(
+        {
+            recipient:"marcandre.martin@gmail.com"
+        },{
+            title:"Salut man", body: "Bleep bleep,blip, blip"
+        }
+    );
+    await testNotification.send();
+    res.send(`Send email!`);
 });
 
 export {ApiRouter};
