@@ -37,6 +37,7 @@ ApiRouter.get("/embed-taxonomies-metas", async (req, res) => {
 });
 
 ApiRouter.get("/test-email", async (req, res) => {
+
     const testNotification:EmailNotification = new EmailNotification(
         {
             recipient:"marcandre.martin@gmail.com"
