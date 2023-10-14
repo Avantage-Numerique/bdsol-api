@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-{% include "Layouts/Partials/head.njk" %}
+{% include "Emails/Layouts/Partials/head.njk" %}
 <body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #F7F7F9;" class="email-bg">
 <center role="article" aria-roledescription="email" lang="en" style="width: 100%; background-color: #F7F7F9;" class="email-bg">
     <!--[if mso | IE]>
@@ -25,7 +25,7 @@
         <![endif]-->
 
         <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-            {% include "Layouts/Partials/logo.njk" %}
+            {% include "Emails/Layouts/Partials/logo.njk" %}
 
             {% block header %}
                 <tr>
@@ -44,7 +44,7 @@
                                 <p style="margin: 0;">{{body}}</p>
                             </td>
                         </tr>
-                        {% include "Layouts/Partials/spacer.njk" %}
+                        {% include "Emails/Layouts/Partials/spacer.njk" %}
                         <tr>
                             <td style="padding: 0 20px;">
                                 <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: auto;">
@@ -56,7 +56,7 @@
                                 </table>
                             </td>
                         </tr>
-                        {% include "Layouts/Partials/spacer.njk" %}
+                        {% include "Emails/Layouts/Partials/spacer.njk" %}
                         <tr>
                             <td>
                                 <p style="text-align: center; margin: 0;">{{ lang.copyCta }} {{ links.cta }}</p>
@@ -66,11 +66,11 @@
                 </td>
             </tr>
 
-            {% include "Layouts/Partials/spacer.njk" %}
+            {% include "Emails/Layouts/Partials/spacer.njk" %}
 
         </table>
 
-        {% include "Layouts/Partials/legal.njk" %}
+        {% include "Emails/Layouts/Partials/legal.njk" %}
 
         <!--[if mso]>
         </td>
@@ -79,7 +79,7 @@
         <![endif]-->
     </div>
 
-    {% include "Layouts/Partials/footer.njk" %}
+    {% include "Emails/Layouts/Partials/footer.njk" %}
 
     <!--[if mso | IE]>
     </td>
