@@ -1,6 +1,7 @@
 import express from "express";
 import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 import EmailNotification from "@src/Notifications/EmailNotification";
+import {StatusCodes} from "http-status-codes";
 
 const ApiRouter = express.Router();
 
@@ -42,11 +43,18 @@ ApiRouter.get("/test-email", async (req, res) => {
         {
             recipient:"marcandre.martin@gmail.com"
         },{
-            title:"Salut man", body: "Bleep bleep,blip, blip"
+            title:"Salut man",
+            context: {
+                title:"Hola amigo",
+                body: "Bleep bleep,blip, blip"
+            },
+            template: "base"
         }
     );
-    await testNotification.send();
-    res.send(`Send email!`);
+    const content:string = await testNotification.preview();
+    testNotification.send();
+    res.set('Content-Type', 'text/html');
+    return res.status(StatusCodes.OK).send(await testNotification.preview());
 });
 
 export {ApiRouter};

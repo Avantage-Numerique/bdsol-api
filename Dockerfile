@@ -17,6 +17,7 @@ RUN mkdir -p /api
 WORKDIR /api
 
 COPY ./package.json .
+COPY ./package-lock.json .
 COPY ./src .
 COPY ./doc .
 COPY ./logs .

@@ -3,8 +3,8 @@ const NOTIFICATION_EMAIL:string = "email";
 
 interface NotificationContent {
     title:string,
-    body:string,
-    bodyType?:string
+    context?:any
+    template?:string
 }
 interface NotificationConfig {
     method?:string,
