@@ -2,6 +2,7 @@ import express from "express";
 import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 import EmailNotification from "@src/Notifications/EmailNotification";
 import {StatusCodes} from "http-status-codes";
+import {EmailConfirmationContent} from "@src/Templates/Contents/EmailConfirmationContent";
 
 const ApiRouter = express.Router();
 
@@ -42,21 +43,8 @@ ApiRouter.get("/test-email", async (req, res) => {
     const testNotification:EmailNotification = new EmailNotification(
         {
             recipient:"marcandre.martin@gmail.com"
-        },{
-            title:"Confirmation de votre courriel pour le compte sur avnu.ca",
-            context: {
-                welcome: `Salut, ${userFirstName}`,
-                title:"Il faut confirmer votre courriel",
-                body: "Il reste seulement cette étape pour confirmer votre compte sur avnu.ca.\n" +
-                    "\n" +
-                    "Il faut cliquer sur le lien ci-dessous pour terminer votre inscription.",
-                conclusion: "Ensuite vous pourrez participer et ajouter des données sur avnu.\n" +
-                    "\n" +
-                    "_Si vous n’êtes pas à l’origine de cette inscription sur avnu.ca, veuillez ignorer ce courriel, et merci de nous contacter pour nous avertir de la situation.",
-                signature: "L'équipe d'avnu"
-            },
-            template: "default"
-        }
+        },
+        EmailConfirmationContent
     );
     //testNotification.send();
     res.set('Content-Type', 'text/html');

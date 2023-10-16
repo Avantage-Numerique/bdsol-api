@@ -2,6 +2,7 @@ import config from "@src/config";
 import {createTransport, Transporter} from 'nodemailer';
 import Notification, {NotificationConfig, NotificationContent} from "@src/Notifications/Notification";
 import EmailTemplate from "@src/Templates/EmailTemplate";
+import EmailContent from "@src/Templates/EmailContent";
 
 
 /**
@@ -19,7 +20,7 @@ class EmailNotification extends Notification {
     private _emailTemplate:EmailTemplate;
 
     constructor(config:NotificationConfig, content:NotificationContent) {
-        super(config, content);
+        super(config, EmailContent.prepare(content));
 
         if (content.template) {
             this._emailTemplate = new EmailTemplate(content.template);
@@ -53,7 +54,6 @@ class EmailNotification extends Notification {
                     pass: config.notifications.email.password,
                 }
             };
-
             this._transporter = createTransport(transportOptions);
         }
         return this._transporter;
