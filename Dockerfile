@@ -19,6 +19,7 @@ WORKDIR /api
 COPY ./package.json .
 COPY ./package-lock.json .
 COPY ./src .
+COPY ./public .
 COPY ./doc .
 COPY ./logs .
 COPY ./migrations .

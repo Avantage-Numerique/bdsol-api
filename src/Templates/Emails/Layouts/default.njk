@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 {% include "Emails/Layouts/Partials/head.njk" %}
-<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #F7F7F9;" class="email-bg">
-<center role="article" aria-roledescription="email" lang="en" style="width: 100%; background-color: #F7F7F9;" class="email-bg">
+<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: {{ theme.bg }};" class="email-bg">
+<center role="article" aria-roledescription="email" lang="en" style="width: 100%; background-color: {{ theme.bg }};" class="email-bg">
     <!--[if mso | IE]>
-    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #F7F7F9;" class="email-bg">
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: {{ theme.bg }};" class="email-bg">
         <tr>
             <td>
     <![endif]-->
@@ -25,47 +25,53 @@
         <![endif]-->
 
         <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-            {% include "Emails/Layouts/Partials/logo.njk" %}
-
+            {% include "Emails/Layouts/Partials/spacer.njk" %}
             {% block header %}
-                <tr>
-                    <td style="background-color: {{ theme.bg }};" class="lightmode-bg">
-                        <img src="https://via.placeholder.com/1200x600" width="600" height="" alt="alt_text" border="0" style="width: 100%; max-width: 600px; height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 15px; color: {{ theme.color }}; margin: auto; display: block;" class="g-img">
-                    </td>
-                </tr>
+                {% include "Emails/Layouts/Partials/header.njk" %}
             {% endblock %}
-
+            {% include "Emails/Layouts/Partials/spacer.njk" %}
             <tr>
-                <td style="background-color: {{ theme.bg }};" class="lightmode-bg">
+                <td style="background-color: {{ theme.content.bg }};" class="lightmode-bg">
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                         <tr>
                             <td style="padding: 20px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: {{ theme.color }};">
-                                <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 25px; line-height: 30px; color: #333333; font-weight: normal;">{{title}}</h1>
+                                <h3 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 20px; line-height: 25px; color: {{ theme.content.bg }}; font-weight: normal;">{{welcome}}</h3>
+                                <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 30px; line-height: 35px; color: {{ theme.content.bg }}; font-weight: normal;">{{title}}</h1>
                                 <p style="margin: 0;">{{body}}</p>
                             </td>
                         </tr>
                         {% include "Emails/Layouts/Partials/spacer.njk" %}
                         <tr>
-                            <td style="padding: 0 20px;">
-                                <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: auto;">
+                            <td style="padding: 0 {{ theme.content.wspacing }};">
+                                <table align="left" role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: auto;">
                                     <tr>
-                                        <td class="button-td button-td-primary" style="border-radius: {{ theme.buttons.radius }}; background: {{ theme.buttons.bg }};">
-                                            <a class="button-a button-a-primary" href="{{link.cta}}" style="background: {{ theme.buttons.bg }}; border: 1px solid #000000; font-family: sans-serif; font-size: 15px; line-height: 15px; text-decoration: none; padding: 13px 17px; color: {{ theme.buttons.color }}; display: block; border-radius: {{ theme.buttons.radius }};">{{lang.ctaLabel}}</a>
+                                        <td class="button-td button-td-primary" style="border-radius: 30px; background: {{ theme.buttons.bg }};">
+                                            <a class="button-a button-a-primary" href="{{link.cta}}" style="background: {{ theme.buttons.bg }}; border: 1px solid {{ theme.buttons.bg }}; font-family: sans-serif; font-size: 20px; line-height: 20px; text-decoration: none; padding: 20px 40px; color: {{ theme.buttons.color }}; display: block; border-radius: 30px;">{{lang.ctaLabel}}</a>
                                         </td>
                                     </tr>
                                 </table>
                             </td>
                         </tr>
-                        {% include "Emails/Layouts/Partials/spacer.njk" %}
                         <tr>
                             <td>
-                                <p style="text-align: center; margin: 0;">{{ lang.copyCta }} {{ links.cta }}</p>
+                                <p style="padding: 0 {{ theme.content.wspacing }}; font-family: sans-serif; font-size: 15px; line-height: 20px; color: {{ theme.color }};">{{ lang.copyCta }} {{ links.cta }}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 20px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: {{ theme.color }};">
+                                <p style="margin: 0;">{{conclusion}}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 20px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: {{ theme.color }};">
+                                <p style="margin: 0;">{{signature}}</p>
                             </td>
                         </tr>
                     </table>
                 </td>
             </tr>
 
+            {% include "Emails/Layouts/Partials/spacer.njk" %}
             {% include "Emails/Layouts/Partials/spacer.njk" %}
 
         </table>

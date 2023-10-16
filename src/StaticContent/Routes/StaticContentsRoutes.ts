@@ -1,8 +1,10 @@
 import express, {NextFunction, Request, Response} from "express";
-import StaticContentsController from "../Controllers/StaticContentsController";
-import AbstractRoute from "../../Abstract/Route";
-import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
+import StaticContentsController from "@src/StaticContent/Controllers/StaticContentsController";
+import AbstractRoute from "@core/Route";
+import {ErrorResponse} from "@src/Http/Responses/ErrorResponse";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
+import SendMedia from "@src/Media/Helpers/SendMedia";
+import StaticPublicStorage from "@src/Storage/Files/StaticPublicStorage";
 
 class StaticContentsRoutes extends AbstractRoute {
 
@@ -53,6 +55,12 @@ class StaticContentsRoutes extends AbstractRoute {
             this.routeSendResponse.bind(this),
         ]);
 
+        this.routerInstance.get('/medias/emails/:filename', [
+            this.viewEmailMedia.bind(this),
+            this.staticContentNotFound.bind(this),
+            this.routeSendResponse.bind(this),
+        ]);
+
         return this.routerInstance;
     }
 
@@ -81,6 +89,22 @@ class StaticContentsRoutes extends AbstractRoute {
         return next();
     }
 
+
+    /**
+     * Route handler to get and view media
+     * @param req {Request}
+     * @param res {Response}
+     * @param next {NextFunction}
+     */
+    public async viewEmailMedia(req: Request, res: Response): Promise<any> {
+        const {
+            filename
+        } = req.params;
+        console.log("viewEmailMedia ",req.params, StaticPublicStorage.basePath, `${StaticPublicStorage.basePath}/emails/${filename}`);
+        await SendMedia(`${StaticPublicStorage.basePath}/emails/${filename}`, res);
+    }
+
+
     /**
      * Route handler to transform all the URI params into query to the get
      * @param req {Request}
@@ -99,6 +123,8 @@ class StaticContentsRoutes extends AbstractRoute {
 
         return next();
     }
+
+
 
     public async staticContentNotFound(req: Request, res: Response, next: NextFunction): Promise<any> {
 

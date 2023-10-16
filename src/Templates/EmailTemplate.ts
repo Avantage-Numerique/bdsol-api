@@ -12,9 +12,9 @@ class EmailTemplate {
     public emailsPath:string;
     public name:string;
 
-    constructor(name:string="default.njk") {
+    constructor(name:string="default") {
         //init
-        this.name = name;
+        this.name = name + ".njk";
         this.basePath = `${config.basepath}src/Templates/`;
         this.includePath = `${this.basePath}`;//keept this as the base (before the Emails tempaltes, to be able to navigate more easily.
         this.emailsPath = `${this.basePath}/Emails/`;
@@ -32,13 +32,21 @@ class EmailTemplate {
 
     public get baseTemplateContext() {
         return {
+            api: {
+                name: "AVNU",
+                baseUrl: config.baseUrl,
+                mediasUrl: `${config.baseUrl}static/medias/emails/`,
+                version: config.version
+            },
             app: {
                 name: "AVNU",
+                baseUrl: config.baseUrl,
+                mediasUrl: `${config.baseUrl}static/medias/emails/`,
                 version: config.version
             },
             company: {
-                label: "Est une initiative de",
-                name: "Avantage numérique et le Petit théâtre du vieux Noranda",
+                label: "Est une initiative du",
+                name: "Avantage Numérique et du Petit théâtre du vieux Noranda",
                 address: "7e rue Rouyn-Noranda, (QC) J9X 1Z9",
                 phone: "1 (819) 797-6436",
             },
@@ -57,16 +65,26 @@ class EmailTemplate {
         }
     }
 
+    //idea: Set prebuild theme by name, to pass différent + these default.
+    //idea : Add button style like this one is basic, cancel btn, generic,etc.
     public get theme() {
         return {
             theme: {
-                bg: "#F7F7F9",
-                color: "#222222",
-                titleColor: "#555555",
+                bg: "#FBF7F5",
+                color: "#1F1F2E",
+                titleColor: "#1F1F2E",
+                content: {
+                    bg: "#FBF7F5",
+                    hspacing: "20px",
+                    wspacing: "20px",
+                    spacing: "20px"
+                },
                 buttons: {
-                    radius: "20px",
-                    bg: "#222222",
-                    color: "#F7F7F9"
+                    radius: "30px",
+                    size: "20px",
+                    padding: "20px",
+                    bg: "#6EC8CD",
+                    color: "#1F1F2E"
                 }
             }
         }

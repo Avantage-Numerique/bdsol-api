@@ -19,6 +19,7 @@ const config:any = {
     port: process.env.PORT || "8000",
     version: process.env.VERSION || "0.0.0",
     basepath: process.env.BASEPATH || "/api/",
+    baseUrl: process.env.BASEURL || "http://localhost:8000/",
 
     tokenSecret: process.env.JWT_KEY || "not set yet",
     tokenSecureSecret: process.env.SECURE_JWT_KEY || "not set securely :P",

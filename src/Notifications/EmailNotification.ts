@@ -20,7 +20,12 @@ class EmailNotification extends Notification {
 
     constructor(config:NotificationConfig, content:NotificationContent) {
         super(config, content);
-        this._emailTemplate = new EmailTemplate();
+
+        if (content.template) {
+            this._emailTemplate = new EmailTemplate(content.template);
+        } else {
+            this._emailTemplate = new EmailTemplate();//default : default.njk.
+        }
     }
 
     public async send() {

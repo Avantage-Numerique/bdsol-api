@@ -1,8 +1,8 @@
 import * as fs from "fs";
 import * as mime from "mime-types";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import {fileExtensionList} from "../../Media/List/FileList";
-import Record from "../../Media/Record/Record";
+import {fileExtensionList} from "@src/Media/List/FileList";
+import Record from "@src/Media/Record/Record";
 
 export default class FileStorage {
     static basePath:string;

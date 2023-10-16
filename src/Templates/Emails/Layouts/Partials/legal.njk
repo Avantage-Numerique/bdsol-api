@@ -3,7 +3,7 @@
 
     {% include "Emails/Layouts/Partials/logo.njk" %}
     <tr>
-        <td style="padding: 20px; font-family: sans-serif; font-size: 12px; line-height: 15px; text-align: center; color: {{ theme.color }};">
+        <td style="padding: 0 20px; font-family: sans-serif; font-size: 12px; line-height: 15px; text-align: center; color: {{ theme.color }};">
             {% if links and links.seeAsWeb and links.seeAsWeb !== "" %}
                 <a href="{{ links.seeAsWeb }}" title="{{lang.seeAsWeb}}"><webversion style="color: {{ theme.color }}; text-decoration: underline; font-weight: bold;">{{ lang.seeAsWeb }}</webversion></a>
             {% endif %}

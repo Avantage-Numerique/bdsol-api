@@ -38,21 +38,27 @@ ApiRouter.get("/embed-taxonomies-metas", async (req, res) => {
 });
 
 ApiRouter.get("/test-email", async (req, res) => {
-
+    const userFirstName = "Mam";
     const testNotification:EmailNotification = new EmailNotification(
         {
             recipient:"marcandre.martin@gmail.com"
         },{
-            title:"Salut man",
+            title:"Confirmation de votre courriel pour le compte sur avnu.ca",
             context: {
-                title:"Hola amigo",
-                body: "Bleep bleep,blip, blip"
+                welcome: `Salut, ${userFirstName}`,
+                title:"Il faut confirmer votre courriel",
+                body: "Il reste seulement cette étape pour confirmer votre compte sur avnu.ca.\n" +
+                    "\n" +
+                    "Il faut cliquer sur le lien ci-dessous pour terminer votre inscription.",
+                conclusion: "Ensuite vous pourrez participer et ajouter des données sur avnu.\n" +
+                    "\n" +
+                    "_Si vous n’êtes pas à l’origine de cette inscription sur avnu.ca, veuillez ignorer ce courriel, et merci de nous contacter pour nous avertir de la situation.",
+                signature: "L'équipe d'avnu"
             },
-            template: "base"
+            template: "default"
         }
     );
-    const content:string = await testNotification.preview();
-    testNotification.send();
+    //testNotification.send();
     res.set('Content-Type', 'text/html');
     return res.status(StatusCodes.OK).send(await testNotification.preview());
 });
