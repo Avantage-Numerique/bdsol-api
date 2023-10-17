@@ -22,29 +22,39 @@ class EmailNotification extends Notification {
     constructor(config:NotificationConfig, content:NotificationContent) {
         super(config, EmailContent.prepare(content));
 
-        const templateName:string = content.template ?? "default";
-        this._emailTemplate = new EmailTemplate(templateName);
+        this._emailTemplate = new EmailTemplate(content.template);//tempalte have already a default in the EmailContent.Prepare.
     }
 
+    /**
+     * Send the notification from the COnfig + content of the email notification.
+     */
     public async send() {
 
         await this.transporter.sendMail({
             from: config.notifications.email.from,
             to: this.config.recipient,
-            subject: this.config.subject,
+            subject: this.config.subject ?? `Un courriel de la part de ${config.appName}`,
             html: await this._emailTemplate.render(this.content),
         });
     }
 
+    /**
+     * Preview this current notification (used to render for test in browser + mailhog
+     * @return {string} the email template rentederd (nunjuck).
+     */
     public async preview():Promise<string> {
         return await this._emailTemplate.preview(this.content);
     }
 
+    /**
+     * singleton-ish transporter setup.
+     * @return {Transporter} from nodemailer with the app setup.
+     */
     public get transporter() {
         if (this._transporter === undefined) {
             const transportOptions:any = {
                 host: config.notifications.email.server, // le nom du service dans le fichier docker compose, ici on va mettre "mailhog"
-                port: config.notifications.email.port, // 1025
+                port: config.notifications.email.port, // dev : 1025
                 secure: false,
                 auth: {
                     user: config.notifications.email.user,

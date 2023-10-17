@@ -13,8 +13,8 @@ class EmailTemplate {
 
     constructor(name:string="default") {
         this.name = name + ".njk";
-        this.basePath = `${config.basepath}src/Templates/`;
-        this.includePath = `${this.basePath}`;//keept this as the base (before the Emails tempaltes, to be able to navigate more easily.
+        this.basePath = `${config.basepath}src/Templates/`;//absolute in server path.
+        this.includePath = `${this.basePath}`;//kept this as the base (before the Emails templates, to be able to navigate more easily.
         this.emailsPath = `${this.basePath}/Emails/`;
         this.system = Nunjucks.configure(this.includePath, {autoescape:true});
     }

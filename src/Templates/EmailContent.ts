@@ -24,7 +24,6 @@ class EmailContent {
 
     public static prepare(content:NotificationContent) {
         return {
-            title: content.title ?? `Nouveau Message de ${config.appName}`,
             context: EmailContent.prepareContext(content.context),
             template: content.template ?? "default"
         }
