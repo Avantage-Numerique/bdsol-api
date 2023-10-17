@@ -11,7 +11,7 @@ import {PasswordsController} from "./PasswordsController";
 import {SuccessResponse} from "@src/Http/Responses/SuccessResponse";
 import {ApiResponseContract} from "@src/Http/Responses/ApiResponse";
 import config from "../../config";
-
+import crypto from "crypto";
 
 class AuthentificationController
 {
@@ -22,6 +22,7 @@ class AuthentificationController
 
     public service:UsersService;
     public userModel:User;
+    private static verifyTokenLength = 128; 
 
 
     constructor()
@@ -64,10 +65,21 @@ class AuthentificationController
             !targetUser.error &&
             targetUser.data !== null)
         {
+            const data:any = this.userModel.dataTransfertObject(targetUser.data);
+
+            //Check if user is verified (if verify object exist and it's true, if not, return error forbidden)
+            try{
+                if(targetUser.data.verify.isVerified !== true)
+                return  SuccessResponse.create({ user: data }, StatusCodes.FORBIDDEN, "Votre compte n'est pas vérifié.");    
+            }
+            catch(e){
+                LogHelper.error("Erreur au login, l'utilisateur n'a pas de champs 'verify'", targetUser.data)
+                return ErrorResponse.create(new Error(ReasonPhrases.INTERNAL_SERVER_ERROR), StatusCodes.INTERNAL_SERVER_ERROR, "User doesn't have a 'verify' field")
+            }
+
             LogHelper.info(`Les information de ${targetUser.data.username} fonctionnent, génération du token JW ...`);
 
             // Generate an access token
-            const data:any = this.userModel.dataTransfertObject(targetUser.data);
             data.token = TokenController.generateUserToken(this.userModel.dataTransfertObject(targetUser.data));
             data.tokenVerified = true;
 
@@ -127,10 +139,33 @@ class AuthentificationController
 
     public async register(requestData:any): Promise<ApiResponseContract>
     {
-        const createdDocumentResponse = await this.service.insert(requestData);
+        const verificationToken = crypto.randomBytes(AuthentificationController.verifyTokenLength).toString('hex');
+        const verificationExpirationDate = new Date(); //Expiration date setters
+        verificationExpirationDate.setDate(verificationExpirationDate.getDate()+1);
+        const userObject = {
+            username: requestData?.username,
+            email: requestData?.email,
+            password: requestData?.password,
+            name: requestData?.name,
+            firstName: requestData?.firstName,
+            lastName: requestData?.lastName,
+            verify:{
+                isVerified:false,
+                token: verificationToken,
+                expireDate: verificationExpirationDate,
+            }
+        }
+
+        const createdDocumentResponse = await this.service.insert(userObject);
 
         if (createdDocumentResponse !== undefined)
+        {
+            //Send email to verify user
+            //HERE
+
+            //Return create user response
             return createdDocumentResponse;
+        }
 
         return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
@@ -192,5 +227,46 @@ class AuthentificationController
             return ErrorResponse.create(errors, StatusCodes.INTERNAL_SERVER_ERROR);
         }
     }
+
+    
+    /**
+     * search in the current database driver for the user.
+     * @param token string of 128 characters of random nature
+     * @return {Promise} of type Any.
+     * @public
+     */
+    public async verifyAccount(token:string):Promise<any>{
+        //verify that token is the right length
+        if(typeof token === 'string' && token.length === AuthentificationController.verifyTokenLength * 2) //times 2 because length in Bytes = 2*hexadecimal
+        {
+            //search users and find the one that has the token
+            const targetUser = await User.getInstance().mongooseModel.findOne({ "verify.token" : token })
+
+            //If user is found
+            if(targetUser !== null){
+                //if he's already verified
+                if(targetUser.verify.isVerified === true){
+                    return ErrorResponse.create(new Error("User's account already verified"), StatusCodes.CONFLICT, "User's account already verified" )
+                }
+                //if token has expired
+                if(new Date(targetUser.verify.expireDate).valueOf() < new Date().valueOf())
+                    return ErrorResponse.create(new Error("The verification token has expired"), StatusCodes.OK, "The verification token has expired")
+                
+                //else modify user to verify.isVerified = true and set the rest of object
+                const response = await User.getInstance().mongooseModel.findOneAndUpdate(
+                    {_id : targetUser._id},
+                    {verify: { isVerified: true, token: null, expireDate: null, validatedOn: new Date()}},
+                    {new: true})
+                const dtoResponse = User.getInstance().dataTransfertObject(response)
+
+                //Return connection token for that user?
+                return SuccessResponse.create(dtoResponse, StatusCodes.OK, "User's account is now verified");
+            }
+            //else couldn't find user, means token doesn't exist
+            return ErrorResponse.create(new Error("Token doesn't exist"), StatusCodes.OK, "Token doesn't exist")
+        }
+        return ErrorResponse.create(new Error("Token is not the right length"), StatusCodes.BAD_REQUEST, "Token is not the right length");
+    }
+
 }
 export default AuthentificationController;

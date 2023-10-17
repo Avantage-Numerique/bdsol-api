@@ -103,6 +103,10 @@ export class AuthentificationRoutes {
             this.generateTokenDevHandler.bind(this)
         ]);
 
+        //Verify user account (post or get?)
+        this.routerInstance.get('/verify-account/:token', [
+            this.verifyUserAccount.bind(this)
+        ]);
 
         this.routerInstance.get('/login', [
             this.loginGetHandler.bind(this)
@@ -210,6 +214,20 @@ export class AuthentificationRoutes {
         return res.status(StatusCodes.UNAUTHORIZED).json({
             "message": ReasonPhrases.UNAUTHORIZED
         });
+    }
+
+        /**
+     * Post methodqui retourne un token pour un utilisateur.
+     * requête body en JSON :
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async verifyUserAccount(req: Request, res: Response): Promise<any>
+    {
+        const token = req.params.token?.toString() ?? '';
+        const response = await this.controllerInstance.verifyAccount(token);
+        return res.status(response.code).send(response);
     }
 
 
