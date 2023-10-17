@@ -42,7 +42,8 @@ ApiRouter.get("/test-email", async (req, res) => {
     const userFirstName = "Mam";
     const testNotification:EmailNotification = new EmailNotification(
         {
-            recipient:"marcandre.martin@gmail.com"
+            recipient:"marcandre.martin@gmail.com",
+            subject: "Confirmation de votre courriel pour le compte sur avnu.ca"
         },
         EmailConfirmationContent
     );

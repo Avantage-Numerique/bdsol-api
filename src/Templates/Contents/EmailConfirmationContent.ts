@@ -1,7 +1,6 @@
 
 
 export const EmailConfirmationContent:any = {
-    title:"Confirmation de votre courriel pour le compte sur avnu.ca",
     context: {
         welcome: `Salut, Mam`,//to define from the content.//getter to concatenate ?
         title:"Il faut confirmer votre courriel",

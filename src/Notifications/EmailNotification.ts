@@ -22,11 +22,8 @@ class EmailNotification extends Notification {
     constructor(config:NotificationConfig, content:NotificationContent) {
         super(config, EmailContent.prepare(content));
 
-        if (content.template) {
-            this._emailTemplate = new EmailTemplate(content.template);
-        } else {
-            this._emailTemplate = new EmailTemplate();//default : default.njk.
-        }
+        const templateName:string = content.template ?? "default";
+        this._emailTemplate = new EmailTemplate(templateName);
     }
 
     public async send() {
@@ -34,7 +31,7 @@ class EmailNotification extends Notification {
         await this.transporter.sendMail({
             from: config.notifications.email.from,
             to: this.config.recipient,
-            subject: this.content.title,
+            subject: this.config.subject,
             html: await this._emailTemplate.render(this.content),
         });
     }

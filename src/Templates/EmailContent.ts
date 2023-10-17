@@ -1,27 +1,28 @@
 import config from "@src/config";
 import {EmailData} from "@src/Templates/Emails/EmailData";
 import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
-
+import {NotificationContent} from "@src/Notifications/Notification";
 
 /**
  * No theme nor base template vars. Only the ones needed from email content.
  */
 interface EmailContentContract {
-    welcome:string,
-    title:string,
-    body:string,
-    conclusion:string,
-    signature:string,
-    cta:EmailLinkContract,
+    welcome?:string,
+    title?:string,
+    body?:string,
+    conclusion?:string,
+    signature?:string,
+    cta?:EmailLinkContract,
 }
+
 interface EmailLinkContract {
-    link:string,
-    label:string
+    link?:string,
+    label?:string
 }
 
 class EmailContent {
 
-    public static prepare(content:any = {}) {
+    public static prepare(content:NotificationContent) {
         return {
             title: content.title ?? `Nouveau Message de ${config.appName}`,
             context: EmailContent.prepareContext(content.context),
@@ -29,7 +30,7 @@ class EmailContent {
         }
     }
 
-    public static prepareContext(context:any={}) {
+    public static prepareContext(context:EmailContentContract={}) {
         return {
             ...EmailContent.baseTemplateContext(),
             welcome: context.welcome ?? `Salut,`,

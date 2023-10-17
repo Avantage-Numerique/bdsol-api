@@ -2,13 +2,13 @@
 const NOTIFICATION_EMAIL:string = "email";
 
 interface NotificationContent {
-    title:string,
     context?:any
     template?:string
 }
 interface NotificationConfig {
     method?:string,
-    recipient:string
+    recipient:string,
+    subject:string
 }
 
 class Notification {
