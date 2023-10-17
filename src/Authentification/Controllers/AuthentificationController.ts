@@ -12,6 +12,8 @@ import {SuccessResponse} from "@src/Http/Responses/SuccessResponse";
 import {ApiResponseContract} from "@src/Http/Responses/ApiResponse";
 import config from "../../config";
 import crypto from "crypto";
+import EmailNotification from "@src/Notifications/EmailNotification";
+import { EmailConfirmationContent } from "@src/Templates/Contents/EmailConfirmationContent";
 
 class AuthentificationController
 {
@@ -22,7 +24,7 @@ class AuthentificationController
 
     public service:UsersService;
     public userModel:User;
-    private static verifyTokenLength = 128; 
+    private static verifyTokenLength = 128;
 
 
     constructor()
@@ -161,7 +163,15 @@ class AuthentificationController
         if (createdDocumentResponse !== undefined)
         {
             //Send email to verify user
-            //HERE
+            const welcomeName = createdDocumentResponse.data?.firstName ?? 'Cher canard';
+            const verifyAccountEmail:EmailNotification = new EmailNotification(
+                {
+                    recipient: createdDocumentResponse.data.email,
+                    subject: welcomeName+", Confirmez ce courriel pour votre compte sur avnu.ca"
+                },
+                EmailConfirmationContent(welcomeName, "http://localhost:8000/verify-account/"+verificationToken)
+            );
+            verifyAccountEmail.send();
 
             //Return create user response
             return createdDocumentResponse;
@@ -263,9 +273,11 @@ class AuthentificationController
                 return SuccessResponse.create(dtoResponse, StatusCodes.OK, "User's account is now verified");
             }
             //else couldn't find user, means token doesn't exist
-            return ErrorResponse.create(new Error("Token doesn't exist"), StatusCodes.OK, "Token doesn't exist")
+            LogHelper.error("Verify account token doesn't exist")
+            return ErrorResponse.create(new Error("Token invalid"), StatusCodes.OK, "Token invalid")
         }
-        return ErrorResponse.create(new Error("Token is not the right length"), StatusCodes.BAD_REQUEST, "Token is not the right length");
+        LogHelper.error("Verify account token is not the right length")
+        return ErrorResponse.create(new Error("Token invalid"), StatusCodes.BAD_REQUEST, "Token invalid");
     }
 
 }
