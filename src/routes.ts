@@ -39,13 +39,12 @@ ApiRouter.get("/embed-taxonomies-metas", async (req, res) => {
 });
 
 ApiRouter.get("/test-email", async (req, res) => {
-    const userFirstName = "Mam";
     const testNotification:EmailNotification = new EmailNotification(
         {
             recipient:"marcandre.martin@gmail.com",
-            subject: "Confirmation de votre courriel pour le compte sur avnu.ca"
+            subject: "Mam, Confirmez ce courriel pour votre compte sur avnu.ca"
         },
-        EmailConfirmationContent
+        EmailConfirmationContent("mam", "https://avnu.ca/users/confirmation/1kajsdf14fdsafsdf9fdsadfsfd923ndsafa-123dsknfd")
     );
     //testNotification.send();
     res.set('Content-Type', 'text/html');

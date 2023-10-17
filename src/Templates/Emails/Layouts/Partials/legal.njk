@@ -9,7 +9,9 @@
             {% endif %}
             <br><br>
             {{ company.label }}<br/>
-            {{ company.name }}<br><span class="unstyle-auto-detected-links">{{ company.address }}<br>{{ company.phone }}</span>
+            {{ company.name }}<br/>
+            <span class="unstyle-auto-detected-links">{{ company.address }}</span><br/>
+            <a href="mailto:{{ company.email }}" title="{{company.email}}" class="unstyle-auto-detected-links"><span class="unstyle-auto-detected-links" style="text-decoration: underline; color:inherit;">{{ company.email }}</span></a>
             <br><br>
             {% if links and links.unsuscribe and links.unsuscribe !== "" %}
                 <a href="{{ links.unsuscribe }}" title="{{lang.unsuscribeLabel}}"><unsubscribe style="color: {{ theme.color }}; text-decoration: underline;">{{lang.unsuscribeLabel}}</unsubscribe></a>
