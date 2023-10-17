@@ -7,4 +7,5 @@ export interface UserContract {
     firstName?:string;
     lastName?:string;
     role: string;
+    verify: object;
 }
