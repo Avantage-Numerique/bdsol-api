@@ -8,6 +8,7 @@ const DefaultEmailTheme:any = {
         titleColor: "#1F1F2E",
         content: {
             bg: "#FBF7F5",
+            color: "#1F1F2E",
             hspacing: "20px",
             wspacing: "20px",
             spacing: "20px"

@@ -44,7 +44,7 @@ ApiRouter.get("/test-email", async (req, res) => {
             recipient:"marcandre.martin@gmail.com",
             subject: "Mam, Confirmez ce courriel pour votre compte sur avnu.ca"
         },
-        EmailConfirmationContent("mam", "https://avnu.ca/users/confirmation/1kajsdf14fdsafsdf9fdsadfsfd923ndsafa-123dsknfd")
+        EmailConfirmationContent("mam", "http://localhost:8000/verify-account/ef2254979c0f073a1f75bf03a404fa3b2547cb9bc858c54f06f5571a68a892156602c101370f08ef6d0cd15c3004663dbee15fdb052107da5e5bc30cf16ce4a133c250cda6f1478e25c7614326706af37d5fbec12f545040621cdfdd548d32c984116652d1aab97f7f6a734c19c125f2d610e1528d8529822c1a73912e53e389")
     );
     //testNotification.send();
     res.set('Content-Type', 'text/html');
