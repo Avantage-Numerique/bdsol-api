@@ -93,14 +93,16 @@ export class AuthentificationRoutes {
             this.loginHandler.bind(this)
         ]);
 
-
         this.routerInstance.post('/verify-token', [
             this.verifyTokenHandler.bind(this)
         ]);
 
-
         this.routerInstance.post('/generate-token', [
             this.generateTokenDevHandler.bind(this)
+        ]);
+
+        this.routerInstance.post('/verify-account/resend', [
+            this.resendEmailVerificationToken.bind(this)
         ]);
 
         //Verify user account (post or get?)
@@ -216,9 +218,8 @@ export class AuthentificationRoutes {
         });
     }
 
-        /**
-     * Post methodqui retourne un token pour un utilisateur.
-     * requête body en JSON :
+    /**
+     * Get method qui vérifie le compte d'un utilisateur.
      * @param req {Request}
      * @param res {Response}
      * @return {Promise<any>}
@@ -229,10 +230,23 @@ export class AuthentificationRoutes {
         const response = await this.controllerInstance.verifyAccount(token);
         return res.status(response.code).send(response);
     }
-
-
+    
+    
     //  GET
-
+    /**
+    * Post method qui renvoie un courriel de token de vérification de compte.
+     * requête body en JSON :
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async resendEmailVerificationToken(req: Request, res: Response): Promise<any>
+    {
+        const email = req.body.data?.email;
+        const response = await this.controllerInstance.resendVerificationToken(email);
+        return res.status(response.code).send(response);
+    }
+    
     /**
      * GET:LOGIN
      * Return content to the user accessing /login on a get route.

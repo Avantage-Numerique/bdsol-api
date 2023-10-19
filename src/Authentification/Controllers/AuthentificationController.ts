@@ -169,7 +169,7 @@ class AuthentificationController
                     recipient: createdDocumentResponse.data.email,
                     subject: welcomeName+", Confirmez ce courriel pour votre compte sur avnu.ca"
                 },
-                EmailConfirmationContent(welcomeName, "http://localhost:8000/verify-account/"+verificationToken)
+                EmailConfirmationContent(welcomeName, "http://localhost:3000/verifier-compte/"+verificationToken)
             );
             verifyAccountEmail.send();
 
@@ -240,7 +240,7 @@ class AuthentificationController
 
     
     /**
-     * search in the current database driver for the user.
+     * Verify account if verification token is associated with a user.
      * @param token string of 128 characters of random nature
      * @return {Promise} of type Any.
      * @public
@@ -256,28 +256,87 @@ class AuthentificationController
             if(targetUser !== null){
                 //if he's already verified
                 if(targetUser.verify.isVerified === true){
-                    return ErrorResponse.create(new Error("User's account already verified"), StatusCodes.CONFLICT, "User's account already verified" )
+                    return ErrorResponse.create(new Error("User's account already verified"), StatusCodes.CONFLICT, "User's account already verified" );
                 }
                 //if token has expired
                 if(new Date(targetUser.verify.expireDate).valueOf() < new Date().valueOf())
-                    return ErrorResponse.create(new Error("The verification token has expired"), StatusCodes.OK, "The verification token has expired")
+                    return ErrorResponse.create(new Error("The verification token has expired"), StatusCodes.OK, "The verification token has expired");
                 
                 //else modify user to verify.isVerified = true and set the rest of object
                 const response = await User.getInstance().mongooseModel.findOneAndUpdate(
                     {_id : targetUser._id},
                     {verify: { isVerified: true, token: null, expireDate: null, validatedOn: new Date()}},
                     {new: true})
-                const dtoResponse = User.getInstance().dataTransfertObject(response)
+                const dtoResponse = User.getInstance().dataTransfertObject(response);
 
                 //Return connection token for that user?
                 return SuccessResponse.create(dtoResponse, StatusCodes.OK, "User's account is now verified");
             }
             //else couldn't find user, means token doesn't exist
-            LogHelper.error("Verify account token doesn't exist")
-            return ErrorResponse.create(new Error("Token invalid"), StatusCodes.OK, "Token invalid")
+            LogHelper.error("Verify account token doesn't exist");
+            return ErrorResponse.create(new Error("Token invalid"), StatusCodes.BAD_REQUEST, "Token invalid");
         }
-        LogHelper.error("Verify account token is not the right length")
+        LogHelper.error("Verify account token is not the right length");
         return ErrorResponse.create(new Error("Token invalid"), StatusCodes.BAD_REQUEST, "Token invalid");
+    }
+
+    /**
+     * search in the current database driver for the user.
+     * @param email string of user's email account
+     * @return {Promise} of type Any.
+     * @public
+     */
+    public async resendVerificationToken(email:string):Promise<any>{
+        //Check if email is defined
+        if(typeof email == 'string' && email?.length > 0){
+            //Check if email is associated with a user
+            const targetUser = await User.getInstance().mongooseModel.findOne({email: email});
+            //If user exist
+            if(targetUser !== null){
+                //If user is not verified
+                if(targetUser?.verify?.isVerified !== true){
+                    //Check if user hasn't resend in the last 5 minutes
+                    const now = new Date();
+                    //Sets expired date 1 day before the token soo that I can check if 5 min passed and compare to now
+                    const expireDateOneDayLess = targetUser?.verify.expireDate
+                    expireDateOneDayLess.setDate(expireDateOneDayLess.getDate()-1)
+                    if(now.valueOf() - expireDateOneDayLess < (5*60*1000)){
+                        return ErrorResponse.create(new Error("5 minutes hasn't elapsed since last send"), StatusCodes.OK, "You need to wait 5 minutes before sending a new email");
+                    }
+
+                    //Update user with new token and expire date
+                    const verificationToken = crypto.randomBytes(AuthentificationController.verifyTokenLength).toString('hex');
+                    const verificationExpirationDate = new Date(); //Expiration date setters
+                    verificationExpirationDate.setDate(verificationExpirationDate.getDate()+1);
+                    const response = await User.getInstance().mongooseModel.findOneAndUpdate(
+                        { _id: targetUser._id },
+                        {
+                            verify:{
+                                isVerified:false,
+                                token: verificationToken,
+                                expireDate: verificationExpirationDate
+                            }
+                        }
+                    )
+
+                    //Resend verify token to user's email
+                    const welcomeName = targetUser.firstName ?? 'Cher canard';
+                    const verifyAccountEmail:EmailNotification = new EmailNotification(
+                        {
+                            recipient: targetUser.email,
+                            subject: welcomeName+", Confirmez ce courriel pour votre compte sur avnu.ca"
+                        },
+                        EmailConfirmationContent(welcomeName, "http://localhost:3000/verifier-compte/"+verificationToken)
+                        );
+                        verifyAccountEmail.send();
+                    return SuccessResponse.create({email: targetUser.email}, StatusCodes.OK, "Email has been sent")
+                        
+                }
+                return ErrorResponse.create(new Error("User is already verified"), StatusCodes.IM_A_TEAPOT, "User is already verified")
+            }
+            return ErrorResponse.create(new Error('Invalid email'), StatusCodes.BAD_REQUEST, 'Invalid email');
+        }
+        return ErrorResponse.create(new Error('Invalid email'), StatusCodes.BAD_REQUEST, 'Invalid email');
     }
 
 }
