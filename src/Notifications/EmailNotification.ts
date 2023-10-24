@@ -18,6 +18,7 @@ class EmailNotification extends Notification {
 
     private _transporter:Transporter;
     private _emailTemplate:EmailTemplate;
+    private LogHelpder: any;
 
     constructor(config:NotificationConfig, content:NotificationContent) {
         super(config, EmailContent.prepare(content));
@@ -29,13 +30,16 @@ class EmailNotification extends Notification {
      * Send the notification from the COnfig + content of the email notification.
      */
     public async send() {
-
-        await this.transporter.sendMail({
-            from: config.notifications.email.from,
-            to: this.config.recipient,
-            subject: this.config.subject ?? `Un courriel de la part de ${config.appName}`,
-            html: await this._emailTemplate.render(this.content),
-        });
+        if (typeof this.config.recipient !== "undefined") {
+            const sendingEmailOptions:any = {
+                from: config.notifications.email.from,
+                to: this.config.recipient,
+                subject: this.config.subject ?? `Un courriel de la part de ${config.appName}`,
+                html: await this._emailTemplate.render(this.content),
+            };
+            await this.transporter.sendMail(sendingEmailOptions);
+        }
+        throw new Error("Email Recipient not valid");
     }
 
     /**
@@ -52,18 +56,33 @@ class EmailNotification extends Notification {
      */
     public get transporter() {
         if (this._transporter === undefined) {
-            const transportOptions:any = {
-                host: config.notifications.email.server, // le nom du service dans le fichier docker compose, ici on va mettre "mailhog"
-                port: config.notifications.email.port, // dev : 1025
-                secure: false,
-                auth: {
-                    user: config.notifications.email.user,
-                    pass: config.notifications.email.password,
-                }
-            };
+            const transportOptions:any = config.environnement === "production" ? this.getProductionTransporterOptions() : this.getDevelopmentTransporterOptions();
             this._transporter = createTransport(transportOptions);
         }
         return this._transporter;
+    }
+
+    public getProductionTransporterOptions() {
+        return {
+            host: config.notifications.email.server,
+            port: config.notifications.email.port,
+            secure: true,
+            auth: {
+                user: config.notifications.email.user,
+                pass: config.notifications.email.password,
+            }
+        }
+    }
+    public getDevelopmentTransporterOptions() {
+        return {
+            host: config.notifications.email.server, // le nom du service dans le fichier docker compose, ici on va mettre "mailhog"
+            port: config.notifications.email.port, // dev : 1025
+            secure: false,
+            auth: {
+                user: config.notifications.email.user,
+                pass: config.notifications.email.password,
+            }
+        }
     }
 }
 

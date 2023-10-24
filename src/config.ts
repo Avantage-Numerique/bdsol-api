@@ -98,7 +98,7 @@ const config:any = {
             port: process.env.MAIL_PORT ?? 1025,
             user: process.env.MAIL_USER ?? "usernamemailhog",
             password: process.env.MAIL_PASSWORD ?? "usernamemailhog",
-            from: "notification@avnu.ca"
+            from: "notifications@avnu.ca"
         }
     }
 };

@@ -13,7 +13,7 @@ import {ApiResponseContract} from "@src/Http/Responses/ApiResponse";
 import config from "../../config";
 import crypto from "crypto";
 import EmailNotification from "@src/Notifications/EmailNotification";
-import { EmailConfirmationContent } from "@src/Templates/Contents/EmailConfirmationContent";
+import {EmailConfirmationContent} from "@src/Templates/Contents/EmailConfirmationContent";
 
 class AuthentificationController
 {
@@ -160,7 +160,7 @@ class AuthentificationController
 
         const createdDocumentResponse = await this.service.insert(userObject);
 
-        if (createdDocumentResponse !== undefined)
+        if (createdDocumentResponse && typeof createdDocumentResponse !== 'undefined' && !createdDocumentResponse.error)
         {
             //Send email to verify user
             const welcomeName = createdDocumentResponse.data?.firstName ?? 'Cher canard';
