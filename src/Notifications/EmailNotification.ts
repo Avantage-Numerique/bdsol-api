@@ -31,13 +31,14 @@ class EmailNotification extends Notification {
      */
     public async send() {
         if (typeof this.config.recipient !== "undefined") {
-            const sendingEmailOptions:any = {
+            const sendingEmailOptions: any = {
                 from: config.notifications.email.from,
                 to: this.config.recipient,
                 subject: this.config.subject ?? `Un courriel de la part de ${config.appName}`,
                 html: await this._emailTemplate.render(this.content),
             };
             await this.transporter.sendMail(sendingEmailOptions);
+            return;
         }
         throw new Error("Email Recipient not valid");
     }
