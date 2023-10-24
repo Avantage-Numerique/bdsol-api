@@ -1,7 +1,7 @@
 import {MongoDBDriver} from "@database/Drivers/MongoDriver";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
-const runQueriesOnDatabase = async (driver:MongoDBDriver, dbName:string = "bdsol-data", tasks:Array<{ collection:string,queries:Array<any> }>, name:string="Renaming Field", direction:string="up") => {
+const runQueriesOnDatabase = async (driver:MongoDBDriver, dbName:string = "bdsol-data", tasks:Array<{ collection:string,queries:Array<any>,match?:any }>, name:string="Renaming Field", direction:string="up") => {
     try {
         const client = await driver.connect();
         const db:any = client.db(dbName);
@@ -11,9 +11,11 @@ const runQueriesOnDatabase = async (driver:MongoDBDriver, dbName:string = "bdsol
 
                 LogHelper.info(`[DB][Migration][${name}][${direction}] Starting for ${task.collection} with ${task.queries.length} query-ies >> `);
                 let queryCount = 0;
+                const matchQuery:any = task.match ?? {};
+
                 for (let query of task.queries) {
                     queryCount++;
-                    currentResults = await db.collection(task.collection).updateMany({}, query);
+                    currentResults = await db.collection(task.collection).updateMany(matchQuery, query);
                     LogHelper.info(`${queryCount}. Results : `, currentResults, ` on ${task.collection}`);
                 }
                 LogHelper.info(`<< [DB][Migration][${name}][${direction}] Ending for ${task.collection}`);

@@ -288,7 +288,7 @@ class AuthentificationController
      */
     public async resendVerificationToken(email:string):Promise<any>{
         //Check if email is defined
-        if(typeof email == 'string' && email?.length > 0){
+        if(typeof email === 'string' && email?.length > 0){
             //Check if email is associated with a user
             const targetUser = await User.getInstance().mongooseModel.findOne({email: email});
             //If user exist
@@ -298,8 +298,9 @@ class AuthentificationController
                     //Check if user hasn't resend in the last 5 minutes
                     const now = new Date();
                     //Sets expired date 1 day before the token soo that I can check if 5 min passed and compare to now
-                    const expireDateOneDayLess = targetUser?.verify.expireDate
-                    expireDateOneDayLess.setDate(expireDateOneDayLess.getDate()-1)
+                    const expireDateOneDayLess = targetUser?.verify.expireDate ?? new Date();
+                    expireDateOneDayLess.setDate(expireDateOneDayLess.getDate()-1);
+
                     if(now.valueOf() - expireDateOneDayLess < (5*60*1000)){
                         return ErrorResponse.create(new Error("5 minutes hasn't elapsed since last send"), StatusCodes.OK, "You need to wait 5 minutes before sending a new email");
                     }
