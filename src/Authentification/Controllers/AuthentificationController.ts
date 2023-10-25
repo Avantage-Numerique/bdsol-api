@@ -14,6 +14,7 @@ import config from "../../config";
 import crypto from "crypto";
 import EmailNotification from "@src/Notifications/EmailNotification";
 import {EmailConfirmationContent} from "@src/Templates/Contents/EmailConfirmationContent";
+import {getUserWelcome} from "@src/Users/Helpers/UserEmailHelper";
 
 class AuthentificationController
 {
@@ -321,7 +322,7 @@ class AuthentificationController
                     )
 
                     //Resend verify token to user's email
-                    const welcomeName = targetUser.firstName ?? 'Cher canard';
+                    const welcomeName = getUserWelcome(targetUser);//encapsulate this into an helper
                     const verifyAccountEmail:EmailNotification = new EmailNotification(
                         {
                             recipient: targetUser.email,

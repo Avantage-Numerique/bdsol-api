@@ -135,8 +135,9 @@
         }
         .button-td-primary:hover,
         .button-a-primary:hover {
-            background: {{ theme.color }} !important;
-            border-color: {{ theme.color }} !important;
+            background: {{ theme.buttons.over.bg }} !important;
+            border-color: {{ theme.buttons.over.bg }} !important;
+            color: {{ theme.buttons.over.color }} !important;
         }
 
         @media screen and (max-width: 600px) {
@@ -170,8 +171,9 @@
             }
             td.button-td-primary:hover,
             td.button-td-primary a:hover {
-                background: #A7DFE2 !important;
-                border-color: #A7DFE2 !important;
+                background: {{ theme.button.over.bg }} !important;
+                border-color: {{ theme.button.over.bg }} !important;
+                color: {{ theme.buttons.over.color }} !important;
             }
             .footer td,
             .footer td a {

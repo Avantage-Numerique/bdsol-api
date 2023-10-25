@@ -6,6 +6,7 @@ const DefaultEmailTheme:any = {
         bg2: "#f3edea",
         color: "#1F1F2E",
         titleColor: "#1F1F2E",
+        radius: '30px',
         content: {
             bg: "#FBF7F5",
             color: "#1F1F2E",
@@ -18,7 +19,11 @@ const DefaultEmailTheme:any = {
             size: "20px",
             padding: "20px",
             bg: "#6EC8CD",
-            color: "#1F1F2E"
+            color: "#1F1F2E",
+            over: {
+                bg: "#C4EAEB",
+                color: "#6EC8CD"
+            }
         }
     }
 }
