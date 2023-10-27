@@ -12,7 +12,7 @@ import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middle
 import {populateUser} from "@src/Users/Middlewares/populateUser";
 import {User} from "@src/Users/Models/User";
 import {SkillGroup} from "@src/Taxonomy/Schemas/SkillGroupSchema";
-import { EquipmentLink } from "@src/Database/Schemas/EquipmentLinkSchema";
+import {EquipmentLink} from "@src/Database/Schemas/EquipmentLinkSchema";
 
 
 class Organisation extends AbstractModel {
@@ -224,6 +224,9 @@ class Organisation extends AbstractModel {
         }
     }
 
+    /**
+     * For a find or findOne, We populate relations
+     */
     public registerEvents():void {
 
         this.schema.pre('find', function() {

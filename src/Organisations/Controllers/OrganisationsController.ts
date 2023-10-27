@@ -78,6 +78,24 @@ class OrganisationsController extends AbstractController {
                 as: "tools"
             },
             {
+                raw: {
+                    $addFields: {
+                        "type": Organisation.getInstance().modelName
+                    }
+                }
+            },
+            {
+                raw: {
+                    $addFields: {
+                        "projects.type": Project.getInstance().modelName,
+                        "events.type": Event.getInstance().modelName,
+                        "people.type": Person.getInstance().modelName,
+                        "tools.type": Equipment.getInstance().modelName,//changed here before the $addfield in raw.
+                        //"type": "$type",//test to get the virtual like that. Organisation.getInstance().modelName
+                    }
+                }
+            },
+            {
                 raw: {  //reconstruction of the team array with the lookup values (as if we used the populate).
                     $addFields: {
                         team: {
@@ -123,7 +141,7 @@ class OrganisationsController extends AbstractController {
                                                 }
                                             },
                                             0
-                                        ]
+                                        ],
                                     },
                                     qty: "$$e.qty",
                                     subMeta: "$$e.subMeta",
@@ -144,19 +162,11 @@ class OrganisationsController extends AbstractController {
             //need to get back the people looked up into team.member.
         ]);
 
-        query.push({// Virtuals
-            $addFields: {
-                "projects.type": Project.getInstance().modelName,
-                "events.type": Event.getInstance().modelName,
-                "team.member.type": Person.getInstance().modelName,
-                "equipment.equipment.type": Equipment.getInstance().modelName,
-                "type": Organisation.getInstance().modelName
-            }
-        });
-
         const aggregateService = new ServiceAggregate(Organisation.getInstance());
 
         const results:any = await aggregateService.lookupMultiple({slug: slug}, query);
+
+        console.log("Org single aggregate equipment", results, results[0].equipment);
 
         //aggregation inter bd don't work (that I red).
         const users:mongoose.Model<any> = User.getInstance().mongooseModel;
@@ -164,7 +174,7 @@ class OrganisationsController extends AbstractController {
         const media:mongoose.Model<any> = Media.getInstance().mongooseModel;
         const equipment:mongoose.Model<any> = Equipment.getInstance().mongooseModel;
 
-        await equipment.populate(results, {path: "equipment.equipment"});
+        //await equipment.populate(results, {path: "equipment.equipment"});
         await taxonomies.populate(results, {path: "offers.skills"});
         await taxonomies.populate(results, {path: "domains.domain"});
 
@@ -176,6 +186,7 @@ class OrganisationsController extends AbstractController {
 
         await users.populate(results, {path: "meta.requestedBy", select: "name username avatar"});
         await users.populate(results, {path: "meta.lastModifiedBy", select: "name username avatar"});
+
 
         if (results.length > 0) {
             return SuccessResponse.create(
