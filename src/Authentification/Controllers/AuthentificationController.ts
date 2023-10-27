@@ -13,8 +13,10 @@ import {ApiResponseContract} from "@src/Http/Responses/ApiResponse";
 import config from "../../config";
 import crypto from "crypto";
 import EmailNotification from "@src/Notifications/EmailNotification";
-import {EmailConfirmationContent} from "@src/Templates/Contents/EmailConfirmationContent";
 import {getUserWelcome} from "@src/Users/Helpers/UserEmailHelper";
+import { EmailConfirmationContent } from "@src/Templates/Contents/EmailConfirmationContent";
+import { isObjectIdOrHexString } from "mongoose";
+import { EmailForgottenPasswordContent } from "@src/Templates/Contents/EmailForgottenPasswordContent";
 
 class AuthentificationController
 {
@@ -140,6 +142,11 @@ class AuthentificationController
     }
 
 
+    /**
+     * @comment Password is beeing hashed inside findOneAndUpdate 'pre' event in the model
+     * @param requestData 
+     * @returns 
+     */
     public async register(requestData:any): Promise<ApiResponseContract>
     {
         const verificationToken = crypto.randomBytes(AuthentificationController.verifyTokenLength).toString('hex');
@@ -164,7 +171,7 @@ class AuthentificationController
         if (createdDocumentResponse && typeof createdDocumentResponse !== 'undefined' && !createdDocumentResponse.error)
         {
             //Send email to verify user
-            const welcomeName = createdDocumentResponse.data?.firstName ?? 'Cher canard';
+            const welcomeName = getUserWelcome(createdDocumentResponse.data);
             const verifyAccountEmail:EmailNotification = new EmailNotification(
                 {
                     recipient: createdDocumentResponse.data.email,
@@ -239,7 +246,142 @@ class AuthentificationController
         }
     }
 
-    
+    /**
+     * Allow to change user's password for newPassword if userId and oldPassword corresponds to user.password hash.
+     * @param {ObjectId} userId objectId of user in database that ask request for change
+     * @param {string} oldPassword user's input
+     * @return {Promise} of type Any.
+     * @public
+     */
+    public async changePassword(userId:string, oldPassword:string, newPassword:string):Promise<any>{
+        //Check if variables are defined and string/ObjectId
+        LogHelper.debug(!isObjectIdOrHexString(userId))
+        if(!isObjectIdOrHexString(userId))
+            return ErrorResponse.create(new Error("Invalid user id"), StatusCodes.BAD_REQUEST, "Invalid user id");
+
+        //Check if newPassword is 'ok' in length and condition
+        if(typeof newPassword !== 'string' || newPassword.length < 8)
+            //If not return newPassword is not ok
+            return ErrorResponse.create(new Error("Invalid new password"), StatusCodes.BAD_REQUEST, "Invalid new password");
+
+        //Check if user exist
+        const targetUser = await User.getInstance().mongooseModel.findOne({ _id : userId });
+        
+        //If user exist compare oldPassword and user.password with argon
+        if(targetUser !== null){
+            const match = await PasswordsController.matches(targetUser.password, oldPassword);
+            if(match){
+                //If user password and old match, procceed to change password
+                const updatedUser = await User.getInstance().mongooseModel.findOneAndUpdate({ _id: targetUser._id}, {password : newPassword});
+                if(!updatedUser.error)
+                    return SuccessResponse.create(User.getInstance().dataTransfertObject(updatedUser), StatusCodes.OK, "Password modified")
+            }
+            return ErrorResponse.create(new Error("Invalid password or user"), StatusCodes.BAD_REQUEST, "Invalid password or user");
+        }
+        else {
+            //Else wrong password don't change it
+            return ErrorResponse.create(new Error("Invalid password or user"), StatusCodes.BAD_REQUEST, "Invalid password or user");
+        }
+        
+    }
+
+    /**
+     * Allow user to reset his password by email.
+     * @param {string} email email of user to send email to reset password
+     * @return {Promise} of type Any.
+     * @public
+     */
+    public async sendResetPasswordLinkByEmail(email:string):Promise<any> {
+        //Check if email is defined and string and length > 0
+        if(typeof email == 'string' && email.length > 0){
+            //Check if email corresponds to a user in the database
+            const targetUser = await User.getInstance().mongooseModel.findOne({ email : email });
+            if(targetUser !== null){
+                //Check if user is verified? (if not then can't change password, need to verify first)
+                if(targetUser.verify?.isVerified !== true)
+                    return this.resendVerificationToken(email);
+
+                //Email OK and user is verified
+                //Check if 5 min elapsed since last token sent
+                const now = new Date();
+                const expireDate30MinutesLess = targetUser?.verify.expireDate ?? new Date();
+                expireDate30MinutesLess.setMinutes(expireDate30MinutesLess.setMinutes()-30);
+                if(targetUser?.changePassword?.expireDate !== undefined &&
+                    now.valueOf() - expireDate30MinutesLess < (5*60*1000))
+                    return ErrorResponse.create(new Error("5 minutes hasn't elapsed since last send"), StatusCodes.OK, "You need to wait 5 minutes before sending a new email");
+
+                //Update user with new changePassword token and expire date
+                const passwordToken = crypto.randomBytes(AuthentificationController.verifyTokenLength).toString('hex');
+                const passwordTokenExpirationDate = new Date(); //Expiration date setters
+                passwordTokenExpirationDate.setMinutes(passwordTokenExpirationDate.getMinutes()+30);
+                const updatedUser = await User.getInstance().mongooseModel.findOneAndUpdate(
+                    { _id: targetUser._id },
+                    {
+                        changePassword:{
+                            token: passwordToken,
+                            expireDate: passwordTokenExpirationDate
+                        }
+                    }
+                )
+                //Send email with a unique secure link to procceed to reset user's password
+                const welcomeName = getUserWelcome(updatedUser);
+                const forgotPasswordEmail:EmailNotification = new EmailNotification(
+                    {
+                        recipient: targetUser.email,
+                        subject: welcomeName+", Demande de réinitialisation de mot de passe sur avnu.ca"
+                    },
+                    EmailForgottenPasswordContent(welcomeName, config.frontendAppUrl+"/compte/nouveau-mot-de-passe/"+passwordToken)
+                    );
+                forgotPasswordEmail.send();
+                return SuccessResponse.create({email : targetUser.email}, StatusCodes.OK, "Sent reset password email")
+            }
+            return ErrorResponse.create(new Error('Invalid email'), StatusCodes.BAD_REQUEST, 'Invalid email')
+        }
+        return ErrorResponse.create(new Error('Invalid request data'), StatusCodes.BAD_REQUEST, 'Invalid request data')
+    }
+
+    /**
+     * Allow user to reset his password by email.
+     * @param {string} email email of user to send email to reset password
+     * @return {Promise} of type Any.
+     * @public
+     */
+    public async updateForgottenPassword(token:string, password:string):Promise<any> {
+        //Verify that token is the right length
+        if(typeof token === 'string' && token.length === AuthentificationController.verifyTokenLength * 2) //times 2 because length (n Bytes = 2n hexadecimal)
+        {
+            //Check if token exists
+            const targetUser = await User.getInstance().mongooseModel.findOne({"changePassword.token": token});
+
+            //If user exist
+            if(targetUser !== null){
+                //Check if token is not expired
+                if(new Date(targetUser.changePassword.expireDate).valueOf() < new Date().valueOf())
+                    return ErrorResponse.create(new Error("The verification token has expired"), StatusCodes.OK, "The verification token has expired");
+
+                //Check if password is ok in length and conditions
+                if(typeof password == 'string' && password.length >= 8){
+                    //If user password and old match, procceed to change password
+                    const response = await User.getInstance().mongooseModel.findOneAndUpdate(
+                        { _id: targetUser._id},
+                        {
+                            password : password,
+                            changePassword: { token: null, expireDate: null}
+                        });
+                    if(!response.error)
+                        return SuccessResponse.create({username: targetUser.username}, StatusCodes.OK, "Password modified")
+
+                    return ErrorResponse.create(new Error("Couldn't update user"), StatusCodes.INTERNAL_SERVER_ERROR, "Couldn't update user");
+                }
+                return ErrorResponse.create(new Error('Invalid new password'), StatusCodes.BAD_REQUEST, 'Invalid new password')
+            }
+            //Token doesn't exist
+            return ErrorResponse.create(new Error("Token invalid"), StatusCodes.BAD_REQUEST, "Token invalid");
+        }
+        //Token is invalid format
+        return ErrorResponse.create(new Error("Token invalid"), StatusCodes.BAD_REQUEST, "Token invalid");
+    }
+
     /**
      * Verify account if verification token is associated with a user.
      * @param token string of 128 characters of random nature
@@ -248,7 +390,7 @@ class AuthentificationController
      */
     public async verifyAccount(token:string):Promise<any>{
         //verify that token is the right length
-        if(typeof token === 'string' && token.length === AuthentificationController.verifyTokenLength * 2) //times 2 because length in Bytes = 2*hexadecimal
+        if(typeof token === 'string' && token.length === AuthentificationController.verifyTokenLength * 2) //times 2 because length (n Bytes = 2n hexadecimal)
         {
             //search users and find the one that has the token
             const targetUser = await User.getInstance().mongooseModel.findOne({ "verify.token" : token })
@@ -310,7 +452,7 @@ class AuthentificationController
                     const verificationToken = crypto.randomBytes(AuthentificationController.verifyTokenLength).toString('hex');
                     const verificationExpirationDate = new Date(); //Expiration date setters
                     verificationExpirationDate.setDate(verificationExpirationDate.getDate()+1);
-                    const response = await User.getInstance().mongooseModel.findOneAndUpdate(
+                    const updatedUser = await User.getInstance().mongooseModel.findOneAndUpdate(
                         { _id: targetUser._id },
                         {
                             verify:{
@@ -328,7 +470,7 @@ class AuthentificationController
                             recipient: targetUser.email,
                             subject: welcomeName+", Confirmez ce courriel pour votre compte sur avnu.ca"
                         },
-                        EmailConfirmationContent(welcomeName, "http://localhost:3000/verifier-compte/"+verificationToken)
+                        EmailConfirmationContent(welcomeName, config.frontendAppUrl+"/compte/verifier-compte/"+verificationToken)
                         );
                         verifyAccountEmail.send();
                     return SuccessResponse.create({email: targetUser.email}, StatusCodes.OK, "Email has been sent")

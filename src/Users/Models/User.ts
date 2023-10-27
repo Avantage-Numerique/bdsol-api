@@ -74,6 +74,10 @@ export class User extends AbstractModel {
                     token: {type: String},
                     expireDate: {type: Date},
                     validatedOn: {type: Date}
+                },
+                changePassword: {
+                    token: {type:String},
+                    expireDate: {type: Date}
                 }
             },
             {

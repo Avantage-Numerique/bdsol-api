@@ -8,4 +8,5 @@ export interface UserContract {
     lastName?:string;
     role: string;
     verify: object;
+    changePassword:object;
 }

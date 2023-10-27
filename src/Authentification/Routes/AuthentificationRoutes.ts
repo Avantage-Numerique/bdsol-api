@@ -1,4 +1,4 @@
-import express, {Request, Response} from "express";
+import express, {Request, Response, response} from "express";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import config from "../../config";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
@@ -72,6 +72,12 @@ export class AuthentificationRoutes {
             VerifyTokenMiddleware.middlewareFunction(),
             this.logoutHandler.bind(this)
         ]);
+
+        this.routerInstance.post('/change-password', [
+            VerifyTokenMiddleware.middlewareFunction(),
+            this.changePasswordHandler.bind(this)
+        ]);
+
         return this.routerInstanceAuthentification;
     }
 
@@ -101,13 +107,21 @@ export class AuthentificationRoutes {
             this.generateTokenDevHandler.bind(this)
         ]);
 
+        this.routerInstance.post('/reset-password', [
+            this.sendResetPasswordLinkByEmailHandler.bind(this)
+        ]);
+
+        this.routerInstance.post('/reset-password/:token', [
+            this.updateForgottenPasswordHandler.bind(this)
+        ]);
+
         this.routerInstance.post('/verify-account/resend', [
-            this.resendEmailVerificationToken.bind(this)
+            this.resendEmailVerificationTokenHandler.bind(this)
         ]);
 
         //Verify user account (post or get?)
         this.routerInstance.get('/verify-account/:token', [
-            this.verifyUserAccount.bind(this)
+            this.verifyUserAccountHandler.bind(this)
         ]);
 
         this.routerInstance.get('/login', [
@@ -219,20 +233,50 @@ export class AuthentificationRoutes {
     }
 
     /**
-     * Get method qui vérifie le compte d'un utilisateur.
+     * Post method qui prend l'ancien mdp et le nouveau souhaité, compare les hash de l'ancien avec la bd et modifie pour le nouveau sur un succès de comparaison.
      * @param req {Request}
      * @param res {Response}
      * @return {Promise<any>}
      */
-    public async verifyUserAccount(req: Request, res: Response): Promise<any>
+    public async changePasswordHandler(req: Request, res: Response): Promise<any>
     {
-        const token = req.params.token?.toString() ?? '';
-        const response = await this.controllerInstance.verifyAccount(token);
+        //UserId must be replaced by some id in the request (to not be able to forge request of password change)
+        const {oldPassword, newPassword} = req.body.data;
+        const userId = req.user?._id;
+        LogHelper.debug("old, new, userId", oldPassword, newPassword, userId);
+        const response = await this.controllerInstance.changePassword(userId, oldPassword, newPassword);
+        return res.status(response.code).send(response);
+        //return res.status(response.code).send(response);
+    }
+
+    /**
+     * Post method qui envoi un courriel de reset de mot de passe.
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async sendResetPasswordLinkByEmailHandler(req: Request, res: Response): Promise<any>
+    {
+        const email = req.body.data?.email;
+        LogHelper.debug("email", email)
+        const response = await this.controllerInstance.sendResetPasswordLinkByEmail(email)
+        return res.status(response.code).send(response);
+    }
+
+    /**
+     * Post qui assigne un nouveau mot de passe au user
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async updateForgottenPasswordHandler(req: Request, res: Response): Promise<any>
+    {
+        const password = req.body.data?.password;
+        const response = await this.controllerInstance.updateForgottenPassword(req.params?.token.toString() ?? '', password);
         return res.status(response.code).send(response);
     }
     
     
-    //  GET
     /**
     * Post method qui renvoie un courriel de token de vérification de compte.
      * requête body en JSON :
@@ -240,10 +284,24 @@ export class AuthentificationRoutes {
      * @param res {Response}
      * @return {Promise<any>}
      */
-    public async resendEmailVerificationToken(req: Request, res: Response): Promise<any>
+    public async resendEmailVerificationTokenHandler(req: Request, res: Response): Promise<any>
     {
         const email = req.body.data?.email;
         const response = await this.controllerInstance.resendVerificationToken(email);
+        return res.status(response.code).send(response);
+    }
+    
+    //  GET
+    /**
+     * Get method qui vérifie le compte d'un utilisateur.
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async verifyUserAccountHandler(req: Request, res: Response): Promise<any>
+    {
+        const token = req.params.token?.toString() ?? '';
+        const response = await this.controllerInstance.verifyAccount(token);
         return res.status(response.code).send(response);
     }
     
