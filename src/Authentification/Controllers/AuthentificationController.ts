@@ -17,6 +17,7 @@ import {getUserWelcome} from "@src/Users/Helpers/UserEmailHelper";
 import { EmailConfirmationContent } from "@src/Templates/Contents/EmailConfirmationContent";
 import { isObjectIdOrHexString } from "mongoose";
 import { EmailForgottenPasswordContent } from "@src/Templates/Contents/EmailForgottenPasswordContent";
+import { EmailPasswordChangedContent } from "@src/Templates/Contents/EmailPasswordChangedContent";
 
 class AuthentificationController
 {
@@ -177,7 +178,7 @@ class AuthentificationController
                     recipient: createdDocumentResponse.data.email,
                     subject: welcomeName+", Confirmez ce courriel pour votre compte sur avnu.ca"
                 },
-                EmailConfirmationContent(welcomeName, "http://localhost:3000/verifier-compte/"+verificationToken)
+                EmailConfirmationContent(welcomeName, config.frontendAppUrl+"/compte/verifier-compte/"+verificationToken)
             );
             verifyAccountEmail.send();
 
@@ -273,8 +274,19 @@ class AuthentificationController
             if(match){
                 //If user password and old match, procceed to change password
                 const updatedUser = await User.getInstance().mongooseModel.findOneAndUpdate({ _id: targetUser._id}, {password : newPassword});
-                if(!updatedUser.error)
+                //Send email to user's email to inform the password change
+                if(updatedUser !== null){
+                    const welcomeName = getUserWelcome(targetUser);//encapsulate this into an helper
+                    const changedPasswordEmail:EmailNotification = new EmailNotification(
+                    {
+                        recipient: targetUser.email,
+                        subject: welcomeName+", Votre mot de passe a été modifié sur avnu.ca"
+                    },
+                    EmailPasswordChangedContent(welcomeName, config.frontendAppUrl+"/compte/connexion")
+                    );
+                    changedPasswordEmail.send();
                     return SuccessResponse.create(User.getInstance().dataTransfertObject(updatedUser), StatusCodes.OK, "Password modified")
+                }
             }
             return ErrorResponse.create(new Error("Invalid password or user"), StatusCodes.BAD_REQUEST, "Invalid password or user");
         }
@@ -362,14 +374,25 @@ class AuthentificationController
                 //Check if password is ok in length and conditions
                 if(typeof password == 'string' && password.length >= 8){
                     //If user password and old match, procceed to change password
-                    const response = await User.getInstance().mongooseModel.findOneAndUpdate(
+                    const updatedUser = await User.getInstance().mongooseModel.findOneAndUpdate(
                         { _id: targetUser._id},
                         {
                             password : password,
                             changePassword: { token: null, expireDate: null}
-                        });
-                    if(!response.error)
-                        return SuccessResponse.create({username: targetUser.username}, StatusCodes.OK, "Password modified")
+                    });
+                    //Send email to user's email to inform the password change
+                    if(updatedUser !== null){
+                        const welcomeName = getUserWelcome(targetUser);//encapsulate this into an helper
+                        const changedPasswordEmail:EmailNotification = new EmailNotification(
+                        {
+                            recipient: targetUser.email,
+                            subject: welcomeName+", Votre mot de passe a été modifié sur avnu.ca"
+                        },
+                        EmailPasswordChangedContent(welcomeName, config.frontendAppUrl+"/compte/connexion")
+                        );
+                        changedPasswordEmail.send();
+                        return SuccessResponse.create({email: targetUser.email}, StatusCodes.OK, "Password modified")
+                    }
 
                     return ErrorResponse.create(new Error("Couldn't update user"), StatusCodes.INTERNAL_SERVER_ERROR, "Couldn't update user");
                 }

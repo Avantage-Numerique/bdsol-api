@@ -9,6 +9,7 @@ import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
 import {NoSpaceSanitizer} from "../../Security/Sanitizers/NoSpaceSanitizer";
 import {NoAccentSanitizer} from "../../Security/Sanitizers/NoAccentSanitizer";
 import { UsersController } from "../../Users/UsersDomain";
+import { noHtmlStringSanitizerAlias } from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
 
 
 export class AuthentificationRoutes {
@@ -56,7 +57,14 @@ export class AuthentificationRoutes {
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .trim()
-        ]
+        ],
+        email: [
+            body('data.email').exists({checkFalsy:true}).bail()
+            .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+            .stripLow()
+            .normalizeEmail()
+            .trim(),
+        ],
     };
 
 
@@ -108,6 +116,7 @@ export class AuthentificationRoutes {
         ]);
 
         this.routerInstance.post('/reset-password', [
+            ...this.addMiddlewares("email"),
             this.sendResetPasswordLinkByEmailHandler.bind(this)
         ]);
 
@@ -116,6 +125,7 @@ export class AuthentificationRoutes {
         ]);
 
         this.routerInstance.post('/verify-account/resend', [
+            ...this.addMiddlewares("email"),
             this.resendEmailVerificationTokenHandler.bind(this)
         ]);
 
