@@ -5,13 +5,15 @@
         <div class="mainContent">
             {% block content %}
                 <div class="indexContent">
-                    <header>
-                        <figure>
-                            <img src="{{ api.mediasUrl }}avnu-picto.png" width="244" height="275" alt="avnu" border="0" />
-                        </figure>
-                    </header>
+                    {% block contentHeader %}
+                        <header>
+                            <figure>
+                                <img src="{{ api.mediasUrl }}avnu-picto.png" width="244" height="275" alt="avnu" border="0" />
+                            </figure>
+                        </header>
+                    {% endblock %}
                     <h1>{{ title }}</h1>
-                    <p>{{ body | safe }} {{ api.description }}</p>
+                    <p>{{ body | safe }}</p>
                 </div>
             {% endblock %}
         </div>

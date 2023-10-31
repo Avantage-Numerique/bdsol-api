@@ -16,7 +16,7 @@ ApiRouter.get("/", async (req, res) => {
     const index = new PublicTemplate();//tempalte have already a default in the EmailContent.Prepare.
     const title:string = `${config.appName} (version ${config.version})`;
     let body:string = config.environnement === 'development' ? `écoute sur le port: ${config.port}<br />` : '';
-    body += ``;
+    body += EmailData.api.description;
     res.set('Content-Type', 'text/html');
     return res.status(StatusCodes.OK).send(await index.render({
         context: {
@@ -33,10 +33,29 @@ ApiRouter.get("/", async (req, res) => {
     }));
 });
 
-// Could be usefull to get the up status here.
-ApiRouter.get("/test", async (req, res) => {
-    res.send(`Testing or do I ? :face-machiavélique-un-peu-trop-intense-pour-la-situation-mais-cest-drole-parce-que-cest-comme-dans-un-film:`);
+
+
+ApiRouter.get('/quarante-deux',async (req, res) => {
+
+    const index42 = new PublicTemplate("quarante-deux");//tempalte have already a default in the EmailContent.Prepare.
+    const title:string = `The Answer to the Ultimate Question of Life, the Universe, and Everything`;
+    let body:string = '';
+    res.set('Content-Type', 'text/html');
+    return res.status(StatusCodes.OK).send(await index42.render({
+        context: {
+            ...EmailData,//basic app and api default string and links
+            ...DefaultEmailTheme,//basic theme for colors and sizes.
+            title: `${title}`,
+            body: `${body}`,
+            meta: {
+                title: `${title}`,
+                description: `${body}`,
+                author: `${config.appName}`
+            }
+        }
+    }));
 });
+
 
 ApiRouter.get('/42',async (req, res) => {
     res.send('<style> body {white-space : pre; background-color : #22211f; color : white}</style>'+
