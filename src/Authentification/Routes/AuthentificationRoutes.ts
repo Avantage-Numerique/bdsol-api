@@ -9,7 +9,6 @@ import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
 import {NoSpaceSanitizer} from "../../Security/Sanitizers/NoSpaceSanitizer";
 import {NoAccentSanitizer} from "../../Security/Sanitizers/NoAccentSanitizer";
 import { UsersController } from "../../Users/UsersDomain";
-import { noHtmlStringSanitizerAlias } from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
 
 
 export class AuthentificationRoutes {
@@ -81,7 +80,7 @@ export class AuthentificationRoutes {
             this.logoutHandler.bind(this)
         ]);
 
-        this.routerInstance.post('/change-password', [
+        this.routerInstanceAuthentification.post('/change-password', [
             VerifyTokenMiddleware.middlewareFunction(),
             this.changePasswordHandler.bind(this)
         ]);

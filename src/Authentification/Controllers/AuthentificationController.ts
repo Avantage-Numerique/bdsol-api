@@ -256,7 +256,6 @@ class AuthentificationController
      */
     public async changePassword(userId:string, oldPassword:string, newPassword:string):Promise<any>{
         //Check if variables are defined and string/ObjectId
-        LogHelper.debug(!isObjectIdOrHexString(userId))
         if(!isObjectIdOrHexString(userId))
             return ErrorResponse.create(new Error("Invalid user id"), StatusCodes.BAD_REQUEST, "Invalid user id");
 
