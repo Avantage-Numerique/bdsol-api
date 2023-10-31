@@ -18,8 +18,8 @@ const config:any = {
     appName: process.env.APP_NAME || "API",
     port: process.env.PORT || "8000",
     version: process.env.VERSION || "0.0.0",
-    basepath: process.env.BASEPATH || "/api/",
-    baseUrl: process.env.BASEURL || "http://localhost:8000/",
+    basepath: process.env.BASEPATH || "/api",
+    baseUrl: process.env.BASEURL || "http://localhost:8000",
     frontendAppUrl: process.env.FRONTEND_APP_URL || "http://localhost:3000",
 
     tokenSecret: process.env.JWT_KEY || "not set yet",

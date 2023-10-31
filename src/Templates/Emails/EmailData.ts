@@ -5,13 +5,14 @@ export const EmailData = {
     api: {
         name: "AVNU",
         baseUrl: config.baseUrl,
-        mediasUrl: `${config.baseUrl}static/medias/emails/`,
-        version: config.version
+        mediasUrl: `${config.baseUrl}/static/medias/emails/`,
+        version: config.version,
+        description: "Base de donnée ouverte et liée crée par Avantage Numérique et qui recense les techno-créatifs sur le territoire du Croissant boréal.",
     },
     app: {
         name: "AVNU",
         baseUrl: config.baseUrl,
-        mediasUrl: `${config.baseUrl}static/medias/emails/`,
+        mediasUrl: `${config.baseUrl}/static/medias/emails/`,
         version: config.version
     },
     company: {

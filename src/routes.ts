@@ -3,14 +3,34 @@ import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 import EmailNotification from "@src/Notifications/EmailNotification";
 import {StatusCodes} from "http-status-codes";
 import {EmailConfirmationContent} from "@src/Templates/Contents/EmailConfirmationContent";
+import config from "@src/config";
+import PublicTemplate from "@src/Templates/PublicTemplate";
+import {EmailData} from "@src/Templates/Emails/EmailData";
+import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
 
 const ApiRouter = express.Router();
 
 // Would this print the doc or not ?
 ApiRouter.get("/", async (req, res) => {
-    const version = process.env.VERSION || 'not set';
-    const port = process.env.PORT || 'not set';
-    res.send(`BDSOL API (version ${version}) écoute sur le port: ${port}`)//@todo create a default get html return.
+
+    const index = new PublicTemplate();//tempalte have already a default in the EmailContent.Prepare.
+    const title:string = `${config.appName} (version ${config.version})`;
+    let body:string = config.environnement === 'development' ? `écoute sur le port: ${config.port}<br />` : '';
+    body += ``;
+    res.set('Content-Type', 'text/html');
+    return res.status(StatusCodes.OK).send(await index.render({
+        context: {
+            ...EmailData,//basic app and api default string and links
+            ...DefaultEmailTheme,//basic theme for colors and sizes.
+            title: `${title}`,
+            body: `${body}`,
+            meta: {
+                title: `${title}`,
+                description: `${body}`,
+                author: `${config.appName}`
+            }
+        }
+    }));
 });
 
 // Could be usefull to get the up status here.
