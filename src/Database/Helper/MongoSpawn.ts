@@ -20,7 +20,7 @@ const MongoSpawn = async (command:string, params:any) => {
     mongoSpawn.stderr.setEncoding('utf8');
     mongoSpawn.stderr.on('data', (data) => {
         data = data.toString();
-        LogHelper.error(`${logPrefix} stderr ${params.dbName}`, data);
+        LogHelper.info(`${logPrefix} stderr ${params.dbName}`, data);
         backupVerbose += data;
     });
 
@@ -29,7 +29,7 @@ const MongoSpawn = async (command:string, params:any) => {
     });
 
     mongoSpawn.on('exit', (code, signal) => {
-        console.log('trace : ',backupVerbose);
+        LogHelper.info(`${logPrefix} Backup process exited`);
         if (code) {
             LogHelper.error(`${logPrefix} Backup process exited with code`, code, `(${typeof code})`);
         }

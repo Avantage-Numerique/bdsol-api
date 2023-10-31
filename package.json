@@ -1,6 +1,6 @@
 {
   "name": "bdsolapi",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "La BDSOL disponible grâce à docker, avec toutes ses facettes. Principalement pour le developpement.",
   "main": "src/api.ts",
   "private": true,
@@ -8,6 +8,8 @@
     "tsc": "tsc && tsc-alias",
     "serve": "node build/src/server.js",
     "serve-ts": "npx ts-node src/server.ts",
+    "backup-ts": "npx ts-node -r tsconfig-paths/register src/backup.ts",
+    "restore-ts": "npx ts-node -r tsconfig-paths/register src/restore.ts",
     "dev": "npx nodemon -r tsconfig-paths/register src/server.ts",
     "dev-old": "npx ts-node-dev --respawn --transpile-only --debug --watch src src/server.ts",
     "prod": "tsc && node ./build/server.js",
