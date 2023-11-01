@@ -175,6 +175,7 @@ abstract class AbstractController implements ControllerContract {
         try {
             //User id
             const user: any = req.user?._id;
+            
 
             //IP Address
             const ipAddress = req.visitor.ip;

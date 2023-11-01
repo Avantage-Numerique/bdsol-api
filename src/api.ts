@@ -27,6 +27,7 @@ import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 import {EventsRoutes} from "./Events/Routes/EventsRoutes";
 import { PlacesRoutes } from "./Places/Routes/PlacesRoutes";
 import EquipmentRoutes from "./Equipment/Routes/EquipmentRoute";
+import CommunicationsRoutes from "./Communications/Routes/CommunicationsRoutes";
 /**
  * Main class for the API
  * Use the express instance as public property.
@@ -142,6 +143,10 @@ export default class Api {
             {
                 baseRoute: "/info",
                 manager: new ModerationRoutes()
+            },
+            {
+                baseRoute: "/communications",
+                manager: new CommunicationsRoutes()
             },
             {
                 baseRoute: "/search",

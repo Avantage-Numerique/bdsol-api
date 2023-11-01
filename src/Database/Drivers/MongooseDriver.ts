@@ -25,6 +25,8 @@ import PlacesService from "@src/Places/Services/PlacesService";
 import Place from "@src/Places/Models/Place";
 import Equipment from "@src/Equipment/Models/Equipment";
 import EquipmentService from "@src/Equipment/Services/EquipmentService";
+import CommunicationsService from "@src/Communications/Services/CommunicationsService";
+import Communication from "@src/Communications/Models/Communication";
 
 
 export class MongooseDBDriver implements DBDriver {
@@ -101,6 +103,7 @@ export class MongooseDBDriver implements DBDriver {
         this.providers.data.assign(EventsService.getInstance(Event.getInstance(doIndexes)));
         this.providers.data.assign(PlacesService.getInstance(Place.getInstance(doIndexes)));
         this.providers.data.assign(EquipmentService.getInstance(Equipment.getInstance(doIndexes)));
+        this.providers.data.assign(CommunicationsService.getInstance(Communication.getInstance(doIndexes)))
     }
 
 
