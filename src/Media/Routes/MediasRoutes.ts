@@ -17,6 +17,7 @@ import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSan
 import {noHtmlStringSanitizerAlias} from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
 import {isInEnumSanitizerAlias} from "@src/Security/SanitizerAliases/IsInEnumSanitizerAlias";
 import {EntityTypesEnum} from "@src/Entities/EntityTypes";
+import { unescape } from "querystring";
 
 
 class MediasRoutes extends AbstractRoute {
@@ -199,7 +200,11 @@ class MediasRoutes extends AbstractRoute {
 
         const {entityId, mediaField, entityType} = req.body.data;
         //Get old media ID if exist
-        const entityResponse = await EntityControllerFactory.getControllerFromEntity(entityType).search( { id : entityId } );
+        const controller = EntityControllerFactory.getControllerFromEntity(entityType);
+        let entityResponse;
+        if(controller !== undefined)
+            entityResponse = await controller.search( { id : entityId } );
+
         const oldMediaId = entityResponse?.data?.[mediaField]?._id;
     
         const record = new Record(req.body.data, req.files, req.user._id, entityId, mediaField, entityType);
@@ -271,8 +276,9 @@ class MediasRoutes extends AbstractRoute {
 
         //if entity media was in use => need to update entity media to null
         //NOTE : IF WE HAVE AN ENTITY WITH MULTIPLE MEDIA FIELD, THIS APPROACH DOESN'T WORK (because multiple media could be "in use")
-        if(res.serviceResponse.data.dbStatus == "in use")
+        if(res.serviceResponse.data.dbStatus == "in use" && entityController !== undefined){
             res.serviceResponse.update = await entityController.service.update( { id: req.params.id, mainImage: null } );
+        }
 
         return next();
     }

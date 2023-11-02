@@ -30,7 +30,7 @@ class SearchRoutes extends AbstractRoute {
      * @public @method
      */
     public setupPublicRoutes(): express.Router {
-
+        this.routerInstance.post('/type', [this.searchByTypeHandler.bind(this), this.routeSendResponse.bind(this)]);
         this.routerInstance.get('/', [this.fullSearchHandler.bind(this), this.routeSendResponse.bind(this)]);
         this.routerInstance.get('/all', [this.aggregateAllHandler.bind(this), this.routeSendResponse.bind(this)]);
         this.routerInstance.get('/regex', [this.textSearchSuggestionsHandler.bind(this), this.routeSendResponse.bind(this)]);
@@ -52,6 +52,15 @@ class SearchRoutes extends AbstractRoute {
         return router;
     }
 
+
+    public async searchByTypeHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
+        const type:string = req.body?.data?.type ?? "";
+        const skip:number = req.body?.data?.skip ?? 0;
+        if(typeof type === 'string'){
+            res.serviceResponse = await this.searchResults_instance.searchByType(type, skip)
+        }
+        return next();
+    }
 
     public async fullSearchHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
         let textSearchResults = await this.searchResults_instance.getTextSearchResult(req.query.searchIndex?.toString());
@@ -130,8 +139,6 @@ class SearchRoutes extends AbstractRoute {
     public async aggregateAllHandler(req:Request, res:Response, next: NextFunction):Promise<any> {
         return next();
     }
-
-
 }
 
 export default SearchRoutes

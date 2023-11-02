@@ -267,7 +267,6 @@ export class AuthentificationRoutes {
     public async sendResetPasswordLinkByEmailHandler(req: Request, res: Response): Promise<any>
     {
         const email = req.body.data?.email;
-        LogHelper.debug("email", email)
         const response = await this.controllerInstance.sendResetPasswordLinkByEmail(email)
         return res.status(response.code).send(response);
     }

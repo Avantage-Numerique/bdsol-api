@@ -9,9 +9,9 @@ import PlacesController from "@src/Places/Controllers/PlacesController";
 import EquipmentController from "@src/Equipment/Controllers/EquipmentController";
 class EntityControllerFactory {
 
-    public static typeList = ["person", "organisation", "taxonomy", "project", "media"]
+    public static typeList = ["person", "organisation", "taxonomy", "project", "media", "event", "place", "equipment"]
 
-    public static getControllerFromEntity(entityType:string):AbstractController{
+    public static getControllerFromEntity(entityType:string):AbstractController | undefined{
         let instance;
         switch(entityType.toLocaleLowerCase()){
             case "person":
@@ -31,7 +31,7 @@ class EntityControllerFactory {
             case "equipment": 
                 instance = EquipmentController.getInstance();break;
 
-            default:instance = PersonsController.getInstance();//Maybe causing some problem eventually
+            default:instance = undefined;
         }
         return instance;
     }

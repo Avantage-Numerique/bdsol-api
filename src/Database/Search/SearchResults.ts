@@ -6,6 +6,9 @@ import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 import Event from "@src/Events/Models/Event";
 import Equipment from "@src/Equipment/Models/Equipment";
+import EntityControllerFactory from "@src/Abstract/EntityControllerFactory";
+import { ErrorResponse } from "@src/Http/Responses/ErrorResponse";
+import { StatusCodes } from "http-status-codes";
 
 
 class SearchResults {
@@ -34,6 +37,15 @@ class SearchResults {
         return SearchResults._instance;
     }
 
+
+    public async searchByType(type:string, skip:number){
+        const controller = EntityControllerFactory.getControllerFromEntity(type);
+        if(controller !== undefined){
+            const result = await controller.list({})//{skip: skip ?? 0});
+            return result;
+        }
+        return ErrorResponse.create(new Error("Type doesn't exist"), StatusCodes.BAD_REQUEST, "Type doesn't exist");
+    }
 
     public async getTextSearchResult(searchIndex:string | undefined) {
         //Send out $text : { $search : req.query } to all entity

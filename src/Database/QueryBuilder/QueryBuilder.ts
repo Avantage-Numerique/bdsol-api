@@ -173,7 +173,7 @@ export default class QueryBuilder {
                 continue;
             }
 
-            if (field == "skip" && Number(field) > 0) {
+            if (field == "skip" && Number(field) >= 0) {
                 options.skip = Number(field);
                 delete query[field];
                 continue;

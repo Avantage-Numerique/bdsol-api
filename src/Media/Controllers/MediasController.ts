@@ -134,9 +134,12 @@ class MediasController extends AbstractController { //implements ControllerContr
 
     public async linkEntityToMedia(res:Response, record:Record, toLinkMediaId:any){
         const updateRequest = { id: record.entityId, [record.mediaField] : toLinkMediaId };
-        const linkingMediaResponse = await EntityControllerFactory.getControllerFromEntity(record.entityType).update(updateRequest);
+        let linkingMediaResponse;
+        const controller = EntityControllerFactory.getControllerFromEntity(record.entityType);
+        if(controller !== undefined)
+            linkingMediaResponse = await controller.update(updateRequest);
         
-        if (linkingMediaResponse.error){
+        if (linkingMediaResponse !== undefined && linkingMediaResponse.error){
             //Delete media
             res.serviceResponse = await this.internalDelete(record.entityId, record.filenameNoExt);
             res.serviceResponse.failMessage = "Couldn't save file, failed to link media to entity";
