@@ -4,6 +4,9 @@ import Communication from "../Models/Communication";
 import CommunicationsService from "../Services/CommunicationsService";
 import { ErrorResponse } from "@src/Http/Responses/ErrorResponse";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import config from "@src/config";
+import { EmailContactUsReceivedContent } from "@src/Templates/Contents/EmailContactUsReceivedContent";
+import EmailNotification from "@src/Notifications/EmailNotification";
 
 
 class CommunicationsController extends AbstractController {
@@ -45,7 +48,19 @@ class CommunicationsController extends AbstractController {
         const createdDocumentResponse = await this.service.insert(communicationObject);
 
         if (createdDocumentResponse !== undefined)
+        {
+            //Send email to notify that we received message and will respond asap
+            const verifyAccountEmail:EmailNotification = new EmailNotification(
+                {
+                    recipient: email,
+                    subject: name+", Nous avons bien reçu votre commentaire"
+                },
+                EmailContactUsReceivedContent(name, config.frontendAppUrl)
+            );
+            verifyAccountEmail.send();
+
             return createdDocumentResponse;
+        }
 
         return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),

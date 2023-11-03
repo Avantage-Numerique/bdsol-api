@@ -90,6 +90,7 @@ export class MongooseDBDriver implements DBDriver {
 
         //order is important for populate. If the schema in relation isn't declare before, it will not work.
         this.providers.users.assign(UsersService.getInstance(User.getInstance()));
+        this.providers.users.assign(CommunicationsService.getInstance(Communication.getInstance()))
 
         const doIndexes = true;
 
@@ -103,7 +104,6 @@ export class MongooseDBDriver implements DBDriver {
         this.providers.data.assign(EventsService.getInstance(Event.getInstance(doIndexes)));
         this.providers.data.assign(PlacesService.getInstance(Place.getInstance(doIndexes)));
         this.providers.data.assign(EquipmentService.getInstance(Equipment.getInstance(doIndexes)));
-        this.providers.data.assign(CommunicationsService.getInstance(Communication.getInstance(doIndexes)))
     }
 
 
