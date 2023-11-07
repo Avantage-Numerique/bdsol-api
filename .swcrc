@@ -5,7 +5,7 @@
       "decorators": true,
       "dynamicImport": true
     },
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
       "@src/*" : ["src/*"],
       "@auth/*" : ["src/Authentification/*"],

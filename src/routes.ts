@@ -90,4 +90,26 @@ ApiRouter.get("/test-email", async (req, res) => {
     return res.status(StatusCodes.OK).send(await testNotification.preview());
 });
 
+ApiRouter.get("/sync-db", async (req, res) => {
+
+    const index = new PublicTemplate("default");//tempalte have already a default in the EmailContent.Prepare.
+    const title:string = `Synching db`;
+    let body:string = 'Sync prod into staging data only.';
+
+    res.set('Content-Type', 'text/html');
+    return res.status(StatusCodes.OK).send(await index.render({
+        context: {
+            ...EmailData,//basic app and api default string and links
+            ...DefaultEmailTheme,//basic theme for colors and sizes.
+            title: `${title}`,
+            body: `${body}`,
+            meta: {
+                title: `${title}`,
+                description: `${body}`,
+                author: `${config.appName}`
+            }
+        }
+    }));
+});
+
 export {ApiRouter};

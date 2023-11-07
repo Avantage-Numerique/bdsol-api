@@ -47,13 +47,13 @@ export class MongooseDBDriver implements DBDriver {
      * Constructor fo this driver. Object is created 1 time in  ServerController.
      */
     constructor(driverConfig?:any) {
-        this.driverPrefix = driverConfig?.prefix ?? config.db.prefix;
-        this.haveCredentials = config.db.user !== '' && config.db.password !== '';
-        this.authSource = config.db.authSource;
+        this.config = driverConfig ?? config.db;
+        this.driverPrefix = this.config.prefix;
+        this.haveCredentials = this.config.user !== '' && this.config.password !== '';
+        this.authSource = this.config.authSource;
         this.client = null;
         this.db = null;
         this.baseUrl = '';
-        this.config = driverConfig ?? config.db;
         this.isSRV = this.driverPrefix.includes('+srv');// check if the prefix contain the srv. to adjust the baseUrl.
         this.providers = {
             users: UsersProvider.getInstance(this),
@@ -120,12 +120,11 @@ export class MongooseDBDriver implements DBDriver {
 
 
     /**
-     * @deprecated
      * This is was used before providers.
      * @param db string to get the connection to mongo db.
      */
-    public getConnectionUrl(db:string='bdsol-users') {
-        const url: string = `${this.getConnectionBaseUrl()}${db}${(this.haveCredentials ? `?authSource=${this.authSource}` : '')}${config.db.additionalUrlParams}`;
+    public getConnectionUrl(db:string|null='bdsol-users') {
+        const url: string = `${this.getConnectionBaseUrl()}${db ?? ""}${(this.haveCredentials ? `?authSource=${this.authSource}` : '')}${this.config.additionalUrlParams}`;
         return url;
     }
 
@@ -134,7 +133,7 @@ export class MongooseDBDriver implements DBDriver {
      */
     public getConnectionBaseUrl() {
         if (this.baseUrl === '') {
-            const credential = this.haveCredentials ? `${config.db.user}:${config.db.password}@` : '';
+            const credential = this.haveCredentials ? `${this.config.user}:${this.config.password}@` : '';
             if (this.isSRV) {
                 this.baseUrl = `${this.driverPrefix}://${credential}${this.config.host}/`;
             }
@@ -167,4 +166,14 @@ export class MongooseDBDriver implements DBDriver {
         throw new Error(error.message);
     }
 
+    public prepareUriForLoging(uri:string):string {
+        return prepareUriForLoging(uri);
+    }
+
+}
+
+export const prepareUriForLoging = (uri:string):string => {
+    let creds = uri.slice(uri.indexOf('://')+3, uri.indexOf('@'));
+    let noCreds = uri.split(creds);
+    return noCreds.join("*****:*****");
 }

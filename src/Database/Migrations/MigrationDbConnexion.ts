@@ -6,7 +6,7 @@ import ServerController from "@src/Server/Controllers/ServerController";
 /**
  * Use in migration and in Scheduler.
  */
-const getDbDriver = ():DBDriver => {
+const getDbDriver = (configurations:any=false):DBDriver => {
 
     let db:DBDriver;
 
@@ -17,8 +17,10 @@ const getDbDriver = ():DBDriver => {
         return ServerController.database;
     }
 
+    const configs = configurations ?? config.migrations;
+
     // check if server need to heat up to make the migration going.
-    return new MongooseDBDriver(config.migrations);
+    return new MongooseDBDriver(configs);
 }
 
 

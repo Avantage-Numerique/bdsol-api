@@ -7,6 +7,7 @@ const config:any = {
 
     environnement: process.env.ENVIRONNEMENT || "development",
     logPerformance: process.env.LOG_PERFORMANCE || true,
+    logToFile: process.env.LOG_TO_FILE || false,
 
     isProduction: process.env.ENVIRONNEMENT === 'production',
     isStaging: process.env.ENVIRONNEMENT === 'staging',
@@ -48,11 +49,41 @@ const config:any = {
             createObjectIdForQuery: false
         }
     },
+
+    localhostDb: {
+        driver: process.env.LOCALHOST_DB_DRIVER || "mongodb",
+        prefix: process.env.LOCALHOST_DB_PREFIX || "mongodb",
+        authSource: process.env.LOCALHOST_DB_AUTHSOURCE || 'admin',
+        additionalUrlParams: process.env.LOCALHOST_DB_ADDITIONAL_URL_PARAMS ? process.env.LOCALHOST_DB_ADDITIONAL_URL_PARAMS : '',// '&replicaSet=replicaset&tls=true',
+        host: process.env.LOCALHOST_DB_HOST || "not set",
+        port: process.env.LOCALHOST_DB_PORT || 27017,
+        user: process.env.LOCALHOST_DB_USER || '',
+        password: process.env.LOCALHOST_DB_PASSWORD || '',
+        name: process.env.LOCALHOST_DB_NAME || '',
+        config: {
+            createObjectIdForQuery: false
+        }
+    },
+
+    distantDb: {
+        driver: process.env.DISTANT_DB_DRIVER || "mongodb",
+        prefix: process.env.DISTANT_DB_PREFIX || "mongodb",
+        authSource: process.env.DISTANT_DB_AUTHSOURCE || 'admin',
+        additionalUrlParams: process.env.DISTANT_DB_ADDITIONAL_URL_PARAMS ? process.env.DISTANT_DB_ADDITIONAL_URL_PARAMS : '',// '&replicaSet=replicaset&tls=true',
+        host: process.env.DISTANT_DB_HOST || "not set",
+        port: process.env.DISTANT_DB_PORT || 27017,
+        user: process.env.DISTANT_DB_USER || '',
+        password: process.env.DISTANT_DB_PASSWORD || '',
+        name: process.env.DISTANT_DB_NAME || '',
+        config: {
+            createObjectIdForQuery: false
+        }
+    },
     migrations: {
         driver: process.env.DB_MIGRATION_DRIVER || "mongodb",
         prefix: process.env.DB_PREFIX || "mongodb",//use the same prefix of config.db
         authSource: process.env.DB_AUTHSOURCE || 'admin',
-        additionalUrlParams: '&replicaSet=replicaset&tls=true',
+        additionalUrlParams: process.env.DB_MIGRATION_ADDITIONAL_URL_PARAMS ? process.env.DB_MIGRATION_ADDITIONAL_URL_PARAMS : '',
         host: process.env.DB_MIGRATION_HOST || "not set",
         port: process.env.DB_MIGRATION_PORT || 27017,
         user: process.env.DB_MIGRATION_USER || '',

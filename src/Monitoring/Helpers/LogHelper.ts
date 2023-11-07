@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import config from "@src/config";
 /**
  * Entry point for loggin activity into the API
  * This is a version 0, with basic console.log thing.
@@ -35,7 +36,7 @@ enum LogFormats {
 export default class LogHelper
 {
     static printToConsole: boolean = true;
-    static logToFile: boolean = false;
+    static logToFile: boolean = config.logToFile;
     
     public static showLog = true;
     public static showError = true;

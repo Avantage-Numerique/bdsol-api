@@ -6,9 +6,12 @@
   "private": true,
   "scripts": {
     "tsc": "tsc && tsc-alias",
+    "tsctest": "tsc --outDir \"../build-api\" && tsc-alias --outDir \"../build-api\"",
     "serve": "node build/src/server.js",
     "serve-ts": "npx ts-node src/server.ts",
     "backup-ts": "npx ts-node -r tsconfig-paths/register src/backup.ts",
+    "preparesync-ts": "npx ts-node -r tsconfig-paths/register src/presync.ts",
+    "sync-ts": "npx ts-node -r tsconfig-paths/register src/sync.ts",
     "restore-ts": "npx ts-node -r tsconfig-paths/register src/restore.ts",
     "dev": "npx nodemon -r tsconfig-paths/register src/server.ts",
     "dev-old": "npx ts-node-dev --respawn --transpile-only --debug --watch src src/server.ts",
