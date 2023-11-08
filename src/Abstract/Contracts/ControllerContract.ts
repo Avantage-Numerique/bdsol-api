@@ -1,5 +1,5 @@
-import {Service} from "../../Database/Service";
-import AbstractModel from "../Model";
+import {Service} from "@database/Service";
+import AbstractModel from "@core/Model";
 
 export interface ControllerContract {
     service: Service;

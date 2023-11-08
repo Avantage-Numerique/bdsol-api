@@ -1,12 +1,9 @@
 import * as http from "http";
 import config from "../../config";
 
-import {
-    DBDriver,
-    MongooseDBDriver
-} from "../../Database/DatabaseDomain";
+import {DBDriver, MongooseDBDriver} from "../../Database/DatabaseDomain";
 
-import {ReasonPhrases,StatusCodes} from 'http-status-codes';
+import {ReasonPhrases, StatusCodes} from 'http-status-codes';
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import Api from "../../api";
 
@@ -26,8 +23,7 @@ export default class ServerController {
      * Create an instance of ServerController with the express app.
      * @param api express.Application
      */
-    constructor(api:Api)
-    {
+    constructor(api:Api) {
         //set the api if it's passed via instanciation.
         this.api = api;
 
@@ -40,20 +36,21 @@ export default class ServerController {
      * Le singleton du ServerController qu'on veut avoir seulement une instance.
      * @param api express.Application Pour initié et associé l'application express au projet.
      */
-    static getInstance(api:Api)
-    {
-        if (ServerController._singleton === undefined) {
+    static getInstance(api:Api|null=null) {
+        if (ServerController._singleton === undefined && api !== null) {
             ServerController._singleton = new ServerController(api);
         }
-        return ServerController._singleton;
+        if (ServerController._singleton) {
+            return ServerController._singleton;
+        }
+        return;
     }
 
     /**
      * Setup the database static property of ServerController for controlling the DB.
      * @private
      */
-    private static _setDBDriver()
-    {
+    private static _setDBDriver() {
         LogHelper.info(`[BD] Initiation du driver ${config.db.driver} de la base de données.`);
 
         if (config.db.driver === 'mongodb') {
@@ -66,8 +63,7 @@ export default class ServerController {
      * Create an HTTP server from node.http, listence on error and on config.port.
      * Connect to the database
      */
-    public async start()
-    {
+    public async start() {
         this.server = http.createServer(this.api.express);
 
         this.server.on("error", this.onError);
@@ -92,10 +88,8 @@ export default class ServerController {
      * When the API got and error. Will exit and
      * @param error
      */
-    public onError(error: any)
-    {
-        if (error.syscall !== "listen")
-        {
+    public onError(error: any) {
+        if (error.syscall !== "listen") {
             throw error;
         }
 
@@ -120,8 +114,7 @@ export default class ServerController {
      * Event listener for HTTP server "listening" on target port.
      * port is setup in the .env file.
      */
-    public onListening()
-    {
+    public onListening() {
         LogHelper.log(`${config.appName} (version ${config.version}) répond sur le port: ${config.port}`);
     }
 
@@ -130,8 +123,7 @@ export default class ServerController {
      * @param errorCode
      * @param message
      */
-    public exitApi(errorCode:any, message:string)
-    {
+    public exitApi(errorCode:any, message:string) {
         LogHelper.error(message);
         process.exit(errorCode);
     }

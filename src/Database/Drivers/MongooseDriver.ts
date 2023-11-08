@@ -27,6 +27,7 @@ import Equipment from "@src/Equipment/Models/Equipment";
 import EquipmentService from "@src/Equipment/Services/EquipmentService";
 import CommunicationsService from "@src/Communications/Services/CommunicationsService";
 import Communication from "@src/Communications/Models/Communication";
+import {DbProvider} from "@database/Providers/DbProvider";
 
 
 export class MongooseDBDriver implements DBDriver {
@@ -40,6 +41,9 @@ export class MongooseDBDriver implements DBDriver {
     public providers: any;
     public config:any;
     public haveCredentials:boolean;
+
+    public connectionTrials:number = 0;
+    public connectionTrialsMax:number = 5;
 
     public plugins: any;
 
@@ -73,37 +77,50 @@ export class MongooseDBDriver implements DBDriver {
         await this.initDb();
     }
 
+    public async disconnect():Promise<void> {
+        for (let key in this.providers) {
+            const provider:DbProvider = this.providers[key];
+            await provider.disconnect();
+        }
+    }
+
     /**
      * Method mandatory in DBDriver, to init this driver.
      */
     public async initDb() {
         //await this.initMongoose();
         await this.configAddon();
-
+        await this.initProviders();
         //LogHelper.info(`[BD] Connexion à la base de données utilisateurs ...`);
+    }
 
+    public async initProviders():Promise<void> {
         //this set connection in the provider
         await this.providers.users.connect(this);
 
         //LogHelper.info(`[BD] Connexion à la base de données structurée, ouverte et liée ...`);
         await this.providers.data.connect(this);
 
-        //order is important for populate. If the schema in relation isn't declare before, it will not work.
-        this.providers.users.assign(UsersService.getInstance(User.getInstance()));
-        this.providers.users.assign(CommunicationsService.getInstance(Communication.getInstance()))
+        if (this.providers.users.isConnected) {
+            //order is important for populate. If the schema in relation isn't declare before, it will not work.
+            this.providers.users.assign(UsersService.getInstance(User.getInstance()));
+            this.providers.users.assign(CommunicationsService.getInstance(Communication.getInstance()))
+        }
 
-        const doIndexes = true;
+        if (this.providers.data.isConnected) {
+            const doIndexes = true;
 
-        this.providers.data.assign(TaxonomyService.getInstance(Taxonomy.getInstance(doIndexes)));
-        this.providers.data.assign(MediasService.getInstance(Media.getInstance(doIndexes)));
-        this.providers.data.assign(UsersHistoryService.getInstance(UserHistory.getInstance()));
+            this.providers.data.assign(TaxonomyService.getInstance(Taxonomy.getInstance(doIndexes)));
+            this.providers.data.assign(MediasService.getInstance(Media.getInstance(doIndexes)));
+            this.providers.data.assign(UsersHistoryService.getInstance(UserHistory.getInstance()));
 
-        this.providers.data.assign(PersonsService.getInstance(Person.getInstance(doIndexes)));
-        this.providers.data.assign(OrganisationsService.getInstance(Organisation.getInstance(doIndexes)));
-        this.providers.data.assign(ProjectsService.getInstance(Project.getInstance(doIndexes)));
-        this.providers.data.assign(EventsService.getInstance(Event.getInstance(doIndexes)));
-        this.providers.data.assign(PlacesService.getInstance(Place.getInstance(doIndexes)));
-        this.providers.data.assign(EquipmentService.getInstance(Equipment.getInstance(doIndexes)));
+            this.providers.data.assign(PersonsService.getInstance(Person.getInstance(doIndexes)));
+            this.providers.data.assign(OrganisationsService.getInstance(Organisation.getInstance(doIndexes)));
+            this.providers.data.assign(ProjectsService.getInstance(Project.getInstance(doIndexes)));
+            this.providers.data.assign(EventsService.getInstance(Event.getInstance(doIndexes)));
+            this.providers.data.assign(PlacesService.getInstance(Place.getInstance(doIndexes)));
+            this.providers.data.assign(EquipmentService.getInstance(Equipment.getInstance(doIndexes)));
+        }
     }
 
 
@@ -168,6 +185,17 @@ export class MongooseDBDriver implements DBDriver {
 
     public prepareUriForLoging(uri:string):string {
         return prepareUriForLoging(uri);
+    }
+
+    public isConnected() {
+        let isProviderDisconnected:boolean = true;
+        for (let key in this.providers) {
+            const provider:DbProvider = this.providers[key];
+            if (provider.isConnected) {
+                isProviderDisconnected = isProviderDisconnected && !provider.isConnected;
+            }
+        }
+        return !isProviderDisconnected;
     }
 
 }

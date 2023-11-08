@@ -10,6 +10,6 @@ api.express.set("port", config.port);
 
 //Serveur controller singleton.
 const serverController = ServerController.getInstance(api);
-serverController.start();
+if (serverController !== undefined) serverController.start();
 
 export {api, serverController};

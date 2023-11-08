@@ -5,6 +5,7 @@ import {BaseProvider} from "./DbProvider";
 import AbstractModel from "../../Abstract/Model";
 import {Service} from "../Service";
 import {DBDriver} from "../Drivers/DBDriver";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 
 export class UsersProvider extends BaseProvider implements DbProvider
@@ -42,11 +43,19 @@ export class UsersProvider extends BaseProvider implements DbProvider
      * @async
      * @return {mongoose.Connection}
      */
-    public async connect():Promise<mongoose.Connection|undefined>
+    public async connect():Promise<mongoose.Connection|boolean>
     {
-        await super.connect();
-
-        return this.connection;
+        try {
+            LogHelper.info("[BD] UserProvider Connecting to DB");
+            const serverConnection:mongoose.Connection|boolean = await super.connect();
+            if (serverConnection !== false) {
+                return this.connection;
+            }
+        }
+        catch (error:any) {
+            LogHelper.error("[BD] Can't connect to db in DataProvider", error);
+        }
+        return false;
     }
 
     public async initServicesIndexes() {

@@ -25,9 +25,12 @@ import JobScheduler from "@src/Schedule/JobScheduler";
 import {JobSheet} from "@src/Schedule/Sheet";
 import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 import {EventsRoutes} from "./Events/Routes/EventsRoutes";
-import { PlacesRoutes } from "./Places/Routes/PlacesRoutes";
+import {PlacesRoutes} from "./Places/Routes/PlacesRoutes";
 import EquipmentRoutes from "./Equipment/Routes/EquipmentRoute";
 import CommunicationsRoutes from "./Communications/Routes/CommunicationsRoutes";
+import {MonitoringRoutes} from "@src/Monitoring/Routes/MonitoringRoutes";
+import {IsMongooseConnected} from "@database/Middlewares/IsMongooseConnected";
+
 /**
  * Main class for the API
  * Use the express instance as public property.
@@ -56,24 +59,6 @@ export default class Api {
      */
     private _initMiddleware()
     {
-        /**
-         * [
-         'http://bdsolapp.devlocal',
-         'https://bdsolapp.devlocal',
-         'http://localhost:3000',
-         'https://localhost:3000',
-         'http://localhost',
-         'https://localhost',
-         'http://51.222.24.157',
-         'https://51.222.24.157',
-         'http://51.222.24.157:3000',
-         'https://51.222.24.157:3000',
-         'http://bdsol.avantagenumerique.org',
-         'https://bdsol.avantagenumerique.org',
-         'http://bdsol.avantagenumerique.org:3000',
-         'https://bdsol.avantagenumerique.org:3000'
-         ]
-         */
         // Add a list of allowed origins.
         const allowedOrigins = config.cors.allowedOrigins,
             options: cors.CorsOptions = {
@@ -159,10 +144,14 @@ export default class Api {
             {
                 baseRoute: "/static",
                 manager: new StaticContentsRoutes()
+            },
+            {
+                baseRoute: "/monitoring",
+                manager: new MonitoringRoutes()
             }
         ];
         // If dev, add admin routes.
-        if (config.environnement) {
+        if (config.environnement === 'development') {
             this.entitiesRoutes.push({
                 baseRoute: "/admin",
                 manager: new AdminRoutes()
@@ -185,6 +174,7 @@ export default class Api {
         this.mainRouter = express.Router(); //this seeem to be a "branch" independant. Middle ware pass here, and error handling are only manage into the same "router's hierarchy" may I labled.
         this.mainRouter.use(GetRequestIp.middleware());    // Set an empty user property in Request there. Would be possible to feed with more default info.
         this.mainRouter.use(PublicUserRequest.middleware());    // Set an empty user property in Request there. Would be possible to feed with more default info.
+        this.mainRouter.use(IsMongooseConnected.middleware());    // Set an empty user property in Request there. Would be possible to feed with more default info.
 
         // All public routes
         this._initPublicRoutes();
@@ -245,6 +235,7 @@ export default class Api {
     {
         /**
          * Init all the base routes
+         * We seperate this to be able to add some route that don't need session. but still keep the scope of responsability
          */
         for (const baseRoute of this.baseRoutes)
         {
@@ -278,4 +269,5 @@ export default class Api {
         this.scheduler.init(jobSheets);
 
     }
+
 }

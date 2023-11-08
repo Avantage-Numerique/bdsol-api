@@ -12,8 +12,11 @@ export interface DbProvider {
     urlPrefix:string;
     url:string;
     databaseName:string;
+    isServerUp:boolean;
+    isConnected:boolean;
 
-    connect(driver:DBDriver):Promise<mongoose.Connection|undefined>;
+    connect(driver:DBDriver):Promise<mongoose.Connection|boolean>;
+    disconnect():Promise<void>;
     assign: (service:Service) => void;
 }
 
@@ -30,18 +33,21 @@ export abstract class BaseProvider implements DbProvider {
     protected _url:string;
     protected _databaseName:string;
     protected _driver:DBDriver;
+    protected _serverIsUp:boolean;
 
     protected _debug:boolean = config.mongooseDebug;
 
     abstract _models:Array<AbstractModel>;
 
     public verbose:boolean = true;
+    public isConnected:boolean = false;
 
 
     constructor(driver:DBDriver, name='') {
         if (name !== "") {
             this.databaseName = name;
             this._driver = driver;
+            this.isServerUp = false;
         }
     }
 
@@ -50,43 +56,67 @@ export abstract class BaseProvider implements DbProvider {
      * Singleton getter in the scope of the concrete provider.
      * @return {DbProvider}
      */
-    public async connect():Promise<mongoose.Connection|undefined>
+    public async connect():Promise<mongoose.Connection|boolean>
     {
+        if (this.verbose) LogHelper.info("[BD] Testing server url");
+        await this.testConnection();
+
+        if (this.isServerUp && !this.isConnected) {
+            const url:string = `${this._driver.getConnectionUrl(this._databaseName)}`;
+            if (this.verbose) LogHelper.info("[BD] Connecting to mongo url");
+            try {
+                mongoose.set('debug', this._debug);
+                //@todo debug this, broke service create. https://thecodebarbarian.com/whats-new-in-mongoose-6-sanitizefilter.html
+                //mongoose.set('sanitizeFilter', true);
+                //maxPoolSize is 100 default
+
+                const options:any = config.db.user !== '' && config.db.password !== '' ? {
+                    authSource: 'admin',
+                    user: config.db.user,
+                    pass: config.db.password,
+                    dbName: this._databaseName
+                } : {};
+
+                this.connection = await mongoose.createConnection(url, options);
+                this.isConnected = true;
+                return this.connection;
+            }
+            catch (error:any)
+            {
+                LogHelper.error(`Can't connect to mongo server in ${this.databaseName} provider`, error);
+                return false;
+            }
+        }
+        LogHelper.error("[BD] Db server is down");
+        return false;
+    }
+
+    public async disconnect():Promise<void> {
+        this.isConnected = false;
+        if (this.connection) this.connection.close();
+    }
+
+    public async testConnection():Promise<boolean> {
         const url:string = `${this._driver.getConnectionUrl(this._databaseName)}`;
-        if (this.verbose) LogHelper.info("[BD] Connecting to mongo url");
         try {
-
-            mongoose.set('debug', this._debug);
-            //@todo debug this, broke service create. https://thecodebarbarian.com/whats-new-in-mongoose-6-sanitizefilter.html
-            //mongoose.set('sanitizeFilter', true);
-            //maxPoolSize is 100 default
-
-            /*
-            db.addUser( { user: "appBdUser",
-              pwd: "appBdUserPw,
-              roles: [ "userAdminAnyDatabase" ] } )
-
-             */
-            const options:any = config.db.user !== '' && config.db.password !== '' ? {
-                /*auth : {
-                    username: config.db.user,
-                    password: config.db.password,
-                },*/
+            const mongooseConnection = await mongoose.connect(url, {
                 authSource: 'admin',
                 user: config.db.user,
                 pass: config.db.password,
-                dbName: this._databaseName
-            } : {};
-            this.connection = await mongoose.createConnection(url, options);
+            });
 
-            return this.connection;
-        }
-        catch (error:any)
-        {
-            LogHelper.error("Can't connect to db in provider");
-            throw error;
+            LogHelper.info(`[DB][testConnection] CONNECTION TO Mongoose succeed`);
+            await mongooseConnection.connection.close();
+            this.isServerUp = true;
+            return this.isServerUp;
+
+        } catch (error) {
+            LogHelper.error(`[DB][testConnection] CONNECTION TO Mongoose failed`, error);
+            //keep _serverIsUp as false (in the constructor).
+            return this.isServerUp;
         }
     }
+
 
     /**
      * @abstract
@@ -98,7 +128,6 @@ export abstract class BaseProvider implements DbProvider {
     public assign(service:Service):void
     {
         try {
-
             if (this.verbose) LogHelper.info(`[DB] assigning ${service.constructor.name} to ${this.constructor.name}`);
             // we may can delete the model's provider property because everything is already handler within the model's connecion set here.
 
@@ -136,8 +165,7 @@ export abstract class BaseProvider implements DbProvider {
      * This is the models
      * @param model
      */
-    public addModel(model:AbstractModel)
-    {
+    public addModel(model:AbstractModel) {
         if (this._models === undefined && typeof this._models === "undefined") {
             this._models = [];
         }
@@ -192,5 +220,12 @@ export abstract class BaseProvider implements DbProvider {
 
     public set databaseName(name) {
         this._databaseName = name;
+    }
+
+    public get isServerUp():boolean {
+        return this._serverIsUp;
+    }
+    public set isServerUp(value:boolean) {
+        this._serverIsUp = value;
     }
 }

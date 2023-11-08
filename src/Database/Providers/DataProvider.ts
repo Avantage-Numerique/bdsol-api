@@ -46,7 +46,7 @@ export class DataProvider extends BaseProvider implements DbProvider
      * Connect the provider to mongo via mongoose.Connection.
      * @return {mongoose.Connection}
      */
-    public async connect():Promise<mongoose.Connection|undefined> {
+    public async connect():Promise<mongoose.Connection|boolean> {
         try {
             LogHelper.info("[BD] DataProvider Connecting to DB");
             await super.connect();
@@ -56,7 +56,7 @@ export class DataProvider extends BaseProvider implements DbProvider
         catch (error:any) {
             LogHelper.error("[BD] Can't connect to db in DataProvider");
         }
-        return undefined;
+        return false;
     }
     public async initServicesIndexes() {
         await super.initServicesIndexes();
@@ -65,6 +65,8 @@ export class DataProvider extends BaseProvider implements DbProvider
     public addService(service:Service) {
         super.addService(service);
     }
+
+
     /**
      * Assign a model to this provider.
      * @param model

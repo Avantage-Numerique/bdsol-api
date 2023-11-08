@@ -130,7 +130,7 @@ abstract class AbstractRoute implements RouteContract
 
 
     /**
-     * Build up the response for the tempalte route, (only getDoc for now).
+     * Build up the response for the template route, (only getDoc for now).
      * @param appResponse {ApiResponseContract}
      * @param req {Request}
      * @param res {Response}
