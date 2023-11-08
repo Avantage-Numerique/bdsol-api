@@ -17,7 +17,6 @@ export class IsMongooseConnected {
          * @return Promise<Response<any, Record<string, any>> | undefined>
          */
         return async function (req: Request, res: Response, next: NextFunction) {
-            const server:ServerController|undefined = ServerController.getInstance(null);
             if (ServerController.database) {
                 if (ServerController.database.isConnected()) {
                     LogHelper.info("[DB][Middleware] database is connected ! passing to next");
