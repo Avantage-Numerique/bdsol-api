@@ -32,7 +32,7 @@ class MonitoringController {
         return MonitoringController._instance;
     }
 
-    public async statusesLayout(requestData: any={}): Promise<string> {
+    public async statusesLayout(): Promise<string> {
 
         const index = new PublicTemplate("status");//tempalte have already a default in the EmailContent.Prepare.
         const title:string = `Status de ${config.appName}`;

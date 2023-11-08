@@ -170,7 +170,7 @@ class OrganisationsController extends AbstractController {
         const users:mongoose.Model<any> = User.getInstance().mongooseModel;
         const taxonomies:mongoose.Model<any> = Taxonomy.getInstance().mongooseModel;
         const media:mongoose.Model<any> = Media.getInstance().mongooseModel;
-        const equipment:mongoose.Model<any> = Equipment.getInstance().mongooseModel;
+        //const equipment:mongoose.Model<any> = Equipment.getInstance().mongooseModel;
 
         //await equipment.populate(results, {path: "equipment.equipment"});
         await taxonomies.populate(results, {path: "offers.skills"});

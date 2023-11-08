@@ -56,10 +56,9 @@ class StaticContentsController implements ControllerContract {
 
     /**
      * @method list List entity documents with research terms from database
-     * @param {any} requestData - Research terms { "nom":"Jean" }
      * @return {ApiResponseContract} Promise containing a list of documents
      */
-    public async getLicencesContent(requestData: any): Promise<ApiResponseContract> {
+    public async getLicencesContent(): Promise<ApiResponseContract> {
 
         try {
             if (this.licences !== null) {
