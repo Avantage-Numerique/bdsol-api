@@ -16,7 +16,7 @@ const RestoreDb = async (dbName: string) => {
     FileStorage.createPathIfNotExist(path);
 
     await MongoSpawn('mongorestore', {
-        uri: `${db.getConnectionUrl(dbName)}`,
+        uri: `${db.connectionUrl(dbName)}`,
         dbName: dbName,
         archive: `${path}/${restoreFileName('distant-bdsol-data', '20231006', '1456')}`,
         gzip: true

@@ -6,6 +6,7 @@ import {DBDriver, MongooseDBDriver} from "../../Database/DatabaseDomain";
 import {ReasonPhrases, StatusCodes} from 'http-status-codes';
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import Api from "../../api";
+import {buildConnectionUrlParams} from "@database/Drivers/Connection";
 
 /**
  * Manage all the serveur actions and connect the app to the ROUTE.
@@ -54,7 +55,7 @@ export default class ServerController {
         LogHelper.info(`[BD] Initiation du driver ${config.db.driver} de la base de données.`);
 
         if (config.db.driver === 'mongodb') {
-            ServerController.database = new MongooseDBDriver();
+            ServerController.database = new MongooseDBDriver(buildConnectionUrlParams(config.db));
             return;
         }
     }

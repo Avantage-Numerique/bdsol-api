@@ -2,26 +2,38 @@ import config from "@src/config";
 
 
 interface MongoDbUrlParamsContract {
-    driverPrefix?:string,
-    haveCredentials?:boolean,
-    isSRV?:boolean,
-    db?:any
+    driverPrefix:string,
+    haveCredentials:boolean,
+    isSRV:boolean,
+    db:any,
+    addAuthSource:boolean
 }
 
-const defaultUrlParams:MongoDbUrlParamsContract = {
-    driverPrefix:config.db.prefix,
-    haveCredentials:true,
-    isSRV:false,
-    db: config.db
-};
+const buildConnectionUrlParams = (dbConfig:any):MongoDbUrlParamsContract => {
+    return {
+        driverPrefix: dbConfig.prefix,
+        haveCredentials: (dbConfig.user !== '' && dbConfig.password !== ''),
+        isSRV: dbConfig.prefix.includes('+srv'),
+        db: dbConfig,
+        addAuthSource: dbConfig.authSource !== '' && dbConfig.authSource !== false && typeof dbConfig.authSource !== 'undefined',
+    }
+}
+
+const defaultUrlParams:MongoDbUrlParamsContract = buildConnectionUrlParams(config.db);
 
 /**
  * Get the connection url in one place.
+ * @param params {MongoDbUrlParamsContract} MongoDbUrlParams parameters to get the url for the db.
  * @param db string to get the connection to mongo db.
- * @param params MongoDbUrlParams parameters to get the url for the db.
  */
-const getConnectionUrl = (db:string='bdsol-data', params:MongoDbUrlParamsContract=defaultUrlParams) => {
-    const url: string = `${getConnectionBaseUrl(params)}${db}${(params.haveCredentials ? `?authSource=${params.db.authSource}` : '')}${params.db.additionalUrlParams}`;
+const getConnectionUrl = (params:MongoDbUrlParamsContract=defaultUrlParams, db:string='') => {
+    let url: string = `${getConnectionBaseUrl(params)}${db}`;
+    const needAuthSourceQueryVar:boolean = params.haveCredentials && params.db.addAuthSource;
+    url += `${(needAuthSourceQueryVar ? `?authSource=${params.db.authSource}` : '')}`;
+
+    const queryVarsStartCaracter:string = needAuthSourceQueryVar ? '&' : '?';
+    url += typeof params.db.additionalUrlParams === 'string' && params.db.additionalUrlParams !== '' ? `${queryVarsStartCaracter}${params.db.additionalUrlParams}` : '';
+
     return url;
 }
 
@@ -30,7 +42,8 @@ const getConnectionUrl = (db:string='bdsol-data', params:MongoDbUrlParamsContrac
  * @param params MongoDbUrlParams parameters to get the url for the db.
  */
 const getConnectionBaseUrl = (params:MongoDbUrlParamsContract = defaultUrlParams) => {
-    const credential = "";//params.haveCredentials ? `${params.db.user}:${params.db.password}@` : '';
+
+    const credential = params.haveCredentials ? `${params.db.user}:${params.db.password}@` : '';
     let baseUrl = "";
     if (params.isSRV) {
         baseUrl = `${params.driverPrefix}://${credential}${params.db.host}/`;
@@ -41,4 +54,12 @@ const getConnectionBaseUrl = (params:MongoDbUrlParamsContract = defaultUrlParams
     return baseUrl;
 }
 
-export {getConnectionUrl, getConnectionBaseUrl, MongoDbUrlParamsContract};
+
+const prepareUriForLoging = (uri:string):string => {
+    let creds = uri.slice(uri.indexOf('://')+3, uri.indexOf('@'));
+    let noCreds = uri.split(creds);
+    return noCreds.join("*****:*****");
+}
+
+
+export {getConnectionUrl, getConnectionBaseUrl, MongoDbUrlParamsContract, prepareUriForLoging, buildConnectionUrlParams, defaultUrlParams};

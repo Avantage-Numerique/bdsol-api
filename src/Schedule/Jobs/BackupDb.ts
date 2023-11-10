@@ -16,7 +16,7 @@ const BackupDb = async (dbName: string) => {
     FileStorage.createPathIfNotExist(path);
 
     await MongoSpawn('mongodump', {
-        uri: `${db.getConnectionUrl(dbName)}`,
+        uri: `${db.connectionUrl(dbName)}`,
         dbName: dbName,
         archive: `${path}/${backupFileName(dbName)}`,
         gzip: true

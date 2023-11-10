@@ -6,6 +6,7 @@ import {MongoDBDriver} from "@database/Drivers/MongoDriver";
 import {MongoClient} from "mongodb";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 import ServerController from "@src/Server/Controllers/ServerController";
+import {buildConnectionUrlParams} from "@database/Drivers/Connection";
 
 class MonitoringController {
 
@@ -42,6 +43,9 @@ class MonitoringController {
         const dataStatus: boolean = await this._pingDatabase();
         const usersStatus: boolean = await this._pingDatabase("bdsol-users");
 
+        const connectedLabel:string = "Connectée";
+        const disconnectedLabel:string = "Déconnectée";
+
         return await index.render({
             context: {
                 ...EmailData,//basic app and api default string and links
@@ -52,17 +56,17 @@ class MonitoringController {
                     {
                         label: "Serveur base de donnée",
                         value: serverStatus,
-                        valueLabel: serverStatus ? "Connectée" : "Déconnectée"
+                        valueLabel: serverStatus ? connectedLabel : disconnectedLabel
                     },
                     {
                         label: "Données",
                         value: dataStatus,
-                        valueLabel: dataStatus ? "Connectée" : "Déconnectée"
+                        valueLabel: dataStatus ? connectedLabel : disconnectedLabel
                     },
                     {
                         label: "Authentification",
                         value: usersStatus,
-                        valueLabel: usersStatus ? "Connectée" : "Déconnectée"
+                        valueLabel: usersStatus ? connectedLabel : disconnectedLabel
                     }
                 ],
                 meta: {
@@ -75,7 +79,7 @@ class MonitoringController {
     }
 
     private async _isMongoServerAccessible():Promise<boolean> {
-        this.mongoDriver = new MongoDBDriver(config.db);
+        this.mongoDriver = new MongoDBDriver(buildConnectionUrlParams(config.db));
         this.mongoClient = this.mongoDriver.client;
 
         try {
@@ -94,7 +98,7 @@ class MonitoringController {
     }
 
     private async _pingDatabase(dbName:string="bdsol-data"):Promise<boolean> {
-        const driver:MongoDBDriver = new MongoDBDriver(config.db);
+        const driver:MongoDBDriver = new MongoDBDriver(buildConnectionUrlParams(config.db));
         let client:MongoClient = driver.client;
         let ping:any;
         try {

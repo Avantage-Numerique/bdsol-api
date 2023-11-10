@@ -62,8 +62,8 @@ export abstract class BaseProvider implements DbProvider {
         await this.testConnection();
 
         if (this.isServerUp && !this.isConnected) {
-            const url:string = `${this._driver.getConnectionUrl(this._databaseName)}`;
-            if (this.verbose) LogHelper.info("[BD] Connecting to mongo url");
+            const url:string = `${this._driver.connectionUrl()}`;
+            if (this.verbose) LogHelper.info(`[BD] Connecting to mongo url ${this._driver.urlToLog(url)}`);
             try {
                 mongoose.set('debug', this._debug);
                 //@todo debug this, broke service create. https://thecodebarbarian.com/whats-new-in-mongoose-6-sanitizefilter.html
@@ -71,11 +71,14 @@ export abstract class BaseProvider implements DbProvider {
                 //maxPoolSize is 100 default
 
                 const options:any = config.db.user !== '' && config.db.password !== '' ? {
-                    authSource: 'admin',
-                    user: config.db.user,
-                    pass: config.db.password,
-                    dbName: this._databaseName
+                    user: this._driver.config.user,
+                    pass: this._driver.config.password,
+                    dbName: this._databaseName,
+                    connectTimeoutMS: 300
                 } : {};
+                if (config.db.addAuthSource) {
+                    options.authSource = this._driver.config.authSource;
+                }
 
                 this.connection = await mongoose.createConnection(url, options);
                 this.isConnected = true;
@@ -97,12 +100,14 @@ export abstract class BaseProvider implements DbProvider {
     }
 
     public async testConnection():Promise<boolean> {
-        const url:string = `${this._driver.getConnectionUrl(this._databaseName)}`;
+        const url:string = `${this._driver.connectionUrl()}`;
+        LogHelper.info(`[DB][testConnection] url ${this._driver.urlToLog(url)}`);
         try {
             const mongooseConnection = await mongoose.connect(url, {
+                connectTimeoutMS: 300,
                 authSource: 'admin',
-                user: config.db.user,
-                pass: config.db.password,
+                user: this._driver.config.user,
+                pass: this._driver.config.password,
             });
 
             LogHelper.info(`[DB][testConnection] CONNECTION TO Mongoose succeed`);

@@ -2,7 +2,7 @@ import * as mongoDB from "mongodb";
 import {MongoClient, ServerApiVersion} from "mongodb";
 import config from "@src/config";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
-import {getConnectionBaseUrl, MongoDbUrlParamsContract} from "@database/Drivers/Connection";
+import {buildConnectionUrlParams, getConnectionUrl, MongoDbUrlParamsContract} from "@database/Drivers/Connection";
 
 
 export class MongoDBDriver {
@@ -16,7 +16,8 @@ export class MongoDBDriver {
     public providers: any;
     public config:any;
     public haveCredentials:boolean;
-    public connectionParams:MongoDbUrlParamsContract;
+    public urlConfig:MongoDbUrlParamsContract;
+    public timeOut:number;
 
     public plugins: any;
 
@@ -25,19 +26,10 @@ export class MongoDBDriver {
      */
     constructor(driverConfig?:any) {
         this.config = driverConfig ?? config.db;
-        this.driverPrefix = driverConfig?.prefix ?? config.db.prefix;
-        this.haveCredentials = config.db.user !== '' && config.db.password !== '';
-        this.authSource = config.db.authSource;
-        this.db = driverConfig?.db ?? 'bdsol-data';
-        this.baseUrl = '';
-        this.isSRV = this.driverPrefix.includes('+srv');
+        this.timeOut = 300;
 
-        this.connectionParams = {
-            driverPrefix:this.driverPrefix,
-            haveCredentials:this.haveCredentials,
-            isSRV:this.isSRV,
-            db: this.config
-        }
+        this.urlConfig = buildConnectionUrlParams(this.config);
+
         this.init();
     }
 
@@ -45,19 +37,20 @@ export class MongoDBDriver {
      * Method mandatory in DBDriver, to init this driver.
      */
     public async init() {
-        const url:string = getConnectionBaseUrl(this.connectionParams);
-
+        const url:string = getConnectionUrl(this.urlConfig);
+        LogHelper.info("URL Mongo Driver", this.urlToLog(url));
         this.client = new MongoClient(url, {
+                connectTimeoutMS: this.timeOut,
                 serverApi: {
                     version: ServerApiVersion.v1,
                     strict: true,
                     deprecationErrors: true,
                 },
                 auth: {
-                    username: this.connectionParams.db.user,
-                    password: this.connectionParams.db.password
+                    username: this.urlConfig.db.user,
+                    password: this.urlConfig.db.password
                 },
-                authSource: this.connectionParams.db.authSource
+                authSource: this.urlConfig.db.authSource
             }
         );
     }
@@ -72,4 +65,16 @@ export class MongoDBDriver {
     public async close() {
         await this.client?.close();
     }
+
+
+    public urlToLog(uri:string):string {
+        return prepareUriForLoging(uri);
+    }
+}
+
+
+const prepareUriForLoging = (uri:string):string => {
+    let creds = uri.slice(uri.indexOf('://')+3, uri.indexOf('@'));
+    let noCreds = uri.split(creds);
+    return noCreds.join("*****:*****");
 }

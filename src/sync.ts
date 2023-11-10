@@ -27,13 +27,12 @@ export const syncProdToStaging = async (dbName:string='bdsol-data') => {
 
         // Restore to local from the distant.
         const restoreDistantToLocalDb = MongoSpawn('mongorestore', {
-            uri: `${db.getConnectionUrl(dbName)}`,
+            uri: `${db.connectionUrl(dbName)}`,
             archive: `${distantPath}`,
             gzip:true,
         });
         //mongorestore --uri mongodb://appBdUser:appBdUserPw@localhost:27018/bdsol-data?authSource=admin --archive=D:\web\bdsol-workspace\api\localStorage\backup\db\distant\20231006-18\bdsol-data.gzip --gzip
     }
-
 }
 
 const backupFileName = (dbName:string, extension:string='gzip') => {

@@ -17,8 +17,7 @@ export class UsersProvider extends BaseProvider implements DbProvider
 
     _models:Array<AbstractModel>;
 
-    constructor( driver:DBDriver, name='')
-    {
+    constructor( driver:DBDriver, name='users') {
         super(driver, name);
         this.urlPrefix = "mongodb";
         this._services = [];
@@ -53,7 +52,7 @@ export class UsersProvider extends BaseProvider implements DbProvider
             }
         }
         catch (error:any) {
-            LogHelper.error("[BD] Can't connect to db in DataProvider", error);
+            LogHelper.error("[BD] Can't connect to db in UserProvider", error);
         }
         return false;
     }

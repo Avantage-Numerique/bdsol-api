@@ -30,7 +30,7 @@ export const backupBeforeSyncProdToStaging = async (dbName:string='bdsol-data') 
         LogHelper.info(`[Command][syncProdToStaging] dumping ${dbName} from distant config`);
         //backup distant db locally
         const backupDistantDb = await MongoSpawn('mongodump', {
-            uri: `${dbDistant.getConnectionUrl(dbName)}`,
+            uri: `${dbDistant.connectionUrl(dbName)}`,
             dbName: dbName,
             archive: `${distantPath}`,
             gzip: true
@@ -39,7 +39,7 @@ export const backupBeforeSyncProdToStaging = async (dbName:string='bdsol-data') 
         LogHelper.info(`[Command][syncProdToStaging] backuping ${dbName} before restoring from local config`);
         //Backup local ??
         const backupLocalDb = await MongoSpawn('mongodump', {
-            uri: `${db.getConnectionUrl(dbName)}`,
+            uri: `${db.connectionUrl(dbName)}`,
             dbName: dbName,
             archive: `${localPath}`,
             gzip: true

@@ -5,6 +5,7 @@
   "main": "src/api.ts",
   "private": true,
   "scripts": {
+    "testdb": "npx ts-node -r tsconfig-paths/register src/testDbConnection.ts",
     "tsc": "tsc && tsc-alias",
     "tsctest": "tsc --outDir \"../build-api\" && tsc-alias --outDir \"../build-api\"",
     "serve": "node build/src/server.js",

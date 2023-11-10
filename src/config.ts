@@ -38,9 +38,11 @@ const config:any = {
     db: {
         driver: process.env.DB_DRIVER || "mongodb",
         prefix: process.env.DB_PREFIX || "mongodb",
-        authSource: process.env.DB_AUTHSOURCE || 'admin',
+        authSource: process.env.DB_AUTHSOURCE !== "false" && process.env.DB_AUTHSOURCE !== "0" ? process.env.DB_AUTHSOURCE : '',
+        addAuthSource: process.env.DB_ADD_AUTHSOURCE === "true",
         additionalUrlParams: process.env.DB_ADDITIONAL_URL_PARAMS ? process.env.DB_ADDITIONAL_URL_PARAMS : '',// '&replicaSet=replicaset&tls=true',
         host: process.env.DB_HOST || "not set",
+        hostName: process.env.DB_HOST_NAME || "not set",
         port: process.env.DB_PORT || 27017,
         user: process.env.DB_USER || '',
         password: process.env.DB_PASSWORD || '',
@@ -53,7 +55,8 @@ const config:any = {
     localhostDb: {
         driver: process.env.LOCALHOST_DB_DRIVER || "mongodb",
         prefix: process.env.LOCALHOST_DB_PREFIX || "mongodb",
-        authSource: process.env.LOCALHOST_DB_AUTHSOURCE || 'admin',
+        authSource: process.env.LOCALHOST_DB_AUTHSOURCE !== "false" && process.env.LOCALHOST_DB_AUTHSOURCE !== "0" ? process.env.LOCALHOST_DB_AUTHSOURCE : '',
+        addAuthSource: process.env.LOCALHOST_DB_ADD_AUTHSOURCE === "true",
         additionalUrlParams: process.env.LOCALHOST_DB_ADDITIONAL_URL_PARAMS ? process.env.LOCALHOST_DB_ADDITIONAL_URL_PARAMS : '',// '&replicaSet=replicaset&tls=true',
         host: process.env.LOCALHOST_DB_HOST || "not set",
         port: process.env.LOCALHOST_DB_PORT || 27017,
@@ -68,7 +71,8 @@ const config:any = {
     distantDb: {
         driver: process.env.DISTANT_DB_DRIVER || "mongodb",
         prefix: process.env.DISTANT_DB_PREFIX || "mongodb",
-        authSource: process.env.DISTANT_DB_AUTHSOURCE || 'admin',
+        authSource: process.env.DB_AUTHSOURCE !== "false" && process.env.DB_AUTHSOURCE !== "0" ? process.env.DB_AUTHSOURCE : '',
+        addAuthSource: process.env.DB_ADD_AUTHSOURCE === "true",
         additionalUrlParams: process.env.DISTANT_DB_ADDITIONAL_URL_PARAMS ? process.env.DISTANT_DB_ADDITIONAL_URL_PARAMS : '',// '&replicaSet=replicaset&tls=true',
         host: process.env.DISTANT_DB_HOST || "not set",
         port: process.env.DISTANT_DB_PORT || 27017,
@@ -82,7 +86,8 @@ const config:any = {
     migrations: {
         driver: process.env.DB_MIGRATION_DRIVER || "mongodb",
         prefix: process.env.DB_PREFIX || "mongodb",//use the same prefix of config.db
-        authSource: process.env.DB_AUTHSOURCE || 'admin',
+        authSource: process.env.DISTANT_DB_AUTHSOURCE !== "false" && process.env.DISTANT_DB_AUTHSOURCE !== "0" ? process.env.DISTANT_DB_AUTHSOURCE : '',
+        addAuthSource: process.env.DISTANT_DB_ADD_AUTHSOURCE === "true",
         additionalUrlParams: process.env.DB_MIGRATION_ADDITIONAL_URL_PARAMS ? process.env.DB_MIGRATION_ADDITIONAL_URL_PARAMS : '',
         host: process.env.DB_MIGRATION_HOST || "not set",
         port: process.env.DB_MIGRATION_PORT || 27017,

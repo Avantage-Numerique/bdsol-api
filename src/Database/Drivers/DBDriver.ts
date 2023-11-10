@@ -11,9 +11,10 @@ export interface DBDriver {
     removeIndexes: () => void;
     initDb: () => void;
     initProviders: () => void;
-    getConnectionUrl: (db?:string) => string;
-    getConnectionBaseUrl: () => string;
+    connectionUrl: (db?:string) => string;
+    connectionBaseUrl: () => string;
     getCollection: (name:string) => any;
     getModel: (name:string) => any;
     isConnected: () => boolean;
+    urlToLog: (url:string) => void;
 }
