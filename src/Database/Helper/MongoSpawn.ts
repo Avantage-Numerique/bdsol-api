@@ -1,6 +1,6 @@
 import {spawn} from "child_process";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
-import {prepareUriForLoging} from "@database/Drivers/MongooseDriver";
+import {prepareUriForLoging} from "@database/Drivers/Connection";
 
 const MongoSpawn = async (command:string, params:any) => {
 
