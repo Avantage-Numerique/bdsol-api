@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, {Connection} from "mongoose";
 import config from "@src/config";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 import type {Service} from "@database/Service";
@@ -58,29 +58,16 @@ export abstract class BaseProvider implements DbProvider {
      */
     public async connect():Promise<mongoose.Connection|boolean>
     {
-        if (this.verbose) LogHelper.info("[BD] Testing server url");
+        if (this.verbose) LogHelper.info(`[BD] Testing server url ${this._databaseName}`);
         await this.testConnection();
 
         if (this.isServerUp && !this.isConnected) {
             const url:string = `${this._driver.connectionUrl()}`;
-            if (this.verbose) LogHelper.info(`[BD] Connecting to mongo url ${this._driver.urlToLog(url)}`);
+            if (this.verbose) LogHelper.info(`[BD] Connecting to mongo url ${this._driver.urlToLog(url)} on ${this._databaseName} database`);
             try {
                 mongoose.set('debug', this._debug);
-                //@todo debug this, broke service create. https://thecodebarbarian.com/whats-new-in-mongoose-6-sanitizefilter.html
-                //mongoose.set('sanitizeFilter', true);
-                //maxPoolSize is 100 default
 
-                const options:any = config.db.user !== '' && config.db.password !== '' ? {
-                    user: this._driver.config.user,
-                    pass: this._driver.config.password,
-                    dbName: this._databaseName,
-                    connectTimeoutMS: 300
-                } : {};
-                if (config.db.addAuthSource) {
-                    options.authSource = this._driver.config.authSource;
-                }
-
-                this.connection = await mongoose.createConnection(url, options);
+                this.connection = await this.createMongooseConnection();
                 this.isConnected = true;
                 return this.connection;
             }
@@ -101,24 +88,44 @@ export abstract class BaseProvider implements DbProvider {
 
     public async testConnection():Promise<boolean> {
         const url:string = `${this._driver.connectionUrl()}`;
-        LogHelper.info(`[DB][testConnection] url ${this._driver.urlToLog(url)}`);
+        LogHelper.info(`[DB][testConnection] url ${this._driver.urlToLog(url)} on ${this._databaseName} database`);
         try {
-            const mongooseConnection = await mongoose.connect(url, {
-                connectTimeoutMS: 300,
-                authSource: 'admin',
-                user: this._driver.config.user,
-                pass: this._driver.config.password,
-            });
+            const mongooseConnection = await this.createMongooseConnection();
 
-            LogHelper.info(`[DB][testConnection] CONNECTION TO Mongoose succeed`);
-            await mongooseConnection.connection.close();
-            this.isServerUp = true;
-            return this.isServerUp;
+            if (typeof mongooseConnection !== 'undefined') {
+                LogHelper.info(`[DB][testConnection] CONNECTION TO Mongoose succeed`);
+                await mongooseConnection.close();
+                this.isServerUp = true;
+                return this.isServerUp;
+            }
 
         } catch (error) {
             LogHelper.error(`[DB][testConnection] CONNECTION TO Mongoose failed`, error);
             //keep _serverIsUp as false (in the constructor).
             return this.isServerUp;
+        }
+        return this.isServerUp;
+    }
+
+    public async createMongooseConnection():Promise<Connection|undefined> {
+        const url:string = `${this._driver.connectionUrl()}`;
+        LogHelper.info(`[DB][createMongooseConnection] url ${this._driver.urlToLog(url)} on ${this._databaseName} database`);
+        try {
+            const options:any = config.db.user !== '' && config.db.password !== '' ? {
+                user: this._driver.config.user,
+                pass: this._driver.config.password,
+                dbName: this._databaseName,
+                connectTimeoutMS: 300
+            } : {};
+            if (config.db.addAuthSource) {
+                options.authSource = this._driver.config.authSource;
+            }
+
+            return await mongoose.createConnection(url, options);
+
+        } catch (error) {
+            LogHelper.error(`[DB][createMongooseConnection] can't create connection to mongo server with mongoose  on ${this._databaseName}`, error);
+            return;
         }
     }
 

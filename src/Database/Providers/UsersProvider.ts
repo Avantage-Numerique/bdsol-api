@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import config from "../../config";
 import type {DbProvider} from "./DbProvider";
 import {BaseProvider} from "./DbProvider";
 import AbstractModel from "../../Abstract/Model";
@@ -31,7 +30,7 @@ export class UsersProvider extends BaseProvider implements DbProvider
     public static getInstance(driver:DBDriver):DbProvider|undefined
     {
         if (UsersProvider._singleton === undefined) {
-            UsersProvider._singleton = new UsersProvider(driver, config.users.db.name);
+            UsersProvider._singleton = new UsersProvider(driver, 'bdsol-users');
         }
         return UsersProvider._singleton;
     }

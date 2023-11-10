@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import type {DbProvider} from "./DbProvider";
 import {BaseProvider} from "./DbProvider";
@@ -36,7 +35,7 @@ export class DataProvider extends BaseProvider implements DbProvider
     public static getInstance(driver:DBDriver):DbProvider
     {
         if (DataProvider._singleton === undefined) {
-            DataProvider._singleton = new DataProvider(driver, config.db.name);
+            DataProvider._singleton = new DataProvider(driver, 'bdsol-data');
         }
         return DataProvider._singleton;
     }
@@ -54,10 +53,11 @@ export class DataProvider extends BaseProvider implements DbProvider
             return this.connection;
         }
         catch (error:any) {
-            LogHelper.error("[BD] Can't connect to db in DataProvider");
+            LogHelper.error("[BD] Can't connect to db in DataProvider", error);
         }
         return false;
     }
+
     public async initServicesIndexes() {
         await super.initServicesIndexes();
     }
