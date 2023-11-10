@@ -136,7 +136,7 @@ export default class LogHelper
     }
 
     /**
-     *  @method finalLog applique des styles aux logs, les affiche et les inscrit dans un fichier log.
+     *  @method createVerbose applique des styles aux logs, les affiche et les inscrit dans un fichier log.
      *  @desc Explains syntax
      *  @see {@link https://simplernerd.com/js-console-colors/}
      *  @desc Explains supported specifier that converts "%" to types (string/json...)
