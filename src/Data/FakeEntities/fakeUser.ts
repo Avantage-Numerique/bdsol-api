@@ -12,7 +12,8 @@ export const fakeUser:Array<UserContract> = [
     changePassword: {
         token: null,
         expireDate: new Date()
-    }
+    },
+    tos: { accepted:true, acceptedOn: new Date()}
 },
 {
     username: 'SonofaPancak',
@@ -25,7 +26,8 @@ export const fakeUser:Array<UserContract> = [
     changePassword: {
         token: null,
         expireDate: new Date()
-    }
+    },
+    tos: { accepted:true, acceptedOn: new Date()}
 },
 {
     username: 'Vincenzo',
@@ -38,7 +40,8 @@ export const fakeUser:Array<UserContract> = [
     changePassword: {
         token: null,
         expireDate: new Date()
-    }
+    },
+    tos: { accepted:true, acceptedOn: new Date()}
 },
 {
     username: 'mam',
@@ -51,7 +54,8 @@ export const fakeUser:Array<UserContract> = [
     changePassword: {
         token: null,
         expireDate: new Date()
-    }
+    },
+    tos: { accepted:true, acceptedOn: new Date()}
 },
 {
     username: 'Simon',
@@ -64,7 +68,8 @@ export const fakeUser:Array<UserContract> = [
     changePassword: {
         token: null,
         expireDate: new Date()
-    }
+    },
+    tos: { accepted:true, acceptedOn: new Date()}
 },
 
 ]
