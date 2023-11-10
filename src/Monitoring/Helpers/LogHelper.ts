@@ -162,7 +162,7 @@ export default class LogHelper
             const d = new Date;
             const date = d.toLocaleDateString('en-CA');
 
-            const path = "./logs/";
+            const path = `${config.basePath}/logs/`;
             const allFileName = date.toString()+"-all.log";
 
             fs.open(path+allFileName, 'a', function(err, fd){
