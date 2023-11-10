@@ -150,6 +150,12 @@ class AuthentificationController
      */
     public async register(requestData:any): Promise<ApiResponseContract>
     {
+        if(requestData?.tos?.accepted !== true)
+            return ErrorResponse.create(
+                new Error(ReasonPhrases.OK),
+                StatusCodes.OK,
+                'User need to accept terms of service.'
+            );
         const verificationToken = crypto.randomBytes(AuthentificationController.verifyTokenLength).toString('hex');
         const verificationExpirationDate = new Date(); //Expiration date setters
         verificationExpirationDate.setDate(verificationExpirationDate.getDate()+1);
@@ -164,6 +170,10 @@ class AuthentificationController
                 isVerified:false,
                 token: verificationToken,
                 expireDate: verificationExpirationDate,
+            },
+            tos: {
+                accepted: true,
+                acceptedOn: new Date
             }
         }
 
@@ -319,7 +329,8 @@ class AuthentificationController
                 expireDate30MinutesLess.setMinutes(expireDate30MinutesLess.setMinutes()-30);
                 if(targetUser?.changePassword?.expireDate !== undefined &&
                     now.valueOf() - expireDate30MinutesLess < (5*60*1000))
-                    return ErrorResponse.create(new Error("5 minutes hasn't elapsed since last send"), StatusCodes.OK, "You need to wait 5 minutes before sending a new email");
+                    //Need to wait 5 min for new token
+                    return SuccessResponse.create({}, StatusCodes.OK, "Sent reset password email")
 
                 //Update user with new changePassword token and expire date
                 const passwordToken = crypto.randomBytes(AuthentificationController.verifyTokenLength).toString('hex');
@@ -344,11 +355,13 @@ class AuthentificationController
                     EmailForgottenPasswordContent(welcomeName, config.frontendAppUrl+"/compte/nouveau-mot-de-passe/"+passwordToken)
                     );
                 forgotPasswordEmail.send();
-                return SuccessResponse.create({email : targetUser.email}, StatusCodes.OK, "Sent reset password email")
+                return SuccessResponse.create({}, StatusCodes.OK, "Sent reset password email")
             }
-            return ErrorResponse.create(new Error('Invalid email'), StatusCodes.BAD_REQUEST, 'Invalid email')
+            //Invalid email (for security we always return same response)
+            return SuccessResponse.create({}, StatusCodes.OK, "Sent reset password email")
         }
-        return ErrorResponse.create(new Error('Invalid request data'), StatusCodes.BAD_REQUEST, 'Invalid request data')
+        //Invalid requestData
+        return SuccessResponse.create({}, StatusCodes.OK, "Sent reset password email")
     }
 
     /**
@@ -467,7 +480,8 @@ class AuthentificationController
                     expireDateOneDayLess.setDate(expireDateOneDayLess.getDate()-1);
 
                     if(now.valueOf() - expireDateOneDayLess < (5*60*1000)){
-                        return ErrorResponse.create(new Error("5 minutes hasn't elapsed since last send"), StatusCodes.OK, "You need to wait 5 minutes before sending a new email");
+                        //5 minutes delay inbetween emails
+                        return SuccessResponse.create({}, StatusCodes.OK, "Sent verification email")
                     }
 
                     //Update user with new token and expire date
@@ -495,14 +509,17 @@ class AuthentificationController
                         EmailConfirmationContent(welcomeName, config.frontendAppUrl+"/compte/verifier-compte/"+verificationToken)
                         );
                         verifyAccountEmail.send();
-                    return SuccessResponse.create({email: targetUser.email}, StatusCodes.OK, "Email has been sent")
+                    return SuccessResponse.create({}, StatusCodes.OK, "Sent verification email")
                         
                 }
-                return ErrorResponse.create(new Error("User is already verified"), StatusCodes.IM_A_TEAPOT, "User is already verified")
+                //user already verified (for security we always send same message)
+                return SuccessResponse.create({}, StatusCodes.OK, "Sent verification email")
             }
-            return ErrorResponse.create(new Error('Invalid email'), StatusCodes.BAD_REQUEST, 'Invalid email');
+            //invalid email
+            return SuccessResponse.create({}, StatusCodes.OK, "Sent verification email")
         }
-        return ErrorResponse.create(new Error('Invalid email'), StatusCodes.BAD_REQUEST, 'Invalid email');
+        //invalid email
+        return SuccessResponse.create({}, StatusCodes.OK, "Sent verification email")
     }
 
 }
