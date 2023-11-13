@@ -69,6 +69,10 @@ export class User extends AbstractModel {
                 role: {
                     type:String
                 },
+                tos: {
+                    accepted: { type: Boolean, default:false},
+                    acceptedOn: { type: Date }
+                },
                 verify: {
                     isVerified: {type: Boolean, default:false},
                     token: {type: String},

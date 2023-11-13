@@ -30,7 +30,7 @@ class SearchRoutes extends AbstractRoute {
      * @public @method
      */
     public setupPublicRoutes(): express.Router {
-        this.routerInstance.post('/type', [this.searchByTypeHandler.bind(this), this.routeSendResponse.bind(this)]);
+        this.routerInstance.post('/type', [this.searchByTypeAndCategoryHandler.bind(this), this.routeSendResponse.bind(this)]);
         this.routerInstance.get('/', [this.fullSearchHandler.bind(this), this.routeSendResponse.bind(this)]);
         this.routerInstance.get('/all', [this.aggregateAllHandler.bind(this), this.routeSendResponse.bind(this)]);
         this.routerInstance.get('/regex', [this.textSearchSuggestionsHandler.bind(this), this.routeSendResponse.bind(this)]);
@@ -53,11 +53,16 @@ class SearchRoutes extends AbstractRoute {
     }
 
 
-    public async searchByTypeHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
+    public async searchByTypeAndCategoryHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
         const type:string = req.body?.data?.type ?? "";
         const skip:number = req.body?.data?.skip ?? 0;
+        /* const categories = {
+            domains : req.body?.data?.domains ?? "",
+            technologies : req.body?.data?.technologies ?? "",
+            skills : req.body?.data?.skills ?? ""
+        } */
         if(typeof type === 'string'){
-            res.serviceResponse = await this.searchResults_instance.searchByType(type, skip)
+            res.serviceResponse = await this.searchResults_instance.searchByTypeAndCategory(type, skip)//, categories)
         }
         return next();
     }

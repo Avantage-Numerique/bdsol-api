@@ -38,10 +38,25 @@ class SearchResults {
     }
 
 
-    public async searchByType(type:string, skip:number){
+    public async searchByTypeAndCategory(type:string, skip:number){//, categories:any){
         const controller = EntityControllerFactory.getControllerFromEntity(type);
         if(controller !== undefined){
-            const result = await controller.list({})//{skip: skip ?? 0});
+            const result = await controller.list({})
+                /* {
+                    $or: [
+                        //Domains
+                        {"domains.domain" : categories.domains},
+                        //Occupations
+                        {"occupations.skills" : categories.skills},
+                        {"occupations.skills" : categories.technologies},
+                        //Offers
+                        {"offers.skills" : categories.skills},
+                        {"offers.skills" : categories.technologies},
+                        //project/event skills
+                        {"skills" : categories.skills},
+                        {"skills" : categories.technologies},
+                    ]}) */
+                    //{skip: skip ?? 0});
             return result;
         }
         return ErrorResponse.create(new Error("Type doesn't exist"), StatusCodes.BAD_REQUEST, "Type doesn't exist");
