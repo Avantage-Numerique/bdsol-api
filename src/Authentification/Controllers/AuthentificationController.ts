@@ -265,6 +265,7 @@ class AuthentificationController
      * Allow to change user's password for newPassword if userId and oldPassword corresponds to user.password hash.
      * @param {ObjectId} userId objectId of user in database that ask request for change
      * @param {string} oldPassword user's input
+     * @param {string} newPassword user's input
      * @return {Promise} of type Any.
      * @public
      */
@@ -318,7 +319,7 @@ class AuthentificationController
      */
     public async sendResetPasswordLinkByEmail(email:string):Promise<any> {
         //Check if email is defined and string and length > 0
-        if(typeof email == 'string' && email.length > 0){
+        if(typeof email === 'string' && email.length > 0){
             //Check if email corresponds to a user in the database
             const targetUser = await User.getInstance().mongooseModel.findOne({ email : email });
             if(targetUser !== null){
@@ -371,6 +372,7 @@ class AuthentificationController
     /**
      * Allow user to reset his password by email.
      * @param {string} email email of user to send email to reset password
+     * @param {string} password email of user to send email to reset password
      * @return {Promise} of type Any.
      * @public
      */
