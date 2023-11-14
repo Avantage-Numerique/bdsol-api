@@ -14,10 +14,10 @@ import config from "../../config";
 import crypto from "crypto";
 import EmailNotification from "@src/Notifications/EmailNotification";
 import {getUserWelcome} from "@src/Users/Helpers/UserEmailHelper";
-import { EmailConfirmationContent } from "@src/Templates/Contents/EmailConfirmationContent";
-import { isObjectIdOrHexString } from "mongoose";
-import { EmailForgottenPasswordContent } from "@src/Templates/Contents/EmailForgottenPasswordContent";
-import { EmailPasswordChangedContent } from "@src/Templates/Contents/EmailPasswordChangedContent";
+import {EmailConfirmationContent} from "@src/Templates/Contents/EmailConfirmationContent";
+import {isObjectIdOrHexString} from "mongoose";
+import {EmailForgottenPasswordContent} from "@src/Templates/Contents/EmailForgottenPasswordContent";
+import {EmailPasswordChangedContent} from "@src/Templates/Contents/EmailPasswordChangedContent";
 
 class AuthentificationController
 {
@@ -177,10 +177,10 @@ class AuthentificationController
             }
         }
 
-        const createdDocumentResponse = await this.service.insert(userObject);
-
+        let createdDocumentResponse = await this.service.insert(userObject);
         if (createdDocumentResponse && typeof createdDocumentResponse !== 'undefined' && !createdDocumentResponse.error)
         {
+            createdDocumentResponse.data = this.userModel.dataTransfertObject(createdDocumentResponse.data);
             //Send email to verify user
             const welcomeName = getUserWelcome(createdDocumentResponse.data);
             const verifyAccountEmail:EmailNotification = new EmailNotification(
@@ -190,7 +190,7 @@ class AuthentificationController
                 },
                 EmailConfirmationContent(welcomeName, config.frontendAppUrl+"/compte/verifier-compte/"+verificationToken)
             );
-            verifyAccountEmail.send();
+            await verifyAccountEmail.send();
 
             //Return create user response
             return createdDocumentResponse;
@@ -230,12 +230,15 @@ class AuthentificationController
 
         try
         {
-            LogHelper.info(`Vérification des informations fournis par ${username} ...`);
-            if (ServerController.database.driverPrefix === 'mongodb')
+            LogHelper.info(`Vérification des informations fournis par ${username} on database driver ${ServerController.database.driverPrefix}`);
+            if (ServerController.database.driverPrefix === 'mongodb' || ServerController.database.driverPrefix === 'mongodb+srv')
             {
                 //Note: Service removed password with the DTO, soo we used mongooseModel directly
                 //Refactoring : We should manage internal and external responses seperately in different services ...
+                LogHelper.info("mongooseModel ", User.getInstance().mongooseModel);
                 const user = await User.getInstance().mongooseModel.findOne(targetUser).lean();
+
+                LogHelper.info("mongooseModel user : ", User.getInstance().dataTransfertObject(user));
                 let response:any;
                 if (user !== null) {
                     response = SuccessResponse.create(user, StatusCodes.OK, ReasonPhrases.OK);
@@ -248,13 +251,14 @@ class AuthentificationController
                         return response;
                     }
                 }
-                return ErrorResponse.create(new Error("Connection refusée"), StatusCodes.UNAUTHORIZED);
             }
         }
         catch (errors: any)
         {
             return ErrorResponse.create(errors, StatusCodes.INTERNAL_SERVER_ERROR);
         }
+
+        return ErrorResponse.create(new Error("Connection refusée"), StatusCodes.UNAUTHORIZED);
     }
 
     /**

@@ -38,7 +38,6 @@ export class MongoDBDriver {
      */
     public async init() {
         const url:string = getConnectionUrl(this.urlConfig);
-        LogHelper.info("URL Mongo Driver", this.urlToLog(url));
         this.client = new MongoClient(url, {
                 connectTimeoutMS: this.timeOut,
                 serverApi: {

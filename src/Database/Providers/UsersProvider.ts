@@ -35,6 +35,13 @@ export class UsersProvider extends BaseProvider implements DbProvider
         return UsersProvider._singleton;
     }
 
+    public static instance():DbProvider|undefined {
+        if (UsersProvider._singleton !== undefined) {
+            return UsersProvider._singleton;
+        }
+        return undefined;
+    }
+
 
     /**
      * Connect this provider to mongoose.

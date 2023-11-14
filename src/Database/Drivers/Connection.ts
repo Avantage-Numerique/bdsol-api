@@ -10,13 +10,14 @@ interface MongoDbUrlParamsContract {
 }
 
 const buildConnectionUrlParams = (dbConfig:any):MongoDbUrlParamsContract => {
+    const prefix:string = dbConfig.prefix ?? "mongodb";
     return {
-        driverPrefix: dbConfig.prefix,
+        driverPrefix: prefix,
         haveCredentials: (dbConfig.user !== '' && dbConfig.password !== ''),
-        isSRV: dbConfig.prefix.includes('+srv'),
+        isSRV: prefix.includes('+srv'),
         db: dbConfig,
         addAuthSource: dbConfig.authSource !== '' && dbConfig.authSource !== false && typeof dbConfig.authSource !== 'undefined',
-    }
+    } as MongoDbUrlParamsContract;
 }
 
 const defaultUrlParams:MongoDbUrlParamsContract = buildConnectionUrlParams(config.db);

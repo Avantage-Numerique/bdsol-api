@@ -56,6 +56,7 @@ abstract class AbstractModel {
             this.connectionIsSetup())
         {
             this.mongooseModel = this.provider.connection.model(this.modelName, this.schema);
+            LogHelper.info(`Model init ${this.modelName} schema`, this.mongooseModel, " on conn. state : ", this.provider.connection.readyState);
         }
     }
 

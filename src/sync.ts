@@ -8,8 +8,9 @@ export const syncProdToStaging = async (dbName:string='bdsol-data') => {
     if (config.environnement === 'staging' || config.environnement === 'development') {
 
         LogHelper.info(`[Command][syncProdToStaging] ${dbName}`);
-        const dbDistant = new MongooseDBDriver(config.distantDb);
-        const db = new MongooseDBDriver(config.localhostDb);
+        //const dbDistant = new MongooseDBDriver(config.distantDb);
+       // const db = new MongooseDBDriver(config.localhostDb);
+        const db = new MongooseDBDriver(config.db);
 
 
         const basePath:string = "D:/web/bdsol-workspace/api/localStorage/backup/db";
@@ -46,5 +47,5 @@ const backupFolderName = () => {
     return "20231006-21";
 }
 
-syncProdToStaging('bdsol-staging');
-syncProdToStaging('bdsol-users');
+syncProdToStaging('bdsol-data');
+//syncProdToStaging('bdsol-users');

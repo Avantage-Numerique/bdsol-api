@@ -59,17 +59,21 @@ export abstract class BaseProvider implements DbProvider {
     public async connect():Promise<mongoose.Connection|boolean>
     {
         if (this.verbose) LogHelper.info(`[BD] Testing server url ${this._databaseName}`);
-        await this.testConnection();
+        //await this.testConnection();//removing for testing with mongo atlas.
 
-        if (this.isServerUp && !this.isConnected) {
+        if (!this.isConnected) {//this.isServerUp &&
             const url:string = `${this._driver.connectionUrl()}`;
-            if (this.verbose) LogHelper.info(`[BD] Connecting to mongo url ${this._driver.urlToLog(url)} on ${this._databaseName} database`);
+            if (this.verbose) LogHelper.info(`[BD] Connecting to mongo url on ${this._databaseName} database`);
             try {
                 mongoose.set('debug', this._debug);
 
                 this.connection = await this.createMongooseConnection();
-                this.isConnected = true;
-                return this.connection;
+                if (typeof this.connection !== 'undefined') {
+                    this.isConnected = true;
+
+                    if (this.verbose) LogHelper.info(`[BD] Connection succeed to mongo url ${this._driver.urlToLog(url)} on ${this._databaseName} database with this state ${this.connection.readyState}`);
+                    return this.connection;
+                }
             }
             catch (error:any)
             {
@@ -87,20 +91,26 @@ export abstract class BaseProvider implements DbProvider {
     }
 
     public async testConnection():Promise<boolean> {
-        const url:string = `${this._driver.connectionUrl()}`;
-        LogHelper.info(`[DB][testConnection] url ${this._driver.urlToLog(url)} on ${this._databaseName} database`);
+        if (this.verbose) LogHelper.info(`[DB][testConnection] on ${this._databaseName} database`);
+
+        if (this.connection && this.connection.readyState === 1) {
+            if (this.verbose) LogHelper.info(`[DB][testConnection] already connected to database ${this._databaseName} `);
+            this.isServerUp = true;
+            return this.isServerUp;
+        }
+
         try {
             const mongooseConnection = await this.createMongooseConnection();
 
             if (typeof mongooseConnection !== 'undefined') {
-                LogHelper.info(`[DB][testConnection] CONNECTION TO Mongoose succeed`);
+                if (this.verbose) LogHelper.info(`[DB][testConnection] CONNECTION TO Mongoose succeed`);
                 await mongooseConnection.close();
                 this.isServerUp = true;
                 return this.isServerUp;
             }
 
         } catch (error) {
-            LogHelper.error(`[DB][testConnection] CONNECTION TO Mongoose failed`, error);
+            if (this.verbose) LogHelper.error(`[DB][testConnection] CONNECTION TO Mongoose failed`, error);
             //keep _serverIsUp as false (in the constructor).
             return this.isServerUp;
         }
@@ -115,13 +125,15 @@ export abstract class BaseProvider implements DbProvider {
                 user: this._driver.config.user,
                 pass: this._driver.config.password,
                 dbName: this._databaseName,
-                connectTimeoutMS: 300
+                connectTimeoutMS: 300,
+                useUnifiedTopology: true,
+                useNewUrlParser: true
             } : {};
             if (config.db.addAuthSource) {
                 options.authSource = this._driver.config.authSource;
             }
 
-            return await mongoose.createConnection(url, options);
+            return await mongoose.createConnection(url, options).asPromise();//ajout du asPromise avec le
 
         } catch (error) {
             LogHelper.error(`[DB][createMongooseConnection] can't create connection to mongo server with mongoose  on ${this._databaseName}`, error);

@@ -162,16 +162,16 @@ export default class LogHelper
             const d = new Date;
             const date = d.toLocaleDateString('en-CA');
 
-            const path = `${config.basePath}/logs/`;
+            const path = config.basepath ? `${config.basepath}/logs/` : "./logs/";
             const allFileName = date.toString()+"-all.log";
 
             fs.open(path+allFileName, 'a', function(err, fd){
                 if (err)
-                    console.log("Can't log into file")
+                    console.log("Can't log into file", err)
                 else {
                     fs.write(fd, verbose + data + "\n", (err) => {
                         if (err)
-                            console.log(err.message);
+                            console.log(err.message, err);
                     });
                 }
             });
@@ -179,11 +179,11 @@ export default class LogHelper
                 const errorFileName = date.toString()+"-error.log"
                 fs.open(path+errorFileName, 'a', function(err, fd){
                     if (err)
-                        console.log("Can't log into file")
+                        console.log("Can't log into file", err)
                     else {
                         fs.write(fd, verbose + data + "\n", (err) => {
                             if (err)
-                                console.log(err.message);
+                                console.log(err.message, err);
                         });
                     }
                 });

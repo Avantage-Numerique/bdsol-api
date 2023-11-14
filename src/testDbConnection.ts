@@ -1,9 +1,8 @@
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 import config from "@src/config";
 import {MongooseDBDriver} from "@database/Drivers/MongooseDriver";
-import {buildConnectionUrlParams} from "@database/Drivers/Connection";
 
-import {MongoClient} from 'mongodb';
+import {MongoClient, ServerApiVersion} from 'mongodb';
 import {MongoDBDriver} from "@database/Drivers/MongoDriver";
 
 export const testDbConnection = async () => {
@@ -11,7 +10,7 @@ export const testDbConnection = async () => {
     if (config.environnement === 'staging' || config.environnement === 'development') {
 
         LogHelper.info(`[Command][testDbConnection]`);
-        const driver:MongooseDBDriver = new MongooseDBDriver(buildConnectionUrlParams(config.db));
+        const driver:MongooseDBDriver = new MongooseDBDriver(config.db);
 
         const logPrefix:string = "[Command][testDbConnection] ";
         LogHelper.info(`${logPrefix} Full : ${driver.urlToLog(driver.connectionUrl())}`);
@@ -20,8 +19,8 @@ export const testDbConnection = async () => {
     }
 }
 
-/*async function run() {
-    const driver:MongooseDBDriver = new MongooseDBDriver(buildConnectionUrlParams(config.db));
+async function run() {
+    const driver:MongooseDBDriver = new MongooseDBDriver(config.db);
     const uri = driver.connectionUrl();
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
     const client = new MongoClient(uri, {
@@ -41,7 +40,7 @@ export const testDbConnection = async () => {
         // Ensures that the client will close when you finish/error
         await client.close();
     }
-}*/
+}
 
 const driver:MongoDBDriver = new MongoDBDriver(config.db);
 let client:MongoClient = driver.client;
@@ -65,6 +64,6 @@ async function pingDatabase(dbName:string="bdsol-data"):Promise<void> {
     }
 }
 //pingDatabase('bdsol-data');
-pingDatabase('bdsol-users');
+//pingDatabase('bdsol-users');
 
-//run().catch(console.dir);
+run().catch(console.dir);

@@ -1,5 +1,4 @@
 import * as mongoDB from "mongodb";
-import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import mongoose from "mongoose";
 import type {DBDriver} from "./DBDriver";
@@ -28,7 +27,13 @@ import EquipmentService from "@src/Equipment/Services/EquipmentService";
 import CommunicationsService from "@src/Communications/Services/CommunicationsService";
 import Communication from "@src/Communications/Models/Communication";
 import {DbProvider} from "@database/Providers/DbProvider";
-import {getConnectionBaseUrl, getConnectionUrl, MongoDbUrlParamsContract, prepareUriForLoging} from "./Connection";
+import {
+    buildConnectionUrlParams,
+    getConnectionBaseUrl,
+    getConnectionUrl,
+    MongoDbUrlParamsContract,
+    prepareUriForLoging
+} from "./Connection";
 
 
 export class MongooseDBDriver implements DBDriver {
@@ -52,8 +57,8 @@ export class MongooseDBDriver implements DBDriver {
     /**
      * Constructor fo this driver. Object is created 1 time in  ServerController.
      */
-    constructor(driverConfig:MongoDbUrlParamsContract) {
-        this.urlConfig = driverConfig;
+    constructor(config:any) {
+        this.urlConfig =  buildConnectionUrlParams(config);
         this.driverPrefix = this.urlConfig.driverPrefix ?? config.db.prefix;
         this.haveCredentials = typeof this.urlConfig.haveCredentials !== 'undefined' ? this.urlConfig.haveCredentials : (this.urlConfig.db.user !== '' && this.urlConfig.db.password !== '');
         this.isSRV = this.urlConfig.isSRV;
@@ -61,7 +66,7 @@ export class MongooseDBDriver implements DBDriver {
         this.client = null;
         this.db = null;
         this.baseUrl = '';
-        this.config = this.urlConfig.db ?? config.db;
+        this.config = this.urlConfig.db;
         this.providers = {
             users: UsersProvider.getInstance(this),
             data: DataProvider.getInstance(this)
