@@ -29,7 +29,6 @@ import {PlacesRoutes} from "./Places/Routes/PlacesRoutes";
 import EquipmentRoutes from "./Equipment/Routes/EquipmentRoute";
 import CommunicationsRoutes from "./Communications/Routes/CommunicationsRoutes";
 import {MonitoringRoutes} from "@src/Monitoring/Routes/MonitoringRoutes";
-import {IsMongooseConnected} from "@database/Middlewares/IsMongooseConnected";
 
 /**
  * Main class for the API
@@ -174,7 +173,7 @@ export default class Api {
         this.mainRouter = express.Router(); //this seeem to be a "branch" independant. Middle ware pass here, and error handling are only manage into the same "router's hierarchy" may I labled.
         this.mainRouter.use(GetRequestIp.middleware());    // Set an empty user property in Request there. Would be possible to feed with more default info.
         this.mainRouter.use(PublicUserRequest.middleware());    // Set an empty user property in Request there. Would be possible to feed with more default info.
-        this.mainRouter.use(IsMongooseConnected.middleware());    // Set an empty user property in Request there. Would be possible to feed with more default info.
+        //this.mainRouter.use(IsMongooseConnected.middleware());    // Set an empty user property in Request there. Would be possible to feed with more default info.
 
         // All public routes
         this._initPublicRoutes();

@@ -5,8 +5,8 @@ import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
 import {MongoDBDriver} from "@database/Drivers/MongoDriver";
 import {MongoClient} from "mongodb";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
-import ServerController from "@src/Server/Controllers/ServerController";
 import {UsersProvider} from "@database/Providers/UsersProvider";
+import {DataProvider} from "@database/Providers/DataProvider";
 
 class MonitoringController {
 
@@ -53,18 +53,13 @@ class MonitoringController {
                 title: `${title}`,
                 body: `${body}`,
                 statuses: [
-                    {
-                        label: "Users",
-                        value: UsersProvider.instance()?.connection.readyState,
-                        valueLabel: `connection status ${UsersProvider.instance()?.connection.readyState}`
-                    }
                     /*{
                         label: "Serveur base de donnée",
                         value: serverStatus,
                         valueLabel: serverStatus ? connectedLabel : disconnectedLabel
                     },
                     {
-                        label: "Données",
+                        label: "Données accessible ?",
                         value: dataStatus,
                         valueLabel: dataStatus ? connectedLabel : disconnectedLabel
                     },
@@ -72,7 +67,17 @@ class MonitoringController {
                         label: "Authentification",
                         value: usersStatus,
                         valueLabel: usersStatus ? connectedLabel : disconnectedLabel
-                    }*/
+                    },*/
+                    {
+                        label: "Données",
+                        value: DataProvider.instance()?.connection.readyState,
+                        valueLabel: `${(DataProvider.instance()?.connection.readyState === 1 ? connectedLabel : disconnectedLabel)} (${DataProvider.instance()?.connection.readyState})`
+                    },
+                    {
+                        label: "Authentification",
+                        value: UsersProvider.instance()?.connection.readyState,
+                        valueLabel: `${(UsersProvider.instance()?.connection.readyState === 1 ? connectedLabel : disconnectedLabel)} (${DataProvider.instance()?.connection.readyState})`
+                    },
                 ],
                 meta: {
                     title: `${title}`,
@@ -112,7 +117,6 @@ class MonitoringController {
             LogHelper.info(`Pinging mongodb serveur ${dbName}`, ping);
             return ping?.ok === 1;
         } catch (e) {
-            ServerController.database.disconnect();
             return false;
         } finally {
             // Ensures that the client will close when you finish/error

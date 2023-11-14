@@ -41,6 +41,17 @@ export class DataProvider extends BaseProvider implements DbProvider
     }
 
     /**
+     * Singleton getter in the scope of the concrete provider.
+     * @return {DbProvider}
+     */
+    public static instance():DbProvider|undefined {
+        if (DataProvider._singleton !== undefined) {
+            return DataProvider._singleton;
+        }
+        return undefined;
+    }
+
+    /**
      * @async
      * Connect the provider to mongo via mongoose.Connection.
      * @return {mongoose.Connection}
