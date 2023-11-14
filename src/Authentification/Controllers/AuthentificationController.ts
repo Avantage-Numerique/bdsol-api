@@ -503,7 +503,7 @@ class AuthentificationController
                                 expireDate: verificationExpirationDate
                             }
                         }
-                    )
+                    );
 
                     //Resend verify token to user's email
                     const welcomeName = getUserWelcome(targetUser);//encapsulate this into an helper

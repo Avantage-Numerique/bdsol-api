@@ -17,7 +17,6 @@ import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSan
 import {noHtmlStringSanitizerAlias} from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
 import {isInEnumSanitizerAlias} from "@src/Security/SanitizerAliases/IsInEnumSanitizerAlias";
 import {EntityTypesEnum} from "@src/Entities/EntityTypes";
-import { unescape } from "querystring";
 
 
 class MediasRoutes extends AbstractRoute {
@@ -258,13 +257,14 @@ class MediasRoutes extends AbstractRoute {
     public async deleteHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
         //`/${req.params.entity}/${req.params.id}/${req.params.fileName}`
 
+        const lowerEntity:string = req.params.entity.toLowerCase();
         //delete file
         // Assuming that 'path/file.txt' is a regular file.
-        fs.unlink(`./localStorage/public/${req.params.entity}/${req.params.id}/${req.params.fileName}`, (err) => {
+        fs.unlink(`./localStorage/public/${lowerEntity}/${req.params.id}/${req.params.fileName}`, (err) => {
             if (err)
                 LogHelper.error("Deleting file failed : ", err);
             else
-                LogHelper.log(`./localStorage/public/${req.params.entity}/${req.params.id}/${req.params.fileName} was deleted`);
+                LogHelper.log(`./localStorage/public/${lowerEntity}/${req.params.id}/${req.params.fileName} was deleted`);
         });
 
         const mediaController = MediasController.getInstance();
@@ -303,7 +303,8 @@ class MediasRoutes extends AbstractRoute {
             entity, id, fileName
         } = req.params;
         //type('image/jpeg')
-        const targetMediaPath = path.resolve(path.join(`${PublicStorage.basePath}/${entity}/${id}/${fileName}`));
+        const lowerEntity:string = entity.toLowerCase();
+        const targetMediaPath = path.resolve(path.join(`${PublicStorage.basePath}/${lowerEntity}/${id}/${fileName}`));
         await res.sendFile(
             targetMediaPath,
             options,

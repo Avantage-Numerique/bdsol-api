@@ -12,6 +12,7 @@ export default class Record {
     public pathNoFilename:string;
     public url:string;
     public entityType:string;//This is now need to be as the Entity model name in Db.
+    public entityTypePath:string;//This is now need to be as the Entity model name in Db.
     public entityId:string;
     public extension:string;
     public userId:string; //media -> uploadedBy
@@ -71,11 +72,12 @@ export default class Record {
             this.filenameAndExt = this.filenameNoExt;
         }
         this.entityType = entityType;
+        this.entityTypePath = entityType.toLowerCase();
         this.entityId = entityId;
-        this.pathNoFilename = FileStorage.generatePath(this.entityType, this.entityId);
+        this.pathNoFilename = FileStorage.generatePath(this.entityTypePath, this.entityId);
         this.pathWithFilename = this.pathNoFilename + '/' + this.filenameAndExt;
 
-        this.url = "/medias/"+ this.entityType + "/" + this.entityId + "/" + this.filenameAndExt;
+        this.url = "/medias/"+ this.entityTypePath + "/" + this.entityId + "/" + this.filenameAndExt;
 
         //Media info
         if(data !== undefined){
