@@ -100,7 +100,6 @@ class StaticContentsRoutes extends AbstractRoute {
         const {
             filename
         } = req.params;
-        console.log("viewEmailMedia ",req.params, StaticPublicStorage.basePath, `${StaticPublicStorage.basePath}/emails/${filename}`);
         await SendMedia(`${StaticPublicStorage.basePath}/emails/${filename}`, res);
     }
 

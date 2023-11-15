@@ -64,33 +64,33 @@ class AuthentificationController
         LogHelper.info(`${username} trying to connect ...`);
         
         //Authenticate the user with the creditentials
-        const targetUser = await this.authenticate(username, password);
+        const targetUser = await this.authenticate(username, password);//return user as dto already.
         
         // User was find in DB
         if (targetUser &&
             !targetUser.error &&
             targetUser.data !== null)
         {
-            const data:any = this.userModel.dataTransfertObject(targetUser.data);
+            const user:any = targetUser.data;
 
             //Check if user is verified (if verify object exist and it's true, if not, return error forbidden)
             try{
-                if(targetUser.data.verify.isVerified !== true)
-                return  SuccessResponse.create({ user: data }, StatusCodes.FORBIDDEN, "Votre compte n'est pas vérifié.");    
+                if(user.verify.isVerified !== true)
+                return  SuccessResponse.create({ user: user }, StatusCodes.FORBIDDEN, "Votre compte n'est pas vérifié.");
             }
             catch(e){
-                LogHelper.error("Erreur au login, l'utilisateur n'a pas de champs 'verify'", targetUser.data)
+                LogHelper.error("Erreur au login, l'utilisateur n'a pas de champs 'verify'", user)
                 return ErrorResponse.create(new Error(ReasonPhrases.INTERNAL_SERVER_ERROR), StatusCodes.INTERNAL_SERVER_ERROR, "User doesn't have a 'verify' field")
             }
 
-            LogHelper.info(`Les information de ${targetUser.data.username} fonctionnent, génération du token JW ...`);
+            LogHelper.info(`Les information de ${user.username} fonctionnent, génération du token JW ...`);
 
             // Generate an access token
-            data.token = TokenController.generateUserToken(this.userModel.dataTransfertObject(targetUser.data));
-            data.tokenVerified = true;
+            user.token = TokenController.generateUserToken(user);
+            user.tokenVerified = true;
 
             return  SuccessResponse.create(
-                { user: data },
+                { user: user },
                 StatusCodes.OK,
                 ReasonPhrases.OK
             );
@@ -123,7 +123,7 @@ class AuthentificationController
      */
     public async verifyToken(token:string): Promise<ApiResponseContract>
     {
-        if (ServerController.database.driverPrefix === 'mongodb')
+        if (ServerController.database.driverPrefix === 'mongodb' || ServerController.database.driverPrefix === 'mongodb+srv')
         {
             try {
                     const decoded:any = await TokenController.verify(token);
@@ -235,20 +235,13 @@ class AuthentificationController
             {
                 //Note: Service removed password with the DTO, soo we used mongooseModel directly
                 //Refactoring : We should manage internal and external responses seperately in different services ...
-                LogHelper.info("mongooseModel ", User.getInstance().mongooseModel);
-                const user = await User.getInstance().mongooseModel.findOne(targetUser).lean();
-
-                LogHelper.info("mongooseModel user : ", User.getInstance().dataTransfertObject(user));
-                let response:any;
-                if (user !== null) {
-                    response = SuccessResponse.create(user, StatusCodes.OK, ReasonPhrases.OK);
-                }
+                const user:any = await User.getInstance().mongooseModel.findOne(targetUser).lean();
     
                 // If we find a user, we check the password through the hashing comparaison.
-                if (!response.error && response.data.password !== undefined)
+                if (user !== null && user.password !== undefined)
                 {
-                    if (await PasswordsController.matches(response.data.password, password)) {
-                        return response;
+                    if (await PasswordsController.matches(user.password, password)) {
+                        return SuccessResponse.create(this.userModel.dataTransfertObject(user), StatusCodes.OK, ReasonPhrases.OK);
                     }
                 }
             }
