@@ -10,4 +10,5 @@ export interface UserContract {
     tos: object;
     verify: object;
     changePassword:object;
+    lastLogin:Date;
 }

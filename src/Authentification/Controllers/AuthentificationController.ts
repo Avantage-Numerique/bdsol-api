@@ -89,6 +89,9 @@ class AuthentificationController
             user.token = TokenController.generateUserToken(user);
             user.tokenVerified = true;
 
+            //Modify lastLogin date
+            const lastLogin = await User.getInstance().mongooseModel.findOneAndUpdate({_id: targetUser.data._id}, { lastLogin: new Date() })
+            LogHelper.debug(lastLogin)
             return  SuccessResponse.create(
                 { user: user },
                 StatusCodes.OK,
@@ -177,7 +180,7 @@ class AuthentificationController
             }
         }
 
-        let createdDocumentResponse = await this.service.insert(userObject);
+        const createdDocumentResponse = await this.service.insert(userObject);
         if (createdDocumentResponse && typeof createdDocumentResponse !== 'undefined' && !createdDocumentResponse.error)
         {
             createdDocumentResponse.data = this.userModel.dataTransfertObject(createdDocumentResponse.data);
