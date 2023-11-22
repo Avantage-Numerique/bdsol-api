@@ -1,45 +1,46 @@
 import * as mongoose from "mongoose";
 import config from "../config";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
-import {StatusCodes, ReasonPhrases} from "http-status-codes";
+import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {SuccessResponse} from "../Http/Responses/SuccessResponse";
 import {ErrorResponse} from "../Http/Responses/ErrorResponse";
 import type {ApiResponseContract} from "../Http/Responses/ApiResponse";
 import AbstractModel from "../Abstract/Model";
 import {Obj} from "../Helpers/Obj";
+import HttpError from "../Error/HttpError";
+import ApiQuery from "@database/QueryBuilder/ApiQuery";
 
 /**
  * Give ability to query and CRUD on collections and its documents.
  * @param model any The model to be use to query in the documents.
  */
-export abstract class Service
-{
+export abstract class Service {
 
     model: any;//@todo create or find the best type for this.
     appModel: AbstractModel;
     //connection: any;
-    state:string;
+    state: string;
 
-    static CREATE_STATE:string = "create";
-    static UPDATE_STATE:string = "update";
-    static DELETE_STATE:string = "delete";
-    static LIST_STATE:string = "list";
-    static SEARCH_STATE:string = "search";
-    static UPDATE_OR_CREATE:string = "update or create";
-    static CUSTOM_FUNCTION:string = "custom";
+    static CREATE_STATE: string = "create";
+    static UPDATE_STATE: string = "update";
+    static DELETE_STATE: string = "delete";
+    static LIST_STATE: string = "list";
+    static SEARCH_STATE: string = "search";
+    static UPDATE_OR_CREATE: string = "update or create";
+    static CUSTOM_FUNCTION: string = "custom";
 
-    static CREATE_MSG:string = "Création";
-    static UPDATE_MSG:string = "Mise à jour";
-    static DELETE_MSG:string = "Suppression";
-    static LIST_MSG:string = "La liste";
-    static SEARCH_MSG:string = "La recherche";
+    static CREATE_MSG: string = "Création";
+    static UPDATE_MSG: string = "Mise à jour";
+    static UPDATE_OR_CREATE_MSG: string = "Mise à jour si ça existe sinon on crée";
+    static DELETE_MSG: string = "Suppression";
+    static LIST_MSG: string = "La liste";
+    static SEARCH_MSG: string = "La recherche";
 
     constructor(model: AbstractModel) {
         this.appModel = model;
     }
 
-    public connectToMongoose():any
-    {
+    public connectToMongoose(): any {
         if (Obj.isNotNull(this.appModel)) {
             this.model = this.appModel.connect();
             return true;
@@ -51,23 +52,14 @@ export abstract class Service
      * Get all the documents from a collection that fits the query.
      * @param query any Should be an object with the document's
      */
-    async get(query: any): Promise<ApiResponseContract>
-    {
-        if (config.db.config.createObjectIdForQuery) {
-            query._id = Service.transformToObjectId(query._id);
-            if (query._id.error) {
-                return query._id;
-            }
-        }
+    async get(query: ApiQuery): Promise<ApiResponseContract> {
 
         try {
-            const item = await this.model.findOne(query);
-
+            const item = await this.model.findOne(query.transmuted, query.projections, query.options);
             if (item !== null) {
-                return SuccessResponse.create(item, StatusCodes.OK, ReasonPhrases.OK);
+                return SuccessResponse.create(this.appModel.dataTransfertObject(item), StatusCodes.OK, ReasonPhrases.OK);
             }
-
-            return SuccessResponse.create({}, StatusCodes.OK, ReasonPhrases.OK);
+            return ErrorResponse.create(new Error("La requête n'a pas retourné de résultats"), StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
 
         } catch (getAllErrors: any) {
             return ErrorResponse.create(getAllErrors, StatusCodes.INTERNAL_SERVER_ERROR);
@@ -79,21 +71,32 @@ export abstract class Service
      * @param query
      * @param sorting
      */
-    async all(query: any, sorting?:any): Promise<ApiResponseContract>
-    {
-        //set and dry parameters passed via query, but for preheating purposes.
-        let {skip, limit, sort} = query;
-        if (sorting === undefined && query.sort === undefined)
-            sorting = {};
+    async all(query: ApiQuery): Promise<ApiResponseContract> {
+        try {
+            const items = await this.model.find(query.transmuted, query.projections, query.options);
+            const returnItems = items.map((doc: any) => {
+                return this.appModel.dataTransfertObject(doc);
+            });
 
+            //populate
+            return SuccessResponse.create(
+                returnItems,
+                StatusCodes.OK,
+                ReasonPhrases.OK
+            );
 
-        skip = skip ? Number(skip) : config.query.defaultSkip;
-        limit = limit ? Number(limit) : config.query.defaultLimit;
-        sort = sort ? sort : {};
-        delete query.skip;
-        delete query.limit;
-        delete query.sort;
+        } catch (getAllErrors: any) {
+            LogHelper.error(`[${this.constructor.name} all, ${getAllErrors.message}`, getAllErrors.stack);
 
+            return ErrorResponse.create(
+                getAllErrors,
+                StatusCodes.INTERNAL_SERVER_ERROR,
+                getAllErrors.message || "Not able to get the queried items"
+            );
+        }
+    }
+
+    async count(query: any): Promise<ApiResponseContract> {
         if (config.db.config.createObjectIdForQuery) {
             query._id = Service.transformToObjectId(query._id);
             if (query._id.error) {
@@ -102,7 +105,8 @@ export abstract class Service
         }
 
         try {
-            const items = await this.model.find(query).sort(sort).skip(skip).limit(limit);
+            const items = await this.model.find(query).estimatedDocumentCount();
+
             //populate
             return SuccessResponse.create(
                 items,
@@ -111,7 +115,8 @@ export abstract class Service
             );
 
         } catch (getAllErrors: any) {
-            LogHelper.error(`[${this.constructor.name} all, ${getAllErrors.message}`);
+            LogHelper.error(`[${this.constructor.name} all, ${getAllErrors.message}`, getAllErrors.stack);
+
             return ErrorResponse.create(
                 getAllErrors,
                 StatusCodes.INTERNAL_SERVER_ERROR,
@@ -128,20 +133,22 @@ export abstract class Service
         let meta;
         try {
             meta = await this.model.create(data)
-             .catch((e: any) => {
-                    LogHelper.error("Can't create target Model with data", data, e);
-                    return e;
+                .catch((e: any) => {
+                    LogHelper.error("Service insert can't create entity", e);
+                    const insertError:HttpError = new HttpError("Impossible de créer l'entité.");//suppression de l e.message car l'app renvoie tout.
+                    insertError.status = StatusCodes.UNPROCESSABLE_ENTITY;
+                    throw insertError;
                 });
 
-            return this.parseResult(meta, Service.CREATE_STATE);
+            return this._parseResult(meta, Service.CREATE_STATE);
 
         } catch (insertError: any) {
-            LogHelper.error(insertError);
-            return ErrorResponse.create(
+            return this.errorCheck(insertError, Service.UPDATE_STATE);
+            /*return ErrorResponse.create(
                 insertError.errors,
                 StatusCodes.INTERNAL_SERVER_ERROR,
                 insertError.message || "Not able to insert item"
-            );
+            );*/
         }
 
     }
@@ -150,15 +157,20 @@ export abstract class Service
      * Insert the persistant data
      * @param data Try to find item, if item != exist, then create it.
      */
-    async persistantData(data:any): Promise<ApiResponseContract>{
-        const filter = { name:data.name, category:data.category };
+    async persistantData(data: any): Promise<ApiResponseContract> {
+        const filter = {name: data.name, category: data.category};
         try {
-            const meta = this.model.findOneAndUpdate(filter, data, { runValidators:true, upsert:true })
-            .catch((e:any) => { return e });
-            return this.parseResult(meta, Service.UPDATE_STATE)
-        }
-        catch(e:any){
-            return ErrorResponse.create( e, StatusCodes.INTERNAL_SERVER_ERROR, "Insertion of persistant data failed.")
+            const meta = this.model.findOneAndUpdate(filter, data, {runValidators: true, upsert: true})
+                .catch((e: any) => {
+                    const persistantDataError:HttpError = new HttpError(e.message);
+                    persistantDataError.status = StatusCodes.UNPROCESSABLE_ENTITY;
+                    throw persistantDataError;
+                });
+
+            return this._parseResult(meta, Service.UPDATE_STATE);
+
+        } catch (e: any) {
+            return this.errorCheck(e, Service.UPDATE_STATE);
         }
     }
 
@@ -168,32 +180,54 @@ export abstract class Service
      * @param options {any} document data containing id
      * @note error 11000 //error = not unique {"index":0,"code":11000,"keyPattern":{"username":1},"keyValue":{"username":"mamilidasdasdasd"}}
      */
-    async update(data: any, options?:any): Promise<ApiResponseContract> {
-
-        const updateOptions = { new: true,
-                                runValidators: true,
-                                ...options}
+    async update(data: any, options?: any): Promise<ApiResponseContract> {
+        const updateOptions = {
+            new: true,
+            runValidators: true,
+            //returnOriginal: true,
+            ...options
+        }
 
         try {
             const id = data.id;
             delete data.id; //Remove id from data
-            if( (id != undefined && id.length != 24) || Object.keys(data).length < 1){
+            // we added validator in front of thesse function. We must assume that this is well formed objectid.
+            /*if ((id != undefined && mongoose.isObjectIdOrHexString(id)) || Object.keys(data).length < 1) {
+                const
                 return ErrorResponse.create(data, StatusCodes.BAD_REQUEST, "id cannot be casted as ObjectId or object to update empty");
-            }
+            }*/
+
             // UpdateOne
             const meta = await this.model.findOneAndUpdate({_id: id}, data, updateOptions)
                 .catch((e: any) => {
-                        return e;
+                        const findOneAndUpdateError:HttpError = new HttpError(e.message);
+                        findOneAndUpdateError.status = StatusCodes.UNPROCESSABLE_ENTITY;
+                        throw findOneAndUpdateError;
                     }
                 );
-            return this.parseResult(meta, Service.UPDATE_STATE);
+
+            return this._parseResult(meta, Service.UPDATE_STATE);
 
         } catch (updateError: any) {
-            return ErrorResponse.create(
-                updateError.errors,
-                StatusCodes.UNPROCESSABLE_ENTITY,
-                updateError.errmsg || "Not able to update item or item doesn't exist"
-            );
+
+            return this.errorCheck(updateError, Service.UPDATE_STATE);
+        }
+    }
+
+    async findAndDelete(filter: object) {
+        try {
+            const meta = await this.model.findOneAndDelete(filter)
+                .catch((e: any) => {
+                    const findOneAndDeleteError:HttpError = new HttpError(e.message);
+                    findOneAndDeleteError.status = StatusCodes.UNPROCESSABLE_ENTITY;
+                    throw findOneAndDeleteError;
+                });
+
+            return this._parseResult(meta, Service.DELETE_STATE);
+
+        } catch (findAndDeleteError: any) {
+
+            return this.errorCheck(findAndDeleteError, Service.DELETE_STATE);
         }
     }
 
@@ -204,7 +238,7 @@ export abstract class Service
      * @param options {any} document data containing id
      * @note error 11000 //error = not unique {"index":0,"code":11000,"keyPattern":{"username":1},"keyValue":{"username":"mamilidasdasdasd"}}
      */
-    async updateOrCreate(data: any, whereKeys?:any, options?:any): Promise<ApiResponseContract> {
+    async updateOrCreate(data: any, whereKeys?: any, options?: any): Promise<ApiResponseContract> {
 
         const updateOrCreateOptions = {
             upsert: true,
@@ -214,7 +248,7 @@ export abstract class Service
         };
 
         try {
-            let where:any = {};
+            const where: any = {};
             switch (typeof whereKeys) {
                 case "string":
                     where[whereKeys] = data[whereKeys];
@@ -227,19 +261,17 @@ export abstract class Service
                     break;
             }
 
-            const meta = await this.model.findOneAndUpdate(where, {$setOnInsert: data}, updateOrCreateOptions)
+            const meta = await this.model.findOneAndUpdate(where, data, updateOrCreateOptions)
                 .catch((e: any) => {
-                        return e;
-                    }
-                );
-            return this.parseResult(meta, Service.UPDATE_OR_CREATE);
+                    // @todo this doesn't catch on CastError, on BSON wrongly pass.
+                    const updateOrCreateError:HttpError = new HttpError(e.message);
+                    updateOrCreateError.status = StatusCodes.UNPROCESSABLE_ENTITY;
+                    throw updateOrCreateError;
+                });
+            return this._parseResult(meta, Service.UPDATE_OR_CREATE);
 
         } catch (updateError: any) {
-            return ErrorResponse.create(
-                updateError.errors,
-                StatusCodes.UNPROCESSABLE_ENTITY,
-                updateError.errmsg || `Not able to ${Service.UPDATE_OR_CREATE} item`
-            );
+            return this.errorCheck(updateError, Service.UPDATE_OR_CREATE);
         }
     }
 
@@ -252,20 +284,16 @@ export abstract class Service
         try {
             const meta = await this.model.findByIdAndDelete(id)
                 .catch((e: any) => {
-                    LogHelper.info("findByIdAndDelete catch:", e);
-                    return e;
-                }
-            );
+                    const deleteError:HttpError = new HttpError(e.message);
+                    deleteError.status = StatusCodes.UNPROCESSABLE_ENTITY;
+                    throw deleteError;
+                });
 
-            return this.parseResult(meta, Service.DELETE_STATE);
+            return this._parseResult(meta, Service.DELETE_STATE);
 
         } catch (deleteError: any) {
 
-            return ErrorResponse.create(
-                deleteError.errors,
-                StatusCodes.INTERNAL_SERVER_ERROR,
-                deleteError.message || "Error on delete item in Service"
-            );
+            return this.errorCheck(deleteError, Service.DELETE_STATE);
         }
     }
 
@@ -274,24 +302,21 @@ export abstract class Service
      * @param mongooseFunction {string} function to call
      * @param params {any} the function params
      */
-    async custom(mongooseFunction:string, params?:any): Promise<ApiResponseContract> {
+    async custom(mongooseFunction: string, params?: any): Promise<ApiResponseContract> {
         try {
             const results = await this.model[mongooseFunction](...params)
                 .catch((e: any) => {
-                        LogHelper.info(`Error on custom call on ${mongooseFunction} item in Service`, e);
-                        return e;
+                        const customError:HttpError = new HttpError(e.message);
+                        customError.status = StatusCodes.UNPROCESSABLE_ENTITY;
+                        throw customError;
                     }
                 );
 
-            return this.parseResult(results, Service.CUSTOM_FUNCTION);
+            return this._parseResult(results, Service.CUSTOM_FUNCTION);
 
         } catch (errors: any) {
 
-            return ErrorResponse.create(
-                errors.errors,
-                StatusCodes.INTERNAL_SERVER_ERROR,
-                errors.message || `Error on custom ${mongooseFunction} item in Service`
-            );
+            return this.errorCheck(errors, Service.CUSTOM_FUNCTION);
         }
     }
 
@@ -304,20 +329,53 @@ export abstract class Service
         }
     }
 
-    private parseResult(meta: any, state:string): ApiResponseContract
-    {
-        let actionMessage:string;
-        switch(state){
-            case Service.CREATE_STATE : actionMessage = Service.CREATE_MSG; break;
-            case Service.UPDATE_STATE : actionMessage = Service.UPDATE_MSG; break;
-            case Service.DELETE_STATE : actionMessage = Service.DELETE_MSG; break;
-            case Service.LIST_STATE   : actionMessage = Service.LIST_MSG;   break;
-            case Service.SEARCH_STATE : actionMessage = Service.SEARCH_MSG; break;
-            default : actionMessage = "State not defined"
+    private _parseResult(meta: any, state: string): ApiResponseContract {
+        const actionMessage:string = this._getActionMessageFromState(state);
+
+        if (meta !== null && meta !== undefined) {
+            return this.succeedMessage(meta, state);
         }
+        return this.errorCheck(meta, state);
+    }
+
+    private _getActionMessageFromState(state:string):string {
+        switch (state) {
+            case Service.CREATE_STATE :
+                return Service.CREATE_MSG;
+            case Service.UPDATE_STATE :
+                return Service.UPDATE_MSG;
+            case Service.UPDATE_OR_CREATE :
+                return Service.UPDATE_OR_CREATE_MSG;
+            case Service.DELETE_STATE :
+                return Service.DELETE_MSG;
+            case Service.LIST_STATE :
+                return Service.LIST_MSG;
+            case Service.SEARCH_STATE :
+                return Service.SEARCH_MSG;
+            default :
+                return `${state} actions have no label`
+        }
+    }
+
+    public errorCheck(meta: any, state: string): ApiResponseContract {
+
+        const actionMessage:string = this._getActionMessageFromState(state);
 
         // Mongo DB validation failed, make that excalade the response flow, shall we.
         if (meta.errors) {
+            //on create, mongodb validate the data and return an object if errors occurs.
+            return ErrorResponse.createWithMultipleErrors(
+                meta.errors,
+                StatusCodes.BAD_REQUEST,
+                "Validating the data fail. Please readjust the request.");
+        }
+        // Mongo DB validation failed, make that excalade the response flow, shall we.
+        if (meta.name === "ValidationError") {
+            const validationErrors:any = {};
+
+            Object.keys(meta.errors).forEach((key) => {
+                validationErrors[key] = meta.errors[key].message;
+            });
             //on create, mongodb validate the data and return an object if errors occurs.
             return ErrorResponse.createWithMultipleErrors(
                 meta.errors,
@@ -369,14 +427,31 @@ export abstract class Service
                     message: meta.message
                 },
                 StatusCodes.INTERNAL_SERVER_ERROR,
-                meta.msg);
+                meta.message);
         }
 
 
-        if(meta.TypeError)
-            return ErrorResponse.create(meta, StatusCodes.BAD_REQUEST, "Échec de la " + actionMessage)
+        if (meta.TypeError)
+            return ErrorResponse.create(meta, StatusCodes.BAD_REQUEST, "Bad Type for " + actionMessage);
 
-        switch(state){
+
+        if (Object.keys(meta).length <= 0) {
+            return ErrorResponse.create(
+                meta,
+                StatusCodes.UNPROCESSABLE_ENTITY,
+                "Erreur inconnu, Le document de retour est vide, il n'a pas pu être " + actionMessage);
+        }
+
+        return ErrorResponse.create(
+            meta.errors,
+            StatusCodes.UNPROCESSABLE_ENTITY,
+            meta.message || `Error on ${actionMessage}`
+        );
+    }
+
+    public succeedMessage(meta: any, state: string): ApiResponseContract {
+        const actionMessage:string = this._getActionMessageFromState(state);
+        switch (state) {
             case Service.CREATE_STATE :
                 return SuccessResponse.create(meta, StatusCodes.CREATED, actionMessage + " de l'item réussi");
             case Service.UPDATE_STATE :
@@ -387,7 +462,10 @@ export abstract class Service
                 return SuccessResponse.create(meta, StatusCodes.OK, actionMessage + " a réussi");
             case Service.SEARCH_STATE :
                 return SuccessResponse.create(meta, StatusCodes.OK, actionMessage + " a réussi");
-            default : return ErrorResponse.create(meta, StatusCodes.INTERNAL_SERVER_ERROR, "Le state dans service n'est pas défini...");
+            case Service.UPDATE_OR_CREATE :
+                return SuccessResponse.create(meta, StatusCodes.OK, actionMessage + " a réussi");
+            default :
+                return ErrorResponse.create(meta, StatusCodes.OK, "Succès, mais l'état est indéfini");
         }
     }
 }

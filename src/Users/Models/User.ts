@@ -3,10 +3,9 @@ import type {DbProvider} from "../../Database/DatabaseDomain";
 import {UserContract} from "../Contracts/UserContract";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
-import {HashingMiddleware} from "../../Authentification/Middleware/HashingMiddleware";
+import {HashingMiddleware} from "@auth/Middleware/HashingMiddleware";
 import {UsersService} from "../Services/UsersService";
 
-//HashingMiddleware
 
 export class User extends AbstractModel {
 
@@ -17,7 +16,10 @@ export class User extends AbstractModel {
     public static getInstance():User {
         if (User._instance === undefined) {
             User._instance = new User();
-            User._instance.assignDbEventsToSchema();
+
+            User._instance.registerPreEvents();
+
+            User._instance.schema.virtual("type").get( function () { return User._instance.modelName });
             User._instance.initSchema();
         }
         return User._instance;
@@ -52,13 +54,38 @@ export class User extends AbstractModel {
                     type: String,
                     required: true
                 },
-                avatar: String,
-                name: String,
-                firstName: String,
-                lastName: String,
-                role: String
+                avatar: {
+                    type:String
+                },
+                name: {
+                    type:String
+                },
+                firstName: {
+                    type:String
+                },
+                lastName: {
+                    type:String
+                },
+                role: {
+                    type:String
+                },
+                tos: {
+                    accepted: { type: Boolean, default:false},
+                    acceptedOn: { type: Date }
+                },
+                verify: {
+                    isVerified: {type: Boolean, default:false},
+                    token: {type: String},
+                    expireDate: {type: Date},
+                    validatedOn: {type: Date}
+                },
+                changePassword: {
+                    token: {type:String},
+                    expireDate: {type: Date}
+                }
             },
             {
+                toJSON: { virtuals: true },
                 timestamps: true
             });
 
@@ -127,6 +154,14 @@ export class User extends AbstractModel {
         }
     }
 
+    public registerIndexes() {
+        return true;
+    }
+
+    public dropIndexes() {
+        return true;
+    }
+
     /**
      * @get the field that are searchable.
      * @return {Object} the field slug/names.
@@ -142,15 +177,18 @@ export class User extends AbstractModel {
      */
     public dataTransfertObject(document: any):any {
         return {
-            id: document._id ?? "",
-            username: document.username ?? "",
-            avatar: document.avatar ?? "",
-            name: document.name ?? "",
-            firstName: document.name ?? "",
-            lastName: document.name ?? "",
-            email: document.email ?? "",
-            role: document.role ?? "",
-            createdAt: document.createdAt ?? ""
+            _id: document._id ?? '',
+            username: document.username ?? '',
+            avatar: document.avatar ?? '',
+            name: document.name ?? '',
+            firstName: document.firstName ?? '',
+            lastName: document.lastName ?? '',
+            email: document.email ?? '',
+            role: document.role ?? '',
+            type: document.type ?? '',
+            verify: { isVerified: document?.verify?.isVerified ?? false},
+            createdAt: document.createdAt ?? '',
+            updatedAt: document.updatedAt ?? '',
         }
     }
 
@@ -165,14 +203,15 @@ export class User extends AbstractModel {
      * Pre->Save
      * Pre->UpdateOne.
      */
-    public async assignDbEventsToSchema()
+    public registerPreEvents()
     {
-        if (this.schema !== undefined)
-        {
+        //if (this.schema !== undefined)
+        //{
             // CREATE users, we hash the password.
-            await this.schema.pre('save', HashingMiddleware.mongooseMiddlewareHandler());
-            await this.schema.pre('updateOne', HashingMiddleware.mongooseMiddlewareHandler());//
-        }
+            this.schema.pre('save', HashingMiddleware.handler());
+            this.schema.pre('updateOne', HashingMiddleware.handler());//
+            this.schema.pre('findOneAndUpdate', HashingMiddleware.findOneAndUpdateHandler());//this is used in updateOrCreate method.
+        //}
     }
 
 }

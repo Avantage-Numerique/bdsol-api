@@ -1,24 +1,25 @@
 import {ApiResponseContract} from "../Http/Responses/ApiResponse";
-import {StatusCodes, ReasonPhrases} from "http-status-codes";
+import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {ErrorResponse} from "../Http/Responses/ErrorResponse";
 import AbstractModel from "./Model";
-import {Service} from "../Database/Service";
-import QueryBuilder from "../Database/QueryBuilder/QueryBuilder";
-import {SuccessResponse} from "../Http/Responses/SuccessResponse";
-import UsersHistoryService from "../UserHistory/Services/UsersHistoryService";
-import UserHistory from "../UserHistory/Models/UserHistory";
-import {UserHistorySchema} from "../UserHistory/Schemas/UserHistorySchema";
+import {Service} from "@database/Service";
+import QueryBuilder from "@database/QueryBuilder/QueryBuilder";
+import {SuccessResponse} from "@src/Http/Responses/SuccessResponse";
+import UsersHistoryService from "@src/UserHistory/Services/UsersHistoryService";
+import UserHistory from "@src/UserHistory/Models/UserHistory";
+import {UserHistorySchema} from "@src/UserHistory/Schemas/UserHistorySchema";
+import {ControllerContract} from "./Contracts/ControllerContract";
+import ApiQuery from "@database/QueryBuilder/ApiQuery";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 /**
  * AbstractController
  * Endpoint method for target entity that handle : create, update, delete, list, search, getInfo and getDoc.
  */
-abstract class AbstractController {
+abstract class AbstractController implements ControllerContract {
 
     /** @abstract Service of a specific entity */
     abstract service: Service;
-
-    abstract name: string;
 
     /** @abstract Model of a specific entity */
     abstract entity: AbstractModel;
@@ -48,8 +49,8 @@ abstract class AbstractController {
      * @return {ApiResponseContract} Promise
      */
     public async update(requestData: any): Promise<ApiResponseContract> {
-        const updatedModelResponse: any = await this.service.update(requestData);
 
+        const updatedModelResponse: any = await this.service.update(requestData);
         if (updatedModelResponse !== undefined)
             return updatedModelResponse;
 
@@ -60,6 +61,15 @@ abstract class AbstractController {
         );
     }
 
+
+    public async textSearch(requestData:any): Promise<ApiResponseContract> {
+        const apiQuery: ApiQuery = new ApiQuery({ $text: { $search: requestData.searchIndex }});
+        apiQuery.options = {
+            sort: { score: -1 }
+        }
+        return await this.service.all(apiQuery);
+    }
+
     /**
      * @method search Search for a single entity document with research terms from database.
      * @param {any} requestData - Research terms e.g. { "name":"Jean" }
@@ -67,19 +77,29 @@ abstract class AbstractController {
      * @return {ApiResponseContract} Promise containing search document
      */
     public async search(requestData: any): Promise<ApiResponseContract> {
-        const query = QueryBuilder.build(requestData);
+        const query = QueryBuilder.build(requestData, true);
         return await this.service.get(query);
     }
 
 
     /**
-     * @method list List entity documents with research terms from database
+     * @method get get target entity by
      * @param {any} requestData - Research terms { "nom":"Jean" }
      * @return {ApiResponseContract} Promise containing a list of documents
      */
     public async get(requestData: any): Promise<ApiResponseContract> {
-        const query = QueryBuilder.build(requestData);
+        const query = QueryBuilder.build(requestData, true);
         return await this.service.get(query);
+    }
+
+
+    /**
+     * @method single get target single entity
+     * @param {any} requestData - Research terms { "nom":"Jean" }
+     * @return {ApiResponseContract} Promise containing a list of documents
+     */
+    public async single(requestData: any): Promise<ApiResponseContract> {
+        return this.get(requestData);
     }
 
 
@@ -90,7 +110,7 @@ abstract class AbstractController {
      * @return {ApiResponseContract} Promise containing a list of documents
      */
     public async getBy(params:string, requestData: any): Promise<ApiResponseContract> {
-        const query = QueryBuilder.build(requestData);
+        const query = QueryBuilder.build(requestData, true);
         return await this.service.get(query);
     }
 
@@ -101,8 +121,13 @@ abstract class AbstractController {
      * @return {ApiResponseContract} Promise containing a list of documents
      */
     public async list(requestData: any): Promise<ApiResponseContract> {
-        const query = QueryBuilder.build(requestData);
+        const query = QueryBuilder.build(requestData, true);
         return await this.service.all(query);
+    }
+
+    public async count(requestData:any): Promise<ApiResponseContract> {
+        const query = QueryBuilder.build(requestData);
+        return await this.service.count(query);
     }
 
 
@@ -144,44 +169,55 @@ abstract class AbstractController {
     }
 
 
-    public async createUserHistory(req: any, res: any, response: any, action: string): Promise<boolean> {
+    public async createUserHistory(req: any, res: any): Promise<boolean> {
         const userHistoryService: UsersHistoryService = UsersHistoryService.getInstance(UserHistory.getInstance());
+        const response:any = res.serviceResponse;
+        const action:string = res.serviceResponse.action;
+        try {
+            //User id
+            const user: any = req.user?._id;
+            
 
-        //User id
-        const user: any = req.user.id;
+            //IP Address
+            const ipAddress = req.visitor.ip;
+            const fromAppIp = req.ip;
 
-        //IP Address
-        const ipAddress = req.visitor.ip;
-        const fromAppIp = req.ip;
+            //Modification date
+            const modifDate = new Date();
 
-        //Modification date
-        const modifDate = new Date();
+            //Affected database
+            const entityCollection = req.originalUrl.split("/")[1]; //split every '/' --> [ "" / "organisations" / "create" ]
 
-        //Affected database
-        const entityCollection = req.originalUrl.split("/")[1]; //split every '/' --> [ "" / "organisations" / "create" ]
+            //Modified entity id
+            const modifiedEntity = response.data?._id;
 
-        //Modified entity id
-        const modifiedEntity = response.data._id;
+            //Action on the data
+            //action <---
 
-        //Action on the data
-        //action <---
+            //Set modified fields
+            const fields = response.data;
 
-        //Set modified fields
-        const fields = response.data;
+            //Media
+            const media = response.media ?? {}
 
-        const history: UserHistorySchema = {
-            "user": user,
-            "ipAddress": ipAddress,
-            "modifDate": modifDate,
-            "action": action,
-            "entityCollection": entityCollection,
-            "modifiedEntity": modifiedEntity,
-            "fields": this.entity.dataTransfertObject(fields),
-        } as UserHistorySchema;
+            const history: UserHistorySchema = {
+                "user": user,
+                "ipAddress": ipAddress,
+                "modifDate": modifDate,
+                "action": action,
+                "entityCollection": entityCollection,
+                "modifiedEntity": modifiedEntity,
+                "fields": this.entity.dataTransfertObject(fields),
+            } as UserHistorySchema;
 
-        //Service call to add UserHistory
-        userHistoryService.insert(history);
-        return true;
+            //Service call to add UserHistory
+            await userHistoryService.insert(history);
+            return true;
+        }
+        catch(e:any)
+        {
+            return e;
+        }
     }
 }
 

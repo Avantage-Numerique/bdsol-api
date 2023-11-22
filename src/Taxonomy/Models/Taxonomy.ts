@@ -1,11 +1,13 @@
-import mongoose from "mongoose";
-import {Schema} from "mongoose"
-import { TaxonomySchema } from "../Schemas/TaxonomySchema";
-import { TaxonomiesCategories } from "../TaxonomiesEnum";
-import type {DbProvider} from "../../Database/DatabaseDomain";
-import AbstractModel from "../../Abstract/Model"
+import mongoose, {Error, Schema} from "mongoose";
+import {TaxonomySchema} from "../Schemas/TaxonomySchema";
+import {TaxonomiesCategoriesEnum} from "../TaxonomiesCategoriesEnum";
+import type {DbProvider} from "@database/DatabaseDomain";
+import AbstractModel from "@core/Model"
 import TaxonomyService from "../Services/TaxonomyService";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
+import {Meta, SubMeta} from "@src/Moderation/Schemas/MetaSchema";
+import * as fs from 'fs';
+import {taxonomyPopulate} from "../Middlewares/TaxonomiesPopulate";
+
 
 class Taxonomy extends AbstractModel {
 
@@ -13,13 +15,42 @@ class Taxonomy extends AbstractModel {
     protected static _instance:Taxonomy;
 
     /** @public @static Model singleton instance constructor */
-    public static getInstance():Taxonomy {
+    public static getInstance(doIndexes=true):Taxonomy {
         if (Taxonomy._instance === undefined) {
             Taxonomy._instance = new Taxonomy();
+
+            Taxonomy._instance.schema.virtual("type").get( function () { return Taxonomy._instance.modelName });
+
+            Taxonomy._instance.registerEvents();
+
+            if (doIndexes) Taxonomy._instance.registerIndexes();
             Taxonomy._instance.initSchema();
-            Taxonomy._instance.schema.index({ name:1, category:1 }, {unique: true})
+
+            //Taxonomy._instance.schema.path('domains.domain').validate(taxonomyDomainNoSelfReference);
         }
         return Taxonomy._instance;
+    }
+
+    public registerIndexes():void {
+        //Indexes
+        Taxonomy._instance.schema.index({ category:1 });
+        Taxonomy._instance.schema.index({ name:1, category:1 }, {unique: true});
+        Taxonomy._instance.schema.index(
+            { name:"text", description:"text", category:"text", slug:"text" },
+            {
+                default_language: "french",
+                weights:{
+                    name:4,
+                    category:3,
+                    description:1,
+                    slug:1,
+                }
+            });
+    }
+
+    public dropIndexes() {
+        //https://mongoosejs.com/docs/api/model.html#Model.ensureIndexes()
+        //https://mongoosejs.com/docs/api/model.html#Model.cleanIndexes()
     }
 
     /** @public Model name */
@@ -41,15 +72,14 @@ class Taxonomy extends AbstractModel {
             category: {
                 type: String,
                 required: [true, 'Required category (occupation, ...)'],
-                enum: TaxonomiesCategories,
-                lowercase: true,
+                enum: TaxonomiesCategoriesEnum,
                 trim: true
             },
             name: {
                 type: String,
                 required: [true, 'Name required'],
                 minlength:[2, 'MinLength 2'],
-                alias: 'nom',
+                //alias: 'nom',
             },
             slug: {
                 type: String,
@@ -60,20 +90,34 @@ class Taxonomy extends AbstractModel {
             },
             description: {
                 type: String,
-                alias:'desc'
+                //alias:'desc'
             },
-            source: {
-                type: String
+            domains: {
+                type: [{
+                    domain: {
+                        type: mongoose.Types.ObjectId,
+                        ref: "Taxonomy",
+                        validate: function (value: mongoose.Types.ObjectId | null) {
+                            const currentDocument = this as any; // Cast 'this' to any to access the document
+                            if (value && value.equals(currentDocument._id)) {
+                                throw new Error("Can't assign self as a domain.");
+                            }
+                            return true
+                        }
+                    },
+                    subMeta: SubMeta.schema
+                }]
             },
-            status: {
-                type: Status.schema,
+            meta: {
+                type: Meta.schema,
                 //required: true,
             }
         },
             {
+                toJSON: { virtuals: true },
                 timestamps: true,
                 strict: true,
-                collation: { locale: 'fr_CA' },
+                //collation: { locale: 'fr_CA' },
         });
 
 
@@ -153,18 +197,34 @@ class Taxonomy extends AbstractModel {
      */
     public dataTransfertObject(document: any) {
         return {
+            _id: document._id ?? '',
             category: document.category ?? '',
             name: document.name ?? '',
             slug: document.slug ?? '',
             description: document.description ?? '',
             source: document.source ?? '',
-            status: document.status ?? '',
-            addReason: document.addReason ?? ''
+            type: document.type ?? '',
+            domains: document.domains ?? [],
+            meta: document.meta ?? {},
+            createdAt : document.createdAt ?? '',
+            updatedAt : document.updatedAt ?? '',
         }
     }
 
+
     public async documentation():Promise<any>{
-        return 'not implemented';
-   }
+        return fs.readFileSync('/api/doc/Taxonomy.md', 'utf-8');
+    }
+
+
+    public registerEvents():void {
+        this.schema.pre('find', function() {
+            taxonomyPopulate(this, 'domains.domain');
+        });
+
+        this.schema.pre('findOne', function() {
+            taxonomyPopulate(this, 'domains.domain');
+        });
+    }
 }
 export default Taxonomy;

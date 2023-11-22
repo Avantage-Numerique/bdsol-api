@@ -3,7 +3,8 @@
 		"_postman_id": "ce797056-d03e-4791-900a-359bc603fdb3",
 		"name": "BDSOL-API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "20488053"
+		"_exporter_id": "20488053",
+		"_collection_link": "https://bdsol-an.postman.co/workspace/Team-Workspace~e08c1037-81c3-471b-8884-64f96d6b63eb/collection/20488053-ce797056-d03e-4791-900a-359bc603fdb3?action=share&source=collection_link&creator=20488053"
 	},
 	"item": [
 		{
@@ -71,11 +72,13 @@
 									"const entity_path = \"/organisations\";\r",
 									"\r",
 									"const e_data = {\r",
-									"    \"name\" : \"Librairie Pommerleau\",\r",
+									"    \"name\" : \"Librairie pommerleau\",\r",
 									"    \"description\" : \"Librairie de petits marchandeurs\",\r",
 									"    \"url\" : \"https://lalibrairiepommerleau.meilleur\",\r",
 									"    \"contactPoint\" : \"info@meilleurelibrairie.meilleurfois2\",\r",
-									"    \"dateDeFondation\" : \"2022-09-10\"\r",
+									"    \"dateDeFondation\" : \"2022-09-10\",\r",
+									"    \"offers\":[],\r",
+									"    \"team\":[]\r",
 									"};\r",
 									"pm.environment.clear();\r",
 									"pm.environment.set(\"create_schema\", create_schema);\r",
@@ -174,7 +177,19 @@
 									"    \"lastName\" : \"Parent\",\r",
 									"    \"firstName\" : \"Jean-Marc\",\r",
 									"    \"nickname\" : \"Mickette\",\r",
-									"    \"description\" : \"Humour\"\r",
+									"    \"description\" : \"Humour\",\r",
+									"    \"occupations\":[\r",
+									"        {\r",
+									"            \"occupation\":\"une patate\",\r",
+									"            \"skills\":[\"6414c4b4004991a4d174ee8f\",\"6414c4b4004991a4d174ee97\"],\r",
+									"            \"status\":{\"state\":\"accepted\"}\r",
+									"        },\r",
+									"        {\r",
+									"            \"occupation\":\"deux potato\",\r",
+									"            \"skills\":[\"6414c4b4004991a4d174eea6\",\"6414c4b4004991a4d174eeaa\"],\r",
+									"            \"status\":{\"state\":\"accepted\"}\r",
+									"        }\r",
+									"    ],\r",
 									"};\r",
 									"pm.environment.clear();\r",
 									"pm.environment.set(\"create_schema\", create_schema);\r",
@@ -377,8 +392,251 @@
 									"    \"name\" : \"Circassien\",\r",
 									"    \"description\" : \"Le circassien pratique l'action de faire du cirque.\",\r",
 									"    \"source\" : \"\",\r",
-									"    \"status\": \"Pending\",\r",
-									"    \"addReason\":\"Je pense que le cirque fait partie intégrante de la culture et j'aimerais qu'il soit ajouté pour pouvoir me l'attribuer.\"\r",
+									"    \"status\": {\r",
+									"        \"state\":\"pending\",\r",
+									"        \"lastModifiedBy\":\"000000000000000000000123\"\r",
+									"        },\r",
+									"};\r",
+									"pm.environment.clear();\r",
+									"pm.environment.set(\"create_schema\", create_schema);\r",
+									"pm.environment.set(\"update_schema\", update_schema);\r",
+									"pm.environment.set(\"entityPATH\", entity_path);\r",
+									"pm.environment.set(\"e_data\", e_data);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/ping",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"ping"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateEnvVariable-proj",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const create_schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"error\": { \"type\": \"boolean\" },\r",
+									"        \"code\": { \"type\": \"number\" },\r",
+									"        \"message\": { \"type\": \"string\" },\r",
+									"        \"errors\": { \"type\": \"object\" },\r",
+									"        \"data\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                        \"_id\": { \"type\": \"string\" },\r",
+									"                        \"name\": { \"type\": \"string\" },\r",
+									"                        \"alternateName\": { \"type\": \"string\" },\r",
+									"                        \"description\": { \"type\": \"string\" },\r",
+									"                        \"url\": { \"type\": \"string\" },\r",
+									"                        \"contactPoint\": { \"type\": \"string\" },\r",
+									"                        \"location\": { \"type\": \"object\" },\r",
+									"                        \"team\": { \"type\": \"array\" },\r",
+									"                        \"sponsor\": { \"type\": \"array\" },\r",
+									"                        \"scheduleBudget\": { \"type\": \"object\" },\r",
+									"                        \"skills\": { \"type\": \"array\" },\r",
+									"                        \"status\": { \"type\": \"object\" },\r",
+									"                        \"createdAt\": { \"type\": \"string\" },\r",
+									"                        \"updatedAt\": { \"type\": \"string\" }\r",
+									"            },\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+									"};\r",
+									"\r",
+									"const update_schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"error\": { \"type\": \"boolean\" },\r",
+									"        \"code\": { \"type\": \"number\" },\r",
+									"        \"message\": { \"type\": \"string\" },\r",
+									"        \"errors\": { \"type\": \"object\" },\r",
+									"        \"data\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                        \"_id\": { \"type\": \"string\" },\r",
+									"                        \"name\": { \"type\": \"string\" },\r",
+									"                        \"alternateName\": { \"type\": \"string\" },\r",
+									"                        \"description\": { \"type\": \"string\" },\r",
+									"                        \"url\": { \"type\": \"string\" },\r",
+									"                        \"contactPoint\": { \"type\": \"string\" },\r",
+									"                        \"location\": { \"type\": \"object\" },\r",
+									"                        \"team\": { \"type\": \"array\" },\r",
+									"                        \"sponsor\": { \"type\": \"array\" },\r",
+									"                        \"scheduleBudget\": { \"type\": \"object\" },\r",
+									"                        \"skills\": { \"type\": \"array\" },\r",
+									"                        \"status\": { \"type\": \"object\" },\r",
+									"                        \"createdAt\": { \"type\": \"string\" },\r",
+									"                        \"updatedAt\": { \"type\": \"string\" }\r",
+									"            },\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+									"};\r",
+									"\r",
+									"const entity_path = \"/projects\";\r",
+									"\r",
+									"const e_data = {\r",
+									"    \"name\" : \"MaNoranda\",\r",
+									"    \"alternateName\" : \"Ma Noranda\",\r",
+									"    \"description\" : \"Spectacle déambulatoire dans Noranda\",\r",
+									"    \"url\" : \"www.manoranda.com\",\r",
+									"    \"contactPoint\" : \"Alexandre Castonguay\",\r",
+									"    \"location\" : \"Rouyn-Noranda\",\r",
+									"    //\"team\" : \"\",\r",
+									"    //mainImage : \"\",\r",
+									"    //\"sponsor\" : \"\",\r",
+									"    //\"scheduleBudget\" : \"\",\r",
+									"    //\"skilss\": \"\",.\r",
+									"    \"status\": {\r",
+									"        \"state\":\"pending\",\r",
+									"        \"lastModifiedBy\":\"000000000000000000000123\"\r",
+									"    },\r",
+									"};\r",
+									"pm.environment.clear();\r",
+									"pm.environment.set(\"create_schema\", create_schema);\r",
+									"pm.environment.set(\"update_schema\", update_schema);\r",
+									"pm.environment.set(\"entityPATH\", entity_path);\r",
+									"pm.environment.set(\"e_data\", e_data);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/ping",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"ping"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateEnvVariable-event",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const create_schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"error\": { \"type\": \"boolean\" },\r",
+									"        \"code\": { \"type\": \"number\" },\r",
+									"        \"message\": { \"type\": \"string\" },\r",
+									"        \"errors\": { \"type\": \"object\" },\r",
+									"        \"data\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                \"_id\": { \"type\": \"string\"},\r",
+									"                \"name\": { \"type\": \"string\"},\r",
+									"                \"alternateName\": { \"type\": \"string\"},\r",
+									"                \"url\": { \"type\": \"string\"},\r",
+									"                \"description\": { \"type\": \"string\"},\r",
+									"                \"eventFormat\": { \"type\": \"string\"},\r",
+									"                \"startDate\": { \"type\": \"date\"},\r",
+									"                \"endDate\": { \"type\": \"date\"},\r",
+									"                \"contactPoint\": { \"type\": \"string\"},\r",
+									"                \"schedule\": { \"type\": \"object\"},\r",
+									"            },\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+									"};\r",
+									"\r",
+									"const update_schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"error\": { \"type\": \"boolean\" },\r",
+									"        \"code\": { \"type\": \"number\" },\r",
+									"        \"message\": { \"type\": \"string\" },\r",
+									"        \"errors\": { \"type\": \"object\" },\r",
+									"        \"data\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                \"_id\": { \"type\": \"string\"},\r",
+									"                \"name\": { \"type\": \"string\"},\r",
+									"                \"alternateName\": { \"type\": \"string\"},\r",
+									"                \"url\": { \"type\": \"string\"},\r",
+									"                \"description\": { \"type\": \"string\"},\r",
+									"                \"eventFormat\": { \"type\": \"string\"},\r",
+									"                \"startDate\": { \"type\": \"date\"},\r",
+									"                \"endDate\": { \"type\": \"date\"},\r",
+									"                \"contactPoint\": { \"type\": \"string\"},\r",
+									"                \"schedule\": { \"type\": \"object\"},\r",
+									"            },\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"error\", \"code\", \"message\", \"errors\", \"data\"]\r",
+									"};\r",
+									"\r",
+									"const entity_path = \"/events\";\r",
+									"\r",
+									"const e_data = {\r",
+									"        \"name\":\"La moustache en feu!\",\r",
+									"        \"alternateName\":\"Moumou\",\r",
+									"        \"url\":\"www.lamoustacheenfeu.prod\",\r",
+									"        \"description\":\"Une pièce de théâtre sur un postier maladroit.\",\r",
+									"        \"eventFormat\":\"presential\",\r",
+									"        \"startDate\":\"2023-10-18\",\r",
+									"        \"endDate\":\"2023-10-19\",\r",
+									"        \"contactPoint\":\"Michèle Dubuc\",\r",
+									"        \"schedule\":[\r",
+									"            {\r",
+									"                \"name\":\"Première représentation\",\r",
+									"                \"startDate\":\"2023-08-18T00:00:00.000+00:00\",\r",
+									"                \"startTime\":\"19:00\",\r",
+									"                \"endDate\":\"2023-08-18T00:00:00.000+00:00\",\r",
+									"                \"endTime\":\"20:20\"\r",
+									"            },\r",
+									"            {\r",
+									"                \"name\":\"Deuxième représentation\",\r",
+									"                \"startDate\":\"2023-08-19T00:00:00.000+00:00\",\r",
+									"                \"startTime\":\"19:00\",\r",
+									"                \"endDate\":\"2023-08-19T00:00:00.000+00:00\",\r",
+									"                \"endTime\":\"20:20\"\r",
+									"            }\r",
+									"        ]\r",
 									"};\r",
 									"pm.environment.clear();\r",
 									"pm.environment.set(\"create_schema\", create_schema);\r",
@@ -437,11 +695,12 @@
 									"    pm.iterationData.unset(\"infoTest\");\r",
 									"    v_data = pm.iterationData.toObject();\r",
 									"}\r",
-									"else{\r",
-									"    v_data = pm.environment.get(\"e_data\");\r",
+									"else {\r",
+									"     v_data = pm.environment.get(\"e_data\");\r",
 									"}\r",
 									"\r",
-									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));\r",
+									"pm.variables.set(\"v_data_obj\", v_data);"
 								],
 								"type": "text/javascript"
 							}
@@ -453,11 +712,51 @@
 									"const schema = pm.environment.get(\"create_schema\");\r",
 									"const errorSchema = pm.globals.get(\"error_schema\");\r",
 									"\r",
-									"const infoTest = pm.environment.get(\"infoTest\");\r",
-									"pm.iterationData.unset(\"infoTest\");\r",
+									"let infoTest;\r",
+									"let testField;\r",
+									"let expectedProperties = {};\r",
+									"\r",
+									"if (pm.iterationData.has(\"infoTest\")) {\r",
+									"    //we are in a runner\r",
+									"    infoTest = pm.environment.get(\"infoTest\");\r",
+									"    pm.iterationData.unset(\"infoTest\");\r",
+									"    testField = pm.iterationData;//pm.iterationData.toObject();\r",
+									"    expectedProperties = infoTest.expectedProperties;\r",
+									"} else {\r",
+									"    //we are in direct test on sending request.\r",
+									"    infoTest = {\r",
+									"        \"name\":\"Off limit name\",\r",
+									"        \"error\":true,\r",
+									"        \"status\":400,\r",
+									"        \"ignoreFields\":{}\r",
+									"    };\r",
+									"    testField = pm.variables.get(\"v_data_obj\");\r",
+									"    \r",
+									"    //v_data = pm.environment.get(\"e_data\");\r",
+									"    expectedProperties.name = \"Deux familles des rives mid\";\r",
+									"    expectedProperties.alternateName = \"Piston Rivière\";\r",
+									"    expectedProperties.entityInCharge = \"000000000000000000000123\"\r",
+									"    expectedProperties.producer = \"643eeff1b9222cff53c5cc79\"\r",
+									"    expectedProperties.description = \"Une histoire sur la famille Rivest\"\r",
+									"    expectedProperties.url = \"www.famillerives.com\"\r",
+									"    expectedProperties.contactPoint = \"Rosalie\"\r",
+									"    expectedProperties.location = {\"latitude\": \"pa\", \"longitude\":\"tate\"}\r",
+									"    expectedProperties.team = [ {\"member\":\"643eeff1b9222cff53c5cc70\", \"role\":\"Chansonier\"}]\r",
+									"    expectedProperties.sponsor = [{\"entity\":\"643eeff1b9222cff53c5cc70\", \"entityType\":\"Person\", \"order\":1}]\r",
+									"    //expectedProperties.scheduleBudget = { \"startDate\":\"2022/04/18\", \"eta\":\"2 mois\",\"timeframe\": [{\"step\":\"Scénario\", \"eta\":\"2 mois\", \"budgetRange\":\"0-1k\"}]}\r",
+									"    expectedProperties.skills = [\"643eeff0b9222cff53c5ca6b\"]\r",
+									"    expectedProperties.context = \"academic\";\r",
+									"    expectedProperties.status = { \"state\":\"accepted\", \"lastModifiedBy\":\"000000000000000000000123\"}\r",
+									"    //expectedProperties.offers = [{ \"offer\" : \"63dc0233bcb3ba5bf3ffb95a\", \"status\":{\"state\":\"accepted\"}}];\r",
+									"}\r",
+									"\r",
 									"const jsonResponse = pm.response.json();\r",
 									"const jsonData = jsonResponse.data;\r",
 									"\r",
+									"pm.environment.set(\"createdEntity\"+Number(pm.info.iteration+1), jsonData);\r",
+									"console.log(\"createdEntity1\", pm.environment.get(\"createdEntity1\"));\r",
+									"console.log(\"infoTest\", infoTest);\r",
+									"console.log(\"testField\", testField);\r",
 									"\r",
 									"pm.test('Status/code check', function(){\r",
 									"    pm.response.to.have.status(infoTest.status);\r",
@@ -475,12 +774,48 @@
 									"    pm.expect(jsonResponse).to.have.jsonSchema(errorSchema);\r",
 									"});\r",
 									"\r",
-									"pm.test('Data check', function() {\r",
+									"pm.test('Data check: ignoreFields', function() {\r",
+									"    if (jsonResponse.error == false) {\r",
+									"        let ignoreKeys;\r",
+									"        if (infoTest.ignoreFields != undefined){\r",
+									"            const ignoreFields = infoTest.ignoreFields;\r",
+									"            \r",
+									"            Object.keys(ignoreFields).forEach( element => {\r",
+									"                //Cherry pick test of values, and it delete after.\r",
+									"                if (ignoreFields[element])// != \"undefined\"\r",
+									"                    pm.expect(jsonData[element]).to.be.equal(ignoreFields[element]);\r",
+									"                delete jsonData[element];\r",
+									"                delete testField[element];\r",
+									"            });\r",
+									"        }\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//utils\r",
+									"function getProperty(obj, path) {\r",
+									"    return path.split('.').reduce((acc, key) => (acc && acc[key]) ? acc[key] : undefined, obj);\r",
+									"}\r",
+									"if (jsonResponse.error === false) {\r",
+									"    for (let [propertyPath, expectedValue] of Object.entries(expectedProperties)) {\r",
+									"        pm.test(`Test value of ${propertyPath} with expected data`, () => {\r",
+									"            let actualValue = getProperty(jsonData, propertyPath);\r",
+									"            if (expectedValue === null) expectedValue = undefined;\r",
+									"            pm.expect(actualValue).to.eql(expectedValue);\r",
+									"        });\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"\r",
+									"/*\r",
+									"pm.test('Data check: Full object', function() {\r",
 									"    if (jsonResponse.error == false) {\r",
 									"        pm.environment.set(\"createdEntity\"+Number(pm.info.iteration+1), jsonData);\r",
-									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
+									"        console.log(\"jsonData\", jsonData);\r",
+									"        console.log(\"testField\", testField);\r",
+									"        pm.expect(jsonData).that.includes(testField);//Commenting because if we can check it, it's an objecct ?//.to.be.an(\"object\");\r",
 									"    }\r",
-									"})"
+									"});*/"
 								],
 								"type": "text/javascript"
 							}
@@ -515,6 +850,7 @@
 							"script": {
 								"exec": [
 									"let v_data = {};\r",
+									"v_data.status = {};\r",
 									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
 									"console.log(pm.iterationData.toObject());\r",
 									"\r",
@@ -524,12 +860,16 @@
 									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
 									"    pm.iterationData.unset(\"infoTest\");\r",
 									"    v_data = pm.iterationData.toObject();\r",
-									"    if(v_data.id === undefined)\r",
+									"    if(v_data.id === undefined) {\r",
 									"        v_data.id = pm.environment.get(\"createdEntity1\")._id;\r",
+									"        v_data._id = pm.environment.get(\"createdEntity1\")._id;\r",
+									"    }\r",
 									"}\r",
-									"else{\r",
-									"    //v_data = pm.environment.get(\"e_data\");\r",
-									"    v_data.id = \"bidon\";\r",
+									"else {\r",
+									"    v_data = pm.environment.get(\"e_data\");\r",
+									"    //v_data.id = \"6463c5685b27a690f39f0329\";\r",
+									"    //v_data.name = \"Supa powa powa soup soupe\";\r",
+									"    //v_data.team = { \"member\":\"6463b6c679a0023c09623506\"}\r",
 									"}\r",
 									"\r",
 									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
@@ -547,6 +887,9 @@
 									"pm.iterationData.unset(\"infoTest\");\r",
 									"const jsonResponse = pm.response.json();\r",
 									"const jsonData = jsonResponse.data;\r",
+									"let testField = pm.iterationData.toObject();\r",
+									"\r",
+									"let expectedProperties = {};\r",
 									"\r",
 									"pm.test('Status/code check', function(){\r",
 									"    pm.response.to.have.status(infoTest.status);\r",
@@ -558,17 +901,50 @@
 									"});\r",
 									"\r",
 									"pm.test('Schema is valid', function() {\r",
-									"    if (infoTest.error == false)\r",
-									"    pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
-									"    else\r",
-									"    pm.expect(jsonResponse).to.have.jsonSchema(errorSchema)\r",
+									"    if (infoTest.error == false) {\r",
+									"        pm.expect(jsonResponse).to.have.jsonSchema(schema);\r",
+									"    }  \r",
+									"    else {\r",
+									"        pm.expect(jsonResponse).to.have.jsonSchema(errorSchema);\r",
+									"    }\r",
 									"});\r",
 									"\r",
-									"pm.test('DataResponse is valid', function() {\r",
-									"    if(jsonResponse.error == false){\r",
-									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(pm.iterationData.toObject());\r",
+									"\r",
+									"//utils\r",
+									"function getProperty(obj, path) {\r",
+									"    return path.split('.').reduce((acc, key) => (acc && acc[key]) ? acc[key] : undefined, obj);\r",
+									"}\r",
+									"if (jsonResponse.error === false && expectedProperties) {\r",
+									"    for (let [propertyPath, expectedValue] of Object.entries(expectedProperties)) {\r",
+									"        pm.test(`Test value of ${propertyPath} with expected data`, () => {\r",
+									"            let actualValue = getProperty(jsonData, propertyPath);\r",
+									"            if (expectedValue === null) expectedValue = undefined;\r",
+									"            pm.expect(actualValue).to.eql(expectedValue);\r",
+									"        });\r",
 									"    }\r",
-									"});"
+									"}\r",
+									"\r",
+									"\r",
+									"/*\r",
+									"pm.test('Data check', function() {\r",
+									"    if (jsonResponse.error == false) {\r",
+									"        let ignoreKeys;\r",
+									"        if (infoTest.ignoreFields != undefined){\r",
+									"            const ignoreFields = infoTest.ignoreFields;\r",
+									"            ignoreKeys = Object.keys(ignoreFields);\r",
+									"            \r",
+									"            ignoreKeys.forEach( element => {\r",
+									"                if (ignoreFields[element] != \"undefined\")\r",
+									"                    pm.expect(jsonData[element]).to.be.equal(ignoreFields[element]);\r",
+									"                delete jsonData[element];\r",
+									"                delete testField[element];\r",
+									"            });\r",
+									"        }\r",
+									"\r",
+									"        pm.environment.set(\"updatedEntity\"+Number(pm.info.iteration+1), jsonData);\r",
+									"        pm.expect(jsonData).to.be.an(\"object\").that.includes(testField);\r",
+									"    }\r",
+									"});*/"
 								],
 								"type": "text/javascript"
 							}
@@ -618,7 +994,14 @@
 									"        v_data.id = pm.environment.get(\"createdEntity1\")._id;\r",
 									"}\r",
 									"else{\r",
-									"    v_data = {};\r",
+									"    v_data = {\r",
+									"        //\"id\":\"63ea9b7e7eb1b26ffd8e738d\"\r",
+									"        //\"offers.offer\":\"Pending\"\r",
+									"        or: [\r",
+									"            {firstName:\"Parent\"},\r",
+									"            {lastName:\"Parent\"}\r",
+									"        ]\r",
+									"    };\r",
 									"}\r",
 									"\r",
 									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
@@ -701,7 +1084,102 @@
 									"        v_data.id = pm.environment.get(\"createdEntity1\")._id;\r",
 									"}\r",
 									"else{\r",
-									"    v_data = {};\r",
+									"    v_data = {\r",
+									"        //\"user\": \"63ea9b7e7eb1b26ffd8e7338\"\r",
+									"        //\"category\":\"domains\"\r",
+									"        //\"offers.status.state\":\"634ef7a4bd536857c226e0f1\"\r",
+									"        \r",
+									"        category: \"in:domains\"\r",
+									"    }\r",
+									"}\r",
+									"console.log(v_data);\r",
+									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const infoTest = pm.environment.get(\"infoTest\");\r",
+									"pm.iterationData.unset(\"infoTest\");\r",
+									"const jsonResponse = pm.response.json();\r",
+									"const jsonData = jsonResponse.data;\r",
+									"\r",
+									"pm.test('Status/code check', function(){\r",
+									"    pm.response.to.have.status(infoTest.status);\r",
+									"    pm.expect(jsonResponse.code).to.equal(infoTest.status);\r",
+									"});\r",
+									"\r",
+									"pm.test('Error check', function(){\r",
+									"    pm.expect(jsonResponse.error).to.equal(infoTest.error);\r",
+									"});\r",
+									"\r",
+									"pm.test('Count is valid', function() {\r",
+									"    if(jsonResponse.error == false){\r",
+									"            pm.expect(jsonData.length).to.be.equal(infoTest.count);\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{{v_data}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{entityPATH}}{{listROUTE}}",
+							"host": [
+								"{{baseURL}}{{entityPATH}}{{listROUTE}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetInfo-Entity",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let v_data = {};\r",
+									"console.log(\"Test en cours :\" + pm.iterationData.get(\"infoTest\") + \" - Itération : \" + Number(pm.info.iteration+1));\r",
+									"console.log(pm.iterationData.toObject());\r",
+									"\r",
+									"if (pm.iterationData.has(\"infoTest\"))\r",
+									"{\r",
+									"    //Retirer les variables non nécessaire dans l'objet à envoyer.\r",
+									"    pm.environment.set(\"infoTest\",pm.iterationData.get(\"infoTest\"));\r",
+									"    pm.iterationData.unset(\"infoTest\");\r",
+									"    v_data = pm.iterationData.toObject();\r",
+									"    \r",
+									"    //If iterationData.id = 1 then replace it with a id created previously\r",
+									"    if (v_data.id != undefined && v_data.id == 1)\r",
+									"        v_data.id = pm.environment.get(\"createdEntity1\")._id;\r",
+									"}\r",
+									"else{\r",
+									"    v_data = {\r",
+									"        //\"user\": \"63ea9b7e7eb1b26ffd8e7338\"\r",
+									"        //\"category\":\"domains\"\r",
+									"        //\"offers.status.state\":\"634ef7a4bd536857c226e0f1\"\r",
+									"        \r",
+									"        or: [\r",
+									"            {firstName:\"sar\"},\r",
+									"            {lastName:\"par\"}\r",
+									"        ]\r",
+									"    }\r",
 									"}\r",
 									"\r",
 									"pm.variables.set(\"v_data\", JSON.stringify(v_data));"
@@ -1033,7 +1511,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjI5NjQ4Y2VjNGRiNmJlOTIyNTNhYjE0IiwidXNlcm5hbWUiOiJNYXJpZW5lcm8iLCJyb2xlIjoiQ2FsaW3DqXJvIiwiaWF0IjoxNjU0MTg2MTk2LCJleHAiOjE2NTQyNzI1OTZ9.r6TC41ebN47_x5HiROKr0c1wan7KYU5UjCwt_ev9C44\"\r\n}",
+									"raw": "{\r\n    \"token\": {{DevToken}}\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1103,6 +1581,29 @@
 							],
 							"path": [
 								"asdfasdfasdfasdf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/ping",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{pingROUTE}}",
+							"host": [
+								"{{baseURL}}{{pingROUTE}}"
 							]
 						}
 					},
@@ -1291,7 +1792,7 @@
 							"response": []
 						},
 						{
-							"name": "1-Create-person-sanitization",
+							"name": "1-Create-personne-sanitization",
 							"event": [
 								{
 									"listen": "test",
@@ -1522,6 +2023,116 @@
 					]
 				}
 			]
+		},
+		{
+			"name": "Stockage",
+			"item": [
+				{
+					"name": "Upload image",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "mainImage",
+									"type": "file",
+									"src": "/D:/travailleur_autonome/tools/reseaux-sociaux/avatar/avatar_marcandremartin_nologo.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/medias",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"medias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create media and link person",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "data",
+									"value": " { \"entityId\":\"63e400c93cd9fd5e5379d35a\",\"entityType\":\"person\", \"title\":\"nerferino le pas beau\", \"alt\":\"un gun nerf steampunk\", \"fileType\":\"image\", \"mediaField\":\"mainImage\"}",
+									"type": "text"
+								},
+								{
+									"key": "mainImage",
+									"type": "file",
+									"src": "/D:/travailleur_autonome/branding/reseaux-sociaux/1x/avatar-embleme-clementine-peel-sur-blanc.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}{{mediaPATH}}/upload",
+							"host": [
+								"{{baseURL}}{{mediaPATH}}"
+							],
+							"path": [
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update media",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "data",
+									"value": "{ \"title\": \"poulet\", \"alt\":\"a chicken\", \"id\":\"63dea401cf71c939d56fc422\"}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}{{mediaPATH}}{{updateROUTE}}",
+							"host": [
+								"{{baseURL}}{{mediaPATH}}{{updateROUTE}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Taxonomies",
+			"item": [
+				{
+					"name": "COunt taxonomies elements",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
 		}
 	],
 	"auth": {

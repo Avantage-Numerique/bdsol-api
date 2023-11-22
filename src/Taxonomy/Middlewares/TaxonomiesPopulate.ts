@@ -1,13 +1,39 @@
+import {mongoosePopulate} from "../../Database/Middlewares/mongoosePopulate";
+
 /**
  * Populate field on pre "find"
  * @param document {any} The mongoose document
  * @param schemaProperty {string} The parameters in the document to populate (with the ref value).
+ * @param fieldToPopulate {string} Field to get from this populate.
+ * @param model {any} if we need to populate between DB. This is the second schema.
+ * @inheritDoc https://mongoosejs.com/docs/6.x/docs/populate.html
  */
-const middlewarePopulateProperty = (document:any,
-                                  schemaProperty:string = 'occupations') => {
-    
-    //Note : I think we can pass "schemaProperty" and add a 2nd param to specify which field we want to populate from the underlying entity                                
-    document.populate(schemaProperty);
+const middlewarePopulateProperty = (document: any,
+                                    schemaProperty: string = 'occupations',
+                                    fieldToPopulate?: string,
+                                    model: any = undefined) => {
+    mongoosePopulate(document, schemaProperty, fieldToPopulate, model);
 }
 
+
 export {middlewarePopulateProperty};
+
+
+
+/**
+ * Populate a taxonomy
+ * @param document {any} The mongoose document
+ * @param schemaProperty {string} The parameters in the document to populate (with the ref value).
+ * @param fieldToPopulate {string} Field to get from this populate.
+ * @param model {any} if we need to populate between DB. This is the second schema.
+ * @inheritDoc https://mongoosejs.com/docs/6.x/docs/populate.html
+ */
+const taxonomyPopulate = (document: any,
+                          schemaProperty: string = 'occupations',
+                          fieldToPopulate: string = "name category meta slug",
+                          model: any = undefined) => {
+    mongoosePopulate(document, schemaProperty, fieldToPopulate, model);
+}
+
+
+export {taxonomyPopulate};
