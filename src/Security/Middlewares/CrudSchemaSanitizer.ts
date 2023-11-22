@@ -27,7 +27,7 @@ export class CrudSchemaSanitizer {
     /**
      * Getter for the anonymous function that will act as the middleware, with the parameters and the next() call.
      */
-    public static middlewareFunction(entity:String)
+    public static middlewareFunction(entity:string)
     {
         const entitysSchema:any = entity;
         let entitysSanitizationRules:any = CrudSchemaSanitizer.parseSchema(entitysSchema);

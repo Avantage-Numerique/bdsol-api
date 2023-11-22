@@ -3,7 +3,6 @@ import {CustomSanitizer} from "express-validator";
 
 export class HtmlSanitizer {
 
-
     /**
      * Method to sanitize Rich text field with the default Html tag only.
      * @param raw {string}
@@ -12,7 +11,6 @@ export class HtmlSanitizer {
     {
         return sanitizeHtml(raw, HtmlSanitizer.options());
     }
-
 
     public static options():sanitizeHtml.IOptions
     {
@@ -55,14 +53,6 @@ export class HtmlSanitizer {
     public static validatorCustomSanitizer():CustomSanitizer {
         return (value) => {
             return HtmlSanitizer.sanitize(value);
-        }
-    }
-
-
-    public static middlewareSchemaValidator():CustomSanitizer
-    {
-        return (value, {req, location, path}) => {
-
         }
     }
 

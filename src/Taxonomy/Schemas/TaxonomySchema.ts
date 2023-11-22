@@ -1,11 +1,14 @@
 import {Document} from "mongoose"
-import { StatusSchema } from "../../Moderation/Schemas/StatusSchema";
+import {MetaSchema} from "@src/Moderation/Schemas/MetaSchema";
+import {TaxonomiesCategoriesEnum} from "../TaxonomiesCategoriesEnum";
+import {DomainSchema} from "./DomainSchema";
 
 export interface TaxonomySchema extends Document {
-    category:string;
+    category:TaxonomiesCategoriesEnum;
     name:string;
     slug:string;
     description:string;
+    domains:[DomainSchema];
     source:string;
-    status:StatusSchema;
+    meta:MetaSchema;
 }

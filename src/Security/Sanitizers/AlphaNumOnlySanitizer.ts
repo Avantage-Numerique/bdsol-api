@@ -1,5 +1,5 @@
 import {CustomSanitizer} from "express-validator";
-import {Str} from "../../Helpers/Str";
+import {Str} from "@src/Helpers/Str";
 
 export class AlphaNumOnlySanitizer {
 

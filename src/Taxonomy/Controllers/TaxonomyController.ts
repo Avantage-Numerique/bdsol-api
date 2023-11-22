@@ -1,9 +1,9 @@
 import Taxonomy from "../Models/Taxonomy"
 import TaxonomyService from "../Services/TaxonomyService";
-import AbstractController from "../../Abstract/Controller"
+import AbstractController from "../../Abstract/Controller";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {SuccessResponse} from "../../Http/Responses/SuccessResponse";
-import {TaxonomiesCategories} from "../TaxonomiesEnum";
+import {TaxonomiesCategoriesEnum} from "../TaxonomiesCategoriesEnum";
 
 class TaxonomyController extends AbstractController {
 
@@ -15,8 +15,6 @@ class TaxonomyController extends AbstractController {
 
     /** @public Model */
     entity:Taxonomy;
-
-    name:string = "Taxonomy";
 
     constructor() {
         super();
@@ -38,9 +36,9 @@ class TaxonomyController extends AbstractController {
 
     public static getTaxonomies():any {
         const data:any = {
-            taxonomies: TaxonomiesCategories
+            taxonomies: TaxonomiesCategoriesEnum
         }
         return SuccessResponse.create(data, StatusCodes.OK, ReasonPhrases.OK);
     }
 }
-export {TaxonomyController};
+export default TaxonomyController;

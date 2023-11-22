@@ -1,5 +1,5 @@
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import {Service} from "../DatabaseDomain";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
+import {Service} from "@database/DatabaseDomain";
 import {SeederContract} from "../Contracts/SeederContract";
 
 export abstract class Seeder implements SeederContract {
@@ -27,6 +27,8 @@ export abstract class Seeder implements SeederContract {
     public async up(): Promise<void> {
         if (await this.conditions()) {
             await this.seed();
+        } else {
+            LogHelper.info(`Seeder condition didn't passed ${this.name}`);
         }
     }
 
@@ -93,7 +95,7 @@ export abstract class Seeder implements SeederContract {
      * Check if the collection is empty from countCollection method.
      */
     public async collectionEmpty(): Promise<boolean> {
-        return await this.countCollection() === 0;
+        return await this.countCollection() <= 0;
     }
 
     /**

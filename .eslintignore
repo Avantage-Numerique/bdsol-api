@@ -1,5 +1,8 @@
-node_modules
-build
-doc
-public
-tests
+/node_modules/**
+/public/**
+/build/**
+/cli/**
+/doc/**
+/docs/**
+/public/**
+/tests/**

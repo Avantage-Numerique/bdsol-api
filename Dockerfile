@@ -8,6 +8,7 @@ RUN apk update \
         g++ \
         git \
         openssh \
+        mongodb-tools \
     && npm install -g node-gyp \
     && npm install -g @mapbox/node-pre-gyp
 
@@ -16,13 +17,17 @@ RUN mkdir -p /api
 WORKDIR /api
 
 COPY ./package.json .
+COPY ./package-lock.json .
 COPY ./src .
+COPY ./public .
 COPY ./doc .
 COPY ./logs .
+COPY ./migrations .
 COPY ./.env .
 COPY ./tsconfig.json .
 COPY ./nodemon.json .
-
+#COPY ./migrate.json .
+#npx migrate up &&
 RUN npm install
 
 # Argon2 prebuild library seem off. We rebuild them all with this.
@@ -31,6 +36,8 @@ RUN npm rebuild
 RUN npm rebuild argon2
 
 EXPOSE 8000
+
+#RUN npx migrate up
 
 ENTRYPOINT ["npm"]
 CMD ["run","dev"]

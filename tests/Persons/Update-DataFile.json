@@ -2,9 +2,16 @@
     {
         "infoTest":
         {
+            "iteration": 1,
             "name":"Update full",
             "error":false,
-            "status":200
+            "status":200,
+            "expectedProperties": {
+                "lastName":"Richard",
+                "firstName":"Jean-Marcel",
+                "nickname":"Rickette",
+                "description":"Humour noir"
+            }
         },
         "lastName":"Richard",
         "firstName":"Jean-Marcel",
@@ -14,6 +21,7 @@
     {
         "infoTest":
         {
+            "iteration": 2,
             "name":"Update id random length 24",
             "error":true,
             "status":422
@@ -27,6 +35,7 @@
     {
         "infoTest":
         {
+            "iteration": 3,
             "name":"Update id length != 24",
             "error":true,
             "status":400
@@ -38,11 +47,16 @@
         "description":"Numour hoir"
     },
     {
-        "infoTest":
-        {
-            "name":"Update no lastName",
-            "error":false,
-            "status":200
+        "infoTest": {
+            "iteration": 4,
+            "name": "Update no lastName",
+            "error": false,
+            "status": 200,
+            "expectedProperties": {
+                "firstName": "Jean-Marcel",
+                "nickname": "Bickette",
+                "description": "Humour Blanc"
+            }
         },
         "firstName":"Jean-Marcel",
         "nickname":"Bickette",
@@ -51,9 +65,15 @@
     {
         "infoTest":
         {
+            "iteration": 5,
             "name":"Update no firstName",
             "error":false,
-            "status":200
+            "status":200,
+            "expectedProperties": {
+                "lastName": "Winchester",
+                "nickname": "Lickette",
+                "description": "Humour turquoise"
+            }
         },
         "lastName":"Winchester",
         "nickname":"Lickette",
@@ -62,9 +82,16 @@
     {
         "infoTest":
         {
+            "iteration": 6,
             "name":"Update empty lastName",
             "error":true,
-            "status":400
+            "status":422,
+            "expectedProperties": {
+                "lastName": "Winchester",
+                "firstName":"Sylvain",
+                "nickname":"Kickette",
+                "description":"Humour bleu"
+            }
         },
         "lastName":"",
         "firstName":"Sylvain",
@@ -74,9 +101,11 @@
     {
         "infoTest":
         {
+            "iteration": 7,
             "name":"Update empty firstName",
             "error":true,
-            "status":400
+            "status":422,
+            "expectedProperties": {}
         },
         "lastName":"Gichard",
         "firstName":"",
@@ -86,9 +115,16 @@
     {
         "infoTest":
         {
+            "iteration": 8,
             "name":"Update empty non req",
             "error":false,
-            "status":200
+            "status":200,
+            "expectedProperties": {
+                "lastName": "Lavallée",
+                "firstName":"Jean-Marcel",
+                "nickname":"",
+                "description":""
+            }
         },
         "lastName":"Lavallée",
         "firstName":"Jean-Marcel",
@@ -98,17 +134,25 @@
     {
         "infoTest":
         {
+            "iteration": 9,
             "name":"Update no update data",
-            "error":true,
-            "status":400
+            "error":false,
+            "status":200
         }
     },
     {
         "infoTest":
         {
+            "iteration": 10,
             "name":"Update prepare for search/list",
             "error":false,
-            "status":200
+            "status":200,
+            "expectedProperties": {
+                "lastName" : "Auclair",
+                "firstName" : "Pierre",
+                "nickname" : "Namasspamousse",
+                "description" : "Un jeune homme charmant et attentionné"
+            }
         },
         "lastName" : "Auclair",
         "firstName" : "Pierre",

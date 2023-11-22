@@ -1,5 +1,6 @@
 node_modules
 .env
+.env.staging
 build
 
 .idea
@@ -9,3 +10,6 @@ bdsolapi.pub
 
 #Logs
 logs/
+
+localStorage
+docs

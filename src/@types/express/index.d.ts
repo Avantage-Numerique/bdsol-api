@@ -9,10 +9,12 @@ namespace Express {
         user?: any;
         visitor?: any;
         data?: any;
+        file?: any;
     }
 }
 namespace Express {
     export interface Response {
         serviceResponse?: any;
+        performance?: any
     }
 }

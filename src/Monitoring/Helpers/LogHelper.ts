@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import config from "@src/config";
 /**
  * Entry point for loggin activity into the API
  * This is a version 0, with basic console.log thing.
@@ -35,7 +36,7 @@ enum LogFormats {
 export default class LogHelper
 {
     static printToConsole: boolean = true;
-    static logToFile: boolean = true;
+    static logToFile: boolean = config.logToFile;
     
     public static showLog = true;
     public static showError = true;
@@ -65,6 +66,7 @@ export default class LogHelper
             console.log(LogFormats.ERROR, verbose, args);
         LogHelper.logFile('ERROR', verbose, args);
     }
+
     public warn(...args:any[]){
         const verbose = LogHelper.createVerbose('WARN', this.routeVerbose);
         if(LogHelper.showError && LogHelper.printToConsole)
@@ -134,7 +136,7 @@ export default class LogHelper
     }
 
     /**
-     *  @method finalLog applique des styles aux logs, les affiche et les inscrit dans un fichier log.
+     *  @method createVerbose applique des styles aux logs, les affiche et les inscrit dans un fichier log.
      *  @desc Explains syntax
      *  @see {@link https://simplernerd.com/js-console-colors/}
      *  @desc Explains supported specifier that converts "%" to types (string/json...)
@@ -160,16 +162,16 @@ export default class LogHelper
             const d = new Date;
             const date = d.toLocaleDateString('en-CA');
 
-            const path = "./logs/";
+            const path = config.basepath ? `${config.basepath}/logs/` : "./logs/";
             const allFileName = date.toString()+"-all.log";
 
             fs.open(path+allFileName, 'a', function(err, fd){
                 if (err)
-                    console.log("Can't log into file")
+                    console.log("Can't log into file", err)
                 else {
                     fs.write(fd, verbose + data + "\n", (err) => {
                         if (err)
-                            console.log(err.message);
+                            console.log(err.message, err);
                     });
                 }
             });
@@ -177,11 +179,11 @@ export default class LogHelper
                 const errorFileName = date.toString()+"-error.log"
                 fs.open(path+errorFileName, 'a', function(err, fd){
                     if (err)
-                        console.log("Can't log into file")
+                        console.log("Can't log into file", err)
                     else {
                         fs.write(fd, verbose + data + "\n", (err) => {
                             if (err)
-                                console.log(err.message);
+                                console.log(err.message, err);
                         });
                     }
                 });

@@ -1,5 +1,5 @@
-import {Service} from "../../Database/DatabaseDomain";
-import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import {Service} from "@database/DatabaseDomain";
+import {ApiResponseContract} from "@src/Http/Responses/ApiResponse";
 
 export class UsersService extends Service {
 

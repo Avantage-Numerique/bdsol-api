@@ -1,0 +1,132 @@
+[
+    {
+        "Type d'équipement": "Beaucoup d'équipement",
+        "Modèle": "voir : https://wiki.fablabs.quebec/index.php/FabLab_Abitibi-Ouest",
+        "Marque": "diverse",
+        "Personne ou organisation (entreprise, regroupement, collectif…) de référence": "La SHOP un projet du CJEAO - Stéphanie Dupré-Guilbert",
+        "Adresse e-mail__11": "sguilbert@cjeao.qc.ca",
+        "Numéro de téléphone__11": "(819) 333-1110",
+        "Quantité d'équipements": 98,
+        "Page web de référence": "www.lashop.quebec",
+        "Types de services": "Prêt"
+    },
+    {
+        "Type d'équipement": "Kit de webinaire+ Petronor",
+        "Marque": "Micro Rode",
+        "Personne ou organisation (entreprise, regroupement, collectif…) de référence": "Cet espace de coworking",
+        "Adresse e-mail__11": "cetespacedecoworking@gmail.com",
+        "Numéro de téléphone__11": "(819) 975-0007",
+        "Quantité d'équipements": 5,
+        "Page web de référence": "https://cetespacedecoworking.net/services/",
+        "Types de services": "Location"
+    },
+    {
+        "Type d'équipement": "Caméra vidéo",
+        "Modèle": "Gemini",
+        "Marque": "RED",
+        "Personne ou organisation (entreprise, regroupement, collectif…) de référence": "Productions trois tiers inc.",
+        "Adresse e-mail__11": "info@productions3tiers.com",
+        "Numéro de téléphone__11": "(819) 760-0177",
+        "Quantité d'équipements": 1,
+        "Page web de référence": "https://www.red.com/",
+        "Types de services": "Location"
+    },
+    {
+        "Type d'équipement__1": "Caméra vidéo",
+        "Modèle__1": "Komodo",
+        "Marque__1": "RED",
+        "Personne ou organisation (entreprise, regroupement, collectif…) de référence__1": "Productions trois tiers inc.",
+        "Adresse e-mail__12": "info@productions3tiers.com",
+        "Numéro de téléphone__12": "(819) 760-0177",
+        "Quantité d'équipements__1": 1,
+        "Page web de référence__1": "https://www.red.com/komodo",
+        "Types de services__1": "Location"
+    },
+    {
+        "Type d'équipement": "Capteurs sans fils et système de gestion de ventilation",
+        "Personne ou organisation (entreprise, regroupement, collectif…) de référence": "ONX Automation",
+        "Adresse e-mail__11": "info@onx-automation.com",
+        "Numéro de téléphone__11": "(187) 347-5017",
+        "Page web de référence": "www.onx-automation.com",
+        "Types de services": "Location\nVente"
+    },
+    {
+        "Type d'équipement": "VR",
+        "Modèle": "Occulus Quest",
+        "Marque": "Meta",
+        "Personne ou organisation (entreprise, regroupement, collectif…) de référence": "Le LabVD",
+        "Adresse e-mail__11": "medialab@ville.valdor.qc.ca",
+        "Numéro de téléphone__11": "(819) 824-2666",
+        "Quantité d'équipements": 1,
+        "Page web de référence": "https://culturevd.ca/lelabvd/",
+        "Types de services": "Prêt"
+    },
+    {
+       
+        "Type d'équipement__1": "iMac",
+        "Modèle__1": "iMac",
+        "Marque__1": "Apple",
+        "Personne ou organisation (entreprise, regroupement, collectif…) de référence__1": "Le LabVD",
+        "Adresse e-mail__12": "medialab@ville.valdor.qc.ca",
+        "Numéro de téléphone__12": "(819) 824-2666",
+        "Quantité d'équipements__1": 5,
+        "Page web de référence__1": "https://culturevd.ca/lelabvd/",
+        "Types de services__1": "Prêt"
+    },
+    {
+        "Type d'équipement__2": "iPad",
+        "Modèle__2": "iPad",
+        "Marque__2": "Apple",
+        "Personne ou organisation (entreprise, regroupement, collectif…) de référence__2": "Le LabVD",
+        "Adresse e-mail__13": "medialab@ville.valdor.qc.ca",
+        "Numéro de téléphone__13": "(819) 824-2666",
+        "Quantité d'équipements__2": 6,
+        "Page web de référence__2": "https://culturevd.ca/lelabvd/",
+        "Types de services__2": "Prêt"
+    },
+    {
+        "Type d'équipement__3": "Nintendo Switch",
+        "Modèle__3": "Nintendo Switch",
+        "Marque__3": "Nintendo",
+        "Personne ou organisation (entreprise, regroupement, collectif…) de référence__3": "Le LabVD",
+        "Adresse e-mail__14": "medialab@ville.valdor.qc.ca",
+        "Numéro de téléphone__14": "(819) 824-2666",
+        "Quantité d'équipements__3": 5,
+        "Page web de référence__3": "https://culturevd.ca/lelabvd/",
+        "Types de services__3": "Prêt"
+    },
+    {
+       
+        "Type d'équipement__4": "Tablette de dessin numérique",
+        "Modèle__4": "Wacom Intuos",
+        "Marque__4": "Wacom",
+        "Personne ou organisation (entreprise, regroupement, collectif…) de référence__4": "Le LabVD",
+        "Adresse e-mail__15": "medialab@ville.valdor.qc.ca",
+        "Numéro de téléphone__15": "(819) 824-2666",
+        "Quantité d'équipements__4": 5,
+        "Page web de référence__4": "https://culturevd.ca/lelabvd/",
+        "Types de services__4": "Prêt"
+    },
+    {
+        "Type d'équipement__5": "Imprimante 3d",
+        "Modèle__5": "Ultimaker S3",
+        "Marque__5": "Ultimaker",
+        "Personne ou organisation (entreprise, regroupement, collectif…) de référence__5": "Le LabVD",
+        "Adresse e-mail__16": "medialab@ville.valdor.qc.ca",
+        "Numéro de téléphone__16": "(819) 824-2666",
+        "Quantité d'équipements__5": 1,
+        "Page web de référence__5": "https://culturevd.ca/lelabvd/",
+        "Types de services__5": "Prêt"
+    },
+    {
+        "Type d'équipement__6": "Imprimante 3d",
+        "Modèle__6": "Dremel 3d45",
+        "Marque__6": "Dremel",
+        "Personne ou organisation (entreprise, regroupement, collectif…) de référence__6": "Le LabVD",
+        "Adresse e-mail__17": "medialab@ville.valdor.qc.ca",
+        "Numéro de téléphone__17": "(819) 824-2666",
+        "Quantité d'équipements__6": 1,
+        "Page web de référence__6": "https://culturevd.ca/lelabvd/",
+        "Types de services__6": "Prêt"
+    }
+]

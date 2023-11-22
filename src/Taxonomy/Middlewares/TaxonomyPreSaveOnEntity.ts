@@ -1,6 +1,3 @@
-import LogHelper from "../../Monitoring/Helpers/LogHelper";
-import {TaxonomiesCategories} from "../TaxonomiesEnum";
-
 /**
  * Add the functionnality of validating if the taxonomy added to the schema exist, is valid, and if empty, passed through.
  * @param idList {any} The list of id to link
@@ -11,19 +8,19 @@ import {TaxonomiesCategories} from "../TaxonomiesEnum";
 const middlewareTaxonomy = async (idList:any,
                                   controller:any,
                                   taxonomyProperty:string = 'occupations',
-                                  taxonomy:string = TaxonomiesCategories.Occupations) => {
+                                  taxonomy:string = "") => {
     if (idList.length != 0)
     {
-        LogHelper.debug("MiddlewareTaxonomy : ", taxonomyProperty, idList);
         const occupationsExist = await controller.getInstance().list({ _id : {$in: idList}, category: taxonomy });
 
         if (!occupationsExist.error) {
             const foundOccupationCount = occupationsExist.data.length;
 
             if (idList.length != foundOccupationCount) {
-                throw(`Pre save Erreur data ${taxonomy} existe pas ou doublons`);
+                throw(new Error(`Pre save Erreur data ${taxonomy} existe pas ou doublons`));
             }
         }
+
     }
 }
 

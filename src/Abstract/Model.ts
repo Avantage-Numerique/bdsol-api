@@ -1,4 +1,4 @@
-import type {Schema, Connection, Model} from "mongoose";//, mongoose
+import type {Connection, Model, Schema} from "mongoose"; //, mongoose
 import {DbProvider, Service} from "../Database/DatabaseDomain";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
 
@@ -37,7 +37,7 @@ abstract class AbstractModel {
         if (this.providerIsSetup() && this.connectionIsSetup())
         {
             this.initSchema();
-            return this.mongooseModel = this.provider.connection.model(this.modelName);
+            return this.mongooseModel;// = this.provider.connection.model(this.modelName);
         }
 
         LogHelper.error(`${this.constructor.name}'s provider is not setup. Can't get the model`,
@@ -55,9 +55,13 @@ abstract class AbstractModel {
         if (this.providerIsSetup() &&
             this.connectionIsSetup())
         {
-            this.provider.connection.model(this.modelName, this.schema);
+            this.mongooseModel = this.provider.connection.model(this.modelName, this.schema);
+            LogHelper.info(`Model init ${this.modelName} schema`, this.mongooseModel, " on conn. state : ", this.provider.connection.readyState);
         }
     }
+
+    abstract registerIndexes():void;
+    abstract dropIndexes():void;
 
     /**
      * @public @method providerIsSetup Return if the provider have a value.
@@ -122,5 +126,6 @@ abstract class AbstractModel {
     abstract dataTransfertObject(document: any):any;
 
     abstract documentation():Promise<any>;
+
 }
 export default AbstractModel;

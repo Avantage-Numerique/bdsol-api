@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from "express";
-import { body } from 'express-validator';//, validationResult, checkSchema
+import {body} from 'express-validator'; //, validationResult, checkSchema
 
 //doc : https://express-validator.github.io/docs/sanitization.html
 //     /*body('email').isEmail().normalizeEmail(),
@@ -85,7 +85,7 @@ export class UserSchemaSanitizer {
     /**
      * Getter for the anonymous function that will act as the middleware, with the parameters and the next() call.
      */
-    public static middlewareFunction(entity:String)
+    public static middlewareFunction(entity:string)
     {
         const entitysSchema:any = "User" || entity;
         let entitysSanitizationRules:any = UserSchemaSanitizer.parseSchema(entitysSchema);

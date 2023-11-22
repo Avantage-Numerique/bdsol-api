@@ -4,7 +4,13 @@
         {
             "name":"Create Full",
             "error":false,
-            "status":201
+            "status":201,
+            "expectedProperties": {
+                "lastName":"Parent",
+                "firstName":"Jean-marc",
+                "nickname":"Mickette",
+                "description":"Humour"
+            }
         },
         "lastName":"Parent",
         "firstName":"Jean-marc",
@@ -16,7 +22,13 @@
         {
             "name":"Create Full",
             "error":false,
-            "status":201
+            "status":201,
+            "expectedProperties": {
+                "lastName":"Tremblay",
+                "firstName":"Michel",
+                "nickname":"Dj Pro Grand Gangsta",
+                "description":"La musica fiesta"
+            }
         },
         "lastName":"Tremblay",
         "firstName":"Michel",
@@ -28,7 +40,7 @@
         {
             "name":"Create no lastName",
             "error":true,
-            "status":400
+            "status":422
         },
         "firstName":"Sarah",
         "nickname":"Le Patin Mou",
@@ -39,7 +51,7 @@
         {
             "name":"Create no firstName",
             "error":true,
-            "status":400
+            "status":422
         },
         "lastName":"Daigneault",
         "nickname":"Pikotte",
@@ -50,7 +62,7 @@
         {
             "name":"Create empty lastName",
             "error":true,
-            "status":400
+            "status":422
         },
         "lastName":"",
         "firstName":"Adelard",
@@ -62,7 +74,7 @@
         {
             "name":"Create empty firstName",
             "error":true,
-            "status":400
+            "status":422
         },
         "lastName":"Boutin",
         "firstName":"",
@@ -74,7 +86,11 @@
         {
             "name":"Create empty non req",
             "error":false,
-            "status":201
+            "status":201,
+            "expectedProperties": {
+                "lastName":"Croche",
+                "firstName":"Sarah"
+            }
         },
         "lastName":"Croche",
         "firstName":"Sarah",
@@ -86,7 +102,11 @@
         {
             "name":"Create no non req",
             "error":false,
-            "status":201
+            "status":201,
+            "expectedProperties": {
+                "lastName":"Neutron",
+                "firstName":"Jimmy"
+            }
         },
         "lastName":"Neutron",
         "firstName":"Jimmy"
@@ -96,7 +116,7 @@
         {
             "name":"Create empty data",
             "error":true,
-            "status":400
+            "status":422
         }
     }
 ]

@@ -1,4 +1,3 @@
-
 import {CustomSanitizer} from "express-validator";
 import {sanitizeUrl} from "@braintree/sanitize-url";
 

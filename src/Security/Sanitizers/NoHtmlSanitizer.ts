@@ -1,4 +1,4 @@
-import {NextFunction, Response, Request} from "express";
+import {NextFunction, Request, Response} from "express";
 import sanitizeHtml from 'sanitize-html';
 import {CustomSanitizer} from "express-validator";
 
@@ -40,8 +40,8 @@ export class NoHtmlSanitizer {
      * Express validator, CustomSanitizer getter of the function to be added as the function.
      */
     public static validatorCustomSanitizer():CustomSanitizer {
-        return (value) => {
-            return NoHtmlSanitizer.sanitize(value);
+        return (input, meta) => {
+            return NoHtmlSanitizer.sanitize(input);
         }
     }
 

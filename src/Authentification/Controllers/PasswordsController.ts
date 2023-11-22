@@ -15,18 +15,12 @@ export class PasswordsController
      */
     public static async hash(password:string):Promise<string>
     {
-        try {
-            // we use the default argon2 salting function as says in the doc : The default value is unset, which generates a cryptographically safe random salt.
-            return await argon2.hash(password, {
-                type: argon2.argon2id,
-                memoryCost: 2 ** 16,
-                hashLength: 50,
-            });
-        }
-        catch (error:any)
-        {
-            throw error;
-        }
+        // we use the default argon2 salting function as says in the doc : The default value is unset, which generates a cryptographically safe random salt.
+        return await argon2.hash(password, {
+            type: argon2.argon2id,
+            memoryCost: 2 ** 16,
+            hashLength: 50,
+        });
     }
 
 
@@ -37,14 +31,7 @@ export class PasswordsController
      */
     public static async matches(storedPassword:string, targetPassword:string):Promise<boolean>
     {
-        try
-        {
-            //directly return the verify response on try.
-            return await argon2.verify(storedPassword, targetPassword);
-        }
-        catch (error:any)
-        {
-            throw error;
-        }
+        //directly return the verify response on try.
+        return await argon2.verify(storedPassword, targetPassword);
     }
 }

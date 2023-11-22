@@ -1,0 +1,31 @@
+[
+    {
+        "infoTest":
+        {
+            "name":"List empty data give no error",
+            "count":1,
+            "error":false,
+            "status":200
+        }
+    },
+    {
+        "infoTest":
+        {
+            "name":"List no result no error",
+            "count":0,
+            "error":false,
+            "status":200
+        },
+        "name" : "afksdj;lkjg"
+    },
+    {
+        "infoTest":
+        {
+            "name":"List 1 result no error",
+            "count":1,
+            "error":false,
+            "status":200
+        },
+        "name" : "La moust"
+    }
+]
