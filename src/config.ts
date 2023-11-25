@@ -1,7 +1,8 @@
 //Init the .env file config vars.
 import * as dotenv from "dotenv";
+import path from "path";
 
-dotenv.config();
+dotenv.config({path: path.join(__dirname, ".env")});
 
 const config:any = {
 
