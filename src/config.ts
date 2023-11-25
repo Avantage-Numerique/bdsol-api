@@ -18,9 +18,9 @@ const config:any = {
     mongooseDebug: process.env.ENVIRONNEMENT === 'development' && process.env.MONGOOSE_DEBUG === 'true' ,
 
     appName: process.env.APP_NAME || "API",
-    port: process.env.PORT || "8000",
-    version: process.env.VERSION || "0.0.0",
-    basepath: process.env.BASEPATH || "/api",
+    port: process.env.PORT || "8001",
+    version: process.env.VERSION || "0.0.8.prod",
+    basepath: process.env.BASEPATH || ".",
     baseUrl: process.env.BASEURL || "http://localhost:8000",
     frontendAppUrl: process.env.FRONTEND_APP_URL || "http://localhost:3000",
 
