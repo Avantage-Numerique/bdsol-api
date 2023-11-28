@@ -1,3 +1,4 @@
+import config from "@src/config";
 import * as Nunjucks from "nunjucks";
 
 class BaseTemplate {
@@ -11,7 +12,7 @@ class BaseTemplate {
 //{path: path.join(__dirname, "../.env")}
     constructor(name:string="default", basePath:string="/Layouts") {
         this.name = name + ".njk";
-        this.basePath = __dirname;//`${config.basepath}/src/Templates`;//absolute in server path.
+        this.basePath = `${config.basepath}/Templates`;//absolute in server path.
         this.includePath = `${this.basePath}`;//kept this as the base (before the Emails templates, to be able to navigate more easily.
         this.contentPath = `${this.basePath}${basePath}`;
         this.system = Nunjucks.configure(this.includePath, {autoescape:true});

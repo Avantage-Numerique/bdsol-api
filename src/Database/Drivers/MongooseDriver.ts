@@ -147,9 +147,7 @@ export class MongooseDBDriver implements DBDriver {
      * @param db string to get the connection to mongo db.
      */
     public connectionUrl(db:string='') {
-        const url:string = getConnectionUrl(this.urlConfig, db);
-        LogHelper.info("Get Connection URL Driver Mongoose", this.urlToLog(url));
-        return url;
+        return getConnectionUrl(this.urlConfig, db);
     }
 
     /**

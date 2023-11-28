@@ -119,7 +119,6 @@ export abstract class BaseProvider implements DbProvider {
 
     public async createMongooseConnection():Promise<Connection|undefined> {
         const url:string = `${this._driver.connectionUrl()}`;
-        LogHelper.info(`[DB][createMongooseConnection] url ${this._driver.urlToLog(url)} on ${this._databaseName} database`);
         try {
             const options:any = config.db.user !== '' && config.db.password !== '' ? {
                 user: this._driver.config.user,
