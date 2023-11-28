@@ -35,6 +35,7 @@ class SearchSuggestions {
     }
 
     public async getTextSearchSuggestions(searchIndex:string | undefined) {
+        const limit = 50;
         //To remove accent on french characters
         //req.query.searchIndex = req.query.searchIndex?.toString().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
         const personsSuggestions = await this.personModel.find(
@@ -43,32 +44,42 @@ class SearchSuggestions {
                 { lastName: { $regex: searchIndex, $options : 'i' }},
                 { nickname: { $regex: searchIndex, $options : 'i' }},
                 { description: { $regex: searchIndex, $options : 'i' }},
-            ]}
+            ]},
+            null,
+            { sort: { updatedAt : -1}, limit: limit}
         );
 
         const organisationsSuggestions = await this.organisationModel.find(
             { $or: [
                 { name: { $regex: searchIndex, $options : 'i' }},
                 { description: { $regex: searchIndex, $options : 'i' }},
-            ]}
+            ]},
+            null,
+            { sort: { updatedAt : -1}, limit: limit}
         );
 
         const projectSuggestions = await this.projectModel.find(
             { $or: [
                 { name: { $regex: searchIndex, $options : 'i' }},
                 { alternateName: { $regex: searchIndex, $options : 'i' }},
-            ]}
+            ]},
+            null,
+            { sort: { updatedAt : 1}, limit: limit}
         );
 
         const taxonomySuggestions = await this.taxonomyModel.find(
-            { name: { $regex : searchIndex, $options : 'i' }}
+            { name: { $regex : searchIndex, $options : 'i' }},
+            null,
+            { sort: { updatedAt : 1}, limit: limit}
         );
 
         const eventSuggestions = await this.eventModel.find(
             { $or: [
                 { name: { $regex: searchIndex, $options: 'i' }},
                 { alternateName: { $regex: searchIndex, $options : 'i' }},
-            ]}
+            ]},
+            null,
+            { sort: { updatedAt : 1}, limit: limit}
         )
 
         return [...personsSuggestions, ...organisationsSuggestions, ...projectSuggestions, ...taxonomySuggestions, ...eventSuggestions];
