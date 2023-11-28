@@ -23,7 +23,6 @@ import {RequestDuration} from "./Monitoring/Middlewares/RequestDuration";
 import {AdminRoutes} from "@src/Admin/Routes/AdminRoutes";
 import JobScheduler from "@src/Schedule/JobScheduler";
 import {JobSheet} from "@src/Schedule/Sheet";
-import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 import {EventsRoutes} from "./Events/Routes/EventsRoutes";
 import {PlacesRoutes} from "./Places/Routes/PlacesRoutes";
 import EquipmentRoutes from "./Equipment/Routes/EquipmentRoute";
@@ -262,10 +261,11 @@ export default class Api {
         this.scheduler = new JobScheduler();
 
         const jobSheets:Array<JobSheet> = [
-            this.scheduler.createSheet("Embed Taxonomy's metas (entities count, etc.", EmbedTaxonomiesMetas),
+            //this.scheduler.createSheet("Embed Taxonomy's metas (entities count, etc.", EmbedTaxonomiesMetas),
             //this.scheduler.createSheet("Backuping BD", BackukDbJob, this.scheduler.createRule('second', 2))
         ];
-        this.scheduler.init(jobSheets);
+        LogHelper.info("Skipping job scheduler for test");
+        //this.scheduler.init(jobSheets);
 
     }
 
