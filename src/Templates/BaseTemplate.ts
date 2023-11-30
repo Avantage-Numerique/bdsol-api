@@ -9,7 +9,7 @@ class BaseTemplate {
     public includePath:string;
     public contentPath:string;
     public name:string;
-//{path: path.join(__dirname, "../.env")}
+
     constructor(name:string="default", basePath:string="") {
         this.name = name + ".njk";
         this.basePath = api.templateBasePath;//absolute in server path.

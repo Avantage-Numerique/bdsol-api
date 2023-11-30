@@ -7,17 +7,19 @@ import config from "@src/config";
 import PublicTemplate from "@src/Templates/PublicTemplate";
 import {EmailData} from "@src/Templates/Emails/EmailData";
 import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 const ApiRouter = express.Router();
 
 // Would this print the doc or not ?
 ApiRouter.get("/", async (req, res) => {
 
-    /*const index = new PublicTemplate();//tempalte have already a default in the EmailContent.Prepare.
+    const index = new PublicTemplate();//tempalte have already a default in the EmailContent.Prepare.
     const title:string = `${config.appName} (version ${config.version})`;
     let body:string = config.environnement === 'development' ? `écoute sur le port: ${config.port}<br />` : '';
     body += EmailData.api.description;
     res.set('Content-Type', 'text/html');
+    LogHelper.info("Rendering index", EmailData);
     return res.status(StatusCodes.OK).send(await index.render({
         context: {
             ...EmailData,//basic app and api default string and links
@@ -30,8 +32,8 @@ ApiRouter.get("/", async (req, res) => {
                 author: `${config.appName}`
             }
         }
-    }));*/
-    return res.status(StatusCodes.OK).send("OK");
+    }));
+    //return res.status(StatusCodes.OK).send("OK");
 });
 
 
