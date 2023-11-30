@@ -28,6 +28,7 @@ import {PlacesRoutes} from "./Places/Routes/PlacesRoutes";
 import EquipmentRoutes from "./Equipment/Routes/EquipmentRoute";
 import CommunicationsRoutes from "./Communications/Routes/CommunicationsRoutes";
 import {MonitoringRoutes} from "@src/Monitoring/Routes/MonitoringRoutes";
+import * as Nunjucks from "nunjucks";
 
 /**
  * Main class for the API
@@ -35,6 +36,8 @@ import {MonitoringRoutes} from "@src/Monitoring/Routes/MonitoringRoutes";
  */
 export default class Api {
     public express: express.Express = express();
+    public templateSystem:Nunjucks.Environment;
+    public templateBasePath:string;
     public mainRouter: express.Router;
     public authRouters: express.Router;
 
@@ -70,6 +73,13 @@ export default class Api {
 
         // parse application/json
         this.express.use(express.json());
+
+        this.templateBasePath = `${config.basepath}/views`;
+        //Templates and rendering
+        this.templateSystem = Nunjucks.configure('views', {
+            express: this.express,
+            autoescape: true
+        });
     }
 
     private _initBaseRoutes() {

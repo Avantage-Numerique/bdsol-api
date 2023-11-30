@@ -1,5 +1,5 @@
-import config from "@src/config";
 import * as Nunjucks from "nunjucks";
+import {api} from "@src/server";
 
 class BaseTemplate {
 
@@ -10,12 +10,13 @@ class BaseTemplate {
     public contentPath:string;
     public name:string;
 //{path: path.join(__dirname, "../.env")}
-    constructor(name:string="default", basePath:string="/Layouts") {
+    constructor(name:string="default", basePath:string="") {
         this.name = name + ".njk";
-        this.basePath = `${config.basepath}/Templates`;//absolute in server path.
+        this.basePath = api.templateBasePath;//absolute in server path.
         this.includePath = `${this.basePath}`;//kept this as the base (before the Emails templates, to be able to navigate more easily.
         this.contentPath = `${this.basePath}${basePath}`;
-        this.system = Nunjucks.configure(this.includePath, {autoescape:true});
+
+        this.system = api.templateSystem;
     }
 
     /**
@@ -23,7 +24,7 @@ class BaseTemplate {
      * and context are prepared in EmailNotification contructor.
      * @param content {object}
      */
-    public async render(content:any) {
+    public async render(content:any){
         this.content = content;
         return Nunjucks.render(`${this.contentPath}/${this.name}`, this.content.context);
     }
@@ -31,7 +32,6 @@ class BaseTemplate {
     public async preview(content:any):Promise<string> {
         return await this.render(content);
     }
-
 }
 
 export default BaseTemplate;
