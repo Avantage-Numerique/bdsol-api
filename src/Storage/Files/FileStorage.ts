@@ -3,10 +3,18 @@ import * as mime from "mime-types";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {fileExtensionList} from "@src/Media/List/FileList";
 import Record from "@src/Media/Record/Record";
+import config from "@src/config";
 
 export default class FileStorage {
-    static basePath:string;
-    static destination:string;
+    static basePath:string = `${config.basepath}`;
+    //static destination:string;
+
+
+    public storageName:string = "Files";
+
+    constructor(name:string="Files") {
+        this.storageName = name;
+    }
 
     public static filename(originFile:any) {
         return originFile.originalname;
@@ -59,8 +67,14 @@ export default class FileStorage {
         return Math.round(Math.random() * 1E9).toString().substring(0, 6); //length 6 random number
     }
 
-    public static generatePath(entityType:string, entityId:string):string {
-        return './localStorage/public/' + entityType + '/' + entityId;
+    /**
+     * Generate the path for public local storage (mostly dynamics elements).
+     * @param entityType {string}
+     * @param entityId {string}
+     * @param basePath {string} Added to avoid adding static value. that method should be integrate in another scope.
+     */
+    public static generatePath(entityType:string, entityId:string, basePath:string=FileStorage.basePath):string {
+        return `${basePath}/${entityType}/${entityId}`;
         //FileStorage.basePath + '/' + entityType + '/' + entityId + '/';
     }
 

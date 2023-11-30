@@ -25,7 +25,5 @@ function cp(src: string, dest: string) {
     });
 }
 
-
-const sourceDir = './views';
-const destDir = './build/views';
-cp(sourceDir, destDir);
+cp('./views', './build/views');
+cp('./public', './build/public');
