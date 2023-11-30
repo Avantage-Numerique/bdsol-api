@@ -1,5 +1,4 @@
 import * as http from "http";
-import config from "../../config";
 
 import {DBDriver, MongooseDBDriver} from "../../Database/DatabaseDomain";
 
@@ -13,9 +12,9 @@ import Api from "../../api";
 export default class ServerController {
 
     static database: DBDriver;
-
+    static api:Api;
     server: http.Server;
-    api: Api;
+    //api: Api;
 
     static _singleton:ServerController;
 
@@ -25,10 +24,8 @@ export default class ServerController {
      */
     constructor(api:Api) {
         //set the api if it's passed via instanciation.
-        this.api = api;
-
-        //this.api.serverController = this;
-        LogHelper.log('Départ de la configuration du serveur pour l\'API');
+        ServerController.api = api;
+        ServerController.api.configure();
         ServerController._setDBDriver();
     }
 
@@ -51,20 +48,20 @@ export default class ServerController {
      * @private
      */
     private static _setDBDriver() {
-        LogHelper.info(`[BD] Initiation du driver ${config.db.driver} de la base de données.`);
+        LogHelper.info(`[BD] Initiation du driver ${ServerController.api.config.db.driver} de la base de données.`);
 
-        if (config.db.driver === 'mongodb') {
-            ServerController.database = new MongooseDBDriver(config.db);
+        if (ServerController.api.config.db.driver === 'mongodb') {
+            ServerController.database = new MongooseDBDriver(ServerController.api.config.db);
             return;
         }
     }
 
     /**
-     * Create an HTTP server from node.http, listence on error and on config.port.
+     * Create an HTTP server from node.http, listence on error and on ServerController.api.config.port.
      * Connect to the database
      */
     public async start() {
-        this.server = http.createServer(this.api.express);
+        this.server = http.createServer(ServerController.api.express);
 
         this.server.on("error", this.onError);
         this.server.on("listening", this.onListening);
@@ -78,10 +75,10 @@ export default class ServerController {
         }
 
         LogHelper.info("Démarrage de l'API");
-        this.api.start();
+        ServerController.api.start();
 
         LogHelper.info('Configuration terminée, départ de l\'écoute sur le serveur');
-        this.server.listen(config.port);
+        this.server.listen(ServerController.api.config.port);
     }
 
     /**
@@ -93,7 +90,7 @@ export default class ServerController {
             throw error;
         }
 
-        const bind = `Port ${config.port} `;
+        const bind = `Port ${ServerController.api.config.port} `;
 
         // handle specific listen errors with friendly messages
         switch (error.code) {
@@ -115,7 +112,7 @@ export default class ServerController {
      * port is setup in the .env file.
      */
     public onListening() {
-        LogHelper.log(`${config.appName} (version ${config.version}) répond sur le port: ${config.port}`);
+        LogHelper.log(`${ServerController.api.config.appName} (version ${ServerController.api.config.version}) répond sur le port: ${ServerController.api.config.port}`);
     }
 
     /**

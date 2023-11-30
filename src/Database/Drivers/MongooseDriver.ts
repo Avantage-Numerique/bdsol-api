@@ -59,7 +59,7 @@ export class MongooseDBDriver implements DBDriver {
      */
     constructor(config:any) {
         this.urlConfig =  buildConnectionUrlParams(config);
-        this.driverPrefix = this.urlConfig.driverPrefix ?? config.db.prefix;
+        this.driverPrefix = this.urlConfig.driverPrefix;
         this.haveCredentials = typeof this.urlConfig.haveCredentials !== 'undefined' ? this.urlConfig.haveCredentials : (this.urlConfig.db.user !== '' && this.urlConfig.db.password !== '');
         this.isSRV = this.urlConfig.isSRV;
         this.authSource = this.urlConfig.db.authSource;
