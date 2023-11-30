@@ -5,7 +5,7 @@ import {StatusCodes} from "http-status-codes";
 import {EmailConfirmationContent} from "@src/Templates/Contents/EmailConfirmationContent";
 import config from "@src/config";
 import PublicTemplate from "@src/Templates/PublicTemplate";
-import {EmailData} from "@src/Templates/Emails/EmailData";
+import {getTemplateBaseData} from "@src/Templates/Emails/EmailData";
 import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
@@ -13,16 +13,16 @@ const ApiRouter = express.Router();
 
 // Would this print the doc or not ?
 ApiRouter.get("/", async (req, res) => {
-
+    const baseData = getTemplateBaseData();
     const index = new PublicTemplate();//tempalte have already a default in the EmailContent.Prepare.
     const title:string = `${config.appName} (version ${config.version})`;
     let body:string = config.environnement === 'development' ? `écoute sur le port: ${config.port}<br />` : '';
-    body += EmailData.api.description;
+    body += baseData.api.description;
     res.set('Content-Type', 'text/html');
-    LogHelper.info("Rendering index", EmailData);
+    LogHelper.info("Rendering index", baseData);
     return res.status(StatusCodes.OK).send(await index.render({
         context: {
-            ...EmailData,//basic app and api default string and links
+            ...baseData,//basic app and api default string and links
             ...DefaultEmailTheme,//basic theme for colors and sizes.
             title: `${title}`,
             body: `${body}`,
@@ -39,14 +39,14 @@ ApiRouter.get("/", async (req, res) => {
 
 
 ApiRouter.get('/quarante-deux',async (req, res) => {
-
+    const baseData = getTemplateBaseData();
     const index42 = new PublicTemplate("quarante-deux");//tempalte have already a default in the EmailContent.Prepare.
     const title:string = `The Answer to the Ultimate Question of Life, the Universe, and Everything`;
     let body:string = '';
     res.set('Content-Type', 'text/html');
     return res.status(StatusCodes.OK).send(await index42.render({
         context: {
-            ...EmailData,//basic app and api default string and links
+            ...baseData,//basic app and api default string and links
             ...DefaultEmailTheme,//basic theme for colors and sizes.
             title: `${title}`,
             body: `${body}`,
@@ -100,9 +100,10 @@ ApiRouter.get("/sync-db", async (req, res) => {
     let body:string = 'Sync prod into staging data only.';
 
     res.set('Content-Type', 'text/html');
+    const baseData = getTemplateBaseData();
     return res.status(StatusCodes.OK).send(await index.render({
         context: {
-            ...EmailData,//basic app and api default string and links
+            ...baseData,//basic app and api default string and links
             ...DefaultEmailTheme,//basic theme for colors and sizes.
             title: `${title}`,
             body: `${body}`,
