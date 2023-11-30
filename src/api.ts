@@ -59,6 +59,7 @@ export default class Api {
     }
 
     public configure() {
+        LogHelper.info("initiating api configuration.");
         this._config = getApiConfig();
         this.express.set("port", this._config.port);
     }

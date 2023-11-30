@@ -2,7 +2,7 @@
   "name": "bdsolapi",
   "version": "0.0.8",
   "description": "La BDSOL disponible grâce à docker, avec toutes ses facettes. Principalement pour le developpement.",
-  "main": "src/api.ts",
+  "main": "src/server.ts",
   "private": true,
   "scripts": {
     "testdb": "npx ts-node -r tsconfig-paths/register src/testDbConnection.ts",
