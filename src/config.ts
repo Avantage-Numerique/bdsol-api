@@ -2,13 +2,13 @@
 import * as dotenv from "dotenv";
 import path from "path";
 
-dotenv.config({path: path.join(__dirname, "../../.env")});
+dotenv.config({path: path.join(__dirname, "../../.env")});//
 
 const getApiConfig = () => {
     return {
         environnement: process.env.ENVIRONNEMENT || "development",
         logPerformance: process.env.LOG_PERFORMANCE || true,
-        logToFile: process.env.LOG_TO_FILE || false,
+        logToFile: process.env.LOG_TO_FILE === "true",
 
         isProduction: process.env.ENVIRONNEMENT === 'production',
         isStaging: process.env.ENVIRONNEMENT === 'staging',
@@ -20,6 +20,7 @@ const getApiConfig = () => {
         appName: process.env.APP_NAME || "API",
         port: process.env.PORT || "8001",
         version: process.env.VERSION || "0.0.8.prod",
+        serverPath: process.env.SERVER_PATH || path.join(__dirname, ".."),
         basepath: process.env.BASEPATH || path.join(__dirname, ".."),
         baseUrl: process.env.BASEURL || "http://localhost:8000",
         frontendAppUrl: process.env.FRONTEND_APP_URL || "http://localhost:3000",

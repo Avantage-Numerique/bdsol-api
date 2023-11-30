@@ -3,10 +3,10 @@ import * as mime from "mime-types";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import {fileExtensionList} from "@src/Media/List/FileList";
 import Record from "@src/Media/Record/Record";
-import config from "@src/config";
+import {getApiConfig} from "@src/config";
 
 export default class FileStorage {
-    static basePath:string = `${config.basepath}`;
+    static basePath:string = `${getApiConfig().basepath}`;
     //static destination:string;
 
 

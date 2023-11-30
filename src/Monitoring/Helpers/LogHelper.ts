@@ -1,5 +1,6 @@
 import * as fs from 'fs';
-import config from "@src/config";
+import {getApiConfig} from "@src/config";
+import LogStorage from "@src/Storage/Files/LogStorage";
 /**
  * Entry point for loggin activity into the API
  * This is a version 0, with basic console.log thing.
@@ -37,7 +38,7 @@ export default class LogHelper
 {
     static printToConsole: boolean = true;
     static styled:boolean = false;
-    static logToFile: boolean = config.logToFile;
+    static logToFile: boolean = getApiConfig().logToFile;
     
     public static showLog = true;
     public static showError = true;
@@ -163,10 +164,10 @@ export default class LogHelper
             const d = new Date;
             const date = d.toLocaleDateString('en-CA');
 
-            const path = config.basepath ? `${config.basepath}/logs/` : "./logs/";
+            const path = `${LogStorage.basePath}`;
             const allFileName = date.toString()+"-all.log";
 
-            fs.open(path+allFileName, 'a', function(err, fd){
+            fs.open(`${path}/${allFileName}`, 'a', function(err, fd){
                 if (err)
                     console.log("Can't log into file", err)
                 else {
