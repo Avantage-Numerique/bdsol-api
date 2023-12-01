@@ -41,7 +41,7 @@ export abstract class BaseProvider implements DbProvider {
 
     public verbose:boolean = true;
     public isConnected:boolean = false;
-    public connectionAsPromise:boolean = false;
+    public connectionAsPromise:boolean = true;
 
     constructor(driver:DBDriver, name='') {
         if (name !== "") {
