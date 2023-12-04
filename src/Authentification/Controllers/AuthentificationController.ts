@@ -102,7 +102,7 @@ class AuthentificationController
         return ErrorResponse.create(
             new Error(ReasonPhrases.UNAUTHORIZED),
             StatusCodes.UNAUTHORIZED,
-            'Vos informations de connexion sont incorrectes, vérifiez votre utilisateur et votre mot de passe.'
+            'Vos informations de connexion sont incorrectes.\nVérifiez votre utilisateur et votre mot de passe.'
         );
     }
 
