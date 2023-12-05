@@ -18,6 +18,7 @@ import {EmailConfirmationContent} from "@src/Templates/Contents/EmailConfirmatio
 import {isObjectIdOrHexString} from "mongoose";
 import {EmailForgottenPasswordContent} from "@src/Templates/Contents/EmailForgottenPasswordContent";
 import {EmailPasswordChangedContent} from "@src/Templates/Contents/EmailPasswordChangedContent";
+import { EmailConfirmationVerifiedAccountContent } from "@src/Templates/Contents/EmailConfirmationVerifiedAccountContent";
 
 class AuthentificationController
 {
@@ -448,6 +449,17 @@ class AuthentificationController
                     {verify: { isVerified: true, token: null, expireDate: null, validatedOn: new Date()}},
                     {new: true})
                 const dtoResponse = User.getInstance().dataTransfertObject(response);
+
+                //Send email to say that account is verified
+                const welcomeName = getUserWelcome(targetUser);//encapsulate this into an helper
+                        const confirmVerifiedAccountEmail:EmailNotification = new EmailNotification(
+                        {
+                            recipient: targetUser.email,
+                            subject: welcomeName+", Votre compte a été vérifié sur avnu.ca"
+                        },
+                        EmailConfirmationVerifiedAccountContent(welcomeName, config.frontendAppUrl+"/compte/connexion")
+                        );
+                        confirmVerifiedAccountEmail.send();
 
                 //Return connection token for that user?
                 return SuccessResponse.create(dtoResponse, StatusCodes.OK, "User's account is now verified");
