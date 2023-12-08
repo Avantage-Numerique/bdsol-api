@@ -13,6 +13,7 @@ import {populateUser} from "@src/Users/Middlewares/populateUser";
 import {User} from "@src/Users/Models/User";
 import {SkillGroup} from "@src/Taxonomy/Schemas/SkillGroupSchema";
 import {EquipmentLink} from "@src/Database/Schemas/EquipmentLinkSchema";
+import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 
 
 class Organisation extends AbstractModel {
@@ -87,7 +88,7 @@ class Organisation extends AbstractModel {
                     //alias: 'desc'
                 },
                 url: {
-                    type: String,
+                    type: [SocialHandle.schema]
                 },
                 contactPoint: {
                     type: String,
@@ -160,7 +161,7 @@ class Organisation extends AbstractModel {
             _id: document._id ?? '',
             name: document.name ?? '',
             description: document.description ?? '',
-            url: document.url ?? '',
+            url: document.url ?? [],
             contactPoint: document.contactPoint ?? '',
             fondationDate: document.fondationDate ?? '',
             offers: document.offers ?? '',

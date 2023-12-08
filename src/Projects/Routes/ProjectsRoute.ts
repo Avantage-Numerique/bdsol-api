@@ -24,7 +24,10 @@ class ProjectsRoutes extends CrudRoute {
             objectIdSanitizerAlias('data.entityInCharge'),
             objectIdSanitizerAlias('data.producer'),
             basicHtmlSanitizerAlias('data.description'),
-            urlSanitizerAlias('data.url'),
+            //SocialHandles
+            basicHtmlSanitizerAlias('data.url.*.label'),
+            urlSanitizerAlias('data.url.*.url'),
+
             contactPointSanitizerAlias('data.contactPoint'),
             //body('data.context').exists({checkNull:true}).bail().customSanitizer(EnumSanitizer.validatorCustomSanitizer(ProjectContextEnum)),
             //body('data.location').exists({checkNull:true}).bail(),
@@ -49,7 +52,10 @@ class ProjectsRoutes extends CrudRoute {
             objectIdSanitizerAlias('data.entityInCharge'),
             objectIdSanitizerAlias('data.producer'),
             basicHtmlSanitizerAlias('data.description'),
-            urlSanitizerAlias('data.url'),
+            //SocialHandles
+            basicHtmlSanitizerAlias('data.url.*.label'),
+            urlSanitizerAlias('data.url.*.url'),
+            
             contactPointSanitizerAlias('data.contactPoint'),
             objectIdSanitizerAlias('data.team.*.member'),
             objectIdSanitizerAlias('data.mainImage'),

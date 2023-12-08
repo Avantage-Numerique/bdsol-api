@@ -7,6 +7,7 @@ import {Sponsor} from "@database/Schemas/SponsorSchema";
 import {ScheduleBudget} from "@database/Schemas/ScheduleBudgetSchema";
 import {ProjectContextEnum} from "../ProjectContextEnum";
 import {DomainSchema} from "@src/Taxonomy/Schemas/DomainSchema";
+import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 
 export interface ProjectSchema extends Document {
     name:string;
@@ -15,7 +16,7 @@ export interface ProjectSchema extends Document {
     entityInCharge:ObjectId;
     producer: ObjectId;
     description:string;
-    url:string;
+    url:[SocialHandle]
     contactPoint:string;
     location:[ObjectId];
     team:[Member];
