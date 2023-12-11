@@ -1,13 +1,13 @@
 import express from "express";
-import ProjectsController from "../Controllers/ProjectsController";
-import AbstractController from "../../Abstract/Controller";
-import CrudRoute from "../../Abstract/CrudRoute";
-import {objectIdSanitizerAlias} from "../../Security/SanitizerAliases/ObjectIdSanitizerAlias";
-import {urlSanitizerAlias} from "../../Security/SanitizerAliases/UrlSanitizerAlias";
-import {contactPointSanitizerAlias} from "../../Security/SanitizerAliases/ContactSanitizerAlias";
-import {entityNameSanitizerAlias} from "../../Security/SanitizerAliases/EntityNameSanitizerAlias";
-import {basicHtmlSanitizerAlias} from "../../Security/SanitizerAliases/BasicHtmlSanitizerAlias";
-import {noHtmlStringSanitizerAlias} from "../../Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
+import ProjectsController from "@src/Projects/Controllers/ProjectsController";
+import AbstractController from "@core/Controller";
+import CrudRoute from "@core/CrudRoute";
+import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
+import {urlSanitizerAlias} from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
+import {contactPointSanitizerAlias} from "@src/Security/SanitizerAliases/ContactSanitizerAlias";
+import {entityNameSanitizerAlias} from "@src/Security/SanitizerAliases/EntityNameSanitizerAlias";
+import {basicHtmlSanitizerAlias} from "@src/Security/SanitizerAliases/BasicHtmlSanitizerAlias";
+import {noHtmlStringSanitizerAlias} from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
 
 class ProjectsRoutes extends CrudRoute {
 

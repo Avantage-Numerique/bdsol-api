@@ -1,9 +1,15 @@
 import express, {NextFunction, Request, Response} from "express";
+import {query} from "express-validator";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {SuccessResponse} from "@src/Http/Responses/SuccessResponse";
 import AbstractRoute from "@core/Route";
 import SearchSuggestions from "./SearchSuggestions";
 import SearchResults from "./SearchResults";
+import {isInEnumSanitizerAlias} from "@src/Security/SanitizerAliases/IsInEnumSanitizerAlias";
+import {EntityTypesEnum} from "@src/Entities/EntityTypes";
+import {IntegerSanitizerAlias} from "@src/Security/SanitizerAliases/IntegerSanitizerAlias";
+import {urlSanitizerAlias} from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
+import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
 
 class SearchRoutes extends AbstractRoute {
 
@@ -15,6 +21,7 @@ class SearchRoutes extends AbstractRoute {
 
     public searchSuggestions_instance: SearchSuggestions;
     public searchResults_instance: SearchResults;
+
     constructor() {
         super();
         this.routerInstance = express.Router();
@@ -30,14 +37,53 @@ class SearchRoutes extends AbstractRoute {
      * @public @method
      */
     public setupPublicRoutes(): express.Router {
-        this.routerInstance.post('/type', [this.searchByTypeAndCategoryHandler.bind(this), this.routeSendResponse.bind(this)]);
-        this.routerInstance.get('/', [this.fullSearchHandler.bind(this), this.routeSendResponse.bind(this)]);
-        this.routerInstance.get('/all', [this.aggregateAllHandler.bind(this), this.routeSendResponse.bind(this)]);
-        this.routerInstance.get('/regex', [this.textSearchSuggestionsHandler.bind(this), this.routeSendResponse.bind(this)]);
-        this.routerInstance.get('/text', [this.textSearchResultsHandler.bind(this), this.routeSendResponse.bind(this)]);
-        this.routerInstance.get('/nearestTaxonomy', [this.nearTaxonomyToSearchIndex.bind(this), this.routeSendResponse.bind(this)]);
-        this.routerInstance.get('/:linkId', [this.taxonomyLinkedEntitiesHandler.bind(this), this.routeSendResponse.bind(this)]);
-        this.routerInstance.get('/:category/:slug', [this.taxonomyLinkedEntitiesByCatAndSlugHandler.bind(this), this.routeSendResponse.bind(this)]);
+        this.routerInstance.post('/type', [
+            isInEnumSanitizerAlias('data.type', EntityTypesEnum),
+            IntegerSanitizerAlias('data.skip'),
+            this.searchByTypeAndCategoryHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+        this.routerInstance.get('/', [
+            urlSanitizerAlias('searchIndex', true, query),//query.searchIndex
+            this.fullSearchHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+        //désactivé ?
+        this.routerInstance.get('/all', [
+            this.aggregateAllHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+        //query.searchIndex
+        this.routerInstance.get('/regex', [
+            urlSanitizerAlias('searchIndex', true, query),
+            this.textSearchSuggestionsHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+        //query.searchIndex
+        this.routerInstance.get('/text', [
+            urlSanitizerAlias('searchIndex', true, query),
+            this.textSearchResultsHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+        //query.searchIndex
+        this.routerInstance.get('/nearestTaxonomy', [
+            urlSanitizerAlias('searchIndex', true, query),
+            this.nearTaxonomyToSearchIndex.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+        //req.params.linkId
+        this.routerInstance.get('/:linkId', [
+            objectIdSanitizerAlias('linkId', false, query),
+            this.taxonomyLinkedEntitiesHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+        //req.params.category, req.params.slug
+        this.routerInstance.get('/:category/:slug', [
+            urlSanitizerAlias('category', false, query),
+            urlSanitizerAlias('slug', false, query),
+            this.taxonomyLinkedEntitiesByCatAndSlugHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
         return this.routerInstance;
     }
 
@@ -48,6 +94,7 @@ class SearchRoutes extends AbstractRoute {
     public setupAdditionnalAuthRoutes(router: express.Router): express.Router {
         return router;
     }
+
     public setupAdditionnalPublicRoutes(router: express.Router): express.Router {
         return router;
     }
@@ -79,7 +126,7 @@ class SearchRoutes extends AbstractRoute {
         combinedResults.forEach((elem) => {
             if(!uniqueResults.some(unique => unique._id == elem._id))
                 uniqueResults.push(elem);
-        })
+        });
 
         res.serviceResponse = SuccessResponse.create(uniqueResults, StatusCodes.OK, ReasonPhrases.OK);
         return next();
