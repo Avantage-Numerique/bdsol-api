@@ -13,7 +13,8 @@ const dateSanitizerAlias = (param:string, isOptional:boolean=true, source=body):
 
     chain = chain.customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
         .trim()
-        //.isDate();
+        .isISO8601()
+        .toDate();
 
     return chain;
 }
