@@ -22,6 +22,7 @@ class PersonsRoutes extends CrudRoute {
             noHtmlStringSanitizerAlias('data.catchphrase'),
             basicHtmlSanitizerAlias('data.description'),
             objectIdSanitizerAlias('data.occupations.*.skills.*'),
+            noHtmlStringSanitizerAlias('data.occupations.*.groupName.*'),
             objectIdSanitizerAlias('data.domains.*.domain'),
         ],
         update: [
@@ -32,6 +33,7 @@ class PersonsRoutes extends CrudRoute {
             noHtmlStringSanitizerAlias('data.catchphrase'),
             basicHtmlSanitizerAlias('data.description'),
             objectIdSanitizerAlias('data.occupations.*.skills.*'),
+            noHtmlStringSanitizerAlias('data.occupations.*.groupName.*'),
             objectIdSanitizerAlias('data.domains.*.domain'),
         ],
         delete: [],
