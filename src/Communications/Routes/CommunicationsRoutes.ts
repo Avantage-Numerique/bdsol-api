@@ -4,11 +4,11 @@ import {body} from "express-validator";
 import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
 import CommunicationsController from "../Controllers/CommunicationsController";
 import AbstractRoute from "@src/Abstract/Route";
-import { RouteContract } from "@src/Abstract/Contracts/RouteContract";
-import { NextFunction, Request, Response } from "express-serve-static-core";
-import { Service } from "@src/Database/DatabaseDomain";
-import { entityNameSanitizerAlias } from "@src/Security/SanitizerAliases/EntityNameSanitizerAlias";
-import { basicHtmlSanitizerAlias } from "@src/Security/SanitizerAliases/BasicHtmlSanitizerAlias";
+import {RouteContract} from "@src/Abstract/Contracts/RouteContract";
+import {NextFunction, Request, Response} from "express-serve-static-core";
+import {Service} from "@src/Database/DatabaseDomain";
+import {entityNameSanitizerAlias} from "@src/Security/SanitizerAliases/EntityNameSanitizerAlias";
+import {basicHtmlSanitizerAlias} from "@src/Security/SanitizerAliases/BasicHtmlSanitizerAlias";
 
 class CommunicationsRoutes extends AbstractRoute implements RouteContract {
 

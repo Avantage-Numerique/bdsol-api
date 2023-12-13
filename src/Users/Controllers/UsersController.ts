@@ -4,7 +4,7 @@ import {UsersService} from "../Services/UsersService";
 import AbstractController from "../../Abstract/Controller";
 import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService";
 import UserHistory from "../../UserHistory/Models/UserHistory";
-import { UserHistorySchema } from "../../UserHistory/Schemas/UserHistorySchema";
+import {UserHistorySchema} from "../../UserHistory/Schemas/UserHistorySchema";
 
 class UsersController extends AbstractController {
 

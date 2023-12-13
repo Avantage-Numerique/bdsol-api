@@ -1,6 +1,5 @@
 import LocalStorage from "./LocalStorage";
 
-export default class PublicStorage extends LocalStorage {
+export default class PublicStorage {
     public static basePath:string = LocalStorage.basePath + "public";
-    public static destination:string = PublicStorage.basePath + "/";
 }

@@ -1,6 +1,3 @@
-import config from "@src/config";
-
-
 interface MongoDbUrlParamsContract {
     driverPrefix:string,
     haveCredentials:boolean,
@@ -20,14 +17,13 @@ const buildConnectionUrlParams = (dbConfig:any):MongoDbUrlParamsContract => {
     } as MongoDbUrlParamsContract;
 }
 
-const defaultUrlParams:MongoDbUrlParamsContract = buildConnectionUrlParams(config.db);
 
 /**
  * Get the connection url in one place.
  * @param params {MongoDbUrlParamsContract} MongoDbUrlParams parameters to get the url for the db.
  * @param db string to get the connection to mongo db.
  */
-const getConnectionUrl = (params:MongoDbUrlParamsContract=defaultUrlParams, db:string='') => {
+const getConnectionUrl = (params:MongoDbUrlParamsContract, db:string='') => {
     let url: string = `${getConnectionBaseUrl(params)}${db}`;
     const needAuthSourceQueryVar:boolean = params.haveCredentials && params.db.addAuthSource;
     url += `${(needAuthSourceQueryVar ? `?authSource=${params.db.authSource}` : '')}`;
@@ -42,7 +38,7 @@ const getConnectionUrl = (params:MongoDbUrlParamsContract=defaultUrlParams, db:s
  *
  * @param params MongoDbUrlParams parameters to get the url for the db.
  */
-const getConnectionBaseUrl = (params:MongoDbUrlParamsContract = defaultUrlParams) => {
+const getConnectionBaseUrl = (params:MongoDbUrlParamsContract) => {
 
     const credential = params.haveCredentials ? `${params.db.user}:${params.db.password}@` : '';
     let baseUrl = "";
@@ -63,4 +59,4 @@ const prepareUriForLoging = (uri:string):string => {
 }
 
 
-export {getConnectionUrl, getConnectionBaseUrl, MongoDbUrlParamsContract, prepareUriForLoging, buildConnectionUrlParams, defaultUrlParams};
+export {getConnectionUrl, getConnectionBaseUrl, MongoDbUrlParamsContract, prepareUriForLoging, buildConnectionUrlParams};

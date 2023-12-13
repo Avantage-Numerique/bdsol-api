@@ -2,11 +2,12 @@
   "name": "bdsolapi",
   "version": "0.0.8",
   "description": "La BDSOL disponible grâce à docker, avec toutes ses facettes. Principalement pour le developpement.",
-  "main": "src/api.ts",
+  "main": "src/server.ts",
   "private": true,
   "scripts": {
     "testdb": "npx ts-node -r tsconfig-paths/register src/testDbConnection.ts",
-    "tsc": "tsc && tsc-alias",
+    "build-views": "npx ts-node src/build-views.ts",
+    "tsc": "tsc && tsc-alias && npm run build-views",
     "tsctest": "tsc --outDir \"../build-api\" && tsc-alias --outDir \"../build-api\"",
     "serve": "node build/src/server.js",
     "serve-ts": "npx ts-node src/server.ts",
@@ -15,12 +16,9 @@
     "sync-ts": "npx ts-node -r tsconfig-paths/register src/sync.ts",
     "restore-ts": "npx ts-node -r tsconfig-paths/register src/restore.ts",
     "dev": "npx nodemon -r tsconfig-paths/register src/server.ts",
-    "dev-old": "npx ts-node-dev --respawn --transpile-only --debug --watch src src/server.ts",
-    "prod": "tsc && node ./build/server.js",
+    "start": "node ./build/src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "test-helpers": "npx ts-node ./src/helpers.ts",
-    "lint": "eslint . --ext .ts",
-    "generate-keys": "ssh-keygen -t rsa -b 4096 -C bdsol-api -f bdsolapi"
+    "lint": "eslint . --ext .ts"
   },
   "keywords": [],
   "authors": [

@@ -11,7 +11,7 @@ export const cli = (args:any) => {
     console.log(args);
 }
 
-import { Command } from "commander";
+import {Command} from "commander";
 
 //add the following line
 const mainCommand = new Command();

@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
-import config from "./config";
+import * as Nunjucks from "nunjucks";
+import {getApiConfig} from "./config";
 import {ApiRouter} from "./routes";
 import {HealthCheckRouter} from "./Healthcheck/Routes/HealthCheckRoutes";
 import {AuthentificationRoutes} from "@auth/Routes/AuthentificationRoutes";
@@ -23,7 +24,6 @@ import {RequestDuration} from "./Monitoring/Middlewares/RequestDuration";
 import {AdminRoutes} from "@src/Admin/Routes/AdminRoutes";
 import JobScheduler from "@src/Schedule/JobScheduler";
 import {JobSheet} from "@src/Schedule/Sheet";
-import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 import {EventsRoutes} from "./Events/Routes/EventsRoutes";
 import {PlacesRoutes} from "./Places/Routes/PlacesRoutes";
 import EquipmentRoutes from "./Equipment/Routes/EquipmentRoute";
@@ -36,6 +36,8 @@ import {MonitoringRoutes} from "@src/Monitoring/Routes/MonitoringRoutes";
  */
 export default class Api {
     public express: express.Express = express();
+    public templateSystem:Nunjucks.Environment;
+    public templateBasePath:string;
     public mainRouter: express.Router;
     public authRouters: express.Router;
 
@@ -43,6 +45,10 @@ export default class Api {
     public entitiesRoutes:Array<any>;
 
     public scheduler:JobScheduler;
+    private _config:any;
+    constructor() {
+    }
+
 
     public start() {
         this._initEntitiesRouters();
@@ -52,6 +58,12 @@ export default class Api {
         this._initScheduler();
     }
 
+    public configure() {
+        LogHelper.info("initiating api configuration.");
+        this._config = getApiConfig();
+        this.express.set("port", this._config.port);
+    }
+
     /**
      * Assign middlewares to express
      * @private
@@ -59,7 +71,7 @@ export default class Api {
     private _initMiddleware()
     {
         // Add a list of allowed origins.
-        const allowedOrigins = config.cors.allowedOrigins,
+        const allowedOrigins = this._config.cors.allowedOrigins,
             options: cors.CorsOptions = {
                 origin: allowedOrigins
             };
@@ -71,6 +83,13 @@ export default class Api {
 
         // parse application/json
         this.express.use(express.json());
+
+        this.templateBasePath = `${this._config.basepath}/views`;
+        //Templates and rendering
+        this.templateSystem = Nunjucks.configure('views', {
+            express: this.express,
+            autoescape: true
+        });
     }
 
     private _initBaseRoutes() {
@@ -150,7 +169,7 @@ export default class Api {
             }
         ];
         // If dev, add admin routes.
-        if (config.environnement === 'development') {
+        if (this._config.environnement === 'development') {
             this.entitiesRoutes.push({
                 baseRoute: "/admin",
                 manager: new AdminRoutes()
@@ -168,7 +187,7 @@ export default class Api {
     {
         LogHelper.info("[ROUTES] Configuration des routes de l'API ...");
 
-        if (config.logPerformance) this.express.use(RequestDuration.middleware());
+        if (this._config.logPerformance) this.express.use(RequestDuration.middleware());
 
         this.mainRouter = express.Router(); //this seeem to be a "branch" independant. Middle ware pass here, and error handling are only manage into the same "router's hierarchy" may I labled.
         this.mainRouter.use(GetRequestIp.middleware());    // Set an empty user property in Request there. Would be possible to feed with more default info.
@@ -262,11 +281,16 @@ export default class Api {
         this.scheduler = new JobScheduler();
 
         const jobSheets:Array<JobSheet> = [
-            this.scheduler.createSheet("Embed Taxonomy's metas (entities count, etc.", EmbedTaxonomiesMetas),
+            //this.scheduler.createSheet("Embed Taxonomy's metas (entities count, etc.", EmbedTaxonomiesMetas),
             //this.scheduler.createSheet("Backuping BD", BackukDbJob, this.scheduler.createRule('second', 2))
         ];
-        this.scheduler.init(jobSheets);
+        LogHelper.info("Skipping job scheduler for test");
+        //this.scheduler.init(jobSheets);
 
+    }
+
+    get config():any {
+        return this._config;
     }
 
 }

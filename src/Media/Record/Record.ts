@@ -1,6 +1,7 @@
 import FileStorage from "../../Storage/Files/FileStorage";
 import * as mime from "mime-types"
 import mongoose from "mongoose";
+import LocalStorage from "@src/Storage/Files/LocalStorage";
 
 
 export default class Record {
@@ -74,7 +75,7 @@ export default class Record {
         this.entityType = entityType;
         this.entityTypePath = entityType.toLowerCase();
         this.entityId = entityId;
-        this.pathNoFilename = FileStorage.generatePath(this.entityTypePath, this.entityId);
+        this.pathNoFilename = FileStorage.generatePath(this.entityTypePath, this.entityId, LocalStorage.basePath);//I did add the third parameters for relative purposes, but it's weird.
         this.pathWithFilename = this.pathNoFilename + '/' + this.filenameAndExt;
 
         this.url = "/medias/"+ this.entityTypePath + "/" + this.entityId + "/" + this.filenameAndExt;

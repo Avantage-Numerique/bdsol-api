@@ -14,9 +14,6 @@ class UserHistory extends AbstractModel {
     public static getInstance():UserHistory {
         if (UserHistory._instance === undefined) {
             UserHistory._instance = new UserHistory();
-            
-            UserHistory._instance.schema.virtual("type").get( function () { return UserHistory._instance.modelName });
-
             UserHistory._instance.initSchema();
         }
         return UserHistory._instance;
@@ -77,7 +74,6 @@ class UserHistory extends AbstractModel {
             }
         },
             {
-                toJSON: { virtuals: true },
                 timestamps: true
         });
 

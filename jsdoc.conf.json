@@ -2,7 +2,7 @@
     "source": {
         "include": ["./src"],
         "exclude": ["./node_modules"],
-        "includePattern": "\\.(jsx|js|ts|tsx)$",
+        "includePattern": "\\.(jsx|js|ts|tsx|njk)$",
         "excludePattern": "(node_modules/|docs)"
     },
     "tags": {

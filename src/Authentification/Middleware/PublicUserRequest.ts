@@ -1,4 +1,4 @@
-import {NextFunction, Response, Request} from "express";
+import {NextFunction, Request, Response} from "express";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 export class PublicUserRequest {

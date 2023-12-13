@@ -2,10 +2,10 @@ import express from "express";
 import AbstractController from "@core/Controller";
 import CrudRoute from "@core/CrudRoute";
 import PlacesController from "@src/Places/Controllers/PlacesController";
-import { basicHtmlSanitizerAlias } from "@src/Security/SanitizerAliases/BasicHtmlSanitizerAlias";
-import { objectIdSanitizerAlias } from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
-import { entityNameSanitizerAlias } from "@src/Security/SanitizerAliases/EntityNameSanitizerAlias";
-import { noHtmlStringSanitizerAlias } from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
+import {basicHtmlSanitizerAlias} from "@src/Security/SanitizerAliases/BasicHtmlSanitizerAlias";
+import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
+import {entityNameSanitizerAlias} from "@src/Security/SanitizerAliases/EntityNameSanitizerAlias";
+import {noHtmlStringSanitizerAlias} from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
 
 class PlacesRoutes extends CrudRoute {
 

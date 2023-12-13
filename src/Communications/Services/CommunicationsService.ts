@@ -1,5 +1,4 @@
-
-import {Service} from "../../Database/DatabaseDomain";
+import {Service} from "@database/DatabaseDomain";
 import Communication from "../Models/Communication";
 
 class CommunicationsService extends Service

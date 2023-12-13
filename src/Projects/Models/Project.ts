@@ -11,7 +11,6 @@ import {Sponsor} from "@database/Schemas/SponsorSchema";
 import {ScheduleBudget} from "@database/Schemas/ScheduleBudgetSchema";
 import {ProjectContextEnum} from "../ProjectContextEnum";
 import {TeamField} from "@src/Team/Schemas/TeamSchema";
-import { EquipmentLink } from "@src/Database/Schemas/EquipmentLinkSchema";
 import * as fs from 'fs';
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 

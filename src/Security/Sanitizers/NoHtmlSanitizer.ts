@@ -1,7 +1,6 @@
-import {NextFunction, Response, Request} from "express";
+import {NextFunction, Request, Response} from "express";
 import sanitizeHtml from 'sanitize-html';
 import {CustomSanitizer} from "express-validator";
-import {Meta} from "express-validator/src/base";
 
 export class NoHtmlSanitizer {
 
