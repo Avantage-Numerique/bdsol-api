@@ -41,7 +41,7 @@ export abstract class BaseProvider implements DbProvider {
 
     public verbose:boolean = true;
     public isConnected:boolean = false;
-
+    public connectionAsPromise:boolean = true;
 
     constructor(driver:DBDriver, name='') {
         if (name !== "") {
@@ -119,7 +119,6 @@ export abstract class BaseProvider implements DbProvider {
 
     public async createMongooseConnection():Promise<Connection|undefined> {
         const url:string = `${this._driver.connectionUrl()}`;
-        LogHelper.info(`[DB][createMongooseConnection] url ${this._driver.urlToLog(url)} on ${this._databaseName} database`);
         try {
             const options:any = config.db.user !== '' && config.db.password !== '' ? {
                 user: this._driver.config.user,
@@ -133,7 +132,11 @@ export abstract class BaseProvider implements DbProvider {
                 options.authSource = this._driver.config.authSource;
             }
 
-            return await mongoose.createConnection(url, options).asPromise();//ajout du asPromise avec le
+            if (this.connectionAsPromise) {
+
+                return await mongoose.createConnection(url, options).asPromise();//ajout du asPromise avec le
+            }
+            return await mongoose.createConnection(url, options);
 
         } catch (error) {
             LogHelper.error(`[DB][createMongooseConnection] can't create connection to mongo server with mongoose  on ${this._databaseName}`, error);

@@ -1,5 +1,5 @@
 import config from "@src/config";
-import {EmailData} from "@src/Templates/Emails/EmailData";
+import {getTemplateBaseData} from "@src/Templates/Emails/EmailData";
 import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
 import {NotificationContent} from "@src/Notifications/Notification";
 
@@ -45,6 +45,7 @@ class EmailContent {
     }
 
     public static baseTemplateContext():any {
+        const baseData = getTemplateBaseData();
         return {
             cta: {
                 cta: "https://avnu.ca",
@@ -60,7 +61,7 @@ class EmailContent {
                 unsuscribeLabel: "Se désinscrire",
                 seeAsWebLabel: "View as a Web Page"
             },
-            ...EmailData,//basic app and api default string and links
+            ...baseData,//basic app and api default string and links
             ...DefaultEmailTheme//basic theme for colors and sizes.
         }
     }

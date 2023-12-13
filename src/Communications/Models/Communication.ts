@@ -1,8 +1,8 @@
 import mongoose, {Schema} from "mongoose";
 import AbstractModel from "../../Abstract/Model";
 import CommunicationsService from "../Services/CommunicationsService";
-import { CommunicationSchema } from "../Schemas/CommunicationSchema";
-import { DbProvider } from "@src/Database/DatabaseDomain";
+import {CommunicationSchema} from "../Schemas/CommunicationSchema";
+import {DbProvider} from "@src/Database/DatabaseDomain";
 
 class Communication extends AbstractModel {
 

@@ -10,7 +10,7 @@
         "name"  : "Circassiensse",
         "description" : "La personne qui fait les actions de faire du cirquesse",
         "source" : "Eric",
-        "status" : "pending",
+        "status" : "Pending",
         "addReason" : "Parce que j'en fais pas"
     },
     {
@@ -67,7 +67,7 @@
         "name" : "!\"/$%?&*()<>{}[]~éàè`{$Status}`",
         "description" : "!\"/$%?&*()<>{}[]~éàè`{$Status}`",
         "source" : "!\"/$%?&*()<>{}[]~éàè`{$Status}`",
-        "status" : "pending",
+        "status" : "Pending",
         "addReason" : "!\"/$%?&*()<>{}[]~éàè`{$Status}`"
     },
     {
@@ -94,7 +94,7 @@
         "name"  : "asdfdd",
         "description" : "asdfff",
         "source" : "asdfff",
-        "status" : "pending",
+        "status" : "Pending",
         "addReason" : "asdffff"
     },
     {
@@ -108,7 +108,7 @@
         "name" : "Circassien(ne)",
         "description" : "Les gens qui font du cirque",
         "source" : "Fred",
-        "status" : "pending",
+        "status" : "Pending",
         "addReason" : "Parce que c'est cool le cirque"
     }
 ]

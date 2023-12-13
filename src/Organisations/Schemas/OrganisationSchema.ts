@@ -3,9 +3,9 @@ import {Meta} from "../../Moderation/Schemas/MetaSchema";
 import Media from "../../Media/Models/Media";
 import {Member} from "../../Team/Schemas/MemberSchema";
 import {DomainSchema} from "@src/Taxonomy/Schemas/DomainSchema";
-import { SkillGroup } from "../../Taxonomy/Schemas/SkillGroupSchema";
-import { ObjectId } from "mongodb";
-import { EquipmentLink } from "@src/Database/Schemas/EquipmentLinkSchema";
+import {SkillGroup} from "../../Taxonomy/Schemas/SkillGroupSchema";
+import {ObjectId} from "mongodb";
+import {EquipmentLink} from "@src/Database/Schemas/EquipmentLinkSchema";
 
 export interface OrganisationSchema extends Document {
     name:string;

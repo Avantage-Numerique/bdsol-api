@@ -1,6 +1,6 @@
-import FileStorage from "@src/Storage/Files/FileStorage";
+import config from "@src/config";
 
-export default class StaticPublicStorage extends FileStorage {
-    public static basePath:string = "./public";//FileStorage.basePath +
-    public static destination:string = StaticPublicStorage.basePath + "/";
+export default class StaticPublicStorage {
+    public static basePath:string = `${config.basepath}/public`;//FileStorage.basePath +
+    //public static destination:string = StaticPublicStorage.basePath + "/";
 }

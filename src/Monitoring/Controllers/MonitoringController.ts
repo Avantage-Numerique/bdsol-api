@@ -1,6 +1,6 @@
 import PublicTemplate from "@src/Templates/PublicTemplate";
 import config from "@src/config";
-import {EmailData} from "@src/Templates/Emails/EmailData";
+import {getTemplateBaseData} from "@src/Templates/Emails/EmailData";
 import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
 import {MongoDBDriver} from "@database/Drivers/MongoDriver";
 import {MongoClient} from "mongodb";
@@ -45,10 +45,11 @@ class MonitoringController {
 
         const connectedLabel:string = "Connectée";
         const disconnectedLabel:string = "Déconnectée";
+        const baseData = getTemplateBaseData();
 
         return await index.render({
             context: {
-                ...EmailData,//basic app and api default string and links
+                ...baseData,//basic app and api default string and links
                 ...DefaultEmailTheme,//basic theme for colors and sizes.
                 title: `${title}`,
                 body: `${body}`,

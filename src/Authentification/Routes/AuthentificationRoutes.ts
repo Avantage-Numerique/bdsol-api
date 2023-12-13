@@ -1,4 +1,4 @@
-import express, {Request, Response, response} from "express";
+import express, {Request, Response} from "express";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import config from "../../config";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
@@ -8,7 +8,7 @@ import {body} from "express-validator";
 import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
 import {NoSpaceSanitizer} from "../../Security/Sanitizers/NoSpaceSanitizer";
 import {NoAccentSanitizer} from "../../Security/Sanitizers/NoAccentSanitizer";
-import { UsersController } from "../../Users/UsersDomain";
+import {UsersController} from "../../Users/UsersDomain";
 
 
 export class AuthentificationRoutes {
@@ -252,10 +252,9 @@ export class AuthentificationRoutes {
         //UserId must be replaced by some id in the request (to not be able to forge request of password change)
         const {oldPassword, newPassword} = req.body.data;
         const userId = req.user?._id;
-        LogHelper.debug("old, new, userId", oldPassword, newPassword, userId);
+
         const response = await this.controllerInstance.changePassword(userId, oldPassword, newPassword);
         return res.status(response.code).send(response);
-        //return res.status(response.code).send(response);
     }
 
     /**

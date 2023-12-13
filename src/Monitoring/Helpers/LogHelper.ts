@@ -1,5 +1,6 @@
 import * as fs from 'fs';
-import config from "@src/config";
+import {getApiConfig} from "@src/config";
+import LogStorage from "@src/Storage/Files/LogStorage";
 /**
  * Entry point for loggin activity into the API
  * This is a version 0, with basic console.log thing.
@@ -36,7 +37,8 @@ enum LogFormats {
 export default class LogHelper
 {
     static printToConsole: boolean = true;
-    static logToFile: boolean = config.logToFile;
+    static styled:boolean = false;
+    static logToFile: boolean = getApiConfig().logToFile;
     
     public static showLog = true;
     public static showError = true;
@@ -57,38 +59,38 @@ export default class LogHelper
     public log(...args:any[]){
         const verbose = LogHelper.createVerbose('LOG', this.routeVerbose);
         if(LogHelper.showLog && LogHelper.printToConsole)
-            console.log(LogFormats.LOG, verbose, args);
+            console.log((LogHelper.styled ? LogFormats.LOG : LogFormats.RAW), verbose, args);
         LogHelper.logFile('LOG', verbose, args);
     }
     public error(...args:any[]){
         const verbose = LogHelper.createVerbose('ERROR', this.routeVerbose);
         if(LogHelper.showError && LogHelper.printToConsole)
-            console.log(LogFormats.ERROR, verbose, args);
+            console.log((LogHelper.styled ? LogFormats.ERROR : LogFormats.RAW), verbose, args);
         LogHelper.logFile('ERROR', verbose, args);
     }
 
     public warn(...args:any[]){
         const verbose = LogHelper.createVerbose('WARN', this.routeVerbose);
         if(LogHelper.showError && LogHelper.printToConsole)
-            console.log(LogFormats.ERROR, verbose, args);
+            console.log((LogHelper.styled ? LogFormats.ERROR : LogFormats.RAW), verbose, args);
         LogHelper.logFile('WARN', verbose, args);
     }
     public info(...args:any[]){
         const verbose = LogHelper.createVerbose('INFO', this.routeVerbose);
         if(LogHelper.showError && LogHelper.printToConsole)
-            console.log(LogFormats.ERROR, verbose, args);
+            console.log((LogHelper.styled ? LogFormats.ERROR : LogFormats.RAW), verbose, args);
         LogHelper.logFile('INFO', verbose, args);
     }
     public debug(...args:any[]){
         const verbose = LogHelper.createVerbose('DEBUG', this.routeVerbose);
         if(LogHelper.showError && LogHelper.printToConsole)
-            console.log(LogFormats.ERROR, verbose, args);
+            console.log((LogHelper.styled ? LogFormats.ERROR : LogFormats.RAW), verbose, args);
         LogHelper.logFile('DEBUG', verbose, args);
     }
     public raw(...args:any[]){
         const verbose = LogHelper.createVerbose('RAW', this.routeVerbose);
         if(LogHelper.showError && LogHelper.printToConsole)
-            console.log(LogFormats.ERROR, verbose, args);
+            console.log((LogHelper.styled ? LogFormats.ERROR : LogFormats.RAW), verbose, args);
         LogHelper.logFile('RAW', verbose, args);
     }
 
@@ -96,42 +98,42 @@ export default class LogHelper
     public static log(...args: any[]) {
         const verbose = LogHelper.createVerbose('LOG')
         if(LogHelper.showLog && LogHelper.printToConsole)
-            console.log(LogFormats.LOG, verbose, args);
+            console.log((LogHelper.styled ? LogFormats.LOG : LogFormats.RAW), verbose, args);
         LogHelper.logFile('LOG', verbose, args);
     }
 
     public static error(...args: any[]) {
         const verbose = LogHelper.createVerbose('ERROR')
         if(LogHelper.showError && LogHelper.printToConsole)
-            console.log(LogFormats.ERROR, verbose, args);
+            console.log((LogHelper.styled ? LogFormats.ERROR : LogFormats.RAW), verbose, args);
         LogHelper.logFile('ERROR', verbose, args);
     }
 
     public static warn(...args: any[]) {
         const verbose = LogHelper.createVerbose('WARN')
         if(LogHelper.showWarn && LogHelper.printToConsole)
-            console.log(LogFormats.WARN, verbose, args);
+            console.log((LogHelper.styled ? LogFormats.WARN : LogFormats.RAW), verbose, args);
         LogHelper.logFile('WARN', verbose, args);
     }
 
     public static info(...args: any[]) {
         const verbose = LogHelper.createVerbose('INFO')
         if(LogHelper.showInfo && LogHelper.printToConsole)
-            console.log(LogFormats.INFO, verbose, args);
+            console.log((LogHelper.styled ? LogFormats.INFO : LogFormats.RAW), verbose, args);
         LogHelper.logFile('INFO', verbose, args);
     }
 
     public static debug(...args: any[]) {
         const verbose = LogHelper.createVerbose('DEBUG')
         if(LogHelper.showDebug && LogHelper.printToConsole)
-            console.log(LogFormats.DEBUG, verbose, args);
+            console.log((LogHelper.styled ? LogFormats.DEBUG : LogFormats.RAW), verbose, args);
         LogHelper.logFile('DEBUG', verbose, args);
     }
 
     public static raw(...args: any[]) {
         const verbose = LogHelper.createVerbose('RAW')
         if(LogHelper.showRaw && LogHelper.printToConsole)
-            console.log(LogFormats.RAW, verbose, args);
+            console.log((LogHelper.styled ? LogFormats.RAW : LogFormats.RAW), verbose, args);
         LogHelper.logFile('RAW', verbose, args);
     }
 
@@ -162,10 +164,10 @@ export default class LogHelper
             const d = new Date;
             const date = d.toLocaleDateString('en-CA');
 
-            const path = config.basepath ? `${config.basepath}/logs/` : "./logs/";
+            const path = `${LogStorage.basePath}`;
             const allFileName = date.toString()+"-all.log";
 
-            fs.open(path+allFileName, 'a', function(err, fd){
+            fs.open(`${path}/${allFileName}`, 'a', function(err, fd){
                 if (err)
                     console.log("Can't log into file", err)
                 else {

@@ -1,11 +1,11 @@
-import { ApiResponseContract } from "@src/Http/Responses/ApiResponse";
+import {ApiResponseContract} from "@src/Http/Responses/ApiResponse";
 import AbstractController from "../../Abstract/Controller"
 import Communication from "../Models/Communication";
 import CommunicationsService from "../Services/CommunicationsService";
-import { ErrorResponse } from "@src/Http/Responses/ErrorResponse";
-import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import {ErrorResponse} from "@src/Http/Responses/ErrorResponse";
+import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import config from "@src/config";
-import { EmailContactUsReceivedContent } from "@src/Templates/Contents/EmailContactUsReceivedContent";
+import {EmailContactUsReceivedContent} from "@src/Templates/Contents/EmailContactUsReceivedContent";
 import EmailNotification from "@src/Notifications/EmailNotification";
 
 
