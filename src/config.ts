@@ -2,7 +2,7 @@
 import * as dotenv from "dotenv";
 import path from "path";
 
-dotenv.config({path: path.join(__dirname, "../../.env")});//
+dotenv.config({path: path.join(__dirname, "../.env")});//
 
 const getApiConfig = () => {
     return {
@@ -87,9 +87,9 @@ const getApiConfig = () => {
         },
         migrations: {
             driver: process.env.DB_MIGRATION_DRIVER || "mongodb",
-            prefix: process.env.DB_PREFIX || "mongodb",//use the same prefix of config.db
-            authSource: process.env.DISTANT_DB_AUTHSOURCE !== "false" && process.env.DISTANT_DB_AUTHSOURCE !== "0" ? process.env.DISTANT_DB_AUTHSOURCE : '',
-            addAuthSource: process.env.DISTANT_DB_ADD_AUTHSOURCE === "true",
+            prefix: process.env.DB_MIGRATION_PREFIX || "mongodb",//use the same prefix of config.db
+            authSource: process.env.DB_MIGRATION_AUTHSOURCE !== "false" && process.env.DB_MIGRATION_AUTHSOURCE !== "0" ? process.env.DB_MIGRATION_AUTHSOURCE : '',
+            addAuthSource: process.env.DB_MIGRATION_ADD_AUTHSOURCE === "true",
             additionalUrlParams: process.env.DB_MIGRATION_ADDITIONAL_URL_PARAMS ? process.env.DB_MIGRATION_ADDITIONAL_URL_PARAMS : '',
             host: process.env.DB_MIGRATION_HOST || "not set",
             port: process.env.DB_MIGRATION_PORT || 27017,

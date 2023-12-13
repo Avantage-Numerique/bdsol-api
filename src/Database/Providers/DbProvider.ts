@@ -63,7 +63,7 @@ export abstract class BaseProvider implements DbProvider {
 
         if (!this.isConnected) {//this.isServerUp &&
             const url:string = `${this._driver.connectionUrl()}`;
-            if (this.verbose) LogHelper.info(`[BD] Connecting to mongo url on ${this._databaseName} database`);
+            if (this.verbose) LogHelper.info(`[BD] Connecting to mongo url ${this._driver.urlToLog(url)} on ${this._databaseName} database`);
             try {
                 mongoose.set('debug', this._debug);
 
@@ -133,10 +133,9 @@ export abstract class BaseProvider implements DbProvider {
             }
 
             if (this.connectionAsPromise) {
-
                 return await mongoose.createConnection(url, options).asPromise();//ajout du asPromise avec le
             }
-            return await mongoose.createConnection(url, options);
+            return mongoose.createConnection(url, options);
 
         } catch (error) {
             LogHelper.error(`[DB][createMongooseConnection] can't create connection to mongo server with mongoose  on ${this._databaseName}`, error);
