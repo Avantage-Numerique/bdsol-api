@@ -7,7 +7,7 @@ const config:any = {
 
     environnement: process.env.ENVIRONNEMENT || "development",
     logPerformance: process.env.LOG_PERFORMANCE || true,
-    logToFile: process.env.LOG_TO_FILE || false,
+    logToFile: process.env.LOG_TO_FILE === "true" || false,
 
     isProduction: process.env.ENVIRONNEMENT === 'production',
     isStaging: process.env.ENVIRONNEMENT === 'staging',

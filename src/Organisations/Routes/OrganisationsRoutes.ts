@@ -1,13 +1,13 @@
 import express from "express";
 import OrganisationsController from "../Controllers/OrganisationsController";
-import CrudRoute from "../../Abstract/CrudRoute";
-import AbstractController from "../../Abstract/Controller";
-import {objectIdSanitizerAlias} from "../../Security/SanitizerAliases/ObjectIdSanitizerAlias";
-import {noHtmlStringSanitizerAlias} from "../../Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
-import {basicHtmlSanitizerAlias} from "../../Security/SanitizerAliases/BasicHtmlSanitizerAlias";
-import {urlSanitizerAlias} from "../../Security/SanitizerAliases/UrlSanitizerAlias";
-import {dateSanitizerAlias} from "../../Security/SanitizerAliases/DateSanitizerAlias";
-import {entityNameSanitizerAlias} from "../../Security/SanitizerAliases/EntityNameSanitizerAlias";
+import CrudRoute from "@core/CrudRoute";
+import AbstractController from "@core/Controller";
+import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
+import {noHtmlStringSanitizerAlias} from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
+import {basicHtmlSanitizerAlias} from "@src/Security/SanitizerAliases/BasicHtmlSanitizerAlias";
+import {urlSanitizerAlias} from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
+import {dateSanitizerAlias} from "@src/Security/SanitizerAliases/DateSanitizerAlias";
+import {entityNameSanitizerAlias} from "@src/Security/SanitizerAliases/EntityNameSanitizerAlias";
 
 class OrganisationsRoutes extends CrudRoute {
     controllerInstance: AbstractController = OrganisationsController.getInstance();
