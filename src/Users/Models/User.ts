@@ -71,17 +71,20 @@ export class User extends AbstractModel {
                 },
                 tos: {
                     accepted: { type: Boolean, default:false },
-                    acceptedOn: { type: Date }
+                    acceptedOn: { type: Date },
+                    ipAddress : { type: String }
                 },
                 verify: {
                     isVerified: { type: Boolean, default:false },
                     token: { type: String },
                     expireDate: { type: Date },
-                    validatedOn: { type: Date }
+                    validatedOn: { type: Date },
+                    ipAddress : { type: String }
                 },
                 changePassword: {
                     token: { type:String },
-                    expireDate: { type: Date }
+                    expireDate: { type: Date },
+                    ipAddress : { type: String }
                 },
                 lastLogin: { type: Date, default: new Date }
             },
