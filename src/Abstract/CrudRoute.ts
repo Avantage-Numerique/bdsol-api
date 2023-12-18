@@ -9,6 +9,16 @@ import {Service} from "@database/Service";
 import {urlSanitizerAlias} from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
 import {SlugSanitizer} from "@src/Security/Sanitizers/SlugSanitizer";
 
+
+/**
+ * The CrudRoute class is an abstract class that provides the basic functionality for CRUD (Create, Read, Update, Delete) operations on a specific entity.
+ * It extends the AbstractRoute class and implements the RouteContract interface.
+ *
+ * @abstract
+ * @class CrudRoute
+ * @extends AbstractRoute
+ * @implements RouteContract
+ */
 abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
     /**
