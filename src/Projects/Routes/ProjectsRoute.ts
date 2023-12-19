@@ -28,18 +28,15 @@ class ProjectsRoutes extends CrudRoute {
             objectIdSanitizerAlias('data.producer'),
             basicHtmlSanitizerAlias('data.description'),
 
-            objectIdSanitizerAlias('data.team.*.member'),
-            noHtmlStringSanitizerAlias('data.team.*.role'),
-
             //SocialHandles
             basicHtmlSanitizerAlias('data.url.*.label'),
             urlSanitizerAlias('data.url.*.url'),
 
             contactPointSanitizerAlias('data.contactPoint'),
-
-            objectIdSanitizerAlias('data.mainImage'),
             objectIdSanitizerAlias('data.location.*'),
-            objectIdSanitizerAlias('data.equipment.*'),
+            objectIdSanitizerAlias('data.team.*.member'),
+            noHtmlStringSanitizerAlias('data.team.*.role'),
+            objectIdSanitizerAlias('data.mainImage'),
 
             //budget
             dateSanitizerAlias('data.scheduleBudget.startDate'),
@@ -53,34 +50,29 @@ class ProjectsRoutes extends CrudRoute {
 
             //skills
             objectIdSanitizerAlias('data.skills.*'),
-
-            //domains
             objectIdSanitizerAlias('data.domains.*.domain'),
 
             //context
-            isInEnumSanitizerAlias('data.context', ProjectContextEnum)
-
+            isInEnumSanitizerAlias('data.context', ProjectContextEnum),
+            objectIdSanitizerAlias('data.equipment.*'),
         ],
         update: [
             objectIdSanitizerAlias('data.id'),
-            entityNameSanitizerAlias('data.name'),
+            entityNameSanitizerAlias('data.name', false),
             noHtmlStringSanitizerAlias('data.alternateName'),
             objectIdSanitizerAlias('data.entityInCharge'),
             objectIdSanitizerAlias('data.producer'),
             basicHtmlSanitizerAlias('data.description'),
 
-            objectIdSanitizerAlias('data.team.*.member'),
-            noHtmlStringSanitizerAlias('data.team.*.role'),
-
             //SocialHandles
             basicHtmlSanitizerAlias('data.url.*.label'),
             urlSanitizerAlias('data.url.*.url'),
-            
-            contactPointSanitizerAlias('data.contactPoint'),
 
-            objectIdSanitizerAlias('data.mainImage'),
+            contactPointSanitizerAlias('data.contactPoint'),
             objectIdSanitizerAlias('data.location.*'),
-            objectIdSanitizerAlias('data.equipment.*'),
+            objectIdSanitizerAlias('data.team.*.member'),
+            noHtmlStringSanitizerAlias('data.team.*.role'),
+            objectIdSanitizerAlias('data.mainImage'),
 
             //budget
             dateSanitizerAlias('data.scheduleBudget.startDate'),
@@ -94,12 +86,11 @@ class ProjectsRoutes extends CrudRoute {
 
             //skills
             objectIdSanitizerAlias('data.skills.*'),
-
-            //domains
             objectIdSanitizerAlias('data.domains.*.domain'),
 
             //context
-            isInEnumSanitizerAlias('data.context', ProjectContextEnum)
+            isInEnumSanitizerAlias('data.context', ProjectContextEnum),
+            objectIdSanitizerAlias('data.equipment.*'),
         ],
         delete: [],
         search: [],

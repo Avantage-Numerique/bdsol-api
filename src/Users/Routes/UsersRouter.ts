@@ -73,6 +73,14 @@ class UsersRoutes extends CrudRoute {
             body('data.name').exists({checkFalsy:true}).bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .trim(),
+            body('data.firstName').exists({checkFalsy:true}).bail()
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
+                .trim(),
+            body('data.lastName').exists({checkFalsy:true}).bail()
+                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+                .stripLow()
+                .trim(),
             body('data.role').exists({checkFalsy:true}).bail()
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()

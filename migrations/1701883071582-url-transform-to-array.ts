@@ -13,6 +13,22 @@ const setSocialHandlesWithExistingUrl:any = [{
     }
 }];
 
+//If values are already empty array, this condition doesn't work.
+//I tried to modify the condition, without success, here's what I've tried
+//Maybe try "$size" ?
+/*
+        match: {"$and":
+            [
+                {"url": {"$exists" : true}},
+                {"$or":
+                    [
+                        {"url": {"$ne" : ""}},
+                        {"url": {"$type": 'array', "$ne" : []}}
+                    ]
+                }
+            ]},
+*/
+
 const setExistingUrlToSocialHandles:any = [
     {
         collection: "organisations",
