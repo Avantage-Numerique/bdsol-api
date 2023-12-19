@@ -18,7 +18,7 @@ import {EmailConfirmationContent} from "@src/Templates/Contents/EmailConfirmatio
 import {isObjectIdOrHexString} from "mongoose";
 import {EmailForgottenPasswordContent} from "@src/Templates/Contents/EmailForgottenPasswordContent";
 import {EmailPasswordChangedContent} from "@src/Templates/Contents/EmailPasswordChangedContent";
-import { EmailConfirmationVerifiedAccountContent } from "@src/Templates/Contents/EmailConfirmationVerifiedAccountContent";
+import {EmailConfirmationVerifiedAccountContent} from "@src/Templates/Contents/EmailConfirmationVerifiedAccountContent";
 
 class AuthentificationController
 {
@@ -26,11 +26,9 @@ class AuthentificationController
     /** @private @static Singleton instance */
     private static _instance:AuthentificationController;
 
-
     public service:UsersService;
     public userModel:User;
     private static verifyTokenLength = 128;
-
 
     constructor()
     {
@@ -87,12 +85,11 @@ class AuthentificationController
             LogHelper.info(`Les information de ${user.username} fonctionnent, génération du token JW ...`);
 
             // Generate an access token
-            user.token = TokenController.generateUserToken(user);
+            user.token = TokenController.generateUserToken(User.getInstance().dataTransfertObject(user));
             user.tokenVerified = true;
 
             //Modify lastLogin date
             const lastLogin = await User.getInstance().mongooseModel.findOneAndUpdate({_id: targetUser.data._id}, { lastLogin: new Date() })
-            LogHelper.debug(lastLogin)
             return  SuccessResponse.create(
                 { user: user },
                 StatusCodes.OK,
