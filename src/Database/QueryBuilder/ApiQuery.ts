@@ -61,15 +61,17 @@ export default class ApiQuery {
 
 
     public set options(values) {
-        this._options = values;
-    }
-
-    public get options() {
+        this.sort = values?.sort ?? {updatedAt : -1}
+        this.limit = values?.limit ?? Number(config.query.defaultLimit)
+        this.skip = values?.skip ?? Number(config.query.defaultSkip)
         this._options = {
             sort: this.sort,
             limit: this.limit,
             skip: this.skip
         }
+    }
+
+    public get options() {
         return this._options;
     }
 

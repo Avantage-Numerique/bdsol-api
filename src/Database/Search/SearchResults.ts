@@ -41,7 +41,7 @@ class SearchResults {
     public async searchByTypeAndCategory(type:string, skip:number){//, categories:any){
         const controller = EntityControllerFactory.getControllerFromEntity(type);
         if(controller !== undefined){
-            const result = await controller.list({})
+            const result = await controller.list({skip:skip})
                 /* {
                     $or: [
                         //Domains

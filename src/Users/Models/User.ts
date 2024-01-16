@@ -70,19 +70,23 @@ export class User extends AbstractModel {
                     type:String
                 },
                 tos: {
-                    accepted: { type: Boolean, default:false},
-                    acceptedOn: { type: Date }
+                    accepted: { type: Boolean, default:false },
+                    acceptedOn: { type: Date },
+                    ipAddress : { type: String }
                 },
                 verify: {
-                    isVerified: {type: Boolean, default:false},
-                    token: {type: String},
-                    expireDate: {type: Date},
-                    validatedOn: {type: Date}
+                    isVerified: { type: Boolean, default:false },
+                    token: { type: String },
+                    expireDate: { type: Date },
+                    validatedOn: { type: Date },
+                    ipAddress : { type: String }
                 },
                 changePassword: {
-                    token: {type:String},
-                    expireDate: {type: Date}
-                }
+                    token: { type:String },
+                    expireDate: { type: Date },
+                    ipAddress : { type: String }
+                },
+                lastLogin: { type: Date, default: new Date }
             },
             {
                 toJSON: { virtuals: true },
@@ -187,6 +191,7 @@ export class User extends AbstractModel {
             role: document.role ?? '',
             type: document.type ?? '',
             verify: { isVerified: document?.verify?.isVerified ?? false},
+            lastLogin: document.lastLogin ?? '',
             createdAt: document.createdAt ?? '',
             updatedAt: document.updatedAt ?? '',
         }

@@ -22,7 +22,10 @@ class EventsRoutes extends CrudRoute {
         create: [
             entityNameSanitizerAlias('data.name', false),
             noHtmlStringSanitizerAlias('data.alternateName'),
-            urlSanitizerAlias('data.url'),
+            //SocialHandles
+            basicHtmlSanitizerAlias('data.url.*.label'),
+            urlSanitizerAlias('data.url.*.url'),
+
             basicHtmlSanitizerAlias('data.description'),
             objectIdSanitizerAlias('data.entityInCharge'),
             objectIdSanitizerAlias('data.organizer'),
@@ -34,6 +37,7 @@ class EventsRoutes extends CrudRoute {
             objectIdSanitizerAlias('data.mainImage'),
             objectIdSanitizerAlias('data.attendees.*'),
             objectIdSanitizerAlias('data.skills.*'),
+            objectIdSanitizerAlias('data.domains.*.domain'),
             //objectIdSanitizerAlias('data.location.*'),
             //domain?
             //schedule
@@ -43,7 +47,10 @@ class EventsRoutes extends CrudRoute {
             objectIdSanitizerAlias('data.id'),
             entityNameSanitizerAlias('data.name', false),
             noHtmlStringSanitizerAlias('data.alternateName'),
-            urlSanitizerAlias('data.url'),
+            //SocialHandles
+            basicHtmlSanitizerAlias('data.url.*.label'),
+            urlSanitizerAlias('data.url.*.url'),
+
             basicHtmlSanitizerAlias('data.description'),
             objectIdSanitizerAlias('data.entityInCharge'),
             objectIdSanitizerAlias('data.organizer'),
@@ -55,6 +62,7 @@ class EventsRoutes extends CrudRoute {
             objectIdSanitizerAlias('data.mainImage'),
             objectIdSanitizerAlias('data.attendees.*'),
             objectIdSanitizerAlias('data.skills.*'),
+            objectIdSanitizerAlias('data.domains.*.domain'),
             //objectIdSanitizerAlias('data.location.*'),
             //domain?
             //schedule

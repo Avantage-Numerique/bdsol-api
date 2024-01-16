@@ -11,6 +11,7 @@ import {populateUser} from "@src/Users/Middlewares/populateUser";
 import {User} from "@src/Users/UsersDomain";
 import {Schedule} from "@src/Database/Schemas/ScheduleSchema";
 import {EventFormatEnum} from "../EventFormatEnum";
+import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 
 class Event extends AbstractModel {
 
@@ -41,7 +42,7 @@ class Event extends AbstractModel {
     public registerIndexes():void {
         //Indexes
         Event._instance.schema.index(
-            { name:"text", alternateNate:"text", slug:"text", url:"text" },
+            { name:"text", alternateNate:"text", slug:"text" },
             {
                 default_language: "french",
                 //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
@@ -49,7 +50,6 @@ class Event extends AbstractModel {
                     name:3,
                     alternateName:3,
                     slug:3,
-                    url:2
                 }
             });
     }
@@ -85,7 +85,7 @@ class Event extends AbstractModel {
                 type: String
             },
             url: {
-                type: String
+                type: [SocialHandle.schema]
             },
             description: {
                 type: String,
@@ -196,7 +196,7 @@ class Event extends AbstractModel {
             name: document.name ?? '',
             slug: document.slug ?? '',
             alternateName: document.alternateName ?? '',
-            url: document.url ?? '',
+            url: document.url ?? [],
             description: document.description ?? '',
             entityInCharge: document.entityInCharge ?? '',
             organizer: document.organizer ?? '',

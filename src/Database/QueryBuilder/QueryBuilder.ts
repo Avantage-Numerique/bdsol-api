@@ -95,7 +95,9 @@ export default class QueryBuilder {
          */
 
         QueryBuilder.parseSections(currentQuery);
-        currentQuery.raw = QueryBuilder.parseParams(currentQuery.raw).query;
+        const parsedQuery = QueryBuilder.parseParams(currentQuery.raw);
+        currentQuery.raw = parsedQuery.query;
+        currentQuery.options = parsedQuery.options;
         return currentQuery;
     }
 
@@ -149,7 +151,6 @@ export default class QueryBuilder {
         for (const field in query)
         {
             const value:any = query[field];
-
             // If the field is an id check, but brute, no property sets.
             if ((field === "id" || field === "_id") &&
                 (value !== "" && value !== undefined && !QueryBuilder.haveProperty(value))) {    // sauf si
@@ -167,14 +168,13 @@ export default class QueryBuilder {
                 continue;
             }
 
-            if (field == "limit" && Number(field) > 0) {
-                options.limit = Number(field);
+            if (field == "limit" && Number(query[field]) > 0) {
+                options.limit = Number(query[field]);
                 delete query[field];
                 continue;
             }
-
-            if (field == "skip" && Number(field) >= 0) {
-                options.skip = Number(field);
+            if (field == "skip" && Number(query[field]) >= 0) {
+                options.skip = Number(query[field]);
                 delete query[field];
                 continue;
             }

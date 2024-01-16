@@ -8,7 +8,9 @@ import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 export async function up(): Promise<void> {
     const db:DBDriver = getDbDriver();
+
     await db.connect();//check this when it's run in the env. of the API already running.
+
     if (db?.providers?.data) {
         const persistantDataTasks: Array<SeederTaskContract> = [
             {

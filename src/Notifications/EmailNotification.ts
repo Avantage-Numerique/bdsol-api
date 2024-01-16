@@ -18,7 +18,7 @@ class EmailNotification extends Notification {
 
     private _transporter:Transporter;
     private _emailTemplate:EmailTemplate;
-    private LogHelpder: any;
+    private LogHelper: any;
 
     constructor(config:NotificationConfig, content:NotificationContent) {
         super(config, EmailContent.prepare(content));
