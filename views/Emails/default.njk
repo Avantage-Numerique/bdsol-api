@@ -25,11 +25,11 @@
         <![endif]-->
 
         <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-            {% include "Emails/Layouts/Partials/spacer.njk" %}
+            {% include "Emails/Partials/spacer.njk" %}
             {% block header %}
-                {% include "Emails/Layouts/Partials/header.njk" %}
+                {% include "Emails/Partials/header.njk" %}
             {% endblock %}
-            {% include "Emails/Layouts/Partials/spacer.njk" %}
+            {% include "Emails/Partials/spacer.njk" %}
             <tr>
                 <td style="background-color: {{ theme.content.bg }};" class="lightmode-bg">
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
@@ -40,7 +40,7 @@
                                 <p style="margin: 0;">{{body | safe}}</p>
                             </td>
                         </tr>
-                        {% include "Emails/Layouts/Partials/spacer.njk" %}
+                        {% include "Emails/Partials/spacer.njk" %}
                         <tr>
                             <td style="padding: 0 {{ theme.content.wspacing }};">
                                 <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: auto;">
@@ -68,7 +68,7 @@
                                 </table>
                             </td>
                         </tr>
-                        {% include "Emails/Layouts/Partials/spacer.njk" %}
+                        {% include "Emails/Partials/spacer.njk" %}
                         <tr>
                             <td style="padding: 20px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: {{ theme.color }} !important;">
                                 <p style="margin: 0;">{{conclusion | safe}}</p>
@@ -83,12 +83,12 @@
                 </td>
             </tr>
 
-            {% include "Emails/Layouts/Partials/spacer.njk" %}
-            {% include "Emails/Layouts/Partials/spacer.njk" %}
+            {% include "Emails/Partials/spacer.njk" %}
+            {% include "Emails/Partials/spacer.njk" %}
 
         </table>
 
-        {% include "Emails/Layouts/Partials/legal.njk" %}
+        {% include "Emails/Partials/legal.njk" %}
 
         <!--[if mso]>
         </td>
@@ -97,7 +97,7 @@
         <![endif]-->
     </div>
 
-    {% include "Emails/Layouts/Partials/footer.njk" %}
+    {% include "Emails/Partials/footer.njk" %}
 
     <!--[if mso | IE]>
     </td>
