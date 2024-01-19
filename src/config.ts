@@ -19,7 +19,7 @@ const getApiConfig = () => {
 
         appName: process.env.APP_NAME || "API",
         port: process.env.PORT || "8001",
-        version: process.env.VERSION || "0.0.8.prod",
+        version: process.env.VERSION || "0.0.8.default",
         serverPath: process.env.SERVER_PATH || path.join(__dirname, ".."),
         basepath: process.env.BASEPATH || path.join(__dirname, ".."),
         baseUrl: process.env.BASEURL || "http://localhost:8000",
