@@ -62,7 +62,7 @@ iconv.fromEncoding = iconv.decode;
 iconv._codecDataCache = {};
 iconv.getCodec = function getCodec(encoding) {
     if (!iconv.encodings)
-        iconv.encodings = require(__dirname + "/../encodings"); // Lazy load all encoding definitions.
+        iconv.encodings = require(__dirname + "/../encodings"); // Lazy load all encoding definitions. //2024-01-19 changed to test that PR : https://github.com/ashtuchkin/iconv-lite/pull/310/commits/e1bb91c5376c81ae2bc9ab54b7cb3fcebef14d63
     
     // Canonicalize encoding name: strip all non-alphanumeric chars and appended year.
     var enc = iconv._canonicalizeEncoding(encoding);
