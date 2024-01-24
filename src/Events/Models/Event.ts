@@ -138,10 +138,6 @@ class Event extends AbstractModel {
                     subMeta: SubMeta.schema
                 }]
             },
-            experience: {
-                type: [mongoose.Types.ObjectId],
-                ref: "Taxonomy"
-            },
             schedule: {
                 type: [Schedule.schema]
             },
@@ -210,7 +206,6 @@ class Event extends AbstractModel {
             attendees: document.attendees ?? [],
             skills: document.skills ?? [],
             domains: document.domains ?? [],
-            experience: document.experience ?? '',
             schedule: document.schedule ?? [],
             subEvents: document.subEvents ?? [],
             location: document.location ?? [],
@@ -245,7 +240,6 @@ class Event extends AbstractModel {
             middlewarePopulateProperty(this, 'team.member');
 
             taxonomyPopulate(this, 'skills');
-            taxonomyPopulate(this, 'experience');
             taxonomyPopulate(this, 'domains.domain');
 
             middlewarePopulateProperty(this, 'mainImage');
@@ -271,7 +265,6 @@ class Event extends AbstractModel {
             }
             middlewarePopulateProperty(this, 'team.member');
             taxonomyPopulate(this, 'skills');
-            taxonomyPopulate(this, 'experience');
             taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');
             middlewarePopulateProperty(this, 'organizer');

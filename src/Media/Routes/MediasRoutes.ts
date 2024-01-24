@@ -17,6 +17,7 @@ import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSan
 import {noHtmlStringSanitizerAlias} from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
 import {isInEnumSanitizerAlias} from "@src/Security/SanitizerAliases/IsInEnumSanitizerAlias";
 import {EntityTypesEnum} from "@src/Entities/EntityTypes";
+import { licenceList } from "../List/LicenceList";
 
 
 class MediasRoutes extends AbstractRoute {
@@ -36,6 +37,7 @@ class MediasRoutes extends AbstractRoute {
             noHtmlStringSanitizerAlias('data.description'),
             objectIdSanitizerAlias('data.entityId'),
             isInEnumSanitizerAlias('data.entityType', EntityTypesEnum),
+            isInEnumSanitizerAlias('data.licence', licenceList)
         ],
         update: [
             objectIdSanitizerAlias('data.id', false),
@@ -44,6 +46,7 @@ class MediasRoutes extends AbstractRoute {
             noHtmlStringSanitizerAlias('data.description'),
             objectIdSanitizerAlias('data.entityId'),
             isInEnumSanitizerAlias('data.entityType', EntityTypesEnum),
+            isInEnumSanitizerAlias('data.licence', licenceList)
         ],
         delete: [],
         search: [],

@@ -11,6 +11,8 @@ import {noHtmlStringSanitizerAlias} from "@src/Security/SanitizerAliases/NoHtmlS
 import {dateSanitizerAlias} from "@src/Security/SanitizerAliases/DateSanitizerAlias";
 import {isInEnumSanitizerAlias} from "@src/Security/SanitizerAliases/IsInEnumSanitizerAlias";
 import {ProjectContextEnum} from "@src/Projects/ProjectContextEnum";
+import { IntegerSanitizerAlias } from "@src/Security/SanitizerAliases/IntegerSanitizerAlias";
+import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 class ProjectsRoutes extends CrudRoute {
 
@@ -55,6 +57,13 @@ class ProjectsRoutes extends CrudRoute {
             //context
             isInEnumSanitizerAlias('data.context', ProjectContextEnum),
             objectIdSanitizerAlias('data.equipment.*'),
+
+            //sponsor
+            basicHtmlSanitizerAlias('data.sponsor.*.name'),
+            objectIdSanitizerAlias('data.sponsor.*.entity'),
+            isInEnumSanitizerAlias('data.sponsor.*.entityType', EntityTypesEnum),
+            IntegerSanitizerAlias('data.sponsor.*.subMeta.order')
+            
         ],
         update: [
             objectIdSanitizerAlias('data.id'),
@@ -91,6 +100,13 @@ class ProjectsRoutes extends CrudRoute {
             //context
             isInEnumSanitizerAlias('data.context', ProjectContextEnum),
             objectIdSanitizerAlias('data.equipment.*'),
+        
+            //sponsor
+            basicHtmlSanitizerAlias('data.sponsor.*.name'),
+            objectIdSanitizerAlias('data.sponsor.*.entity'),
+            isInEnumSanitizerAlias('data.sponsor.*.entityType', EntityTypesEnum),
+            IntegerSanitizerAlias('data.sponsor.*.subMeta.order')
+            
         ],
         delete: [],
         search: [],
