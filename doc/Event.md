@@ -41,7 +41,6 @@ Un événement pourra lui aussi avoir des "enfants" événement `subEvents` dans
     attendees : [ObjectId] (Person)
     domains : [ { domain: ObjectId, subMeta: {SubMeta.Schema} } ]
     skills : [ObjectId]
-    experience : undefined
     schedule: [Schedule]
     subEvents : [ObjectId] (Event)
     meta : Meta.Schema
@@ -67,7 +66,6 @@ Un événement pourra lui aussi avoir des "enfants" événement `subEvents` dans
 - attendees : Personne présente?
 - domains : Domaine associé à l'événement
 - skills : Compétences associées à l'événement
-- experience : L'expérience que les personnes participantes vont retiré de l'événement
 - schedule : Horaire d'une activité de l'événement date et heure de début et de fin avec un nom d'activité
 - subEvents : Sous-événement (un spectacle en plusieurs partie, où les autres parties du spectacle serait des événements)
 - meta : métadonée de la fiche d'événement

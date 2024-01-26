@@ -26,7 +26,6 @@ export interface EventSchema extends Document {
     attendees:[ObjectId];
     domains:[DomainSchema];
     skills:[ObjectId];
-    experience:[ObjectId];
     schedule:[Schedule];
     subEvents:[ObjectId];
     location:[ObjectId];
