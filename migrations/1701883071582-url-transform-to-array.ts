@@ -1,6 +1,5 @@
 import {MongoDBDriver} from "@database/Drivers/MongoDriver";
 import config from "@src/config";
-import {runQueriesOnDatabase} from "@database/Helper/MongodbRunQueries";
 
 const setSocialHandlesWithExistingUrl:any = [{
     $set: {
@@ -90,8 +89,9 @@ const setEmptyUrlToEmptyArray:any = [
  */
 export async function up(): Promise<void> {
     const driver:MongoDBDriver = new MongoDBDriver(config.migrations);
-    await runQueriesOnDatabase(driver, 'bdsol-data', setExistingUrlToSocialHandles, 'Arranging url:string that are not empty into array of SocialHandles', 'up');
-    await runQueriesOnDatabase(driver, 'bdsol-data', setEmptyUrlToEmptyArray, 'Arranging url:string that are empty string into empty array to prepare future SocialHandles ', 'up');
+    //skip this, make infinite object -> array in the data.
+    //await runQueriesOnDatabase(driver, 'bdsol-data', setExistingUrlToSocialHandles, 'Arranging url:string that are not empty into array of SocialHandles', 'up');
+    //await runQueriesOnDatabase(driver, 'bdsol-data', setEmptyUrlToEmptyArray, 'Arranging url:string that are empty string into empty array to prepare future SocialHandles ', 'up');
 }
 
 /**

@@ -84,9 +84,9 @@ export default class Api {
         // parse application/json
         this.express.use(express.json());
 
-        this.templateBasePath = `${this._config.basepath}/views`;
+        this.templateBasePath = `${this._config.appPath}/views`;
         //Templates and rendering
-        this.templateSystem = Nunjucks.configure('views', {
+        this.templateSystem = Nunjucks.configure(this.templateBasePath, {
             express: this.express,
             autoescape: true
         });

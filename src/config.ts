@@ -2,7 +2,9 @@
 import * as dotenv from "dotenv";
 import path from "path";
 
-dotenv.config({path: path.join(__dirname, "../../.env")});//
+//const envFolder = process.env.ENVIRONNEMENT === "production" ? "../../" : "../";//in cleavr (prod) We need to go 2 level up from the build. But In dev, we are still in ./src.
+const envFolder = "../../";////
+dotenv.config({path: path.join(__dirname, `${envFolder}.env`)});
 
 const getApiConfig = () => {
     return {
@@ -19,8 +21,9 @@ const getApiConfig = () => {
 
         appName: process.env.APP_NAME || "API",
         port: process.env.PORT || "8001",
-        version: process.env.VERSION || "0.0.8.prod",
+        version: process.env.VERSION || "0.0.8.default",
         serverPath: process.env.SERVER_PATH || path.join(__dirname, ".."),
+        appPath: process.env.APP_PATH || path.join(__dirname, ".."),
         basepath: process.env.BASEPATH || path.join(__dirname, ".."),
         baseUrl: process.env.BASEURL || "http://localhost:8000",
         frontendAppUrl: process.env.FRONTEND_APP_URL || "http://localhost:3000",
