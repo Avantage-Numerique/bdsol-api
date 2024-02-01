@@ -132,6 +132,9 @@ export abstract class BaseProvider implements DbProvider {
                 options.authSource = this._driver.config.authSource;
             }
 
+            if (this.connectionAsPromise) {
+                return await mongoose.createConnection(url, options).asPromise();//ajout du asPromise avec le
+            }
             return mongoose.createConnection(url, options);//.asPromise();//ajout du asPromise avec le
 
         } catch (error) {
