@@ -2,8 +2,7 @@
 import * as dotenv from "dotenv";
 import path from "path";
 
-//const envFolder = process.env.ENVIRONNEMENT === "production" ? "../../" : "../";//in cleavr (prod) We need to go 2 level up from the build. But In dev, we are still in ./src.
-const envFolder = process.env.ENV_FOLDER ?? '../';////../
+const envFolder = process.env.ENV_FOLDER ?? '../';// ENV_FOLDER need to be declare in the node stack (outside of .env to work in staging and prod).
 dotenv.config({path: path.join(__dirname, `${envFolder}.env`)});
 
 const getApiConfig = () => {

@@ -36,6 +36,11 @@ ApiRouter.get("/", async (req, res) => {
     //return res.status(StatusCodes.OK).send("OK");
 });
 
+//Disalow indexing for all path of the api.
+ApiRouter.get('/robots.txt', function (req, res) {
+    res.type('text/plain');
+    res.send("User-agent: *\nDisallow: /");
+});
 
 
 ApiRouter.get('/quarante-deux',async (req, res) => {
