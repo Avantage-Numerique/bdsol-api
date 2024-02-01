@@ -200,7 +200,7 @@ class AuthentificationController
         return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
             StatusCodes.INTERNAL_SERVER_ERROR,
-            'Service returned an undefined response from insert'
+            "Nom d'utilisateur déjà existant ou erreur du service."//'Service returned an undefined response from insert'
         );
     }
 
@@ -324,10 +324,11 @@ class AuthentificationController
                 //Email OK and user is verified
                 //Check if 5 min elapsed since last token sent
                 const now = new Date();
-                const expireDate30MinutesLess = targetUser?.verify.expireDate ?? new Date();
-                expireDate30MinutesLess.setMinutes(expireDate30MinutesLess.setMinutes()-30);
+                const currentTokenExpireDate = targetUser?.changePassword.expireDate
+                //If expire date is defined and 5 min have past
+                //(if now - expire is negative, it's time before token expire, if positive it's time since token expired)
                 if(targetUser?.changePassword?.expireDate !== undefined &&
-                    now.valueOf() - expireDate30MinutesLess < (5*60*1000))
+                    now.valueOf() - currentTokenExpireDate.valueOf() < (-25*60*1000))
                     //Need to wait 5 min for new token
                     return SuccessResponse.create({}, StatusCodes.OK, "Sent reset password email")
 
@@ -351,7 +352,7 @@ class AuthentificationController
                         recipient: targetUser.email,
                         subject: welcomeName+", Demande de réinitialisation de mot de passe sur avnu.ca"
                     },
-                    EmailForgottenPasswordContent(welcomeName, config.frontendAppUrl+"/compte/nouveau-mot-de-passe/"+passwordToken)
+                    EmailForgottenPasswordContent(welcomeName, config.frontendAppUrl+"/compte/nouveau-mot-de-passe/"+passwordToken, updatedUser.username)
                     );
                 forgotPasswordEmail.send();
                 return SuccessResponse.create({}, StatusCodes.OK, "Sent reset password email")
@@ -490,7 +491,7 @@ class AuthentificationController
                     const expireDateOneDayLess = targetUser?.verify.expireDate ?? new Date();
                     expireDateOneDayLess.setDate(expireDateOneDayLess.getDate()-1);
 
-                    if(now.valueOf() - expireDateOneDayLess < (5*60*1000)){
+                    if(now.valueOf() - expireDateOneDayLess.valueOf() < (5*60*1000)){
                         //5 minutes delay inbetween emails
                         return SuccessResponse.create({}, StatusCodes.OK, "Sent verification email")
                     }
