@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 import path from "path";
 
 //const envFolder = process.env.ENVIRONNEMENT === "production" ? "../../" : "../";//in cleavr (prod) We need to go 2 level up from the build. But In dev, we are still in ./src.
-const envFolder = "../../";////
+const envFolder = process.env.ENV_FOLDER ?? '../';////../
 dotenv.config({path: path.join(__dirname, `${envFolder}.env`)});
 
 const getApiConfig = () => {
@@ -11,6 +11,7 @@ const getApiConfig = () => {
         environnement: process.env.ENVIRONNEMENT || "development",
         logPerformance: process.env.LOG_PERFORMANCE || true,
         logToFile: process.env.LOG_TO_FILE === "true",
+        envFolder: process.env.ENV_FOLDER ?? '../',
 
         isProduction: process.env.ENVIRONNEMENT === 'production',
         isStaging: process.env.ENVIRONNEMENT === 'staging',
@@ -52,6 +53,7 @@ const getApiConfig = () => {
             user: process.env.DB_USER || '',
             password: process.env.DB_PASSWORD || '',
             name: process.env.DB_NAME || '',
+            needPromise: process.env.DB_NEED_PROMISE === 'true',
             config: {
                 createObjectIdForQuery: false
             }
@@ -68,6 +70,7 @@ const getApiConfig = () => {
             user: process.env.LOCALHOST_DB_USER || '',
             password: process.env.LOCALHOST_DB_PASSWORD || '',
             name: process.env.LOCALHOST_DB_NAME || '',
+            needPromise: process.env.LOCALHOST_DB_NEED_PROMISE === 'true',
             config: {
                 createObjectIdForQuery: false
             }
@@ -84,6 +87,7 @@ const getApiConfig = () => {
             user: process.env.DISTANT_DB_USER || '',
             password: process.env.DISTANT_DB_PASSWORD || '',
             name: process.env.DISTANT_DB_NAME || '',
+            needPromise: process.env.DISTANT_DB_NEED_PROMISE === 'true',
             config: {
                 createObjectIdForQuery: false
             }
@@ -99,6 +103,7 @@ const getApiConfig = () => {
             user: process.env.DB_MIGRATION_USER || '',
             password: process.env.DB_MIGRATION_PASSWORD || '',
             name: process.env.DB_MIGRATION_DB_NAME || '',
+            needPromise: process.env.DB_MIGRATION_NEED_PROMISE === 'true',
             config: {
                 createObjectIdForQuery: false
             }

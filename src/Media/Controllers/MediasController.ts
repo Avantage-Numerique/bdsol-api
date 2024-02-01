@@ -98,7 +98,7 @@ class MediasController extends AbstractController { //implements ControllerContr
         //For all values, check if mediaField is accepted for that model
         if(!entities[requestData.entityType].includes(requestData.mediaField))
             return false
-        return true
+        return true;//this could be change for a
     }
 
     public async saveFile(res: Response, record:Record):Promise<boolean>{
