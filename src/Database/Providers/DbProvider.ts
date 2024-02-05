@@ -41,7 +41,7 @@ export abstract class BaseProvider implements DbProvider {
 
     public verbose:boolean = true;
     public isConnected:boolean = false;
-    public connectionAsPromise:boolean = true;
+    public connectionAsPromise:boolean = false;
 
     constructor(driver:DBDriver, name='') {
         if (name !== "") {
@@ -132,10 +132,10 @@ export abstract class BaseProvider implements DbProvider {
                 options.authSource = this._driver.config.authSource;
             }
 
-            if (this.connectionAsPromise) {
-                return await mongoose.createConnection(url, options).asPromise();//ajout du asPromise avec le
+            if (this._driver.config.needPromise) {
+                return await mongoose.createConnection(url, options).asPromise();
             }
-            return mongoose.createConnection(url, options);//.asPromise();//ajout du asPromise avec le
+            return mongoose.createConnection(url, options);
 
         } catch (error) {
             LogHelper.error(`[DB][createMongooseConnection] can't create connection to mongo server with mongoose  on ${this._databaseName}`, error);

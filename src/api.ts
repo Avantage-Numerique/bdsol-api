@@ -190,7 +190,7 @@ export default class Api {
         if (this._config.logPerformance) this.express.use(RequestDuration.middleware());
 
         this.mainRouter = express.Router(); //this seeem to be a "branch" independant. Middle ware pass here, and error handling are only manage into the same "router's hierarchy" may I labled.
-        this.mainRouter.use(GetRequestIp.middleware());    // Set an empty user property in Request there. Would be possible to feed with more default info.
+        this.mainRouter.use(GetRequestIp.middleware());    // Set an empty user in req.visitor property in Request there. Would be possible to feed with more default info.
         this.mainRouter.use(PublicUserRequest.middleware());    // Set an empty user property in Request there. Would be possible to feed with more default info.
         //this.mainRouter.use(IsMongooseConnected.middleware());    // Set an empty user property in Request there. Would be possible to feed with more default info.
 
