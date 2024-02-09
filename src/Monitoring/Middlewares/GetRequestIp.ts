@@ -52,5 +52,6 @@ export class GetRequestIp {
         if (req.socket.remoteAddress) {
             return req.socket.remoteAddress;
         }
+        return "get Visitor Ip didn't find IP";
     }
 }
