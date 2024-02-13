@@ -37,6 +37,17 @@ class SearchResults {
         return SearchResults._instance;
     }
 
+    public async fetchHomePageEntity(){
+        const homePageEntity = [];
+        homePageEntity.push(await this.personModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
+        homePageEntity.push(await this.organisationModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
+        //Commented because taxonomy doesn't have a simple component in frontend
+        //homePageEntity.push(await this.taxonomyModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
+        homePageEntity.push(await this.projectModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
+        homePageEntity.push(await this.eventModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
+        homePageEntity.push(await this.equipmentModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
+        return homePageEntity;
+    }
 
     public async searchByTypeAndCategory(type:string, skip:number){//, categories:any){
         const controller = EntityControllerFactory.getControllerFromEntity(type);
@@ -97,7 +108,6 @@ class SearchResults {
                 {$text: {$search: searchIndex}},
                 {score: {$meta: "textScore"}}
             ));
-
 
         let textSearchResultArray;
         if(promises.length > 0){

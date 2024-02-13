@@ -101,7 +101,7 @@ ApiRouter.get("/test-email", async (req, res) => {
 ApiRouter.get("/sync-db", async (req, res) => {
 
     const index = new PublicTemplate("default");//tempalte have already a default in the EmailContent.Prepare.
-    const title:string = `Synching db`;
+    const title:string = `Syncing db`;
     let body:string = 'Sync prod into staging data only.';
 
     res.set('Content-Type', 'text/html');
