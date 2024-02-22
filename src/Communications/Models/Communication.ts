@@ -3,6 +3,7 @@ import AbstractModel from "../../Abstract/Model";
 import CommunicationsService from "../Services/CommunicationsService";
 import {CommunicationSchema} from "../Schemas/CommunicationSchema";
 import {DbProvider} from "@src/Database/DatabaseDomain";
+import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 class Communication extends AbstractModel {
 
@@ -49,6 +50,10 @@ class Communication extends AbstractModel {
     /** @public Database schema */
     schema: Schema =
         new Schema<CommunicationSchema>({
+                communicationType: {
+                    type: String,
+                    enum: ["contact-us", "report"]
+                },
                 name: {
                     type: String,
                 },
@@ -61,6 +66,19 @@ class Communication extends AbstractModel {
                 date: {
                     type: Date,
                     default: new Date()
+                },
+                reportedEntityId: {
+                    type: mongoose.Types.ObjectId
+                },
+                reportedEntityType: {
+                    type: String,
+                    enum: EntityTypesEnum
+                },
+                userInfo:{
+                    type: {
+                        userId: mongoose.Types.ObjectId,
+                        ip: String
+                    }
                 }
             },
             {
@@ -91,9 +109,10 @@ class Communication extends AbstractModel {
     public dataTransfertObject(document: any) {
         return {
             _id: document._id ?? '',
-            name: document.name ?? '',
-            email: document.email ?? '',
-            message: document.message ?? '',
+            communicationType: document.communicationType ?? '',
+            //name: document.name ?? '',
+            //email: document.email ?? '',
+            //message: document.message ?? '',
             date: document.date ?? '',
             type: document.type ?? '',
             createdAt : document.createdAt ?? '',
