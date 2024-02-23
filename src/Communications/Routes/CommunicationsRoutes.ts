@@ -8,6 +8,9 @@ import {NextFunction, Request, Response} from "express-serve-static-core";
 import {Service} from "@src/Database/DatabaseDomain";
 import {entityNameSanitizerAlias} from "@src/Security/SanitizerAliases/EntityNameSanitizerAlias";
 import {basicHtmlSanitizerAlias} from "@src/Security/SanitizerAliases/BasicHtmlSanitizerAlias";
+import { objectIdSanitizerAlias } from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
+import { isInEnumSanitizerAlias } from "@src/Security/SanitizerAliases/IsInEnumSanitizerAlias";
+import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 class CommunicationsRoutes extends AbstractRoute implements RouteContract {
 
@@ -19,7 +22,7 @@ class CommunicationsRoutes extends AbstractRoute implements RouteContract {
     middlewaresDistribution:any = {
         all: [],
         createUpdate: [],
-        create: [
+        createContactUs: [
             entityNameSanitizerAlias('data.name'),
             basicHtmlSanitizerAlias('data.message'),
             body('data.email').exists({checkFalsy:true}).bail()
@@ -27,6 +30,12 @@ class CommunicationsRoutes extends AbstractRoute implements RouteContract {
                 .stripLow()
                 .normalizeEmail()
                 .trim(),
+        ],
+        createReport: [
+            basicHtmlSanitizerAlias('data.message'),
+            objectIdSanitizerAlias("data.reportedEntityId"),
+            isInEnumSanitizerAlias('data.reportedEntityType', EntityTypesEnum),
+            objectIdSanitizerAlias("data.userId"),
         ],
         update: [],
         delete: [],
@@ -55,13 +64,13 @@ class CommunicationsRoutes extends AbstractRoute implements RouteContract {
 
     setupPublicRoutes(): express.Router {
         this.routerInstance.post('/contact-us', [
-            ...this.addMiddlewares("create"),
+            ...this.addMiddlewares("createContactUs"),
             this.validatingResults.bind(this),
             this.contactUsHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
         this.routerInstance.post('/report', [
-            ...this.addMiddlewares("create"),
+            ...this.addMiddlewares("createReport"),
             this.validatingResults.bind(this),
             this.reportEntityHandler.bind(this),
             this.routeSendResponse.bind(this),
@@ -94,11 +103,7 @@ class CommunicationsRoutes extends AbstractRoute implements RouteContract {
      * @return {Promise<any>}
      */
     public async reportEntityHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        console.log("Allo")
-        console.log("Allo")
-        console.log("Allo")
-        console.log("Allo")
-        res.serviceResponse = await this.controllerInstance.createReportEntity(req.body.data, req.user?._id, req.visitor.ip);
+        res.serviceResponse = await this.controllerInstance.createReportEntity(req.body.data, req.body.data?.userId, req.visitor.ip);
         res.serviceResponse.action = Service.CREATE_STATE;
         return next();
     }
