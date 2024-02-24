@@ -161,15 +161,19 @@ class UserHistory extends AbstractModel {
      * @return {any}
      */
     public dataTransfertObject(document: any) {
+        delete document.fields.meta;
+        delete document.fields.createdAt;
+        delete document.fields.updatedAt;
+        delete document.fields._id;
         return {
-            user: document.user ?? '',
+            //user: document.user ?? '',
             modifDate: document.modifDate ?? '',
             action: document.action ?? '',
-            entityCollection: document.entityCollection ?? '',
+            //entityCollection: document.entityCollection ?? '',
             modifiedEntity: document.modifiedEntity ?? '',
             fields: document.fields ?? '',
-            createdAt : document.createdAt ?? '',
-            updatedAt : document.updatedAt ?? '',
+            //createdAt : document.createdAt ?? '',
+            //updatedAt : document.updatedAt ?? '',
         }
     }
 
