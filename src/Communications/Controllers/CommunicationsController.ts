@@ -7,6 +7,7 @@ import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import config from "@src/config";
 import {EmailContactUsReceivedContent} from "@src/Templates/Contents/EmailContactUsReceivedContent";
 import EmailNotification from "@src/Notifications/EmailNotification";
+import { EmailAdminNotification } from "@src/Templates/Contents/EmailAdminNotification";
 
 
 class CommunicationsController extends AbstractController {
@@ -50,14 +51,22 @@ class CommunicationsController extends AbstractController {
         if (createdDocumentResponse !== undefined)
         {
             //Send email to notify that we received message and will respond asap
-            const verifyAccountEmail:EmailNotification = new EmailNotification(
+            const contactUsReceivedEmail:EmailNotification = new EmailNotification(
                 {
                     recipient: email,
                     subject: name+", Nous avons bien reçu votre commentaire"
                 },
                 EmailContactUsReceivedContent(name, config.frontendAppUrl)
             );
-            verifyAccountEmail.send();
+            contactUsReceivedEmail.send();
+            const adminNotificationOfContactUs:EmailNotification = new EmailNotification(
+                {
+                    recipient: "bonjour@avnu.ca", //Add email config
+                    subject: "Nouveau message nous-joindre"
+                },
+                EmailAdminNotification(createdDocumentResponse.data)
+            );
+            adminNotificationOfContactUs.send();
 
             return createdDocumentResponse;
         }
@@ -92,8 +101,17 @@ class CommunicationsController extends AbstractController {
         }
         const createdDocumentResponse = await this.service.insert(communicationObject);
 
-        if (createdDocumentResponse !== undefined)
+        if (createdDocumentResponse !== undefined){
+            const adminNotificationOfReport:EmailNotification = new EmailNotification(
+                {
+                    recipient: "bonjour@avnu.ca", //Add email config
+                    subject: "Nouveau signalement"
+                },
+                EmailAdminNotification(createdDocumentResponse.data)
+            );
+            adminNotificationOfReport.send();   
             return createdDocumentResponse;
+        }
 
         return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
