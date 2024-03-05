@@ -10,6 +10,7 @@ import {EntityTypesEnum} from "@src/Entities/EntityTypes";
 import {IntegerSanitizerAlias} from "@src/Security/SanitizerAliases/IntegerSanitizerAlias";
 import {urlSanitizerAlias} from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
 import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 class SearchRoutes extends AbstractRoute {
 
@@ -37,6 +38,10 @@ class SearchRoutes extends AbstractRoute {
      * @public @method
      */
     public setupPublicRoutes(): express.Router {
+        this.routerInstance.get('/homepage', [
+            this.fetchHomePageEntityHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
         this.routerInstance.post('/type', [
             isInEnumSanitizerAlias('data.type', EntityTypesEnum),
             IntegerSanitizerAlias('data.skip'),
@@ -99,6 +104,10 @@ class SearchRoutes extends AbstractRoute {
         return router;
     }
 
+    public async fetchHomePageEntityHandler(req:Request, res: Response, next: NextFunction): Promise<any>{
+        res.serviceResponse = SuccessResponse.create(await this.searchResults_instance.fetchHomePageEntity(), StatusCodes.OK, ReasonPhrases.OK)
+        return next();
+    }
 
     public async searchByTypeAndCategoryHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
         const type:string = req.body?.data?.type ?? "";

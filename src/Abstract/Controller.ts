@@ -10,7 +10,6 @@ import UserHistory from "@src/UserHistory/Models/UserHistory";
 import {UserHistorySchema} from "@src/UserHistory/Schemas/UserHistorySchema";
 import {ControllerContract} from "./Contracts/ControllerContract";
 import ApiQuery from "@database/QueryBuilder/ApiQuery";
-import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 /**
  * AbstractController
@@ -25,7 +24,7 @@ abstract class AbstractController implements ControllerContract {
     abstract entity: AbstractModel;
 
     /**
-     * @method create Create a new entity in de database based on the request.
+     * @method create Create a new entity in the database based on the request.
      * @param {any} requestData - Containing information for the create
      * @return {ApiResponseContract} Promise
      */

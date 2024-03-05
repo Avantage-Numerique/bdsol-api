@@ -164,7 +164,8 @@ export class AuthentificationRoutes {
     public async registerHandler(req: Request, res: Response): Promise<any> {
 
         const {data} = req.body;
-        res.serviceResponse = await this.controllerInstance.register(data);
+        const visitorIp = req.visitor.ip;
+        res.serviceResponse = await this.controllerInstance.register(data, visitorIp);
         res.serviceResponse.action = "create";
         //History of registration
         if(!res.serviceResponse.error)
@@ -266,7 +267,8 @@ export class AuthentificationRoutes {
     public async sendResetPasswordLinkByEmailHandler(req: Request, res: Response): Promise<any>
     {
         const email = req.body.data?.email;
-        const response = await this.controllerInstance.sendResetPasswordLinkByEmail(email)
+        const visitorIp = req.visitor.ip;
+        const response = await this.controllerInstance.sendResetPasswordLinkByEmail(email, visitorIp)
         return res.status(response.code).send(response);
     }
 
@@ -308,7 +310,8 @@ export class AuthentificationRoutes {
     public async verifyUserAccountHandler(req: Request, res: Response): Promise<any>
     {
         const token = req.params.token?.toString() ?? '';
-        const response = await this.controllerInstance.verifyAccount(token);
+        const visitorIp = req.visitor.ip;
+        const response = await this.controllerInstance.verifyAccount(token, visitorIp);
         return res.status(response.code).send(response);
     }
     

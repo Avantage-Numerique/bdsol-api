@@ -149,7 +149,7 @@ class AuthentificationController
      * @param requestData 
      * @returns 
      */
-    public async register(requestData:any): Promise<ApiResponseContract>
+    public async register(requestData:any, visitorIp:any): Promise<ApiResponseContract>
     {
         if(requestData?.tos?.accepted !== true)
             return ErrorResponse.create(
@@ -174,7 +174,8 @@ class AuthentificationController
             },
             tos: {
                 accepted: true,
-                acceptedOn: new Date
+                acceptedOn: new Date,
+                ipAddress:visitorIp
             }
         }
 
@@ -311,7 +312,7 @@ class AuthentificationController
      * @return {Promise} of type Any.
      * @public
      */
-    public async sendResetPasswordLinkByEmail(email:string):Promise<any> {
+    public async sendResetPasswordLinkByEmail(email:string, visitorIp:any):Promise<any> {
         //Check if email is defined and string and length > 0
         if(typeof email === 'string' && email.length > 0){
             //Check if email corresponds to a user in the database
@@ -341,7 +342,8 @@ class AuthentificationController
                     {
                         changePassword:{
                             token: passwordToken,
-                            expireDate: passwordTokenExpirationDate
+                            expireDate: passwordTokenExpirationDate,
+                            ipAddress: visitorIp
                         }
                     }
                 )
@@ -424,7 +426,7 @@ class AuthentificationController
      * @return {Promise} of type Any.
      * @public
      */
-    public async verifyAccount(token:string):Promise<any>{
+    public async verifyAccount(token:string, visitorIp:any):Promise<any>{
         //verify that token is the right length
         if(typeof token === 'string' && token.length === AuthentificationController.verifyTokenLength * 2) //times 2 because length (n Bytes = 2n hexadecimal)
         {
@@ -444,7 +446,7 @@ class AuthentificationController
                 //else modify user to verify.isVerified = true and set the rest of object
                 const response = await User.getInstance().mongooseModel.findOneAndUpdate(
                     {_id : targetUser._id},
-                    {verify: { isVerified: true, token: null, expireDate: null, validatedOn: new Date()}},
+                    {verify: { isVerified: true, token: null, expireDate: null, validatedOn: new Date(), ipAddress: visitorIp}},
                     {new: true})
                 const dtoResponse = User.getInstance().dataTransfertObject(response);
 
