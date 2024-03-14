@@ -6,7 +6,7 @@ const EmailConfirmationContent:any = (welcomeName:string, link:string, additionn
         context: {
             welcome: `Salut, ${welcomeName}`,//to define from the content.//getter to concatenate ?
             title:"Il faut confirmer votre courriel",
-            body: "Il reste seulement cette étape avant que votre compte soit actif sur avnu.ca.<br/><br/>Il faut cliquer sur le lien ci-dessous pour terminer votre inscription.",
+            body: "Il reste seulement cette étape avant que votre compte soit actif sur avnu.ca.<br/><br/>Cliquez sur le lien ci-dessous pour terminer votre inscription.”",
             conclusion: `Ensuite vous pourrez participer et ajouter des données sur avnu.<br /><br /><strong>Important</strong> <u>Si vous n’êtes pas à l’origine de cette inscription sur avnu.ca</u>, veuillez ignorer ce courriel, et merci de <a href="mailto:${baseData.company.email}" title='Contact ${baseData.company.email}'><u>nous contacter via ${baseData.company.email}</u></a> pour nous avertir de la situation.<br/><u>Veuillez ne pas répondre à courriel.</u>`,
             signature: "L'équipe d'avnu",
             cta: {
