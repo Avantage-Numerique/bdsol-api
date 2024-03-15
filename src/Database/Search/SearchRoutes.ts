@@ -10,7 +10,7 @@ import {EntityTypesEnum} from "@src/Entities/EntityTypes";
 import {IntegerSanitizerAlias} from "@src/Security/SanitizerAliases/IntegerSanitizerAlias";
 import {urlSanitizerAlias} from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
 import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
-import LogHelper from "@src/Monitoring/Helpers/LogHelper";
+import { urlSanitizerSearchAlias } from "@src/Security/SanitizerAliases/UrlSanitizerSearchAlias";
 
 class SearchRoutes extends AbstractRoute {
 
@@ -49,7 +49,7 @@ class SearchRoutes extends AbstractRoute {
             this.routeSendResponse.bind(this)
         ]);
         this.routerInstance.get('/', [
-            urlSanitizerAlias('searchIndex', true, query),//query.searchIndex
+            urlSanitizerSearchAlias('searchIndex', true, query),//query.searchIndex
             this.fullSearchHandler.bind(this),
             this.routeSendResponse.bind(this)
         ]);
@@ -124,8 +124,9 @@ class SearchRoutes extends AbstractRoute {
     }
 
     public async fullSearchHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
-        let textSearchResults = await this.searchResults_instance.getTextSearchResult(req.query.searchIndex?.toString());
-        const regexSearchResults = await this.searchSuggestions_instance.getTextSearchSuggestions(req.query.searchIndex?.toString())
+        const searchIndex = req.query.searchIndex ? decodeURI(req.query.searchIndex.toString()) : "";
+        let textSearchResults = await this.searchResults_instance.getTextSearchResult(searchIndex);
+        const regexSearchResults = await this.searchSuggestions_instance.getTextSearchSuggestions(searchIndex)
         
         if (textSearchResults == undefined)
             textSearchResults = [];

@@ -8,8 +8,8 @@ const licencesCollection: any = {
         "version": "1",
         "description": "",
         "guide": "Vous ne pouvez rien faire avec le média. Les droits d'auteur originaux du média sont garder tels quels par l'auteur. Il faut vérifier les informations que l'utilisateur a fournies.",
-        "source": "https://creativecommons.org/publicdomain/zero/1.0/deed.fr",
-        "legal-source": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.fr",
+        "source": "https://fr.wikipedia.org/wiki/Droit_d%27auteur",
+        "legal-source": "https://fr.wikipedia.org/wiki/Droit_d%27auteur",
         "undernote": "",
         "image": "/icones/copyright.svg",
         "language": "fr"

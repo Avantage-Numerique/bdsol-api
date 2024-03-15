@@ -201,7 +201,7 @@ class AuthentificationController
         return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
             StatusCodes.INTERNAL_SERVER_ERROR,
-            "Nom d'utilisateur déjà existant ou erreur du service."//'Service returned an undefined response from insert'
+            "Nom d'utilisateur ou courriel déjà existant ou erreur du service."//'Service returned an undefined response from insert'
         );
     }
 
