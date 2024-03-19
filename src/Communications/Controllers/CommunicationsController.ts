@@ -7,7 +7,7 @@ import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import config from "@src/config";
 import {EmailContactUsReceivedContent} from "@src/Templates/Contents/EmailContactUsReceivedContent";
 import EmailNotification from "@src/Notifications/EmailNotification";
-import { EmailAdminNotification } from "@src/Templates/Contents/EmailAdminNotification";
+import {EmailAdminNotification} from "@src/Templates/Contents/EmailAdminNotification";
 
 
 class CommunicationsController extends AbstractController {
@@ -58,7 +58,8 @@ class CommunicationsController extends AbstractController {
                 },
                 EmailContactUsReceivedContent(name, config.frontendAppUrl)
             );
-            contactUsReceivedEmail.send();
+            await contactUsReceivedEmail.send();
+
             const adminNotificationOfContactUs:EmailNotification = new EmailNotification(
                 {
                     recipient: "bonjour@avnu.ca", //Add email config
@@ -66,7 +67,7 @@ class CommunicationsController extends AbstractController {
                 },
                 EmailAdminNotification(createdDocumentResponse.data)
             );
-            adminNotificationOfContactUs.send();
+            await adminNotificationOfContactUs.send();
 
             return createdDocumentResponse;
         }

@@ -1,4 +1,3 @@
-
 const NOTIFICATION_EMAIL:string = "email";
 
 interface NotificationContent {
@@ -17,10 +16,12 @@ class Notification {
     public method:string;
     public config:any = {};
     public content:NotificationContent;
+    public textContent:string;
 
-    constructor(config:NotificationConfig, content:NotificationContent) {
+    constructor(config:NotificationConfig, content:NotificationContent, textContent="") {
         this.method = config.method ?? this.default_method;
         this.content = content;
+        this.textContent = textContent;
         this.config = config;
     }
 

@@ -17,4 +17,9 @@ const EmailPasswordChangedContent:any = (welcomeName:string, link:string, additi
     }
 }
 
-export {EmailPasswordChangedContent};
+
+const EmailPasswordChangedTextContent:any = () => {
+    return "Le mot de passe de votre compte avnu.ca associé à ce courriel a été modifié. Si vous n’êtes pas à l’origine de cette modification sur avnu.ca, veuillez nous contacter via notre courriel pour nous informer de la situation.";
+}
+
+export {EmailPasswordChangedContent, EmailPasswordChangedTextContent};

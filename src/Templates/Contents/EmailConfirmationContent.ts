@@ -19,4 +19,8 @@ const EmailConfirmationContent:any = (welcomeName:string, link:string, additionn
     }
 }
 
-export {EmailConfirmationContent};
+const EmailConfirmationTextContent:any = () => {
+    return "Il faut confirmer votre courriel. Il reste seulement cette étape avant que votre compte soit actif sur avnu.ca. Cliquez sur le lien ci-dessous pour terminer votre inscription. Ensuite vous pourrez participer et ajouter des données sur avnu.";
+}
+
+export {EmailConfirmationContent, EmailConfirmationTextContent};
