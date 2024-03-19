@@ -28,7 +28,7 @@ class AuthentificationController
 
     public service:UsersService;
     public userModel:User;
-    private static verifyTokenLength = 128;
+    private static verifyTokenLength = 16;
 
     constructor()
     {
