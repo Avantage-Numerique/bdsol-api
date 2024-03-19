@@ -330,10 +330,10 @@ class AuthentificationController
                 //Email OK and user is verified
                 //Check if 5 min elapsed since last token sent
                 const now = new Date();
-                const currentTokenExpireDate = targetUser?.changePassword.expireDate
+                const currentTokenExpireDate = targetUser?.changePassword?.expireDate ?? undefined
                 //If expire date is defined and 5 min have past
                 //(if now - expire is negative, it's time before token expire, if positive it's time since token expired)
-                if(targetUser?.changePassword?.expireDate !== undefined &&
+                if(currentTokenExpireDate !== undefined &&
                     now.valueOf() - currentTokenExpireDate.valueOf() < (-25*60*1000))
                     //Need to wait 5 min for new token
                     return SuccessResponse.create({}, StatusCodes.OK, "Sent reset password email")
