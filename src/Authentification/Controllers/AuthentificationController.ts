@@ -14,10 +14,13 @@ import config from "../../config";
 import crypto from "crypto";
 import EmailNotification from "@src/Notifications/EmailNotification";
 import {getUserWelcome} from "@src/Users/Helpers/UserEmailHelper";
-import {EmailConfirmationContent} from "@src/Templates/Contents/EmailConfirmationContent";
+import {EmailConfirmationContent, EmailConfirmationTextContent} from "@src/Templates/Contents/EmailConfirmationContent";
 import {isObjectIdOrHexString} from "mongoose";
 import {EmailForgottenPasswordContent} from "@src/Templates/Contents/EmailForgottenPasswordContent";
-import {EmailPasswordChangedContent} from "@src/Templates/Contents/EmailPasswordChangedContent";
+import {
+    EmailPasswordChangedContent,
+    EmailPasswordChangedTextContent
+} from "@src/Templates/Contents/EmailPasswordChangedContent";
 import {EmailConfirmationVerifiedAccountContent} from "@src/Templates/Contents/EmailConfirmationVerifiedAccountContent";
 
 class AuthentificationController
@@ -190,7 +193,8 @@ class AuthentificationController
                     recipient: createdDocumentResponse.data.email,
                     subject: welcomeName+", Confirmez ce courriel pour votre compte sur avnu.ca"
                 },
-                EmailConfirmationContent(welcomeName, config.frontendAppUrl+"/compte/verifier-compte/"+verificationToken)
+                EmailConfirmationContent(welcomeName, config.frontendAppUrl+"/compte/verifier-compte/"+verificationToken),
+                EmailConfirmationTextContent()
             );
             await verifyAccountEmail.send();
 
@@ -287,11 +291,12 @@ class AuthentificationController
                 if(updatedUser !== null){
                     const welcomeName = getUserWelcome(targetUser);//encapsulate this into an helper
                     const changedPasswordEmail:EmailNotification = new EmailNotification(
-                    {
-                        recipient: targetUser.email,
-                        subject: welcomeName+", Votre mot de passe a été modifié sur avnu.ca"
-                    },
-                    EmailPasswordChangedContent(welcomeName, config.frontendAppUrl+"/compte/connexion")
+                        {
+                            recipient: targetUser.email,
+                            subject: welcomeName+", Votre mot de passe a été modifié sur avnu.ca"
+                        },
+                        EmailPasswordChangedContent(welcomeName, config.frontendAppUrl+"/compte/connexion"),
+                        EmailPasswordChangedTextContent()
                     );
                     changedPasswordEmail.send();
                     return SuccessResponse.create(User.getInstance().dataTransfertObject(updatedUser), StatusCodes.OK, "Password modified")

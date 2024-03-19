@@ -144,7 +144,8 @@ const getApiConfig = () => {
                 port: process.env.MAIL_PORT ?? 1025,
                 user: process.env.MAIL_USER ?? "usernamemailhog",
                 password: process.env.MAIL_PASSWORD ?? "usernamemailhog",
-                from: "notifications@avnu.ca"
+                from: "notifications@avnu.ca",
+                replyTo: "bonjour@avnu.ca"
             }
         }
     }

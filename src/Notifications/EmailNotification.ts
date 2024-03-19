@@ -3,6 +3,7 @@ import {createTransport, Transporter} from 'nodemailer';
 import Notification, {NotificationConfig, NotificationContent} from "@src/Notifications/Notification";
 import EmailTemplate from "@src/Templates/EmailTemplate";
 import EmailContent from "@src/Templates/EmailContent";
+import {NoHtmlSanitizer} from "@src/Security/Sanitizers/NoHtmlSanitizer";
 
 
 /**
@@ -20,7 +21,7 @@ class EmailNotification extends Notification {
     private _emailTemplate:EmailTemplate;
     private LogHelper: any;
 
-    constructor(config:NotificationConfig, content:NotificationContent) {
+    constructor(config:NotificationConfig, content:NotificationContent, textContent="") {
         super(config, EmailContent.prepare(content));
 
         this._emailTemplate = new EmailTemplate(content.template);//tempalte have already a default in the EmailContent.Prepare.
@@ -33,10 +34,13 @@ class EmailNotification extends Notification {
         if (typeof this.config.recipient !== "undefined") {
             const sendingEmailOptions: any = {
                 from: config.notifications.email.from,
+                replyTo: config.notifications.email.replyTo,
                 to: this.config.recipient,
                 subject: this.config.subject ?? `Un courriel de la part de ${config.appName}`,
+                text: this.contentToTextOnly(),
                 html: await this._emailTemplate.render(this.content),
             };
+            console.log("sendingEmailOptions", sendingEmailOptions);
             await this.transporter.sendMail(sendingEmailOptions);
             return;
         }
@@ -49,6 +53,13 @@ class EmailNotification extends Notification {
      */
     public async preview():Promise<string> {
         return await this._emailTemplate.preview(this.content);
+    }
+
+    public contentToTextOnly() {
+        let textContent = this.content.context.body;
+        if (this.textContent !== "") textContent = this.textContent;
+
+        return NoHtmlSanitizer.sanitize(textContent);
     }
 
     /**
@@ -78,7 +89,7 @@ class EmailNotification extends Notification {
         return {
             host: config.notifications.email.server, // le nom du service dans le fichier docker compose, ici on va mettre "mailhog"
             port: config.notifications.email.port, // dev : 1025
-            secure: false,
+            secure: true,//@todo change that back for mailhog.
             auth: {
                 user: config.notifications.email.user,
                 pass: config.notifications.email.password,

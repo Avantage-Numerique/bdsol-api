@@ -19,4 +19,8 @@ const EmailContactUsReceivedContent:any = (welcomeName:string, link:string, addi
     }
 }
 
+const EmailContactUsReceivedTextContent :any = () => {
+    return "Nous avons bien reçu votre message. Notre équipe a été notifié et, au besoin, vous réponderons dès que possible.";
+}
+
 export {EmailContactUsReceivedContent};
