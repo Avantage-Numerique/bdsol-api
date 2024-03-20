@@ -362,7 +362,7 @@ export abstract class Service {
     public errorCheck(meta: any, state: string): ApiResponseContract {
 
         const actionMessage:string = this._getActionMessageFromState(state);
-        LogHelper.error("errorCheck called meta:",meta,"state", state);
+
         // Mongo DB validation failed, make that excalade the response flow, shall we.
         if (meta.errors) {
             //on create, mongodb validate the data and return an object if errors occurs.
