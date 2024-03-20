@@ -135,8 +135,10 @@ export abstract class Service {
             meta = await this.model.create(data)
                 .catch((e: any) => {
                     LogHelper.error("Service insert can't create entity", e);
-                    const insertError:HttpError = new HttpError("Impossible de créer l'entité.");//suppression de l e.message car l'app renvoie tout.
+                    //commented during test to manage this.
+                    const insertError:HttpError = new HttpError("Impossible de créer l'entité.", e);//suppression de l e.message car l'app renvoie tout.
                     insertError.status = StatusCodes.UNPROCESSABLE_ENTITY;
+                    //Throw the original error to be able to parsed it in error check. Throw http error only outside of the service.
                     throw insertError;
                 });
 
@@ -162,7 +164,7 @@ export abstract class Service {
         try {
             const meta = this.model.findOneAndUpdate(filter, data, {runValidators: true, upsert: true})
                 .catch((e: any) => {
-                    const persistantDataError:HttpError = new HttpError(e.message);
+                    const persistantDataError:HttpError = new HttpError(e.message, e);
                     persistantDataError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                     throw persistantDataError;
                 });
@@ -200,7 +202,7 @@ export abstract class Service {
             // UpdateOne
             const meta = await this.model.findOneAndUpdate({_id: id}, data, updateOptions)
                 .catch((e: any) => {
-                        const findOneAndUpdateError:HttpError = new HttpError(e.message);
+                        const findOneAndUpdateError:HttpError = new HttpError(e.message, e);
                         findOneAndUpdateError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                         throw findOneAndUpdateError;
                     }
@@ -218,7 +220,7 @@ export abstract class Service {
         try {
             const meta = await this.model.findOneAndDelete(filter)
                 .catch((e: any) => {
-                    const findOneAndDeleteError:HttpError = new HttpError(e.message);
+                    const findOneAndDeleteError:HttpError = new HttpError(e.message, e);
                     findOneAndDeleteError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                     throw findOneAndDeleteError;
                 });
@@ -264,7 +266,7 @@ export abstract class Service {
             const meta = await this.model.findOneAndUpdate(where, data, updateOrCreateOptions)
                 .catch((e: any) => {
                     // @todo this doesn't catch on CastError, on BSON wrongly pass.
-                    const updateOrCreateError:HttpError = new HttpError(e.message);
+                    const updateOrCreateError:HttpError = new HttpError(e.message, e);
                     updateOrCreateError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                     throw updateOrCreateError;
                 });
@@ -284,7 +286,7 @@ export abstract class Service {
         try {
             const meta = await this.model.findByIdAndDelete(id)
                 .catch((e: any) => {
-                    const deleteError:HttpError = new HttpError(e.message);
+                    const deleteError:HttpError = new HttpError(e.message, e);
                     deleteError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                     throw deleteError;
                 });
@@ -306,7 +308,7 @@ export abstract class Service {
         try {
             const results = await this.model[mongooseFunction](...params)
                 .catch((e: any) => {
-                        const customError:HttpError = new HttpError(e.message);
+                        const customError:HttpError = new HttpError(e.message, e);
                         customError.status = StatusCodes.UNPROCESSABLE_ENTITY;
                         throw customError;
                     }
@@ -360,7 +362,7 @@ export abstract class Service {
     public errorCheck(meta: any, state: string): ApiResponseContract {
 
         const actionMessage:string = this._getActionMessageFromState(state);
-
+        LogHelper.error("errorCheck called meta:",meta,"state", state);
         // Mongo DB validation failed, make that excalade the response flow, shall we.
         if (meta.errors) {
             //on create, mongodb validate the data and return an object if errors occurs.
@@ -369,6 +371,15 @@ export abstract class Service {
                 StatusCodes.BAD_REQUEST,
                 "Données non valide. Réajuster la requête.");
         }
+        //MongoError
+        /**
+         * if (error.code === 11000) {
+         *         const duplicateKey = Object.keys(error.keyPattern)[0];
+         *         console.error(`Error: Cannot insert document. '${duplicateKey}' already exists.`);
+         *     } else {
+         *         console.error("Error inserting document:", error);
+         *     }
+         */
         // Mongo DB validation failed, make that excalade the response flow, shall we.
         if (meta.name === "ValidationError") {
             const validationErrors:any = {};
@@ -399,12 +410,13 @@ export abstract class Service {
         }
 
         // Si not unique
-        if (meta.code === 11000) {
-            const wrongElements = Object.getOwnPropertyNames(meta.keyValue);
+        if (meta.rawError.code === 11000) {
+            //In service, rawError contains the original error that triggered this error handling.
+            const wrongElements = Object.getOwnPropertyNames(meta.rawError.keyValue);
             let wrongElementsValues = "";
 
             wrongElements.forEach((key: string) => {
-                wrongElementsValues += key + " (" + meta.keyValue[key] + ") n'est pas unique";
+                wrongElementsValues += "le champ : " + key + " (" + meta.rawError.keyValue[key] + ") n'est pas unique";
             });
 
             //Peut être CONFLICT=409, UNPROCESSABLE_ENTITY=422
