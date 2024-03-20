@@ -353,7 +353,7 @@ export abstract class Service {
             case Service.SEARCH_STATE :
                 return Service.SEARCH_MSG;
             default :
-                return `${state} actions have no label`
+                return `L'action : ${state} n'a pas de nom associé (label).`
         }
     }
 
@@ -367,7 +367,7 @@ export abstract class Service {
             return ErrorResponse.createWithMultipleErrors(
                 meta.errors,
                 StatusCodes.BAD_REQUEST,
-                "Validating the data fail. Please readjust the request.");
+                "Données non valide. Réajuster la requête.");
         }
         // Mongo DB validation failed, make that excalade the response flow, shall we.
         if (meta.name === "ValidationError") {
@@ -380,7 +380,7 @@ export abstract class Service {
             return ErrorResponse.createWithMultipleErrors(
                 meta.errors,
                 StatusCodes.BAD_REQUEST,
-                "Validating the data fail. Please readjust the request.");
+                "Données non valide. Réajuster la requête.");
         }
 
         // Champ mal formulé
@@ -432,7 +432,7 @@ export abstract class Service {
 
 
         if (meta.TypeError)
-            return ErrorResponse.create(meta, StatusCodes.BAD_REQUEST, "Bad Type for " + actionMessage);
+            return ErrorResponse.create(meta, StatusCodes.BAD_REQUEST, "Mauvais type pour " + actionMessage);
 
 
         if (Object.keys(meta).length <= 0) {
@@ -445,7 +445,7 @@ export abstract class Service {
         return ErrorResponse.create(
             meta.errors,
             StatusCodes.UNPROCESSABLE_ENTITY,
-            meta.message || `Error on ${actionMessage}`
+            meta.message || `Erreur lors de l'action : ${actionMessage} (code:${meta.code})`
         );
     }
 
