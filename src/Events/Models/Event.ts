@@ -246,7 +246,7 @@ class Event extends AbstractModel {
             middlewarePopulateProperty(this, 'organizer');
             middlewarePopulateProperty(this, 'attendees');
             middlewarePopulateProperty(this, 'entityInCharge');
-            middlewarePopulateProperty(this, 'subEvents');
+            //middlewarePopulateProperty(this, 'subEvents');
             middlewarePopulateProperty(this, 'eventType');
             middlewarePopulateProperty(this, 'location');
             middlewarePopulateProperty(this, 'photoGallery');

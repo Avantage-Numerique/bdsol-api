@@ -10,6 +10,7 @@ import {EntityTypesEnum} from "@src/Entities/EntityTypes";
 import {IntegerSanitizerAlias} from "@src/Security/SanitizerAliases/IntegerSanitizerAlias";
 import {urlSanitizerAlias} from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
 import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
+import { urlSanitizerSearchAlias } from "@src/Security/SanitizerAliases/UrlSanitizerSearchAlias";
 
 class SearchRoutes extends AbstractRoute {
 
@@ -37,6 +38,10 @@ class SearchRoutes extends AbstractRoute {
      * @public @method
      */
     public setupPublicRoutes(): express.Router {
+        this.routerInstance.get('/homepage', [
+            this.fetchHomePageEntityHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
         this.routerInstance.post('/type', [
             isInEnumSanitizerAlias('data.type', EntityTypesEnum),
             IntegerSanitizerAlias('data.skip'),
@@ -44,7 +49,7 @@ class SearchRoutes extends AbstractRoute {
             this.routeSendResponse.bind(this)
         ]);
         this.routerInstance.get('/', [
-            urlSanitizerAlias('searchIndex', true, query),//query.searchIndex
+            urlSanitizerSearchAlias('searchIndex', true, query),//query.searchIndex
             this.fullSearchHandler.bind(this),
             this.routeSendResponse.bind(this)
         ]);
@@ -99,6 +104,10 @@ class SearchRoutes extends AbstractRoute {
         return router;
     }
 
+    public async fetchHomePageEntityHandler(req:Request, res: Response, next: NextFunction): Promise<any>{
+        res.serviceResponse = SuccessResponse.create(await this.searchResults_instance.fetchHomePageEntity(), StatusCodes.OK, ReasonPhrases.OK)
+        return next();
+    }
 
     public async searchByTypeAndCategoryHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
         const type:string = req.body?.data?.type ?? "";
@@ -115,8 +124,9 @@ class SearchRoutes extends AbstractRoute {
     }
 
     public async fullSearchHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
-        let textSearchResults = await this.searchResults_instance.getTextSearchResult(req.query.searchIndex?.toString());
-        const regexSearchResults = await this.searchSuggestions_instance.getTextSearchSuggestions(req.query.searchIndex?.toString())
+        const searchIndex = req.query.searchIndex ? decodeURI(req.query.searchIndex.toString()) : "";
+        let textSearchResults = await this.searchResults_instance.getTextSearchResult(searchIndex);
+        const regexSearchResults = await this.searchSuggestions_instance.getTextSearchSuggestions(searchIndex)
         
         if (textSearchResults == undefined)
             textSearchResults = [];

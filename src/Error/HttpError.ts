@@ -1,6 +1,6 @@
 import {ApiResponseContract} from "../Http/Responses/ApiResponse";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
-import {StatusCodes, ReasonPhrases} from "http-status-codes";
+import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {ErrorResponse} from "../Http/Responses/ErrorResponse";
 
 export default class HttpError extends Error {
@@ -10,9 +10,13 @@ export default class HttpError extends Error {
     public message:string;
     public stack:any;
     public response:any;
+    public rawError:any;
 
-    constructor(message:string = "Erreur") {
+    constructor(message:string = "Erreur", raw:any=null) {
         super(message);
+        if (raw !== null) {
+            this.rawError = raw;
+        }
     }
 
     /**

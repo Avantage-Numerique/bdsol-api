@@ -15,6 +15,7 @@ import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {ErrorResponse} from "@src/Http/Responses/ErrorResponse";
 import Event from "@src/Events/Models/Event";
 import Equipment from "@src/Equipment/Models/Equipment";
+import Place from "@src/Places/Models/Place";
 
 class OrganisationsController extends AbstractController {
 
@@ -51,7 +52,6 @@ class OrganisationsController extends AbstractController {
     }
 
     public async aggregateSingle(slug:any): Promise<ApiResponseContract> {
-
         /**
          * regroup Linked entity from a 1:n relation where person is linked.
          * linkField : Property in the AppModel that
@@ -78,6 +78,12 @@ class OrganisationsController extends AbstractController {
                 as: "tools"
             },
             {
+                appModel: Place.getInstance(),
+                by: "location",
+                foreignField: "_id",
+                as: "location"
+            },
+            {
                 raw: {
                     $addFields: {
                         "type": Organisation.getInstance().modelName
@@ -91,6 +97,7 @@ class OrganisationsController extends AbstractController {
                         "events.type": Event.getInstance().modelName,
                         "people.type": Person.getInstance().modelName,
                         "tools.type": Equipment.getInstance().modelName,//changed here before the $addfield in raw.
+                        "location.type": Place.getInstance().modelName,
                         //"type": "$type",//test to get the virtual like that. Organisation.getInstance().modelName
                     }
                 }
@@ -180,6 +187,7 @@ class OrganisationsController extends AbstractController {
         await media.populate(results, {path: "projects.mainImage"});
         await media.populate(results, {path: "team.member.mainImage"});
         await media.populate(results, {path: "events.mainImage"});
+        await media.populate(results, {path: "location.mainImage"});
         await media.populate(results, {path: "equipment.equipment.mainImage"});
 
         await users.populate(results, {path: "meta.requestedBy", select: "name username avatar"});

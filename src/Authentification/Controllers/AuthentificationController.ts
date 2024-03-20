@@ -14,10 +14,13 @@ import config from "../../config";
 import crypto from "crypto";
 import EmailNotification from "@src/Notifications/EmailNotification";
 import {getUserWelcome} from "@src/Users/Helpers/UserEmailHelper";
-import {EmailConfirmationContent} from "@src/Templates/Contents/EmailConfirmationContent";
+import {EmailConfirmationContent, EmailConfirmationTextContent} from "@src/Templates/Contents/EmailConfirmationContent";
 import {isObjectIdOrHexString} from "mongoose";
 import {EmailForgottenPasswordContent} from "@src/Templates/Contents/EmailForgottenPasswordContent";
-import {EmailPasswordChangedContent} from "@src/Templates/Contents/EmailPasswordChangedContent";
+import {
+    EmailPasswordChangedContent,
+    EmailPasswordChangedTextContent
+} from "@src/Templates/Contents/EmailPasswordChangedContent";
 import {EmailConfirmationVerifiedAccountContent} from "@src/Templates/Contents/EmailConfirmationVerifiedAccountContent";
 
 class AuthentificationController
@@ -28,7 +31,7 @@ class AuthentificationController
 
     public service:UsersService;
     public userModel:User;
-    private static verifyTokenLength = 128;
+    private static verifyTokenLength = 16;
 
     constructor()
     {
@@ -149,7 +152,7 @@ class AuthentificationController
      * @param requestData 
      * @returns 
      */
-    public async register(requestData:any): Promise<ApiResponseContract>
+    public async register(requestData:any, visitorIp:any): Promise<ApiResponseContract>
     {
         if(requestData?.tos?.accepted !== true)
             return ErrorResponse.create(
@@ -174,7 +177,8 @@ class AuthentificationController
             },
             tos: {
                 accepted: true,
-                acceptedOn: new Date
+                acceptedOn: new Date,
+                ipAddress:visitorIp
             }
         }
 
@@ -189,7 +193,8 @@ class AuthentificationController
                     recipient: createdDocumentResponse.data.email,
                     subject: welcomeName+", Confirmez ce courriel pour votre compte sur avnu.ca"
                 },
-                EmailConfirmationContent(welcomeName, config.frontendAppUrl+"/compte/verifier-compte/"+verificationToken)
+                EmailConfirmationContent(welcomeName, config.frontendAppUrl+"/compte/verifier-compte/"+verificationToken),
+                EmailConfirmationTextContent()
             );
             await verifyAccountEmail.send();
 
@@ -200,7 +205,7 @@ class AuthentificationController
         return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
             StatusCodes.INTERNAL_SERVER_ERROR,
-            "Nom d'utilisateur déjà existant ou erreur du service."//'Service returned an undefined response from insert'
+            "Nom d'utilisateur ou courriel déjà existant ou erreur du service."//'Service returned an undefined response from insert'
         );
     }
 
@@ -286,11 +291,12 @@ class AuthentificationController
                 if(updatedUser !== null){
                     const welcomeName = getUserWelcome(targetUser);//encapsulate this into an helper
                     const changedPasswordEmail:EmailNotification = new EmailNotification(
-                    {
-                        recipient: targetUser.email,
-                        subject: welcomeName+", Votre mot de passe a été modifié sur avnu.ca"
-                    },
-                    EmailPasswordChangedContent(welcomeName, config.frontendAppUrl+"/compte/connexion")
+                        {
+                            recipient: targetUser.email,
+                            subject: welcomeName+", Votre mot de passe a été modifié sur avnu.ca"
+                        },
+                        EmailPasswordChangedContent(welcomeName, config.frontendAppUrl+"/compte/connexion"),
+                        EmailPasswordChangedTextContent()
                     );
                     changedPasswordEmail.send();
                     return SuccessResponse.create(User.getInstance().dataTransfertObject(updatedUser), StatusCodes.OK, "Password modified")
@@ -311,7 +317,7 @@ class AuthentificationController
      * @return {Promise} of type Any.
      * @public
      */
-    public async sendResetPasswordLinkByEmail(email:string):Promise<any> {
+    public async sendResetPasswordLinkByEmail(email:string, visitorIp:any):Promise<any> {
         //Check if email is defined and string and length > 0
         if(typeof email === 'string' && email.length > 0){
             //Check if email corresponds to a user in the database
@@ -324,10 +330,10 @@ class AuthentificationController
                 //Email OK and user is verified
                 //Check if 5 min elapsed since last token sent
                 const now = new Date();
-                const currentTokenExpireDate = targetUser?.changePassword.expireDate
+                const currentTokenExpireDate = targetUser?.changePassword?.expireDate ?? undefined
                 //If expire date is defined and 5 min have past
                 //(if now - expire is negative, it's time before token expire, if positive it's time since token expired)
-                if(targetUser?.changePassword?.expireDate !== undefined &&
+                if(currentTokenExpireDate !== undefined &&
                     now.valueOf() - currentTokenExpireDate.valueOf() < (-25*60*1000))
                     //Need to wait 5 min for new token
                     return SuccessResponse.create({}, StatusCodes.OK, "Sent reset password email")
@@ -341,7 +347,8 @@ class AuthentificationController
                     {
                         changePassword:{
                             token: passwordToken,
-                            expireDate: passwordTokenExpirationDate
+                            expireDate: passwordTokenExpirationDate,
+                            ipAddress: visitorIp
                         }
                     }
                 )
@@ -424,7 +431,7 @@ class AuthentificationController
      * @return {Promise} of type Any.
      * @public
      */
-    public async verifyAccount(token:string):Promise<any>{
+    public async verifyAccount(token:string, visitorIp:any):Promise<any>{
         //verify that token is the right length
         if(typeof token === 'string' && token.length === AuthentificationController.verifyTokenLength * 2) //times 2 because length (n Bytes = 2n hexadecimal)
         {
@@ -444,7 +451,7 @@ class AuthentificationController
                 //else modify user to verify.isVerified = true and set the rest of object
                 const response = await User.getInstance().mongooseModel.findOneAndUpdate(
                     {_id : targetUser._id},
-                    {verify: { isVerified: true, token: null, expireDate: null, validatedOn: new Date()}},
+                    {verify: { isVerified: true, token: null, expireDate: null, validatedOn: new Date(), ipAddress: visitorIp}},
                     {new: true})
                 const dtoResponse = User.getInstance().dataTransfertObject(response);
 

@@ -1,5 +1,4 @@
 import express from "express";
-import AbstractController from "@core/Controller";
 import {body} from "express-validator";
 import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
 import CommunicationsController from "../Controllers/CommunicationsController";
@@ -9,10 +8,13 @@ import {NextFunction, Request, Response} from "express-serve-static-core";
 import {Service} from "@src/Database/DatabaseDomain";
 import {entityNameSanitizerAlias} from "@src/Security/SanitizerAliases/EntityNameSanitizerAlias";
 import {basicHtmlSanitizerAlias} from "@src/Security/SanitizerAliases/BasicHtmlSanitizerAlias";
+import { objectIdSanitizerAlias } from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
+import { isInEnumSanitizerAlias } from "@src/Security/SanitizerAliases/IsInEnumSanitizerAlias";
+import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 class CommunicationsRoutes extends AbstractRoute implements RouteContract {
 
-    controllerInstance: AbstractController = CommunicationsController.getInstance();
+    controllerInstance:any = CommunicationsController.getInstance();
     routerInstance: express.Router = express.Router();
     routerInstanceAuthentification: express.Router = express.Router();
 
@@ -20,7 +22,7 @@ class CommunicationsRoutes extends AbstractRoute implements RouteContract {
     middlewaresDistribution:any = {
         all: [],
         createUpdate: [],
-        create: [
+        createContactUs: [
             entityNameSanitizerAlias('data.name'),
             basicHtmlSanitizerAlias('data.message'),
             body('data.email').exists({checkFalsy:true}).bail()
@@ -28,6 +30,12 @@ class CommunicationsRoutes extends AbstractRoute implements RouteContract {
                 .stripLow()
                 .normalizeEmail()
                 .trim(),
+        ],
+        createReport: [
+            basicHtmlSanitizerAlias('data.message'),
+            objectIdSanitizerAlias("data.reportedEntityId"),
+            isInEnumSanitizerAlias('data.reportedEntityType', EntityTypesEnum),
+            objectIdSanitizerAlias("data.userId"),
         ],
         update: [],
         delete: [],
@@ -55,10 +63,16 @@ class CommunicationsRoutes extends AbstractRoute implements RouteContract {
     }
 
     setupPublicRoutes(): express.Router {
-        this.routerInstance.post('/create', [
-            ...this.addMiddlewares("create"),
+        this.routerInstance.post('/contact-us', [
+            ...this.addMiddlewares("createContactUs"),
             this.validatingResults.bind(this),
-            this.createHandler.bind(this),
+            this.contactUsHandler.bind(this),
+            this.routeSendResponse.bind(this),
+        ]);
+        this.routerInstance.post('/report', [
+            ...this.addMiddlewares("createReport"),
+            this.validatingResults.bind(this),
+            this.reportEntityHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
         return this.setupAdditionnalPublicRoutes(this.routerInstance);
@@ -68,15 +82,28 @@ class CommunicationsRoutes extends AbstractRoute implements RouteContract {
     }
 
     /**
-     * CREATE
-     * Handle the create method of the controller of the entity, passing the data to it.
+     * createContactUsHandler
+     * Handle the create contact-us communication, passing the data to the controller.
      * @param req {Request}
      * @param res {Response}
      * @param next {NextFunction}
      * @return {Promise<any>}
      */
-    public async createHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        res.serviceResponse = await this.controllerInstance.create(req.body.data);
+    public async contactUsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        res.serviceResponse = await this.controllerInstance.createContactUs(req.body.data);
+        res.serviceResponse.action = Service.CREATE_STATE;
+        return next();
+    }
+    /**
+     * reportEntityHandler
+     * Handle the create contact-us communication, passing the data to the controller.
+     * @param req {Request}
+     * @param res {Response}
+     * @param next {NextFunction}
+     * @return {Promise<any>}
+     */
+    public async reportEntityHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        res.serviceResponse = await this.controllerInstance.createReportEntity(req.body.data, req.body.data?.userId, req.visitor.ip);
         res.serviceResponse.action = Service.CREATE_STATE;
         return next();
     }
