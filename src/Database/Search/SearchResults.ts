@@ -46,6 +46,9 @@ class SearchResults {
         homePageEntity.push(await this.projectModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
         homePageEntity.push(await this.eventModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
         homePageEntity.push(await this.equipmentModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
+
+        //fetch a 6th entity for frontend (atm always the second last person modified)
+        homePageEntity.push(await this.personModel.findOne({}, {}, { sort : { updatedAt: -1 }, skip:1 }));
         return homePageEntity;
     }
 
