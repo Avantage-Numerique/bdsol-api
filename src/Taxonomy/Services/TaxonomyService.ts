@@ -21,7 +21,7 @@ class TaxonomyService extends Service
 
     public async embedCount(document:any, results:Array<any>) {
         try {
-            const currentCount:Number = results.length;
+            const currentCount:number = results.length;
             document.meta = {
                 ...document.meta,
                 count: currentCount
