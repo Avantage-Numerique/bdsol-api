@@ -16,13 +16,14 @@ import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 import {getDbDriver} from "@database/Migrations/MigrationDbConnexion";
 import SearchResults from "@database/Search/SearchResults";
 import Taxonomy from "@src/Taxonomy/Models/Taxonomy";
+import {getApiConfig} from "@src/config";
 
 const EmbedTaxonomiesMetas = async () => {
 
     LogHelper.info("[Job][EmbedTaxonomiesMetas] start execution (async)");
 
     //  Get all the taxonomies in the collection.
-    const db = getDbDriver();
+    const db = getDbDriver(getApiConfig().db);
     const service = db.providers.data.services.TaxonomyService;
     const mongooseModel = Taxonomy.getInstance().mongooseModel;
     const taxonomies = await mongooseModel.find({});

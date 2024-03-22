@@ -23,6 +23,7 @@ class TaxonomyService extends Service
         try {
             const currentCount:Number = results.length;
             document.meta = {
+                ...document.meta,
                 count: currentCount
             }
             await document.save();
