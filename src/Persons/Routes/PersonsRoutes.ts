@@ -5,6 +5,7 @@ import CrudRoute from "@core/CrudRoute";
 import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
 import {noHtmlStringSanitizerAlias} from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
 import {basicHtmlSanitizerAlias} from "@src/Security/SanitizerAliases/BasicHtmlSanitizerAlias";
+import { urlSanitizerAlias } from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
 
 class PersonsRoutes extends CrudRoute {
 
@@ -25,6 +26,15 @@ class PersonsRoutes extends CrudRoute {
             objectIdSanitizerAlias('data.domains.*.domain'),
             objectIdSanitizerAlias('data.mainImage'),
             noHtmlStringSanitizerAlias('data.catchphrase'),
+
+            //SocialHandles
+            basicHtmlSanitizerAlias('data.url.*.label'),
+            urlSanitizerAlias('data.url.*.url'),
+            //contactPoint
+            noHtmlStringSanitizerAlias('data.contactPoint.tel.num'),
+            noHtmlStringSanitizerAlias('data.contactPoint.tel.ext'),
+            noHtmlStringSanitizerAlias('data.contactPoint.email.address'),
+            noHtmlStringSanitizerAlias('data.contactPoint.website.url'),
         ],
         update: [
             objectIdSanitizerAlias('data.id', false),
@@ -36,6 +46,16 @@ class PersonsRoutes extends CrudRoute {
             noHtmlStringSanitizerAlias('data.occupations.*.groupName.*'),
             objectIdSanitizerAlias('data.domains.*.domain'),
             noHtmlStringSanitizerAlias('data.catchphrase'),
+            
+            //SocialHandles
+            basicHtmlSanitizerAlias('data.url.*.label'),
+            urlSanitizerAlias('data.url.*.url'),
+            //contactPoint
+            noHtmlStringSanitizerAlias('data.contactPoint.tel.num'),
+            noHtmlStringSanitizerAlias('data.contactPoint.tel.ext'),
+            noHtmlStringSanitizerAlias('data.contactPoint.email.address'),
+            noHtmlStringSanitizerAlias('data.contactPoint.website.url'),
+
         ],
         delete: [],
         search: [],

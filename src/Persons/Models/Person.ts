@@ -11,6 +11,8 @@ import {Meta, SubMeta} from "@src/Moderation/Schemas/MetaSchema";
 import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import {populateUser} from "@src/Users/Middlewares/populateUser";
 import {SkillGroup} from "@src/Taxonomy/Schemas/SkillGroupSchema";
+import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
+import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 
 class Person extends AbstractModel {
 
@@ -128,6 +130,12 @@ class Person extends AbstractModel {
                 catchphrase: {
                     type: String
                 },
+                contactPoint: {
+                    type: ContactPoint.schema
+                },
+                url: {
+                    type: [SocialHandle.schema]
+                },
                 meta:{
                     type: Meta.schema
                 }
@@ -224,6 +232,8 @@ class Person extends AbstractModel {
             mainImage: document.mainImage ?? '',
             slug: document.slug ?? '',
             catchphrase: document.catchphrase ?? '',
+            url: document.url ?? [],
+            contactPoint: document.contactPoint ?? {},
             meta: document.meta ?? '',
             type: document.type ?? '',
             fullName: document.fullName ?? '',
