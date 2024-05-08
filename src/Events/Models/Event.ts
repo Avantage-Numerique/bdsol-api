@@ -12,6 +12,7 @@ import {User} from "@src/Users/UsersDomain";
 import {Schedule} from "@src/Database/Schemas/ScheduleSchema";
 import {EventFormatEnum} from "../EventFormatEnum";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
+import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 
 class Event extends AbstractModel {
 
@@ -115,7 +116,7 @@ class Event extends AbstractModel {
                 type: Date
             },
             contactPoint: {
-                type: String
+                type: ContactPoint.schema
             },
             mainImage: {
                 type: mongoose.Types.ObjectId,
@@ -201,7 +202,7 @@ class Event extends AbstractModel {
             team: document.team ?? [],
             startDate: document.startDate ?? '',
             endDate: document.endDate ?? '',
-            contactPoint: document.contactPoint ?? '',
+            contactPoint: document.contactPoint ?? {tel:{num:"", ext:""}, email:{address:""}, website:{url:""}},
             mainImage: document.mainImage ?? '',
             attendees: document.attendees ?? [],
             skills: document.skills ?? [],

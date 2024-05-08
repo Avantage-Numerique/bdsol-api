@@ -14,6 +14,7 @@ import {User} from "@src/Users/Models/User";
 import {SkillGroup} from "@src/Taxonomy/Schemas/SkillGroupSchema";
 import {EquipmentLink} from "@src/Database/Schemas/EquipmentLinkSchema";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
+import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 
 
 class Organisation extends AbstractModel {
@@ -91,7 +92,7 @@ class Organisation extends AbstractModel {
                     type: [SocialHandle.schema]
                 },
                 contactPoint: {
-                    type: String,
+                    type: ContactPoint.schema,
                 },
                 fondationDate: {
                     type: Date,
@@ -162,7 +163,7 @@ class Organisation extends AbstractModel {
             name: document.name ?? '',
             description: document.description ?? '',
             url: document.url ?? [],
-            contactPoint: document.contactPoint ?? '',
+            contactPoint: document.contactPoint ?? {tel:{num:"", ext:""}, email:{address:""}, website:{url:""}},
             fondationDate: document.fondationDate ?? '',
             offers: document.offers ?? '',
             domains: document.domains ?? '',

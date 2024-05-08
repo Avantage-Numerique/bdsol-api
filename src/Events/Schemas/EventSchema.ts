@@ -7,6 +7,7 @@ import {Member} from "@src/Team/Schemas/MemberSchema";
 import {Schedule} from "@src/Database/Schemas/ScheduleSchema";
 import {EventFormatEnum} from "../EventFormatEnum";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
+import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 
 export interface EventSchema extends Document {
     name:string;
@@ -21,7 +22,7 @@ export interface EventSchema extends Document {
     team:[Member];
     startDate:Date;
     endDate:Date;
-    contactPoint:string;
+    contactPoint:ContactPoint;
     mainImage:Media;
     attendees:[ObjectId];
     domains:[DomainSchema];

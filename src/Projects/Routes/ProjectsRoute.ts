@@ -34,7 +34,6 @@ class ProjectsRoutes extends CrudRoute {
             basicHtmlSanitizerAlias('data.url.*.label'),
             urlSanitizerAlias('data.url.*.url'),
 
-            contactPointSanitizerAlias('data.contactPoint'),
             objectIdSanitizerAlias('data.location.*'),
             objectIdSanitizerAlias('data.team.*.member'),
             noHtmlStringSanitizerAlias('data.team.*.role'),
@@ -62,7 +61,13 @@ class ProjectsRoutes extends CrudRoute {
             basicHtmlSanitizerAlias('data.sponsor.*.name'),
             objectIdSanitizerAlias('data.sponsor.*.entity'),
             isInEnumSanitizerAlias('data.sponsor.*.entityType', EntityTypesEnum),
-            IntegerSanitizerAlias('data.sponsor.*.subMeta.order')
+            IntegerSanitizerAlias('data.sponsor.*.subMeta.order'),
+
+            //contactPoint
+            noHtmlStringSanitizerAlias('data.contactPoint.tel.num'),
+            noHtmlStringSanitizerAlias('data.contactPoint.tel.ext'),
+            noHtmlStringSanitizerAlias('data.contactPoint.email.address'),
+            noHtmlStringSanitizerAlias('data.contactPoint.website.url'),
             
         ],
         update: [
@@ -77,7 +82,6 @@ class ProjectsRoutes extends CrudRoute {
             basicHtmlSanitizerAlias('data.url.*.label'),
             urlSanitizerAlias('data.url.*.url'),
 
-            contactPointSanitizerAlias('data.contactPoint'),
             objectIdSanitizerAlias('data.location.*'),
             objectIdSanitizerAlias('data.team.*.member'),
             noHtmlStringSanitizerAlias('data.team.*.role'),
@@ -105,7 +109,13 @@ class ProjectsRoutes extends CrudRoute {
             basicHtmlSanitizerAlias('data.sponsor.*.name'),
             objectIdSanitizerAlias('data.sponsor.*.entity'),
             isInEnumSanitizerAlias('data.sponsor.*.entityType', EntityTypesEnum),
-            IntegerSanitizerAlias('data.sponsor.*.subMeta.order')
+            IntegerSanitizerAlias('data.sponsor.*.subMeta.order'),
+
+            //contactPoint
+            noHtmlStringSanitizerAlias('data.contactPoint.tel.num'),
+            noHtmlStringSanitizerAlias('data.contactPoint.tel.ext'),
+            noHtmlStringSanitizerAlias('data.contactPoint.email.address'),
+            noHtmlStringSanitizerAlias('data.contactPoint.website.url'),
             
         ],
         delete: [],

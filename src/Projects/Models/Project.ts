@@ -13,6 +13,7 @@ import {ProjectContextEnum} from "../ProjectContextEnum";
 import {TeamField} from "@src/Team/Schemas/TeamSchema";
 import * as fs from 'fs';
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
+import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 
 class Project extends AbstractModel {
 
@@ -103,7 +104,7 @@ class Project extends AbstractModel {
                 type: [SocialHandle.schema]
             },
             contactPoint: {
-                type: String
+                type: ContactPoint.schema
             },
             location: {
                 type: [mongoose.Types.ObjectId],
@@ -189,7 +190,7 @@ class Project extends AbstractModel {
             alternateName: document.alternateName ?? '',
             description: document.description ?? '',
             url: document.url ?? '',
-            contactPoint: document.contactPoint ?? '',
+            contactPoint: document.contactPoint ?? {tel:{num:"", ext:""}, email:{address:""}, website:{url:""}},
             location: document.location ?? undefined,
             team: document.team ?? undefined,
             mainImage: document.mainImage ?? "",

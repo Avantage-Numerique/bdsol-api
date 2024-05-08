@@ -233,7 +233,7 @@ class Person extends AbstractModel {
             slug: document.slug ?? '',
             catchphrase: document.catchphrase ?? '',
             url: document.url ?? [],
-            contactPoint: document.contactPoint ?? {},
+            contactPoint: document.contactPoint ?? {tel:{num:"", ext:""}, email:{address:""}, website:{url:""}},
             meta: document.meta ?? '',
             type: document.type ?? '',
             fullName: document.fullName ?? '',
