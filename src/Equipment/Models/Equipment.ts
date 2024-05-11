@@ -72,10 +72,12 @@ class Equipment extends AbstractModel {
             //name (virtual)
             equipmentType: {
                 type: mongoose.Types.ObjectId,
+                required: true,
                 ref: "Taxonomy"
             },
             label: {
-                type: String
+                type: String,
+                required: true
             },
             description: {
                 type: String
