@@ -31,6 +31,7 @@ import CommunicationsRoutes from "./Communications/Routes/CommunicationsRoutes";
 import {MonitoringRoutes} from "@src/Monitoring/Routes/MonitoringRoutes";
 import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 import {BackukDbJob} from "@src/Schedule/Jobs/BackupDb";
+import {PagesRoutes} from "@src/Pages/Routes/PagesRoutes";
 
 /**
  * Main class for the API
@@ -168,6 +169,10 @@ export default class Api {
             {
                 baseRoute: "/monitoring",
                 manager: new MonitoringRoutes()
+            },
+            {
+                baseRoute: "/",
+                manager: new PagesRoutes()
             }
         ];
         // If dev, add admin routes.

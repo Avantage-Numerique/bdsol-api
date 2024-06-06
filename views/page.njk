@@ -10,15 +10,6 @@
             {% endblock %}
             <h1>{{ title }}</h1>
             <p>{{ body | safe }}</p>
-            <ul>
-                {% for status in statuses %}
-                    <li>
-                        <span>{{ status.label }}</span> : <span class="{% if status.value %}connected{% else %}disconnected{% endif %}">{{ status.valueLabel }}</span>
-                    </li>
-                {% else %}
-                    <li>Aucun status.</li>
-                {% endfor %}
-            </ul>
         </div>
     {% endblock %}
 </div>
