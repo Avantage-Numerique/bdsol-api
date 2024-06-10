@@ -10,7 +10,7 @@ const MongoSpawn = async (command:string, params:any) => {
 
     let uri:string = `${params.uri}`;
 
-    LogHelper.info(`${logPrefix} ${command} with params ${mongoParamsToArgs(params)} this uri : ${prepareUriForLoging(uri)}`);
+    LogHelper.info(`${logPrefix} ${command} with params ${mongoParamsToArgs(params, true)} this uri : ${prepareUriForLoging(uri)}`);
 
     let backupVerbose:string = "";
     mongoSpawn.stdout.setEncoding('utf8');
@@ -47,7 +47,10 @@ const MongoSpawn = async (command:string, params:any) => {
     return mongoSpawn;
 }
 
-const mongoParamsToArgs = (params:any) => {
+const mongoParamsToArgs = (params:any, forlogs=false) => {
+    if (forlogs) {
+        params.uri = prepareUriForLoging(params.uri);
+    }
     let args:Array<string> = [
         `--uri=${params.uri}`
     ];

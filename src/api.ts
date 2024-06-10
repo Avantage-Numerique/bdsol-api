@@ -29,6 +29,9 @@ import {PlacesRoutes} from "./Places/Routes/PlacesRoutes";
 import EquipmentRoutes from "./Equipment/Routes/EquipmentRoute";
 import CommunicationsRoutes from "./Communications/Routes/CommunicationsRoutes";
 import {MonitoringRoutes} from "@src/Monitoring/Routes/MonitoringRoutes";
+import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
+import {BackukDbJob} from "@src/Schedule/Jobs/BackupDb";
+import {PagesRoutes} from "@src/Pages/Routes/PagesRoutes";
 
 /**
  * Main class for the API
@@ -166,6 +169,10 @@ export default class Api {
             {
                 baseRoute: "/monitoring",
                 manager: new MonitoringRoutes()
+            },
+            {
+                baseRoute: "/",
+                manager: new PagesRoutes()
             }
         ];
         // If dev, add admin routes.
@@ -281,11 +288,11 @@ export default class Api {
         this.scheduler = new JobScheduler();
 
         const jobSheets:Array<JobSheet> = [
-            //this.scheduler.createSheet("Embed Taxonomy's metas (entities count, etc.", EmbedTaxonomiesMetas),
-            //this.scheduler.createSheet("Backuping BD", BackukDbJob, this.scheduler.createRule('second', 2))
+            this.scheduler.createSheet("Embed Taxonomy's metas (entities count, etc.", EmbedTaxonomiesMetas, this.scheduler.createRule('minute', 1)),
+            this.scheduler.createSheet("Backuping BD", BackukDbJob, this.scheduler.createRule('minute', 35))
         ];
-        LogHelper.info("Skipping job scheduler for test");
-        //this.scheduler.init(jobSheets);
+        LogHelper.info("[Jobs] Registred and strating scheduler.");
+        this.scheduler.init(jobSheets);
 
     }
 

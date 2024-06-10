@@ -2,20 +2,22 @@ import {getDbDriver} from "@database/Migrations/MigrationDbConnexion";
 import FileStorage from "@src/Storage/Files/FileStorage";
 import {MongoSpawn} from "@database/Helper/MongoSpawn";
 import {leadingZero} from "@src/Helpers/DateTime";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 const BackukDbJob = async () => {
-    await BackupDb('bdsol-data');
-    await BackupDb('bdsol-users');
+    const dataBckupResult:any = await BackupDb('bdsol-data');
+    const usersBckupResult:any = await BackupDb('bdsol-users');
+    return true;//finished
 }
 
 const BackupDb = async (dbName: string) => {
-
+    LogHelper.info("[JOB Callback] BackupDb starting");
     const db = getDbDriver();
 
     const path:string = './localStorage/backup/db';
     FileStorage.createPathIfNotExist(path);
 
-    await MongoSpawn('mongodump', {
+    return await MongoSpawn('mongodump', {
         uri: `${db.connectionUrl(dbName)}`,
         dbName: dbName,
         archive: `${path}/${backupFileName(dbName)}`,

@@ -40,7 +40,6 @@ class EmailNotification extends Notification {
                 text: this.contentToTextOnly(),
                 html: await this._emailTemplate.render(this.content),
             };
-            console.log("sendingEmailOptions", sendingEmailOptions);
             await this.transporter.sendMail(sendingEmailOptions);
             return;
         }
@@ -78,7 +77,7 @@ class EmailNotification extends Notification {
         return {
             host: config.notifications.email.server,
             port: config.notifications.email.port,
-            secure: true,
+            secure: true,//this is not a config to have. It must crash if not tls.
             auth: {
                 user: config.notifications.email.user,
                 pass: config.notifications.email.password,
@@ -89,7 +88,7 @@ class EmailNotification extends Notification {
         return {
             host: config.notifications.email.server, // le nom du service dans le fichier docker compose, ici on va mettre "mailhog"
             port: config.notifications.email.port, // dev : 1025
-            secure: true,//@todo change that back for mailhog.
+            secure: config.notifications.email.tls,
             auth: {
                 user: config.notifications.email.user,
                 pass: config.notifications.email.password,

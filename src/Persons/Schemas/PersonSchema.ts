@@ -3,6 +3,8 @@ import Media from "../../Media/Models/Media";
 import {Meta} from "../../Moderation/Schemas/MetaSchema";
 import {DomainSchema} from "../../Taxonomy/Schemas/DomainSchema";
 import {SkillGroup} from "../../Taxonomy/Schemas/SkillGroupSchema";
+import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
+import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 
 export interface PersonSchema extends Document {
     lastName:string;
@@ -14,5 +16,7 @@ export interface PersonSchema extends Document {
     domains:[DomainSchema];
     mainImage:Media;//ça fonctionne ça ?
     catchphrase:string;
+    contactPoint: ContactPoint;
+    url: [SocialHandle];
     meta: Meta;
 }

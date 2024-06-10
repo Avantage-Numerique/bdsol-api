@@ -1,0 +1,32 @@
+{
+  "versions": [
+    {
+      "label": "Première version de l'API",
+      "value": "1.0.0",
+      "date": "2024-03-23",
+      "description": "Mise en ligne le 23 mars 2024, nous avons fait X, Y et Z.",
+      "link": "https://github.com/avantage-numerique/bdsol-api",
+      "notes": [
+        {
+          "value": "C'est pas de ma faute"
+        },
+        {
+          "value": "Awesome man"
+        },
+        {
+          "value": "This is not this"
+        },
+        {
+          "value": "This is a sub note with another tag than default",
+          "tag": "h4"
+        },
+        {
+          "value": "1- Sub note under h3 - 1"
+        },
+        {
+          "value": "2- Sub note under h3 - 2"
+        }
+      ]
+    }
+  ]
+}

@@ -1,12 +1,12 @@
 import express from "express";
-import {UsersController} from "../Controllers/UsersController";
-import AbstractController from "../../Abstract/Controller";
 import {body} from "express-validator";
-import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
-import {NoSpaceSanitizer} from "../../Security/Sanitizers/NoSpaceSanitizer";
-import {NoAccentSanitizer} from "../../Security/Sanitizers/NoAccentSanitizer";
-import CrudRoute from "../../Abstract/CrudRoute";
-import {AlphaNumOnlySanitizer} from "../../Security/Sanitizers/AlphaNumOnlySanitizer";
+import AbstractController from "@core/Controller";
+import CrudRoute from "@core/CrudRoute";
+import {UsersController} from "@src/Users/Controllers/UsersController";
+import {NoHtmlSanitizer} from "@src/Security/Sanitizers/NoHtmlSanitizer";
+import {NoSpaceSanitizer} from "@src/Security/Sanitizers/NoSpaceSanitizer";
+import {NoAccentSanitizer} from "@src/Security/Sanitizers/NoAccentSanitizer";
+import {AlphaNumOnlySanitizer} from "@src/Security/Sanitizers/AlphaNumOnlySanitizer";
 
 class UsersRoutes extends CrudRoute {
     controllerInstance: AbstractController = UsersController.getInstance();

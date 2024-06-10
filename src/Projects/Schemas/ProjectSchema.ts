@@ -8,6 +8,7 @@ import {ScheduleBudget} from "@database/Schemas/ScheduleBudgetSchema";
 import {ProjectContextEnum} from "../ProjectContextEnum";
 import {DomainSchema} from "@src/Taxonomy/Schemas/DomainSchema";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
+import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 
 export interface ProjectSchema extends Document {
     name:string;
@@ -17,7 +18,7 @@ export interface ProjectSchema extends Document {
     producer: ObjectId;
     description:string;
     url:[SocialHandle]
-    contactPoint:string;
+    contactPoint:ContactPoint;
     location:[ObjectId];
     team:[Member];
     mainImage:Media;

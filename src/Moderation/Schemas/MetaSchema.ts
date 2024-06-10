@@ -15,6 +15,7 @@ export interface MetaSchema extends Document {
     requestedBy: mongoose.ObjectId;
     lastModifiedBy: mongoose.ObjectId;
     message: string;
+    statistics: Number;
 }
 
 export class Meta {
@@ -37,6 +38,9 @@ export class Meta {
         //If need to have a message attached to it (Reason to add taxonomy, comment...)
         message: {
             type: String,
+        },
+        statistics: {
+            count: Number
         }
     }, { _id : false });
 }

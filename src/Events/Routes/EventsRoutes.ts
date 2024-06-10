@@ -37,7 +37,6 @@ class EventsRoutes extends CrudRoute {
             objectIdSanitizerAlias('data.team.*.member'),
             dateSanitizerAlias('data.startDate'),
             dateSanitizerAlias('data.endDate'),
-            contactPointSanitizerAlias('data.contactPoint'),
             objectIdSanitizerAlias('data.mainImage'),
             objectIdSanitizerAlias('data.attendees.*'),
             objectIdSanitizerAlias('data.skills.*'),
@@ -53,7 +52,13 @@ class EventsRoutes extends CrudRoute {
 
             objectIdSanitizerAlias('data.subEvents.*'),
             objectIdSanitizerAlias('data.location.*'),
-            objectIdSanitizerAlias('data.photoGallery')
+            objectIdSanitizerAlias('data.photoGallery'),
+
+            //contactPoint
+            noHtmlStringSanitizerAlias('data.contactPoint.tel.num'),
+            noHtmlStringSanitizerAlias('data.contactPoint.tel.ext'),
+            noHtmlStringSanitizerAlias('data.contactPoint.email.address'),
+            noHtmlStringSanitizerAlias('data.contactPoint.website.url'),
         ],
         update: [
             objectIdSanitizerAlias('data.id'),
@@ -71,7 +76,6 @@ class EventsRoutes extends CrudRoute {
             objectIdSanitizerAlias('data.team.*.member'),
             dateSanitizerAlias('data.startDate'),
             dateSanitizerAlias('data.endDate'),
-            contactPointSanitizerAlias('data.contactPoint'),
             objectIdSanitizerAlias('data.mainImage'),
             objectIdSanitizerAlias('data.attendees.*'),
             objectIdSanitizerAlias('data.skills.*'),
@@ -87,7 +91,13 @@ class EventsRoutes extends CrudRoute {
 
             objectIdSanitizerAlias('data.subEvents.*'),
             objectIdSanitizerAlias('data.location.*'),
-            objectIdSanitizerAlias('data.photoGallery')
+            objectIdSanitizerAlias('data.photoGallery'),
+
+            //contactPoint
+            noHtmlStringSanitizerAlias('data.contactPoint.tel.num'),
+            noHtmlStringSanitizerAlias('data.contactPoint.tel.ext'),
+            noHtmlStringSanitizerAlias('data.contactPoint.email.address'),
+            noHtmlStringSanitizerAlias('data.contactPoint.website.url'),
         ],
         delete: [],
         search: [],

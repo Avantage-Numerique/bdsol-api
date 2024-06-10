@@ -6,11 +6,7 @@
             {% block content %}
                 <div class="indexContent">
                     {% block contentHeader %}
-                        <header>
-                            <figure>
-                                <img src="{{ api.mediasUrl }}avnu-picto.png" width="244" height="275" alt="avnu" border="0" />
-                            </figure>
-                        </header>
+                        {% include "Partials/header.njk" %}
                     {% endblock %}
                     <h1>{{ title }}</h1>
                     <p>{{ body | safe }}</p>
