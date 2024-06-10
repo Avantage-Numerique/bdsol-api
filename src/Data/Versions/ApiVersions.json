@@ -1,30 +1,39 @@
 {
   "versions": [
     {
-      "label": "Première version de l'API",
-      "value": "1.0.0",
+      "label": "Mise en ligne d'AVNU pour le lancement",
+      "value": "0.9.9",
       "date": "2024-03-23",
-      "description": "Mise en ligne le 23 mars 2024, nous avons fait X, Y et Z.",
+      "description": "Mise en ligne le 23 mars 2024. Le lancement a eu lieux au Cabaret de la Dernière chance à la fin du Forum avantage numérique.",
       "link": "https://github.com/avantage-numerique/bdsol-api",
       "notes": [
         {
-          "value": "C'est pas de ma faute"
+          "value": "Structure de l'ontotologie modifiable et fonctionnalités de consultation pour pour les Personnes, Organisations, Projets, Événements, Équipements et Lieux."
         },
         {
-          "value": "Awesome man"
+          "value": "Branding et intégration de la maquette web pour la version 1 d'AVNU."
         },
         {
-          "value": "This is not this"
+          "value": "Système de connexion via l'API."
         },
         {
-          "value": "This is a sub note with another tag than default",
-          "tag": "h4"
+          "value": "Équipe",
+          "tag": "strong"
         },
         {
-          "value": "1- Sub note under h3 - 1"
+          "value": "Vincent P. Ruel, Intégration et front-end"
         },
         {
-          "value": "2- Sub note under h3 - 2"
+          "value": "Frédéric Rivard, Backend et front-end"
+        },
+        {
+          "value": "Marc-André Martin, Backend, front-end et responsable du développement"
+        },
+        {
+          "value": "Simon Descoteau, coordination et gestion du produits"
+        },
+        {
+          "value": "Jeanne Perrin web design et UX"
         }
       ]
     }
