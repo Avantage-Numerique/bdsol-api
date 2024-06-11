@@ -5,6 +5,7 @@ import {leadingZero} from "@src/Helpers/DateTime";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 import {getApiConfig} from "@src/config";
 import BackupStorage from "@src/Storage/Files/BackupStorage";
+import {Str} from "@src/Helpers/Str";
 
 const BackukDbJob = async () => {
     const dataBckupResult:any = await BackupDb('bdsol-data');
@@ -31,8 +32,9 @@ const backupFileName = (dbName:string, extension:string='gzip') => {
 
     const now:Date = new Date();
     const sep:string = "-";
-    const config = getApiConfig()
-    return `${now.getFullYear()}${leadingZero(now.getMonth())}${leadingZero(now.getDate())}${sep}${leadingZero(now.getHours())}${leadingZero(now.getMinutes())}${sep}${dbName}${sep}${config.appName}${sep}${config.environnement}${sep}${config.version}.${extension}`;
+    const config = getApiConfig();
+    const currentAppContextName = `${config.appName}${sep}${config.environnement}${sep}${config.version}`;
+    return `${now.getFullYear()}${leadingZero(now.getMonth())}${leadingZero(now.getDate())}${sep}${leadingZero(now.getHours())}${leadingZero(now.getMinutes())}${sep}${dbName}${sep}${Str.kebab(currentAppContextName)}.${extension}`;
 }
 
 export {BackupDb, BackukDbJob};
