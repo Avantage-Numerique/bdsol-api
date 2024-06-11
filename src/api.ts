@@ -288,8 +288,8 @@ export default class Api {
         this.scheduler = new JobScheduler();
 
         const jobSheets:Array<JobSheet> = [
-            this.scheduler.createSheet("Embed Taxonomy's metas (entities count, etc.", EmbedTaxonomiesMetas, this.scheduler.createRule('minute', 1)),
-            this.scheduler.createSheet("Backuping BD", BackukDbJob, this.scheduler.createRule('minute', 35))
+            this.scheduler.createSheet("Embed Taxonomy's metas (entities count, etc.", EmbedTaxonomiesMetas, this.scheduler.createRule('hour', 23)),
+            this.scheduler.createSheet("Backuping BD", BackukDbJob, this.scheduler.createRule('hour', 0))
         ];
         LogHelper.info("[Jobs] Registred and strating scheduler.");
         this.scheduler.init(jobSheets);

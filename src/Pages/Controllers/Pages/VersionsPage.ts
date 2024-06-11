@@ -34,7 +34,6 @@ class VersionsPage extends Page {
         }
         return versionsBody;
     }
-
 }
 
 export default VersionsPage;
