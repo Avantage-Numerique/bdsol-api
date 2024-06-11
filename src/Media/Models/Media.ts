@@ -8,6 +8,8 @@ import {licenceList} from "../List/LicenceList";
 import {fileExtensionList, fileTypeList} from "../List/FileList";
 import {middlewarePopulateProperty} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import {EntityTypesEnum} from "@src/Entities/EntityTypes";
+import { User } from "@src/Users/UsersDomain";
+import { populateUser } from "@src/Users/Middlewares/populateUser";
 
 
 class Media extends AbstractModel {
@@ -184,9 +186,13 @@ class Media extends AbstractModel {
     public registerEvents():void {
         this.schema.pre('find', function() {
             //middlewarePopulateProperty(this, "entityId");
+            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
         });
         this.schema.pre('findOne', function() {
             middlewarePopulateProperty(this, "entityId");
+            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
         });
     }
 }

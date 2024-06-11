@@ -23,5 +23,7 @@ export interface OrganisationSchema extends Document {
     catchphrase:string;
     location: [ObjectId];
     equipment: [EquipmentLink];
+    region: string;
+    badges: [string]
     meta: Meta;
 }

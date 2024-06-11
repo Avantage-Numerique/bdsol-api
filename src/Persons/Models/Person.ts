@@ -13,6 +13,8 @@ import {populateUser} from "@src/Users/Middlewares/populateUser";
 import {SkillGroup} from "@src/Taxonomy/Schemas/SkillGroupSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
+import BadgeTypes from "@src/Badges/BadgeTypes";
+import { middlewareInsertBadges } from "@src/Badges/MiddlewareInsertBadges";
 
 class Person extends AbstractModel {
 
@@ -136,9 +138,16 @@ class Person extends AbstractModel {
                 url: {
                     type: [SocialHandle.schema]
                 },
+                region: {
+                    type: String
+                },
+                badges: {
+                    type: [String],
+                    enum: BadgeTypes.allBadgeTypes()
+                },
                 meta:{
                     type: Meta.schema
-                }
+                },
             },
             {
                 toJSON: { virtuals: true },
@@ -234,6 +243,8 @@ class Person extends AbstractModel {
             catchphrase: document.catchphrase ?? '',
             url: document.url ?? [],
             contactPoint: document.contactPoint ?? {tel:{num:"", ext:""}, email:{address:""}, website:{url:""}},
+            region: document.region ?? "",
+            badges: document.badges ?? [],
             meta: document.meta ?? '',
             type: document.type ?? '',
             fullName: document.fullName ?? '',
@@ -260,29 +271,35 @@ class Person extends AbstractModel {
         if (this.schema !== undefined) {
 
             //Pre save, verification for occupation
-            //Verify that occupations in the array exists and that there are no duplicates
             this.schema.pre('save', async function (next: any): Promise<any> {
-                    const idList = this.occupations.map( (el:any) => {
+                //Verify that occupations in the array exists and that there are no duplicates
+                const idList = this.occupations.map( (el:any) => {
+                    return el.skills.map( (id:any) =>{
+                        return new mongoose.Types.ObjectId(id);
+                    })
+                });
+                await middlewareTaxonomy(idList, TaxonomyController, "occupations.skills");
+
+                //Check and insert badges (this == document)
+                middlewareInsertBadges(this);
+
+                return next();
+            });
+
+            //Pre update verification for occupation //Maybe it should be in the schema as a validator
+            this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
+                const updatedDocument:any = this.getUpdate();
+                if (updatedDocument["occupations"] != undefined){
+                    const idList = updatedDocument.occupations.map( (el:any) => {
                         return el.skills.map( (id:any) =>{
                             return new mongoose.Types.ObjectId(id);
                         })
                     });
                     await middlewareTaxonomy(idList, TaxonomyController, "occupations.skills");
-                    return next();
-            });
-
-            //Pre update verification for occupation //Maybe it should be in the schema as a validator
-            this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
-                    const updatedDocument:any = this.getUpdate();
-                    if (updatedDocument["occupations"] != undefined){
-                        const idList = updatedDocument.occupations.map( (el:any) => {
-                            return el.skills.map( (id:any) =>{
-                                return new mongoose.Types.ObjectId(id);
-                            })
-                        });
-                        await middlewareTaxonomy(idList, TaxonomyController, "occupations.skills");
-                    }
-                    return next();
+                }
+                //Check and insert badges
+                middlewareInsertBadges(updatedDocument);
+                return next();
             });
         }
     }

@@ -18,5 +18,7 @@ export interface PersonSchema extends Document {
     catchphrase:string;
     contactPoint: ContactPoint;
     url: [SocialHandle];
+    region: string;
+    badges: [string]
     meta: Meta;
 }

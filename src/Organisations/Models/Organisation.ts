@@ -15,6 +15,8 @@ import {SkillGroup} from "@src/Taxonomy/Schemas/SkillGroupSchema";
 import {EquipmentLink} from "@src/Database/Schemas/EquipmentLinkSchema";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
+import BadgeTypes from "@src/Badges/BadgeTypes";
+import { middlewareInsertBadges } from "@src/Badges/MiddlewareInsertBadges";
 
 
 class Organisation extends AbstractModel {
@@ -129,6 +131,13 @@ class Organisation extends AbstractModel {
                 equipment: {
                     type: [EquipmentLink.schema]
                 },
+                region: {
+                    type: String
+                },
+                badges: {
+                    type: [String],
+                    enum: BadgeTypes.allBadgeTypes()
+                },
                 meta: {
                     type: Meta.schema
                 }
@@ -174,6 +183,8 @@ class Organisation extends AbstractModel {
             meta : document.meta ?? '',
             location: document.location ?? [],
             equipment: document.equipment ?? [],
+            region: document.region ?? "",
+            badges: document.badges ?? [],
             type: document.type ?? '',
             createdAt : document.createdAt ?? '',
             updatedAt : document.updatedAt ?? '',
@@ -206,6 +217,10 @@ class Organisation extends AbstractModel {
                     })
                 });
                 await middlewareTaxonomy(idList.flat(), TaxonomyController, "offers.skills");
+
+                //Check and insert badges (this == document)
+                middlewareInsertBadges(this);
+
                 return next();
             });
 
@@ -220,6 +235,9 @@ class Organisation extends AbstractModel {
                     });
                     await middlewareTaxonomy(idList.flat(), TaxonomyController, "offers.skills");
                 }
+
+                //Check and insert badges
+                middlewareInsertBadges(updatedDocument);
 
                 return next();
             });
