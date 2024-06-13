@@ -22,7 +22,7 @@ export const insertBadgeInArray = (badgesArray:[string], badgeType:string) => {
         badgesArray.push(badgeType);
 }
 
-export const removeBadgeInArray = (badgesArray:[string], badgeType:string) => {
+export const removeBadgeFromArray = (badgesArray:[string], badgeType:string) => {
     //if badgeType is in array
     if(badgesArray.includes(badgeType)){
         const index = badgesArray.indexOf(badgeType);

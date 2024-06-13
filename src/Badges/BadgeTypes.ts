@@ -1,4 +1,4 @@
-import { insertBadgeInArray, removeBadgeInArray } from "./MiddlewareInsertBadges";
+import { insertBadgeInArray, removeBadgeFromArray } from "./MiddlewareInsertBadges";
 
 class BadgeTypes {
 
@@ -21,7 +21,7 @@ class BadgeTypes {
                     if(BadgeTypes.badges.CB.acceptedRegion.includes(document.region))
                         insertBadgeInArray(document.badges, "CB");
                     else
-                        removeBadgeInArray(document.badges, "CB");
+                        removeBadgeFromArray(document.badges, "CB");
                 }
             },
             acceptedRegion:["abitibi-temiscamingue", "north Ontario", "baies-james"],
