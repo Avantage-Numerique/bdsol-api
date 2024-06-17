@@ -95,6 +95,9 @@ class JobScheduler {
     public createRule(param:string, value:number):schedule.RecurrenceRule {
         const rule:schedule.RecurrenceRule = new schedule.RecurrenceRule();
         Object.assign(rule, {[param]: value});
+        if (param !== "minute") {
+            Object.assign(rule, {"minute": 1});
+        }
         return rule;
     }
 
