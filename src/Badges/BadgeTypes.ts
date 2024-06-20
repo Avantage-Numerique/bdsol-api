@@ -13,8 +13,9 @@ class BadgeTypes {
             name: "CB",
             fullName: "Croissant Boréal",
             label: "Croissant Boréal",
-            iconPath: "",
-            iconAlt: "",
+            description: "J'habite le croissant boréal",
+            iconPath: "/badges-icons/badge-croissant-boreal.svg",
+            iconAlt: "Badge Croissant Boréal",
             iconDescription: "",
             condition(document:any){
                 if(document?.region !== undefined){
