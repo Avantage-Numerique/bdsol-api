@@ -1,14 +1,48 @@
 {
   "versions": [
     {
+      "label": "Badge du CB et informations de contact",
+      "value": "1.0.0",
+      "date": "2024-06-28",
+      "link": "",
+      "description": "Mise en ligne le 28 juin 2024. La version 1 ajoute plusieurs amélioration et ajustement du visuel, des textes. On a réglé plusieurs bogues.",
+      "notes": [
+        {
+          "value": "Ajout des informations de contact pour les entités Personnes et Organisations avec plus de détails (courriel, téléphones, site web)"
+        },
+        {
+          "value": "Ajout du système de badge, et on commence avec le badge : croissant Boréal (CB) et le champ de la région de l'entité."
+        },
+        {
+          "value": "Ajout des backups et du partage des versions dans l'API."
+        },
+        {
+          "value": "Ajout d'une fonctionnalité de type contenu statique (appelé Page) dans L'API."
+        },
+        {
+          "value": "<strong>Équipe</strong>",
+          "additionnalClasses": "pt-3 pb-2"
+        },
+        {
+          "value": "<strong>Frédéric Rivard</strong>, Backend et front-end"
+        },
+        {
+          "value": "<strong>Marc-André Martin</strong>, Backend, front-end et responsable du développement"
+        },
+        {
+          "value": "<strong>Jeanne Perrin</strong> web design et UX"
+        }
+      ]
+    },
+    {
       "label": "Mise en ligne d'AVNU pour le lancement",
       "value": "0.9.9",
       "date": "2024-03-23",
-      "description": "Mise en ligne le 23 mars 2024. Le lancement a eu lieux au Cabaret de la Dernière chance à la fin du Forum avantage numérique.",
-      "link": "https://github.com/avantage-numerique/bdsol-api",
+      "description": "Mise en ligne le 23 mars 2024. Le lancement a eu lieu au Cabaret de la dernière chance à la fin du Forum Avantage numérique.",
+      "link": "",
       "notes": [
         {
-          "value": "Structure de l'ontotologie modifiable et fonctionnalités de consultation pour pour les Personnes, Organisations, Projets, Événements, Équipements et Lieux."
+          "value": "Structure de l'ontologie modifiable et fonctionnalités de consultation pour  les Personnes, Organisations, Projets, Événements, Équipements et Lieux."
         },
         {
           "value": "Branding et intégration de la maquette web pour la version 1 d'AVNU."
@@ -17,23 +51,23 @@
           "value": "Système de connexion via l'API."
         },
         {
-          "value": "Équipe",
-          "tag": "strong"
+          "value": "<strong>Équipe</strong>",
+          "additionnalClasses": "pt-3 pb-2"
         },
         {
-          "value": "Vincent P. Ruel, Intégration et front-end"
+          "value": "<strong>Vincent P. Ruel</strong>, Intégration et front-end"
         },
         {
-          "value": "Frédéric Rivard, Backend et front-end"
+          "value": "<strong>Frédéric Rivard</strong>, Backend et front-end"
         },
         {
-          "value": "Marc-André Martin, Backend, front-end et responsable du développement"
+          "value": "<strong>Marc-André Martin</strong>, Backend, front-end et responsable du développement"
         },
         {
-          "value": "Simon Descoteau, coordination et gestion du produits"
+          "value": "<strong>Simon Descoteau</strong>, coordination et gestion du produits"
         },
         {
-          "value": "Jeanne Perrin web design et UX"
+          "value": "<strong>Jeanne Perrin</strong> web design et UX"
         }
       ]
     }
