@@ -35,6 +35,7 @@ class CommunicationsRoutes extends AbstractRoute implements RouteContract {
             basicHtmlSanitizerAlias('data.message'),
             objectIdSanitizerAlias("data.reportedEntityId"),
             isInEnumSanitizerAlias('data.reportedEntityType', EntityTypesEnum),
+            basicHtmlSanitizerAlias('data.reportedEntitySlug'),
             objectIdSanitizerAlias("data.userId"),
         ],
         update: [],

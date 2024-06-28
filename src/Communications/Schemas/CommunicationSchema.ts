@@ -10,5 +10,6 @@ export interface CommunicationSchema extends Document {
     date:Date;
     reportedEntityId:ObjectId;
     reportedEntityType:EntityTypesEnum;
+    reportedEntitySlug:String;
     userInfo: Object;
 }

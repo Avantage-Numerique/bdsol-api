@@ -74,6 +74,9 @@ class Communication extends AbstractModel {
                     type: String,
                     enum: EntityTypesEnum
                 },
+                reportedEntitySlug: {
+                    type: String
+                },
                 userInfo:{
                     type: {
                         userId: mongoose.Types.ObjectId,

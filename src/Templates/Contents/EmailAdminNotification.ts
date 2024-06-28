@@ -11,7 +11,8 @@ const EmailAdminNotification:any = (communicationObject:any, additionnalContext:
                 message : ${communicationObject?.message ?? "-"}<br/>
                 date : ${communicationObject?.date ?? "-"}<br/>
                 reportedEntityId : ${communicationObject?.reportedEntityId ?? "-"}<br/>
-                reportedEntityType : ${communicationObject?.reportedEntityType ?? "-"}<br/>`,
+                reportedEntityType : ${communicationObject?.reportedEntityType ?? "-"}<br/>
+                reportedEntitySlug : ${communicationObject?.reportedEntitySlug ?? "-"}<br/>`,
             conclusion: "<br/>Merci de traitez cette demande comme il se doit :)",
             /* cta: {
                 link: `${link}`,//to define from the content
