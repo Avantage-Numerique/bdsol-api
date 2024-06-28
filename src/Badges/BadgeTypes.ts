@@ -33,6 +33,21 @@ class BadgeTypes {
     static allBadgeTypes(){
         return Object.keys(this.badges)
     }
+
+    static populateBadgesArray(document:any){
+        //If badges exist
+        const populatedBadge :any = [];
+        if(Array.isArray(document.badges) && document.badges.length > 0)
+        {
+            document.badges.forEach((elem: any) => {
+                if(BadgeTypes.badges?.[elem] !== undefined){
+                    populatedBadge.push(BadgeTypes.badges[elem])
+                }
+            });
+        }
+        document.badges = populatedBadge;
+        return;
+    }
 }
 
 export default BadgeTypes
