@@ -87,13 +87,14 @@ class CommunicationsController extends AbstractController {
      * @return {ApiResponseContract} Promise
      */
     public async createReportEntity(requestData: any, userId:any, ip:string): Promise<ApiResponseContract> {
-        const {message, reportedEntityId, reportedEntityType} = requestData;
+        const {message, reportedEntityId, reportedEntityType, reportedEntitySlug} = requestData;
         const communicationObject =
         {
             communicationType: "report",
             message: message,
             reportedEntityId: reportedEntityId,
             reportedEntityType: reportedEntityType,
+            reportedEntitySlug: reportedEntitySlug,
             userInfo: {
                 userId: userId ?? null,
                 ip: ip ?? "not-set"

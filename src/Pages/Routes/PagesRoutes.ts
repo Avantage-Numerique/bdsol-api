@@ -49,6 +49,9 @@ class PagesRoutes extends AbstractRoute {
         this.routerInstance.get('/versions', [
             this.versionsLayoutHandler.bind(this)
         ]);
+        this.routerInstance.get('/statistics', [
+            this.statisticsLayoutHandler.bind(this)
+        ]);
 
         return this.routerInstance;
     }
@@ -62,6 +65,10 @@ class PagesRoutes extends AbstractRoute {
         return router;
     }
 
+
+    public async statisticsLayoutHandler(req: Request, res: Response): Promise<any> {
+        return this.layoutHandler(await this.controllerInstance.statistics(), req, res);
+    }
 
     public async versionsLayoutHandler(req: Request, res: Response): Promise<any> {
         return this.layoutHandler(await this.controllerInstance.versions(), req, res);

@@ -18,7 +18,7 @@ const RestoreDb = async (dbName: string) => {
     await MongoSpawn('mongorestore', {
         uri: `${db.connectionUrl(dbName)}`,
         dbName: dbName,
-        archive: `${path}/${restoreFileName('distant-bdsol-data', '20231006', '1456')}`,
+        archive: `${path}/${restoreFileName('bdsol-data-stagingapiavnuproduction100', '20240519', '0001')}`,
         gzip: true
     });
 }

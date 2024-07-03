@@ -19,7 +19,7 @@ class Page {
     public renderedTemplate:any;
     private _noCache:boolean = true;
 
-    constructor(name:string, layout:string, content:PageContent={title:"Page", body:"contenu"}) {
+    constructor(name:string, layout:string = "page", content:PageContent={title:"Page", body:"contenu"}) {
         this.name = name;
         this.layout = layout;
         this.content = content;
@@ -30,7 +30,7 @@ class Page {
     public async render(): Promise<string> {
 
         if (this._noCache || !this.template) {
-            this.template = new PublicTemplate(this.name);//template have already a default in the EmailContent.Prepare.
+            this.template = new PublicTemplate(this.layout);//template have already a default in the EmailContent.Prepare.
         }
         if (this._noCache || !this.renderedTemplate) {
             this.renderedTemplate = await this.template.render({

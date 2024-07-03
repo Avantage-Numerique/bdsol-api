@@ -1,5 +1,6 @@
 import Page, {PageContent} from "@src/Pages/Controllers/Pages/Page";
 import VersionsPage from "@src/Pages/Controllers/Pages/VersionsPage";
+import StatisticsPage from "@src/Pages/Controllers/Pages/StatisticsPage";
 
 class PagesController {
 
@@ -25,6 +26,11 @@ class PagesController {
 
     public async versions():Promise<string> {
         const versionsPage = new VersionsPage("versions", "versions");
+
+        return await versionsPage.render();
+    }
+    public async statistics():Promise<string> {
+        const versionsPage = new StatisticsPage("statistics");
 
         return await versionsPage.render();
     }
