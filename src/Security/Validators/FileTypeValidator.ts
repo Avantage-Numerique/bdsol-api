@@ -1,6 +1,6 @@
 
 // image
-/**à
+/**
  * const whitelist = [
  *   'image/png',
  *   'image/jpeg',
