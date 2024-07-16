@@ -13,7 +13,7 @@ class BadgeTypes {
             name: "CB",
             fullName: "Croissant Boréal",
             label: "Croissant Boréal",
-            description: "J'habite le croissant boréal",
+            description: "se trouve sur le croissant boréal",
             iconPath: "/badges-icons/badge-croissant-boreal.svg",
             iconAlt: "Badge Croissant Boréal",
             iconDescription: "",
