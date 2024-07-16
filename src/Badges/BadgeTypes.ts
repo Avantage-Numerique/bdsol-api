@@ -1,4 +1,4 @@
-import { insertBadgeInArray, removeBadgeFromArray } from "./MiddlewareInsertBadges";
+import {insertBadgeInArray, removeBadgeFromArray} from "./MiddlewareInsertBadges";
 
 class BadgeTypes {
 
@@ -11,11 +11,11 @@ class BadgeTypes {
         CB :
         {
             name: "CB",
-            fullName: "Croissant Boréal",
-            label: "Croissant Boréal",
-            description: "J'habite le croissant boréal",
+            fullName: "Croissant boréal",
+            label: "Croissant boréal",
+            description: "se trouve sur le Croissant boréal",
             iconPath: "/badges-icons/badge-croissant-boreal.svg",
-            iconAlt: "Badge Croissant Boréal",
+            iconAlt: "Badge Croissant boréal",
             iconDescription: "",
             condition(document:any){
                 if(document?.region !== undefined){

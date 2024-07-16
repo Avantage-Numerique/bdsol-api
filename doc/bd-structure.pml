@@ -17,7 +17,7 @@ package Entity {
         description : String
         occupations : [ **SkillGroup** ]
         domains : [ { domain : ObjectId (Taxonomy), subMeta : **SubMeta**}, ... ]
-        mainImage : ObjectId (Place)
+        mainImage : ObjectId (Media)
         catchPhrase : String
         contactPoint : **ContactPoint**
         url : [ **SocialHandle** ]
@@ -306,7 +306,7 @@ package Enums {
     }
 
     enum **EventFormatEnum** {
-        "" = ""
+        " " = " "
         "Présentiel" = "presential"
         "Asynchrone" = "asynchronous"
         "Mixte" = "mixed"
