@@ -410,7 +410,7 @@ export abstract class Service {
         }
 
         // Si not unique
-        if (meta.rawError.code === 11000) {
+        if (meta.rawError?.code && meta.rawError?.code && meta.rawError?.code === 11000) {
             //In service, rawError contains the original error that triggered this error handling.
             const wrongElements = Object.getOwnPropertyNames(meta.rawError.keyValue);
             let wrongElementsValues = "";
