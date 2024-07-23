@@ -24,7 +24,7 @@ abstract class AbstractController implements ControllerContract {
     abstract entity: AbstractModel;
 
     /**
-     * @method create Create a new entity in de database based on the request.
+     * @method create Create a new entity in the database based on the request.
      * @param {any} requestData - Containing information for the create
      * @return {ApiResponseContract} Promise
      */
@@ -82,13 +82,23 @@ abstract class AbstractController implements ControllerContract {
 
 
     /**
-     * @method list List entity documents with research terms from database
+     * @method get get target entity by
      * @param {any} requestData - Research terms { "nom":"Jean" }
      * @return {ApiResponseContract} Promise containing a list of documents
      */
     public async get(requestData: any): Promise<ApiResponseContract> {
         const query = QueryBuilder.build(requestData, true);
         return await this.service.get(query);
+    }
+
+
+    /**
+     * @method single get target single entity
+     * @param {any} requestData - Research terms { "nom":"Jean" }
+     * @return {ApiResponseContract} Promise containing a list of documents
+     */
+    public async single(requestData: any): Promise<ApiResponseContract> {
+        return this.get(requestData);
     }
 
 
@@ -165,6 +175,7 @@ abstract class AbstractController implements ControllerContract {
         try {
             //User id
             const user: any = req.user?._id;
+            
 
             //IP Address
             const ipAddress = req.visitor.ip;

@@ -1,4 +1,4 @@
-import {defaultModifier, objectIdModifier, PropertyModifier} from "./PropertyModifier";
+import {defaultModifier, objectIdModifier, PropertyModifier, stringToArrayModifier} from "./PropertyModifier";
 import ApiQuery from "./ApiQuery";
 
 
@@ -22,12 +22,8 @@ export default class QueryBuilder {
         },
         or: {
             queryProperty: '$or'
-        },
-        in: {
-            queryProperty: '$in'
-        },
+        }
         //match ? THis need to have recursive crawling in to be worth it, I think.
-        //in ? could be implemented quickly
         //not ? could be implemented quickly
     }
 
@@ -48,6 +44,10 @@ export default class QueryBuilder {
         ne: {
             queryProperty: '$ne'
         },
+        in: {
+            queryProperty: '$in',
+            modifier: stringToArrayModifier
+        },
         objId: {
             queryProperty: ""
         }
@@ -55,9 +55,11 @@ export default class QueryBuilder {
 
     /**
      * Modifiers are used to change the query value. Like for now for every _id we apply the objectIdModifier.
+     * in, we
      */
     static fieldPropertiesModifiers: any = {
-        "_id": objectIdModifier
+        "_id": objectIdModifier,
+        "id": objectIdModifier
     }
 
     /**
@@ -93,7 +95,9 @@ export default class QueryBuilder {
          */
 
         QueryBuilder.parseSections(currentQuery);
-        currentQuery.raw = QueryBuilder.parseParams(currentQuery.raw).query;
+        const parsedQuery = QueryBuilder.parseParams(currentQuery.raw);
+        currentQuery.raw = parsedQuery.query;
+        currentQuery.options = parsedQuery.options;
         return currentQuery;
     }
 
@@ -147,10 +151,11 @@ export default class QueryBuilder {
         for (const field in query)
         {
             const value:any = query[field];
-
             // If the field is an id check, but brute, no property sets.
             if ((field === "id" || field === "_id") &&
                 (value !== "" && value !== undefined && !QueryBuilder.haveProperty(value))) {    // sauf si
+                //const modifier = QueryBuilder.fieldPropertiesModifiers['_id'] ?? defaultModifier;
+                //parsedQuery._id = modifier(value);
                 parsedQuery._id = value;
                 continue;
             }
@@ -163,14 +168,13 @@ export default class QueryBuilder {
                 continue;
             }
 
-            if (field == "limit" && Number(field) > 0) {
-                options.limit = Number(field);
+            if (field == "limit" && Number(query[field]) > 0) {
+                options.limit = Number(query[field]);
                 delete query[field];
                 continue;
             }
-
-            if (field == "skip" && Number(field) > 0) {
-                options.skip = Number(field);
+            if (field == "skip" && Number(query[field]) >= 0) {
+                options.skip = Number(query[field]);
                 delete query[field];
                 continue;
             }
@@ -191,6 +195,7 @@ export default class QueryBuilder {
         if (QueryBuilder.haveProperty(value)) {
             // for now we only have ObjectId modifier for properties.
             const modifier:PropertyModifier = QueryBuilder.fieldPropertiesModifiers[field] ?? defaultModifier;  //this should be a list too to assign modifier to target type of field. For now _id seem to be the only one needed for that.
+
             parsedValue = QueryBuilder.propertyToQueryObject(value, modifier);
             fieldChanged = true;
         }
@@ -221,12 +226,14 @@ export default class QueryBuilder {
         for (const supportedProperty in QueryBuilder.queryProperties)
         {
             const propertyParams:any = QueryBuilder.queryProperties[supportedProperty];
+            const propertyModifier:any = propertyParams.modifier ?? defaultModifier;
             const propertyPrefix:string = `${supportedProperty}${QueryBuilder.propertySeperator}`;
 
             if (QueryBuilder.haveProperty(value, propertyPrefix)) {
                 if (propertyParams.queryProperty !== "") {
-                    queryProperty[propertyParams.queryProperty] = modifier(QueryBuilder.queryPropertyValue(value, propertyPrefix.length));
-
+                    queryProperty[propertyParams.queryProperty] = modifier(
+                        propertyModifier(QueryBuilder.queryPropertyValue(value, propertyPrefix.length))
+                    );
                     return queryProperty;
                 }
                 return modifier(QueryBuilder.queryPropertyValue(value, propertyPrefix.length));

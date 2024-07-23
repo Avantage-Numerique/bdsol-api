@@ -6,11 +6,15 @@ export interface DBDriver {
     baseUrl: string,
     providers: any,
     connect: () => void;
+    disconnect: () => void;
     setupIndexes: () => void;
     removeIndexes: () => void;
     initDb: () => void;
-    getConnectionUrl: (db?:string) => string;
-    getConnectionBaseUrl: () => string;
+    initProviders: () => void;
+    connectionUrl: (db?:string) => string;
+    connectionBaseUrl: () => string;
     getCollection: (name:string) => any;
     getModel: (name:string) => any;
+    isConnected: () => boolean;
+    urlToLog: (url:string) => void;
 }

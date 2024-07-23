@@ -22,6 +22,8 @@ export default class ApiQuery {
     public sections:Array<any>;
     private _transmuted:any;
     private _options:any;
+    private _lookup:any;
+    private _matches:any;
     private _projections:any;
 
     /**
@@ -57,18 +59,46 @@ export default class ApiQuery {
         return this._transmuted;
     }
 
-    public set options(values) {
-        this._options = values;
-    }
 
-    public get options() {
+    public set options(values) {
+        this.sort = values?.sort ?? {updatedAt : -1}
+        this.limit = values?.limit ?? Number(config.query.defaultLimit)
+        this.skip = values?.skip ?? Number(config.query.defaultSkip)
         this._options = {
             sort: this.sort,
             limit: this.limit,
             skip: this.skip
         }
+    }
+
+    public get options() {
         return this._options;
     }
+
+
+    public set matches(values:any) {
+        this._matches = values;
+    }
+
+    public get matches() {
+        return this._matches;
+    }
+
+
+    public set lookup(values:any) {
+        /*
+        from: Collection,
+        localField: current Model field to match the value of ForeignField,
+        foreignField: The field to match the from collection,
+        as: Name of the properties to push the data.,
+         */
+        this._lookup = values;
+    }
+
+    public get lookup() {
+        return this._lookup;
+    }
+
 
     public get projections() {
         return {};

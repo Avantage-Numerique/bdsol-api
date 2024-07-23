@@ -3,11 +3,13 @@ import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import {MediaSchema} from "../Schemas/MediaSchema";
 import MediasService from "../Services/MediasService";
-import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {Meta} from "@src/Moderation/Schemas/MetaSchema";
 import {licenceList} from "../List/LicenceList";
 import {fileExtensionList, fileTypeList} from "../List/FileList";
 import {middlewarePopulateProperty} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import {EntityTypesEnum} from "@src/Entities/EntityTypes";
+import { User } from "@src/Users/UsersDomain";
+import { populateUser } from "@src/Users/Middlewares/populateUser";
 
 
 class Media extends AbstractModel {
@@ -16,7 +18,7 @@ class Media extends AbstractModel {
     protected static _instance: Media;
 
     /** @public @static Model singleton instance constructor */
-    public static getInstance(): Media {
+    public static getInstance(doIndexes=true): Media {
         if (Media._instance === undefined) {
             Media._instance = new Media();
 
@@ -25,7 +27,7 @@ class Media extends AbstractModel {
 
             Media._instance.schema.virtual("type").get( function () { return Media._instance.modelName });
 
-            Media._instance.registerIndexes();
+            if (doIndexes) Media._instance.registerIndexes();
             Media._instance.initSchema();
         }
         return Media._instance;
@@ -85,6 +87,10 @@ class Media extends AbstractModel {
                     type: String,
                     enum: fileExtensionList
                 },
+                mediaField: {
+                    type: String,
+                    enum: ["mainImage", "photoGallery"]
+                },
                 slug: {
                     type: String,
                     slug: ["entityId"],
@@ -110,8 +116,8 @@ class Media extends AbstractModel {
                     type: String,
                     enum: [ "in use", "archived", "to delete", "pending" ]
                 },
-                status: {
-                    type: Status.schema,
+                meta: {
+                    type: Meta.schema,
                     //required: true
                 }
             },
@@ -139,8 +145,7 @@ class Media extends AbstractModel {
             "slug",
             "entityId",
             "entityType",
-            "uploadedBy",
-            "status"];
+            "uploadedBy"];
     }
 
     /**
@@ -160,11 +165,12 @@ class Media extends AbstractModel {
             fileType: document.fileType ?? '',
             fileName: document.fileName ?? '',
             extension: document.extension ?? '',
+            mediaField: document.mediaField ?? '',
             slug: document.slug ?? '',
             entityId: document.entityId ?? '',
             entityType: document.entityType ?? '',
             uploadedBy: document.uploadedBy ?? '',
-            status: document.status ?? '',
+            meta: document.meta ?? '',
             type: document.type ?? '',
             createdAt : document.createdAt ?? '',
             updatedAt : document.updatedAt ?? '',
@@ -180,9 +186,13 @@ class Media extends AbstractModel {
     public registerEvents():void {
         this.schema.pre('find', function() {
             //middlewarePopulateProperty(this, "entityId");
+            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
         });
         this.schema.pre('findOne', function() {
             middlewarePopulateProperty(this, "entityId");
+            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
         });
     }
 }

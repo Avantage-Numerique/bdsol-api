@@ -1,13 +1,18 @@
 import express from "express";
-import ProjectsController from "../Controllers/ProjectsController";
-import AbstractController from "../../Abstract/Controller";
-import CrudRoute from "../../Abstract/CrudRoute";
-import {objectIdSanitizerAlias} from "../../Security/SanitizerAliases/ObjectIdSanitizerAlias";
-import {urlSanitizerAlias} from "../../Security/SanitizerAliases/UrlSanitizerAlias";
-import {contactPointSanitizerAlias} from "../../Security/SanitizerAliases/ContactSanitizerAlias";
-import {entityNameSanitizerAlias} from "../../Security/SanitizerAliases/EntityNameSanitizerAlias";
-import {basicHtmlSanitizerAlias} from "../../Security/SanitizerAliases/BasicHtmlSanitizerAlias";
-import {noHtmlStringSanitizerAlias} from "../../Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
+import ProjectsController from "@src/Projects/Controllers/ProjectsController";
+import AbstractController from "@core/Controller";
+import CrudRoute from "@core/CrudRoute";
+import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
+import {urlSanitizerAlias} from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
+import {contactPointSanitizerAlias} from "@src/Security/SanitizerAliases/ContactSanitizerAlias";
+import {entityNameSanitizerAlias} from "@src/Security/SanitizerAliases/EntityNameSanitizerAlias";
+import {basicHtmlSanitizerAlias} from "@src/Security/SanitizerAliases/BasicHtmlSanitizerAlias";
+import {noHtmlStringSanitizerAlias} from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
+import {dateSanitizerAlias} from "@src/Security/SanitizerAliases/DateSanitizerAlias";
+import {isInEnumSanitizerAlias} from "@src/Security/SanitizerAliases/IsInEnumSanitizerAlias";
+import {ProjectContextEnum} from "@src/Projects/ProjectContextEnum";
+import { IntegerSanitizerAlias } from "@src/Security/SanitizerAliases/IntegerSanitizerAlias";
+import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 class ProjectsRoutes extends CrudRoute {
 
@@ -24,46 +29,94 @@ class ProjectsRoutes extends CrudRoute {
             objectIdSanitizerAlias('data.entityInCharge'),
             objectIdSanitizerAlias('data.producer'),
             basicHtmlSanitizerAlias('data.description'),
-            urlSanitizerAlias('data.url'),
-            contactPointSanitizerAlias('data.contactPoint'),
-            //body('data.context').exists({checkNull:true}).bail().customSanitizer(EnumSanitizer.validatorCustomSanitizer(ProjectContextEnum)),
-            //body('data.location').exists({checkNull:true}).bail(),
-            //body('data.team').exists({checkNull:true}).bail().isArray(),
+
+            //SocialHandles
+            basicHtmlSanitizerAlias('data.url.*.label'),
+            urlSanitizerAlias('data.url.*.url'),
+
+            objectIdSanitizerAlias('data.location.*'),
             objectIdSanitizerAlias('data.team.*.member'),
-            //body('data.sponsor').exists({checkNull:true}).bail(),
-            //body('data.scheduleBudget').exists({checkNull:true}).bail(),
+            noHtmlStringSanitizerAlias('data.team.*.role'),
             objectIdSanitizerAlias('data.mainImage'),
-            /*body('data.skills').exists({checkNull:true}).bail()
-                .custom(IsObjectIdStringValid.validatorCustom())
-                .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
-                .trim(),*/
-            //status not sanitize yet, because it will be manage by backend*/
+
+            //budget
+            dateSanitizerAlias('data.scheduleBudget.startDate'),
+            dateSanitizerAlias('data.scheduleBudget.endDateEstimate'),
+            dateSanitizerAlias('data.scheduleBudget.completionDate'),
+
+            noHtmlStringSanitizerAlias('data.scheduleBudget.eta'),
+            noHtmlStringSanitizerAlias('data.scheduleBudget.timeframe.*.step'),
+            noHtmlStringSanitizerAlias('data.scheduleBudget.timeframe.*.eta'),
+            noHtmlStringSanitizerAlias('data.scheduleBudget.timeframe.*.budgetRange'),
+
+            //skills
+            objectIdSanitizerAlias('data.skills.*'),
+            objectIdSanitizerAlias('data.domains.*.domain'),
+
+            //context
+            isInEnumSanitizerAlias('data.context', ProjectContextEnum),
+            objectIdSanitizerAlias('data.equipment.*'),
+
+            //sponsor
+            basicHtmlSanitizerAlias('data.sponsor.*.name'),
+            objectIdSanitizerAlias('data.sponsor.*.entity'),
+            isInEnumSanitizerAlias('data.sponsor.*.entityType', EntityTypesEnum),
+            IntegerSanitizerAlias('data.sponsor.*.subMeta.order'),
+
+            //contactPoint
+            noHtmlStringSanitizerAlias('data.contactPoint.tel.num'),
+            noHtmlStringSanitizerAlias('data.contactPoint.tel.ext'),
+            noHtmlStringSanitizerAlias('data.contactPoint.email.address'),
+            noHtmlStringSanitizerAlias('data.contactPoint.website.url'),
+            
         ],
         update: [
             objectIdSanitizerAlias('data.id'),
-            entityNameSanitizerAlias('data.name'),
+            entityNameSanitizerAlias('data.name', false),
             noHtmlStringSanitizerAlias('data.alternateName'),
             objectIdSanitizerAlias('data.entityInCharge'),
             objectIdSanitizerAlias('data.producer'),
             basicHtmlSanitizerAlias('data.description'),
-            urlSanitizerAlias('data.url'),
-            contactPointSanitizerAlias('data.contactPoint'),
+
+            //SocialHandles
+            basicHtmlSanitizerAlias('data.url.*.label'),
+            urlSanitizerAlias('data.url.*.url'),
+
+            objectIdSanitizerAlias('data.location.*'),
             objectIdSanitizerAlias('data.team.*.member'),
+            noHtmlStringSanitizerAlias('data.team.*.role'),
             objectIdSanitizerAlias('data.mainImage'),
 
-            //body('data.context').exists({checkNull:true}).bail().customSanitizer(EnumSanitizer.validatorCustomSanitizer(ProjectContextEnum)),
-            //body('data.location').exists({checkNull:true}).bail(),
-            //body('data.team').exists({checkNull:true}).bail().isArray(),
+            //budget
+            dateSanitizerAlias('data.scheduleBudget.startDate'),
+            dateSanitizerAlias('data.scheduleBudget.endDateEstimate'),
+            dateSanitizerAlias('data.scheduleBudget.completionDate'),
 
-            //body('data.sponsor').exists({checkNull:true}).bail(),
-            //body('data.scheduleBudget').exists({checkNull:true}).bail(),
+            noHtmlStringSanitizerAlias('data.scheduleBudget.eta'),
+            noHtmlStringSanitizerAlias('data.scheduleBudget.timeframe.*.step'),
+            noHtmlStringSanitizerAlias('data.scheduleBudget.timeframe.*.eta'),
+            noHtmlStringSanitizerAlias('data.scheduleBudget.timeframe.*.budgetRange'),
 
-            /*body('data.skills').exists({checkNull:true}).bail()
-                .custom(IsObjectIdStringValid.validatorCustom())
-                .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
-                .trim(),*/
+            //skills
+            objectIdSanitizerAlias('data.skills.*'),
+            objectIdSanitizerAlias('data.domains.*.domain'),
 
-            //status not sanitize yet, because it will be manage by backend*/
+            //context
+            isInEnumSanitizerAlias('data.context', ProjectContextEnum),
+            objectIdSanitizerAlias('data.equipment.*'),
+        
+            //sponsor
+            basicHtmlSanitizerAlias('data.sponsor.*.name'),
+            objectIdSanitizerAlias('data.sponsor.*.entity'),
+            isInEnumSanitizerAlias('data.sponsor.*.entityType', EntityTypesEnum),
+            IntegerSanitizerAlias('data.sponsor.*.subMeta.order'),
+
+            //contactPoint
+            noHtmlStringSanitizerAlias('data.contactPoint.tel.num'),
+            noHtmlStringSanitizerAlias('data.contactPoint.tel.ext'),
+            noHtmlStringSanitizerAlias('data.contactPoint.email.address'),
+            noHtmlStringSanitizerAlias('data.contactPoint.website.url'),
+            
         ],
         delete: [],
         search: [],

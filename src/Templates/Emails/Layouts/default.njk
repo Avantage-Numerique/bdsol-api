@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+{% include "Emails/Layouts/Partials/head.njk" %}
+<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: {{ theme.bg }};" class="email-bg">
+<center role="article" aria-roledescription="email" lang="en" style="width: 100%; background-color: {{ theme.bg }};" class="email-bg">
+    <!--[if mso | IE]>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: {{ theme.bg }};" class="email-bg">
+        <tr>
+            <td>
+    <![endif]-->
+
+    <div style="max-height:0; overflow:hidden; mso-hide:all;" aria-hidden="true">
+        (Optional) This text will appear in the inbox preview, but not the email body. It can be used to supplement the email subject line or even summarize the email's contents. Extended text preheaders (~490 characters) seems like a better UX for anyone using a screenreader or voice-command apps like Siri to dictate the contents of an email. If this text is not included, email clients will automatically populate it using the text (including image alt text) at the start of the email's body.
+    </div>
+
+    <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+        &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+    </div>
+
+    <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+        <!--[if mso]>
+        <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="600">
+            <tr>
+                <td>
+        <![endif]-->
+
+        <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+            {% include "Emails/Layouts/Partials/spacer.njk" %}
+            {% block header %}
+                {% include "Emails/Layouts/Partials/header.njk" %}
+            {% endblock %}
+            {% include "Emails/Layouts/Partials/spacer.njk" %}
+            <tr>
+                <td style="background-color: {{ theme.content.bg }};" class="lightmode-bg">
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                        <tr>
+                            <td style="padding: 20px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: {{ theme.content.color }} !important;">
+                                <h3 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 20px; line-height: 25px; color: {{ theme.content.color }} !important; font-weight: normal;">{{welcome | safe}}</h3>
+                                <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 30px; line-height: 35px; color: {{ theme.content.color }} !important; font-weight: normal;">{{title | safe}}</h1>
+                                <p style="margin: 0;">{{body | safe}}</p>
+                            </td>
+                        </tr>
+                        {% include "Emails/Layouts/Partials/spacer.njk" %}
+                        <tr>
+                            <td style="padding: 0 {{ theme.content.wspacing }};">
+                                <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: auto;">
+                                    <tr>
+                                        <td class="button-td button-td-primary" style="border-radius: {{ theme.radius }}; background: {{ theme.buttons.bg }};">
+                                            <a class="button-a button-a-primary" href="{{cta.link}}" style="background: {{ theme.buttons.bg }}; border: 1px solid {{ theme.buttons.bg }}; font-family: sans-serif; font-size: 20px; line-height: 20px; text-decoration: none; padding: 20px 40px; color: {{ theme.buttons.color }}; display: block; border-radius: {{ theme.radius }};">{{cta.label}}</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center">
+                                <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: auto;">
+                                    <tr>
+                                        <td>
+                                            <p style="padding: {{ theme.content.wspacing }} {{ theme.content.wspacing }} 0 {{ theme.content.wspacing }}; text-align: center; font-family: sans-serif; font-size: 15px; line-height: 20px; color: {{ theme.color }} !important;">{{ lang.copyCta }}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background-color: {{ theme.bg2 }}; border-radius: {{ theme.radius }};">
+                                            <p style="padding: 10px {{ theme.content.wspacing }}; text-align: center; font-family: sans-serif; font-size: 15px; line-height: 20px; color: {{ theme.color }} !important; background-color: {{ theme.bg2 }}; word-break:break-all; border-radius: {{ theme.radius }};">{{ cta.link }}</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        {% include "Emails/Layouts/Partials/spacer.njk" %}
+                        <tr>
+                            <td style="padding: 20px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: {{ theme.color }} !important;">
+                                <p style="margin: 0;">{{conclusion | safe}}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 20px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: {{ theme.color }} !important;">
+                                <p style="margin: 0;">{{signature | safe}}</p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            {% include "Emails/Layouts/Partials/spacer.njk" %}
+            {% include "Emails/Layouts/Partials/spacer.njk" %}
+
+        </table>
+
+        {% include "Emails/Layouts/Partials/legal.njk" %}
+
+        <!--[if mso]>
+        </td>
+        </tr>
+        </table>
+        <![endif]-->
+    </div>
+
+    {% include "Emails/Layouts/Partials/footer.njk" %}
+
+    <!--[if mso | IE]>
+    </td>
+    </tr>
+    </table>
+    <![endif]-->
+</center>
+</body>
+</html>

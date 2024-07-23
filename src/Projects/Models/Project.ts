@@ -3,15 +3,17 @@ import {ProjectSchema} from "../Schemas/ProjectSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import ProjectsService from "../Services/ProjectsService";
-import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {Meta, SubMeta} from "@src/Moderation/Schemas/MetaSchema";
 import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import {populateUser} from "@src/Users/Middlewares/populateUser";
 import {User} from "@src/Users/UsersDomain";
 import {Sponsor} from "@database/Schemas/SponsorSchema";
 import {ScheduleBudget} from "@database/Schemas/ScheduleBudgetSchema";
-import {Location} from "@database/Schemas/LocationSchema";
 import {ProjectContextEnum} from "../ProjectContextEnum";
 import {TeamField} from "@src/Team/Schemas/TeamSchema";
+import * as fs from 'fs';
+import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
+import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 
 class Project extends AbstractModel {
 
@@ -19,7 +21,7 @@ class Project extends AbstractModel {
     protected static _instance: Project;
 
     /** @public @static Model singleton instance constructor */
-    public static getInstance(): Project {
+    public static getInstance(doIndexes=true): Project {
         if (Project._instance === undefined) {
             Project._instance = new Project();
 
@@ -30,7 +32,7 @@ class Project extends AbstractModel {
             //Setting virtuals
             Project._instance.schema.virtual("type").get( function() { return Project._instance.modelName });
 
-            Project._instance.registerIndexes();
+            if (doIndexes) Project._instance.registerIndexes();
             Project._instance.initSchema();
         }
         return Project._instance;
@@ -99,14 +101,14 @@ class Project extends AbstractModel {
                 type: String
             },
             url: {
-                type: String
+                type: [SocialHandle.schema]
             },
             contactPoint: {
-                type: String
+                type: ContactPoint.schema
             },
             location: {
-                type: Location.schema,
-                default: {}
+                type: [mongoose.Types.ObjectId],
+                ref: "Place"
             },
             team: TeamField,
             mainImage: {
@@ -129,15 +131,19 @@ class Project extends AbstractModel {
                         type: mongoose.Types.ObjectId,
                         ref: "Taxonomy"
                     },
-                    status: Status.schema
+                    subMeta: SubMeta.schema
                 }]
             },
             context: {
                 type: String,
                 enum: ProjectContextEnum
             },
-            status: {
-                type: Status.schema
+            equipment: {
+                type: [mongoose.Types.ObjectId],
+                ref: "Equipment"
+            },
+            meta: {
+                type: Meta.schema
             }
         }, {
                 toJSON: { virtuals: true },
@@ -184,7 +190,7 @@ class Project extends AbstractModel {
             alternateName: document.alternateName ?? '',
             description: document.description ?? '',
             url: document.url ?? '',
-            contactPoint: document.contactPoint ?? '',
+            contactPoint: document.contactPoint ?? {tel:{num:"", ext:""}, email:{address:""}, website:{url:""}},
             location: document.location ?? undefined,
             team: document.team ?? undefined,
             mainImage: document.mainImage ?? "",
@@ -193,7 +199,8 @@ class Project extends AbstractModel {
             skills: document.skills ?? undefined,
             domains: document.domains ?? undefined,
             context: document.context ?? '',
-            status: document.status ?? undefined,
+            equipment: document.equipment ?? [],
+            meta: document.meta ?? undefined,
             type: document.type ?? '',
             createdAt: document.createdAt ?? '',
             updatedAt: document.updatedAt ?? '',
@@ -201,7 +208,7 @@ class Project extends AbstractModel {
     }
 
     public async documentation(): Promise<any> {
-        return "";
+        return fs.readFileSync('/api/doc/Project.md', 'utf-8');
     }
 
     public registerPreEvents() {
@@ -242,31 +249,30 @@ class Project extends AbstractModel {
      */
     public registerEvents(): void {
         this.schema.pre('find', function() {
-            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             taxonomyPopulate(this, 'skills');
             taxonomyPopulate(this, 'domains.domain');
+            middlewarePopulateProperty(this, 'equipment');
             middlewarePopulateProperty(this, 'mainImage');
             middlewarePopulateProperty(this, 'sponsor.entity');
-            middlewarePopulateProperty(this, 'team.member');
             middlewarePopulateProperty(this, 'producer');
             middlewarePopulateProperty(this, 'entityInCharge');
 
-            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
         });
 
         this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'team.member', "firstName lastName status");
             taxonomyPopulate(this, 'skills');
             taxonomyPopulate(this, 'domains.domain');
+            middlewarePopulateProperty(this, 'equipment');
             middlewarePopulateProperty(this, 'mainImage');
             middlewarePopulateProperty(this, 'sponsor.entity');
             middlewarePopulateProperty(this, 'team.member');
             middlewarePopulateProperty(this, 'producer');
             middlewarePopulateProperty(this, 'entityInCharge');
 
-            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
         });
     }
 }

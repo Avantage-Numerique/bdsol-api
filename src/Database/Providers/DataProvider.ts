@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import config from "../../config";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import type {DbProvider} from "./DbProvider";
 import {BaseProvider} from "./DbProvider";
@@ -36,9 +35,20 @@ export class DataProvider extends BaseProvider implements DbProvider
     public static getInstance(driver:DBDriver):DbProvider
     {
         if (DataProvider._singleton === undefined) {
-            DataProvider._singleton = new DataProvider(driver, config.db.name);
+            DataProvider._singleton = new DataProvider(driver, 'bdsol-data');
         }
         return DataProvider._singleton;
+    }
+
+    /**
+     * Singleton getter in the scope of the concrete provider.
+     * @return {DbProvider}
+     */
+    public static instance():DbProvider|undefined {
+        if (DataProvider._singleton !== undefined) {
+            return DataProvider._singleton;
+        }
+        return undefined;
     }
 
     /**
@@ -46,7 +56,7 @@ export class DataProvider extends BaseProvider implements DbProvider
      * Connect the provider to mongo via mongoose.Connection.
      * @return {mongoose.Connection}
      */
-    public async connect():Promise<mongoose.Connection|undefined> {
+    public async connect():Promise<mongoose.Connection|boolean> {
         try {
             LogHelper.info("[BD] DataProvider Connecting to DB");
             await super.connect();
@@ -54,10 +64,11 @@ export class DataProvider extends BaseProvider implements DbProvider
             return this.connection;
         }
         catch (error:any) {
-            LogHelper.error("[BD] Can't connect to db in DataProvider");
+            LogHelper.error("[BD] Can't connect to db in DataProvider", error);
         }
-        return undefined;
+        return false;
     }
+
     public async initServicesIndexes() {
         await super.initServicesIndexes();
     }
@@ -65,6 +76,8 @@ export class DataProvider extends BaseProvider implements DbProvider
     public addService(service:Service) {
         super.addService(service);
     }
+
+
     /**
      * Assign a model to this provider.
      * @param model

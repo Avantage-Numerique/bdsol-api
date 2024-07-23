@@ -7,11 +7,16 @@ import TaxonomyController from "../../Taxonomy/Controllers/TaxonomyController";
 import OrganisationsService from "../Services/OrganisationsService";
 import {middlewareTaxonomy} from "@src/Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
 import {Member} from "@src/Team/Schemas/MemberSchema";
-import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {Meta, SubMeta} from "@src/Moderation/Schemas/MetaSchema";
 import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import {populateUser} from "@src/Users/Middlewares/populateUser";
 import {User} from "@src/Users/Models/User";
 import {SkillGroup} from "@src/Taxonomy/Schemas/SkillGroupSchema";
+import {EquipmentLink} from "@src/Database/Schemas/EquipmentLinkSchema";
+import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
+import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
+import BadgeTypes from "@src/Badges/BadgeTypes";
+import { middlewareInsertBadges } from "@src/Badges/MiddlewareInsertBadges";
 
 
 class Organisation extends AbstractModel {
@@ -20,14 +25,14 @@ class Organisation extends AbstractModel {
     protected static _instance: Organisation;
 
     /** @public @static Model singleton instance constructor */
-    public static getInstance(): Organisation {
+    public static getInstance(doIndexes=true): Organisation {
         if (Organisation._instance === undefined) {
             Organisation._instance = new Organisation();
             Organisation._instance.registerPreEvents();
             Organisation._instance.registerEvents();
 
             Organisation._instance.schema.virtual("type").get( function () { return Organisation._instance.modelName });
-            Organisation._instance.registerIndexes();
+            if (doIndexes) Organisation._instance.registerIndexes();
             Organisation._instance.initSchema();
         }
         return Organisation._instance;
@@ -77,7 +82,7 @@ class Organisation extends AbstractModel {
                 slug: {
                     type: String,
                     slug: "name",
-                    slugPaddingSize: 2,
+                    slugPaddingSize: 3,
                     index: true,
                     unique: true
                 },
@@ -86,10 +91,10 @@ class Organisation extends AbstractModel {
                     //alias: 'desc'
                 },
                 url: {
-                    type: String,
+                    type: [SocialHandle.schema]
                 },
                 contactPoint: {
-                    type: String,
+                    type: ContactPoint.schema,
                 },
                 fondationDate: {
                     type: Date,
@@ -104,7 +109,8 @@ class Organisation extends AbstractModel {
                             type: mongoose.Types.ObjectId,
                             ref: "Taxonomy"
                         },
-                        status: Status.schema
+                        subMeta: SubMeta.schema,
+                        _id:false
                     }]
                 },
                 team: {
@@ -118,8 +124,22 @@ class Organisation extends AbstractModel {
                 catchphrase: {
                     type: String
                 },
-                status: {
-                    type: Status.schema
+                location: {
+                    type: [mongoose.Types.ObjectId],
+                    ref: "Place"
+                },
+                equipment: {
+                    type: [EquipmentLink.schema]
+                },
+                region: {
+                    type: String
+                },
+                badges: {
+                    type: [String],
+                    enum: BadgeTypes.allBadgeTypes()
+                },
+                meta: {
+                    type: Meta.schema
                 }
             },
             {
@@ -151,8 +171,8 @@ class Organisation extends AbstractModel {
             _id: document._id ?? '',
             name: document.name ?? '',
             description: document.description ?? '',
-            url: document.url ?? '',
-            contactPoint: document.contactPoint ?? '',
+            url: document.url ?? [],
+            contactPoint: document.contactPoint ?? {tel:{num:"", ext:""}, email:{address:""}, website:{url:""}},
             fondationDate: document.fondationDate ?? '',
             offers: document.offers ?? '',
             domains: document.domains ?? '',
@@ -160,7 +180,11 @@ class Organisation extends AbstractModel {
             mainImage: document.mainImage ?? '',
             slug: document.slug ?? '',
             catchphrase: document.catchphrase ?? '',
-            status : document.status ?? '',
+            meta : document.meta ?? '',
+            location: document.location ?? [],
+            equipment: document.equipment ?? [],
+            region: document.region ?? "",
+            badges: document.badges ?? [],
             type: document.type ?? '',
             createdAt : document.createdAt ?? '',
             updatedAt : document.updatedAt ?? '',
@@ -193,6 +217,10 @@ class Organisation extends AbstractModel {
                     })
                 });
                 await middlewareTaxonomy(idList.flat(), TaxonomyController, "offers.skills");
+
+                //Check and insert badges (this == document)
+                middlewareInsertBadges(this);
+
                 return next();
             });
 
@@ -208,33 +236,41 @@ class Organisation extends AbstractModel {
                     await middlewareTaxonomy(idList.flat(), TaxonomyController, "offers.skills");
                 }
 
+                //Check and insert badges
+                middlewareInsertBadges(updatedDocument);
+
                 return next();
             });
         }
     }
 
+    /**
+     * For a find or findOne, We populate relations
+     */
     public registerEvents():void {
 
         this.schema.pre('find', function() {
             taxonomyPopulate(this, 'offers.skills');
             taxonomyPopulate(this, 'domains.domain');
-
+            middlewarePopulateProperty(this, 'equipment.equipment');
             middlewarePopulateProperty(this, 'team.member');
             middlewarePopulateProperty(this, "mainImage");
+            middlewarePopulateProperty(this, "location");
 
-            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
         });
         
         this.schema.pre('findOne', function() {
             taxonomyPopulate(this, 'offers.skills');
             taxonomyPopulate(this, 'domains.domain');
-
+            middlewarePopulateProperty(this, 'equipment.equipment');
             middlewarePopulateProperty(this, 'team.member');
             middlewarePopulateProperty(this, "mainImage");
+            middlewarePopulateProperty(this, "location");
 
-            populateUser(this, "status.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "status.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
         });
     }
 }

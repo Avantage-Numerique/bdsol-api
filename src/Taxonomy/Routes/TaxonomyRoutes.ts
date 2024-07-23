@@ -24,8 +24,7 @@ class TaxonomyRoutes extends CrudRoute {
             isInEnumSanitizerAlias('data.category', TaxonomiesCategoriesEnum),
             noHtmlStringSanitizerAlias('data.name'),
             noHtmlStringSanitizerAlias('data.description'),
-            noHtmlStringSanitizerAlias('data.source'),
-            noHtmlStringSanitizerAlias('data.addReason'),
+            objectIdSanitizerAlias('data.domains.*.domain'),
         ],
         createUpdate: [],
         update: [
@@ -33,8 +32,7 @@ class TaxonomyRoutes extends CrudRoute {
             isInEnumSanitizerAlias('data.category', TaxonomiesCategoriesEnum),
             noHtmlStringSanitizerAlias('data.name'),
             noHtmlStringSanitizerAlias('data.description'),
-            noHtmlStringSanitizerAlias('data.source'),
-            noHtmlStringSanitizerAlias('data.addReason'),
+            objectIdSanitizerAlias('data.domains.*.domain'),
         ],
         delete: [],
         search: [],
@@ -59,6 +57,12 @@ class TaxonomyRoutes extends CrudRoute {
         router.post('/supported', [
             ...this.addMiddlewares("all"),
             this.getTaxonomiesHanlder.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+
+        router.post('/group/skills', [
+            ...this.addMiddlewares("all"),
+            this.getByTaxonomyGroup.bind(this),
             this.routeSendResponse.bind(this)
         ]);
 
@@ -122,6 +126,18 @@ class TaxonomyRoutes extends CrudRoute {
         return next();
     }
 
+    /**
+     * List taxonomies that are allowed in skills or skills group (skills, technologies ...)
+     * @param req {Request}
+     * @param res {Response}
+     * @param next {NextFunction}
+     */
+    public async getByTaxonomyGroup(req: Request, res: Response, next: NextFunction): Promise<any> {
+        req.body.data.category = `in:${TaxonomiesCategoriesEnum.Skills},${TaxonomiesCategoriesEnum.Technology},${TaxonomiesCategoriesEnum.Domains}`;
+        const listByGroupSkills = await this.controllerInstance.list(req.body.data);
+        res.serviceResponse = listByGroupSkills;
+        return next();
+    }
 
 }
 

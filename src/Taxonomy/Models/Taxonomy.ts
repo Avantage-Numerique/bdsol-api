@@ -4,7 +4,7 @@ import {TaxonomiesCategoriesEnum} from "../TaxonomiesCategoriesEnum";
 import type {DbProvider} from "@database/DatabaseDomain";
 import AbstractModel from "@core/Model"
 import TaxonomyService from "../Services/TaxonomyService";
-import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {Meta, SubMeta} from "@src/Moderation/Schemas/MetaSchema";
 import * as fs from 'fs';
 import {taxonomyPopulate} from "../Middlewares/TaxonomiesPopulate";
 
@@ -15,7 +15,7 @@ class Taxonomy extends AbstractModel {
     protected static _instance:Taxonomy;
 
     /** @public @static Model singleton instance constructor */
-    public static getInstance():Taxonomy {
+    public static getInstance(doIndexes=true):Taxonomy {
         if (Taxonomy._instance === undefined) {
             Taxonomy._instance = new Taxonomy();
 
@@ -23,7 +23,7 @@ class Taxonomy extends AbstractModel {
 
             Taxonomy._instance.registerEvents();
 
-            Taxonomy._instance.registerIndexes();
+            if (doIndexes) Taxonomy._instance.registerIndexes();
             Taxonomy._instance.initSchema();
 
             //Taxonomy._instance.schema.path('domains.domain').validate(taxonomyDomainNoSelfReference);
@@ -73,7 +73,6 @@ class Taxonomy extends AbstractModel {
                 type: String,
                 required: [true, 'Required category (occupation, ...)'],
                 enum: TaxonomiesCategoriesEnum,
-                lowercase: true,
                 trim: true
             },
             name: {
@@ -106,17 +105,11 @@ class Taxonomy extends AbstractModel {
                             return true
                         }
                     },
-                    status: Status.schema
+                    subMeta: SubMeta.schema
                 }]
             },
-            //source: {
-                //type: String
-            //},,
             meta: {
-                type: Schema.Types.Mixed
-            },
-            status: {
-                type: Status.schema,
+                type: Meta.schema,
                 //required: true,
             }
         },
@@ -210,7 +203,6 @@ class Taxonomy extends AbstractModel {
             slug: document.slug ?? '',
             description: document.description ?? '',
             source: document.source ?? '',
-            status: document.status ?? '',
             type: document.type ?? '',
             domains: document.domains ?? [],
             meta: document.meta ?? {},

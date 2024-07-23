@@ -20,14 +20,17 @@ Lorsqu'on exécute des commandes entre les conteneurs, dans l'environnement Dock
 Lorsqu'on interagi avec la base de données à l'extérieur de Docker, dans votre OS par exemple, le port ouvert est `27018`.
 
 ###### L'adresse de connexion pour *Compass*
-```url
-mongodb://localhost:27018/?readPreference=primary&appname=mongo&directConnection=true&ssl=false
-```
+
 ### Travailler sur le frontend
 [Voir le répertoire pour la bdsol workspace](https://github.com/Avantage-Numerique/bdsol-workspace)
 
 
-
+## Travailler avec les courriels.
+- Il faut aller copier le nouveau container du docker-compose dans le répertoire de [bdsol workspace](https://github.com/Avantage-Numerique/bdsol-workspace) dans son environnement de dev.
+- Il faut ajouter le dossier `./dev` dans le root de votre dossier de travail (en sibling à côté de `./app` et `./api`. avec le Dockerfile (déjà présent dans le répertoire [bdsol workspace](https://github.com/Avantage-Numerique/bdsol-workspace).
+- Il faut copier les variables du `.env-exemple` dans son `.env` 4 nouvelles variables.
+- Et hop docker compose build.
+- On peut voir la boite de courriel test à l'url : http://localhost:8025
 
 ---
 ## Utilisation de l'API

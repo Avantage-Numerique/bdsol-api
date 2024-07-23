@@ -4,7 +4,7 @@ import {UsersService} from "../Services/UsersService";
 import AbstractController from "../../Abstract/Controller";
 import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService";
 import UserHistory from "../../UserHistory/Models/UserHistory";
-import { UserHistorySchema } from "../../UserHistory/Schemas/UserHistorySchema";
+import {UserHistorySchema} from "../../UserHistory/Schemas/UserHistorySchema";
 
 class UsersController extends AbstractController {
 
@@ -42,7 +42,7 @@ class UsersController extends AbstractController {
         const user:mongoose.ObjectId = response.data._id
 
         //IP Address
-        const ipAddress = req.ip;
+        const ipAddress = req.visitor?.ip ?? req.ip;//req.ip is the app that made the request. We save that data into req.user.ip after.
 
         //Modification date
         const modifDate = new Date();

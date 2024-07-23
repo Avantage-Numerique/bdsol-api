@@ -1,5 +1,5 @@
-import {Service} from "../../Database/DatabaseDomain";
-import StaticContent from "../Models/StaticContent";
+import {Service} from "@database/DatabaseDomain";
+import StaticContent from "@src/StaticContent/Models/StaticContent";
 
 class StaticContentsService extends Service {
     /** @private @static Singleton instance */

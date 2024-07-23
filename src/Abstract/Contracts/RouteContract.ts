@@ -1,4 +1,3 @@
-import type AbstractController from "../Controller";
 import type {Router} from "express";
 import {ControllerContract} from "./ControllerContract";
 

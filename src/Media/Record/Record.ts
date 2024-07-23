@@ -1,6 +1,7 @@
 import FileStorage from "../../Storage/Files/FileStorage";
 import * as mime from "mime-types"
 import mongoose from "mongoose";
+import PublicStorage from "@src/Storage/Files/PublicStorage";
 
 
 export default class Record {
@@ -12,9 +13,11 @@ export default class Record {
     public pathNoFilename:string;
     public url:string;
     public entityType:string;//This is now need to be as the Entity model name in Db.
+    public entityTypePath:string;//This is now need to be as the Entity model name in Db.
     public entityId:string;
     public extension:string;
     public userId:string; //media -> uploadedBy
+    public mediaField;
 
     //Media info
     public title:string;
@@ -23,7 +26,7 @@ export default class Record {
     public licence:string;
     public fileType:string;
     //public dbStatus:string;
-    //public status:any;
+    //public meta:any;
 
     //Multer file props
     public file_fieldName:any;
@@ -37,11 +40,13 @@ export default class Record {
     public file_buffer:any;
 
 
-    constructor(req:any, res:any, entityId:string, mediaField:string, entityType:string){
+    constructor(data:any, files:any, userId:any, entityId:string, mediaField:string, entityType:string){
 
-        this.userId = req.user._id;
+        const file = files[mediaField][0];
+        this.userId = userId;
+        this.mediaField = mediaField;
 
-        const tryExt:string|false = mime.extension(req.file.mimetype);
+        const tryExt:string|false = mime.extension(file.mimetype);
         this.extension = (tryExt !== false ? tryExt : "");
 
         if(this.extension !== ""){
@@ -50,7 +55,7 @@ export default class Record {
                     mediaField,
                     this.userId,
                     FileStorage.getUniquePrefix(),
-                    FileStorage.removeExtension(req.file.originalname)
+                    FileStorage.removeExtension(file.originalname)
                 ],
                 this.extension
             )
@@ -62,38 +67,39 @@ export default class Record {
                     mediaField,
                     this.userId,
                     FileStorage.getUniquePrefix(),
-                    req.file.originalname
+                    file.originalname
                 ],
                 "");
             this.filenameAndExt = this.filenameNoExt;
         }
         this.entityType = entityType;
+        this.entityTypePath = entityType.toLowerCase();
         this.entityId = entityId;
-        this.pathNoFilename = FileStorage.generatePath(this.entityType, this.entityId);
+        this.pathNoFilename = FileStorage.generatePath(this.entityTypePath, this.entityId, PublicStorage.basePath);// I did add the third parameters for relative purposes, but it's weird.
         this.pathWithFilename = this.pathNoFilename + '/' + this.filenameAndExt;
 
-        this.url = "/medias/"+ this.entityType + "/" + this.entityId + "/" + this.filenameAndExt;
+        this.url = "/medias/"+ this.entityTypePath + "/" + this.entityId + "/" + this.filenameAndExt;
 
         //Media info
-        if(req.body.data !== undefined){
-            this.title = req.body.data.title
-            this.alt = req.body.data.alt
-            this.description = req.body.data.description
-            this.licence = req.body.data.licence
-            this.fileType = req.body.data.fileType
+        if(data !== undefined){
+            this.title = data.title
+            this.alt = data.alt
+            this.description = data.description
+            this.licence = data.licence
+            this.fileType = data.fileType
         }
 
-        //Multer file props
-        if(req.file !== undefined){
-            this.file_fieldName = req.file.fieldName
-            this.file_originalname = req.file.originalname
-            this.file_encoding = req.file.encoding
-            this.file_mimetype = req.file.mimetype
-            this.file_size = req.file.size
-            this.file_destination = req.file.destination
-            this.file_filename = req.file.filename
-            this.file_path = req.file.path
-            this.file_buffer = req.file.buffer
+        //Multer file props (transformed req.files)
+        if(file !== undefined){
+            this.file_fieldName = file.fieldName
+            this.file_originalname = file.originalname
+            this.file_encoding = file.encoding
+            this.file_mimetype = file.mimetype
+            this.file_size = file.size
+            this.file_destination = file.destination
+            this.file_filename = file.filename
+            this.file_path = file.path
+            this.file_buffer = file.buffer
         }
     }
 

@@ -4,6 +4,11 @@ import Person from "../../Persons/Models/Person";
 import Project from "../../Projects/Models/Project";
 import Taxonomy from "../../Taxonomy/Models/Taxonomy";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
+import Event from "@src/Events/Models/Event";
+import Equipment from "@src/Equipment/Models/Equipment";
+import EntityControllerFactory from "@src/Abstract/EntityControllerFactory";
+import { ErrorResponse } from "@src/Http/Responses/ErrorResponse";
+import { StatusCodes } from "http-status-codes";
 
 
 class SearchResults {
@@ -13,6 +18,8 @@ class SearchResults {
     public organisationModel:any;
     public taxonomyModel:any;
     public projectModel:any;
+    public eventModel:any;
+    public equipmentModel:any;
 
     //Singleton
     public static _instance : SearchResults;
@@ -24,10 +31,50 @@ class SearchResults {
             SearchResults._instance.organisationModel = Organisation.getInstance().mongooseModel;
             SearchResults._instance.taxonomyModel = Taxonomy.getInstance().mongooseModel;
             SearchResults._instance.projectModel = Project.getInstance().mongooseModel;
+            SearchResults._instance.eventModel = Event.getInstance().mongooseModel;
+            SearchResults._instance.equipmentModel = Equipment.getInstance().mongooseModel;
         }
         return SearchResults._instance;
     }
 
+    public async fetchHomePageEntity(){
+        const homePageEntity = [];
+        homePageEntity.push(await this.personModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
+        homePageEntity.push(await this.organisationModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
+        //Commented because taxonomy doesn't have a simple component in frontend
+        //homePageEntity.push(await this.taxonomyModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
+        homePageEntity.push(await this.projectModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
+        homePageEntity.push(await this.eventModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
+        homePageEntity.push(await this.equipmentModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
+
+        //fetch a 6th entity for frontend (atm always the second last person modified)
+        homePageEntity.push(await this.personModel.findOne({}, {}, { sort : { updatedAt: -1 }, skip:1 }));
+        return homePageEntity;
+    }
+
+    public async searchByTypeAndCategory(type:string, skip:number){//, categories:any){
+        const controller = EntityControllerFactory.getControllerFromEntity(type);
+        if(controller !== undefined){
+            const result = await controller.list({skip:skip})
+                /* {
+                    $or: [
+                        //Domains
+                        {"domains.domain" : categories.domains},
+                        //Occupations
+                        {"occupations.skills" : categories.skills},
+                        {"occupations.skills" : categories.technologies},
+                        //Offers
+                        {"offers.skills" : categories.skills},
+                        {"offers.skills" : categories.technologies},
+                        //project/event skills
+                        {"skills" : categories.skills},
+                        {"skills" : categories.technologies},
+                    ]}) */
+                    //{skip: skip ?? 0});
+            return result;
+        }
+        return ErrorResponse.create(new Error("Type doesn't exist"), StatusCodes.BAD_REQUEST, "Type doesn't exist");
+    }
 
     public async getTextSearchResult(searchIndex:string | undefined) {
         //Send out $text : { $search : req.query } to all entity
@@ -53,7 +100,17 @@ class SearchResults {
                 {$text: {$search: searchIndex}},
                 {score: {$meta: "textScore"}}
             ));
-
+        
+        promises.push(
+            await this.eventModel.find(
+                {$text: {$search: searchIndex}},
+                {score: {$meta: "textScore"}}
+            ));
+        promises.push(
+            await this.equipmentModel.find(
+                {$text: {$search: searchIndex}},
+                {score: {$meta: "textScore"}}
+            ));
 
         let textSearchResultArray;
         if(promises.length > 0){
@@ -119,6 +176,23 @@ class SearchResults {
                 )
             )
 
+            promises.push(
+                await this.eventModel.find(
+                    {
+                        $or: [
+                            {"skills": paramId},
+                            {"domains.domain": paramId},
+                            {"eventType": paramId}
+                        ]
+                    }
+                )
+            )
+            promises.push(
+                await this.equipmentModel.find(
+                    { equipmentType: paramId }
+                )
+            )
+
             let tagSearchResult = [];
             if(promises.length > 0) {
                     tagSearchResult = promises.flat();
@@ -131,7 +205,7 @@ class SearchResults {
 
     private async _embedEntitiesCountInTaxonomy(document:any, results:Array<any>) {
         try {
-            const currentCount:Number = results.length;
+            const currentCount:number = results.length;
             document.meta = {
                 count: currentCount
             }

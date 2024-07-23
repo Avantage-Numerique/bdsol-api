@@ -9,6 +9,16 @@ import {Service} from "@database/Service";
 import {urlSanitizerAlias} from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
 import {SlugSanitizer} from "@src/Security/Sanitizers/SlugSanitizer";
 
+
+/**
+ * The CrudRoute class is an abstract class that provides the basic functionality for CRUD (Create, Read, Update, Delete) operations on a specific entity.
+ * It extends the AbstractRoute class and implements the RouteContract interface.
+ *
+ * @abstract
+ * @class CrudRoute
+ * @extends AbstractRoute
+ * @implements RouteContract
+ */
 abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
     /**
@@ -268,21 +278,6 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
     }
 
     /**
-     * get LIST
-     * Handle the list method for the get endpoint of the controller of the entity, passing the data to it.
-     * @param req {Request}
-     * @param res {Response}
-     * @param next {NextFunction}
-     * @return {Promise<any>}
-     */
-    public async getListHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-
-        res.serviceResponse = await this.controllerInstance.list({});
-        return next();
-    }
-
-
-    /**
      * GETINFO
      * Handle the getInfo method of the controller of the entity, passing the data to it
      * @param req {Request}
@@ -325,7 +320,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         for (const param in req.params) {
             initialQuery[param] = req.params[param];
         }
-        res.serviceResponse = await this.controllerInstance.get(initialQuery);
+        res.serviceResponse = await this.controllerInstance.single(initialQuery);
         return next();
     }
 

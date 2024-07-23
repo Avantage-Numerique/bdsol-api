@@ -61,6 +61,7 @@ const EmbedTaxonomiesMetas = async () => {
             }
         }
     }
+    return true;
 }
 
 export default EmbedTaxonomiesMetas;

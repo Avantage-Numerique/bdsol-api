@@ -1,13 +1,12 @@
-
-import StaticContentsService from "../Services/StaticContentsService";
-import StaticContent from "../Models/StaticContent";
-import {ControllerContract} from "../../Abstract/Contracts/ControllerContract";
-import {ApiResponseContract} from "../../Http/Responses/ApiResponse";
-import {SuccessResponse} from "../../Http/Responses/SuccessResponse";
+import StaticContentsService from "@src/StaticContent/Services/StaticContentsService";
+import StaticContent from "@src/StaticContent/Models/StaticContent";
+import {ControllerContract} from "@core/Contracts/ControllerContract";
+import {ApiResponseContract} from "@src/Http/Responses/ApiResponse";
+import {SuccessResponse} from "@src/Http/Responses/SuccessResponse";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
-import {ErrorResponse} from "../../Http/Responses/ErrorResponse";
-import AbstractModel from "../../Abstract/Model";
-import LicencesData from "../../Data/Licences/LicencesData";
+import {ErrorResponse} from "@src/Http/Responses/ErrorResponse";
+import AbstractModel from "@core/Model";
+import LicencesData from "@src/Data/Licences/LicencesData";
 
 
 class StaticContentsController implements ControllerContract {
@@ -57,10 +56,9 @@ class StaticContentsController implements ControllerContract {
 
     /**
      * @method list List entity documents with research terms from database
-     * @param {any} requestData - Research terms { "nom":"Jean" }
      * @return {ApiResponseContract} Promise containing a list of documents
      */
-    public async getLicencesContent(requestData: any): Promise<ApiResponseContract> {
+    public async getLicencesContent(): Promise<ApiResponseContract> {
 
         try {
             if (this.licences !== null) {

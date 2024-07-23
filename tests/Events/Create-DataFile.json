@@ -1,0 +1,61 @@
+[
+    {
+        "infoTest":
+        {
+            "name":"Create Full",
+            "error":false,
+            "status":201,
+            "expectedProperties": {
+                "name":"La moustache en miette!",
+                "alternateName":"Moumou",
+                "url":"www.lamoustacheenmiette.prod",
+                "description":"Une pièce de théâtre sur un postier maladroit.",
+                "eventFormat":"presential",
+                "startDate":"2023-08-18T00:00:00.000+00:00Z",
+                "endDate":"2023-08-19T00:00:00.000+00:00Z",
+                "contactPoint":"Michèle Dubuc",
+                "schedule":[
+                    {
+                        "name":"Première représentation",
+                        "startDate":"2023-08-18T00:00:00.000+00:00Z",
+                        "startTime":"19:20",
+                        "endDate":"2023-08-18T00:00:00.000+00:00Z",
+                        "endTime":"20:20"
+                    },
+                    {
+                        "name":"Deuxième représentation",
+                        "startDate":"2023-08-19T00:00:00.000+00:00Z",
+                        "startTime":"19:20",
+                        "endDate":"2023-08-19T00:00:00.000+00:00Z",
+                        "endTime":"20:20"
+                    }
+                ]
+                
+            }
+        },
+        "name":"La moustache en miette!",
+        "alternateName":"Moumou",
+        "url":"www.lamoustacheenmiette.prod",
+        "description":"Une pièce de théâtre sur un postier maladroit.",
+        "eventFormat":"presential",
+        "startDate":"2023-10-18",
+        "endDate":"2023-10-19",
+        "contactPoint":"Michèle Dubuc",
+        "schedule":[
+            {
+                "name":"Première représentation",
+                "startDate":"2023-08-18T00:00:00.000+00:00",
+                "startTime":"19:20",
+                "endDate":"2023-08-18T00:00:00.000+00:00",
+                "endTime":"20:20"
+            },
+            {
+                "name":"Deuxième représentation",
+                "startDate":"2023-08-19T00:00:00.000+00:00",
+                "startTime":"19:20",
+                "endDate":"2023-08-19T00:00:00.000+00:00",
+                "endTime":"20:20"
+            }
+        ]
+    }
+]

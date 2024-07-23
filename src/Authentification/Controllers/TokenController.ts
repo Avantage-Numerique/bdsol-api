@@ -1,6 +1,6 @@
 import * as jwt from "jsonwebtoken";
 import {JwtPayload, VerifyErrors} from "jsonwebtoken";
-import config from "@src/config";
+import {getApiConfig} from "@src/config";
 import {now} from "@src/Helpers/DateTime";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
@@ -10,13 +10,23 @@ import LogHelper from "@src/Monitoring/Helpers/LogHelper";
  */
 export class TokenController {
 
+    static config:any;
+
     /**
      * Use un Authenfication mainly, with user data as : { username: user.username,  role: user.role }
      * @param encapsulateData object encapsulate this object in the token.
      */
     public static generate(encapsulateData:any):string
     {
-        return jwt.sign(encapsulateData, config.tokenSecret, config.jwt.defaultOptions);
+        TokenController.initConfig();
+
+        return jwt.sign(encapsulateData, TokenController.config.tokenSecret, TokenController.config.jwt.defaultOptions);
+    }
+
+    public static initConfig() {
+        if (TokenController.config === undefined || TokenController.config === null) {
+            TokenController.config = getApiConfig();
+        }
     }
 
     /**
@@ -27,10 +37,11 @@ export class TokenController {
     public static async verify(token:string):Promise<string|JwtPayload|undefined|any>
     {
         let verifiedToken;
+        TokenController.initConfig();
         try {
             await jwt.verify(
                 token,
-                config.tokenSecret,
+                TokenController.config.tokenSecret,
                 (err:any, decoded:any) => {
                     verifiedToken = TokenController.onVerifyToken(err, decoded);
                 }
@@ -84,6 +95,7 @@ export class TokenController {
             // could be : TokenExpiredError
             throw err;
         }
+
         if (TokenController.isValid(decoded) &&
             TokenController.isActive(decoded))
         {
@@ -96,7 +108,7 @@ export class TokenController {
 
 
     /**
-     * @deprecated
+     * @Deprecated
      * @param verifiedToken {any} Likely to be an object.
      * @protected
      */
@@ -129,7 +141,7 @@ export class TokenController {
             verifiedToken.iat >= 0 &&
             verifiedToken.exp !== undefined &&
             verifiedToken.exp >= 0 &&
-            (verifiedToken._id !== undefined || verifiedToken.id !== undefined) &&
+            verifiedToken._id !== undefined &&
             verifiedToken.username !== undefined &&
             verifiedToken.role !== undefined;
     }

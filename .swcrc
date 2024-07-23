@@ -5,7 +5,7 @@
       "decorators": true,
       "dynamicImport": true
     },
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
       "@src/*" : ["src/*"],
       "@auth/*" : ["src/Authentification/*"],
@@ -15,11 +15,6 @@
     "target": "es2021",
     "keepClassNames": true,
     "loose": true
-  },
-  "env": {
-    "targets": {
-      "node": 16
-    }
   },
   "module": {
     "type": "commonjs"

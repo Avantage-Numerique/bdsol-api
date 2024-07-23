@@ -1,5 +1,5 @@
-import {Service} from "../../Database/DatabaseDomain";
-import Organisation from "../Models/Organisation";
+import {Service} from "@database/DatabaseDomain";
+import Organisation from "@src/Organisations/Models/Organisation";
 
 class OrganisationsService extends Service
 {

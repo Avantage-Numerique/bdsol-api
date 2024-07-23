@@ -1,4 +1,4 @@
-import schedule from 'node-schedule';
+import schedule, {Job} from 'node-schedule';
 import {JobSheet, Sheet} from "@src/Schedule/Sheet";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
@@ -9,12 +9,14 @@ import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 class JobScheduler {
 
     public jobs:Array<JobSheet>;
+    public scheduledJobs:Array<Job>;
     public defaultIntervale:string;
     public defaultRule:schedule.RecurrenceRule;
     public defaultTestRule:schedule.RecurrenceRule;
 
     constructor() {
         this.jobs = [];
+        this.scheduledJobs = [];
         this.defaultRule = new schedule.RecurrenceRule();
         this.defaultTestRule = new schedule.RecurrenceRule();
         /**
@@ -27,9 +29,10 @@ class JobScheduler {
          * minute: null,
          * second: 5
          */
-        this.defaultRule.hour = 12;//it minutes in fact.
-        this.defaultTestRule.second = 2;//it minutes in fact.
-        this.defaultIntervale = '5 * * * * *';
+        this.defaultRule.hour = 0;
+        this.defaultRule.minute = 15;
+        //this.defaultTestRule.second = 2;
+        this.defaultIntervale = '* /5 * * * *';
     }
 
 
@@ -42,23 +45,30 @@ class JobScheduler {
             this.schedule();
             return;
         }
-        LogHelper.info(`[SCHEDULER] Initiation because there is no jobSheet to schedule.`);
+        LogHelper.info(`[SCHEDULER] No jobSheet to schedule.`);
     }
 
 
     public schedule() {
         if (this.jobs.length > 0) {
             for (const sheet of this.jobs) {
-                schedule.scheduleJob(sheet.name, sheet.rule, sheet.callback);
+                this.scheduledJobs.push(sheet.schedule());
             }
         }
         LogHelper.info(`[SCHEDULER] ${this.jobs.length} sheet registered.`);
-        //this._registerEvents();
     }
 
-
+    /**
+     * A `run` event after each execution.
+     * A `scheduled` event each time they're scheduled to run.
+     * A `canceled` event when an invocation is canceled before it's executed.
+     * Note that canceled is the single-L American spelling.
+     * An `error` event when a job invocation triggered by a schedule throws or returns a rejected Promise.
+     * A `success` event when a job invocation triggered by a schedule returns successfully or returns a resolved Promise. In any case, the success event receives the value returned by the callback or in case of a promise, the resolved value.
+     */
     private _registerEvents() {
         //console.log("Job scheduler  :  register events");
+
     }
 
 
@@ -69,6 +79,7 @@ class JobScheduler {
 
 
     public createSheet(name:string, jobCallback:any, rule:schedule.RecurrenceRule=this.defaultRule, message:string="") {
+        console.log("[SCHEDULER] CreateSheet", name, "rule", rule);
         return new Sheet({
             name: name,
             rule: rule,
@@ -84,7 +95,9 @@ class JobScheduler {
     public createRule(param:string, value:number):schedule.RecurrenceRule {
         const rule:schedule.RecurrenceRule = new schedule.RecurrenceRule();
         Object.assign(rule, {[param]: value});
-        console.log("createRule", rule);
+        if (param !== "minute") {
+            Object.assign(rule, {"minute": 1});
+        }
         return rule;
     }
 

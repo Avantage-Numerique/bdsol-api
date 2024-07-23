@@ -1,4 +1,4 @@
-import config from '@src/config';
+import {getApiConfig} from '@src/config';
 import {DBDriver} from "@database/Drivers/DBDriver";
 import {MongooseDBDriver} from "@database/Drivers/MongooseDriver";
 import ServerController from "@src/Server/Controllers/ServerController";
@@ -6,9 +6,7 @@ import ServerController from "@src/Server/Controllers/ServerController";
 /**
  * Use in migration and in Scheduler.
  */
-const getDbDriver = ():DBDriver => {
-
-    let db:DBDriver;
+const getDbDriver = (configurations:any=false):DBDriver => {
 
     // 1st implementation will be with the serveur running.
 
@@ -16,9 +14,11 @@ const getDbDriver = ():DBDriver => {
     if (typeof ServerController.database !== 'undefined') {
         return ServerController.database;
     }
+    const apiConfig = getApiConfig();
+    const configs = configurations || apiConfig.migrations;
 
     // check if server need to heat up to make the migration going.
-    return new MongooseDBDriver(config.migrations);
+    return new MongooseDBDriver(configs);
 }
 
 

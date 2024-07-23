@@ -7,4 +7,8 @@ export interface UserContract {
     firstName?:string;
     lastName?:string;
     role: string;
+    tos: object;
+    verify: object;
+    changePassword:object;
+    lastLogin:Date;
 }

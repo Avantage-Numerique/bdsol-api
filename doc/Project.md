@@ -9,13 +9,13 @@ Retour à la base de (Documention de l'API)(readme.md)
 - description : (string) une description du projet
 - url : (string) url du projet (redirection vers le un site)
 - contactPoint : (string) moyen de contact d'un-e représentant-e du projet
-- location : (Location.schema) coordonée d'un endroit où le projet à lieu, si besoin il y a de spécifier un lieu. (pas le lieu de la finalité)
+- location : (ObjectId ref:Place) coordonée ou addresse d'un endroit où le projet à lieu, si besoin il y a de spécifier un lieu. (pas le lieu de la finalité)
 - team : [Member.schema] des membres de l'équipe du projet
 - mainImage : (ObjectId) un média image représentant le projet
 - sponsor : [Sponsor.schema] partenaire financier ou non du projet
 - scheduleBudget : (ScheduleBudget.schema) Échéancier et budget associé aux étapes de réalisation du projet
 - skills : [ObjectId] Réfère de compétence nécessaire à l'accomplissement du projet
-- status : (Status.schema) Réfère aux statut des derniers changements effectué sur le projet
+- meta : (Meta.schema) Réfère aux statut des derniers changements effectué sur le projet
 
 
 
@@ -26,8 +26,7 @@ Les sponsor devrait pouvoir être ordonné. On ne semble pas vouloir permettre d
 ## Schema
 - name : (string) Nom du sponsor
 - entityId : (ObjectId) S'il y a lieu, l'id de la Person ou Organisation représentant le sponsor (partenaire)
-- order : (Number) Nombre représentant l'ordre ascendant de l'affichage des sponsors
-- status : (Status.Schema) Statut de l'ajout du sponsor
+- subMeta : (SubMeta.Schema) Statut de l'ajout du sponsor
 
 
 # ScheduleBudget associé à Project
@@ -42,7 +41,7 @@ L'autre partie comprend l'échéancier financier (timeframe) qui devrait être e
 - estimatedTotalBudget : (Number) Coût total estimé
 - estimatedTimeToComplete : (string) Durée estimé du projet
 - timeframe : [Timeframe.schema] Object comprenant les étapes, le temps estimé pour complété ces étapes, et les coût associé à celles-ci
-- status : (Status.schema) statut du la modification du budget
+- subMeta : (SubMeta.schema) statut du la modification du budget
 
 # Timeframe
 C'est la partie du projet comprenant l'échéancié spécifique. Une liste des étapes, coût, et temps associé à chaque étape de production.

@@ -8,7 +8,7 @@ import {body} from "express-validator";
 import {NoHtmlSanitizer} from "../../Security/Sanitizers/NoHtmlSanitizer";
 import {NoSpaceSanitizer} from "../../Security/Sanitizers/NoSpaceSanitizer";
 import {NoAccentSanitizer} from "../../Security/Sanitizers/NoAccentSanitizer";
-import { UsersController } from "../../Users/UsersDomain";
+import {UsersController} from "../../Users/UsersDomain";
 
 
 export class AuthentificationRoutes {
@@ -56,7 +56,14 @@ export class AuthentificationRoutes {
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .trim()
-        ]
+        ],
+        email: [
+            body('data.email').exists({checkFalsy:true}).bail()
+            .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
+            .stripLow()
+            .normalizeEmail()
+            .trim(),
+        ],
     };
 
 
@@ -72,6 +79,12 @@ export class AuthentificationRoutes {
             VerifyTokenMiddleware.middlewareFunction(),
             this.logoutHandler.bind(this)
         ]);
+
+        this.routerInstanceAuthentification.post('/change-password', [
+            VerifyTokenMiddleware.middlewareFunction(),
+            this.changePasswordHandler.bind(this)
+        ]);
+
         return this.routerInstanceAuthentification;
     }
 
@@ -93,16 +106,32 @@ export class AuthentificationRoutes {
             this.loginHandler.bind(this)
         ]);
 
-
         this.routerInstance.post('/verify-token', [
             this.verifyTokenHandler.bind(this)
         ]);
-
 
         this.routerInstance.post('/generate-token', [
             this.generateTokenDevHandler.bind(this)
         ]);
 
+        this.routerInstance.post('/reset-password', [
+            ...this.addMiddlewares("email"),
+            this.sendResetPasswordLinkByEmailHandler.bind(this)
+        ]);
+
+        this.routerInstance.post('/reset-password/:token', [
+            this.updateForgottenPasswordHandler.bind(this)
+        ]);
+
+        this.routerInstance.post('/verify-account/resend', [
+            ...this.addMiddlewares("email"),
+            this.resendEmailVerificationTokenHandler.bind(this)
+        ]);
+
+        //Verify user account (post or get?)
+        this.routerInstance.get('/verify-account/:token', [
+            this.verifyUserAccountHandler.bind(this)
+        ]);
 
         this.routerInstance.get('/login', [
             this.loginGetHandler.bind(this)
@@ -135,7 +164,8 @@ export class AuthentificationRoutes {
     public async registerHandler(req: Request, res: Response): Promise<any> {
 
         const {data} = req.body;
-        res.serviceResponse = await this.controllerInstance.register(data);
+        const visitorIp = req.visitor.ip;
+        res.serviceResponse = await this.controllerInstance.register(data, visitorIp);
         res.serviceResponse.action = "create";
         //History of registration
         if(!res.serviceResponse.error)
@@ -212,9 +242,79 @@ export class AuthentificationRoutes {
         });
     }
 
+    /**
+     * Post method qui prend l'ancien mdp et le nouveau souhaité, compare les hash de l'ancien avec la bd et modifie pour le nouveau sur un succès de comparaison.
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async changePasswordHandler(req: Request, res: Response): Promise<any>
+    {
+        //UserId must be replaced by some id in the request (to not be able to forge request of password change)
+        const {oldPassword, newPassword} = req.body.data;
+        const userId = req.user?._id;
 
+        const response = await this.controllerInstance.changePassword(userId, oldPassword, newPassword);
+        return res.status(response.code).send(response);
+    }
+
+    /**
+     * Post method qui envoi un courriel de reset de mot de passe.
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async sendResetPasswordLinkByEmailHandler(req: Request, res: Response): Promise<any>
+    {
+        const email = req.body.data?.email;
+        const visitorIp = req.visitor.ip;
+        const response = await this.controllerInstance.sendResetPasswordLinkByEmail(email, visitorIp)
+        return res.status(response.code).send(response);
+    }
+
+    /**
+     * Post qui assigne un nouveau mot de passe au user
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async updateForgottenPasswordHandler(req: Request, res: Response): Promise<any>
+    {
+        const password = req.body.data?.password;
+        const response = await this.controllerInstance.updateForgottenPassword(req.params?.token.toString() ?? '', password);
+        return res.status(response.code).send(response);
+    }
+    
+    
+    /**
+    * Post method qui renvoie un courriel de token de vérification de compte.
+     * requête body en JSON :
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async resendEmailVerificationTokenHandler(req: Request, res: Response): Promise<any>
+    {
+        const email = req.body.data?.email;
+        const response = await this.controllerInstance.resendVerificationToken(email);
+        return res.status(response.code).send(response);
+    }
+    
     //  GET
-
+    /**
+     * Get method qui vérifie le compte d'un utilisateur.
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async verifyUserAccountHandler(req: Request, res: Response): Promise<any>
+    {
+        const token = req.params.token?.toString() ?? '';
+        const visitorIp = req.visitor.ip;
+        const response = await this.controllerInstance.verifyAccount(token, visitorIp);
+        return res.status(response.code).send(response);
+    }
+    
     /**
      * GET:LOGIN
      * Return content to the user accessing /login on a get route.

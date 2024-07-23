@@ -1,13 +1,14 @@
 import {Document} from "mongoose";
-import { Status } from "../../Moderation/Schemas/StatusSchema";
-import { Member } from "../../Team/Schemas/MemberSchema";
-import Media from "../../Media/Models/Media";
-import { ObjectId } from "mongodb";
-import { Sponsor } from "../../Database/Schemas/SponsorSchema";
-import { ScheduleBudget } from "../../Database/Schemas/ScheduleBudgetSchema";
-import { Location } from "../../Database/Schemas/LocationSchema";
-import { ProjectContextEnum } from "../ProjectContextEnum";
-import { DomainSchema } from "@src/Taxonomy/Schemas/DomainSchema";
+import {Meta} from "@src/Moderation/Schemas/MetaSchema";
+import {Member} from "@src/Team/Schemas/MemberSchema";
+import Media from "@src/Media/Models/Media";
+import {ObjectId} from "mongodb";
+import {Sponsor} from "@database/Schemas/SponsorSchema";
+import {ScheduleBudget} from "@database/Schemas/ScheduleBudgetSchema";
+import {ProjectContextEnum} from "../ProjectContextEnum";
+import {DomainSchema} from "@src/Taxonomy/Schemas/DomainSchema";
+import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
+import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 
 export interface ProjectSchema extends Document {
     name:string;
@@ -16,15 +17,16 @@ export interface ProjectSchema extends Document {
     entityInCharge:ObjectId;
     producer: ObjectId;
     description:string;
-    url:string;
-    contactPoint:string;
-    location:Location;
+    url:[SocialHandle]
+    contactPoint:ContactPoint;
+    location:[ObjectId];
     team:[Member];
     mainImage:Media;
     sponsor:[Sponsor];
     scheduleBudget:ScheduleBudget;
     skills:[ObjectId];
     domains:[DomainSchema];
-    context: ProjectContextEnum
-    status: Status
+    context: ProjectContextEnum;
+    equipment: [ObjectId];
+    meta: Meta
 }

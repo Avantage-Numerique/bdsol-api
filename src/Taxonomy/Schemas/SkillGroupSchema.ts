@@ -1,13 +1,12 @@
 import mongoose, {Document, Schema} from "mongoose";
-import {Status} from "@src/Moderation/Schemas/StatusSchema";
+import {SubMeta} from "@src/Moderation/Schemas/MetaSchema";
 
 
 export interface SkillGroupSchema extends Document {
     groupName:string;
     skills: [mongoose.ObjectId] ;
-    status: Status;
+    subMeta: SubMeta;
 }
-
 
 export class SkillGroup {
     /** @static schema */
@@ -19,6 +18,8 @@ export class SkillGroup {
             type: [mongoose.Types.ObjectId],
             ref: 'Taxonomy'
         },
-        status: Status.schema
+        subMeta: {
+            type: SubMeta.schema
+        }
     }, { _id : false });
 }

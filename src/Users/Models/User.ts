@@ -54,11 +54,39 @@ export class User extends AbstractModel {
                     type: String,
                     required: true
                 },
-                avatar: String,
-                name: String,
-                firstName: String,
-                lastName: String,
-                role: String
+                avatar: {
+                    type:String
+                },
+                name: {
+                    type:String
+                },
+                firstName: {
+                    type:String
+                },
+                lastName: {
+                    type:String
+                },
+                role: {
+                    type:String
+                },
+                tos: {
+                    accepted: { type: Boolean, default:false },
+                    acceptedOn: { type: Date },
+                    ipAddress : { type: String }
+                },
+                verify: {
+                    isVerified: { type: Boolean, default:false },
+                    token: { type: String },
+                    expireDate: { type: Date },
+                    validatedOn: { type: Date },
+                    ipAddress : { type: String }
+                },
+                changePassword: {
+                    token: { type:String },
+                    expireDate: { type: Date },
+                    ipAddress : { type: String }
+                },
+                lastLogin: { type: Date, default: new Date }
             },
             {
                 toJSON: { virtuals: true },
@@ -157,11 +185,13 @@ export class User extends AbstractModel {
             username: document.username ?? '',
             avatar: document.avatar ?? '',
             name: document.name ?? '',
-            firstName: document.name ?? '',
-            lastName: document.name ?? '',
+            firstName: document.firstName ?? '',
+            lastName: document.lastName ?? '',
             email: document.email ?? '',
             role: document.role ?? '',
             type: document.type ?? '',
+            verify: { isVerified: document?.verify?.isVerified ?? false},
+            lastLogin: document.lastLogin ?? '',
             createdAt: document.createdAt ?? '',
             updatedAt: document.updatedAt ?? '',
         }

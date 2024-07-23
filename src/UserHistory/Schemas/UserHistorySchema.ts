@@ -1,9 +1,8 @@
-import mongoose from "mongoose";
-import {Document} from "mongoose"
+import mongoose, {Document} from "mongoose";
 
 export interface UserHistorySchema extends Document {
     user: mongoose.ObjectId;
-    ipAddress: string;
+    ipAddress?: string;
     modifDate: Date;
     action: string;
     entityCollection: string;

@@ -1,9 +1,16 @@
 import express, {NextFunction, Request, Response} from "express";
+import {query} from "express-validator";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {SuccessResponse} from "@src/Http/Responses/SuccessResponse";
 import AbstractRoute from "@core/Route";
 import SearchSuggestions from "./SearchSuggestions";
 import SearchResults from "./SearchResults";
+import {isInEnumSanitizerAlias} from "@src/Security/SanitizerAliases/IsInEnumSanitizerAlias";
+import {EntityTypesEnum} from "@src/Entities/EntityTypes";
+import {IntegerSanitizerAlias} from "@src/Security/SanitizerAliases/IntegerSanitizerAlias";
+import {urlSanitizerAlias} from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
+import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
+import { urlSanitizerSearchAlias } from "@src/Security/SanitizerAliases/UrlSanitizerSearchAlias";
 
 class SearchRoutes extends AbstractRoute {
 
@@ -15,6 +22,7 @@ class SearchRoutes extends AbstractRoute {
 
     public searchSuggestions_instance: SearchSuggestions;
     public searchResults_instance: SearchResults;
+
     constructor() {
         super();
         this.routerInstance = express.Router();
@@ -30,13 +38,57 @@ class SearchRoutes extends AbstractRoute {
      * @public @method
      */
     public setupPublicRoutes(): express.Router {
-
-        this.routerInstance.get('/', [this.fullSearchHandler.bind(this), this.routeSendResponse.bind(this)])
-        this.routerInstance.get('/regex', [this.textSearchSuggestionsHandler.bind(this), this.routeSendResponse.bind(this)]);
-        this.routerInstance.get('/text', [this.textSearchResultsHandler.bind(this), this.routeSendResponse.bind(this)]);
-        this.routerInstance.get('/nearestTaxonomy', [this.nearTaxonomyToSearchIndex.bind(this), this.routeSendResponse.bind(this)]);
-        this.routerInstance.get('/:linkId', [this.taxonomyLinkedEntitiesHandler.bind(this), this.routeSendResponse.bind(this)]);
-        this.routerInstance.get('/:category/:slug', [this.taxonomyLinkedEntitiesByCatAndSlugHandler.bind(this), this.routeSendResponse.bind(this)]);
+        this.routerInstance.get('/homepage', [
+            this.fetchHomePageEntityHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+        this.routerInstance.post('/type', [
+            isInEnumSanitizerAlias('data.type', EntityTypesEnum),
+            IntegerSanitizerAlias('data.skip'),
+            this.searchByTypeAndCategoryHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+        this.routerInstance.get('/', [
+            urlSanitizerSearchAlias('searchIndex', true, query),//query.searchIndex
+            this.fullSearchHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+        //désactivé ?
+        this.routerInstance.get('/all', [
+            this.aggregateAllHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+        //query.searchIndex
+        this.routerInstance.get('/regex', [
+            urlSanitizerAlias('searchIndex', true, query),
+            this.textSearchSuggestionsHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+        //query.searchIndex
+        this.routerInstance.get('/text', [
+            urlSanitizerAlias('searchIndex', true, query),
+            this.textSearchResultsHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+        //query.searchIndex
+        this.routerInstance.get('/nearestTaxonomy', [
+            urlSanitizerAlias('searchIndex', true, query),
+            this.nearTaxonomyToSearchIndex.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+        //req.params.linkId
+        this.routerInstance.get('/:linkId', [
+            objectIdSanitizerAlias('linkId', false, query),
+            this.taxonomyLinkedEntitiesHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
+        //req.params.category, req.params.slug
+        this.routerInstance.get('/:category/:slug', [
+            urlSanitizerAlias('category', false, query),
+            urlSanitizerAlias('slug', false, query),
+            this.taxonomyLinkedEntitiesByCatAndSlugHandler.bind(this),
+            this.routeSendResponse.bind(this)
+        ]);
         return this.routerInstance;
     }
 
@@ -47,14 +99,34 @@ class SearchRoutes extends AbstractRoute {
     public setupAdditionnalAuthRoutes(router: express.Router): express.Router {
         return router;
     }
+
     public setupAdditionnalPublicRoutes(router: express.Router): express.Router {
         return router;
     }
 
+    public async fetchHomePageEntityHandler(req:Request, res: Response, next: NextFunction): Promise<any>{
+        res.serviceResponse = SuccessResponse.create(await this.searchResults_instance.fetchHomePageEntity(), StatusCodes.OK, ReasonPhrases.OK)
+        return next();
+    }
+
+    public async searchByTypeAndCategoryHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
+        const type:string = req.body?.data?.type ?? "";
+        const skip:number = req.body?.data?.skip ?? 0;
+        /* const categories = {
+            domains : req.body?.data?.domains ?? "",
+            technologies : req.body?.data?.technologies ?? "",
+            skills : req.body?.data?.skills ?? ""
+        } */
+        if(typeof type === 'string'){
+            res.serviceResponse = await this.searchResults_instance.searchByTypeAndCategory(type, skip)//, categories)
+        }
+        return next();
+    }
 
     public async fullSearchHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
-        let textSearchResults = await this.searchResults_instance.getTextSearchResult(req.query.searchIndex?.toString());
-        const regexSearchResults = await this.searchSuggestions_instance.getTextSearchSuggestions(req.query.searchIndex?.toString())
+        const searchIndex = req.query.searchIndex ? decodeURI(req.query.searchIndex.toString()) : "";
+        let textSearchResults = await this.searchResults_instance.getTextSearchResult(searchIndex);
+        const regexSearchResults = await this.searchSuggestions_instance.getTextSearchSuggestions(searchIndex)
         
         if (textSearchResults == undefined)
             textSearchResults = [];
@@ -64,7 +136,7 @@ class SearchRoutes extends AbstractRoute {
         combinedResults.forEach((elem) => {
             if(!uniqueResults.some(unique => unique._id == elem._id))
                 uniqueResults.push(elem);
-        })
+        });
 
         res.serviceResponse = SuccessResponse.create(uniqueResults, StatusCodes.OK, ReasonPhrases.OK);
         return next();
@@ -126,7 +198,9 @@ class SearchRoutes extends AbstractRoute {
         return next();
     }
 
-
+    public async aggregateAllHandler(req:Request, res:Response, next: NextFunction):Promise<any> {
+        return next();
+    }
 }
 
 export default SearchRoutes

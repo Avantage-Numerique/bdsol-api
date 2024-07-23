@@ -14,9 +14,6 @@ class UserHistory extends AbstractModel {
     public static getInstance():UserHistory {
         if (UserHistory._instance === undefined) {
             UserHistory._instance = new UserHistory();
-            
-            UserHistory._instance.schema.virtual("type").get( function () { return UserHistory._instance.modelName });
-
             UserHistory._instance.initSchema();
         }
         return UserHistory._instance;
@@ -77,7 +74,6 @@ class UserHistory extends AbstractModel {
             }
         },
             {
-                toJSON: { virtuals: true },
                 timestamps: true
         });
 
@@ -165,15 +161,19 @@ class UserHistory extends AbstractModel {
      * @return {any}
      */
     public dataTransfertObject(document: any) {
+        delete document.fields.meta;
+        delete document.fields.createdAt;
+        delete document.fields.updatedAt;
+        delete document.fields._id;
         return {
-            user: document.user ?? '',
+            //user: document.user ?? '',
             modifDate: document.modifDate ?? '',
             action: document.action ?? '',
-            entityCollection: document.entityCollection ?? '',
+            //entityCollection: document.entityCollection ?? '',
             modifiedEntity: document.modifiedEntity ?? '',
             fields: document.fields ?? '',
-            createdAt : document.createdAt ?? '',
-            updatedAt : document.updatedAt ?? '',
+            //createdAt : document.createdAt ?? '',
+            //updatedAt : document.updatedAt ?? '',
         }
     }
 
