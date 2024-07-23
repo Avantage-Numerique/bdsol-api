@@ -166,10 +166,10 @@ export default class LogHelper
 
             const path = `${LogStorage.basePath}`;
             const ext:string = "log";
-            const fileName = date.toString()+"-all.log";
+            const fileName = date.toString();
             const fileNameSuffix = consoleMethod == "ERROR" ? "error" : "all";
 
-            fs.open(`${path}/${fileName}${fileNameSuffix}.${ext}`, 'a', function(err, fd){
+            fs.open(`${path}/${fileName}-${fileNameSuffix}.${ext}`, 'a', function(err, fd){
                 if (err)
                     console.log("Can't log into file", err)
                 else {
