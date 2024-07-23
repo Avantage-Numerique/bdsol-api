@@ -165,9 +165,11 @@ export default class LogHelper
             const date = d.toLocaleDateString('en-CA');
 
             const path = `${LogStorage.basePath}`;
-            const allFileName = date.toString()+"-all.log";
+            const ext:string = "log";
+            const fileName = date.toString()+"-all.log";
+            const fileNameSuffix = consoleMethod == "ERROR" ? "error" : "all";
 
-            fs.open(`${path}/${allFileName}`, 'a', function(err, fd){
+            fs.open(`${path}/${fileName}${fileNameSuffix}.${ext}`, 'a', function(err, fd){
                 if (err)
                     console.log("Can't log into file", err)
                 else {
@@ -177,19 +179,6 @@ export default class LogHelper
                     });
                 }
             });
-            if (consoleMethod == "ERROR") {
-                const errorFileName = date.toString()+"-error.log"
-                fs.open(path+errorFileName, 'a', function(err, fd){
-                    if (err)
-                        console.log("Can't log into file", err)
-                    else {
-                        fs.write(fd, verbose + data + "\n", (err) => {
-                            if (err)
-                                console.log(err.message, err);
-                        });
-                    }
-                });
-            }
         }
     }
 }

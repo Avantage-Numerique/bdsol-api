@@ -287,7 +287,7 @@ package SubSchema {
 
 package Enums {
     enum **BadgeTypes** {
-        "CB" : { fullName : "Croissant Boréal", ... }
+        "CB" : { fullName : "Croissant boréal", ... }
     }
 
     enum **TaxonomiesCategoriesEnum** {

@@ -49,7 +49,7 @@ class EmailContent {
         return {
             cta: {
                 cta: "https://avnu.ca",
-                label: "Le répertoire des techno-créatif du croissant boréal"
+                label: "Le répertoire des techno-créatif du Croissant boréal"
             },
             links: {
                 unsuscribe: "https://avnu.ca",
