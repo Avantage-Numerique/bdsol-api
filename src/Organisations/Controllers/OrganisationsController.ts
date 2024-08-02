@@ -59,7 +59,14 @@ class OrganisationsController extends AbstractController {
         let query: Array<any> = lookupModelsByQueries([
             {
                 appModel: Project.getInstance(),
-                foreignField: "entityInCharge"
+                foreignField: "entityInCharge",
+                as: "creatorOfProjects"
+            },
+            {
+                appModel: Project.getInstance(),
+                by: "sponsor",
+                foreignField: "entity",
+                as: "projectsPartner"
             },
             {
                 appModel: Person.getInstance(),
@@ -70,6 +77,11 @@ class OrganisationsController extends AbstractController {
             {
                 appModel: Event.getInstance(),
                 foreignField: "organizer"
+            },
+            {
+                appModel: Event.getInstance(),
+                foreignField: "entityInCharge",
+                as: "creatorOfEvents"
             },
             {
                 appModel: Equipment.getInstance(),
@@ -83,6 +95,7 @@ class OrganisationsController extends AbstractController {
                 foreignField: "_id",
                 as: "location"
             },
+            
             {
                 raw: {
                     $addFields: {
@@ -98,6 +111,9 @@ class OrganisationsController extends AbstractController {
                         "people.type": Person.getInstance().modelName,
                         "tools.type": Equipment.getInstance().modelName,//changed here before the $addfield in raw.
                         "location.type": Place.getInstance().modelName,
+                        "projectsPartner.type": Project.getInstance().modelName,
+                        "creatorOfProjects.type": Project.getInstance().modelName,
+                        "creatorOfEvents.type" : Event.getInstance().modelName,
                         //"type": "$type",//test to get the virtual like that. Organisation.getInstance().modelName
                     }
                 }
