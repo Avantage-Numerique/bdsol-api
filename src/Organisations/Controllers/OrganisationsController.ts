@@ -205,6 +205,9 @@ class OrganisationsController extends AbstractController {
         await media.populate(results, {path: "events.mainImage"});
         await media.populate(results, {path: "location.mainImage"});
         await media.populate(results, {path: "equipment.equipment.mainImage"});
+        await media.populate(results, {path: "creatorOfProjects.mainImage"});
+        await media.populate(results, {path: "creatorOfEvents.mainImage"});
+        await media.populate(results, {path: "projectsPartner.mainImage"});
 
         await users.populate(results, {path: "meta.requestedBy", select: "name username avatar"});
         await users.populate(results, {path: "meta.lastModifiedBy", select: "name username avatar"});
