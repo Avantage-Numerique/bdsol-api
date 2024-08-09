@@ -64,8 +64,8 @@ class OrganisationsController extends AbstractController {
             },
             {
                 appModel: Project.getInstance(),
-                by: "sponsor",
-                foreignField: "entity",
+                //by: "sponsor",
+                foreignField: "sponsor.entity",
                 as: "projectsPartner"
             },
             {
