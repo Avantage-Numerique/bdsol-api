@@ -270,8 +270,10 @@ class Person extends AbstractModel {
     public registerPreEvents() {
         if (this.schema !== undefined) {
 
+            /* VOIR DOCUMENTATION TECHNIQUE, FONCTIONNALITÉ API, VALIDATION.MD */
+
             //Pre save, verification for occupation
-            this.schema.pre('save', async function (next: any): Promise<any> {
+            /* this.schema.pre('save', async function (next: any): Promise<any> {
                 //Verify that occupations in the array exists and that there are no duplicates
                 const idList = this.occupations.map( (el:any) => {
                     return el.skills.map( (id:any) =>{
@@ -284,10 +286,10 @@ class Person extends AbstractModel {
                 middlewareInsertBadges(this);
 
                 return next();
-            });
+            }); */
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
-            this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
+            /* this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
                 const updatedDocument:any = this.getUpdate();
                 if (updatedDocument["occupations"] != undefined){
                     const idList = updatedDocument.occupations.map( (el:any) => {
@@ -300,7 +302,7 @@ class Person extends AbstractModel {
                 //Check and insert badges
                 middlewareInsertBadges(updatedDocument);
                 return next();
-            });
+            }); */
         }
     }
 

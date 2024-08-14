@@ -208,9 +208,11 @@ class Organisation extends AbstractModel {
     public registerPreEvents() {
         if (this.schema !== undefined) {
 
+            /* VOIR DOCUMENTATION TECHNIQUE, FONCTIONNALITÉ API, VALIDATION.MD */
+            
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
-            this.schema.pre('save', async function (next: any): Promise<any> {
+            /* this.schema.pre('save', async function (next: any): Promise<any> {
                 const idList = this.offers.map( (el:any) => {
                     return el.skills.map( (id:any) =>{
                         return new mongoose.Types.ObjectId(id);
@@ -240,7 +242,7 @@ class Organisation extends AbstractModel {
                 middlewareInsertBadges(updatedDocument);
 
                 return next();
-            });
+            }); */
         }
     }
 

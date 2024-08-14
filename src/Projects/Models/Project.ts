@@ -213,7 +213,7 @@ class Project extends AbstractModel {
 
     public registerPreEvents() {
         if (this.schema !== undefined) {
-
+            /* VOIR DOCUMENTATION TECHNIQUE, FONCTIONNALITÉ API, VALIDATION.MD */
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
             //this.schema.pre('save', async function (next: any): Promise<any> {

@@ -9,14 +9,15 @@ const middlewareTaxonomy = async (idList:any,
                                   controller:any,
                                   taxonomyProperty:string = 'occupations',
                                   taxonomy:string = "") => {
-    if (idList.length != 0)
+    const flatenedList = idList.flat(3);
+    if (flatenedList.flat(3).length != 0)
     {
-        const occupationsExist = await controller.getInstance().list({ _id : {$in: idList}, category: taxonomy });
+        const occupationsExist = await controller.getInstance().list({ _id : {$in: flatenedList}, category: taxonomy });
 
         if (!occupationsExist.error) {
             const foundOccupationCount = occupationsExist.data.length;
 
-            if (idList.length != foundOccupationCount) {
+            if (flatenedList.length != foundOccupationCount) {
                 throw(new Error(`Pre save Erreur data ${taxonomy} existe pas ou doublons`));
             }
         }
