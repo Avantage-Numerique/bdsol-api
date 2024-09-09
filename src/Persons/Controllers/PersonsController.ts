@@ -88,7 +88,8 @@ class PersonsController extends AbstractController {
         const results:any = await aggregateService.lookupMultiple({slug: slug}, query);
 
         //agregation inter bd don't work (that I red).
-        const users:mongoose.Model<any> = User.getInstance().mongooseModel;
+        const userAppModel:User = User.getInstance();
+        const users:mongoose.Model<any> = userAppModel.mongooseModel;
 
         //I'm doing it with populate because of the $lookup is just really fetching, and we need data to stay the same.
         // All the things I found and tests where not working
@@ -103,8 +104,8 @@ class PersonsController extends AbstractController {
         await media.populate(results, {path: "mainImage"});
         await media.populate(results, {path: "events.mainImage"});
 
-        await users.populate(results, {path: "meta.requestedBy", select: "name username avatar"});
-        await users.populate(results, {path: "meta.lastModifiedBy", select: "name username avatar"});
+        await users.populate(results, {path: "meta.requestedBy", select: userAppModel.publicFields()});
+        await users.populate(results, {path: "meta.lastModifiedBy", select: userAppModel.publicFields()});
 
         if (results.length > 0) {
             return SuccessResponse.create(

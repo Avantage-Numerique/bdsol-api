@@ -190,7 +190,8 @@ class OrganisationsController extends AbstractController {
         const results:any = await aggregateService.lookupMultiple({slug: slug}, query);
 
         //aggregation inter bd don't work (that I red).
-        const users:mongoose.Model<any> = User.getInstance().mongooseModel;
+        const userAppModel:User = User.getInstance();
+        const users:mongoose.Model<any> = userAppModel.mongooseModel;
         const taxonomies:mongoose.Model<any> = Taxonomy.getInstance().mongooseModel;
         const media:mongoose.Model<any> = Media.getInstance().mongooseModel;
         //const equipment:mongoose.Model<any> = Equipment.getInstance().mongooseModel;
@@ -209,8 +210,8 @@ class OrganisationsController extends AbstractController {
         await media.populate(results, {path: "creatorOfEvents.mainImage"});
         await media.populate(results, {path: "projectsPartner.mainImage"});
 
-        await users.populate(results, {path: "meta.requestedBy", select: "name firstName avatar"});
-        await users.populate(results, {path: "meta.lastModifiedBy", select: "name firstName avatar"});
+        await users.populate(results, {path: "meta.requestedBy", select: userAppModel.publicFields()});
+        await users.populate(results, {path: "meta.lastModifiedBy", select: userAppModel.publicFields()});
 
 
         if (results.length > 0) {

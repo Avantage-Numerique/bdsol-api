@@ -174,6 +174,10 @@ export class User extends AbstractModel {
         return ["To be completed"];
     }
 
+    public publicFields():string {
+        return "name firstName lastname avatar"
+    }
+
     /**
      * @public @method dataTransfertObject Format the document for the public return.
      * @param document
