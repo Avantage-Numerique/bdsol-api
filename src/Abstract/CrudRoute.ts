@@ -349,10 +349,12 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
         const logger = new LogHelper(req);
         if (!res.serviceResponse.error) {
-            const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res);
-            logger.log(`UserHistory response : ${userHistoryCreated ? "Created" : "Error"}`);
+            const userHistoryCreated: ApiResponseContract = await this.controllerInstance.createUserHistory(req, res);
+            logger.log(`UserHistory have been : ${!userHistoryCreated.error ? "Created successfuly" : "with Error "+userHistoryCreated.message}`);
+        } else {
+            logger.log(`Couldn't create userHistory, service response error : ${res.serviceResponse.message}, code ${res.serviceResponse.code}`);
         }
-        logger.log(`Couldn't create userHistory, service response error : ${res.serviceResponse.message}, code ${res.serviceResponse.code}`);
+
         next();
     }
 
