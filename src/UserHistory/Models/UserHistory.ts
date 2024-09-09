@@ -38,6 +38,9 @@ class UserHistory extends AbstractModel {
     service:UsersHistoryService;
     mongooseModel:mongoose.Model<any>;
 
+    /**
+     * ipAddress removed : `required: true` on 2024-09-09
+     */
     /** @public Database schema */
     schema:Schema =
         new Schema<UserHistorySchema>({
@@ -47,8 +50,7 @@ class UserHistory extends AbstractModel {
                 //ref: 'users' //Note, c'est dans une autre bd ?
             },
             ipAddress: {
-                type: String,
-                required: true
+                type: String
             },
             modifDate: {
                 type: Date,

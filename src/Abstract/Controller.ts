@@ -10,6 +10,7 @@ import UserHistory from "@src/UserHistory/Models/UserHistory";
 import {UserHistorySchema} from "@src/UserHistory/Schemas/UserHistorySchema";
 import {ControllerContract} from "./Contracts/ControllerContract";
 import ApiQuery from "@database/QueryBuilder/ApiQuery";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 /**
  * AbstractController
@@ -198,7 +199,7 @@ abstract class AbstractController implements ControllerContract {
 
             //Media
             const media = response.media ?? {}
-
+            LogHelper.log("---- USER HISTORY ----", "FROM APP IP", fromAppIp, "FROM VISITOR IP", ipAddress, 'USER', user);
             const history: UserHistorySchema = {
                 "user": user,
                 "ipAddress": ipAddress,
