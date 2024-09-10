@@ -3,20 +3,16 @@ import {OrganisationSchema} from "../Schemas/OrganisationSchema";
 import {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from 'fs';
-import TaxonomyController from "../../Taxonomy/Controllers/TaxonomyController";
 import OrganisationsService from "../Services/OrganisationsService";
-import {middlewareTaxonomy} from "@src/Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
 import {Member} from "@src/Team/Schemas/MemberSchema";
 import {Meta, SubMeta} from "@src/Moderation/Schemas/MetaSchema";
 import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import {populateUser} from "@src/Users/Middlewares/populateUser";
-import {User} from "@src/Users/Models/User";
 import {SkillGroup} from "@src/Taxonomy/Schemas/SkillGroupSchema";
 import {EquipmentLink} from "@src/Database/Schemas/EquipmentLinkSchema";
-import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
-import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
+import {SocialHandle} from "@src/Database/Schemas/SocialHandleSchema";
+import {ContactPoint} from "@src/Database/Schemas/ContactPointSchema";
 import BadgeTypes from "@src/Badges/BadgeTypes";
-import { middlewareInsertBadges } from "@src/Badges/MiddlewareInsertBadges";
 
 
 class Organisation extends AbstractModel {
@@ -259,8 +255,8 @@ class Organisation extends AbstractModel {
             middlewarePopulateProperty(this, "mainImage");
             middlewarePopulateProperty(this, "location");
 
-            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy");
+            populateUser(this, "meta.lastModifiedBy");
         });
         
         this.schema.pre('findOne', function() {
@@ -271,8 +267,8 @@ class Organisation extends AbstractModel {
             middlewarePopulateProperty(this, "mainImage");
             middlewarePopulateProperty(this, "location");
 
-            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy");
+            populateUser(this, "meta.lastModifiedBy");
         });
     }
 }

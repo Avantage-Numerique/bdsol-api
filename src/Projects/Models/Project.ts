@@ -6,14 +6,13 @@ import ProjectsService from "../Services/ProjectsService";
 import {Meta, SubMeta} from "@src/Moderation/Schemas/MetaSchema";
 import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import {populateUser} from "@src/Users/Middlewares/populateUser";
-import {User} from "@src/Users/UsersDomain";
 import {Sponsor} from "@database/Schemas/SponsorSchema";
 import {ScheduleBudget} from "@database/Schemas/ScheduleBudgetSchema";
 import {ProjectContextEnum} from "../ProjectContextEnum";
 import {TeamField} from "@src/Team/Schemas/TeamSchema";
 import * as fs from 'fs';
-import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
-import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
+import {SocialHandle} from "@src/Database/Schemas/SocialHandleSchema";
+import {ContactPoint} from "@src/Database/Schemas/ContactPointSchema";
 
 class Project extends AbstractModel {
 
@@ -257,8 +256,8 @@ class Project extends AbstractModel {
             middlewarePopulateProperty(this, 'producer');
             middlewarePopulateProperty(this, 'entityInCharge');
 
-            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy");
+            populateUser(this, "meta.lastModifiedBy");
         });
 
         this.schema.pre('findOne', function() {
@@ -271,8 +270,8 @@ class Project extends AbstractModel {
             middlewarePopulateProperty(this, 'producer');
             middlewarePopulateProperty(this, 'entityInCharge');
 
-            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy");
+            populateUser(this, "meta.lastModifiedBy");
         });
     }
 }

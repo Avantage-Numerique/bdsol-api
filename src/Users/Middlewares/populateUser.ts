@@ -1,4 +1,5 @@
 import {mongoosePopulate} from "../../Database/Middlewares/mongoosePopulate";
+import {User} from "@src/Users/Models/User";
 
 /**
  * Populate field on pre "find"
@@ -9,12 +10,10 @@ import {mongoosePopulate} from "../../Database/Middlewares/mongoosePopulate";
  * @inheritDoc https://mongoosejs.com/docs/6.x/docs/populate.html
  */
 const populateUser = (document: any,
-                      schemaProperty: string,
-                      model: any = undefined,
-                      fieldToPopulate: string = "name username avatar",
+                      schemaProperty: string
 ) => {
-
-    mongoosePopulate(document, schemaProperty, fieldToPopulate, model);
+    const appModel = User.getInstance();
+    mongoosePopulate(document, schemaProperty, appModel.publicFields(), appModel.mongooseModel);
 }
 
 export {populateUser};

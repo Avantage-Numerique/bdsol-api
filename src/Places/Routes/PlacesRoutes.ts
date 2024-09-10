@@ -29,8 +29,6 @@ class PlacesRoutes extends CrudRoute {
             noHtmlStringSanitizerAlias('data.country'),
             noHtmlStringSanitizerAlias('data.latitude'),
             noHtmlStringSanitizerAlias('data.longitude'),
-
-
         ],
         update: [
             objectIdSanitizerAlias('data.id', false),

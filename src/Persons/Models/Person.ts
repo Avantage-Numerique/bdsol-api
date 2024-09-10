@@ -2,19 +2,15 @@ import mongoose, {Schema} from "mongoose";
 import {PersonSchema} from "../Schemas/PersonSchema";
 import type {DbProvider} from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
-import {User} from "@src/Users/Models/User";
 import * as fs from 'fs';
-import TaxonomyController from "../../Taxonomy/Controllers/TaxonomyController";
 import PersonsService from "../Services/PersonsService";
-import {middlewareTaxonomy} from "@src/Taxonomy/Middlewares/TaxonomyPreSaveOnEntity";
 import {Meta, SubMeta} from "@src/Moderation/Schemas/MetaSchema";
 import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import {populateUser} from "@src/Users/Middlewares/populateUser";
 import {SkillGroup} from "@src/Taxonomy/Schemas/SkillGroupSchema";
-import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
-import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
+import {ContactPoint} from "@src/Database/Schemas/ContactPointSchema";
+import {SocialHandle} from "@src/Database/Schemas/SocialHandleSchema";
 import BadgeTypes from "@src/Badges/BadgeTypes";
-import { middlewareInsertBadges } from "@src/Badges/MiddlewareInsertBadges";
 
 class Person extends AbstractModel {
 
@@ -312,8 +308,8 @@ class Person extends AbstractModel {
             taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, "mainImage");
 
-            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy");
+            populateUser(this, "meta.lastModifiedBy");
 
             //populateUser(this, "occupations.occupation.subMeta.requestedBy", User.getInstance().mongooseModel);
             //populateUser(this, "occupations.occupation.subMeta.lastModifiedBy", User.getInstance().mongooseModel);
@@ -323,8 +319,8 @@ class Person extends AbstractModel {
             taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, 'mainImage');
 
-            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy");
+            populateUser(this, "meta.lastModifiedBy");
 
             //populateUser(this, "occupations.occupation.subMeta.requestedBy", User.getInstance().mongooseModel);
             //populateUser(this, "occupations.occupation.subMeta.lastModifiedBy", User.getInstance().mongooseModel);
