@@ -213,7 +213,6 @@ class OrganisationsController extends AbstractController {
         await users.populate(results, {path: "meta.requestedBy", select: userAppModel.publicFields()});
         await users.populate(results, {path: "meta.lastModifiedBy", select: userAppModel.publicFields()});
 
-
         if (results.length > 0) {
             return SuccessResponse.create(
                 results[0],

@@ -6,7 +6,6 @@ import PlacesService from "@src/Places/Services/PlacesService";
 import {middlewarePopulateProperty} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import {Meta} from "@src/Moderation/Schemas/MetaSchema";
 import {populateUser} from "@src/Users/Middlewares/populateUser";
-import {User} from "@src/Users/Models/User";
 
 class Place extends AbstractModel {
 
@@ -180,15 +179,15 @@ class Place extends AbstractModel {
         this.schema.pre('find', function() {
             middlewarePopulateProperty(this, "mainImage");
 
-            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy");
+            populateUser(this, "meta.lastModifiedBy");
         });
 
         this.schema.pre('findOne', function() {
             middlewarePopulateProperty(this, 'mainImage');
 
-            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy");
+            populateUser(this, "meta.lastModifiedBy");
         });
     }
 }

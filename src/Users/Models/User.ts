@@ -175,7 +175,7 @@ export class User extends AbstractModel {
     }
 
     public publicFields():string {
-        return "name firstName lastName avatar"
+        return "name firstName lastName avatar";
     }
 
     /**

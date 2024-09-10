@@ -8,11 +8,10 @@ import {Meta, SubMeta} from "@src/Moderation/Schemas/MetaSchema";
 import * as fs from 'fs';
 import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import {populateUser} from "@src/Users/Middlewares/populateUser";
-import {User} from "@src/Users/UsersDomain";
 import {Schedule} from "@src/Database/Schemas/ScheduleSchema";
 import {EventFormatEnum} from "../EventFormatEnum";
-import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
-import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
+import {SocialHandle} from "@src/Database/Schemas/SocialHandleSchema";
+import {ContactPoint} from "@src/Database/Schemas/ContactPointSchema";
 
 class Event extends AbstractModel {
 
@@ -252,8 +251,8 @@ class Event extends AbstractModel {
             middlewarePopulateProperty(this, 'location');
             middlewarePopulateProperty(this, 'photoGallery');
 
-            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy");
+            populateUser(this, "meta.lastModifiedBy");
 
             next();
         });
@@ -275,8 +274,8 @@ class Event extends AbstractModel {
             middlewarePopulateProperty(this, 'eventType');
             middlewarePopulateProperty(this, 'location');
             middlewarePopulateProperty(this, 'photoGallery');
-            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy");
+            populateUser(this, "meta.lastModifiedBy");
 
             next();
         });
