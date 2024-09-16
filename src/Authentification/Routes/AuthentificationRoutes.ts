@@ -119,6 +119,10 @@ export class AuthentificationRoutes {
             this.sendResetPasswordLinkByEmailHandler.bind(this)
         ]);
 
+        //Route to check if /reset-password/:token is valid url
+        this.routerInstance.get('/reset-password/:token', [
+            this.verifyResetPasswordTokenUrl.bind(this)
+        ])
         this.routerInstance.post('/reset-password/:token', [
             this.updateForgottenPasswordHandler.bind(this)
         ]);
@@ -127,6 +131,7 @@ export class AuthentificationRoutes {
             ...this.addMiddlewares("email"),
             this.resendEmailVerificationTokenHandler.bind(this)
         ]);
+
 
         //Verify user account (post or get?)
         this.routerInstance.get('/verify-account/:token', [
@@ -301,6 +306,19 @@ export class AuthentificationRoutes {
     }
     
     //  GET
+    /**
+     * Get method qui vérifie le compte d'un utilisateur.
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async verifyResetPasswordTokenUrl(req: Request, res: Response): Promise<any>
+    {
+        const token = req.params?.token.toString();
+        const response = await this.controllerInstance.verifyResetPasswordToken(token);
+        return res.status(response.code).send(response);
+    }
+
     /**
      * Get method qui vérifie le compte d'un utilisateur.
      * @param req {Request}

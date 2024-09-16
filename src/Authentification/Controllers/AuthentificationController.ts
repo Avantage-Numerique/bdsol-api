@@ -334,14 +334,14 @@ class AuthentificationController
                 //If expire date is defined and 5 min have past
                 //(if now - expire is negative, it's time before token expire, if positive it's time since token expired)
                 if(currentTokenExpireDate !== undefined &&
-                    now.valueOf() - currentTokenExpireDate.valueOf() < (-25*60*1000))
+                    now.valueOf() - currentTokenExpireDate.valueOf() < (-55*60*1000))
                     //Need to wait 5 min for new token
                     return SuccessResponse.create({}, StatusCodes.OK, "Sent reset password email")
 
                 //Update user with new changePassword token and expire date
                 const passwordToken = crypto.randomBytes(AuthentificationController.verifyTokenLength).toString('hex');
                 const passwordTokenExpirationDate = new Date(); //Expiration date setters
-                passwordTokenExpirationDate.setMinutes(passwordTokenExpirationDate.getMinutes()+30);
+                passwordTokenExpirationDate.setMinutes(passwordTokenExpirationDate.getMinutes()+60);
                 const updatedUser = await User.getInstance().mongooseModel.findOneAndUpdate(
                     { _id: targetUser._id },
                     {
@@ -539,6 +539,39 @@ class AuthentificationController
         }
         //invalid email
         return SuccessResponse.create({}, StatusCodes.OK, "Sent verification email")
+    }
+
+    /**
+     * Check user database for a change password token match that is not expired
+     * @param token 
+     * @returns positive/negative status code if token has a match that is not expired
+     */
+    public async verifyResetPasswordToken(token:string):Promise<any>{
+        //If token is string with correct length
+        if(typeof token === 'string' && token.length === AuthentificationController.verifyTokenLength * 2){
+            const targetUser = await User.getInstance().mongooseModel.findOne({ "changePassword.token" : token })
+            //If token exist
+            if(targetUser !== null){
+                //Check if token expired
+                const now = new Date();
+                const currentTokenExpireDate = targetUser?.changePassword?.expireDate ?? undefined;
+                //(if now - expire is negative, it's time before token expire, if positive it's time since token expired)
+                if(currentTokenExpireDate !== undefined &&
+                    now.valueOf() - currentTokenExpireDate.valueOf() < 0){
+                        //Token isn't expired and url page is OK
+                        return SuccessResponse.create({}, StatusCodes.OK, "Token not expired, URL is valid")
+                }
+                //else token found but expired
+                else
+                    return ErrorResponse.create(new Error("Token expired"), StatusCodes.OK, "Token expired");
+            }
+            //else no token found
+            return ErrorResponse.create(new Error("Token not found"), StatusCodes.OK, "Token not found");
+        }
+        //Else token is invalid (not a string, not correct length)
+        else
+            return ErrorResponse.create(new Error("Token invalid"), StatusCodes.BAD_REQUEST, "Token invalid");
+
     }
 
 }
