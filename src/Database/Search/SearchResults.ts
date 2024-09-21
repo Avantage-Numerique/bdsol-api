@@ -52,10 +52,10 @@ class SearchResults {
         return homePageEntity;
     }
 
-    public async searchByTypeAndCategory(type:string, skip:number){//, categories:any){
+    public async searchByTypeAndCategory(type:string, skip:number, limit:number){//, categories:any){
         const controller = EntityControllerFactory.getControllerFromEntity(type);
         if(controller !== undefined){
-            const result = await controller.list({skip:skip})
+            const result = await controller.list({skip:skip, limit:limit, sort:"desc"})
                 /* {
                     $or: [
                         //Domains

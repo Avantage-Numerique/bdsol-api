@@ -112,13 +112,14 @@ class SearchRoutes extends AbstractRoute {
     public async searchByTypeAndCategoryHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
         const type:string = req.body?.data?.type ?? "";
         const skip:number = req.body?.data?.skip ?? 0;
+        const limit:number = req.body?.data?.limit ?? 4;
         /* const categories = {
             domains : req.body?.data?.domains ?? "",
             technologies : req.body?.data?.technologies ?? "",
             skills : req.body?.data?.skills ?? ""
         } */
         if(typeof type === 'string'){
-            res.serviceResponse = await this.searchResults_instance.searchByTypeAndCategory(type, skip)//, categories)
+            res.serviceResponse = await this.searchResults_instance.searchByTypeAndCategory(type, skip, limit)//, categories)
         }
         return next();
     }
