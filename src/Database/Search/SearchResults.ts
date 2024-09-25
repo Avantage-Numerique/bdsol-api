@@ -56,22 +56,17 @@ class SearchResults {
         const controller = EntityControllerFactory.getControllerFromEntity(type);
         if(controller !== undefined){
             const result = await controller.list({skip:skip, limit:limit, sort:"desc"})
-                /* {
-                    $or: [
-                        //Domains
-                        {"domains.domain" : categories.domains},
-                        //Occupations
-                        {"occupations.skills" : categories.skills},
-                        {"occupations.skills" : categories.technologies},
-                        //Offers
-                        {"offers.skills" : categories.skills},
-                        {"offers.skills" : categories.technologies},
-                        //project/event skills
-                        {"skills" : categories.skills},
-                        {"skills" : categories.technologies},
-                    ]}) */
-                    //{skip: skip ?? 0});
             return result;
+        }
+        return ErrorResponse.create(new Error("Type doesn't exist"), StatusCodes.BAD_REQUEST, "Type doesn't exist");
+    }
+
+    //For pagination, acts as a 
+    public async countByType(type:string){
+        const controller = EntityControllerFactory.getControllerFromEntity(type);
+        if(controller !== undefined){
+            const count = await controller.count({});
+            return count;
         }
         return ErrorResponse.create(new Error("Type doesn't exist"), StatusCodes.BAD_REQUEST, "Type doesn't exist");
     }

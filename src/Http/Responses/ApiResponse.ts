@@ -6,6 +6,7 @@ export interface ApiResponseContract {
     message:string;
     errors:any;
     data: any;
+    meta: any;
 }
 
 export default class ApiResponse implements ApiResponseContract {
@@ -18,6 +19,7 @@ export default class ApiResponse implements ApiResponseContract {
     protected _error:boolean = true;
     protected _errors:any;
     protected _message:string;
+    protected _meta:any;
 
     constructor(responseParams:ApiResponseContract) {
         this.error = responseParams.error;
@@ -26,6 +28,7 @@ export default class ApiResponse implements ApiResponseContract {
         this.errors = responseParams.errors;
         this.data = responseParams.data;
         this.response = responseParams;
+        this.meta = responseParams.meta;
     }
 
     public get response():ApiResponseContract {
@@ -35,6 +38,7 @@ export default class ApiResponse implements ApiResponseContract {
             "message": this.message,
             "errors": this.errors,
             "data": this.data,
+            "meta": this.meta
         } as ApiResponseContract;
     }
     public set response(response:ApiResponseContract) {
@@ -74,5 +78,12 @@ export default class ApiResponse implements ApiResponseContract {
     }
     public set data(message:object) {
         this._data = message;
+    }
+
+    public get meta():object {
+        return this._meta;
+    }
+    public set meta(message:object) {
+        this._meta = message;
     }
 }
