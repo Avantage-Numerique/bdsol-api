@@ -45,7 +45,7 @@ class SearchRoutes extends AbstractRoute {
         this.routerInstance.post('/type', [
             isInEnumSanitizerAlias('data.type', EntityTypesEnum),
             IntegerSanitizerAlias('data.skip'),
-            this.searchByTypeAndCategoryHandler.bind(this),
+            this.searchByTypeHandler.bind(this),
             this.routeSendResponse.bind(this)
         ]);
         this.routerInstance.get('/', [
@@ -109,7 +109,7 @@ class SearchRoutes extends AbstractRoute {
         return next();
     }
 
-    public async searchByTypeAndCategoryHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
+    public async searchByTypeHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
         const type:string = req.body?.data?.type ?? "";
         const skip:number = req.body?.data?.skip ?? 0;
         const limit:number = req.body?.data?.limit ?? 25;
@@ -119,11 +119,20 @@ class SearchRoutes extends AbstractRoute {
             skills : req.body?.data?.skills ?? ""
         } */
         if(typeof type === 'string'){
-            res.serviceResponse = await this.searchResults_instance.searchByTypeAndCategory(type, skip, limit)//, categories)
+            res.serviceResponse = await this.searchResults_instance.searchByType(type, skip, limit)//, categories)
         }
 
         const count = await this.searchResults_instance.countByType(type);
-        res.serviceResponse.meta = {pagination : { count : count?.data, skipped: skip, limit: limit, type: type }}
+        res.serviceResponse.meta = {pagination :
+            { 
+                count : count?.data,
+                skipped: skip,
+                limit: limit,
+                type: type,
+                pageCount: Math.ceil(count?.data / limit),
+                currentPage: Math.ceil(skip / limit) + 1,
+            }
+        }
         return next();
     }
 
@@ -203,6 +212,8 @@ class SearchRoutes extends AbstractRoute {
     }
 
     public async aggregateAllHandler(req:Request, res:Response, next: NextFunction):Promise<any> {
+        const allEntityInOrder = await this.searchResults_instance.paginateTest();
+        res.serviceResponse = SuccessResponse.create(allEntityInOrder, StatusCodes.OK, ReasonPhrases.OK);
         return next();
     }
 }

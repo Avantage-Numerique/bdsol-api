@@ -52,7 +52,7 @@ class SearchResults {
         return homePageEntity;
     }
 
-    public async searchByTypeAndCategory(type:string, skip:number, limit:number){//, categories:any){
+    public async searchByType(type:string, skip:number, limit:number){//, categories:any){
         const controller = EntityControllerFactory.getControllerFromEntity(type);
         if(controller !== undefined){
             const result = await controller.list({skip:skip, limit:limit, sort:"desc"})
@@ -197,6 +197,19 @@ class SearchResults {
         return [];
     }
 
+    public async paginateTest(){
+        const allDocsPaginated = await this.personModel.aggregate([
+            //{ $project: { updatedAt: 1, type: {$literal: "Person"} } },
+            { $unionWith: { coll: 'organisations' } },//, pipeline: [{ $project: { updatedAt: 1, type: {$literal: "Organisation"}}}]}},
+            { $unionWith: { coll: 'projects' } },//, pipeline: [{ $project: { updatedAt: 1, type: {$literal: "Project"}}}]}},
+            { $unionWith: { coll: 'events' } },//, pipeline: [{ $project: { updatedAt: 1, type: {$literal: "Event"}}}]}},
+            { $unionWith: { coll: 'equipment' } },//, pipeline: [{ $project: { updatedAt: 1, type: {$literal: "equipment"}}}]}},
+            { $sort: { updatedAt: -1 } },
+            //{ $skip: 2 },
+            //{ $limit: 20 }
+        ])
+        return allDocsPaginated;
+    }
 
     private async _embedEntitiesCountInTaxonomy(document:any, results:Array<any>) {
         try {
@@ -211,6 +224,7 @@ class SearchResults {
             throw new Error(e);
         }
     }
+    
 }
 
 export default SearchResults;
