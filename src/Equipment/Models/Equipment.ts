@@ -6,7 +6,6 @@ import EquipmentService from "@src/Equipment/Services/EquipmentService";
 import {Meta} from "@src/Moderation/Schemas/MetaSchema";
 import {populateUser} from "@src/Users/Middlewares/populateUser";
 import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
-import {User} from "@src/Users/UsersDomain";
 import {SocialHandle} from "@src/Database/Schemas/SocialHandleSchema";
 
 class Equipment extends AbstractModel {
@@ -162,14 +161,14 @@ class Equipment extends AbstractModel {
         this.schema.pre('find', function() {
             taxonomyPopulate(this, 'equipmentType');
             middlewarePopulateProperty(this, "mainImage");
-            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy");
+            populateUser(this, "meta.lastModifiedBy");
         });
         this.schema.pre('findOne', function() {
             taxonomyPopulate(this, 'equipmentType');
             middlewarePopulateProperty(this, 'mainImage');
-            populateUser(this, "meta.requestedBy", User.getInstance().mongooseModel);
-            populateUser(this, "meta.lastModifiedBy", User.getInstance().mongooseModel);
+            populateUser(this, "meta.requestedBy");
+            populateUser(this, "meta.lastModifiedBy");
         });
     }
 }

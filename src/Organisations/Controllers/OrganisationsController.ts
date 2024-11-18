@@ -59,7 +59,14 @@ class OrganisationsController extends AbstractController {
         let query: Array<any> = lookupModelsByQueries([
             {
                 appModel: Project.getInstance(),
-                foreignField: "entityInCharge"
+                foreignField: "entityInCharge",
+                as: "creatorOfProjects"
+            },
+            {
+                appModel: Project.getInstance(),
+                //by: "sponsor",
+                foreignField: "sponsor.entity",
+                as: "projectsPartner"
             },
             {
                 appModel: Person.getInstance(),
@@ -70,6 +77,11 @@ class OrganisationsController extends AbstractController {
             {
                 appModel: Event.getInstance(),
                 foreignField: "organizer"
+            },
+            {
+                appModel: Event.getInstance(),
+                foreignField: "entityInCharge",
+                as: "creatorOfEvents"
             },
             {
                 appModel: Equipment.getInstance(),
@@ -83,6 +95,7 @@ class OrganisationsController extends AbstractController {
                 foreignField: "_id",
                 as: "location"
             },
+            
             {
                 raw: {
                     $addFields: {
@@ -98,6 +111,9 @@ class OrganisationsController extends AbstractController {
                         "people.type": Person.getInstance().modelName,
                         "tools.type": Equipment.getInstance().modelName,//changed here before the $addfield in raw.
                         "location.type": Place.getInstance().modelName,
+                        "projectsPartner.type": Project.getInstance().modelName,
+                        "creatorOfProjects.type": Project.getInstance().modelName,
+                        "creatorOfEvents.type" : Event.getInstance().modelName,
                         //"type": "$type",//test to get the virtual like that. Organisation.getInstance().modelName
                     }
                 }
@@ -174,7 +190,8 @@ class OrganisationsController extends AbstractController {
         const results:any = await aggregateService.lookupMultiple({slug: slug}, query);
 
         //aggregation inter bd don't work (that I red).
-        const users:mongoose.Model<any> = User.getInstance().mongooseModel;
+        const userAppModel:User = User.getInstance();
+        const users:mongoose.Model<any> = userAppModel.mongooseModel;
         const taxonomies:mongoose.Model<any> = Taxonomy.getInstance().mongooseModel;
         const media:mongoose.Model<any> = Media.getInstance().mongooseModel;
         //const equipment:mongoose.Model<any> = Equipment.getInstance().mongooseModel;
@@ -189,10 +206,12 @@ class OrganisationsController extends AbstractController {
         await media.populate(results, {path: "events.mainImage"});
         await media.populate(results, {path: "location.mainImage"});
         await media.populate(results, {path: "equipment.equipment.mainImage"});
+        await media.populate(results, {path: "creatorOfProjects.mainImage"});
+        await media.populate(results, {path: "creatorOfEvents.mainImage"});
+        await media.populate(results, {path: "projectsPartner.mainImage"});
 
-        await users.populate(results, {path: "meta.requestedBy", select: "name username avatar"});
-        await users.populate(results, {path: "meta.lastModifiedBy", select: "name username avatar"});
-
+        await users.populate(results, {path: "meta.requestedBy", select: userAppModel.publicFields()});
+        await users.populate(results, {path: "meta.lastModifiedBy", select: userAppModel.publicFields()});
 
         if (results.length > 0) {
             return SuccessResponse.create(

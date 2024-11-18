@@ -10,6 +10,7 @@ import UserHistory from "@src/UserHistory/Models/UserHistory";
 import {UserHistorySchema} from "@src/UserHistory/Schemas/UserHistorySchema";
 import {ControllerContract} from "./Contracts/ControllerContract";
 import ApiQuery from "@database/QueryBuilder/ApiQuery";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 /**
  * AbstractController
@@ -168,7 +169,7 @@ abstract class AbstractController implements ControllerContract {
     }
 
 
-    public async createUserHistory(req: any, res: any): Promise<boolean> {
+    public async createUserHistory(req: any, res: any): Promise<ApiResponseContract> {
         const userHistoryService: UsersHistoryService = UsersHistoryService.getInstance(UserHistory.getInstance());
         const response:any = res.serviceResponse;
         const action:string = res.serviceResponse.action;
@@ -198,7 +199,7 @@ abstract class AbstractController implements ControllerContract {
 
             //Media
             const media = response.media ?? {}
-
+            LogHelper.log("---- USER HISTORY ----", "FROM APP IP", fromAppIp, "FROM VISITOR IP", ipAddress, 'USER', user);
             const history: UserHistorySchema = {
                 "user": user,
                 "ipAddress": ipAddress,
@@ -210,12 +211,14 @@ abstract class AbstractController implements ControllerContract {
             } as UserHistorySchema;
 
             //Service call to add UserHistory
-            await userHistoryService.insert(history);
-            return true;
+            return await userHistoryService.insert(history);
         }
         catch(e:any)
         {
-            return e;
+            return ErrorResponse.create(
+                e,
+                StatusCodes.INTERNAL_SERVER_ERROR,
+                "Can't create the user history due to an error.");
         }
     }
 }

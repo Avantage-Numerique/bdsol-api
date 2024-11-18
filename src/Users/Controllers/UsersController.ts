@@ -1,10 +1,12 @@
-import mongoose from "mongoose";
 import {User} from "../Models/User";
 import {UsersService} from "../Services/UsersService";
 import AbstractController from "../../Abstract/Controller";
 import UsersHistoryService from "../../UserHistory/Services/UsersHistoryService";
 import UserHistory from "../../UserHistory/Models/UserHistory";
-import {UserHistorySchema} from "../../UserHistory/Schemas/UserHistorySchema";
+import {UserHistorySchema} from "@src/UserHistory/Schemas/UserHistorySchema";
+import {ApiResponseContract} from "@src/Http/Responses/ApiResponse";
+import {ErrorResponse} from "@src/Http/Responses/ErrorResponse";
+import {StatusCodes} from "http-status-codes";
 
 class UsersController extends AbstractController {
 
@@ -34,41 +36,58 @@ class UsersController extends AbstractController {
         return UsersController._instance;
     }
 
-    public async createUserHistory(req:any, res:any):Promise<boolean> {
-        const response = res.serviceResponse;
-        const action = res.action ?? "create";
-        const userHistoryService:UsersHistoryService = UsersHistoryService.getInstance(UserHistory.getInstance());
-        //User id
-        const user:mongoose.ObjectId = response.data._id
 
-        //IP Address
-        const ipAddress = req.visitor?.ip ?? req.ip;//req.ip is the app that made the request. We save that data into req.user.ip after.
+    public async createUserHistory(req: any, res: any): Promise<ApiResponseContract> {
+        const userHistoryService: UsersHistoryService = UsersHistoryService.getInstance(UserHistory.getInstance());
+        const response:any = res.serviceResponse;
+        const action:string = res.serviceResponse.action;
+        try {
+            //User id
+            const user: any = req.user?._id;
 
-        //Modification date
-        const modifDate = new Date();
 
-        //Modified entity id
-        //const modifiedEntity = response.data._id;
+            //IP Address
+            const ipAddress = req.visitor.ip;
+            const fromAppIp = req.ip;
 
-        //Action on the data
-        //action <---
+            //Modification date
+            const modifDate = new Date();
 
-        //Set modified fields
-        const fields = response.data;
-        
-        const history: UserHistorySchema = {
-            "user": user,
-            "ipAddress": ipAddress,
-            "modifDate": modifDate,
-            "action": action,
-            "entityCollection": "users",
-            "modifiedEntity": user,
-            "fields": this.entity.dataTransfertObject(fields),
-        } as UserHistorySchema;
+            //Affected database
+            const entityCollection = req.originalUrl.split("/")[1]; //split every '/' --> [ "" / "organisations" / "create" ]
 
-        //Service call to add UserHistory
-        await userHistoryService.insert(history);
-        return true;
+            //Modified entity id
+            const modifiedEntity = response.data?._id;
+
+            //Action on the data
+            //action <---
+
+            //Set modified fields
+            const fields = response.data;
+
+            //Media
+            const media = response.media ?? {}
+
+            const history: UserHistorySchema = {
+                "user": user,
+                "ipAddress": ipAddress,
+                "modifDate": modifDate,
+                "action": action,
+                "entityCollection": entityCollection,
+                "modifiedEntity": modifiedEntity,
+                "fields": this.entity.dataTransfertObject(fields),
+            } as UserHistorySchema;
+
+            //Service call to add UserHistory
+            return await userHistoryService.insert(history);
+        }
+        catch(e:any)
+        {
+            return ErrorResponse.create(
+                e,
+                StatusCodes.INTERNAL_SERVER_ERROR,
+                "Can't create the user history due to an error.");
+        }
     }
 }
 export {UsersController};

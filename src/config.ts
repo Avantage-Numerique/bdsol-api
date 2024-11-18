@@ -146,7 +146,7 @@ const getApiConfig = () => {
                 password: process.env.MAIL_PASSWORD ?? "usernamemailhog",
                 from: "notifications@avnu.ca",
                 replyTo: "bonjour@avnu.ca",
-                tls: process.env.MAIL_SECURE ?? false
+                tls: process.env.MAIL_SECURE === "true"
             }
         }
     }
