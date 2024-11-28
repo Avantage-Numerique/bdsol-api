@@ -54,9 +54,10 @@ class SearchRoutes extends AbstractRoute {
             this.routeSendResponse.bind(this)
         ]);
         //désactivé ?
-        this.routerInstance.get('/all', [
+        this.routerInstance.post('/all', [
             IntegerSanitizerAlias('data.limit'),
             IntegerSanitizerAlias('data.skip'),
+            IntegerSanitizerAlias('data.sort'),
             this.aggregateAllHandler.bind(this),
             this.routeSendResponse.bind(this)
         ]);
@@ -216,8 +217,9 @@ class SearchRoutes extends AbstractRoute {
     public async aggregateAllHandler(req:Request, res:Response, next: NextFunction):Promise<any> {
         const skip:number = req.body?.data?.skip ?? 0;
         const limit:number = req.body?.data?.limit ?? 16;
+        const sort:number = req.body?.data?.sort === "asc" ? 1 : -1;
 
-        const allEntityInOrder = await this.searchResults_instance.searchPaginate(skip, limit);
+        const allEntityInOrder = await this.searchResults_instance.searchPaginate(skip, limit, sort);
         const aggregationPaginated = allEntityInOrder[0].paginatedResults ?? null;
 
         console.log("aggregationPaginated", aggregationPaginated);

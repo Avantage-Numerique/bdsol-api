@@ -197,9 +197,10 @@ class SearchResults {
         return [];
     }
 
-    public async searchPaginate(skip:number = 2, limit:number = 20){
-        const targetSkip:number = skip ?? 2;
-        const targetLimit:number = limit ?? 20;
+    public async searchPaginate(skip:number = 2, limit:number = 20, sort:number = -1){
+        const targetSkip:number = skip;
+        const targetLimit:number = limit;
+        const targetSort:number = sort;
 
         const aggregationPipeline = [
             { $addFields: {
@@ -283,7 +284,7 @@ class SearchResults {
             {
                 $facet: {
                     paginatedResults: [
-                        { $sort: { updatedAt: -1 } },
+                        { $sort: { updatedAt: targetSort } },
                         { $skip: targetSkip },
                         { $limit: targetLimit }
                     ],
