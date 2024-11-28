@@ -10,7 +10,7 @@ import {EntityTypesEnum} from "@src/Entities/EntityTypes";
 import {IntegerSanitizerAlias} from "@src/Security/SanitizerAliases/IntegerSanitizerAlias";
 import {urlSanitizerAlias} from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
 import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
-import { urlSanitizerSearchAlias } from "@src/Security/SanitizerAliases/UrlSanitizerSearchAlias";
+import {urlSanitizerSearchAlias} from "@src/Security/SanitizerAliases/UrlSanitizerSearchAlias";
 
 class SearchRoutes extends AbstractRoute {
 
@@ -55,6 +55,8 @@ class SearchRoutes extends AbstractRoute {
         ]);
         //désactivé ?
         this.routerInstance.get('/all', [
+            IntegerSanitizerAlias('data.limit'),
+            IntegerSanitizerAlias('data.skip'),
             this.aggregateAllHandler.bind(this),
             this.routeSendResponse.bind(this)
         ]);
@@ -212,8 +214,33 @@ class SearchRoutes extends AbstractRoute {
     }
 
     public async aggregateAllHandler(req:Request, res:Response, next: NextFunction):Promise<any> {
-        const allEntityInOrder = await this.searchResults_instance.paginateTest();
-        res.serviceResponse = SuccessResponse.create(allEntityInOrder, StatusCodes.OK, ReasonPhrases.OK);
+        const skip:number = req.body?.data?.skip ?? 0;
+        const limit:number = req.body?.data?.limit ?? 16;
+
+        const allEntityInOrder = await this.searchResults_instance.searchPaginate(skip, limit);
+        const aggregationPaginated = allEntityInOrder[0].paginatedResults ?? null;
+
+        console.log("aggregationPaginated", aggregationPaginated);
+        let paginationMeta = {};
+
+        if (allEntityInOrder[0].meta) {
+            const total = allEntityInOrder[0].meta[0].count;//the aggregate return all the facet elements in array, so that,s why it's ugly like that.
+            paginationMeta = {
+                pagination : {
+                    count : total,
+                    skipped: skip,
+                    limit: limit,
+                    pageCount: Math.ceil(total / limit),
+                    currentPage: Math.ceil(skip / limit) + 1
+                }
+            };// meta override.
+        }
+
+        res.serviceResponse = SuccessResponse.create(aggregationPaginated, StatusCodes.OK, ReasonPhrases.OK);
+
+        res.serviceResponse.meta = paginationMeta;
+
+        console.log("return to the endpoint", res.serviceResponse);
         return next();
     }
 }

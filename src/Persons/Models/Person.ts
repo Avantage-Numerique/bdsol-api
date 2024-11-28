@@ -249,6 +249,10 @@ class Person extends AbstractModel {
         }
     }
 
+    public dataTransfertObjectAggregate():any {
+        return { updatedAt: 1, type: {$literal: "Person"}, lastName: 1, firstName: 1, slug: 1, nickname: 1, occupations: 1, mainImage: 1, catchphrase: 1, badges: 1, meta: 1 };
+    }
+
     public async documentation(): Promise<any> {
         return fs.readFileSync('/api/doc/Persons.md', 'utf-8');
     }
@@ -326,8 +330,6 @@ class Person extends AbstractModel {
             //populateUser(this, "occupations.occupation.subMeta.lastModifiedBy", User.getInstance().mongooseModel);
         });
         /*this.schema.pre('aggregate', function() {
-
-
         });*/
     }
 }

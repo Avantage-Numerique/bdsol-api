@@ -7,8 +7,8 @@ import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 import Event from "@src/Events/Models/Event";
 import Equipment from "@src/Equipment/Models/Equipment";
 import EntityControllerFactory from "@src/Abstract/EntityControllerFactory";
-import { ErrorResponse } from "@src/Http/Responses/ErrorResponse";
-import { StatusCodes } from "http-status-codes";
+import {ErrorResponse} from "@src/Http/Responses/ErrorResponse";
+import {StatusCodes} from "http-status-codes";
 
 
 class SearchResults {
@@ -197,17 +197,112 @@ class SearchResults {
         return [];
     }
 
-    public async paginateTest(){
-        const allDocsPaginated = await this.personModel.aggregate([
-            //{ $project: { updatedAt: 1, type: {$literal: "Person"} } },
-            { $unionWith: { coll: 'organisations' } },//, pipeline: [{ $project: { updatedAt: 1, type: {$literal: "Organisation"}}}]}},
-            { $unionWith: { coll: 'projects' } },//, pipeline: [{ $project: { updatedAt: 1, type: {$literal: "Project"}}}]}},
-            { $unionWith: { coll: 'events' } },//, pipeline: [{ $project: { updatedAt: 1, type: {$literal: "Event"}}}]}},
-            { $unionWith: { coll: 'equipment' } },//, pipeline: [{ $project: { updatedAt: 1, type: {$literal: "equipment"}}}]}},
-            { $sort: { updatedAt: -1 } },
-            //{ $skip: 2 },
-            //{ $limit: 20 }
-        ])
+    public async searchPaginate(skip:number = 2, limit:number = 20){
+        const targetSkip:number = skip ?? 2;
+        const targetLimit:number = limit ?? 20;
+
+        const aggregationPipeline = [
+            { $addFields: {
+                    type: 'Person',
+                    collection: 'people'
+                }},
+            { $unionWith: {
+                    coll: 'organisations',
+                    pipeline: [
+                        { $addFields: {
+                                type: 'Organisation',
+                                collection: 'organisations'
+                            }}
+                    ]
+                }},
+            { $unionWith: {
+                    coll: 'events',
+                    pipeline: [
+                        { $addFields: {
+                                type: 'Event',
+                                collection: 'events'
+                            }}
+                    ]
+                }},
+            { $unionWith: {
+                    coll: 'projects',
+                    pipeline: [
+                        { $addFields: {
+                                type: 'Project',
+                                collection: 'projects'
+                            }}
+                    ]
+                }},
+            { $unionWith: {
+                    coll: 'equipment',
+                    pipeline: [
+                        { $addFields: {
+                                type: 'Equipment',
+                                collection: 'equipment'
+                            }}
+                    ]
+                }},
+            {
+                $lookup: {
+                    from: 'media',
+                    localField: 'mainImage',
+                    foreignField: '_id',
+                    as: 'mainImageDetails'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$mainImageDetails',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            // Ajout d'un champ `type` à `mainImageDetails` si nécessaire
+            /*{
+                $addFields: {
+                    'mainImageDetails.type': 'Media'
+                }
+            },*/
+            // Fusion des détails dans `mainImage`
+            {
+                $set: {
+                    mainImage: {
+                        $cond: {
+                            if: { $ne: ['$mainImageDetails', null] },
+                            then: '$mainImageDetails',
+                            else: '$mainImage'
+                        }
+                    }
+                }
+            },
+            // Suppression du champ `mainImageDetails` si inutile
+            {
+                $project: {
+                    mainImageDetails: 0
+                }
+            },
+            {
+                $facet: {
+                    paginatedResults: [
+                        { $sort: { updatedAt: -1 } },
+                        { $skip: targetSkip },
+                        { $limit: targetLimit }
+                    ],
+                    meta: [
+                        { $count: 'count' }
+                    ]
+                }
+            }
+        ];
+
+        const allDocsPaginated = await this.personModel.aggregate(aggregationPipeline);
+
+        /*//needed for simple layout
+        $project: {
+                    updatedAt: 1, type: {$literal: "Person"}, lastName: 1, firstName: 1, slug: 1, nickname: 1, occupations: 1, catchphrase: 1, badges: 1, meta: 1,
+                   "mainImage.title": 1, "mainImage.alt": 1, "mainImage.url": 1,
+                }
+         */
+        console.log(allDocsPaginated);
         return allDocsPaginated;
     }
 
