@@ -303,7 +303,6 @@ class SearchResults {
                    "mainImage.title": 1, "mainImage.alt": 1, "mainImage.url": 1,
                 }
          */
-        console.log(allDocsPaginated);
         return allDocsPaginated;
     }
 

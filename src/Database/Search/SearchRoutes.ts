@@ -222,7 +222,6 @@ class SearchRoutes extends AbstractRoute {
         const allEntityInOrder = await this.searchResults_instance.searchPaginate(skip, limit, sort);
         const aggregationPaginated = allEntityInOrder[0].paginatedResults ?? null;
 
-        console.log("aggregationPaginated", aggregationPaginated);
         let paginationMeta = {};
 
         if (allEntityInOrder[0].meta) {
@@ -241,8 +240,6 @@ class SearchRoutes extends AbstractRoute {
         res.serviceResponse = SuccessResponse.create(aggregationPaginated, StatusCodes.OK, ReasonPhrases.OK);
 
         res.serviceResponse.meta = paginationMeta;
-
-        console.log("return to the endpoint", res.serviceResponse);
         return next();
     }
 }
