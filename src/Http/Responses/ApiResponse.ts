@@ -6,7 +6,7 @@ export interface ApiResponseContract {
     message:string;
     errors:any;
     data: any;
-    meta: any;
+    meta?: any;
 }
 
 export default class ApiResponse implements ApiResponseContract {
