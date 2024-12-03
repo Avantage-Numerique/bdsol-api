@@ -45,6 +45,7 @@ class SearchRoutes extends AbstractRoute {
         this.routerInstance.post('/type', [
             isInEnumSanitizerAlias('data.type', EntityTypesEnum),
             IntegerSanitizerAlias('data.skip'),
+            //IntegerSanitizerAlias('data.limit'),
             this.searchByTypeHandler.bind(this),
             this.routeSendResponse.bind(this)
         ]);
@@ -113,27 +114,45 @@ class SearchRoutes extends AbstractRoute {
     }
 
     public async searchByTypeHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
+        const apiQueryLimit = parseInt(process?.env?.QUERY_DEFAULT_LIMIT ?? "50");
         const type:string = req.body?.data?.type ?? "";
         const skip:number = req.body?.data?.skip ?? 0;
-        const limit:number = req.body?.data?.limit ?? 25;
+        const limit:number = 
+            parseInt(req.body?.data?.limit) > 0 &&
+            parseInt(req.body?.data?.limit) <= apiQueryLimit ? req.body.data.limit : apiQueryLimit;
         /* const categories = {
             domains : req.body?.data?.domains ?? "",
             technologies : req.body?.data?.technologies ?? "",
             skills : req.body?.data?.skills ?? ""
         } */
+        let count;
+        let realSkip;
         if(typeof type === 'string'){
-            res.serviceResponse = await this.searchResults_instance.searchByType(type, skip, limit)//, categories)
+            count = await this.searchResults_instance.countByType(type);
+            //If count > skip the page exist.
+            if(count?.data != undefined && count.data > skip - limit)
+                res.serviceResponse = await this.searchResults_instance.searchByType(type, skip, limit);
+            //else fetch last page, because skip number is too big to be fetched
+            else {
+                if(count.data % limit != 0)
+                    realSkip = count.data - (count.data % limit);
+                else
+                    realSkip = count.data - limit;
+
+                res.serviceResponse = await this.searchResults_instance.searchByType(type, realSkip, limit);
+            }
         }
 
-        const count = await this.searchResults_instance.countByType(type);
+        const pageCount = Math.ceil(count?.data / limit);
+        const currentPage = Math.ceil(skip / limit) + 1;
         res.serviceResponse.meta = {pagination :
             { 
                 count : count?.data,
-                skipped: skip,
+                skipped: realSkip ?? skip,
                 limit: limit,
                 type: type,
-                pageCount: Math.ceil(count?.data / limit),
-                currentPage: Math.ceil(skip / limit) + 1,
+                pageCount: pageCount,
+                currentPage: currentPage > pageCount ? pageCount : currentPage
             }
         }
         return next();
@@ -226,13 +245,15 @@ class SearchRoutes extends AbstractRoute {
 
         if (allEntityInOrder[0].meta) {
             const total = allEntityInOrder[0].meta[0].count;//the aggregate return all the facet elements in array, so that,s why it's ugly like that.
+            const pageCount = Math.ceil(total / limit);
+            const currentPage = Math.ceil(skip / limit) + 1;
             paginationMeta = {
                 pagination : {
                     count : total,
                     skipped: skip,
                     limit: limit,
-                    pageCount: Math.ceil(total / limit),
-                    currentPage: Math.ceil(skip / limit) + 1
+                    pageCount: pageCount,
+                    currentPage:  currentPage > pageCount ? pageCount : currentPage
                 }
             };// meta override.
         }
