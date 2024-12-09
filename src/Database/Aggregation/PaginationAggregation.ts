@@ -39,7 +39,7 @@ async function paginationAggregation(model:mongoose.Model<any>, aggregationPipel
         const modificatedParameters:any = {};
 
         //check if the skip is within the max documents of the query.
-        if (firstDocumentOnPageIndex >= totalDocuments && firstDocumentOnPageIndex >= 0) {
+        if (firstDocumentOnPageIndex >= totalDocuments && firstDocumentOnPageIndex > 0) {
             // Modify skip to push the last page.
             skip = maxPageNumber - 1;
             modificatedParameters.skip = maxPageNumber - 1

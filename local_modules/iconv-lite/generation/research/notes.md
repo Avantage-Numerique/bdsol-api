@@ -95,7 +95,7 @@ Encoding =
  2. Codec (med, manual)
  3. Data/Table (large, generated)
 
-/encodings/index.js - loads all needed files to fill iconv.encodings.
+/encodings/[[...entityFilter]].js - loads all needed files to fill iconv.encodings.
 /encodings/sbcs-codec.js, dbcs-codec.js - code to convert.
 /encodings/sbcs-data.js, .. - aliases/tables to use.
 /encodings/tables/cp950.json - (generally large) tables to be used with dbcs.

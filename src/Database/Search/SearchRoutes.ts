@@ -11,6 +11,7 @@ import {IntegerSanitizerAlias} from "@src/Security/SanitizerAliases/IntegerSanit
 import {urlSanitizerAlias} from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
 import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
 import {urlSanitizerSearchAlias} from "@src/Security/SanitizerAliases/UrlSanitizerSearchAlias";
+import {AggregationResultContract} from "@database/Aggregation/PaginationAggregation";
 
 class SearchRoutes extends AbstractRoute {
 
@@ -113,7 +114,6 @@ class SearchRoutes extends AbstractRoute {
     }
 
     public async searchByTypeHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
-        console.log("skip avant", req.body?.data?.skip)
         const apiQueryLimit = parseInt(process?.env?.QUERY_DEFAULT_LIMIT ?? "50");
         const type:string = req.body?.data?.type ?? "";
         const limit:number =
@@ -125,7 +125,7 @@ class SearchRoutes extends AbstractRoute {
         if(/[^0-9]/.test(req.body?.data?.skip)){
             skip = 100000000; //100 millions will be last page and not transformed to scientific notation
         }
-        console.log("skip après", skip)
+
         let count;
         let realSkip;
 
@@ -278,7 +278,7 @@ class SearchRoutes extends AbstractRoute {
         /*
         const allEntityInOrder:AggregationResultContract = await this.searchResults_instance.searchPaginate(skip, limit, sort);
 
-        let paginationMeta = {};
+        let paginationMeta:{pagination:any} = {pagination:null};
 
         if (allEntityInOrder.meta) {
             const total = allEntityInOrder.meta.count;//the aggregate return all the facet elements in array, so that,s why it's ugly like that.
