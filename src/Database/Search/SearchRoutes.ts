@@ -45,7 +45,7 @@ class SearchRoutes extends AbstractRoute {
         this.routerInstance.post('/type', [
             isInEnumSanitizerAlias('data.type', EntityTypesEnum),
             IntegerSanitizerAlias('data.skip'),
-            //IntegerSanitizerAlias('data.limit'),
+            IntegerSanitizerAlias('data.limit'),
             this.searchByTypeHandler.bind(this),
             this.routeSendResponse.bind(this)
         ]);
@@ -116,17 +116,13 @@ class SearchRoutes extends AbstractRoute {
     public async searchByTypeHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
         const apiQueryLimit = parseInt(process?.env?.QUERY_DEFAULT_LIMIT ?? "50");
         const type:string = req.body?.data?.type ?? "";
-        const skip:number = req.body?.data?.skip ?? 0;
+        const skip:number = parseInt(req.body?.data?.skip) >= 0 ? req.body.data.skip : 0;
         const limit:number = 
             parseInt(req.body?.data?.limit) > 0 &&
             parseInt(req.body?.data?.limit) <= apiQueryLimit ? req.body.data.limit : apiQueryLimit;
-        /* const categories = {
-            domains : req.body?.data?.domains ?? "",
-            technologies : req.body?.data?.technologies ?? "",
-            skills : req.body?.data?.skills ?? ""
-        } */
         let count;
         let realSkip;
+        
         if(typeof type === 'string'){
             count = await this.searchResults_instance.countByType(type);
             //If count > skip the page exist.
@@ -238,19 +234,27 @@ class SearchRoutes extends AbstractRoute {
         const limit:number = req.body?.data?.limit ?? 16;
         const sort:number = req.body?.data?.sort === "asc" ? 1 : -1;
 
-        const allEntityInOrder = await this.searchResults_instance.searchPaginate(skip, limit, sort);
-        const aggregationPaginated = allEntityInOrder[0].paginatedResults ?? null;
+        let allEntityInOrder = await this.searchResults_instance.searchPaginate(skip, limit, sort);
+        let aggregationPaginated = allEntityInOrder[0].paginatedResults ?? null;
 
         let paginationMeta = {};
 
-        if (allEntityInOrder[0].meta) {
+        if (allEntityInOrder[0].meta){
             const total = allEntityInOrder[0].meta[0].count;//the aggregate return all the facet elements in array, so that,s why it's ugly like that.
             const pageCount = Math.ceil(total / limit);
+            
+            //If skipped the last page, refetch with last page results. (non-optimal the refetch of whole database)
+            let newSkip = skip;
+            if(allEntityInOrder[0].meta[0].count <= skip){
+                newSkip = (pageCount - 1) * limit;
+                allEntityInOrder = await this.searchResults_instance.searchPaginate(newSkip, limit, sort);
+                aggregationPaginated = allEntityInOrder[0].paginatedResults ?? null;
+            }
             const currentPage = Math.ceil(skip / limit) + 1;
             paginationMeta = {
                 pagination : {
                     count : total,
-                    skipped: skip,
+                    skipped: skip != newSkip ? newSkip : skip,
                     limit: limit,
                     pageCount: pageCount,
                     currentPage:  currentPage > pageCount ? pageCount : currentPage
