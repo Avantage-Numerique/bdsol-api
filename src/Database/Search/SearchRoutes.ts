@@ -44,7 +44,7 @@ class SearchRoutes extends AbstractRoute {
         ]);
         this.routerInstance.post('/type', [
             isInEnumSanitizerAlias('data.type', EntityTypesEnum),
-            IntegerSanitizerAlias('data.skip'),
+            //IntegerSanitizerAlias('data.skip'), Removed because scientific notation break the sanitizer (parseInt)
             IntegerSanitizerAlias('data.limit'),
             this.searchByTypeHandler.bind(this),
             this.routeSendResponse.bind(this)
@@ -54,10 +54,9 @@ class SearchRoutes extends AbstractRoute {
             this.fullSearchHandler.bind(this),
             this.routeSendResponse.bind(this)
         ]);
-        //désactivé ?
         this.routerInstance.post('/all', [
             IntegerSanitizerAlias('data.limit'),
-            IntegerSanitizerAlias('data.skip'),
+            //IntegerSanitizerAlias('data.skip'), Removed because scientific notation break the sanitizer (parseInt)
             IntegerSanitizerAlias('data.sort'),
             this.aggregateAllHandler.bind(this),
             this.routeSendResponse.bind(this)
@@ -114,12 +113,19 @@ class SearchRoutes extends AbstractRoute {
     }
 
     public async searchByTypeHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
+        console.log("skip avant", req.body?.data?.skip)
         const apiQueryLimit = parseInt(process?.env?.QUERY_DEFAULT_LIMIT ?? "50");
         const type:string = req.body?.data?.type ?? "";
-        const skip:number = parseInt(req.body?.data?.skip) >= 0 ? req.body.data.skip : 0;
         const limit:number = 
             parseInt(req.body?.data?.limit) > 0 &&
             parseInt(req.body?.data?.limit) <= apiQueryLimit ? req.body.data.limit : apiQueryLimit;
+        let skip:number= parseInt(req.body?.data?.skip) >= 0 ? req.body.data.skip : 0;
+
+        //Added to dismiss scientific notation (e.g. 2e+53)
+        if(/[^0-9]/.test(req.body?.data?.skip)){
+            skip = 100000000; //100 millions will be last page and not transformed to scientific notation
+        }
+        console.log("skip après", skip)
         let count;
         let realSkip;
         
@@ -230,9 +236,14 @@ class SearchRoutes extends AbstractRoute {
     }
 
     public async aggregateAllHandler(req:Request, res:Response, next: NextFunction):Promise<any> {
-        const skip:number = req.body?.data?.skip ?? 0;
+        let skip:number= parseInt(req.body?.data?.skip) >= 0 ? req.body.data.skip : 0;
         const limit:number = req.body?.data?.limit ?? 16;
         const sort:number = req.body?.data?.sort === "asc" ? 1 : -1;
+
+        //Added to dismiss scientific notation (e.g. 2e+53)
+        if(/[^0-9]/.test(req.body.data.skip)){
+            skip = 100000000; //100 millions will be last page and not transformed to scientific notation
+        }
 
         let allEntityInOrder = await this.searchResults_instance.searchPaginate(skip, limit, sort);
         let aggregationPaginated = allEntityInOrder[0].paginatedResults ?? null;
@@ -254,7 +265,7 @@ class SearchRoutes extends AbstractRoute {
             paginationMeta = {
                 pagination : {
                     count : total,
-                    skipped: skip != newSkip ? newSkip : skip,
+                    skipped: newSkip,
                     limit: limit,
                     pageCount: pageCount,
                     currentPage:  currentPage > pageCount ? pageCount : currentPage
