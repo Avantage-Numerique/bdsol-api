@@ -68,8 +68,6 @@ async function paginationAggregation(model:mongoose.Model<any>, aggregationPipel
         // Execute aggregation
         const results = await model.aggregate(paginatedPipeline);
 
-        console.log("results[0].paginatedResults.length", results[0].paginatedResults.length, "expectedPageLength", nextPageLength, "results", results, "meta", results[0].meta);
-
         // Verify result length matches expected
         if (results[0].paginatedResults.length > nextPageLength && results[0].paginatedResults.length === 0) {
             throw new Error('Pagination result count does not match expected length');
