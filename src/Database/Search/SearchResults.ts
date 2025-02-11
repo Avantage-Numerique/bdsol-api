@@ -23,6 +23,8 @@ class SearchResults {
     public eventModel:any;
     public equipmentModel:any;
 
+    public configs:any;
+
     //Singleton
     public static _instance : SearchResults;
     public static getInstance(): SearchResults {
@@ -35,6 +37,7 @@ class SearchResults {
             SearchResults._instance.projectModel = Project.getInstance().mongooseModel;
             SearchResults._instance.eventModel = Event.getInstance().mongooseModel;
             SearchResults._instance.equipmentModel = Equipment.getInstance().mongooseModel;
+            SearchResults._instance.configs = getApiConfig();
         }
         return SearchResults._instance;
     }
@@ -199,7 +202,7 @@ class SearchResults {
         return [];
     }
 
-    public async searchPaginate(skip:number = 2, limit:number = 20, sort:number = -1) {
+    public async searchPaginate(skip:number = 0, limit:number = this.configs.pagination.pageLimitDefault, sort:number = this.configs.pagination.sortDirectionDefault) {
         const targetSkip:number = skip;
         const targetLimit:number = limit;
         const targetSort:number = sort;

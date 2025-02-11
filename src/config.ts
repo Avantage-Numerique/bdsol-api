@@ -21,7 +21,7 @@ const getApiConfig = () => {
 
         appName: process.env.APP_NAME || "API",
         port: process.env.PORT || "8001",
-        version: process.env.VERSION || "0.0.8.default",
+        version: process.env.VERSION || "1.0.2.default",
         serverPath: process.env.SERVER_PATH || path.join(__dirname, ".."),
         appPath: process.env.APP_PATH || path.join(__dirname, ".."),
         basepath: process.env.BASEPATH || path.join(__dirname, ".."),
@@ -30,6 +30,11 @@ const getApiConfig = () => {
 
         tokenSecret: process.env.JWT_KEY || "not set yet",
         tokenSecureSecret: process.env.SECURE_JWT_KEY || "not set securely :P",
+
+        pagination: {
+            pageLimitDefault: 20,
+            sortDirectionDefault: -1,
+        },
 
         cors: {
             allowedOrigins: process.env.CORS_ALLOWED_ORIGINS ? process.env.CORS_ALLOWED_ORIGINS.split(' ') : [
