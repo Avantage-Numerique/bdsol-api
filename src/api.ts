@@ -32,6 +32,7 @@ import {MonitoringRoutes} from "@src/Monitoring/Routes/MonitoringRoutes";
 import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 import {BackukDbJob} from "@src/Schedule/Jobs/BackupDb";
 import {PagesRoutes} from "@src/Pages/Routes/PagesRoutes";
+import SlowDownMiddleware from "@src/Server/Middlewares/SlowDownMiddleware";
 
 /**
  * Main class for the API
@@ -49,6 +50,9 @@ export default class Api {
 
     public scheduler:JobScheduler;
     private _config:any;
+
+    private _slowDown:boolean = true;
+
     constructor() {
     }
 
@@ -86,6 +90,9 @@ export default class Api {
 
         // parse application/json
         this.express.use(express.json());
+        if (this._config.environnement === 'development' && this._slowDown) {
+            this.express.use(SlowDownMiddleware());
+        }
 
         this.templateBasePath = `${this._config.appPath}/views`;
         //Templates and rendering
