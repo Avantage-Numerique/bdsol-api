@@ -9,6 +9,8 @@ import Equipment from "@src/Equipment/Models/Equipment";
 import EntityControllerFactory from "@src/Abstract/EntityControllerFactory";
 import {ErrorResponse} from "@src/Http/Responses/ErrorResponse";
 import {StatusCodes} from "http-status-codes";
+import {getApiConfig} from "@src/config";
+import {paginationAggregation} from "@database/Aggregation/PaginationAggregation";
 
 
 class SearchResults {
@@ -197,7 +199,7 @@ class SearchResults {
         return [];
     }
 
-    public async searchPaginate(skip:number = 2, limit:number = 20, sort:number = -1){
+    public async searchPaginate(skip:number = 2, limit:number = 20, sort:number = -1) {
         const targetSkip:number = skip;
         const targetLimit:number = limit;
         const targetSort:number = sort;
@@ -280,7 +282,9 @@ class SearchResults {
                 $project: {
                     mainImageDetails: 0
                 }
-            },
+            }
+        ];
+        /*
             {
                 $facet: {
                     paginatedResults: [
@@ -293,9 +297,14 @@ class SearchResults {
                     ]
                 }
             }
-        ];
-
-        const allDocsPaginated = await this.personModel.aggregate(aggregationPipeline);
+        */
+        let allDocsPaginated;
+        if (getApiConfig().environnement === "development") {
+            allDocsPaginated = await paginationAggregation(this.personModel, aggregationPipeline, targetSkip, targetLimit, targetSort);
+            //allDocsPaginated = await this.personModel.aggregate(aggregationPipeline).explain();
+        } else {
+            allDocsPaginated = await paginationAggregation(this.personModel, aggregationPipeline, targetSkip, targetLimit, targetSort);
+        }
 
         /*//needed for simple layout
         $project: {

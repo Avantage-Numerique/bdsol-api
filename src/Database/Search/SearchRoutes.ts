@@ -116,7 +116,7 @@ class SearchRoutes extends AbstractRoute {
         console.log("skip avant", req.body?.data?.skip)
         const apiQueryLimit = parseInt(process?.env?.QUERY_DEFAULT_LIMIT ?? "50");
         const type:string = req.body?.data?.type ?? "";
-        const limit:number = 
+        const limit:number =
             parseInt(req.body?.data?.limit) > 0 &&
             parseInt(req.body?.data?.limit) <= apiQueryLimit ? req.body.data.limit : apiQueryLimit;
         let skip:number= parseInt(req.body?.data?.skip) >= 0 ? req.body.data.skip : 0;
@@ -128,7 +128,7 @@ class SearchRoutes extends AbstractRoute {
         console.log("skip après", skip)
         let count;
         let realSkip;
-        
+
         if(typeof type === 'string'){
             count = await this.searchResults_instance.countByType(type);
             //If count > skip the page exist.
@@ -246,20 +246,20 @@ class SearchRoutes extends AbstractRoute {
         }
 
         let allEntityInOrder = await this.searchResults_instance.searchPaginate(skip, limit, sort);
-        let aggregationPaginated = allEntityInOrder[0].paginatedResults ?? null;
+        let aggregationPaginated = allEntityInOrder.results ?? null;
 
         let paginationMeta = {};
 
-        if (allEntityInOrder[0].meta){
-            const total = allEntityInOrder[0].meta[0].count;//the aggregate return all the facet elements in array, so that,s why it's ugly like that.
+        if (allEntityInOrder.meta){
+            const total = allEntityInOrder.meta.count;//the aggregate return all the facet elements in array, so that,s why it's ugly like that.
             const pageCount = Math.ceil(total / limit);
-            
+
             //If skipped the last page, refetch with last page results. (non-optimal the refetch of whole database)
             let newSkip = skip;
-            if(allEntityInOrder[0].meta[0].count <= skip){
+            if(allEntityInOrder.meta.count <= skip){
                 newSkip = (pageCount - 1) * limit;
                 allEntityInOrder = await this.searchResults_instance.searchPaginate(newSkip, limit, sort);
-                aggregationPaginated = allEntityInOrder[0].paginatedResults ?? null;
+                aggregationPaginated = allEntityInOrder.results ?? null;
             }
             const currentPage = Math.ceil(skip / limit) + 1;
             paginationMeta = {
@@ -272,10 +272,31 @@ class SearchRoutes extends AbstractRoute {
                 }
             };// meta override.
         }
-
         res.serviceResponse = SuccessResponse.create(aggregationPaginated, StatusCodes.OK, ReasonPhrases.OK);
-
         res.serviceResponse.meta = paginationMeta;
+
+        /*
+        const allEntityInOrder:AggregationResultContract = await this.searchResults_instance.searchPaginate(skip, limit, sort);
+
+        let paginationMeta = {};
+
+        if (allEntityInOrder.meta) {
+            const total = allEntityInOrder.meta.count;//the aggregate return all the facet elements in array, so that,s why it's ugly like that.
+            const modifiedSkip = allEntityInOrder.modificatedParameters.skip ?? skip;
+            paginationMeta = {
+                pagination : {
+                    count : total,
+                    skipped: modifiedSkip,//if the searchPaginate modified the page skip, it return a value there.
+                    limit: limit,
+                    pageCount: Math.ceil(total / limit),
+                    currentPage: Math.ceil(modifiedSkip / limit) + 1
+                }
+            };
+        }
+
+        res.serviceResponse = SuccessResponse.create(allEntityInOrder, StatusCodes.OK, ReasonPhrases.OK);
+        res.serviceResponse.meta = paginationMeta;*/
+
         return next();
     }
 }
