@@ -11,6 +11,7 @@ import {SkillGroup} from "@src/Taxonomy/Schemas/SkillGroupSchema";
 import {ContactPoint} from "@src/Database/Schemas/ContactPointSchema";
 import {SocialHandle} from "@src/Database/Schemas/SocialHandleSchema";
 import BadgeTypes from "@src/Badges/BadgeTypes";
+import { middlewareInsertBadges } from "@src/Badges/MiddlewareInsertBadges";
 
 class Person extends AbstractModel {
 
@@ -269,11 +270,10 @@ class Person extends AbstractModel {
       */
     public registerPreEvents() {
         if (this.schema !== undefined) {
-
-            /* VOIR DOCUMENTATION TECHNIQUE, FONCTIONNALITÉ API, VALIDATION.MD */
-
             //Pre save, verification for occupation
-            /* this.schema.pre('save', async function (next: any): Promise<any> {
+            this.schema.pre('save', async function (next: any): Promise<any> {
+                /* VOIR DOCUMENTATION TECHNIQUE, FONCTIONNALITÉ API, VALIDATION.MD */
+                /*
                 //Verify that occupations in the array exists and that there are no duplicates
                 const idList = this.occupations.map( (el:any) => {
                     return el.skills.map( (id:any) =>{
@@ -281,17 +281,17 @@ class Person extends AbstractModel {
                     })
                 });
                 await middlewareTaxonomy(idList, TaxonomyController, "occupations.skills");
-
+                */
                 //Check and insert badges (this == document)
                 middlewareInsertBadges(this);
 
                 return next();
-            }); */
+            });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
-            /* this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
+            this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
                 const updatedDocument:any = this.getUpdate();
-                if (updatedDocument["occupations"] != undefined){
+                /*if (updatedDocument["occupations"] != undefined){
                     const idList = updatedDocument.occupations.map( (el:any) => {
                         return el.skills.map( (id:any) =>{
                             return new mongoose.Types.ObjectId(id);
@@ -299,10 +299,11 @@ class Person extends AbstractModel {
                     });
                     await middlewareTaxonomy(idList, TaxonomyController, "occupations.skills");
                 }
+                */
                 //Check and insert badges
                 middlewareInsertBadges(updatedDocument);
                 return next();
-            }); */
+            });
         }
     }
 
