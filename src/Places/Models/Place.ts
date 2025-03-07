@@ -6,6 +6,7 @@ import PlacesService from "@src/Places/Services/PlacesService";
 import {middlewarePopulateProperty} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import {Meta} from "@src/Moderation/Schemas/MetaSchema";
 import {populateUser} from "@src/Users/Middlewares/populateUser";
+import { Location } from "@src/Database/Schemas/LocationSchema";
 
 class Place extends AbstractModel {
 
@@ -77,6 +78,15 @@ class Place extends AbstractModel {
             description: {
                 type: String
             },
+            smallDescription: {
+                type: String
+            },
+            rooms: {
+                type: [Object]
+            },
+            placeType: {
+                type: String
+            },
             slug: {
                 type: String,
                 slug: "name",
@@ -88,41 +98,17 @@ class Place extends AbstractModel {
                 type: mongoose.Types.ObjectId,
                 ref : "Media"
             },
-            address: {
-                type: String
+            location: {
+                type: Location.schema
             },
-            city: {
-                type: String
-            },
-            region: {
-                type: String
-            },
-            mrc: {
-                type: String
-            },
-            province: {
-                type: String
-            },
-            postalCode: {
-                type: String
-            },
-            country: {
-                type: String
-            },
-            latitude: {
-                type: String
-            },
-            longitude: {
-                type: String
-            },
-            meta:{
+            meta: {
                 type: Meta.schema
             }
         },
-            {
-                toJSON: {virtuals: true},
-                timestamps: true,
-            });
+        {
+            toJSON: {virtuals: true},
+            timestamps: true,
+        });
 
     /** @abstract Used to return attributes and rules for each field of this entity. */
     public fieldInfo: any = [];
@@ -132,10 +118,10 @@ class Place extends AbstractModel {
 
     /**
      * @get the field that are searchable.
-     * @return {Object} the field slug/names.
+     * @return {Array} the field slug/names.
      */
     get searchSearchableFields(): object {
-        return ["name","description","address","region","mrc","province","country","postalCode"];
+        return ["name","description","location"];
     }
 
     /**
@@ -151,20 +137,11 @@ class Place extends AbstractModel {
             description: document.description ?? '',
             slug: document.slug ?? '',
             mainImage: document.mainImage ?? '',
-            address: document.address ?? '',
-            city: document.city ?? '',
-            region: document.region ?? '',
-            mrc: document.mrc ?? '',
-            province: document.province ?? '',
-            postalCode: document.postalCode ?? '',
-            country: document.country ?? '',
-            latitude: document.latitude ?? '',
-            longitude: document.longitude ?? '',
+            location: document.location ?? {},
             meta: document.meta ?? '',
             type: document.type ?? '',
             createdAt: document.createdAt ?? '',
             updatedAt: document.updatedAt ?? ''
-
         }
     }
 

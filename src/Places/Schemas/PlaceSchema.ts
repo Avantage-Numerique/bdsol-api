@@ -1,3 +1,4 @@
+import { Location } from "@src/Database/Schemas/LocationSchema";
 import {Meta} from "@src/Moderation/Schemas/MetaSchema";
 import {ObjectId} from "mongodb";
 import {Document} from "mongoose";
@@ -5,16 +6,11 @@ import {Document} from "mongoose";
 export interface PlaceSchema extends Document {
     name:string,
     description:string,
+    smallDescription:string,
+    rooms:[object],
+    placeType: string,
     slug:string,
     mainImage:ObjectId,
-    address:string,
-    city:string,
-    region:string,
-    mrc:string,
-    province:string,
-    postalCode:string,
-    country:string,
-    latitude:string,
-    longitude:string,
+    location: Location,
     meta:Meta
 }
