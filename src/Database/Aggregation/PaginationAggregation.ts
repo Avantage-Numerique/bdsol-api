@@ -27,23 +27,24 @@ async function paginationAggregation(model:mongoose.Model<any>, aggregationPipel
         const totalDocuments = countResult ? countResult.totalDocuments : 0;
 
 
-        console.log("paginationAggregation", "count", countResult, "total", totalDocuments, "skip", skip, "pageSize", limit, "sort", sort);
 
         if (totalDocuments === 0) return countResult;//no result
 
-        const maxPageNumber = Math.floor(totalDocuments / limit);
+        const maxPageNumber = Math.round(totalDocuments / limit);//removed floor because we need the last part.
 
         // Calculate expected page length
-        const firstDocumentOnPageIndex = skip * limit;
-        const nextPageLength = Math.min(limit, totalDocuments - firstDocumentOnPageIndex);
+        const firstDocumentOnPageIndex = Number(skip) * Number(limit);
+        const nextPageLength = Math.min(limit, totalDocuments - skip);
         const modificatedParameters:any = {};
 
+        console.log("paginationAggregation", "count", countResult, "total", totalDocuments, "skip", skip, "pageSize", limit, "sort", sort, "nextPageLength", nextPageLength, "firstDocumentOnPageIndex", firstDocumentOnPageIndex);
+
         //check if the skip is within the max documents of the query.
-        if (firstDocumentOnPageIndex >= totalDocuments && firstDocumentOnPageIndex > 0) {
+        /*if (firstDocumentOnPageIndex >= totalDocuments && firstDocumentOnPageIndex > 0) {
             // Modify skip to push the last page.
             skip = maxPageNumber - 1;
             modificatedParameters.skip = maxPageNumber - 1
-        }
+        }*/
 
         console.log("paginationAggregation AFTER skip change.", "firstDocumentOnPageIndex", firstDocumentOnPageIndex, "total", totalDocuments, "skip", skip, "limit", limit, "sort", sort);
 

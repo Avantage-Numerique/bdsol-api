@@ -244,6 +244,7 @@ class SearchRoutes extends AbstractRoute {
         if(/[^0-9]/.test(req.body.data.skip)){
             skip = 100000000; //100 millions will be last page and not transformed to scientific notation
         }
+        console.log("Route", "skip", skip, "limit", limit, "sort", sort);
 
         let allEntityInOrder = await this.searchResults_instance.searchPaginate(skip, limit, sort);
         let aggregationPaginated = allEntityInOrder.results ?? null;
