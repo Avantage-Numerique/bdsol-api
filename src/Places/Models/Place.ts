@@ -101,6 +101,9 @@ class Place extends AbstractModel {
             location: {
                 type: Location.schema
             },
+            nomatimObject:{
+                type: Object
+            },
             meta: {
                 type: Meta.schema
             }
@@ -138,6 +141,10 @@ class Place extends AbstractModel {
             slug: document.slug ?? '',
             mainImage: document.mainImage ?? '',
             location: document.location ?? {},
+            smallDescription: document.smallDescription ?? '',
+            rooms: document.rooms ?? [],
+            placeType: document.placeType ?? '',
+            nomatimObject: document.nomatimObject ?? {},
             meta: document.meta ?? '',
             type: document.type ?? '',
             createdAt: document.createdAt ?? '',

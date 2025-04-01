@@ -12,5 +12,6 @@ export interface PlaceSchema extends Document {
     slug:string,
     mainImage:ObjectId,
     location: Location,
+    nomatimObject: object,
     meta:Meta
 }
