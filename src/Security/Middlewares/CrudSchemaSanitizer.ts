@@ -13,7 +13,7 @@ import {NextFunction, Request, Response} from "express";
 //2. preset the parser of the schema with the entity's schema
 //3. Build a dictionnary for pairing Entity's schema and Express-validation sanitizers.
 //4. allow chaining of the sanitization there to be able to the the right functions to sanitized the property correctly.
-//5. trace this work in log
+//5. trace this work in logs
 
 
 

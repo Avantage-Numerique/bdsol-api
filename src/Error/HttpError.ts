@@ -20,10 +20,10 @@ export default class HttpError extends Error {
     }
 
     /**
-     * @static @method NotAcceptable log erreur $message et retourne une réponse d'erreur
+     * @static @method NotAcceptable logs erreur $message et retourne une réponse d'erreur
      * Paramètres :
      * @param {string} message - erreur à mettre dans les logs @default ""
-     * @param {boolean} log - Si on log l'erreur @default true
+     * @param {boolean} log - Si on logs l'erreur @default true
      * @returns {ApiResponseContract}
      */
     static NotAcceptable(message: string = "", log=true): ApiResponseContract
@@ -41,7 +41,7 @@ export default class HttpError extends Error {
 
 
     /**
-     * @static @method NotImplemented log erreur $message et retourne une réponse d'erreur (ServiceResponse).
+     * @static @method NotImplemented logs erreur $message et retourne une réponse d'erreur (ServiceResponse).
      *
      * Paramètres :
      *      @param {string} message - erreur à mettre dans les logs @default ""

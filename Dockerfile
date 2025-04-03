@@ -1,4 +1,5 @@
 FROM node:16-alpine as apibuild
+#move to node:22-alpine?
 
 # Install python3 into the deps of the container. For the argon bug : 2022-05-30 : Error: Error loading shared library /api/node_modules/argon2/lib/binding/napi-v3/argon2.node: Exec format error
 RUN apk update \

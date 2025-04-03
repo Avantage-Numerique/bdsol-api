@@ -3,7 +3,7 @@ import {getApiConfig} from "@src/config";
 import LogStorage from "@src/Storage/Files/LogStorage";
 /**
  * Entry point for loggin activity into the API
- * This is a version 0, with basic console.log thing.
+ * This is a version 0, with basic console.logs thing.
  */
 
 /*
@@ -138,7 +138,7 @@ export default class LogHelper
     }
 
     /**
-     *  @method createVerbose applique des styles aux logs, les affiche et les inscrit dans un fichier log.
+     *  @method createVerbose applique des styles aux logs, les affiche et les inscrit dans un fichier logs.
      *  @desc Explains syntax
      *  @see {@link https://simplernerd.com/js-console-colors/}
      *  @desc Explains supported specifier that converts "%" to types (string/json...)
@@ -171,7 +171,7 @@ export default class LogHelper
 
             fs.open(`${path}/${fileName}-${fileNameSuffix}.${ext}`, 'a', function(err, fd){
                 if (err)
-                    console.log("Can't log into file", err)
+                    console.log("Can't logs into file", err)
                 else {
                     fs.write(fd, verbose + data + "\n", (err) => {
                         if (err)

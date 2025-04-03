@@ -4,7 +4,7 @@ import {getDurationInMilliseconds} from "@src/Helpers/DateTime";
 import LogHelper from "../Helpers/LogHelper";
 
 /**
- * Static, The RequestDuration anonymous function middleware log performance duration of the call.
+ * Static, The RequestDuration anonymous function middleware logs performance duration of the call.
  */
 export class RequestDuration {
 

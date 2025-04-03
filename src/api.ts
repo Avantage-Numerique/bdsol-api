@@ -241,7 +241,7 @@ export default class Api {
 
         //this.mainRouter.use("/", RegistrationRouter);this is now manage by the AuthentificationController. But It should be a create in the User domain. @todo find a better design for this.
 
-        //main log and feedback from the API
+        //main logs and feedback from the API
         this.mainRouter.use("/", ApiRouter);
 
         //Tools the manage the health of the API

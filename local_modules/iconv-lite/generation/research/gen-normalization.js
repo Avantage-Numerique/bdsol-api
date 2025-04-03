@@ -26,7 +26,7 @@ async.parallel({
                 canonical = false;
                 decomp.shift();
             }
-            //console.log(String.fromCharCode(ch), " -> ", decomp.map(function(c) { return String.fromCharCode(c)}).join(" + "), canonical ? "canonical" : "compat");
+            //console.logs(String.fromCharCode(ch), " -> ", decomp.map(function(c) { return String.fromCharCode(c)}).join(" + "), canonical ? "canonical" : "compat");
         }
 
         if (decomp || combiningClass) {
@@ -48,7 +48,7 @@ async.parallel({
     for (var ch in features) {
         var feat = features[ch];
         if (feat.canonical && (feat.decomp.length == 1 || feat.combiningClass || (features[feat.decomp[0]] || {}).combiningClass)) {
-            //console.log("Excluded:", (+ch).toString(16));
+            //console.logs("Excluded:", (+ch).toString(16));
             feat.noCompose = true;
         }
     }
@@ -91,7 +91,7 @@ async.parallel({
             var arr = decompose(ch, can);
             for (var i = 0; i < arr.length-1; i++)
                 if (f(arr[i]).combiningClass > f(arr[i+1]).combiningClass)
-                    console.log("Err", (+ch).toString(16), can, arr.map(function(ch) {return hex(ch)+"/"+f(ch).combiningClass;}));
+                    console.logs("Err", (+ch).toString(16), can, arr.map(function(ch) {return hex(ch)+"/"+f(ch).combiningClass;}));
 
 
         });
@@ -117,15 +117,15 @@ async.parallel({
     //             var feat = f(charCode);
     //             if (feat.decomp && feat.canonical && feat.decomp.length == 2) {
     //                 if (!existChars[feat.decomp[0]])
-    //                     console.log("!!", encName, hex(enc.chars.charCodeAt(i)), "->", feat.decomp.map(hex));    
+    //                     console.logs("!!", encName, hex(enc.chars.charCodeAt(i)), "->", feat.decomp.map(hex));
     //                 if (f(feat.decomp[0]).combiningClass != 0 || f(feat.decomp[1]).combiningClass == 0)
-    //                     console.log("!!2", encName, hex(enc.chars.charCodeAt(i)), "->", feat.decomp.map(hex));    
+    //                     console.logs("!!2", encName, hex(enc.chars.charCodeAt(i)), "->", feat.decomp.map(hex));
     //             }
 
     //             var decomp = decompose(charCode, true);
     //             if (decomp.length > 2) {
 
-    //                 console.log("!!3", encName, hex(enc.chars.charCodeAt(i)), "->", decomp.map(hex));
+    //                 console.logs("!!3", encName, hex(enc.chars.charCodeAt(i)), "->", decomp.map(hex));
 
     //             }
     //         }

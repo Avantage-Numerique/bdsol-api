@@ -67,7 +67,7 @@ class JobScheduler {
      * A `success` event when a job invocation triggered by a schedule returns successfully or returns a resolved Promise. In any case, the success event receives the value returned by the callback or in case of a promise, the resolved value.
      */
     private _registerEvents() {
-        //console.log("Job scheduler  :  register events");
+        //console.logs("Job scheduler  :  register events");
 
     }
 
