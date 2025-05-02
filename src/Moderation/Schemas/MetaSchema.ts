@@ -15,7 +15,8 @@ export interface MetaSchema extends Document {
     requestedBy: mongoose.ObjectId;
     lastModifiedBy: mongoose.ObjectId;
     message: string;
-    statistics: Number;
+    statistics: number;
+    provenance: Array<object>;
 }
 
 export class Meta {
@@ -41,7 +42,11 @@ export class Meta {
         },
         statistics: {
             count: Number
+        },
+        provenance: {
+            type: [Object]
         }
+
     }, { _id : false });
 }
 
