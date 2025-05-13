@@ -3,7 +3,7 @@ import AbstractModel from "@core/Model";
 import type {DbProvider} from "@database/DatabaseDomain";
 import {PlaceSchema} from "@src/Places/Schemas/PlaceSchema";
 import PlacesService from "@src/Places/Services/PlacesService";
-import {middlewarePopulateProperty} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import {Meta} from "@src/Moderation/Schemas/MetaSchema";
 import {populateUser} from "@src/Users/Middlewares/populateUser";
 import { Location } from "@src/Database/Schemas/LocationSchema";
@@ -78,14 +78,15 @@ class Place extends AbstractModel {
             description: {
                 type: String
             },
-            smallDescription: {
+            shortDescription: {
                 type: String
             },
             rooms: {
                 type: [Object]
             },
             placeType: {
-                type: String
+                type: [mongoose.Types.ObjectId],
+                ref: "Taxonomy"
             },
             slug: {
                 type: String,
@@ -141,9 +142,9 @@ class Place extends AbstractModel {
             slug: document.slug ?? '',
             mainImage: document.mainImage ?? '',
             location: document.location ?? {},
-            smallDescription: document.smallDescription ?? '',
+            shortDescription: document.shortDescription ?? '',
             rooms: document.rooms ?? [],
-            placeType: document.placeType ?? '',
+            placeType: document.placeType ?? [],
             nomatimObject: document.nomatimObject ?? {},
             meta: document.meta ?? '',
             type: document.type ?? '',
@@ -162,6 +163,7 @@ class Place extends AbstractModel {
     public registerEvents(): void {
         this.schema.pre('find', function() {
             middlewarePopulateProperty(this, "mainImage");
+            taxonomyPopulate(this, 'placeType');
 
             populateUser(this, "meta.requestedBy");
             populateUser(this, "meta.lastModifiedBy");
@@ -169,6 +171,7 @@ class Place extends AbstractModel {
 
         this.schema.pre('findOne', function() {
             middlewarePopulateProperty(this, 'mainImage');
+            taxonomyPopulate(this, 'placeType');
 
             populateUser(this, "meta.requestedBy");
             populateUser(this, "meta.lastModifiedBy");

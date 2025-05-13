@@ -133,22 +133,6 @@ export const PlaceTypePersistantData = [
     },
     {
         "category" : TaxonomiesCategoriesEnum.PlaceTypes,
-        "name" : "theatre venue",
-        "description": "",
-        "meta": {
-            "state": MetaStates.accepted,
-            "lastModifiedBy": apiDefaultUserId,
-            "provenance": [{
-                    "label": "theatre venue",
-                    "source": "wikidata",
-                    "id": "Q2310313",
-                    "url": "https://www.wikidata.org/wiki/Q2310313",
-                    "retrievedAt": "2025-05-02T10:00:00Z",
-            }],
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.PlaceTypes,
         "name" : "théâtre flottant",
         "description": "Bateau aménagé en théâtre",
         "meta": {
@@ -357,8 +341,8 @@ export const PlaceTypePersistantData = [
     },
     {
         "category" : TaxonomiesCategoriesEnum.PlaceTypes,
-        "name" : "dance venue",
-        "description": "lieu de danse",
+        "name" : "lieu de danse",
+        "description": "",
         "meta": {
             "state": MetaStates.accepted,
             "lastModifiedBy": apiDefaultUserId,
@@ -469,7 +453,7 @@ export const PlaceTypePersistantData = [
     },
     {
         "category" : TaxonomiesCategoriesEnum.PlaceTypes,
-        "name" : "music club",
+        "name" : "Club de musique",
         "description": "",
         "meta": {
             "state": MetaStates.accepted,
@@ -789,22 +773,6 @@ export const PlaceTypePersistantData = [
     },
     {
         "category" : TaxonomiesCategoriesEnum.PlaceTypes,
-        "name" : "indoor arena",
-        "description": "",
-        "meta": {
-            "state": MetaStates.accepted,
-            "lastModifiedBy": apiDefaultUserId,
-            "provenance": [{
-                    "label": "indoor arena",
-                    "source": "wikidata",
-                    "id": "Q27951514",
-                    "url": "https://www.wikidata.org/wiki/Q27951514",
-                    "retrievedAt": "2025-05-02T10:00:00Z",
-            }],
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.PlaceTypes,
         "name" : "salle de spectacles polyvalente",
         "description": "salle des arts du spectacle pouvant servir à plusieurs arts de la scène",
         "meta": {
@@ -853,7 +821,7 @@ export const PlaceTypePersistantData = [
     },
     {
         "category" : TaxonomiesCategoriesEnum.PlaceTypes,
-        "name" : "lieu d’exposition",
+        "name" : "lieu d'exposition",
         "description": "lieu où des œuvres artistiques sont présentées",
         "meta": {
             "state": MetaStates.accepted,
@@ -883,39 +851,6 @@ export const PlaceTypePersistantData = [
             }],
         }
     },
-    {
-        "category" : TaxonomiesCategoriesEnum.PlaceTypes,
-        "name" : "galerie d'art",
-        "description": "",
-        "meta": {
-            "state": MetaStates.accepted,
-            "lastModifiedBy": apiDefaultUserId,
-            "provenance": [{
-                    "label": "kunsthalle",
-                    "source": "wikidata",
-                    "id": "Q1475403",
-                    "url": "https://www.wikidata.org/wiki/Q1475403",
-                    "retrievedAt": "2025-05-02T10:00:00Z",
-            }],
-        }
-    },
-    {
-        "category" : TaxonomiesCategoriesEnum.PlaceTypes,
-        "name" : "artist-run centre",
-        "description": "",
-        "meta": {
-            "state": MetaStates.accepted,
-            "lastModifiedBy": apiDefaultUserId,
-            "provenance": [{
-                    "label": "artist-run centre",
-                    "source": "wikidata",
-                    "id": "Q4801243",
-                    "url": "https://www.wikidata.org/wiki/Q4801243",
-                    "retrievedAt": "2025-05-02T10:00:00Z",
-            }],
-        }
-    },
-
 ];
 
 

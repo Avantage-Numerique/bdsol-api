@@ -9,6 +9,7 @@ import Equipment from "@src/Equipment/Models/Equipment";
 import EntityControllerFactory from "@src/Abstract/EntityControllerFactory";
 import { ErrorResponse } from "@src/Http/Responses/ErrorResponse";
 import { StatusCodes } from "http-status-codes";
+import Place from "@src/Places/Models/Place";
 
 
 class SearchResults {
@@ -20,6 +21,7 @@ class SearchResults {
     public projectModel:any;
     public eventModel:any;
     public equipmentModel:any;
+    public placeModel:any;
 
     //Singleton
     public static _instance : SearchResults;
@@ -33,6 +35,7 @@ class SearchResults {
             SearchResults._instance.projectModel = Project.getInstance().mongooseModel;
             SearchResults._instance.eventModel = Event.getInstance().mongooseModel;
             SearchResults._instance.equipmentModel = Equipment.getInstance().mongooseModel;
+            SearchResults._instance.placeModel = Place.getInstance().mongooseModel;
         }
         return SearchResults._instance;
     }
@@ -187,9 +190,18 @@ class SearchResults {
                     }
                 )
             )
+
             promises.push(
                 await this.equipmentModel.find(
                     { equipmentType: paramId }
+                )
+            )
+
+            promises.push(
+                await this.placeModel.find(
+                    {
+                        "placeType": paramId
+                    }
                 )
             )
 
