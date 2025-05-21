@@ -7,6 +7,7 @@ import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middle
 import {Meta} from "@src/Moderation/Schemas/MetaSchema";
 import {populateUser} from "@src/Users/Middlewares/populateUser";
 import { Location } from "@src/Database/Schemas/LocationSchema";
+import { Room } from "../Schemas/RoomSchema";
 
 class Place extends AbstractModel {
 
@@ -82,7 +83,7 @@ class Place extends AbstractModel {
                 type: String
             },
             rooms: {
-                type: [Object]
+                type: [Room.schema]
             },
             placeType: {
                 type: [mongoose.Types.ObjectId],
