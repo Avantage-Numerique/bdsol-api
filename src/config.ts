@@ -16,6 +16,8 @@ const getApiConfig = () => {
         isStaging: process.env.ENVIRONNEMENT === 'staging',
         isDevelopment: process.env.ENVIRONNEMENT === 'development',
 
+        debugSlowConnection: process.env.DEBUG_SLOW_CONNECTION || false,
+
         // Dev configuration.
         mongooseDebug: process.env.ENVIRONNEMENT === 'development' && process.env.MONGOOSE_DEBUG === 'true' ,
 

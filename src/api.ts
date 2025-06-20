@@ -51,7 +51,7 @@ export default class Api {
     public scheduler:JobScheduler;
     private _config:any;
 
-    private _slowDown:boolean = true;
+    private _slowDown:boolean;
 
     constructor() {
     }
@@ -65,9 +65,13 @@ export default class Api {
         this._initScheduler();
     }
 
+    /**
+     * Called before starting the API on the Server controler.
+     */
     public configure() {
         LogHelper.info("initiating api configuration.");
         this._config = getApiConfig();
+        this._slowDown = this._config.debugSlowConnection;
         this.express.set("port", this._config.port);
     }
 
