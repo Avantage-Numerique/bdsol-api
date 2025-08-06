@@ -8,6 +8,35 @@ interface AggregationResultContract {
 }
 
 /**
+ * Safe walling of the last page if the request page / skip > than the total size of the aggregate.
+ * @param requestedPage
+ * @param limit
+ * @param totalDocuments
+ */
+function safeSkip(requestedPage: number, limit: number, totalDocuments: number): number {
+    // Ensure minimum values
+    const page = Math.max(1, Math.floor(requestedPage));
+    const pageSize = Math.max(1, Math.floor(limit));
+
+    // Calculate total pages
+    const totalPages = Math.ceil(totalDocuments / pageSize);
+
+    // If no documents, return 0
+    if (totalDocuments <= 0) {
+        return 0;
+    }
+
+    // Clamp the page to valid range (1 to totalPages)
+    const safePage = Math.min(page, totalPages);
+
+    // Calculate skip (page is 1-indexed)
+    const skip = (safePage - 1) * pageSize;
+
+    return (safePage - 1) * pageSize;
+}
+
+
+/**
  * Prevent over pagination aggregation by checking if the search have the total pages asked for.
  * It does force default value of page size. This must be walled upstream.
  * @param model {mongoose.Model<any>}
@@ -27,17 +56,19 @@ async function paginationAggregation(model:mongoose.Model<any>, aggregationPipel
         const totalDocuments = countResult ? countResult.totalDocuments : 0;
 
 
-
         if (totalDocuments === 0) return countResult;//no result
 
-        const maxPageNumber = Math.round(totalDocuments / limit);//removed floor because we need the last part.
-
+        const maxPageNumber = Math.ceil(totalDocuments / limit);//removed floor because we need the last part.
+        const currentPage = Math.floor(skip / limit);
         // Calculate expected page length
-        const firstDocumentOnPageIndex = Number(skip) * Number(limit);
-        const nextPageLength = Math.min(limit, totalDocuments - skip);
+        const lastPageSkipNumber = totalDocuments - (totalDocuments - skip);//weird, mais c'est ce que je pense qui est ok.
+        const firstDocumentOnPageIndex = Number(currentPage) * Number(limit);
+        const nextPageLength = Math.min(limit, totalDocuments - firstDocumentOnPageIndex);//check if the current skip is in the last page, and adjust to it.
         const modificatedParameters:any = {};
 
-        console.log("paginationAggregation", "count", countResult, "total", totalDocuments, "skip", skip, "pageSize", limit, "sort", sort, "nextPageLength", nextPageLength, "firstDocumentOnPageIndex", firstDocumentOnPageIndex);
+        const nextSkip = safeSkip(currentPage+1, limit, totalDocuments);//Math.min(firstDocumentOnPageIndex, lastPageSkipNumber);
+
+        console.log("paginationAggregation", "count", countResult, "total", totalDocuments, "currentPage (start at 0)", currentPage, "maxPageNumber", maxPageNumber, "skip", skip, "nextSkip", nextSkip, "pageSize", limit, "sort", sort, "nextPageLength", nextPageLength, "firstDocumentOnPageIndex", firstDocumentOnPageIndex);
 
         //check if the skip is within the max documents of the query.
         /*if (firstDocumentOnPageIndex >= totalDocuments && firstDocumentOnPageIndex > 0) {
@@ -54,7 +85,7 @@ async function paginationAggregation(model:mongoose.Model<any>, aggregationPipel
                 $facet: {
                     paginatedResults: [
                         { $sort: { updatedAt: sort } },
-                        { $skip: skip },
+                        { $skip: nextSkip },
                         { $limit: limit }
                     ],
                     meta: [
