@@ -8,30 +8,23 @@ interface AggregationResultContract {
 }
 
 /**
- * Safe walling of the last page if the request page / skip > than the total size of the aggregate.
- * @param requestedPage
- * @param limit
- * @param totalDocuments
+ * Safe wall-ing of the last page if the request page / skip > than the total size of the aggregate.
+ * @param requestedPage {number} the target page requested by
+ * @param limit {number} the current limit from what we are checking the max skip.
+ * @param totalDocuments {number} total length of the current query.
  */
 function safeSkip(requestedPage: number, limit: number, totalDocuments: number): number {
-    // Ensure minimum values
+
     const page = Math.max(1, Math.floor(requestedPage));
     const pageSize = Math.max(1, Math.floor(limit));
-
-    // Calculate total pages
     const totalPages = Math.ceil(totalDocuments / pageSize);
 
-    // If no documents, return 0
     if (totalDocuments <= 0) {
         return 0;
     }
 
     // Clamp the page to valid range (1 to totalPages)
     const safePage = Math.min(page, totalPages);
-
-    // Calculate skip (page is 1-indexed)
-    const skip = (safePage - 1) * pageSize;
-
     return (safePage - 1) * pageSize;
 }
 
