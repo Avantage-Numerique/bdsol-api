@@ -3,7 +3,7 @@ import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 import EmailNotification from "@src/Notifications/EmailNotification";
 import {StatusCodes} from "http-status-codes";
 import {EmailConfirmationContent} from "@src/Templates/Contents/EmailConfirmationContent";
-import config from "@src/config";
+import config, {getApiConfig} from "@src/config";
 import PublicTemplate from "@src/Templates/PublicTemplate";
 import {getTemplateBaseData} from "@src/Templates/Emails/EmailData";
 import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
@@ -13,11 +13,13 @@ const ApiRouter = express.Router();
 
 // Would this print the doc or not ?
 ApiRouter.get("/", async (req, res) => {
+    const updatedConfig = getApiConfig();
     const baseData = getTemplateBaseData();
-    const index = new PublicTemplate();//tempalte have already a default in the EmailContent.Prepare.
-    const title:string = `${config.appName} (version ${config.version})`;
-    let body:string = config.environnement === 'development' ? `écoute sur le port: ${config.port}<br />` : '';
-    body += baseData.api.description;
+    const index = new PublicTemplate();//template have already a default in the EmailContent.Prepare.
+    const title:string = `${updatedConfig.appName} (version ${updatedConfig.version})`;
+    let body:string = updatedConfig.environnement === 'development' ? `<p>écoute sur le port: ${updatedConfig.port}<br /></p>` : '';
+    body += `<p>${baseData.api.description}</p>`;
+    body += updatedConfig.environnement === 'development' ? `<p>Slow Down Middleware est <strong>${updatedConfig.debugSlowConnection ? 'activé' : 'désactivé'}</strong> et ralenti avec ${updatedConfig.debugSlowDuration}ms</p>` : "";
     res.set('Content-Type', 'text/html');
     LogHelper.info("Rendering index", baseData);
     return res.status(StatusCodes.OK).send(await index.render({
@@ -29,7 +31,7 @@ ApiRouter.get("/", async (req, res) => {
             meta: {
                 title: `${title}`,
                 description: `${body}`,
-                author: `${config.appName}`
+                author: `${updatedConfig.appName}`
             }
         }
     }));
@@ -47,7 +49,7 @@ ApiRouter.get('/quarante-deux',async (req, res) => {
     const baseData = getTemplateBaseData();
     const index42 = new PublicTemplate("quarante-deux");//tempalte have already a default in the EmailContent.Prepare.
     const title:string = `The Answer to the Ultimate Question of Life, the Universe, and Everything`;
-    let body:string = '';
+    const body:string = '';
     res.set('Content-Type', 'text/html');
     return res.status(StatusCodes.OK).send(await index42.render({
         context: {
@@ -81,44 +83,47 @@ ApiRouter.get('/42',async (req, res) => {
 });
 
 ApiRouter.get("/embed-taxonomies-metas", async (req, res) => {
-    res.send(`Embeding taxonomies metas`);
+    res.send(`Manually embeding taxonomies metas`);
     await EmbedTaxonomiesMetas();
 });
 
-ApiRouter.get("/test-email", async (req, res) => {
-    const testNotification:EmailNotification = new EmailNotification(
-        {
-            recipient:"marcandre.martin@gmail.com",
-            subject: "Mam, Confirmez ce courriel pour votre compte sur avnu.ca"
-        },
-        EmailConfirmationContent("mam", "http://localhost:8000/verify-account/ef2254979c0f073a1f75bf03a404fa3b2547cb9bc858c54f06f5571a68a892156602c101370f08ef6d0cd15c3004663dbee15fdb052107da5e5bc30cf16ce4a133c250cda6f1478e25c7614326706af37d5fbec12f545040621cdfdd548d32c984116652d1aab97f7f6a734c19c125f2d610e1528d8529822c1a73912e53e389")
-    );
-    //testNotification.send();
-    res.set('Content-Type', 'text/html');
-    return res.status(StatusCodes.OK).send(await testNotification.preview());
-});
+if (config.environnement === 'development') {
+    ApiRouter.get("/test-email", async (req, res) => {
+        const testNotification:EmailNotification = new EmailNotification(
+            {
+                recipient:"marcandre.martin@gmail.com",
+                subject: "Mam, Confirmez ce courriel pour votre compte sur avnu.ca"
+            },
+            EmailConfirmationContent("mam", "http://localhost:8000/verify-account/ef2254979c0f073a1f75bf03a404fa3b2547cb9bc858c54f06f5571a68a892156602c101370f08ef6d0cd15c3004663dbee15fdb052107da5e5bc30cf16ce4a133c250cda6f1478e25c7614326706af37d5fbec12f545040621cdfdd548d32c984116652d1aab97f7f6a734c19c125f2d610e1528d8529822c1a73912e53e389")
+        );
+        //testNotification.send();
+        res.set('Content-Type', 'text/html');
+        return res.status(StatusCodes.OK).send(await testNotification.preview());
+    });
 
-ApiRouter.get("/sync-db", async (req, res) => {
+    ApiRouter.get("/sync-db", async (req, res) => {
 
-    const index = new PublicTemplate("default");//tempalte have already a default in the EmailContent.Prepare.
-    const title:string = `Syncing db`;
-    let body:string = 'Sync prod into staging data only.';
+        const index = new PublicTemplate("default");//tempalte have already a default in the EmailContent.Prepare.
+        const title:string = `Syncing db`;
+        let body:string = 'Sync prod into staging data only.';
 
-    res.set('Content-Type', 'text/html');
-    const baseData = getTemplateBaseData();
-    return res.status(StatusCodes.OK).send(await index.render({
-        context: {
-            ...baseData,//basic app and api default string and links
-            ...DefaultEmailTheme,//basic theme for colors and sizes.
-            title: `${title}`,
-            body: `${body}`,
-            meta: {
+        res.set('Content-Type', 'text/html');
+        const baseData = getTemplateBaseData();
+        return res.status(StatusCodes.OK).send(await index.render({
+            context: {
+                ...baseData,//basic app and api default string and links
+                ...DefaultEmailTheme,//basic theme for colors and sizes.
                 title: `${title}`,
-                description: `${body}`,
-                author: `${config.appName}`
+                body: `${body}`,
+                meta: {
+                    title: `${title}`,
+                    description: `${body}`,
+                    author: `${config.appName}`
+                }
             }
-        }
-    }));
-});
+        }));
+    });
+}
+
 
 export {ApiRouter};
