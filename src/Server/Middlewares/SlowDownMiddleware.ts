@@ -46,32 +46,3 @@ const SlowDownMiddleware = (options = {} as SlowDownOptions ) => {
 
 export default SlowDownMiddleware;
 export {SlowDownOptions};
-
-// Usage example:
-/*
-const express = require('express');
-const slowDown = require('./slowDown');
-
-const app = express();
-
-// Basic usage - adds 1 second delay to all requests
-app.use(slowDown());
-
-// Advanced usage with options
-app.use(slowDown({
-  delay: 2000,
-  verbose: true,
-  shouldDelay: (req) => {
-    // Only delay API requests
-    return req.path.startsWith('/api');
-  }
-}));
-
-// Can also be applied to specific routes
-app.get('/api/slow-endpoint',
-  slowDown({ delay: 3000 }),
-  (req, res) => {
-    res.json({ message: 'This response was delayed' });
-  }
-);
-*/
