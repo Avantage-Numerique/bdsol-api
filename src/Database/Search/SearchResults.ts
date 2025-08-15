@@ -7,8 +7,10 @@ import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 import Event from "@src/Events/Models/Event";
 import Equipment from "@src/Equipment/Models/Equipment";
 import EntityControllerFactory from "@src/Abstract/EntityControllerFactory";
-import { ErrorResponse } from "@src/Http/Responses/ErrorResponse";
-import { StatusCodes } from "http-status-codes";
+import {ErrorResponse} from "@src/Http/Responses/ErrorResponse";
+import {StatusCodes} from "http-status-codes";
+import {getApiConfig} from "@src/config";
+import {paginationAggregation} from "@database/Aggregation/PaginationAggregation";
 
 
 class SearchResults {
@@ -20,6 +22,8 @@ class SearchResults {
     public projectModel:any;
     public eventModel:any;
     public equipmentModel:any;
+
+    public configs:any;
 
     //Singleton
     public static _instance : SearchResults;
@@ -33,6 +37,7 @@ class SearchResults {
             SearchResults._instance.projectModel = Project.getInstance().mongooseModel;
             SearchResults._instance.eventModel = Event.getInstance().mongooseModel;
             SearchResults._instance.equipmentModel = Equipment.getInstance().mongooseModel;
+            SearchResults._instance.configs = getApiConfig();
         }
         return SearchResults._instance;
     }
@@ -52,26 +57,21 @@ class SearchResults {
         return homePageEntity;
     }
 
-    public async searchByTypeAndCategory(type:string, skip:number){//, categories:any){
+    public async searchByType(type:string, skip:number, limit:number){//, categories:any){
         const controller = EntityControllerFactory.getControllerFromEntity(type);
         if(controller !== undefined){
-            const result = await controller.list({skip:skip})
-                /* {
-                    $or: [
-                        //Domains
-                        {"domains.domain" : categories.domains},
-                        //Occupations
-                        {"occupations.skills" : categories.skills},
-                        {"occupations.skills" : categories.technologies},
-                        //Offers
-                        {"offers.skills" : categories.skills},
-                        {"offers.skills" : categories.technologies},
-                        //project/event skills
-                        {"skills" : categories.skills},
-                        {"skills" : categories.technologies},
-                    ]}) */
-                    //{skip: skip ?? 0});
+            const result = await controller.list({skip:skip, limit:limit, sort:"desc"})
             return result;
+        }
+        return ErrorResponse.create(new Error("Type doesn't exist"), StatusCodes.BAD_REQUEST, "Type doesn't exist");
+    }
+
+    //For pagination, acts as a 
+    public async countByType(type:string){
+        const controller = EntityControllerFactory.getControllerFromEntity(type);
+        if(controller !== undefined){
+            const count = await controller.count({});
+            return count;
         }
         return ErrorResponse.create(new Error("Type doesn't exist"), StatusCodes.BAD_REQUEST, "Type doesn't exist");
     }
@@ -202,6 +202,121 @@ class SearchResults {
         return [];
     }
 
+    public async searchPaginate(skip:number = 0, limit:number = this.configs.pagination.pageLimitDefault, sort:number = this.configs.pagination.sortDirectionDefault) {
+        const targetSkip:number = skip;
+        const targetLimit:number = limit;
+        const targetSort:number = sort;
+
+        const aggregationPipeline = [
+            { $addFields: {
+                    type: 'Person',
+                    collection: 'people'
+                }},
+            { $unionWith: {
+                    coll: 'organisations',
+                    pipeline: [
+                        { $addFields: {
+                                type: 'Organisation',
+                                collection: 'organisations'
+                            }}
+                    ]
+                }},
+            { $unionWith: {
+                    coll: 'events',
+                    pipeline: [
+                        { $addFields: {
+                                type: 'Event',
+                                collection: 'events'
+                            }}
+                    ]
+                }},
+            { $unionWith: {
+                    coll: 'projects',
+                    pipeline: [
+                        { $addFields: {
+                                type: 'Project',
+                                collection: 'projects'
+                            }}
+                    ]
+                }},
+            { $unionWith: {
+                    coll: 'equipment',
+                    pipeline: [
+                        { $addFields: {
+                                type: 'Equipment',
+                                collection: 'equipment'
+                            }}
+                    ]
+                }},
+            {
+                $lookup: {
+                    from: 'media',
+                    localField: 'mainImage',
+                    foreignField: '_id',
+                    as: 'mainImageDetails'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$mainImageDetails',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            // Ajout d'un champ `type` à `mainImageDetails` si nécessaire
+            /*{
+                $addFields: {
+                    'mainImageDetails.type': 'Media'
+                }
+            },*/
+            // Fusion des détails dans `mainImage`
+            {
+                $set: {
+                    mainImage: {
+                        $cond: {
+                            if: { $ne: ['$mainImageDetails', null] },
+                            then: '$mainImageDetails',
+                            else: '$mainImage'
+                        }
+                    }
+                }
+            },
+            // Suppression du champ `mainImageDetails` si inutile
+            {
+                $project: {
+                    mainImageDetails: 0
+                }
+            }
+        ];
+        /*
+            {
+                $facet: {
+                    paginatedResults: [
+                        { $sort: { updatedAt: targetSort } },
+                        { $skip: targetSkip },
+                        { $limit: targetLimit }
+                    ],
+                    meta: [
+                        { $count: 'count' }
+                    ]
+                }
+            }
+        */
+        let allDocsPaginated;
+        if (getApiConfig().environnement === "development") {
+            allDocsPaginated = await paginationAggregation(this.personModel, aggregationPipeline, targetSkip, targetLimit, targetSort);
+            //allDocsPaginated = await this.personModel.aggregate(aggregationPipeline).explain();
+        } else {
+            allDocsPaginated = await paginationAggregation(this.personModel, aggregationPipeline, targetSkip, targetLimit, targetSort);
+        }
+
+        /*//needed for simple layout
+        $project: {
+                    updatedAt: 1, type: {$literal: "Person"}, lastName: 1, firstName: 1, slug: 1, nickname: 1, occupations: 1, catchphrase: 1, badges: 1, meta: 1,
+                   "mainImage.title": 1, "mainImage.alt": 1, "mainImage.url": 1,
+                }
+         */
+        return allDocsPaginated;
+    }
 
     private async _embedEntitiesCountInTaxonomy(document:any, results:Array<any>) {
         try {
@@ -216,6 +331,7 @@ class SearchResults {
             throw new Error(e);
         }
     }
+    
 }
 
 export default SearchResults;

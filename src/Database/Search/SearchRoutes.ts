@@ -10,7 +10,8 @@ import {EntityTypesEnum} from "@src/Entities/EntityTypes";
 import {IntegerSanitizerAlias} from "@src/Security/SanitizerAliases/IntegerSanitizerAlias";
 import {urlSanitizerAlias} from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
 import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
-import { urlSanitizerSearchAlias } from "@src/Security/SanitizerAliases/UrlSanitizerSearchAlias";
+import {urlSanitizerSearchAlias} from "@src/Security/SanitizerAliases/UrlSanitizerSearchAlias";
+import {AggregationResultContract} from "@database/Aggregation/PaginationAggregation";
 
 class SearchRoutes extends AbstractRoute {
 
@@ -44,8 +45,9 @@ class SearchRoutes extends AbstractRoute {
         ]);
         this.routerInstance.post('/type', [
             isInEnumSanitizerAlias('data.type', EntityTypesEnum),
-            IntegerSanitizerAlias('data.skip'),
-            this.searchByTypeAndCategoryHandler.bind(this),
+            //IntegerSanitizerAlias('data.skip'), Removed because scientific notation break the sanitizer (parseInt)
+            IntegerSanitizerAlias('data.limit'),
+            this.searchByTypeHandler.bind(this),
             this.routeSendResponse.bind(this)
         ]);
         this.routerInstance.get('/', [
@@ -53,8 +55,10 @@ class SearchRoutes extends AbstractRoute {
             this.fullSearchHandler.bind(this),
             this.routeSendResponse.bind(this)
         ]);
-        //désactivé ?
-        this.routerInstance.get('/all', [
+        this.routerInstance.post('/all', [
+            IntegerSanitizerAlias('data.limit'),
+            //IntegerSanitizerAlias('data.skip'), Removed because scientific notation break the sanitizer (parseInt)
+            IntegerSanitizerAlias('data.sort'),
             this.aggregateAllHandler.bind(this),
             this.routeSendResponse.bind(this)
         ]);
@@ -109,16 +113,49 @@ class SearchRoutes extends AbstractRoute {
         return next();
     }
 
-    public async searchByTypeAndCategoryHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
+    public async searchByTypeHandler(req:Request, res: Response, next: NextFunction): Promise<any> {
+        const apiQueryLimit = parseInt(process?.env?.QUERY_DEFAULT_LIMIT ?? "50");
         const type:string = req.body?.data?.type ?? "";
-        const skip:number = req.body?.data?.skip ?? 0;
-        /* const categories = {
-            domains : req.body?.data?.domains ?? "",
-            technologies : req.body?.data?.technologies ?? "",
-            skills : req.body?.data?.skills ?? ""
-        } */
+        const limit:number =
+            parseInt(req.body?.data?.limit) > 0 &&
+            parseInt(req.body?.data?.limit) <= apiQueryLimit ? req.body.data.limit : apiQueryLimit;
+        let skip:number= parseInt(req.body?.data?.skip) >= 0 ? req.body.data.skip : 0;
+
+        //Added to dismiss scientific notation (e.g. 2e+53)
+        if(/[^0-9]/.test(req.body?.data?.skip)){
+            skip = 100000000; //100 millions will be last page and not transformed to scientific notation
+        }
+
+        let count;
+        let realSkip;
+
         if(typeof type === 'string'){
-            res.serviceResponse = await this.searchResults_instance.searchByTypeAndCategory(type, skip)//, categories)
+            count = await this.searchResults_instance.countByType(type);
+            //If count > skip the page exist.
+            if(count?.data != undefined && count.data > skip - limit)
+                res.serviceResponse = await this.searchResults_instance.searchByType(type, skip, limit);
+            //else fetch last page, because skip number is too big to be fetched
+            else {
+                if(count.data % limit != 0)
+                    realSkip = count.data - (count.data % limit);
+                else
+                    realSkip = count.data - limit;
+
+                res.serviceResponse = await this.searchResults_instance.searchByType(type, realSkip, limit);
+            }
+        }
+
+        const pageCount = Math.ceil(count?.data / limit);
+        const currentPage = Math.ceil(skip / limit) + 1;
+        res.serviceResponse.meta = {pagination :
+            { 
+                count : count?.data,
+                skipped: realSkip ?? skip,
+                limit: limit,
+                type: type,
+                pageCount: pageCount,
+                currentPage: currentPage > pageCount ? pageCount : currentPage
+            }
         }
         return next();
     }
@@ -199,6 +236,68 @@ class SearchRoutes extends AbstractRoute {
     }
 
     public async aggregateAllHandler(req:Request, res:Response, next: NextFunction):Promise<any> {
+        let skip:number= parseInt(req.body?.data?.skip) >= 0 ? req.body.data.skip : 0;
+        const limit:number = req.body?.data?.limit ?? 16;
+        const sort:number = req.body?.data?.sort === "asc" ? 1 : -1;
+
+        //Added to dismiss scientific notation (e.g. 2e+53)
+        if(/[^0-9]/.test(req.body.data.skip)){
+            skip = 100000000; //100 millions will be last page and not transformed to scientific notation
+        }
+        console.log("Route", "skip", skip, "limit", limit, "sort", sort);
+
+        let allEntityInOrder = await this.searchResults_instance.searchPaginate(skip, limit, sort);
+        let aggregationPaginated = allEntityInOrder.results ?? null;
+
+        let paginationMeta = {};
+
+        if (allEntityInOrder.meta){
+            const total = allEntityInOrder.meta.count;//the aggregate return all the facet elements in array, so that,s why it's ugly like that.
+            const pageCount = Math.ceil(total / limit);
+
+            //If skipped the last page, refetch with last page results. (non-optimal the refetch of whole database)
+            let newSkip = skip;
+            if(allEntityInOrder.meta.count <= skip){
+                newSkip = (pageCount - 1) * limit;
+                allEntityInOrder = await this.searchResults_instance.searchPaginate(newSkip, limit, sort);
+                aggregationPaginated = allEntityInOrder.results ?? null;
+            }
+            const currentPage = Math.ceil(skip / limit) + 1;
+            paginationMeta = {
+                pagination : {
+                    count : total,
+                    skipped: newSkip,
+                    limit: limit,
+                    pageCount: pageCount,
+                    currentPage:  currentPage > pageCount ? pageCount : currentPage
+                }
+            };// meta override.
+        }
+        res.serviceResponse = SuccessResponse.create(aggregationPaginated, StatusCodes.OK, ReasonPhrases.OK);
+        res.serviceResponse.meta = paginationMeta;
+
+        /*
+        const allEntityInOrder:AggregationResultContract = await this.searchResults_instance.searchPaginate(skip, limit, sort);
+
+        let paginationMeta:{pagination:any} = {pagination:null};
+
+        if (allEntityInOrder.meta) {
+            const total = allEntityInOrder.meta.count;//the aggregate return all the facet elements in array, so that,s why it's ugly like that.
+            const modifiedSkip = allEntityInOrder.modificatedParameters.skip ?? skip;
+            paginationMeta = {
+                pagination : {
+                    count : total,
+                    skipped: modifiedSkip,//if the searchPaginate modified the page skip, it return a value there.
+                    limit: limit,
+                    pageCount: Math.ceil(total / limit),
+                    currentPage: Math.ceil(modifiedSkip / limit) + 1
+                }
+            };
+        }
+
+        res.serviceResponse = SuccessResponse.create(allEntityInOrder, StatusCodes.OK, ReasonPhrases.OK);
+        res.serviceResponse.meta = paginationMeta;*/
+
         return next();
     }
 }
