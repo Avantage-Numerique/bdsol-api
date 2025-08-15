@@ -95,7 +95,10 @@ export default class Api {
         // parse application/json
         this.express.use(express.json());
         if (this._config.environnement === 'development' && this._slowDown) {
-            this.express.use(SlowDownMiddleware());
+            this.express.use(SlowDownMiddleware({
+                delay: this._config.debugSlowDuration,
+                verbose: true
+            }));
         }
 
         this.templateBasePath = `${this._config.appPath}/views`;
