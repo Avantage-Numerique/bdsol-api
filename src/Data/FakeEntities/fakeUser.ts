@@ -76,5 +76,20 @@ export const fakeUser:Array<UserContract> = [
     tos: { accepted:true, acceptedOn: new Date()},
     lastLogin: new Date()
 },
+{
+    username: 'Jules',
+    name: 'Jules Luzy-Riopel',
+    email: 'jules@lafabriquevirtuelle.com',
+    avatar: 'https://lafabriquevirtuelle.com/img/assets/dessin_jules_axelle_o.svg',
+    password: '12345',
+    role: 'admin',
+    verify:{ isVerified: true},
+    changePassword: {
+        token: null,
+        expireDate: new Date()
+    },
+    tos: { accepted:true, acceptedOn: new Date()},
+    lastLogin: new Date()
+},
 
 ]
