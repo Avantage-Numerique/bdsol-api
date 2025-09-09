@@ -26,8 +26,8 @@ class ProjectsRoutes extends CrudRoute {
         create: [
             entityNameSanitizerAlias('data.name', false),
             noHtmlStringSanitizerAlias('data.alternateName'),
-            objectIdSanitizerAlias('data.entityInCharge'),
-            objectIdSanitizerAlias('data.producer'),
+            objectIdSanitizerAlias('data.entityInCharge.*'),
+            objectIdSanitizerAlias('data.producer.*'),
             basicHtmlSanitizerAlias('data.description'),
 
             //SocialHandles
@@ -74,8 +74,8 @@ class ProjectsRoutes extends CrudRoute {
             objectIdSanitizerAlias('data.id'),
             entityNameSanitizerAlias('data.name', false),
             noHtmlStringSanitizerAlias('data.alternateName'),
-            objectIdSanitizerAlias('data.entityInCharge'),
-            objectIdSanitizerAlias('data.producer'),
+            objectIdSanitizerAlias('data.entityInCharge.*'),
+            objectIdSanitizerAlias('data.producer.*'),
             basicHtmlSanitizerAlias('data.description'),
 
             //SocialHandles

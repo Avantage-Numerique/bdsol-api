@@ -88,12 +88,12 @@ class Project extends AbstractModel {
                 unique: true
             },
             entityInCharge: {
-                type: mongoose.Types.ObjectId,
+                type: [mongoose.Types.ObjectId],
                 //required: true,
                 ref: "Organisation"
             },
             producer: {
-                type: mongoose.Types.ObjectId,
+                type: [mongoose.Types.ObjectId],
                 ref: "Organisation" //Investigate refPath or dynamic populate model call
             },
             description: {
@@ -183,8 +183,8 @@ class Project extends AbstractModel {
         return {
             _id: document._id ?? '',
             name: document.name ?? '',
-            entityInCharge: document.entityInCharge ?? '',
-            producer: document.producer ?? '',
+            entityInCharge: document.entityInCharge ?? [],
+            producer: document.producer ?? [],
             slug: document.slug ?? '',
             alternateName: document.alternateName ?? '',
             description: document.description ?? '',
