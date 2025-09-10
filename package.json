@@ -18,12 +18,19 @@
     "dev": "npx nodemon -r tsconfig-paths/register src/server.ts",
     "start": "node ./build/src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "format:check": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "lint:check": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "check": "prettier --check . && eslint .",
+    "fix": "prettier --write . && eslint --fix ."
   },
   "keywords": [],
   "authors": [
     "Marc-André Martin",
-    "Frédéric Rivard"
+    "Frédéric Rivard",
+    "Jules Luzy-Riopel"
   ],
   "license": "à venir",
   "dependencies": {
@@ -72,9 +79,13 @@
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.30.7",
     "eslint": "^8.20.0",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-import": "^2.27.5",
     "express-list-endpoints": "^6.0.0",
-    "nodemon": "^3"
+    "nodemon": "^3",
+    "prettier": "^3.6.2",
+    "pretty-quick": "^4.2.2",
+    "simple-git-hooks": "^2.13.1"
   }
 }
