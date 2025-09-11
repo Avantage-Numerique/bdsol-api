@@ -95,6 +95,7 @@ export default class Api {
         // parse application/json
         this.express.use(express.json());
         if (this._config.environnement === 'development' && this._slowDown) {
+            console.warn(`--=== SLOWDOWN MIDDLEWARE ACTIVATED ===-- ${this._config.debugSlowDuration}ms`);
             this.express.use(SlowDownMiddleware({
                 delay: this._config.debugSlowDuration,
                 verbose: true

@@ -7,6 +7,7 @@ import {MongoClient} from "mongodb";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 import {UsersProvider} from "@database/Providers/UsersProvider";
 import {DataProvider} from "@database/Providers/DataProvider";
+import MongoDBMetricsMonitor from "@src/Monitoring/Provider/InternalMetricsProvider";
 
 class MonitoringController {
 
@@ -37,11 +38,32 @@ class MonitoringController {
 
         const index = new PublicTemplate("status");//tempalte have already a default in the EmailContent.Prepare.
         const title:string = `Status de ${config.appName}`;
-        let body:string = `<h2>État des services</h2>`;
+        let body:string = `<p>Quelques références pour avoir une image globale de l'API</p>`;
 
         //const serverStatus: boolean = await this._isMongoServerAccessible();
         //const dataStatus: boolean = await this._pingDatabase();
         //const usersStatus: boolean = await this._pingDatabase("bdsol-users");
+
+        const metricsMonitor = new MongoDBMetricsMonitor();
+
+        // Get metrics
+        const metrics = await metricsMonitor.getMetrics();
+
+        //build readable metrics.
+        /**
+         *     timestamp: string;
+         *     uptime: number;
+         *     connectionPool: ConnectionPoolMetrics;
+         *     performance: PerformanceMetrics | null;
+         *     database: DatabaseMetrics | null;
+         *     application: ApplicationMetrics;
+         *     server: ServerMetrics;
+         *     replication: ReplicationMetrics | null;
+         *     errors: ErrorMetrics;
+         *     health: HealthMetrics;
+         */
+
+        body += `<h2>État des services</h2>`;
 
         const connectedLabel:string = "Connectée";
         const disconnectedLabel:string = "Déconnectée";
@@ -53,22 +75,59 @@ class MonitoringController {
                 ...DefaultEmailTheme,//basic theme for colors and sizes.
                 title: `${title}`,
                 body: `${body}`,
+                metrics: [
+                    {
+                        label: "timestamp",
+                        value: metrics.timestamp,
+                        valueLabel: ``
+                    },
+                    {
+                        label: "uptime",
+                        value: metrics.uptime,
+                        valueLabel: ``
+                    },
+                    {
+                        label: "connectionPool",
+                        value: this.renderObjectAsHTML(metrics.connectionPool),
+                        valueLabel: ``
+                    },
+                    {
+                        label: "performance",
+                        value: this.renderObjectAsHTML(metrics.performance),
+                        valueLabel: ``
+                    },
+                    {
+                        label: "database",
+                        value: this.renderObjectAsHTML(metrics.database),
+                        valueLabel: ``
+                    },
+                    {
+                        label: "application",
+                        value: this.renderObjectAsHTML(metrics.application),
+                        valueLabel: ``
+                    },
+                    {
+                        label: "server",
+                        value: this.renderObjectAsHTML(metrics.server),
+                        valueLabel: ``
+                    },
+                    {
+                        label: "replication",
+                        value: this.renderObjectAsHTML(metrics.replication),
+                        valueLabel: ``
+                    },
+                    {
+                        label: "errors",
+                        value: this.renderObjectAsHTML(metrics.errors),
+                        valueLabel: ``
+                    },
+                    {
+                        label: "health",
+                        value: this.renderObjectAsHTML(metrics.health),
+                        valueLabel: ``
+                    },
+                ],
                 statuses: [
-                    /*{
-                        label: "Serveur base de donnée",
-                        value: serverStatus,
-                        valueLabel: serverStatus ? connectedLabel : disconnectedLabel
-                    },
-                    {
-                        label: "Données accessible ?",
-                        value: dataStatus,
-                        valueLabel: dataStatus ? connectedLabel : disconnectedLabel
-                    },
-                    {
-                        label: "Authentification",
-                        value: usersStatus,
-                        valueLabel: usersStatus ? connectedLabel : disconnectedLabel
-                    },*/
                     {
                         label: "Données",
                         value: DataProvider.instance()?.connection.readyState,
@@ -87,6 +146,61 @@ class MonitoringController {
                 }
             }
         });
+    }
+
+    // Generic function to render any object as HTML rows
+    renderObjectAsHTML(obj: any, options?: {
+        containerTag?: string;
+        rowTag?: string;
+        keyClass?: string;
+        valueClass?: string;
+        excludeKeys?: Array<string>;
+    }): string {
+        const {
+            containerTag = 'div',
+            rowTag = 'div',
+            keyClass = 'key',
+            valueClass = 'value',
+            excludeKeys = []
+        } = options || {};
+
+        const rows: string[] = [];
+        if (obj) {
+            // Get all enumerable properties of the object
+            for (const [key, value] of Object.entries(obj)) {
+
+                let currentKeyClass = keyClass;
+                // Skip excluded keys
+                if (excludeKeys.includes(key)) {
+                    continue;
+                }
+
+                // Format the value for display
+                let displayValue: string;
+                if (value === null) {
+                    displayValue = 'null';
+                } else if (value === undefined) {
+                    displayValue = 'undefined';
+                } else if (typeof value === 'object') {
+                    displayValue = this.renderObjectAsHTML(value);
+                    currentKeyClass = "text-bold";
+                } else if (typeof value === 'function') {
+                    displayValue = '[Function]';
+                } else {
+                    displayValue = String(value);
+                }
+
+                // Create HTML row
+                const row = `
+      <${rowTag} class="object-row">
+        <span class="${currentKeyClass}">${key}:</span>
+        <span class="${valueClass}">${displayValue}</span>
+      </${rowTag}>
+    `;
+                rows.push(row);
+            }
+        }
+        return `<${containerTag} class="object-container">${rows.join('')}</${containerTag}>`;
     }
 
     private async _isMongoServerAccessible():Promise<boolean> {
@@ -110,7 +224,7 @@ class MonitoringController {
 
     private async _pingDatabase(dbName:string="bdsol-data"):Promise<boolean> {
         const driver:MongoDBDriver = new MongoDBDriver(config.db);
-        let client:MongoClient = driver.client;
+        const client:MongoClient = driver.client;
         let ping:any;
         try {
             await client.connect();

@@ -19,6 +19,19 @@
                     <li>Aucun status.</li>
                 {% endfor %}
             </ul>
+            <h3>Metrics ({{ metrics.length }})</h3>
+            <div>
+                {% for metric in metrics %}
+                    <h4><span>{{ metric.label }}</span> : <span>{{ metric.valueLabel }}</span></h4>
+                    {% if metric.value %}
+                        <div>
+                            {{ metric.value | safe }}
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <li>-</li>
+                {% endfor %}
+            </div>
         </div>
     {% endblock %}
 </div>
