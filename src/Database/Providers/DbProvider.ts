@@ -120,11 +120,16 @@ export abstract class BaseProvider implements DbProvider {
     public async createMongooseConnection():Promise<Connection|undefined> {
         const url:string = `${this._driver.connectionUrl()}`;
         try {
+            const performanceOptions:any = {
+                maxPoolSize: 15,
+                minPoolSize: 1,
+            }
             const options:any = config.db.user !== '' && config.db.password !== '' ? {
                 user: this._driver.config.user,
                 pass: this._driver.config.password,
                 dbName: this._databaseName,
-                connectTimeoutMS: 300,
+                connectTimeoutMS: 1000,
+                socketTimeoutMS: 1000,
                 useUnifiedTopology: true,
                 useNewUrlParser: true
             } : {};
@@ -133,9 +138,9 @@ export abstract class BaseProvider implements DbProvider {
             }
 
             if (this._driver.config.needPromise) {
-                return await mongoose.createConnection(url, options).asPromise();
+                return await mongoose.createConnection(url, {...options, ...performanceOptions}).asPromise();
             }
-            return mongoose.createConnection(url, options);
+            return mongoose.createConnection(url, {...options, ...performanceOptions});
 
         } catch (error) {
             LogHelper.error(`[DB][createMongooseConnection] can't create connection to mongo server with mongoose  on ${this._databaseName}`, error);
