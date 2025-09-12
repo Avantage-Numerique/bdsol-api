@@ -14,8 +14,8 @@ export interface ProjectSchema extends Document {
     name:string;
     slug:string;
     alternateName:string;
-    entityInCharge:ObjectId;
-    producer: ObjectId;
+    entityInCharge: [ObjectId];
+    producer: [ObjectId];
     description:string;
     url:[SocialHandle]
     contactPoint:ContactPoint;
