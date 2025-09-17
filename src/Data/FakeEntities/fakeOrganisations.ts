@@ -3,7 +3,6 @@ import { MetaStates } from "../../Moderation/Schemas/MetaSchema";
 export const fakeOrganisations = [
   {
     name: "Petit Théâtre du Vieux Noranda",
-    slug: "petit-theatre-du-vieux-noranda",
     description: "Vie et magie",
     url: [{ url: "https://petittheatre.org" }],
     contactPoint: { email: "Rosalie.Chartier-Lacombe@ptvn.org" },
@@ -15,7 +14,6 @@ export const fakeOrganisations = [
   },
   {
     name: "Librairie Pommerleau",
-    slug: "librairie-pommmerleau",
     description: "Librairie de petits marchandeurs",
     url: [{ url: "https://lalibrairiepommerleau.meilleur" }],
     contactPoint: { email: "info@meilleurelibrairie.meilleurfois2" },
