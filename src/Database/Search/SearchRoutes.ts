@@ -109,7 +109,7 @@ class SearchRoutes extends AbstractRoute {
     }
 
     public async fetchHomePageEntityHandler(req:Request, res: Response, next: NextFunction): Promise<any>{
-        res.serviceResponse = SuccessResponse.create(await this.searchResults_instance.fetchHomePageEntity(), StatusCodes.OK, ReasonPhrases.OK)
+        res.serviceResponse = SuccessResponse.create(await this.searchResults_instance.lastUpdatedEntities(), StatusCodes.OK, ReasonPhrases.OK);
         return next();
     }
 
