@@ -43,18 +43,139 @@ class SearchResults {
     }
 
     public async fetchHomePageEntity(){
-        const homePageEntity = [];
-        homePageEntity.push(await this.personModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
-        homePageEntity.push(await this.organisationModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
+        const homePageEntities = [];
+
+        homePageEntities.push(await this.personModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
+        homePageEntities.push(await this.organisationModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
         //Commented because taxonomy doesn't have a simple component in frontend
         //homePageEntity.push(await this.taxonomyModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
-        homePageEntity.push(await this.projectModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
-        homePageEntity.push(await this.eventModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
-        homePageEntity.push(await this.equipmentModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
+        homePageEntities.push(await this.projectModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
+        homePageEntities.push(await this.eventModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
+        homePageEntities.push(await this.equipmentModel.findOne({}, {}, { sort : { updatedAt: -1 } }));
 
         //fetch a 6th entity for frontend (atm always the second last person modified)
-        homePageEntity.push(await this.personModel.findOne({}, {}, { sort : { updatedAt: -1 }, skip:1 }));
-        return homePageEntity;
+        homePageEntities.push(await this.personModel.findOne({}, {}, { sort : { updatedAt: -1 }, skip:1 }));
+
+        return homePageEntities;
+    }
+
+    /**
+     * Get the most recent changed entity in each of our collections.
+     * People, organisations, projects, events,
+     * @param limit
+     */
+    public async lastUpdatedEntities(limit:number=1) {
+        const sorting = { updatedAt: -1 };
+        return await this.personModel.aggregate([
+            { $sort: sorting },
+            { $limit: limit },
+            { $addFields: {
+                    type: 'Person',
+                    collection: 'people'
+                }
+            },
+
+            { $unionWith: {
+                    coll: "organisations",
+                    pipeline: [
+                        { $sort: sorting },
+                        { $limit: limit },
+                        { $addFields: {
+                                type: 'Organisation',
+                                collection: 'organisations'
+                            }
+                        }
+                    ]
+                }
+            },
+
+            { $unionWith: {
+                    coll: "events",
+                    pipeline: [
+                        { $sort: sorting },
+                        { $limit: limit },
+                        { $addFields: {
+                                type: 'Event',
+                                collection: 'events'
+                            }
+                        }
+                    ]
+                }
+            },
+
+            { $unionWith: {
+                    coll: "equipment",
+                    pipeline: [
+                        { $sort: sorting },
+                        { $limit: limit },
+                        { $addFields: {
+                                type: 'Equipment',
+                                collection: 'equipment'
+                            }
+                        }
+                    ]
+                }
+            },
+
+            { $unionWith: {
+                    coll: "projects",
+                    pipeline: [
+                        { $sort: sorting },
+                        { $limit: limit },
+                        { $addFields: {
+                                type: 'Project',
+                                collection: "projects"
+                            }
+                        }
+                    ]
+                }
+            },
+
+            { $unionWith: {
+                    coll: "people",
+                    pipeline: [
+                        { $sort: sorting },
+                        { $skip: 1 },//to have 2 person, and avoid getting the first one.
+                        { $limit: limit },
+                        { $addFields: {
+                                type: 'Person',
+                                collection: "people"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $lookup: {
+                    from: 'media',
+                    localField: 'mainImage',
+                    foreignField: '_id',
+                    as: 'mainImageDetails'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$mainImageDetails',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $set: {
+                    mainImage: {
+                        $cond: {
+                            if: { $ne: ['$mainImageDetails', null] },
+                            then: '$mainImageDetails',
+                            else: '$mainImage'
+                        }
+                    }
+                }
+            },
+            {
+                $project: {
+                    mainImageDetails: 0
+                }
+            }
+        ]);
     }
 
     public async searchByType(type:string, skip:number, limit:number){//, categories:any){

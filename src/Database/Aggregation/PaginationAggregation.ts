@@ -61,16 +61,12 @@ async function paginationAggregation(model:mongoose.Model<any>, aggregationPipel
 
         const nextSkip = safeSkip(currentPage+1, limit, totalDocuments);//Math.min(firstDocumentOnPageIndex, lastPageSkipNumber);
 
-        console.log("paginationAggregation", "count", countResult, "total", totalDocuments, "currentPage (start at 0)", currentPage, "maxPageNumber", maxPageNumber, "skip", skip, "nextSkip", nextSkip, "pageSize", limit, "sort", sort, "nextPageLength", nextPageLength, "firstDocumentOnPageIndex", firstDocumentOnPageIndex);
-
         //check if the skip is within the max documents of the query.
         /*if (firstDocumentOnPageIndex >= totalDocuments && firstDocumentOnPageIndex > 0) {
             // Modify skip to push the last page.
             skip = maxPageNumber - 1;
             modificatedParameters.skip = maxPageNumber - 1
         }*/
-
-        console.log("paginationAggregation AFTER skip change.", "firstDocumentOnPageIndex", firstDocumentOnPageIndex, "total", totalDocuments, "skip", skip, "limit", limit, "sort", sort);
 
         const paginatedPipeline = [
             ...aggregationPipeline,
