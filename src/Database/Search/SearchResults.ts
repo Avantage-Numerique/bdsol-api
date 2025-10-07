@@ -181,8 +181,7 @@ class SearchResults {
     public async searchByType(type:string, skip:number, limit:number){//, categories:any){
         const controller = EntityControllerFactory.getControllerFromEntity(type);
         if(controller !== undefined){
-            const result = await controller.list({skip:skip, limit:limit, sort:"desc"})
-            return result;
+            return await controller.list({skip:skip, limit:limit, sort:"desc"});
         }
         return ErrorResponse.create(new Error("Type doesn't exist"), StatusCodes.BAD_REQUEST, "Type doesn't exist");
     }
@@ -191,8 +190,7 @@ class SearchResults {
     public async countByType(type:string){
         const controller = EntityControllerFactory.getControllerFromEntity(type);
         if(controller !== undefined){
-            const count = await controller.count({});
-            return count;
+            return await controller.count({});
         }
         return ErrorResponse.create(new Error("Type doesn't exist"), StatusCodes.BAD_REQUEST, "Type doesn't exist");
     }
