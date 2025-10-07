@@ -11,7 +11,6 @@ import {IntegerSanitizerAlias} from "@src/Security/SanitizerAliases/IntegerSanit
 import {urlSanitizerAlias} from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
 import {objectIdSanitizerAlias} from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
 import {urlSanitizerSearchAlias} from "@src/Security/SanitizerAliases/UrlSanitizerSearchAlias";
-import {AggregationResultContract} from "@database/Aggregation/PaginationAggregation";
 
 class SearchRoutes extends AbstractRoute {
 
