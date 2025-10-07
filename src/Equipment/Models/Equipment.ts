@@ -158,11 +158,13 @@ class Equipment extends AbstractModel {
      * Register mongoose events, for now pre-save, pre-findOneAndUpdate
      */
     public registerEvents(): void {
+
+        //for basic information, used in a
         this.schema.pre('find', function() {
             taxonomyPopulate(this, 'equipmentType');
             middlewarePopulateProperty(this, "mainImage");
-            populateUser(this, "meta.requestedBy");
-            populateUser(this, "meta.lastModifiedBy");
+            //populateUser(this, "meta.requestedBy");
+            //populateUser(this, "meta.lastModifiedBy");
         });
         this.schema.pre('findOne', function() {
             taxonomyPopulate(this, 'equipmentType');

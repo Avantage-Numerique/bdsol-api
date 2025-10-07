@@ -313,8 +313,8 @@ class Person extends AbstractModel {
             taxonomyPopulate(this, 'domains.domain');
             middlewarePopulateProperty(this, "mainImage");
 
-            populateUser(this, "meta.requestedBy");
-            populateUser(this, "meta.lastModifiedBy");
+            //populateUser(this, "meta.requestedBy");
+            //populateUser(this, "meta.lastModifiedBy");
 
             //populateUser(this, "occupations.occupation.subMeta.requestedBy", User.getInstance().mongooseModel);
             //populateUser(this, "occupations.occupation.subMeta.lastModifiedBy", User.getInstance().mongooseModel);

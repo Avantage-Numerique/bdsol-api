@@ -179,8 +179,8 @@ class Place extends AbstractModel {
         this.schema.pre('find', function() {
             middlewarePopulateProperty(this, "mainImage");
 
-            populateUser(this, "meta.requestedBy");
-            populateUser(this, "meta.lastModifiedBy");
+            //populateUser(this, "meta.requestedBy");
+            //populateUser(this, "meta.lastModifiedBy");
         });
 
         this.schema.pre('findOne', function() {

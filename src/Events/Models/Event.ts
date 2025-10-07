@@ -237,22 +237,24 @@ class Event extends AbstractModel {
             if (this.options?._recursed) {
                 return next();
             }
-            middlewarePopulateProperty(this, 'team.member');
+            //middlewarePopulateProperty(this, 'team.member');
 
             taxonomyPopulate(this, 'skills');
             taxonomyPopulate(this, 'domains.domain');
 
             middlewarePopulateProperty(this, 'mainImage');
-            middlewarePopulateProperty(this, 'organizer');
-            middlewarePopulateProperty(this, 'attendees');
-            middlewarePopulateProperty(this, 'entityInCharge');
-            //middlewarePopulateProperty(this, 'subEvents');
-            middlewarePopulateProperty(this, 'eventType');
-            middlewarePopulateProperty(this, 'location');
-            middlewarePopulateProperty(this, 'photoGallery');
+            //middlewarePopulateProperty(this, 'organizer');
+            //middlewarePopulateProperty(this, 'attendees');
+            //middlewarePopulateProperty(this, 'entityInCharge');
 
-            populateUser(this, "meta.requestedBy");
-            populateUser(this, "meta.lastModifiedBy");
+            //feature remove temporarly //middlewarePopulateProperty(this, 'subEvents');
+
+            //middlewarePopulateProperty(this, 'eventType');
+            //middlewarePopulateProperty(this, 'location');
+            //middlewarePopulateProperty(this, 'photoGallery');
+
+            //populateUser(this, "meta.requestedBy");
+            //populateUser(this, "meta.lastModifiedBy");
 
             next();
         });

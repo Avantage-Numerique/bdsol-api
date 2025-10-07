@@ -250,13 +250,13 @@ class Organisation extends AbstractModel {
         this.schema.pre('find', function() {
             taxonomyPopulate(this, 'offers.skills');
             taxonomyPopulate(this, 'domains.domain');
-            middlewarePopulateProperty(this, 'equipment.equipment');
-            middlewarePopulateProperty(this, 'team.member');
+            //middlewarePopulateProperty(this, 'equipment.equipment');
+            //middlewarePopulateProperty(this, 'team.member');
             middlewarePopulateProperty(this, "mainImage");
-            middlewarePopulateProperty(this, "location");
+            //middlewarePopulateProperty(this, "location");
 
-            populateUser(this, "meta.requestedBy");
-            populateUser(this, "meta.lastModifiedBy");
+            //populateUser(this, "meta.requestedBy");
+            //populateUser(this, "meta.lastModifiedBy");
         });
         
         this.schema.pre('findOne', function() {
