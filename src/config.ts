@@ -16,7 +16,7 @@ const getApiConfig = () => {
         isStaging: process.env.ENVIRONNEMENT === 'staging',
         isDevelopment: process.env.ENVIRONNEMENT === 'development',
 
-        debugSlowConnection: process.env.DEBUG_SLOW_CONNEXION || false,
+        debugSlowConnection: process.env.DEBUG_SLOW_CONNEXION === "true" || false,
         debugSlowDuration: process.env.DEBUG_SLOW_DURATION || 1000,
 
         // Dev configuration.
