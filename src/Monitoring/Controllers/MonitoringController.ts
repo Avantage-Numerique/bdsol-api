@@ -1,16 +1,15 @@
 import PublicTemplate from "@src/Templates/PublicTemplate";
 import config from "@src/config";
-import {getTemplateBaseData} from "@src/Templates/Emails/EmailData";
+import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
 import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
-import {MongoDBDriver} from "@database/Drivers/MongoDriver";
-import {MongoClient} from "mongodb";
+import { MongoDBDriver } from "@database/Drivers/MongoDriver";
+import { MongoClient } from "mongodb";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
-import {UsersProvider} from "@database/Providers/UsersProvider";
-import {DataProvider} from "@database/Providers/DataProvider";
+import { UsersProvider } from "@database/Providers/UsersProvider";
+import { DataProvider } from "@database/Providers/DataProvider";
 import MongoDBMetricsMonitor from "@src/Monitoring/Provider/InternalMetricsProvider";
 
 class MonitoringController {
-
     /** @private @static Singleton instance */
     private static _instance: MonitoringController;
 
@@ -19,9 +18,7 @@ class MonitoringController {
     public mongoDriver: MongoDBDriver;
     public mongoClient: MongoClient;
 
-    constructor() {
-
-    }
+    constructor() {}
 
     /**
      * @public @static @method getInstance Create the singleton instance if not existing
@@ -35,10 +32,9 @@ class MonitoringController {
     }
 
     public async statusesLayout(): Promise<string> {
-
-        const index = new PublicTemplate("status");//tempalte have already a default in the EmailContent.Prepare.
-        const title:string = `Status de ${config.appName}`;
-        let body:string = `<p>Quelques références pour avoir une image globale de l'API</p>`;
+        const index = new PublicTemplate("status"); //tempalte have already a default in the EmailContent.Prepare.
+        const title: string = `Status de ${config.appName}`;
+        let body: string = `<p>Quelques références pour avoir une image globale de l'API</p>`;
 
         //const serverStatus: boolean = await this._isMongoServerAccessible();
         //const dataStatus: boolean = await this._pingDatabase();
@@ -65,110 +61,112 @@ class MonitoringController {
 
         body += `<h2>État des services</h2>`;
 
-        const connectedLabel:string = "Connectée";
-        const disconnectedLabel:string = "Déconnectée";
+        const connectedLabel: string = "Connectée";
+        const disconnectedLabel: string = "Déconnectée";
         const baseData = getTemplateBaseData();
 
         return await index.render({
             context: {
-                ...baseData,//basic app and api default string and links
-                ...DefaultEmailTheme,//basic theme for colors and sizes.
+                ...baseData, //basic app and api default string and links
+                ...DefaultEmailTheme, //basic theme for colors and sizes.
                 title: `${title}`,
                 body: `${body}`,
                 metrics: [
                     {
                         label: "timestamp",
                         value: metrics.timestamp,
-                        valueLabel: ``
+                        valueLabel: ``,
                     },
                     {
                         label: "uptime",
                         value: metrics.uptime,
-                        valueLabel: ``
+                        valueLabel: ``,
                     },
                     {
                         label: "connectionPool",
                         value: this.renderObjectAsHTML(metrics.connectionPool),
-                        valueLabel: ``
+                        valueLabel: ``,
                     },
                     {
                         label: "performance",
                         value: this.renderObjectAsHTML(metrics.performance),
-                        valueLabel: ``
+                        valueLabel: ``,
                     },
                     {
                         label: "database",
                         value: this.renderObjectAsHTML(metrics.database),
-                        valueLabel: ``
+                        valueLabel: ``,
                     },
                     {
                         label: "application",
                         value: this.renderObjectAsHTML(metrics.application),
-                        valueLabel: ``
+                        valueLabel: ``,
                     },
                     {
                         label: "server",
                         value: this.renderObjectAsHTML(metrics.server),
-                        valueLabel: ``
+                        valueLabel: ``,
                     },
                     {
                         label: "replication",
                         value: this.renderObjectAsHTML(metrics.replication),
-                        valueLabel: ``
+                        valueLabel: ``,
                     },
                     {
                         label: "errors",
                         value: this.renderObjectAsHTML(metrics.errors),
-                        valueLabel: ``
+                        valueLabel: ``,
                     },
                     {
                         label: "health",
                         value: this.renderObjectAsHTML(metrics.health),
-                        valueLabel: ``
+                        valueLabel: ``,
                     },
                 ],
                 statuses: [
                     {
                         label: "Données",
                         value: DataProvider.instance()?.connection.readyState,
-                        valueLabel: `${(DataProvider.instance()?.connection.readyState === 1 ? connectedLabel : disconnectedLabel)} (${DataProvider.instance()?.connection.readyState})`
+                        valueLabel: `${DataProvider.instance()?.connection.readyState === 1 ? connectedLabel : disconnectedLabel} (${DataProvider.instance()?.connection.readyState})`,
                     },
                     {
                         label: "Authentification",
                         value: UsersProvider.instance()?.connection.readyState,
-                        valueLabel: `${(UsersProvider.instance()?.connection.readyState === 1 ? connectedLabel : disconnectedLabel)} (${DataProvider.instance()?.connection.readyState})`
+                        valueLabel: `${UsersProvider.instance()?.connection.readyState === 1 ? connectedLabel : disconnectedLabel} (${DataProvider.instance()?.connection.readyState})`,
                     },
                 ],
                 meta: {
                     title: `${title}`,
                     description: `${body}`,
-                    author: `${config.appName}`
-                }
-            }
+                    author: `${config.appName}`,
+                },
+            },
         });
     }
 
     // Generic function to render any object as HTML rows
-    renderObjectAsHTML(obj: any, options?: {
-        containerTag?: string;
-        rowTag?: string;
-        keyClass?: string;
-        valueClass?: string;
-        excludeKeys?: Array<string>;
-    }): string {
+    renderObjectAsHTML(
+        obj: any,
+        options?: {
+            containerTag?: string;
+            rowTag?: string;
+            keyClass?: string;
+            valueClass?: string;
+            excludeKeys?: Array<string>;
+        }
+    ): string {
         const {
-            containerTag = 'div',
-            rowTag = 'div',
-            keyClass = 'key',
-            valueClass = 'value',
-            excludeKeys = []
+            containerTag = "div",
+            rowTag = "div",
+            keyClass = "key",
+            valueClass = "value",
+            excludeKeys = [],
         } = options || {};
 
         const rows: string[] = [];
         if (obj) {
             // Get all enumerable properties of the object
             for (const [key, value] of Object.entries(obj)) {
-
                 let currentKeyClass = keyClass;
                 // Skip excluded keys
                 if (excludeKeys.includes(key)) {
@@ -178,14 +176,14 @@ class MonitoringController {
                 // Format the value for display
                 let displayValue: string;
                 if (value === null) {
-                    displayValue = 'null';
+                    displayValue = "null";
                 } else if (value === undefined) {
-                    displayValue = 'undefined';
-                } else if (typeof value === 'object') {
+                    displayValue = "undefined";
+                } else if (typeof value === "object") {
                     displayValue = this.renderObjectAsHTML(value);
                     currentKeyClass = "text-bold";
-                } else if (typeof value === 'function') {
-                    displayValue = '[Function]';
+                } else if (typeof value === "function") {
+                    displayValue = "[Function]";
                 } else {
                     displayValue = String(value);
                 }
@@ -200,15 +198,15 @@ class MonitoringController {
                 rows.push(row);
             }
         }
-        return `<${containerTag} class="object-container">${rows.join('')}</${containerTag}>`;
+        return `<${containerTag} class="object-container">${rows.join("")}</${containerTag}>`;
     }
 
-    private async _isMongoServerAccessible():Promise<boolean> {
+    private async _isMongoServerAccessible(): Promise<boolean> {
         this.mongoDriver = new MongoDBDriver(config.db);
         this.mongoClient = this.mongoDriver.client;
 
         try {
-            const connectionReturn:any = await this.mongoClient.connect();
+            const connectionReturn: any = await this.mongoClient.connect();
             LogHelper.info(`Pinging mongodb serveur`, connectionReturn);
             return true;
         } catch (e) {
@@ -222,10 +220,12 @@ class MonitoringController {
         return false;
     }
 
-    private async _pingDatabase(dbName:string="bdsol-data"):Promise<boolean> {
-        const driver:MongoDBDriver = new MongoDBDriver(config.db);
-        const client:MongoClient = driver.client;
-        let ping:any;
+    private async _pingDatabase(
+        dbName: string = "bdsol-data"
+    ): Promise<boolean> {
+        const driver: MongoDBDriver = new MongoDBDriver(config.db);
+        const client: MongoClient = driver.client;
+        let ping: any;
         try {
             await client.connect();
             ping = await client.db(dbName).command({ ping: 1 });

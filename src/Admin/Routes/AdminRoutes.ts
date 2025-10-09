@@ -1,23 +1,22 @@
-import express, {NextFunction, Request, Response} from "express";
-import {ReasonPhrases, StatusCodes} from "http-status-codes";
+import express, { NextFunction, Request, Response } from "express";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import AbstractRoute from "@core/Route";
-import {ErrorResponse} from "@src/Http/Responses/ErrorResponse";
+import { ErrorResponse } from "@src/Http/Responses/ErrorResponse";
 import AdminController from "@src/Admin/Controllers/AdminController";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 class AdminRoutes extends AbstractRoute {
-
     controllerInstance: any = AdminController.getInstance();
     routerInstance: express.Router = express.Router();
     routerInstanceAuthentification: express.Router = express.Router();
 
     middlewaresDistribution: any = {
-        all: []
-    }
+        all: [],
+    };
 
     defaultMiddlewaresDistribution: any = {
-        all: []
-    }
+        all: [],
+    };
 
     // Initiator (called in api.ts)
 
@@ -31,11 +30,9 @@ class AdminRoutes extends AbstractRoute {
         return this.routerInstanceAuthentification;
     }
 
-
-    public setupAdditionnalAuthRoutes(router: express.Router):express.Router {
+    public setupAdditionnalAuthRoutes(router: express.Router): express.Router {
         return router;
     }
-
 
     /**
      * Public routes init
@@ -43,27 +40,26 @@ class AdminRoutes extends AbstractRoute {
      * @return {express.Router} router for the public routes
      * @public @method
      */
-    public setupPublicRoutes():express.Router {
-
-        this.routerInstance.get('/', [
+    public setupPublicRoutes(): express.Router {
+        this.routerInstance.get("/", [
             this.dashboardHandler.bind(this),
             this.staticContentNotFound.bind(this),
             this.renderDefaultTemplate.bind(this),
         ]);
 
-        this.routerInstance.get('/bd', [
+        this.routerInstance.get("/bd", [
             this.dashboardDockerManagement.bind(this),
             this.staticContentNotFound.bind(this),
             this.renderDefaultTemplate.bind(this),
         ]);
 
-        this.routerInstance.get('/routes', [
+        this.routerInstance.get("/routes", [
             this.renderRoutesStructureHandler.bind(this),
             this.staticContentNotFound.bind(this),
             this.renderDefaultTemplate.bind(this),
         ]);
 
-        this.routerInstance.get('/test-getinfo', [
+        this.routerInstance.get("/test-getinfo", [
             this.renderRoutesTestingHandler.bind(this),
             this.staticContentNotFound.bind(this),
             this.renderDefaultTemplate.bind(this),
@@ -72,43 +68,55 @@ class AdminRoutes extends AbstractRoute {
         return this.routerInstance;
     }
 
-
     /**
      * Allow routes Manager to declare route on the same router.
      * @param router {express.Router} The router to associate other routes, at the target Routes scope.
      */
-    public setupAdditionnalPublicRoutes(router:express.Router):express.Router {
+    public setupAdditionnalPublicRoutes(
+        router: express.Router
+    ): express.Router {
         return router;
     }
 
-
-    public async dashboardHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-
-        res.serviceResponse = await this.controllerInstance.renderAdminDashboard();
+    public async dashboardHandler(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<any> {
+        res.serviceResponse =
+            await this.controllerInstance.renderAdminDashboard();
         return next();
     }
 
-
-    public async dashboardDockerManagement(req: Request, res: Response, next: NextFunction): Promise<any> {
-
-        res.serviceResponse = await this.controllerInstance.renderDockerManager();
+    public async dashboardDockerManagement(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<any> {
+        res.serviceResponse =
+            await this.controllerInstance.renderDockerManager();
         return next();
     }
 
-
-    public async renderRoutesStructureHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-
-        res.serviceResponse = await this.controllerInstance.renderRoutesStructure();
+    public async renderRoutesStructureHandler(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<any> {
+        res.serviceResponse =
+            await this.controllerInstance.renderRoutesStructure();
         return next();
     }
 
-
-    public async renderRoutesTestingHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-
-        res.serviceResponse = await this.controllerInstance.renderRoutesTesting();
+    public async renderRoutesTestingHandler(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<any> {
+        res.serviceResponse =
+            await this.controllerInstance.renderRoutesTesting();
         return next();
     }
-
 
     /**
      * Build up the response for the tempalte route, (only getDoc for now).
@@ -116,21 +124,36 @@ class AdminRoutes extends AbstractRoute {
      * @param res {Response}
      * @protected
      */
-    protected async renderDefaultTemplate(req: Request, res: Response): Promise<any> {
+    protected async renderDefaultTemplate(
+        req: Request,
+        res: Response
+    ): Promise<any> {
         const logger = new LogHelper(req);
         logger.log(`Response status ${StatusCodes.OK}, ${StatusCodes["OK"]}`);
 
-        res.set('Content-Type', 'text/html');
-        return res.status(StatusCodes.OK).send(Buffer.from(res.serviceResponse));
+        res.set("Content-Type", "text/html");
+        return res
+            .status(StatusCodes.OK)
+            .send(Buffer.from(res.serviceResponse));
     }
 
-    public async staticContentNotFound(req: Request, res: Response, next: NextFunction): Promise<any> {
-
-        if (res.serviceResponse === undefined || res.serviceResponse === null || res.serviceResponse === "") {
-            res.serviceResponse = ErrorResponse.create(new Error(ReasonPhrases.NOT_FOUND), StatusCodes.NOT_FOUND);
+    public async staticContentNotFound(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<any> {
+        if (
+            res.serviceResponse === undefined ||
+            res.serviceResponse === null ||
+            res.serviceResponse === ""
+        ) {
+            res.serviceResponse = ErrorResponse.create(
+                new Error(ReasonPhrases.NOT_FOUND),
+                StatusCodes.NOT_FOUND
+            );
         }
         return next();
     }
 }
 
-export {AdminRoutes};
+export { AdminRoutes };

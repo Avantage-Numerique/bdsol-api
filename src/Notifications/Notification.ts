@@ -1,24 +1,27 @@
-const NOTIFICATION_EMAIL:string = "email";
+const NOTIFICATION_EMAIL: string = "email";
 
 interface NotificationContent {
-    context?:any
-    template?:string
+    context?: any;
+    template?: string;
 }
 interface NotificationConfig {
-    method?:string,//for now only email is implemented and no factory setup.
-    recipient:string,
-    subject:string
+    method?: string; //for now only email is implemented and no factory setup.
+    recipient: string;
+    subject: string;
 }
 
 class Notification {
+    public default_method: string = NOTIFICATION_EMAIL;
+    public method: string;
+    public config: any = {};
+    public content: NotificationContent;
+    public textContent: string;
 
-    public default_method:string = NOTIFICATION_EMAIL;
-    public method:string;
-    public config:any = {};
-    public content:NotificationContent;
-    public textContent:string;
-
-    constructor(config:NotificationConfig, content:NotificationContent, textContent="") {
+    constructor(
+        config: NotificationConfig,
+        content: NotificationContent,
+        textContent = ""
+    ) {
         this.method = config.method ?? this.default_method;
         this.content = content;
         this.textContent = textContent;
@@ -32,9 +35,8 @@ class Notification {
             //notification send.
         }
     }
-
 }
 
-export {NOTIFICATION_EMAIL};//types of notification
-export {NotificationContent, NotificationConfig};//interfaces.
-export default Notification;//class
+export { NOTIFICATION_EMAIL }; //types of notification
+export { NotificationContent, NotificationConfig }; //interfaces.
+export default Notification; //class

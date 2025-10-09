@@ -1,10 +1,9 @@
-import {NextFunction, Request, Response} from "express";
+import { NextFunction, Request, Response } from "express";
 
 //doc : https://express-validator.github.io/docs/sanitization.html
 //     /*body('email').isEmail().normalizeEmail(),
 //     body('text').not().isEmpty().trim().escape(),
 //     body('notifyOnReply').toBoolean(),*/
-
 
 // Algortihm
 
@@ -15,22 +14,19 @@ import {NextFunction, Request, Response} from "express";
 //4. allow chaining of the sanitization there to be able to the the right functions to sanitized the property correctly.
 //5. trace this work in log
 
-
-
 /**
  * Santize the request's body base on their model's schema.
  */
 export class CrudSchemaSanitizer {
-
-    public static sanitizationDictionary:any
+    public static sanitizationDictionary: any;
 
     /**
      * Getter for the anonymous function that will act as the middleware, with the parameters and the next() call.
      */
-    public static middlewareFunction(entity:string)
-    {
-        const entitysSchema:any = entity;
-        let entitysSanitizationRules:any = CrudSchemaSanitizer.parseSchema(entitysSchema);
+    public static middlewareFunction(entity: string) {
+        const entitysSchema: any = entity;
+        let entitysSanitizationRules: any =
+            CrudSchemaSanitizer.parseSchema(entitysSchema);
 
         //since all properties are sanitize by itself in a middleware slot (as an array elements). We need to return an array with all the rules
 
@@ -41,18 +37,21 @@ export class CrudSchemaSanitizer {
          * @param next {NextFunction}
          * @return Promise<Response<any, Record<string, any>> | undefined>
          */
-        return async function (req: Request, res: Response, next: NextFunction) {
+        return async function (
+            req: Request,
+            res: Response,
+            next: NextFunction
+        ) {
             entitysSanitizationRules = {};
             next();
-        }
+        };
     }
 
-    public static parseSchema(schema:any):Array<any> {
+    public static parseSchema(schema: any): Array<any> {
         if (CrudSchemaSanitizer.sanitizationDictionary === undefined) {
             //set the dictionary
         }
 
         return [schema];
     }
-
 }

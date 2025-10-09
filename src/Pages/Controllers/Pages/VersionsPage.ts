@@ -1,10 +1,13 @@
-import Page, {PageContent} from "@src/Pages/Controllers/Pages/Page";
+import Page, { PageContent } from "@src/Pages/Controllers/Pages/Page";
 import ApiVersions from "@src/Data/Versions/ApiVersions.json";
-import {getApiConfig} from "@src/config";
+import { getApiConfig } from "@src/config";
 
 class VersionsPage extends Page {
-
-    constructor(name:string, layout:string, content:PageContent={title:"Page", body:"contenu"}) {
+    constructor(
+        name: string,
+        layout: string,
+        content: PageContent = { title: "Page", body: "contenu" }
+    ) {
         super(name, layout, content);
         this.content.title = this.title();
         this.content.body = this.body();
@@ -22,11 +25,16 @@ class VersionsPage extends Page {
             versionsBody += `<h2>${isCurrentVersion ? "<span class='badge bg-primary'>Actuelle</span>" : ""} ${version.value} ${version.label}</h2>`;
             versionsBody += `<p>${version.date}</p>`;
             versionsBody += `<p>${version.description}</p>`;
-            versionsBody += version.link ? `<p><a href="${version.link}" title="Consulter les notes de versions sur github" target="_blank">Voir sur github</a></p>` : "";
+            versionsBody += version.link
+                ? `<p><a href="${version.link}" title="Consulter les notes de versions sur github" target="_blank">Voir sur github</a></p>`
+                : "";
             if (typeof version.notes === "string") {
                 versionsBody += `<p>${version.notes}</p>`;
             }
-            if (typeof version.notes === "object" && Array.isArray(version.notes)) {
+            if (
+                typeof version.notes === "object" &&
+                Array.isArray(version.notes)
+            ) {
                 for (const note of version.notes) {
                     versionsBody += `<p>${note.value}</p>`;
                 }

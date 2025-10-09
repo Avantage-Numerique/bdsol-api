@@ -1,4 +1,3 @@
-
 //  String helpers
 
 /**
@@ -10,29 +9,29 @@
  *  string caching, help for multiple call on the same string.
  */
 export class Str {
-
-    public static cache:any;
+    public static cache: any;
     public static SEPARATE_WORDS = /^(.)|\s+(.)/g;
     public static POSSIBLE_SLUG_CHAR = /._|-/g;
     public static NO_SPACE = /\s+/g;
-    public static ALLOW_CHAR = /[^A-Z0-9\s]+/ig;
+    public static ALLOW_CHAR = /[^A-Z0-9\s]+/gi;
     public static ALPHA_NUM_ONLY = /[^0-9a-fA-F]{24}$/;
     public static OBJECTID_ALLOWED_CHAR = Str.ALPHA_NUM_ONLY;
-    public static EMAIL = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
+    public static EMAIL =
+        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
     //public static URL = /|[^a-z0-9-~+_.?#=!&;,/:%@$\|*\'()\[\]\\x80-\\xff]|i]/;
     //public static URL = /[a-z0-9]/g;//use this for the slug function : https://www.npmjs.com/package/any-ascii
-    public static URL:RegExp = /((http)?s?(:\/\/)?)?(www.)?[a-zA-Z0-9/]+\.[a-zA-Z]+[/a-zA-Z0-9=%?.]*/gi;//use this for the slug function : https://www.npmjs.com/package/any-ascii
+    public static URL: RegExp =
+        /((http)?s?(:\/\/)?)?(www.)?[a-zA-Z0-9/]+\.[a-zA-Z]+[/a-zA-Z0-9=%?.]*/gi; //use this for the slug function : https://www.npmjs.com/package/any-ascii
     //public static URL = /^(?:(?:https?|mailto|data|ftp|tel|file|sms):|[^&:/?#]*(?:[/?#]|$))/gi;//from angular https://github.com/angular/angular/blob/main/packages/core/src/sanitization/url_sanitizer.ts
     //public static URL = /((((https?|ftps?|gopher|telnet|nntp)://)|(mailto:|news:))(%[0-9A-Fa-f]{2}|[-()_.!~*';/?:@&=+$,A-Za-z0-9])+)([).!';/?:,][[:blank:|:blank:]])/gi;//from OWAsp https://owasp.org/www-community/OWASP_Validation_Regex_Repository
 
-    public static DELIMITERS:any = {
-        "underscore": "_",
-        "dash": "-",
-        "none": ""
-    }
+    public static DELIMITERS: any = {
+        underscore: "_",
+        dash: "-",
+        none: "",
+    };
 
-    private static initCache(scope:string, key:string)
-    {
+    private static initCache(scope: string, key: string) {
         if (Str.cache === undefined) {
             Str.cache = {};
         }
@@ -45,29 +44,28 @@ export class Str {
         return Str.cache[scope];
     }
 
-
-    public static camel(str:string):string {
-        const key:string = str;
+    public static camel(str: string): string {
+        const key: string = str;
         const cacheScope = Str.initCache("camel", key);
 
-        if (cacheScope[key] !== undefined &&
-            typeof cacheScope[key] === "string") {
+        if (
+            cacheScope[key] !== undefined &&
+            typeof cacheScope[key] === "string"
+        ) {
             return cacheScope[key];
         }
 
-        return cacheScope[key] = Str.firstCharUpper(Str.studly(str));
+        return (cacheScope[key] = Str.firstCharUpper(Str.studly(str)));
     }
-
 
     /**
      * Change the string to the kebab case (with all word separated to word-word-word)
      * This function uses the snake method with the - delimiter param
      * @param str {string} the string to be change into X format.
      */
-    public static kebab(str:string):string {
+    public static kebab(str: string): string {
         return Str.snake(str, "dash");
     }
-
 
     /**
      * Change the string with all word separated to word_word_word all lower case
@@ -75,13 +73,14 @@ export class Str {
      * @param str {string} the string to be change into X format.
      * @param delimiter {string} Will seperate all the the word with that character. Snake is _ and kebab is -.
      */
-    public static snake(str:string, delimiter="underscore"):string
-    {
-        const key:string = str;
+    public static snake(str: string, delimiter = "underscore"): string {
+        const key: string = str;
         const cacheScope = Str.initCache("snake", key);
 
-        if (cacheScope[key] !== undefined &&
-            cacheScope[key][delimiter] !== undefined) {
+        if (
+            cacheScope[key] !== undefined &&
+            cacheScope[key][delimiter] !== undefined
+        ) {
             return cacheScope[key][delimiter];
         }
 
@@ -91,42 +90,40 @@ export class Str {
             str = Str.upperCaseWords(str);
         }
 
-        str = str.replace(Str.NO_SPACE, '');
+        str = str.replace(Str.NO_SPACE, "");
         str = Str.lower(
-            str.replace(
-                /(.)(?=[A-Z])/g,
-                '$1' + Str.DELIMITERS[delimiter])
+            str.replace(/(.)(?=[A-Z])/g, "$1" + Str.DELIMITERS[delimiter])
         );
 
-        return cacheScope[key][delimiter] = str;
+        return (cacheScope[key][delimiter] = str);
     }
 
     /**
      * Change a string to a studly casing : ChangeAStringToAStudlyCasing.
      * @param str {string} The string to parse.
      */
-    public static studly(str:string):string
-    {
-        const key:string = str;
+    public static studly(str: string): string {
+        const key: string = str;
         const cacheScope = Str.initCache("studly", key);
 
-        if (cacheScope[key] !== undefined &&
-            typeof cacheScope[key] === "string") {
+        if (
+            cacheScope[key] !== undefined &&
+            typeof cacheScope[key] === "string"
+        ) {
             return cacheScope[key];
         }
         str = Str.allowedChars(str);
         str = str.replace(Str.POSSIBLE_SLUG_CHAR, " ");
         str = Str.upperCaseWords(str).replace(" ", "");
 
-        return cacheScope[key] = str.replace(Str.NO_SPACE, "");
+        return (cacheScope[key] = str.replace(Str.NO_SPACE, ""));
     }
 
-
-    public static lower(str:string):string {
+    public static lower(str: string): string {
         return str.toLowerCase();
     }
 
-    public static isLower(str:string):boolean {
+    public static isLower(str: string): boolean {
         return str === str.toLowerCase();
     }
 
@@ -134,7 +131,7 @@ export class Str {
      * Could be usefull but it's the same as Lower.
      * @param str
      */
-    public static isAllCharsAre(str:string):boolean {
+    public static isAllCharsAre(str: string): boolean {
         let isIt = false;
         for (const char of str) {
             if (char === " ") continue;
@@ -143,15 +140,15 @@ export class Str {
         return isIt;
     }
 
-    public static upper(str:string):string {
+    public static upper(str: string): string {
         return str.toUpperCase();
     }
 
-    public static isUpper(str:string):boolean {
+    public static isUpper(str: string): boolean {
         return str === str.toUpperCase();
     }
 
-    public static slug(str:string, sep:string = "-") {
+    public static slug(str: string, sep: string = "-") {
         return Str.snake(str, sep);
     }
 
@@ -161,47 +158,45 @@ export class Str {
      * to avoid adding a dependency for this. npm package : https://www.npmjs.com/package/ucwords
      * @param str {string} the string to change to Cap Word.
      */
-    public static upperCaseWords(str:string)
-    {
-        return str.replace(Str.SEPARATE_WORDS, function(match) {
+    public static upperCaseWords(str: string) {
+        return str.replace(Str.SEPARATE_WORDS, function (match) {
             return match.toUpperCase();
         });
     }
 
-    public static firstCharUpper(str:string) {
+    public static firstCharUpper(str: string) {
         return str.charAt(0).toLowerCase() + str.substring(1, str.length);
     }
 
-    public static allowedChars(str:string):string {
+    public static allowedChars(str: string): string {
         if (Str.isString(str)) {
             return str.replace(Str.ALLOW_CHAR, "");
         }
         return "";
     }
 
-    public static noSpaces(str:string):string {
+    public static noSpaces(str: string): string {
         if (Str.isString(str)) {
             return str.replace(Str.NO_SPACE, "");
         }
         return "";
     }
 
-    public static toObjectIdAllowedCharacter(str:string):string {
+    public static toObjectIdAllowedCharacter(str: string): string {
         if (Str.isString(str)) {
             return str.replace(Str.OBJECTID_ALLOWED_CHAR, "");
         }
         return "";
     }
 
-    public static alphaNumOnly(str:string):string {
+    public static alphaNumOnly(str: string): string {
         if (Str.isString(str)) {
             return str.replace(Str.ALPHA_NUM_ONLY, "");
         }
         return "";
     }
 
-    public static isString(str:string):boolean {
-        return (typeof str === "string" && str !== "");
+    public static isString(str: string): boolean {
+        return typeof str === "string" && str !== "";
     }
-
 }

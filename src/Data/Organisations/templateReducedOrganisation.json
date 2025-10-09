@@ -9,13 +9,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"1917 Boulevard Forest",
-            "ville":"val-d'or",
-            "codePostal":"J9P5J8",
-            "province":"Quebec",
-            "numeroTelephone":"(819)856-9070",
-            "email":"info@revelations-services.com"
+        "extra": {
+            "adresse": "1917 Boulevard Forest",
+            "ville": "val-d'or",
+            "codePostal": "J9P5J8",
+            "province": "Quebec",
+            "numeroTelephone": "(819)856-9070",
+            "email": "info@revelations-services.com"
         }
     },
     {
@@ -28,13 +28,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"",
-            "ville":"",
-            "codePostal":"",
-            "province":"",
-            "numeroTelephone":"(514) 813-3642",
-            "email":"jsdionne@maloraph.com"
+        "extra": {
+            "adresse": "",
+            "ville": "",
+            "codePostal": "",
+            "province": "",
+            "numeroTelephone": "(514) 813-3642",
+            "email": "jsdionne@maloraph.com"
         }
     },
     {
@@ -47,13 +47,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"1200, 8e rue",
-            "ville":"Val-d'Or",
-            "codePostal":"J9P3N7",
-            "province":"Québec",
-            "numeroTelephone":"(819) 874-4067",
-            "email":"mclavoie@evoressources.com"
+        "extra": {
+            "adresse": "1200, 8e rue",
+            "ville": "Val-d'Or",
+            "codePostal": "J9P3N7",
+            "province": "Québec",
+            "numeroTelephone": "(819) 874-4067",
+            "email": "mclavoie@evoressources.com"
         }
     },
     {
@@ -66,13 +66,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"23 Perrier",
-            "ville":"Rouyn-Noranda",
-            "codePostal":"J9Y1J7",
-            "province":"Québec",
-            "numeroTelephone":"(819) 279-4361",
-            "email":"meriendeau@onx-automation.com"
+        "extra": {
+            "adresse": "23 Perrier",
+            "ville": "Rouyn-Noranda",
+            "codePostal": "J9Y1J7",
+            "province": "Québec",
+            "numeroTelephone": "(819) 279-4361",
+            "email": "meriendeau@onx-automation.com"
         }
     },
     {
@@ -85,13 +85,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"158 avenue Champlain",
-            "ville":"Val-d'Or",
-            "codePostal":"J9P2B3",
-            "province":"Québec",
-            "numeroTelephone":"(819) 860-3534",
-            "email":"info@kreaxion.ca"
+        "extra": {
+            "adresse": "158 avenue Champlain",
+            "ville": "Val-d'Or",
+            "codePostal": "J9P2B3",
+            "province": "Québec",
+            "numeroTelephone": "(819) 860-3534",
+            "email": "info@kreaxion.ca"
         }
     },
     {
@@ -104,13 +104,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"1132 Rte 111 Ouest",
-            "ville":"Amos",
-            "codePostal":"J9T 1N1",
-            "province":"Québec",
-            "numeroTelephone":"(819) 732-6525",
-            "email":"cgelinas@larouche-bureautique.com"
+        "extra": {
+            "adresse": "1132 Rte 111 Ouest",
+            "ville": "Amos",
+            "codePostal": "J9T 1N1",
+            "province": "Québec",
+            "numeroTelephone": "(819) 732-6525",
+            "email": "cgelinas@larouche-bureautique.com"
         }
     },
     {
@@ -123,13 +123,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"",
-            "ville":"",
-            "codePostal":"",
-            "province":"",
-            "numeroTelephone":"",
-            "email":"tom.pollet@petittheatre.org"
+        "extra": {
+            "adresse": "",
+            "ville": "",
+            "codePostal": "",
+            "province": "",
+            "numeroTelephone": "",
+            "email": "tom.pollet@petittheatre.org"
         }
     },
     {
@@ -142,13 +142,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"255 avenue Québec",
-            "ville":"Rouyn-Noranda",
-            "codePostal":"J9X 5A1",
-            "province":"Québec",
-            "numeroTelephone":"(819) 797-1215",
-            "email":"kvallee@dblarpentage.com"
+        "extra": {
+            "adresse": "255 avenue Québec",
+            "ville": "Rouyn-Noranda",
+            "codePostal": "J9X 5A1",
+            "province": "Québec",
+            "numeroTelephone": "(819) 797-1215",
+            "email": "kvallee@dblarpentage.com"
         }
     },
     {
@@ -161,13 +161,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"299 rue Principale",
-            "ville":"La Sarre",
-            "codePostal":"J9Z 1Z1",
-            "province":"QC",
-            "numeroTelephone":"(819) 333-1110",
-            "email":"info@cjeao.qc.ca"
+        "extra": {
+            "adresse": "299 rue Principale",
+            "ville": "La Sarre",
+            "codePostal": "J9Z 1Z1",
+            "province": "QC",
+            "numeroTelephone": "(819) 333-1110",
+            "email": "info@cjeao.qc.ca"
         }
     },
     {
@@ -180,13 +180,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"680, 3e Avenue, suite 205",
-            "ville":"Val-d'Or",
-            "codePostal":"J9P 1S5",
-            "province":"Québec",
-            "numeroTelephone":"(819) 975-0007",
-            "email":"cetespacedecoworking@gmail.com"
+        "extra": {
+            "adresse": "680, 3e Avenue, suite 205",
+            "ville": "Val-d'Or",
+            "codePostal": "J9P 1S5",
+            "province": "Québec",
+            "numeroTelephone": "(819) 975-0007",
+            "email": "cetespacedecoworking@gmail.com"
         }
     },
     {
@@ -199,13 +199,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"7264 route d'Aiguebelle",
-            "ville":"Rouyn-Noranda",
-            "codePostal":"J0Z 1P0",
-            "province":"Québec",
-            "numeroTelephone":"(819) 860-2007",
-            "email":"jessica@petitcom.ca"
+        "extra": {
+            "adresse": "7264 route d'Aiguebelle",
+            "ville": "Rouyn-Noranda",
+            "codePostal": "J0Z 1P0",
+            "province": "Québec",
+            "numeroTelephone": "(819) 860-2007",
+            "email": "jessica@petitcom.ca"
         }
     },
     {
@@ -218,13 +218,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"",
-            "ville":"",
-            "codePostal":"",
-            "province":"",
-            "numeroTelephone":"(819) 316-0713",
-            "email":"max@studioozone.com"
+        "extra": {
+            "adresse": "",
+            "ville": "",
+            "codePostal": "",
+            "province": "",
+            "numeroTelephone": "(819) 316-0713",
+            "email": "max@studioozone.com"
         }
     },
     {
@@ -234,16 +234,16 @@
         "contactPoint": "",
         "fondationDate": "",
         "offers": [],
-        "domains": [{"domain":{}}],
+        "domains": [{ "domain": {} }],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"38, 7e Avenue Ouest",
-            "ville":"Macamic",
-            "codePostal":"J0Z2S0",
-            "province":"Qc",
-            "numeroTelephone":"(877) 262-2237",
-            "email":"info@radiumstudio.com"
+        "extra": {
+            "adresse": "38, 7e Avenue Ouest",
+            "ville": "Macamic",
+            "codePostal": "J0Z2S0",
+            "province": "Qc",
+            "numeroTelephone": "(877) 262-2237",
+            "email": "info@radiumstudio.com"
         }
     },
     {
@@ -256,13 +256,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"",
-            "ville":"Malartic",
-            "codePostal":"J0Y 1Z0",
-            "province":"Québec",
-            "numeroTelephone":"(819) 355-2250",
-            "email":"info@quebecstudio.com"
+        "extra": {
+            "adresse": "",
+            "ville": "Malartic",
+            "codePostal": "J0Y 1Z0",
+            "province": "Québec",
+            "numeroTelephone": "(819) 355-2250",
+            "email": "info@quebecstudio.com"
         }
     },
     {
@@ -275,13 +275,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"Pas de pignon sur rue",
-            "ville":"Rouyn-Noranda",
-            "codePostal":"J9Y 0G8",
-            "province":"Québec",
-            "numeroTelephone":"(819) 649-0102",
-            "email":"mllevirtuelle@outlook.com"
+        "extra": {
+            "adresse": "Pas de pignon sur rue",
+            "ville": "Rouyn-Noranda",
+            "codePostal": "J9Y 0G8",
+            "province": "Québec",
+            "numeroTelephone": "(819) 649-0102",
+            "email": "mllevirtuelle@outlook.com"
         }
     },
     {
@@ -294,13 +294,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"2171 Rue King Ouest",
-            "ville":"Sherbrooke",
-            "codePostal":"J1J 2G1",
-            "province":"QC",
-            "numeroTelephone":"(819) 822-3890",
-            "email":"smathieu@hypershell.com"
+        "extra": {
+            "adresse": "2171 Rue King Ouest",
+            "ville": "Sherbrooke",
+            "codePostal": "J1J 2G1",
+            "province": "QC",
+            "numeroTelephone": "(819) 822-3890",
+            "email": "smathieu@hypershell.com"
         }
     },
     {
@@ -313,13 +313,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"90 avenue Richelieu",
-            "ville":"Rouyn-Noranda",
-            "codePostal":"J9X 1L5",
-            "province":"Québec",
-            "numeroTelephone":"(819) 279-3484",
-            "email":"info@ethop.studio"
+        "extra": {
+            "adresse": "90 avenue Richelieu",
+            "ville": "Rouyn-Noranda",
+            "codePostal": "J9X 1L5",
+            "province": "Québec",
+            "numeroTelephone": "(819) 279-3484",
+            "email": "info@ethop.studio"
         }
     },
     {
@@ -332,13 +332,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"1, 1ere Avenue Est",
-            "ville":"Macamic",
-            "codePostal":"J0Z 2S0",
-            "province":"Québec",
-            "numeroTelephone":"(819) 279-1699",
-            "email":"aplouffe@alliancetechnologie.ca"
+        "extra": {
+            "adresse": "1, 1ere Avenue Est",
+            "ville": "Macamic",
+            "codePostal": "J0Z 2S0",
+            "province": "Québec",
+            "numeroTelephone": "(819) 279-1699",
+            "email": "aplouffe@alliancetechnologie.ca"
         }
     },
     {
@@ -351,13 +351,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"325, Boul. Rideau",
-            "ville":"Rouyn-Noranda",
-            "codePostal":"J9X 5Y6",
-            "province":"QC",
-            "numeroTelephone":"(819) 762-4545",
-            "email":"info@equipelebleu.com"
+        "extra": {
+            "adresse": "325, Boul. Rideau",
+            "ville": "Rouyn-Noranda",
+            "codePostal": "J9X 5Y6",
+            "province": "QC",
+            "numeroTelephone": "(819) 762-4545",
+            "email": "info@equipelebleu.com"
         }
     },
     {
@@ -370,13 +370,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"325 bou. Rideau",
-            "ville":"Rouyn-Noranda",
-            "codePostal":"J9X 5Y6",
-            "province":"Québec",
-            "numeroTelephone":"(819) 760-0177",
-            "email":"info@productions3tiers.com"
+        "extra": {
+            "adresse": "325 bou. Rideau",
+            "ville": "Rouyn-Noranda",
+            "codePostal": "J9X 5Y6",
+            "province": "Québec",
+            "numeroTelephone": "(819) 760-0177",
+            "email": "info@productions3tiers.com"
         }
     },
     {
@@ -389,13 +389,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"",
-            "ville":"",
-            "codePostal":"",
-            "province":"",
-            "numeroTelephone":"",
-            "email":""
+        "extra": {
+            "adresse": "",
+            "ville": "",
+            "codePostal": "",
+            "province": "",
+            "numeroTelephone": "",
+            "email": ""
         }
     },
     {
@@ -408,32 +408,32 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"701, 5e rue Ouest",
-            "ville":"Amos",
-            "codePostal":"J9T 2S9",
-            "province":"Québec",
-            "numeroTelephone":"(819) 442-2504",
-            "email":"pub.at@hotmail.com"
+        "extra": {
+            "adresse": "701, 5e rue Ouest",
+            "ville": "Amos",
+            "codePostal": "J9T 2S9",
+            "province": "Québec",
+            "numeroTelephone": "(819) 442-2504",
+            "email": "pub.at@hotmail.com"
         }
     },
     {
         "name": "Tandem Design & Impression",
-        "description":"Nous sommes une jeune entreprise spécialisée dans le design graphique, le lettrage automobile et l'impression grand format en tout genre.\nContactez-nous pour nous parler de votre projet!",
+        "description": "Nous sommes une jeune entreprise spécialisée dans le design graphique, le lettrage automobile et l'impression grand format en tout genre.\nContactez-nous pour nous parler de votre projet!",
         "url": "tandemdesign.ca",
         "contactPoint": "",
         "fondationDate": "",
-        "offers":[],
+        "offers": [],
         "domains": [],
         "team": [],
-        "catchphrase":"",
-        "extra":{
-            "adresse":"635 1ère Avenue Ouest",
-            "ville":"Amos",
-            "codePostal":"J9T1V4",
-            "province":"Québec",
-            "numeroTelephone":"(819) 443-3880",
-            "email":"info@tandemdesign.ca"
+        "catchphrase": "",
+        "extra": {
+            "adresse": "635 1ère Avenue Ouest",
+            "ville": "Amos",
+            "codePostal": "J9T1V4",
+            "province": "Québec",
+            "numeroTelephone": "(819) 443-3880",
+            "email": "info@tandemdesign.ca"
         }
     },
     {
@@ -446,13 +446,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"23 rue Perrier",
-            "ville":"Rouyn-Noranda",
-            "codePostal":"J9Y 1J7",
-            "province":"Québec",
-            "numeroTelephone":"(819) 279-4361",
-            "email":"meriendeau@onx-automation.com"
+        "extra": {
+            "adresse": "23 rue Perrier",
+            "ville": "Rouyn-Noranda",
+            "codePostal": "J9Y 1J7",
+            "province": "Québec",
+            "numeroTelephone": "(819) 279-4361",
+            "email": "meriendeau@onx-automation.com"
         }
     },
     {
@@ -465,13 +465,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"",
-            "ville":"Val-d'Or",
-            "codePostal":"",
-            "province":"",
-            "numeroTelephone":"(819) 860-3534",
-            "email":"info@kreaxion.ca"
+        "extra": {
+            "adresse": "",
+            "ville": "Val-d'Or",
+            "codePostal": "",
+            "province": "",
+            "numeroTelephone": "(819) 860-3534",
+            "email": "info@kreaxion.ca"
         }
     },
     {
@@ -484,13 +484,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"377, Route 393 Nord",
-            "ville":"Saint-Vital-de-Clermont",
-            "codePostal":"J0Z 3M0",
-            "province":"Québec",
-            "numeroTelephone":"(819) 333-3582",
-            "email":"info@graphixdesign.ca"
+        "extra": {
+            "adresse": "377, Route 393 Nord",
+            "ville": "Saint-Vital-de-Clermont",
+            "codePostal": "J0Z 3M0",
+            "province": "Québec",
+            "numeroTelephone": "(819) 333-3582",
+            "email": "info@graphixdesign.ca"
         }
     },
     {
@@ -503,13 +503,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"",
-            "ville":"Amos",
-            "codePostal":"J9T 1P7",
-            "province":"Québec",
-            "numeroTelephone":"",
-            "email":"Photo@JennyLeeLariviere.com"
+        "extra": {
+            "adresse": "",
+            "ville": "Amos",
+            "codePostal": "J9T 1P7",
+            "province": "Québec",
+            "numeroTelephone": "",
+            "email": "Photo@JennyLeeLariviere.com"
         }
     },
     {
@@ -522,13 +522,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"410A rue Murdoch",
-            "ville":"Rouyn-Noranda",
-            "codePostal":"J9Y1T6",
-            "province":"Qc",
-            "numeroTelephone":"(819) 290-4112",
-            "email":"hugo@truerc.ca"
+        "extra": {
+            "adresse": "410A rue Murdoch",
+            "ville": "Rouyn-Noranda",
+            "codePostal": "J9Y1T6",
+            "province": "Qc",
+            "numeroTelephone": "(819) 290-4112",
+            "email": "hugo@truerc.ca"
         }
     },
     {
@@ -541,13 +541,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"600 7e Rue, Val-d'Or, QC J9P 3P3",
-            "ville":"Val-d'Or",
-            "codePostal":"J9P 3P3",
-            "province":"Québec",
-            "numeroTelephone":"(819) 824-2666",
-            "email":"medialab@ville.valdor.qc.ca"
+        "extra": {
+            "adresse": "600 7e Rue, Val-d'Or, QC J9P 3P3",
+            "ville": "Val-d'Or",
+            "codePostal": "J9P 3P3",
+            "province": "Québec",
+            "numeroTelephone": "(819) 824-2666",
+            "email": "medialab@ville.valdor.qc.ca"
         }
     },
     {
@@ -560,13 +560,13 @@
         "domains": [],
         "team": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"112, 7e Rue",
-            "ville":"Rouyn-Noranda",
-            "codePostal":"J9X1Z9",
-            "province":"Québec",
-            "numeroTelephone":"(819) 797-6436",
-            "email":"info@petittheatre.org"
+        "extra": {
+            "adresse": "112, 7e Rue",
+            "ville": "Rouyn-Noranda",
+            "codePostal": "J9X1Z9",
+            "province": "Québec",
+            "numeroTelephone": "(819) 797-6436",
+            "email": "info@petittheatre.org"
         }
     }
 ]

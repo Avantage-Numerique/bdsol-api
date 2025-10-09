@@ -12,30 +12,29 @@ import config from "../../config";
  * @property transmuted {any} The final query used in for search/list/etc.
  */
 export default class ApiQuery {
-
-    public name:string;
-    public sort:any;
-    public skip:number;
-    public limit:number;
-    public raw:any;
-    public initQuery:any;
-    public sections:Array<any>;
-    private _transmuted:any;
-    private _options:any;
-    private _lookup:any;
-    private _matches:any;
-    private _projections:any;
+    public name: string;
+    public sort: any;
+    public skip: number;
+    public limit: number;
+    public raw: any;
+    public initQuery: any;
+    public sections: Array<any>;
+    private _transmuted: any;
+    private _options: any;
+    private _lookup: any;
+    private _matches: any;
+    private _projections: any;
 
     /**
      *
      * @param query
      * @inheritDoc
      */
-    constructor(query:any) {
+    constructor(query: any) {
         this.raw = query;
         this.initQuery = query;
         this.sections = [];
-        this.sort = {updatedAt : -1};
+        this.sort = { updatedAt: -1 };
         this.skip = Number(config.query.defaultSkip);
         this.limit = Number(config.query.defaultLimit);
     }
@@ -46,37 +45,35 @@ export default class ApiQuery {
 
     public get transmuted() {
         this._transmuted = {
-            ...this.raw
-        }
+            ...this.raw,
+        };
         if (this.sections.length > 0) {
             for (const section of this.sections) {
                 this._transmuted = {
                     ...this._transmuted,
-                    ...section
-                }
+                    ...section,
+                };
             }
         }
         return this._transmuted;
     }
 
-
     public set options(values) {
-        this.sort = values?.sort ?? {updatedAt : -1}
-        this.limit = values?.limit ?? Number(config.query.defaultLimit)
-        this.skip = values?.skip ?? Number(config.query.defaultSkip)
+        this.sort = values?.sort ?? { updatedAt: -1 };
+        this.limit = values?.limit ?? Number(config.query.defaultLimit);
+        this.skip = values?.skip ?? Number(config.query.defaultSkip);
         this._options = {
             sort: this.sort,
             limit: this.limit,
-            skip: this.skip
-        }
+            skip: this.skip,
+        };
     }
 
     public get options() {
         return this._options;
     }
 
-
-    public set matches(values:any) {
+    public set matches(values: any) {
         this._matches = values;
     }
 
@@ -84,8 +81,7 @@ export default class ApiQuery {
         return this._matches;
     }
 
-
-    public set lookup(values:any) {
+    public set lookup(values: any) {
         /*
         from: Collection,
         localField: current Model field to match the value of ForeignField,
@@ -98,7 +94,6 @@ export default class ApiQuery {
     public get lookup() {
         return this._lookup;
     }
-
 
     public get projections() {
         return {};

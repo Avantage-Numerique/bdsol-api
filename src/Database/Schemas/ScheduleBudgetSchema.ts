@@ -1,15 +1,15 @@
-import {Document, Schema} from "mongoose";
-import {SubMeta} from "@src/Moderation/Schemas/MetaSchema";
+import { Document, Schema } from "mongoose";
+import { SubMeta } from "@src/Moderation/Schemas/MetaSchema";
 
 export enum BudgetRangeEnum {
     "" = "",
     "0$ à 1 000$" = "0-1k",
     "1 000$ à 5 000$" = "1k-5k",
     "5 000$ à 10 000$" = "5k-10k",
-    "10 000$ à 25 000$"= "10k-25k",
+    "10 000$ à 25 000$" = "10k-25k",
     "25 000$ à 50 000$" = "25k-50k",
     "50 000$ à 100 000$" = "50k-100k",
-    "Plus de 100 000$" = "100k+"
+    "Plus de 100 000$" = "100k+",
 }
 
 export enum TimeframeEtaEnum {
@@ -22,38 +22,35 @@ export enum TimeframeEtaEnum {
     "Une année" = "1 year",
     "2 ans" = "2 year",
     "3 ans" = "3 year",
-    "5 ans ou plus" = "5 year +"
+    "5 ans ou plus" = "5 year +",
 }
 
 export interface TimeframeSchema extends Document {
     step: string;
     eta: string;
     budgetRange: string;
-    subMeta: SubMeta
+    subMeta: SubMeta;
 }
 
 export class Timeframe {
     /** @static schema */
-    static schema:Schema =
-    new Schema<TimeframeSchema>({
+    static schema: Schema = new Schema<TimeframeSchema>({
         step: {
             type: String,
         },
         eta: {
             type: String,
-            enum: TimeframeEtaEnum
+            enum: TimeframeEtaEnum,
         },
         budgetRange: {
             type: String,
-            enum: BudgetRangeEnum
+            enum: BudgetRangeEnum,
         },
         subMeta: {
-            type: SubMeta.schema
-        }
-    })
-
+            type: SubMeta.schema,
+        },
+    });
 }
-
 
 export interface ScheduleBudgetSchema extends Document {
     startDate: Date;
@@ -65,34 +62,33 @@ export interface ScheduleBudgetSchema extends Document {
     subMeta: SubMeta;
 }
 
-
 export class ScheduleBudget {
-
     /** @static schema */
-    static schema:Schema =
-    new Schema<ScheduleBudgetSchema>({
-        startDate: {
-            type: Date
+    static schema: Schema = new Schema<ScheduleBudgetSchema>(
+        {
+            startDate: {
+                type: Date,
+            },
+            endDateEstimate: {
+                type: Date,
+            },
+            completionDate: {
+                type: Date,
+            },
+            estimatedTotalBudget: {
+                type: Number,
+            },
+            eta: {
+                type: String,
+            },
+            timeframe: {
+                type: [Timeframe.schema],
+            },
+            subMeta: {
+                type: SubMeta.schema,
+                //required: true
+            },
         },
-        endDateEstimate: {
-            type: Date
-        },
-        completionDate: {
-            type: Date
-        },
-        estimatedTotalBudget: {
-            type: Number,
-        },
-        eta: {
-            type: String,
-        },
-        timeframe: {
-            type: [Timeframe.schema],
-        },
-        subMeta: {
-            type: SubMeta.schema,
-            //required: true
-        }
-    },{ _id : false }
+        { _id: false }
     );
 }

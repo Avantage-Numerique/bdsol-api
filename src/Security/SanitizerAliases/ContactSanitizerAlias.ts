@@ -1,11 +1,14 @@
-import {body} from "express-validator";
-import {NoHtmlSanitizer} from "../Sanitizers/NoHtmlSanitizer";
-import {ApiValidatingSanitizingChainType} from "../ExpressValidator/ApiValidatingSanitizingChain";
+import { body } from "express-validator";
+import { NoHtmlSanitizer } from "../Sanitizers/NoHtmlSanitizer";
+import { ApiValidatingSanitizingChainType } from "../ExpressValidator/ApiValidatingSanitizingChain";
 
-const contactPointSanitizerAlias = (param:string, isOptional:boolean=true, source=body):ApiValidatingSanitizingChainType => {
-
-    let chain:ApiValidatingSanitizingChainType = source(param);
-    chain = chain.optional({values:"falsy"});
+const contactPointSanitizerAlias = (
+    param: string,
+    isOptional: boolean = true,
+    source = body
+): ApiValidatingSanitizingChainType => {
+    let chain: ApiValidatingSanitizingChainType = source(param);
+    chain = chain.optional({ values: "falsy" });
 
     if (!isOptional) {
         chain = chain.notEmpty().withMessage("Is required");
@@ -15,6 +18,6 @@ const contactPointSanitizerAlias = (param:string, isOptional:boolean=true, sourc
         .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
         .stripLow()
         .trim(); //.normalizeEmail()
-}
+};
 
-export {contactPointSanitizerAlias}
+export { contactPointSanitizerAlias };

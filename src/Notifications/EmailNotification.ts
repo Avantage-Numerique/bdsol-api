@@ -1,10 +1,12 @@
 import config from "@src/config";
-import {createTransport, Transporter} from 'nodemailer';
-import Notification, {NotificationConfig, NotificationContent} from "@src/Notifications/Notification";
+import { createTransport, Transporter } from "nodemailer";
+import Notification, {
+    NotificationConfig,
+    NotificationContent,
+} from "@src/Notifications/Notification";
 import EmailTemplate from "@src/Templates/EmailTemplate";
 import EmailContent from "@src/Templates/EmailContent";
-import {NoHtmlSanitizer} from "@src/Security/Sanitizers/NoHtmlSanitizer";
-
+import { NoHtmlSanitizer } from "@src/Security/Sanitizers/NoHtmlSanitizer";
 
 /**
  * Send an email as a notification with the default Enailtemplate
@@ -16,15 +18,18 @@ import {NoHtmlSanitizer} from "@src/Security/Sanitizers/NoHtmlSanitizer";
  * @param content.context.title {object} All the variables to push into the template.
  */
 class EmailNotification extends Notification {
-
-    private _transporter:Transporter;
-    private _emailTemplate:EmailTemplate;
+    private _transporter: Transporter;
+    private _emailTemplate: EmailTemplate;
     private LogHelper: any;
 
-    constructor(config:NotificationConfig, content:NotificationContent, textContent="") {
+    constructor(
+        config: NotificationConfig,
+        content: NotificationContent,
+        textContent = ""
+    ) {
         super(config, EmailContent.prepare(content));
 
-        this._emailTemplate = new EmailTemplate(content.template);//tempalte have already a default in the EmailContent.Prepare.
+        this._emailTemplate = new EmailTemplate(content.template); //tempalte have already a default in the EmailContent.Prepare.
     }
 
     /**
@@ -36,7 +41,9 @@ class EmailNotification extends Notification {
                 from: config.notifications.email.from,
                 replyTo: config.notifications.email.replyTo,
                 to: this.config.recipient,
-                subject: this.config.subject ?? `Un courriel de la part de ${config.appName}`,
+                subject:
+                    this.config.subject ??
+                    `Un courriel de la part de ${config.appName}`,
                 text: this.contentToTextOnly(),
                 html: await this._emailTemplate.render(this.content),
             };
@@ -50,7 +57,7 @@ class EmailNotification extends Notification {
      * Preview this current notification (used to render for test in browser + mailhog
      * @return {string} the email template rentederd (nunjuck).
      */
-    public async preview():Promise<string> {
+    public async preview(): Promise<string> {
         return await this._emailTemplate.preview(this.content);
     }
 
@@ -67,7 +74,10 @@ class EmailNotification extends Notification {
      */
     public get transporter() {
         if (this._transporter === undefined) {
-            const transportOptions:any = config.environnement === "production" ? this.getProductionTransporterOptions() : this.getDevelopmentTransporterOptions();
+            const transportOptions: any =
+                config.environnement === "production"
+                    ? this.getProductionTransporterOptions()
+                    : this.getDevelopmentTransporterOptions();
             this._transporter = createTransport(transportOptions);
         }
         return this._transporter;
@@ -77,12 +87,12 @@ class EmailNotification extends Notification {
         return {
             host: config.notifications.email.server,
             port: config.notifications.email.port,
-            secure: true,//this is not a config to have. It must crash if not tls.
+            secure: true, //this is not a config to have. It must crash if not tls.
             auth: {
                 user: config.notifications.email.user,
                 pass: config.notifications.email.password,
-            }
-        }
+            },
+        };
     }
     public getDevelopmentTransporterOptions() {
         return {
@@ -92,8 +102,8 @@ class EmailNotification extends Notification {
             auth: {
                 user: config.notifications.email.user,
                 pass: config.notifications.email.password,
-            }
-        }
+            },
+        };
     }
 }
 

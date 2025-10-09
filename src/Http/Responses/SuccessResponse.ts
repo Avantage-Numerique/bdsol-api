@@ -1,22 +1,23 @@
-import ApiResponse, {ApiResponseContract} from "./ApiResponse";
+import ApiResponse, { ApiResponseContract } from "./ApiResponse";
 
 export class SuccessResponse extends ApiResponse {
-
-    constructor(response:ApiResponseContract) {
+    constructor(response: ApiResponseContract) {
         super(response);
         this.error = false;
     }
 
-    public static create(data:any, code:number, message:string):ApiResponseContract {
-
+    public static create(
+        data: any,
+        code: number,
+        message: string
+    ): ApiResponseContract {
         const success = new SuccessResponse({
-            error:false,
+            error: false,
             code: code,
             message: message,
             errors: {},
-            data: data
+            data: data,
         } as ApiResponseContract);
         return success.response;
     }
-
 }

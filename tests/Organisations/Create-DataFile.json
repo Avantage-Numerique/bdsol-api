@@ -1,86 +1,80 @@
 [
     {
-        "infoTest":
-        {
+        "infoTest": {
             "iteration": 1,
-            "name":"Create Full no fondationDate",
-            "error":false,
-            "status":201,
+            "name": "Create Full no fondationDate",
+            "error": false,
+            "status": 201,
             "expectedProperties": {
-                "name" : "Petit f",
-                "description" : "Théâtre et f",
-                "url" : "https://f.org/",
-                "contactPoint" : "info@f.org"
+                "name": "Petit f",
+                "description": "Théâtre et f",
+                "url": "https://f.org/",
+                "contactPoint": "info@f.org"
             }
         },
         "name": "Petit f",
         "description": "Théâtre et f",
-        "url":"https://f.org/",
-        "contactPoint":"info@f.org"
+        "url": "https://f.org/",
+        "contactPoint": "info@f.org"
     },
     {
-        "infoTest":
-        {
+        "infoTest": {
             "iteration": 2,
-            "name":"Create Full2",
-            "error":false,
-            "status":201,
-            "ignoreFields":{},
+            "name": "Create Full2",
+            "error": false,
+            "status": 201,
+            "ignoreFields": {},
             "expectedProperties": {
                 "name": "Agora des Arts",
                 "description": "Petite église, salle de spectacle sympatoche",
-                "url":"http://www.agoradesarts.com/",
-                "contactPoint":"info@agoradesarts.com",
-                "fondationDate":"2022-06-08T00:00:00.000Z"
+                "url": "http://www.agoradesarts.com/",
+                "contactPoint": "info@agoradesarts.com",
+                "fondationDate": "2022-06-08T00:00:00.000Z"
             }
         },
         "name": "Agora des Arts",
         "description": "Petite église, salle de spectacle sympatoche",
-        "url":"http://www.agoradesarts.com/",
-        "contactPoint":"info@agoradesarts.com",
-        "fondationDate":"2022-06-08"
+        "url": "http://www.agoradesarts.com/",
+        "contactPoint": "info@agoradesarts.com",
+        "fondationDate": "2022-06-08"
     },
     {
-        "infoTest":
-        {
+        "infoTest": {
             "iteration": 3,
-            "name":"Create empty data",
-            "error":true,
-            "status":422
+            "name": "Create empty data",
+            "error": true,
+            "status": 422
         }
     },
     {
-        "infoTest":
-        {
+        "infoTest": {
             "iteration": 4,
-            "name":"Create no name",
-            "error":true,
-            "status":422
+            "name": "Create no name",
+            "error": true,
+            "status": 422
         },
         "description": "Culturama sse-toi",
-        "url":"http://www.culturamassetoi.com/",
-        "contactPoint":"info@ramasse.png"
+        "url": "http://www.culturamassetoi.com/",
+        "contactPoint": "info@ramasse.png"
     },
     {
-        "infoTest":
-        {
+        "infoTest": {
             "iteration": 5,
-            "name":"Create empty name",
-            "error":true,
-            "status":422
+            "name": "Create empty name",
+            "error": true,
+            "status": 422
         },
         "name": "",
         "description": "Culturama sse-toi",
-        "url":"http://www.culturamassetoi.com/",
-        "contactPoint":"info@ramasse.png"
+        "url": "http://www.culturamassetoi.com/",
+        "contactPoint": "info@ramasse.png"
     },
     {
-        "infoTest":
-        {
+        "infoTest": {
             "iteration": 6,
-            "name":"Create empty non req",
-            "error":false,
-            "status":201,
+            "name": "Create empty non req",
+            "error": false,
+            "status": 201,
             "expectedProperties": {
                 "name": "Synvain Rénove",
                 "description": "Rénovation de tout genre"
@@ -88,16 +82,15 @@
         },
         "name": "Synvain Rénove",
         "description": "Rénovation de tout genre",
-        "url":"",
-        "contactPoint":""
+        "url": "",
+        "contactPoint": ""
     },
     {
-        "infoTest":
-        {
+        "infoTest": {
             "iteration": 7,
-            "name":"Create no non req",
-            "error":false,
-            "status":201,
+            "name": "Create no non req",
+            "error": false,
+            "status": 201,
             "expectedProperties": {
                 "name": "L'alphabet à 9 ans",
                 "description": "Garderie"
@@ -107,12 +100,11 @@
         "description": "Garderie"
     },
     {
-        "infoTest":
-        {
+        "infoTest": {
             "iteration": 8,
-            "name":"Create empty date",
-            "error":false,
-            "status":201,
+            "name": "Create empty date",
+            "error": false,
+            "status": 201,
             "expectedProperties": {
                 "name": "L'iro kals",
                 "description": "Gryt"
@@ -120,6 +112,6 @@
         },
         "name": "L'iro kals",
         "description": "Gryt",
-        "fondationDate":null
+        "fondationDate": null
     }
 ]

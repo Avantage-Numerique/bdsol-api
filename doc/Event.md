@@ -3,6 +3,7 @@ Retour à la base de [Documention de l'API](readme.md)
 # Event
 
 ## URI définies
+
 - `/events/`
 - `/events/create`
 - `/events/update`
@@ -10,16 +11,16 @@ Retour à la base de [Documention de l'API](readme.md)
 - `/events/search`
 - `/events/delete`
 
-
 ## Choix du schéma
+
 Événement est une entité à part entière, mais est aussi une finalité d'un projet. L'événement a donc beaucoup de similitude avec projet, puisqu'il a lui aussi une entité en charge, et des partenaires.
 
 Un projet pourra être lié vers un événement, il en sera donc le "parent".
 
 Un événement pourra lui aussi avoir des "enfants" événement `subEvents` dans le cas où un festival voudrais spécifié chaque spectacle qu'il présente sous forme d'événement au lieu de plage horaire.
 
+## Schéma de l'objet
 
-## Schéma de l'objet 
 ```
 {
     _id : ObjectId
@@ -48,7 +49,9 @@ Un événement pourra lui aussi avoir des "enfants" événement `subEvents` dans
     updatedAt : Date
 }
 ```
+
 ## Champs
+
 - name : Nom de l'événement
 - alternateName : Nom alternatif de l'événement
 - description : Description de l'événement
@@ -69,9 +72,3 @@ Un événement pourra lui aussi avoir des "enfants" événement `subEvents` dans
 - schedule : Horaire d'une activité de l'événement date et heure de début et de fin avec un nom d'activité
 - subEvents : Sous-événement (un spectacle en plusieurs partie, où les autres parties du spectacle serait des événements)
 - meta : métadonée de la fiche d'événement
-
-
-
-
-
-

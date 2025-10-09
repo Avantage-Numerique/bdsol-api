@@ -1,10 +1,9 @@
-
 interface RuleHandler {
     setNext(handler: RuleHandler): RuleHandler;
 
-    handle(rule:string, value:any, param?:any): string;
+    handle(rule: string, value: any, param?: any): string;
 
-    errMsg:string;
+    errMsg: string;
 }
 
 abstract class AbstractRuleHandler implements RuleHandler {
@@ -15,35 +14,35 @@ abstract class AbstractRuleHandler implements RuleHandler {
         return handler;
     }
 
-    public handle(rule: string, value:any, param?:any): string {
+    public handle(rule: string, value: any, param?: any): string {
         if (this.nextHandler) {
             return this.nextHandler.handle(rule, value, param);
         }
 
-        return "\nLa règle "+rule+ "n'est pas implémentée.";
+        return "\nLa règle " + rule + "n'est pas implémentée.";
     }
 
-    errMsg:string;
+    errMsg: string;
 }
 
 export class isDefined extends AbstractRuleHandler {
-    public handle(rule:string, value:any, param?:any) :string {
+    public handle(rule: string, value: any, param?: any): string {
         if (rule === "isDefined") {
-            if (value !== undefined && typeof value !== 'undefined')
+            if (value !== undefined && typeof value !== "undefined")
                 return "OK";
-            return "Valeur : "+value+" rule "+this.errMsg;
+            return "Valeur : " + value + " rule " + this.errMsg;
         }
         return super.handle(rule, value, param);
     }
-    public errMsg = "isDefined : n'est pas définie (typeof == undefined || == null).";
+    public errMsg =
+        "isDefined : n'est pas définie (typeof == undefined || == null).";
 }
 
 export class isNotNull extends AbstractRuleHandler {
-    public handle(rule:string, value:any, param?:any) :string {
+    public handle(rule: string, value: any, param?: any): string {
         if (rule === "isNotNull") {
-            if (value !== null)
-                return "OK";
-            return "Valeur : "+value+" rule "+this.errMsg;
+            if (value !== null) return "OK";
+            return "Valeur : " + value + " rule " + this.errMsg;
         }
         return super.handle(rule, value, param);
     }
@@ -51,11 +50,10 @@ export class isNotNull extends AbstractRuleHandler {
 }
 
 export class isString extends AbstractRuleHandler {
-    public handle(rule:string, value:any, param?:any) :string {
+    public handle(rule: string, value: any, param?: any): string {
         if (rule === "isString") {
-            if (typeof value == "string")
-                return "OK";
-            return "Valeur : "+value+" rule "+this.errMsg;
+            if (typeof value == "string") return "OK";
+            return "Valeur : " + value + " rule " + this.errMsg;
         }
         return super.handle(rule, value, param);
     }
@@ -63,11 +61,10 @@ export class isString extends AbstractRuleHandler {
 }
 
 export class isNotEmpty extends AbstractRuleHandler {
-    public handle(rule:string, value:any, param?:any) :string {
+    public handle(rule: string, value: any, param?: any): string {
         if (rule === "isNotEmpty") {
-            if (typeof value == "string" && value != "")
-                return "OK";
-            return "Valeur : "+value+" rule "+this.errMsg;
+            if (typeof value == "string" && value != "") return "OK";
+            return "Valeur : " + value + " rule " + this.errMsg;
         }
         return super.handle(rule, value, param);
     }
@@ -75,35 +72,34 @@ export class isNotEmpty extends AbstractRuleHandler {
 }
 
 export class minLength extends AbstractRuleHandler {
-    public handle(rule:string, value:any, param?:any) :string {
+    public handle(rule: string, value: any, param?: any): string {
         if (rule === "minLength") {
-            if (typeof value == "string" && value.length >= param)
-                return "OK";
-            return "Valeur : "+value+" rule "+this.errMsg;
+            if (typeof value == "string" && value.length >= param) return "OK";
+            return "Valeur : " + value + " rule " + this.errMsg;
         }
         return super.handle(rule, value, param);
     }
-    public errMsg = "minLength : n'a pas la longueur minimale requise ou n'est pas un string.";
+    public errMsg =
+        "minLength : n'a pas la longueur minimale requise ou n'est pas un string.";
 }
 
 export class maxLength extends AbstractRuleHandler {
-    public handle(rule:string, value:any, param?:any) :string {
+    public handle(rule: string, value: any, param?: any): string {
         if (rule === "maxLength") {
-            if (typeof value == "string" && value.length <= param)
-                return "OK";
-            return "Valeur : "+value+" rule "+this.errMsg;
+            if (typeof value == "string" && value.length <= param) return "OK";
+            return "Valeur : " + value + " rule " + this.errMsg;
         }
         return super.handle(rule, value, param);
     }
-    public errMsg = "maxLength : dépasse la longueur maximal permise ou n'est pas un string.";
+    public errMsg =
+        "maxLength : dépasse la longueur maximal permise ou n'est pas un string.";
 }
 
 export class idValid extends AbstractRuleHandler {
-    public handle(rule:string, value:any, param?:any) :string {
+    public handle(rule: string, value: any, param?: any): string {
         if (rule === "idValid") {
-            if (typeof value == "string" && value.length == 24)
-                return "OK"
-            return "Valeur : "+value+" rule "+this.errMsg;
+            if (typeof value == "string" && value.length == 24) return "OK";
+            return "Valeur : " + value + " rule " + this.errMsg;
         }
         return super.handle(rule, value, param);
     }
@@ -111,11 +107,10 @@ export class idValid extends AbstractRuleHandler {
 }
 
 export class isObject extends AbstractRuleHandler {
-    public handle(rule:string, value:any, param?:any) :string {
+    public handle(rule: string, value: any, param?: any): string {
         if (rule === "isObject") {
-            if (typeof value == 'object')
-                return "OK"
-            return "Valeur : "+value+" rule "+this.errMsg;
+            if (typeof value == "object") return "OK";
+            return "Valeur : " + value + " rule " + this.errMsg;
         }
         return super.handle(rule, value, param);
     }
@@ -123,24 +118,24 @@ export class isObject extends AbstractRuleHandler {
 }
 
 export class objectNotEmpty extends AbstractRuleHandler {
-    public handle(rule:string, value:any, param?:any) :string {
+    public handle(rule: string, value: any, param?: any): string {
         if (rule === "objectNotEmpty") {
-            if (value !== undefined && typeof value !== 'undefined')
+            if (value !== undefined && typeof value !== "undefined")
                 return "OK";
-            return "Valeur : "+value+" rule "+this.errMsg;
+            return "Valeur : " + value + " rule " + this.errMsg;
         }
         return super.handle(rule, value, param);
     }
-    public errMsg = "objectNotEmpty : l'objet à traiter ne contient aucun champs";
+    public errMsg =
+        "objectNotEmpty : l'objet à traiter ne contient aucun champs";
 }
 
 export class isDate extends AbstractRuleHandler {
-    public handle(rule:string, value:any, param?:any) :string {
+    public handle(rule: string, value: any, param?: any): string {
         if (rule === "isDate") {
             const date = new Date(value);
-            if (date instanceof Date && !isNaN(date.valueOf()))
-                return "OK"
-            return "Valeur : "+value+" rule "+this.errMsg;
+            if (date instanceof Date && !isNaN(date.valueOf())) return "OK";
+            return "Valeur : " + value + " rule " + this.errMsg;
         }
         return super.handle(rule, value, param);
     }

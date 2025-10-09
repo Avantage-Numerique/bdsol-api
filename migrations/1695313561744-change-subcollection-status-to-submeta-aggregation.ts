@@ -1,107 +1,106 @@
-import {MongoDBDriver} from "@database/Drivers/MongoDriver";
+import { MongoDBDriver } from "@database/Drivers/MongoDriver";
 import config from "@src/config";
-import {runQueriesOnDatabase} from "@database/Helper/MongodbRunQueries";
+import { runQueriesOnDatabase } from "@database/Helper/MongodbRunQueries";
 
-const renameDomainStatus:any = [
+const renameDomainStatus: any = [
     {
         $addFields: {
-            "domains": {
+            domains: {
                 $map: {
                     input: "$domains",
                     as: "d",
                     in: {
-                        "domain": "$$d.domain",
-                        "subMeta": "$$d.status" // Rename 'status' to 'subMeta'
-                    }
-                }
-            }
-        }
-    }
+                        domain: "$$d.domain",
+                        subMeta: "$$d.status", // Rename 'status' to 'subMeta'
+                    },
+                },
+            },
+        },
+    },
 ];
 
-const renameTeamMembers:any = [
+const renameTeamMembers: any = [
     {
         $addFields: {
-            "team": {
+            team: {
                 $map: {
                     input: "$team",
                     as: "t",
                     in: {
-                        "member": "$$t.member",
-                        "role": "$$t.role",
-                        "subMeta": "$$t.status" // Rename 'status' to 'subMeta'
-                    }
-                }
-            }
-        }
-    }
+                        member: "$$t.member",
+                        role: "$$t.role",
+                        subMeta: "$$t.status", // Rename 'status' to 'subMeta'
+                    },
+                },
+            },
+        },
+    },
 ];
 
-const getAggregationSkillGroupQuery = (mainField:string) => {
+const getAggregationSkillGroupQuery = (mainField: string) => {
     return [
         {
             $addFields: {
-               [mainField]: {
+                [mainField]: {
                     $map: {
                         input: `$${mainField}`,
                         as: "mf",
                         in: {
-                            "groupName": "$$mf.groupName",
-                            "skills": "$$mf.skills",
-                            "subMeta": "$$mf.status" // Rename 'status' to 'subMeta'
-                        }
-                    }
-               }
-            }
-        }
+                            groupName: "$$mf.groupName",
+                            skills: "$$mf.skills",
+                            subMeta: "$$mf.status", // Rename 'status' to 'subMeta'
+                        },
+                    },
+                },
+            },
+        },
     ];
-}
+};
 
-const renameStatusToMetaTasks:any = [
+const renameStatusToMetaTasks: any = [
     {
         collection: "organisations",
         queries: [
             renameDomainStatus,
             renameTeamMembers,
-            getAggregationSkillGroupQuery('offers')
-        ]
+            getAggregationSkillGroupQuery("offers"),
+        ],
     },
     {
         collection: "events",
-        queries: [
-            renameDomainStatus,
-            renameTeamMembers
-        ]
+        queries: [renameDomainStatus, renameTeamMembers],
     },
     {
         collection: "people",
         queries: [
             renameDomainStatus,
-            getAggregationSkillGroupQuery('occupations')
-        ]
+            getAggregationSkillGroupQuery("occupations"),
+        ],
     },
     {
         collection: "projects",
-        queries: [
-            renameDomainStatus,
-            renameTeamMembers
-        ]
-    }
+        queries: [renameDomainStatus, renameTeamMembers],
+    },
 ];
-
 
 /**
  * Up method, executed when we up migrations.
  */
 export async function up(): Promise<void> {
-    const driver:MongoDBDriver = new MongoDBDriver(config.migrations);
-    await runQueriesOnDatabase(driver, 'bdsol-data', renameStatusToMetaTasks, 'Renaming domains.status to domains.subMeta and ', 'up');
+    const driver: MongoDBDriver = new MongoDBDriver(config.migrations);
+    await runQueriesOnDatabase(
+        driver,
+        "bdsol-data",
+        renameStatusToMetaTasks,
+        "Renaming domains.status to domains.subMeta and ",
+        "up"
+    );
 }
 
 /**
  * Down method, executed when we roll back migration.
  */
-export async function down (): Promise<void> {
+export async function down(): Promise<void> {
     //const driver:MongoDBDriver = new MongoDBDriver(config.migrations);
     // SOrry I didn't implement the down query.
     //await runQueriesOnDatabase(driver, 'bdsol-data', tasksRenameMetaToStatus, 'Renaming status to meta', 'down');

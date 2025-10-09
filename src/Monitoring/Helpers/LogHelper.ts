@@ -1,5 +1,5 @@
-import * as fs from 'fs';
-import {getApiConfig} from "@src/config";
+import * as fs from "fs";
+import { getApiConfig } from "@src/config";
 import LogStorage from "@src/Storage/Files/LogStorage";
 /**
  * Entry point for loggin activity into the API
@@ -31,110 +31,165 @@ enum LogFormats {
     WARN = "\x1b[33;4m%s\x1b[0;33m%j\x1b[0m",
     INFO = "\x1b[90;4m%s\x1b[0;90m%j\x1b[0m",
     DEBUG = "\x1b[36;4m%s\x1b[0;36m%j\x1b[0m",
-    RAW = ""
+    RAW = "",
 }
 
-export default class LogHelper
-{
+export default class LogHelper {
     static printToConsole: boolean = true;
-    static styled:boolean = false;
+    static styled: boolean = false;
     static logToFile: boolean = getApiConfig().logToFile;
-    
+
     public static showLog = true;
     public static showError = true;
     public static showWarn = true;
     public static showInfo = true;
     public static showDebug = true;
     public static showRaw = true;
-    
 
-    public routeVerbose:string;
+    public routeVerbose: string;
 
-    constructor(req:any){
-        if(req.user && req.user.username && req.ip)
-            this.routeVerbose = '[' + req.visitor.ip + ']' + '[' + req.user.username + ']' + '[' + req.originalUrl + ']'
+    constructor(req: any) {
+        if (req.user && req.user.username && req.ip)
+            this.routeVerbose =
+                "[" +
+                req.visitor.ip +
+                "]" +
+                "[" +
+                req.user.username +
+                "]" +
+                "[" +
+                req.originalUrl +
+                "]";
     }
 
     //With instance
-    public log(...args:any[]){
-        const verbose = LogHelper.createVerbose('LOG', this.routeVerbose);
-        if(LogHelper.showLog && LogHelper.printToConsole)
-            console.log((LogHelper.styled ? LogFormats.LOG : LogFormats.RAW), verbose, args);
-        LogHelper.logFile('LOG', verbose, args);
+    public log(...args: any[]) {
+        const verbose = LogHelper.createVerbose("LOG", this.routeVerbose);
+        if (LogHelper.showLog && LogHelper.printToConsole)
+            console.log(
+                LogHelper.styled ? LogFormats.LOG : LogFormats.RAW,
+                verbose,
+                args
+            );
+        LogHelper.logFile("LOG", verbose, args);
     }
-    public error(...args:any[]){
-        const verbose = LogHelper.createVerbose('ERROR', this.routeVerbose);
-        if(LogHelper.showError && LogHelper.printToConsole)
-            console.log((LogHelper.styled ? LogFormats.ERROR : LogFormats.RAW), verbose, args);
-        LogHelper.logFile('ERROR', verbose, args);
+    public error(...args: any[]) {
+        const verbose = LogHelper.createVerbose("ERROR", this.routeVerbose);
+        if (LogHelper.showError && LogHelper.printToConsole)
+            console.log(
+                LogHelper.styled ? LogFormats.ERROR : LogFormats.RAW,
+                verbose,
+                args
+            );
+        LogHelper.logFile("ERROR", verbose, args);
     }
 
-    public warn(...args:any[]){
-        const verbose = LogHelper.createVerbose('WARN', this.routeVerbose);
-        if(LogHelper.showError && LogHelper.printToConsole)
-            console.log((LogHelper.styled ? LogFormats.ERROR : LogFormats.RAW), verbose, args);
-        LogHelper.logFile('WARN', verbose, args);
+    public warn(...args: any[]) {
+        const verbose = LogHelper.createVerbose("WARN", this.routeVerbose);
+        if (LogHelper.showError && LogHelper.printToConsole)
+            console.log(
+                LogHelper.styled ? LogFormats.ERROR : LogFormats.RAW,
+                verbose,
+                args
+            );
+        LogHelper.logFile("WARN", verbose, args);
     }
-    public info(...args:any[]){
-        const verbose = LogHelper.createVerbose('INFO', this.routeVerbose);
-        if(LogHelper.showError && LogHelper.printToConsole)
-            console.log((LogHelper.styled ? LogFormats.ERROR : LogFormats.RAW), verbose, args);
-        LogHelper.logFile('INFO', verbose, args);
+    public info(...args: any[]) {
+        const verbose = LogHelper.createVerbose("INFO", this.routeVerbose);
+        if (LogHelper.showError && LogHelper.printToConsole)
+            console.log(
+                LogHelper.styled ? LogFormats.ERROR : LogFormats.RAW,
+                verbose,
+                args
+            );
+        LogHelper.logFile("INFO", verbose, args);
     }
-    public debug(...args:any[]){
-        const verbose = LogHelper.createVerbose('DEBUG', this.routeVerbose);
-        if(LogHelper.showError && LogHelper.printToConsole)
-            console.log((LogHelper.styled ? LogFormats.ERROR : LogFormats.RAW), verbose, args);
-        LogHelper.logFile('DEBUG', verbose, args);
+    public debug(...args: any[]) {
+        const verbose = LogHelper.createVerbose("DEBUG", this.routeVerbose);
+        if (LogHelper.showError && LogHelper.printToConsole)
+            console.log(
+                LogHelper.styled ? LogFormats.ERROR : LogFormats.RAW,
+                verbose,
+                args
+            );
+        LogHelper.logFile("DEBUG", verbose, args);
     }
-    public raw(...args:any[]){
-        const verbose = LogHelper.createVerbose('RAW', this.routeVerbose);
-        if(LogHelper.showError && LogHelper.printToConsole)
-            console.log((LogHelper.styled ? LogFormats.ERROR : LogFormats.RAW), verbose, args);
-        LogHelper.logFile('RAW', verbose, args);
+    public raw(...args: any[]) {
+        const verbose = LogHelper.createVerbose("RAW", this.routeVerbose);
+        if (LogHelper.showError && LogHelper.printToConsole)
+            console.log(
+                LogHelper.styled ? LogFormats.ERROR : LogFormats.RAW,
+                verbose,
+                args
+            );
+        LogHelper.logFile("RAW", verbose, args);
     }
 
     //(static) Without instance
     public static log(...args: any[]) {
-        const verbose = LogHelper.createVerbose('LOG')
-        if(LogHelper.showLog && LogHelper.printToConsole)
-            console.log((LogHelper.styled ? LogFormats.LOG : LogFormats.RAW), verbose, args);
-        LogHelper.logFile('LOG', verbose, args);
+        const verbose = LogHelper.createVerbose("LOG");
+        if (LogHelper.showLog && LogHelper.printToConsole)
+            console.log(
+                LogHelper.styled ? LogFormats.LOG : LogFormats.RAW,
+                verbose,
+                args
+            );
+        LogHelper.logFile("LOG", verbose, args);
     }
 
     public static error(...args: any[]) {
-        const verbose = LogHelper.createVerbose('ERROR')
-        if(LogHelper.showError && LogHelper.printToConsole)
-            console.log((LogHelper.styled ? LogFormats.ERROR : LogFormats.RAW), verbose, args);
-        LogHelper.logFile('ERROR', verbose, args);
+        const verbose = LogHelper.createVerbose("ERROR");
+        if (LogHelper.showError && LogHelper.printToConsole)
+            console.log(
+                LogHelper.styled ? LogFormats.ERROR : LogFormats.RAW,
+                verbose,
+                args
+            );
+        LogHelper.logFile("ERROR", verbose, args);
     }
 
     public static warn(...args: any[]) {
-        const verbose = LogHelper.createVerbose('WARN')
-        if(LogHelper.showWarn && LogHelper.printToConsole)
-            console.log((LogHelper.styled ? LogFormats.WARN : LogFormats.RAW), verbose, args);
-        LogHelper.logFile('WARN', verbose, args);
+        const verbose = LogHelper.createVerbose("WARN");
+        if (LogHelper.showWarn && LogHelper.printToConsole)
+            console.log(
+                LogHelper.styled ? LogFormats.WARN : LogFormats.RAW,
+                verbose,
+                args
+            );
+        LogHelper.logFile("WARN", verbose, args);
     }
 
     public static info(...args: any[]) {
-        const verbose = LogHelper.createVerbose('INFO')
-        if(LogHelper.showInfo && LogHelper.printToConsole)
-            console.log((LogHelper.styled ? LogFormats.INFO : LogFormats.RAW), verbose, args);
-        LogHelper.logFile('INFO', verbose, args);
+        const verbose = LogHelper.createVerbose("INFO");
+        if (LogHelper.showInfo && LogHelper.printToConsole)
+            console.log(
+                LogHelper.styled ? LogFormats.INFO : LogFormats.RAW,
+                verbose,
+                args
+            );
+        LogHelper.logFile("INFO", verbose, args);
     }
 
     public static debug(...args: any[]) {
-        const verbose = LogHelper.createVerbose('DEBUG')
-        if(LogHelper.showDebug && LogHelper.printToConsole)
-            console.log((LogHelper.styled ? LogFormats.DEBUG : LogFormats.RAW), verbose, args);
-        LogHelper.logFile('DEBUG', verbose, args);
+        const verbose = LogHelper.createVerbose("DEBUG");
+        if (LogHelper.showDebug && LogHelper.printToConsole)
+            console.log(
+                LogHelper.styled ? LogFormats.DEBUG : LogFormats.RAW,
+                verbose,
+                args
+            );
+        LogHelper.logFile("DEBUG", verbose, args);
     }
 
     public static raw(...args: any[]) {
-        const verbose = LogHelper.createVerbose('RAW')
-        if(LogHelper.showRaw && LogHelper.printToConsole)
-            console.log((LogHelper.styled ? LogFormats.RAW : LogFormats.RAW), verbose, args);
-        LogHelper.logFile('RAW', verbose, args);
+        const verbose = LogHelper.createVerbose("RAW");
+        if (LogHelper.showRaw && LogHelper.printToConsole)
+            console.log(
+                LogHelper.styled ? LogFormats.RAW : LogFormats.RAW,
+                verbose,
+                args
+            );
+        LogHelper.logFile("RAW", verbose, args);
     }
 
     /**
@@ -142,43 +197,47 @@ export default class LogHelper
      *  @desc Explains syntax
      *  @see {@link https://simplernerd.com/js-console-colors/}
      *  @desc Explains supported specifier that converts "%" to types (string/json...)
-     *  @see {@link https://www.geeksforgeeks.org/node-js-util-format-method/} 
+     *  @see {@link https://www.geeksforgeeks.org/node-js-util-format-method/}
      *  @desc Other usefull doc
      *  @see {@link https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color}
      */
-    public static createVerbose(consoleMethod:any, routeVerbose?:string):string {
+    public static createVerbose(
+        consoleMethod: any,
+        routeVerbose?: string
+    ): string {
         const d = new Date();
-        const date = d.toLocaleDateString('en-CA');
-        const time = d.toLocaleTimeString('it-IT');
-        const dateTime = "["+date+"]["+time+"]"
-        let verbose:string = dateTime + "["+consoleMethod+"]";
+        const date = d.toLocaleDateString("en-CA");
+        const time = d.toLocaleTimeString("it-IT");
+        const dateTime = "[" + date + "][" + time + "]";
+        let verbose: string = dateTime + "[" + consoleMethod + "]";
 
-        if (routeVerbose != undefined)
-            verbose += routeVerbose;
+        if (routeVerbose != undefined) verbose += routeVerbose;
 
         return verbose;
     }
 
-    public static logFile(consoleMethod:any, verbose:string, data:any[]) {
+    public static logFile(consoleMethod: any, verbose: string, data: any[]) {
         if (LogHelper.logToFile) {
-            const d = new Date;
-            const date = d.toLocaleDateString('en-CA');
+            const d = new Date();
+            const date = d.toLocaleDateString("en-CA");
 
             const path = `${LogStorage.basePath}`;
-            const ext:string = "log";
+            const ext: string = "log";
             const fileName = date.toString();
             const fileNameSuffix = consoleMethod == "ERROR" ? "error" : "all";
 
-            fs.open(`${path}/${fileName}-${fileNameSuffix}.${ext}`, 'a', function(err, fd){
-                if (err)
-                    console.log("Can't log into file", err)
-                else {
-                    fs.write(fd, verbose + data + "\n", (err) => {
-                        if (err)
-                            console.log(err.message, err);
-                    });
+            fs.open(
+                `${path}/${fileName}-${fileNameSuffix}.${ext}`,
+                "a",
+                function (err, fd) {
+                    if (err) console.log("Can't log into file", err);
+                    else {
+                        fs.write(fd, verbose + data + "\n", (err) => {
+                            if (err) console.log(err.message, err);
+                        });
+                    }
                 }
-            });
+            );
         }
     }
 }

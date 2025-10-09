@@ -1,13 +1,12 @@
-import express, {NextFunction, Request, Response} from "express";
+import express, { NextFunction, Request, Response } from "express";
 import StaticContentsController from "@src/StaticContent/Controllers/StaticContentsController";
 import AbstractRoute from "@core/Route";
-import {ErrorResponse} from "@src/Http/Responses/ErrorResponse";
-import {ReasonPhrases, StatusCodes} from "http-status-codes";
+import { ErrorResponse } from "@src/Http/Responses/ErrorResponse";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import SendMedia from "@src/Media/Helpers/SendMedia";
 import StaticPublicStorage from "@src/Storage/Files/StaticPublicStorage";
 
 class StaticContentsRoutes extends AbstractRoute {
-
     controllerInstance: any = StaticContentsController.getInstance();
     routerInstance: express.Router = express.Router();
     routerInstanceAuthentification: express.Router = express.Router();
@@ -15,13 +14,12 @@ class StaticContentsRoutes extends AbstractRoute {
     middlewaresDistribution: any = {
         all: [],
         bySlug: [],
-    }
+    };
 
     defaultMiddlewaresDistribution: any = {
         all: [],
         bySlug: [],
-    }
-
+    };
 
     // Initiator (called in api.ts)
 
@@ -35,11 +33,9 @@ class StaticContentsRoutes extends AbstractRoute {
         return this.routerInstanceAuthentification;
     }
 
-
-    public setupAdditionnalAuthRoutes(router: express.Router):express.Router {
+    public setupAdditionnalAuthRoutes(router: express.Router): express.Router {
         return router;
     }
-
 
     /**
      * Public routes init
@@ -47,15 +43,14 @@ class StaticContentsRoutes extends AbstractRoute {
      * @return {express.Router} router for the public routes
      * @public @method
      */
-    public setupPublicRoutes():express.Router {
-
-        this.routerInstance.get('/:slug/:secondSlug?', [
+    public setupPublicRoutes(): express.Router {
+        this.routerInstance.get("/:slug/:secondSlug?", [
             this.getByTwoLevelUriParamsHandler.bind(this),
             this.staticContentNotFound.bind(this),
             this.routeSendResponse.bind(this),
         ]);
 
-        this.routerInstance.get('/medias/emails/:filename', [
+        this.routerInstance.get("/medias/emails/:filename", [
             this.viewEmailMedia.bind(this),
             this.staticContentNotFound.bind(this),
             this.routeSendResponse.bind(this),
@@ -64,15 +59,15 @@ class StaticContentsRoutes extends AbstractRoute {
         return this.routerInstance;
     }
 
-
     /**
      * Allow routes Manager to declare route on the same router.
      * @param router {express.Router} The router to associate other routes, at the target Routes scope.
      */
-    public setupAdditionnalPublicRoutes(router:express.Router):express.Router {
+    public setupAdditionnalPublicRoutes(
+        router: express.Router
+    ): express.Router {
         return router;
     }
-
 
     /**
      * Route handler to transform all the URI params into query to the get
@@ -80,15 +75,18 @@ class StaticContentsRoutes extends AbstractRoute {
      * @param res {Response}
      * @param next {NextFunction}
      */
-    public async getByUriParamsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-
+    public async getByUriParamsHandler(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<any> {
         if (req.params["slug"] === "licences") {
-            res.serviceResponse = await this.controllerInstance.getLicencesContent();
+            res.serviceResponse =
+                await this.controllerInstance.getLicencesContent();
         }
 
         return next();
     }
-
 
     /**
      * Route handler to get and view media
@@ -97,12 +95,12 @@ class StaticContentsRoutes extends AbstractRoute {
      * @param next {NextFunction}
      */
     public async viewEmailMedia(req: Request, res: Response): Promise<any> {
-        const {
-            filename
-        } = req.params;
-        await SendMedia(`${StaticPublicStorage.basePath}/emails/${filename}`, res);
+        const { filename } = req.params;
+        await SendMedia(
+            `${StaticPublicStorage.basePath}/emails/${filename}`,
+            res
+        );
     }
-
 
     /**
      * Route handler to transform all the URI params into query to the get
@@ -110,29 +108,46 @@ class StaticContentsRoutes extends AbstractRoute {
      * @param res {Response}
      * @param next {NextFunction}
      */
-    public async getByTwoLevelUriParamsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-
+    public async getByTwoLevelUriParamsHandler(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<any> {
         if (req.params["slug"] === "licences") {
-            res.serviceResponse = await this.controllerInstance.getLicencesContent();
+            res.serviceResponse =
+                await this.controllerInstance.getLicencesContent();
         }
 
-        if (req.params["slug"] === "licence" && req.params["secondSlug"] !== undefined) {
-            res.serviceResponse = await this.controllerInstance.getTargetLicenceContent(req.params["secondSlug"]);
+        if (
+            req.params["slug"] === "licence" &&
+            req.params["secondSlug"] !== undefined
+        ) {
+            res.serviceResponse =
+                await this.controllerInstance.getTargetLicenceContent(
+                    req.params["secondSlug"]
+                );
         }
 
         return next();
     }
 
-
-
-    public async staticContentNotFound(req: Request, res: Response, next: NextFunction): Promise<any> {
-
-        if (res.serviceResponse === undefined || res.serviceResponse === null || res.serviceResponse === "") {
-            res.serviceResponse = ErrorResponse.create(new Error(ReasonPhrases.NOT_FOUND), StatusCodes.NOT_FOUND);
+    public async staticContentNotFound(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<any> {
+        if (
+            res.serviceResponse === undefined ||
+            res.serviceResponse === null ||
+            res.serviceResponse === ""
+        ) {
+            res.serviceResponse = ErrorResponse.create(
+                new Error(ReasonPhrases.NOT_FOUND),
+                StatusCodes.NOT_FOUND
+            );
         }
         return next();
-
     }
 }
 
-export {StaticContentsRoutes};
+export { StaticContentsRoutes };
