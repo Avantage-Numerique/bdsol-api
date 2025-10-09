@@ -50,7 +50,7 @@ async function run() {
 }
 
 const driver: MongoDBDriver = new MongoDBDriver(config.db);
-let client: MongoClient = driver.client;
+const client: MongoClient = driver.client;
 async function pingDatabase(dbName: string = "bdsol-data"): Promise<void> {
     let ping: any;
     try {

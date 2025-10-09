@@ -12,7 +12,7 @@ const runQueriesOnDatabase = async (
         const client = await driver.connect();
         const db: any = client.db(dbName);
         let currentResults: any;
-        for (let task of tasks) {
+        for (const task of tasks) {
             if (Array.isArray(task.queries)) {
                 LogHelper.info(
                     `[DB][Migration][${name}][${direction}] Starting for ${task.collection} with ${task.queries.length} query-ies >> `
@@ -20,7 +20,7 @@ const runQueriesOnDatabase = async (
                 let queryCount = 0;
                 const matchQuery: any = task.match ?? {};
 
-                for (let query of task.queries) {
+                for (const query of task.queries) {
                     queryCount++;
                     currentResults = await db
                         .collection(task.collection)

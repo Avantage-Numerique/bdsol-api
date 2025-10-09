@@ -35,7 +35,7 @@ class AdminController {
     }
 
     public async renderAdminDashboard() {
-        let content: string = `<div class="content"><h1>Le tableau de bord en dev de la BDSOL API.</h1></div>`;
+        const content: string = `<div class="content"><h1>Le tableau de bord en dev de la BDSOL API.</h1></div>`;
         return this._render(content);
     }
 
@@ -56,7 +56,7 @@ nav ul li a {
 
     public async renderDockerManager() {
         //let content:string = "<a href='https://51.222.24.157:9443/api/stacks/webhooks/3eaba35f-3914-4a8e-98e5-ff85ceb54663' title=''>Repartir le stack avec un webhook 8-)</a>";
-        let content: string = `<form action="https://51.222.24.157:9443/api/stacks/webhooks/3f09db09-ec61-4d71-a85a-3f691d8ac6c9" method="post">
+        const content: string = `<form action="https://51.222.24.157:9443/api/stacks/webhooks/3f09db09-ec61-4d71-a85a-3f691d8ac6c9" method="post">
                       Redeploy stack containers with latest image of same tag <input type="submit" />
                     </form>`;
         return this._render(content);
@@ -75,7 +75,7 @@ nav ul li a {
         const prefix: string = "<ul>";
         const suffix: string = "</ul>";
 
-        let basesRoutesColors: Map<string, string> = new Map();
+        const basesRoutesColors: Map<string, string> = new Map();
 
         for (const route of routeStructure) {
             const segments: Array<any> = route.path.split("/");
@@ -88,7 +88,7 @@ nav ul li a {
                 basesRoutesColors.set(basePathName, pathColor);
             }
 
-            let color: string =
+            const color: string =
                 basesRoutesColors.get(basePathName) ?? "#FF0000";
             const border: string = "2px solid " + color + ";";
             routesRender +=
@@ -166,9 +166,9 @@ nav ul li a {
     }
 
     private getRandomColor() {
-        var letters = "0123456789ABCDEF";
-        var color = "#";
-        for (var i = 0; i < 6; i++) {
+        const letters = "0123456789ABCDEF";
+        let color = "#";
+        for (let i = 0; i < 6; i++) {
             color += letters[Math.floor(Math.random() * 16)];
         }
         return color;

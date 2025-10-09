@@ -5,9 +5,9 @@ import { prepareUriForLoging } from "@database/Drivers/Connection";
 const MongoSpawn = async (command: string, params: any) => {
     const logPrefix: string = `[Job][mongoSpawn][${command}]`;
 
-    let mongoSpawn = spawn(command, mongoParamsToArgs(params));
+    const mongoSpawn = spawn(command, mongoParamsToArgs(params));
 
-    let uri: string = `${params.uri}`;
+    const uri: string = `${params.uri}`;
 
     LogHelper.info(
         `${logPrefix} ${command} with params ${mongoParamsToArgs(params, true)} this uri : ${prepareUriForLoging(uri)}`
@@ -63,7 +63,7 @@ const mongoParamsToArgs = (params: any, forlogs = false) => {
     if (forlogs) {
         params.uri = prepareUriForLoging(params.uri);
     }
-    let args: Array<string> = [`--uri=${params.uri}`];
+    const args: Array<string> = [`--uri=${params.uri}`];
     if (params.archive) {
         args.push(`--archive=${params.archive}`);
     }

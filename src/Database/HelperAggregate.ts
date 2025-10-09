@@ -21,16 +21,16 @@ const lookupModelByQuery = (target: any, by: string = "_id") => {
 };
 
 const lookupByQueries = (queries: any, by: string = "_id") => {
-    let lookups: Array<any> = [];
-    for (let query of queries) {
+    const lookups: Array<any> = [];
+    for (const query of queries) {
         lookups.push(lookupByQuery(query, query.by ?? by));
     }
     return lookups;
 };
 
 const lookupModelsByQueries = (queries: any, by: string = "_id") => {
-    let lookups: Array<any> = [];
-    for (let query of queries) {
+    const lookups: Array<any> = [];
+    for (const query of queries) {
         if (typeof query.raw !== "undefined") {
             lookups.push(query.raw);
             continue;

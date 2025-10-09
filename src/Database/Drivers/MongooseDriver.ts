@@ -86,7 +86,7 @@ export class MongooseDBDriver implements DBDriver {
     }
 
     public async disconnect(): Promise<void> {
-        for (let key in this.providers) {
+        for (const key in this.providers) {
             const provider: DbProvider = this.providers[key];
             await provider.disconnect();
         }
@@ -205,7 +205,7 @@ export class MongooseDBDriver implements DBDriver {
 
     public isConnected() {
         let isProviderDisconnected: boolean = true;
-        for (let key in this.providers) {
+        for (const key in this.providers) {
             const provider: DbProvider = this.providers[key];
             if (provider.isConnected) {
                 isProviderDisconnected =

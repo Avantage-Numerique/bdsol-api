@@ -15,7 +15,7 @@ export interface MetaSchema extends Document {
     requestedBy: mongoose.ObjectId;
     lastModifiedBy: mongoose.ObjectId;
     message: string;
-    statistics: Number;
+    statistics: number;
 }
 
 export class Meta {

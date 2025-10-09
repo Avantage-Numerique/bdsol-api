@@ -57,7 +57,7 @@ class PersonsController extends AbstractController {
          * regroup Linked entity from a 1:n relation where person is linked.
          * linkField : Property in the AppModel that
          */
-        let query: Array<any> = lookupModelsByQueries([
+        const query: Array<any> = lookupModelsByQueries([
             {
                 appModel: Organisation.getInstance(),
                 foreignField: "team.member",

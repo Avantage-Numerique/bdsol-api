@@ -48,7 +48,7 @@ class StatisticsPage extends Page {
                 typeof version.notes === "object" &&
                 Array.isArray(version.notes)
             ) {
-                for (let note of version.notes) {
+                for (const note of version.notes) {
                     body += `<p${note.additionnalClasses && note.additionnalClasses !== "" ? "class='" + note.additionnalClasses + "'" : ""}>${note.value}</p>`;
                 }
             }

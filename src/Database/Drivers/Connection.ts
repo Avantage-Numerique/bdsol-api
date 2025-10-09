@@ -63,8 +63,8 @@ const getConnectionBaseUrl = (params: MongoDbUrlParamsContract) => {
 };
 
 const prepareUriForLoging = (uri: string): string => {
-    let creds = uri.slice(uri.indexOf("://") + 3, uri.indexOf("@"));
-    let noCreds = uri.split(creds);
+    const creds = uri.slice(uri.indexOf("://") + 3, uri.indexOf("@"));
+    const noCreds = uri.split(creds);
     return noCreds.join("*****:*****");
 };
 
