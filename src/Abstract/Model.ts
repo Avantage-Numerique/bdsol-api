@@ -43,18 +43,13 @@ abstract class AbstractModel {
             typeof this.provider
         );
 
-        throw new Error(
-            `${this.constructor.name}'s provider is not setup. Can't get the model`
-        );
+        throw new Error(`${this.constructor.name}'s provider is not setup. Can't get the model`);
     }
 
     /** @public @method initSchema Associate the mongo Schema to the connection. */
     public initSchema(): void {
         if (this.providerIsSetup() && this.connectionIsSetup()) {
-            this.mongooseModel = this.provider.connection.model(
-                this.modelName,
-                this.schema
-            );
+            this.mongooseModel = this.provider.connection.model(this.modelName, this.schema);
             LogHelper.info(
                 `Model init ${this.modelName} schema`,
                 this.mongooseModel,
@@ -95,14 +90,8 @@ abstract class AbstractModel {
         const concatRule: any = {};
         for (const field in this.ruleSet.default) {
             //If the field exist in the Route's ruleSet. Don't double it. Or if default, don't double it.
-            if (
-                Object.keys(this.ruleSet[route]).indexOf(field) != -1 &&
-                route != "default"
-            ) {
-                concatRule[field] = [
-                    ...this.ruleSet[route][field],
-                    ...this.ruleSet.default[field],
-                ];
+            if (Object.keys(this.ruleSet[route]).indexOf(field) != -1 && route != "default") {
+                concatRule[field] = [...this.ruleSet[route][field], ...this.ruleSet.default[field]];
             }
             //Insert default Rules there.
             else {

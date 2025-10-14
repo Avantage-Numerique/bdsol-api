@@ -7,17 +7,11 @@ var Buffer = require("buffer").Buffer,
 module.exports = function (iconv) {
     // Additional Public API.
     iconv.encodeStream = function encodeStream(encoding, options) {
-        return new IconvLiteEncoderStream(
-            iconv.getEncoder(encoding, options),
-            options
-        );
+        return new IconvLiteEncoderStream(iconv.getEncoder(encoding, options), options);
     };
 
     iconv.decodeStream = function decodeStream(encoding, options) {
-        return new IconvLiteDecoderStream(
-            iconv.getDecoder(encoding, options),
-            options
-        );
+        return new IconvLiteDecoderStream(iconv.getDecoder(encoding, options), options);
     };
 
     iconv.supportsStreams = true;
@@ -41,10 +35,7 @@ IconvLiteEncoderStream.prototype = Object.create(Transform.prototype, {
 });
 
 IconvLiteEncoderStream.prototype._transform = function (chunk, encoding, done) {
-    if (typeof chunk != "string")
-        return done(
-            new Error("Iconv encoding stream needs strings as its input.")
-        );
+    if (typeof chunk != "string") return done(new Error("Iconv encoding stream needs strings as its input."));
     try {
         var res = this.conv.write(chunk);
         if (res && res.length) this.push(res);
@@ -89,10 +80,7 @@ IconvLiteDecoderStream.prototype = Object.create(Transform.prototype, {
 });
 
 IconvLiteDecoderStream.prototype._transform = function (chunk, encoding, done) {
-    if (!Buffer.isBuffer(chunk))
-        return done(
-            new Error("Iconv decoding stream needs buffers as its input.")
-        );
+    if (!Buffer.isBuffer(chunk)) return done(new Error("Iconv decoding stream needs buffers as its input."));
     try {
         var res = this.conv.write(chunk);
         if (res && res.length) this.push(res, this.encoding);

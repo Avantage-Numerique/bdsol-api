@@ -42,9 +42,7 @@ export default class PublicLocalMediaStorage extends PublicStorage {
             filename: (req: any, file, cb) => {
                 const userId = req.userId ?? "undefined";
                 const fieldname = file.fieldname;
-                const originalname = file.originalname
-                    .toString()
-                    .substring(0, 10);
+                const originalname = file.originalname.toString().substring(0, 10);
 
                 //If no extension is detected, it's set to undefined and not put in the fileName
                 const tryExt: string | false = mime.extension(file.mimetype);
@@ -54,12 +52,7 @@ export default class PublicLocalMediaStorage extends PublicStorage {
                 cb(
                     null,
                     FileStorage.generateFilename(
-                        [
-                            fieldname,
-                            userId,
-                            FileStorage.getUniquePrefix(),
-                            originalname,
-                        ],
+                        [fieldname, userId, FileStorage.getUniquePrefix(), originalname],
                         extension
                     )
                 );

@@ -39,9 +39,7 @@ class AuthentificationController {
         this.service = UsersService.getInstance(this.userModel);
 
         if (this.service === undefined) {
-            LogHelper.error(
-                "[AuthentificationController] Service is null in Authentification"
-            );
+            LogHelper.error("[AuthentificationController] Service is null in Authentification");
         }
     }
 
@@ -51,8 +49,7 @@ class AuthentificationController {
      */
     public static getInstance(): AuthentificationController {
         if (AuthentificationController._instance === undefined) {
-            AuthentificationController._instance =
-                new AuthentificationController();
+            AuthentificationController._instance = new AuthentificationController();
         }
         return AuthentificationController._instance;
     }
@@ -62,10 +59,7 @@ class AuthentificationController {
      * @param username {string}
      * @param password {string}
      */
-    public async login(
-        username: string,
-        password: string
-    ): Promise<LoginResponse> {
+    public async login(username: string, password: string): Promise<LoginResponse> {
         // add encryption on send form till checking here.
         LogHelper.info(`${username} trying to connect ...`);
 
@@ -85,10 +79,7 @@ class AuthentificationController {
                         "Votre compte n'est pas vérifié."
                     );
             } catch (e) {
-                LogHelper.error(
-                    "Erreur au login, l'utilisateur n'a pas de champs 'verify'",
-                    user
-                );
+                LogHelper.error("Erreur au login, l'utilisateur n'a pas de champs 'verify'", user);
                 return ErrorResponse.create(
                     new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
                     StatusCodes.INTERNAL_SERVER_ERROR,
@@ -96,27 +87,18 @@ class AuthentificationController {
                 );
             }
 
-            LogHelper.info(
-                `Les information de ${user.username} fonctionnent, génération du token JW ...`
-            );
+            LogHelper.info(`Les information de ${user.username} fonctionnent, génération du token JW ...`);
 
             // Generate an access token
-            user.token = TokenController.generateUserToken(
-                User.getInstance().dataTransfertObject(user)
-            );
+            user.token = TokenController.generateUserToken(User.getInstance().dataTransfertObject(user));
             user.tokenVerified = true;
 
             //Modify lastLogin date
-            const lastLogin =
-                await User.getInstance().mongooseModel.findOneAndUpdate(
-                    { _id: targetUser.data._id },
-                    { lastLogin: new Date() }
-                );
-            return SuccessResponse.create(
-                { user: user },
-                StatusCodes.OK,
-                ReasonPhrases.OK
+            const lastLogin = await User.getInstance().mongooseModel.findOneAndUpdate(
+                { _id: targetUser.data._id },
+                { lastLogin: new Date() }
             );
+            return SuccessResponse.create({ user: user }, StatusCodes.OK, ReasonPhrases.OK);
         }
 
         return ErrorResponse.create(
@@ -153,24 +135,14 @@ class AuthentificationController {
 
                 // If we find a user, we check the password through the hashing comparaison.
                 if (decoded && !decoded.error) {
-                    return SuccessResponse.create(
-                        { tokenVerified: true },
-                        StatusCodes.OK,
-                        ReasonPhrases.OK
-                    );
+                    return SuccessResponse.create({ tokenVerified: true }, StatusCodes.OK, ReasonPhrases.OK);
                 }
-                return ErrorResponse.create(
-                    new Error("Connection refusée"),
-                    StatusCodes.UNAUTHORIZED
-                );
+                return ErrorResponse.create(new Error("Connection refusée"), StatusCodes.UNAUTHORIZED);
             } catch (error: any) {
                 return ErrorResponse.create(error, StatusCodes.UNAUTHORIZED);
             }
         }
-        return ErrorResponse.create(
-            new Error("DB driver don't support verifing token"),
-            StatusCodes.NOT_IMPLEMENTED
-        );
+        return ErrorResponse.create(new Error("DB driver don't support verifing token"), StatusCodes.NOT_IMPLEMENTED);
     }
 
     /**
@@ -178,23 +150,16 @@ class AuthentificationController {
      * @param requestData
      * @returns
      */
-    public async register(
-        requestData: any,
-        visitorIp: any
-    ): Promise<ApiResponseContract> {
+    public async register(requestData: any, visitorIp: any): Promise<ApiResponseContract> {
         if (requestData?.tos?.accepted !== true)
             return ErrorResponse.create(
                 new Error(ReasonPhrases.OK),
                 StatusCodes.OK,
                 "User need to accept terms of service."
             );
-        const verificationToken = crypto
-            .randomBytes(AuthentificationController.verifyTokenLength)
-            .toString("hex");
+        const verificationToken = crypto.randomBytes(AuthentificationController.verifyTokenLength).toString("hex");
         const verificationExpirationDate = new Date(); //Expiration date setters
-        verificationExpirationDate.setDate(
-            verificationExpirationDate.getDate() + 1
-        );
+        verificationExpirationDate.setDate(verificationExpirationDate.getDate() + 1);
         const userObject = {
             username: requestData?.username,
             email: requestData?.email,
@@ -220,23 +185,17 @@ class AuthentificationController {
             typeof createdDocumentResponse !== "undefined" &&
             !createdDocumentResponse.error
         ) {
-            createdDocumentResponse.data = this.userModel.dataTransfertObject(
-                createdDocumentResponse.data
-            );
+            createdDocumentResponse.data = this.userModel.dataTransfertObject(createdDocumentResponse.data);
             //Send email to verify user
             const welcomeName = getUserWelcome(createdDocumentResponse.data);
             const verifyAccountEmail: EmailNotification = new EmailNotification(
                 {
                     recipient: createdDocumentResponse.data.email,
-                    subject:
-                        welcomeName +
-                        ", Confirmez ce courriel pour votre compte sur avnu.ca",
+                    subject: welcomeName + ", Confirmez ce courriel pour votre compte sur avnu.ca",
                 },
                 EmailConfirmationContent(
                     welcomeName,
-                    config.frontendAppUrl +
-                        "/compte/verifier-compte/" +
-                        verificationToken
+                    config.frontendAppUrl + "/compte/verifier-compte/" + verificationToken
                 ),
                 EmailConfirmationTextContent()
             );
@@ -258,9 +217,7 @@ class AuthentificationController {
             const devUser: any = await this.service.model.findOne({
                 username: "datageek",
             });
-            return TokenController.generateUserToken(
-                this.userModel.dataTransfertObject(devUser)
-            );
+            return TokenController.generateUserToken(this.userModel.dataTransfertObject(devUser));
         }
         return "";
     }
@@ -272,10 +229,7 @@ class AuthentificationController {
      * @return {Promise} of type Any.
      * @private
      */
-    private async authenticate(
-        username: string,
-        password: string
-    ): Promise<any> {
+    private async authenticate(username: string, password: string): Promise<any> {
         const targetUser = {
             username: username,
         } as UserAuthContract;
@@ -290,18 +244,11 @@ class AuthentificationController {
             ) {
                 //Note: Service removed password with the DTO, soo we used mongooseModel directly
                 //Refactoring : We should manage internal and external responses seperately in different services ...
-                const user: any = await User.getInstance()
-                    .mongooseModel.findOne(targetUser)
-                    .lean();
+                const user: any = await User.getInstance().mongooseModel.findOne(targetUser).lean();
 
                 // If we find a user, we check the password through the hashing comparaison.
                 if (user !== null && user.password !== undefined) {
-                    if (
-                        await PasswordsController.matches(
-                            user.password,
-                            password
-                        )
-                    ) {
+                    if (await PasswordsController.matches(user.password, password)) {
                         return SuccessResponse.create(
                             this.userModel.dataTransfertObject(user),
                             StatusCodes.OK,
@@ -311,16 +258,10 @@ class AuthentificationController {
                 }
             }
         } catch (errors: any) {
-            return ErrorResponse.create(
-                errors,
-                StatusCodes.INTERNAL_SERVER_ERROR
-            );
+            return ErrorResponse.create(errors, StatusCodes.INTERNAL_SERVER_ERROR);
         }
 
-        return ErrorResponse.create(
-            new Error("Connection refusée"),
-            StatusCodes.UNAUTHORIZED
-        );
+        return ErrorResponse.create(new Error("Connection refusée"), StatusCodes.UNAUTHORIZED);
     }
 
     /**
@@ -331,18 +272,10 @@ class AuthentificationController {
      * @return {Promise} of type Any.
      * @public
      */
-    public async changePassword(
-        userId: string,
-        oldPassword: string,
-        newPassword: string
-    ): Promise<any> {
+    public async changePassword(userId: string, oldPassword: string, newPassword: string): Promise<any> {
         //Check if variables are defined and string/ObjectId
         if (!isObjectIdOrHexString(userId))
-            return ErrorResponse.create(
-                new Error("Invalid user id"),
-                StatusCodes.BAD_REQUEST,
-                "Invalid user id"
-            );
+            return ErrorResponse.create(new Error("Invalid user id"), StatusCodes.BAD_REQUEST, "Invalid user id");
 
         //Check if newPassword is 'ok' in length and condition
         if (typeof newPassword !== "string" || newPassword.length < 8)
@@ -360,34 +293,24 @@ class AuthentificationController {
 
         //If user exist compare oldPassword and user.password with argon
         if (targetUser !== null) {
-            const match = await PasswordsController.matches(
-                targetUser.password,
-                oldPassword
-            );
+            const match = await PasswordsController.matches(targetUser.password, oldPassword);
             if (match) {
                 //If user password and old match, procceed to change password
-                const updatedUser =
-                    await User.getInstance().mongooseModel.findOneAndUpdate(
-                        { _id: targetUser._id },
-                        { password: newPassword }
-                    );
+                const updatedUser = await User.getInstance().mongooseModel.findOneAndUpdate(
+                    { _id: targetUser._id },
+                    { password: newPassword }
+                );
                 //Send email to user's email to inform the password change
                 if (updatedUser !== null) {
                     const welcomeName = getUserWelcome(targetUser); //encapsulate this into an helper
-                    const changedPasswordEmail: EmailNotification =
-                        new EmailNotification(
-                            {
-                                recipient: targetUser.email,
-                                subject:
-                                    welcomeName +
-                                    ", Votre mot de passe a été modifié sur avnu.ca",
-                            },
-                            EmailPasswordChangedContent(
-                                welcomeName,
-                                config.frontendAppUrl + "/compte/connexion"
-                            ),
-                            EmailPasswordChangedTextContent()
-                        );
+                    const changedPasswordEmail: EmailNotification = new EmailNotification(
+                        {
+                            recipient: targetUser.email,
+                            subject: welcomeName + ", Votre mot de passe a été modifié sur avnu.ca",
+                        },
+                        EmailPasswordChangedContent(welcomeName, config.frontendAppUrl + "/compte/connexion"),
+                        EmailPasswordChangedTextContent()
+                    );
                     changedPasswordEmail.send();
                     return SuccessResponse.create(
                         User.getInstance().dataTransfertObject(updatedUser),
@@ -417,10 +340,7 @@ class AuthentificationController {
      * @return {Promise} of type Any.
      * @public
      */
-    public async sendResetPasswordLinkByEmail(
-        email: string,
-        visitorIp: any
-    ): Promise<any> {
+    public async sendResetPasswordLinkByEmail(email: string, visitorIp: any): Promise<any> {
         //Check if email is defined and string and length > 0
         if (typeof email === "string" && email.length > 0) {
             //Check if email corresponds to a user in the database
@@ -429,85 +349,56 @@ class AuthentificationController {
             });
             if (targetUser !== null) {
                 //Check if user is verified? (if not then can't change password, need to verify first)
-                if (targetUser.verify?.isVerified !== true)
-                    return this.resendVerificationToken(email);
+                if (targetUser.verify?.isVerified !== true) return this.resendVerificationToken(email);
 
                 //Email OK and user is verified
                 //Check if 5 min elapsed since last token sent
                 const now = new Date();
-                const currentTokenExpireDate =
-                    targetUser?.changePassword?.expireDate ?? undefined;
+                const currentTokenExpireDate = targetUser?.changePassword?.expireDate ?? undefined;
                 //If expire date is defined and 5 min have past
                 //(if now - expire is negative, it's time before token expire, if positive it's time since token expired)
                 if (
                     currentTokenExpireDate !== undefined &&
-                    now.valueOf() - currentTokenExpireDate.valueOf() <
-                        -55 * 60 * 1000
+                    now.valueOf() - currentTokenExpireDate.valueOf() < -55 * 60 * 1000
                 )
                     //Need to wait 5 min for new token
-                    return SuccessResponse.create(
-                        {},
-                        StatusCodes.OK,
-                        "Sent reset password email"
-                    );
+                    return SuccessResponse.create({}, StatusCodes.OK, "Sent reset password email");
 
                 //Update user with new changePassword token and expire date
-                const passwordToken = crypto
-                    .randomBytes(AuthentificationController.verifyTokenLength)
-                    .toString("hex");
+                const passwordToken = crypto.randomBytes(AuthentificationController.verifyTokenLength).toString("hex");
                 const passwordTokenExpirationDate = new Date(); //Expiration date setters
-                passwordTokenExpirationDate.setMinutes(
-                    passwordTokenExpirationDate.getMinutes() + 60
+                passwordTokenExpirationDate.setMinutes(passwordTokenExpirationDate.getMinutes() + 60);
+                const updatedUser = await User.getInstance().mongooseModel.findOneAndUpdate(
+                    { _id: targetUser._id },
+                    {
+                        changePassword: {
+                            token: passwordToken,
+                            expireDate: passwordTokenExpirationDate,
+                            ipAddress: visitorIp,
+                        },
+                    }
                 );
-                const updatedUser =
-                    await User.getInstance().mongooseModel.findOneAndUpdate(
-                        { _id: targetUser._id },
-                        {
-                            changePassword: {
-                                token: passwordToken,
-                                expireDate: passwordTokenExpirationDate,
-                                ipAddress: visitorIp,
-                            },
-                        }
-                    );
                 //Send email with a unique secure link to procceed to reset user's password
                 const welcomeName = getUserWelcome(updatedUser);
-                const forgotPasswordEmail: EmailNotification =
-                    new EmailNotification(
-                        {
-                            recipient: targetUser.email,
-                            subject:
-                                welcomeName +
-                                ", Demande de réinitialisation de mot de passe sur avnu.ca",
-                        },
-                        EmailForgottenPasswordContent(
-                            welcomeName,
-                            config.frontendAppUrl +
-                                "/compte/nouveau-mot-de-passe/" +
-                                passwordToken,
-                            updatedUser.username
-                        )
-                    );
-                forgotPasswordEmail.send();
-                return SuccessResponse.create(
-                    {},
-                    StatusCodes.OK,
-                    "Sent reset password email"
+                const forgotPasswordEmail: EmailNotification = new EmailNotification(
+                    {
+                        recipient: targetUser.email,
+                        subject: welcomeName + ", Demande de réinitialisation de mot de passe sur avnu.ca",
+                    },
+                    EmailForgottenPasswordContent(
+                        welcomeName,
+                        config.frontendAppUrl + "/compte/nouveau-mot-de-passe/" + passwordToken,
+                        updatedUser.username
+                    )
                 );
+                forgotPasswordEmail.send();
+                return SuccessResponse.create({}, StatusCodes.OK, "Sent reset password email");
             }
             //Invalid email (for security we always return same response)
-            return SuccessResponse.create(
-                {},
-                StatusCodes.OK,
-                "Sent reset password email"
-            );
+            return SuccessResponse.create({}, StatusCodes.OK, "Sent reset password email");
         }
         //Invalid requestData
-        return SuccessResponse.create(
-            {},
-            StatusCodes.OK,
-            "Sent reset password email"
-        );
+        return SuccessResponse.create({}, StatusCodes.OK, "Sent reset password email");
     }
 
     /**
@@ -517,15 +408,9 @@ class AuthentificationController {
      * @return {Promise} of type Any.
      * @public
      */
-    public async updateForgottenPassword(
-        token: string,
-        password: string
-    ): Promise<any> {
+    public async updateForgottenPassword(token: string, password: string): Promise<any> {
         //Verify that token is the right length
-        if (
-            typeof token === "string" &&
-            token.length === AuthentificationController.verifyTokenLength * 2
-        ) {
+        if (typeof token === "string" && token.length === AuthentificationController.verifyTokenLength * 2) {
             //times 2 because length (n Bytes = 2n hexadecimal)
             //Check if token exists
             const targetUser = await User.getInstance().mongooseModel.findOne({
@@ -535,10 +420,7 @@ class AuthentificationController {
             //If user exist
             if (targetUser !== null) {
                 //Check if token is not expired
-                if (
-                    new Date(targetUser.changePassword.expireDate).valueOf() <
-                    new Date().valueOf()
-                )
+                if (new Date(targetUser.changePassword.expireDate).valueOf() < new Date().valueOf())
                     return ErrorResponse.create(
                         new Error("The verification token has expired"),
                         StatusCodes.OK,
@@ -548,39 +430,28 @@ class AuthentificationController {
                 //Check if password is ok in length and conditions
                 if (typeof password == "string" && password.length >= 8) {
                     //If user password and old match, procceed to change password
-                    const updatedUser =
-                        await User.getInstance().mongooseModel.findOneAndUpdate(
-                            { _id: targetUser._id },
-                            {
-                                password: password,
-                                changePassword: {
-                                    token: null,
-                                    expireDate: null,
-                                },
-                            }
-                        );
+                    const updatedUser = await User.getInstance().mongooseModel.findOneAndUpdate(
+                        { _id: targetUser._id },
+                        {
+                            password: password,
+                            changePassword: {
+                                token: null,
+                                expireDate: null,
+                            },
+                        }
+                    );
                     //Send email to user's email to inform the password change
                     if (updatedUser !== null) {
                         const welcomeName = getUserWelcome(targetUser); //encapsulate this into an helper
-                        const changedPasswordEmail: EmailNotification =
-                            new EmailNotification(
-                                {
-                                    recipient: targetUser.email,
-                                    subject:
-                                        welcomeName +
-                                        ", Votre mot de passe a été modifié sur avnu.ca",
-                                },
-                                EmailPasswordChangedContent(
-                                    welcomeName,
-                                    config.frontendAppUrl + "/compte/connexion"
-                                )
-                            );
-                        changedPasswordEmail.send();
-                        return SuccessResponse.create(
-                            { email: targetUser.email },
-                            StatusCodes.OK,
-                            "Password modified"
+                        const changedPasswordEmail: EmailNotification = new EmailNotification(
+                            {
+                                recipient: targetUser.email,
+                                subject: welcomeName + ", Votre mot de passe a été modifié sur avnu.ca",
+                            },
+                            EmailPasswordChangedContent(welcomeName, config.frontendAppUrl + "/compte/connexion")
                         );
+                        changedPasswordEmail.send();
+                        return SuccessResponse.create({ email: targetUser.email }, StatusCodes.OK, "Password modified");
                     }
 
                     return ErrorResponse.create(
@@ -596,18 +467,10 @@ class AuthentificationController {
                 );
             }
             //Token doesn't exist
-            return ErrorResponse.create(
-                new Error("Token invalid"),
-                StatusCodes.BAD_REQUEST,
-                "Token invalid"
-            );
+            return ErrorResponse.create(new Error("Token invalid"), StatusCodes.BAD_REQUEST, "Token invalid");
         }
         //Token is invalid format
-        return ErrorResponse.create(
-            new Error("Token invalid"),
-            StatusCodes.BAD_REQUEST,
-            "Token invalid"
-        );
+        return ErrorResponse.create(new Error("Token invalid"), StatusCodes.BAD_REQUEST, "Token invalid");
     }
 
     /**
@@ -618,10 +481,7 @@ class AuthentificationController {
      */
     public async verifyAccount(token: string, visitorIp: any): Promise<any> {
         //verify that token is the right length
-        if (
-            typeof token === "string" &&
-            token.length === AuthentificationController.verifyTokenLength * 2
-        ) {
+        if (typeof token === "string" && token.length === AuthentificationController.verifyTokenLength * 2) {
             //times 2 because length (n Bytes = 2n hexadecimal)
             //search users and find the one that has the token
             const targetUser = await User.getInstance().mongooseModel.findOne({
@@ -639,10 +499,7 @@ class AuthentificationController {
                     );
                 }
                 //if token has expired
-                if (
-                    new Date(targetUser.verify.expireDate).valueOf() <
-                    new Date().valueOf()
-                )
+                if (new Date(targetUser.verify.expireDate).valueOf() < new Date().valueOf())
                     return ErrorResponse.create(
                         new Error("The verification token has expired"),
                         StatusCodes.OK,
@@ -650,61 +507,41 @@ class AuthentificationController {
                     );
 
                 //else modify user to verify.isVerified = true and set the rest of object
-                const response =
-                    await User.getInstance().mongooseModel.findOneAndUpdate(
-                        { _id: targetUser._id },
-                        {
-                            verify: {
-                                isVerified: true,
-                                token: null,
-                                expireDate: null,
-                                validatedOn: new Date(),
-                                ipAddress: visitorIp,
-                            },
+                const response = await User.getInstance().mongooseModel.findOneAndUpdate(
+                    { _id: targetUser._id },
+                    {
+                        verify: {
+                            isVerified: true,
+                            token: null,
+                            expireDate: null,
+                            validatedOn: new Date(),
+                            ipAddress: visitorIp,
                         },
-                        { new: true }
-                    );
-                const dtoResponse =
-                    User.getInstance().dataTransfertObject(response);
+                    },
+                    { new: true }
+                );
+                const dtoResponse = User.getInstance().dataTransfertObject(response);
 
                 //Send email to say that account is verified
                 const welcomeName = getUserWelcome(targetUser); //encapsulate this into an helper
-                const confirmVerifiedAccountEmail: EmailNotification =
-                    new EmailNotification(
-                        {
-                            recipient: targetUser.email,
-                            subject:
-                                welcomeName +
-                                ", Votre compte a été vérifié sur avnu.ca",
-                        },
-                        EmailConfirmationVerifiedAccountContent(
-                            welcomeName,
-                            config.frontendAppUrl + "/compte/connexion"
-                        )
-                    );
+                const confirmVerifiedAccountEmail: EmailNotification = new EmailNotification(
+                    {
+                        recipient: targetUser.email,
+                        subject: welcomeName + ", Votre compte a été vérifié sur avnu.ca",
+                    },
+                    EmailConfirmationVerifiedAccountContent(welcomeName, config.frontendAppUrl + "/compte/connexion")
+                );
                 confirmVerifiedAccountEmail.send();
 
                 //Return connection token for that user?
-                return SuccessResponse.create(
-                    dtoResponse,
-                    StatusCodes.OK,
-                    "User's account is now verified"
-                );
+                return SuccessResponse.create(dtoResponse, StatusCodes.OK, "User's account is now verified");
             }
             //else couldn't find user, means token doesn't exist
             LogHelper.error("Verify account token doesn't exist");
-            return ErrorResponse.create(
-                new Error("Token invalid"),
-                StatusCodes.BAD_REQUEST,
-                "Token invalid"
-            );
+            return ErrorResponse.create(new Error("Token invalid"), StatusCodes.BAD_REQUEST, "Token invalid");
         }
         LogHelper.error("Verify account token is not the right length");
-        return ErrorResponse.create(
-            new Error("Token invalid"),
-            StatusCodes.BAD_REQUEST,
-            "Token invalid"
-        );
+        return ErrorResponse.create(new Error("Token invalid"), StatusCodes.BAD_REQUEST, "Token invalid");
     }
 
     /**
@@ -727,90 +564,54 @@ class AuthentificationController {
                     //Check if user hasn't resend in the last 5 minutes
                     const now = new Date();
                     //Sets expired date 1 day before the token soo that I can check if 5 min passed and compare to now
-                    const expireDateOneDayLess =
-                        targetUser?.verify.expireDate ?? new Date();
-                    expireDateOneDayLess.setDate(
-                        expireDateOneDayLess.getDate() - 1
-                    );
+                    const expireDateOneDayLess = targetUser?.verify.expireDate ?? new Date();
+                    expireDateOneDayLess.setDate(expireDateOneDayLess.getDate() - 1);
 
-                    if (
-                        now.valueOf() - expireDateOneDayLess.valueOf() <
-                        5 * 60 * 1000
-                    ) {
+                    if (now.valueOf() - expireDateOneDayLess.valueOf() < 5 * 60 * 1000) {
                         //5 minutes delay inbetween emails
-                        return SuccessResponse.create(
-                            {},
-                            StatusCodes.OK,
-                            "Sent verification email"
-                        );
+                        return SuccessResponse.create({}, StatusCodes.OK, "Sent verification email");
                     }
 
                     //Update user with new token and expire date
                     const verificationToken = crypto
-                        .randomBytes(
-                            AuthentificationController.verifyTokenLength
-                        )
+                        .randomBytes(AuthentificationController.verifyTokenLength)
                         .toString("hex");
                     const verificationExpirationDate = new Date(); //Expiration date setters
-                    verificationExpirationDate.setDate(
-                        verificationExpirationDate.getDate() + 1
+                    verificationExpirationDate.setDate(verificationExpirationDate.getDate() + 1);
+                    const updatedUser = await User.getInstance().mongooseModel.findOneAndUpdate(
+                        { _id: targetUser._id },
+                        {
+                            verify: {
+                                isVerified: false,
+                                token: verificationToken,
+                                expireDate: verificationExpirationDate,
+                            },
+                        }
                     );
-                    const updatedUser =
-                        await User.getInstance().mongooseModel.findOneAndUpdate(
-                            { _id: targetUser._id },
-                            {
-                                verify: {
-                                    isVerified: false,
-                                    token: verificationToken,
-                                    expireDate: verificationExpirationDate,
-                                },
-                            }
-                        );
 
                     //Resend verify token to user's email
                     const welcomeName = getUserWelcome(targetUser); //encapsulate this into an helper
-                    const verifyAccountEmail: EmailNotification =
-                        new EmailNotification(
-                            {
-                                recipient: targetUser.email,
-                                subject:
-                                    welcomeName +
-                                    ", Confirmez ce courriel pour votre compte sur avnu.ca",
-                            },
-                            EmailConfirmationContent(
-                                welcomeName,
-                                config.frontendAppUrl +
-                                    "/compte/verifier-compte/" +
-                                    verificationToken
-                            )
-                        );
-                    verifyAccountEmail.send();
-                    return SuccessResponse.create(
-                        {},
-                        StatusCodes.OK,
-                        "Sent verification email"
+                    const verifyAccountEmail: EmailNotification = new EmailNotification(
+                        {
+                            recipient: targetUser.email,
+                            subject: welcomeName + ", Confirmez ce courriel pour votre compte sur avnu.ca",
+                        },
+                        EmailConfirmationContent(
+                            welcomeName,
+                            config.frontendAppUrl + "/compte/verifier-compte/" + verificationToken
+                        )
                     );
+                    verifyAccountEmail.send();
+                    return SuccessResponse.create({}, StatusCodes.OK, "Sent verification email");
                 }
                 //user already verified (for security we always send same message)
-                return SuccessResponse.create(
-                    {},
-                    StatusCodes.OK,
-                    "Sent verification email"
-                );
+                return SuccessResponse.create({}, StatusCodes.OK, "Sent verification email");
             }
             //invalid email
-            return SuccessResponse.create(
-                {},
-                StatusCodes.OK,
-                "Sent verification email"
-            );
+            return SuccessResponse.create({}, StatusCodes.OK, "Sent verification email");
         }
         //invalid email
-        return SuccessResponse.create(
-            {},
-            StatusCodes.OK,
-            "Sent verification email"
-        );
+        return SuccessResponse.create({}, StatusCodes.OK, "Sent verification email");
     }
 
     /**
@@ -820,10 +621,7 @@ class AuthentificationController {
      */
     public async verifyResetPasswordToken(token: string): Promise<any> {
         //If token is string with correct length
-        if (
-            typeof token === "string" &&
-            token.length === AuthentificationController.verifyTokenLength * 2
-        ) {
+        if (typeof token === "string" && token.length === AuthentificationController.verifyTokenLength * 2) {
             const targetUser = await User.getInstance().mongooseModel.findOne({
                 "changePassword.token": token,
             });
@@ -831,42 +629,20 @@ class AuthentificationController {
             if (targetUser !== null) {
                 //Check if token expired
                 const now = new Date();
-                const currentTokenExpireDate =
-                    targetUser?.changePassword?.expireDate ?? undefined;
+                const currentTokenExpireDate = targetUser?.changePassword?.expireDate ?? undefined;
                 //(if now - expire is negative, it's time before token expire, if positive it's time since token expired)
-                if (
-                    currentTokenExpireDate !== undefined &&
-                    now.valueOf() - currentTokenExpireDate.valueOf() < 0
-                ) {
+                if (currentTokenExpireDate !== undefined && now.valueOf() - currentTokenExpireDate.valueOf() < 0) {
                     //Token isn't expired and url page is OK
-                    return SuccessResponse.create(
-                        {},
-                        StatusCodes.OK,
-                        "Token not expired, URL is valid"
-                    );
+                    return SuccessResponse.create({}, StatusCodes.OK, "Token not expired, URL is valid");
                 }
                 //else token found but expired
-                else
-                    return ErrorResponse.create(
-                        new Error("Token expired"),
-                        StatusCodes.OK,
-                        "Token expired"
-                    );
+                else return ErrorResponse.create(new Error("Token expired"), StatusCodes.OK, "Token expired");
             }
             //else no token found
-            return ErrorResponse.create(
-                new Error("Token not found"),
-                StatusCodes.OK,
-                "Token not found"
-            );
+            return ErrorResponse.create(new Error("Token not found"), StatusCodes.OK, "Token not found");
         }
         //Else token is invalid (not a string, not correct length)
-        else
-            return ErrorResponse.create(
-                new Error("Token invalid"),
-                StatusCodes.BAD_REQUEST,
-                "Token invalid"
-            );
+        else return ErrorResponse.create(new Error("Token invalid"), StatusCodes.BAD_REQUEST, "Token invalid");
     }
 }
 export default AuthentificationController;

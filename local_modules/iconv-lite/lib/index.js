@@ -63,8 +63,7 @@ iconv.fromEncoding = iconv.decode;
 // Search for a codec in iconv.encodings. Cache codec data in iconv._codecDataCache.
 iconv._codecDataCache = {};
 iconv.getCodec = function getCodec(encoding) {
-    if (!iconv.encodings)
-        iconv.encodings = require(__dirname + "/../encodings"); // Lazy load all encoding definitions. //2024-01-19 changed to test that PR : https://github.com/ashtuchkin/iconv-lite/pull/310/commits/e1bb91c5376c81ae2bc9ab54b7cb3fcebef14d63
+    if (!iconv.encodings) iconv.encodings = require(__dirname + "/../encodings"); // Lazy load all encoding definitions. //2024-01-19 changed to test that PR : https://github.com/ashtuchkin/iconv-lite/pull/310/commits/e1bb91c5376c81ae2bc9ab54b7cb3fcebef14d63
 
     // Canonicalize encoding name: strip all non-alphanumeric chars and appended year.
     var enc = iconv._canonicalizeEncoding(encoding);
@@ -101,13 +100,7 @@ iconv.getCodec = function getCodec(encoding) {
                 return codec;
 
             default:
-                throw new Error(
-                    "Encoding not recognized: '" +
-                        encoding +
-                        "' (searched as: '" +
-                        enc +
-                        "')"
-                );
+                throw new Error("Encoding not recognized: '" + encoding + "' (searched as: '" + enc + "')");
         }
     }
 };
@@ -121,8 +114,7 @@ iconv.getEncoder = function getEncoder(encoding, options) {
     var codec = iconv.getCodec(encoding),
         encoder = new codec.encoder(options, codec);
 
-    if (codec.bomAware && options && options.addBOM)
-        encoder = new bomHandling.PrependBOM(encoder, options);
+    if (codec.bomAware && options && options.addBOM) encoder = new bomHandling.PrependBOM(encoder, options);
 
     return encoder;
 };
@@ -138,8 +130,7 @@ iconv.getDecoder = function getDecoder(encoding, options) {
 };
 
 // Load extensions in Node. All of them are omitted in Browserify build via 'browser' field in package.json.
-var nodeVer =
-    typeof process !== "undefined" && process.versions && process.versions.node;
+var nodeVer = typeof process !== "undefined" && process.versions && process.versions.node;
 if (nodeVer) {
     // Load streaming support in Node v0.10+
     var nodeVerArr = nodeVer.split(".").map(Number);

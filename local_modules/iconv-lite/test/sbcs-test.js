@@ -36,8 +36,7 @@ var iconvEquivChars = {
 };
 
 function swapBytes(buf) {
-    for (var i = 0; i < buf.length; i += 2)
-        buf.writeUInt16LE(buf.readUInt16BE(i), i);
+    for (var i = 0; i < buf.length; i += 2) buf.writeUInt16LE(buf.readUInt16BE(i), i);
     return buf;
 }
 function spacify2(str) {
@@ -61,8 +60,7 @@ describe("Full SBCS encoding tests", function () {
         if (iconv.encodings[enc].type === "_sbcs")
             (function (enc) {
                 var iconvName = iconvAlias(enc),
-                    testEncName =
-                        enc + (enc !== iconvName ? " (" + iconvName + ")" : "");
+                    testEncName = enc + (enc !== iconvName ? " (" + iconvName + ")" : "");
 
                 it("Decode SBCS encoding " + testEncName, function () {
                     try {
@@ -74,11 +72,7 @@ describe("Full SBCS encoding tests", function () {
                     for (var i = 0; i < 0x100; i++) {
                         var buf = new Buffer([i]);
                         var strActual = iconv.decode(buf, enc);
-                        var strExpected = convertWithDefault(
-                            conv,
-                            buf,
-                            iconv.defaultCharUnicode
-                        ).toString();
+                        var strExpected = convertWithDefault(conv, buf, iconv.defaultCharUnicode).toString();
 
                         if (strActual != strExpected)
                             errors.push({
@@ -137,26 +131,13 @@ describe("Full SBCS encoding tests", function () {
                         // (when single unicode char results in >1 encoded chars because of diacritics)
                         if (
                             normalizedEncodings[enc] &&
-                            strActual ==
-                                iconv.defaultCharSingleByte
-                                    .charCodeAt(0)
-                                    .toString(16)
+                            strActual == iconv.defaultCharSingleByte.charCodeAt(0).toString(16)
                         ) {
                             var strDenormStrict = unorm.nfd(str); // Strict decomposition
-                            if (
-                                strExpected ==
-                                iconv
-                                    .encode(strDenormStrict, enc)
-                                    .toString("hex")
-                            )
-                                continue;
+                            if (strExpected == iconv.encode(strDenormStrict, enc).toString("hex")) continue;
 
                             var strDenorm = unorm.nfkd(str); // Check also compat decomposition.
-                            if (
-                                strExpected ==
-                                iconv.encode(strDenorm, enc).toString("hex")
-                            )
-                                continue;
+                            if (strExpected == iconv.encode(strDenorm, enc).toString("hex")) continue;
 
                             // Try semicomposition if we have 2 combining characters.
                             if (
@@ -166,32 +147,13 @@ describe("Full SBCS encoding tests", function () {
                                 combClass[strDenorm[2]]
                             ) {
                                 // Semicompose without swapping.
-                                var strDenorm2 =
-                                    unorm.nfc(strDenorm[0] + strDenorm[1]) +
-                                    strDenorm[2];
-                                if (
-                                    strExpected ==
-                                    iconv
-                                        .encode(strDenorm2, enc)
-                                        .toString("hex")
-                                )
-                                    continue;
+                                var strDenorm2 = unorm.nfc(strDenorm[0] + strDenorm[1]) + strDenorm[2];
+                                if (strExpected == iconv.encode(strDenorm2, enc).toString("hex")) continue;
 
                                 // Swap combining characters if they have different combining classes, making swap unicode-equivalent.
-                                var strDenorm3 =
-                                    unorm.nfc(strDenorm[0] + strDenorm[2]) +
-                                    strDenorm[1];
-                                if (
-                                    strExpected ==
-                                    iconv
-                                        .encode(strDenorm3, enc)
-                                        .toString("hex")
-                                )
-                                    if (
-                                        combClass[strDenorm[1]] !=
-                                        combClass[strDenorm[2]]
-                                    )
-                                        continue;
+                                var strDenorm3 = unorm.nfc(strDenorm[0] + strDenorm[2]) + strDenorm[1];
+                                if (strExpected == iconv.encode(strDenorm3, enc).toString("hex"))
+                                    if (combClass[strDenorm[1]] != combClass[strDenorm[2]]) continue;
                                     else
                                         // In theory, if combining classes are the same, we can not swap them. But iconv thinks otherwise.
                                         // So we skip this too.
@@ -203,10 +165,7 @@ describe("Full SBCS encoding tests", function () {
                         if (
                             iconvEquivChars[enc] &&
                             iconvEquivChars[enc][str] &&
-                            strExpected ==
-                                iconv
-                                    .encode(iconvEquivChars[enc][str], enc)
-                                    .toString("hex")
+                            strExpected == iconv.encode(iconvEquivChars[enc][str], enc).toString("hex")
                         )
                             continue;
 

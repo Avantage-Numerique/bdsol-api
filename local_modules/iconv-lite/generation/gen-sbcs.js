@@ -31,9 +31,8 @@ var encodingFamilies = [
         // IBM/DOS code pages http://www-01.ibm.com/software/globalization/cp/cp_cpgid.html  http://download.boulder.ibm.com/ibmdl/pub/software/dw/java/cdctables.zip
         // GCGID <-> GCUID (unicode) http://www-01.ibm.com/software/globalization/gcgid/gcgid.html
         encodings: [
-            437, 737, 775, 850, 852, 855, 856, 857, 858, 860, 861, 862, 863,
-            864, 865, 866, 869, 922, 1046, 1124, 1125, 1129, 1133, 1161, 1162,
-            1163,
+            437, 737, 775, 850, 852, 855, 856, 857, 858, 860, 861, 862, 863, 864, 865, 866, 869, 922, 1046, 1124, 1125,
+            1129, 1133, 1161, 1162, 1163,
         ],
         convert: function (cp) {
             return {
@@ -120,22 +119,12 @@ function generateCharsString(encoding) {
 
     for (var b = 0x0; b < 0x100; b++) {
         try {
-            var convertedChar = iconvToUtf8
-                .convert(Buffer.from([b]))
-                .toString();
+            var convertedChar = iconvToUtf8.convert(Buffer.from([b])).toString();
 
-            if (convertedChar.length != 1)
-                throw new Error(
-                    "Single-byte encoding error: Must return single char."
-                );
+            if (convertedChar.length != 1) throw new Error("Single-byte encoding error: Must return single char.");
 
-            var convertedBackBuf = iconvFromUtf8.convert(
-                Buffer.from(convertedChar)
-            );
-            if (convertedBackBuf.length != 1)
-                throw new Error(
-                    "Single-byte encoding error: Cannot decode back."
-                );
+            var convertedBackBuf = iconvFromUtf8.convert(Buffer.from(convertedChar));
+            if (convertedBackBuf.length != 1) throw new Error("Single-byte encoding error: Cannot decode back.");
 
             if (convertedBackBuf[0] != b) needReverse = true; // We've got non 1:1 corresponding.
 

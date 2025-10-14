@@ -2,11 +2,7 @@ import * as mongoDB from "mongodb";
 import { MongoClient, ServerApiVersion } from "mongodb";
 import config from "@src/config";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
-import {
-    buildConnectionUrlParams,
-    getConnectionUrl,
-    MongoDbUrlParamsContract,
-} from "@database/Drivers/Connection";
+import { buildConnectionUrlParams, getConnectionUrl, MongoDbUrlParamsContract } from "@database/Drivers/Connection";
 
 export class MongoDBDriver {
     public driverPrefix: string;
@@ -56,9 +52,7 @@ export class MongoDBDriver {
     }
 
     public async connect() {
-        LogHelper.info(
-            `[DB][Driver][Mongo] Connexion du client au serveur mongodb`
-        );
+        LogHelper.info(`[DB][Driver][Mongo] Connexion du client au serveur mongodb`);
         await this.init();
         await this.client.connect();
         return this.client;

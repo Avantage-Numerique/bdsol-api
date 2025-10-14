@@ -41,20 +41,12 @@ class TaxonomyRoutes extends CrudRoute {
         byTaxonomy: [
             param("category")
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .customSanitizer(
-                    EnumSanitizer.validatorCustomSanitizer(
-                        TaxonomiesCategoriesEnum
-                    )
-                )
+                .customSanitizer(EnumSanitizer.validatorCustomSanitizer(TaxonomiesCategoriesEnum))
                 .customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
                 .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
                 .stripLow()
                 .trim()
-                .customSanitizer(
-                    EnumSanitizer.validatorCustomSanitizer(
-                        TaxonomiesCategoriesEnum
-                    )
-                ),
+                .customSanitizer(EnumSanitizer.validatorCustomSanitizer(TaxonomiesCategoriesEnum)),
         ],
     };
 
@@ -124,11 +116,7 @@ class TaxonomyRoutes extends CrudRoute {
      * @param res {Response}
      * @param next {NextFunction}
      */
-    public async getTaxonomiesHanlder(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
+    public async getTaxonomiesHanlder(req: Request, res: Response, next: NextFunction): Promise<any> {
         res.serviceResponse = TaxonomyController.getTaxonomies();
         return next();
     }
@@ -139,15 +127,9 @@ class TaxonomyRoutes extends CrudRoute {
      * @param res {Response}
      * @param next {NextFunction}
      */
-    public async getByTaxonomyGroup(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
+    public async getByTaxonomyGroup(req: Request, res: Response, next: NextFunction): Promise<any> {
         req.body.data.category = `in:${TaxonomiesCategoriesEnum.Skills},${TaxonomiesCategoriesEnum.Technology},${TaxonomiesCategoriesEnum.Domains}`;
-        const listByGroupSkills = await this.controllerInstance.list(
-            req.body.data
-        );
+        const listByGroupSkills = await this.controllerInstance.list(req.body.data);
         res.serviceResponse = listByGroupSkills;
         return next();
     }

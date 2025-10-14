@@ -109,8 +109,7 @@ class OrganisationsController extends AbstractController {
                         "tools.type": Equipment.getInstance().modelName, //changed here before the $addfield in raw.
                         "location.type": Place.getInstance().modelName,
                         "projectsPartner.type": Project.getInstance().modelName,
-                        "creatorOfProjects.type":
-                            Project.getInstance().modelName,
+                        "creatorOfProjects.type": Project.getInstance().modelName,
                         "creatorOfEvents.type": Event.getInstance().modelName,
                         //"type": "$type",//test to get the virtual like that. Organisation.getInstance().modelName
                     },
@@ -132,10 +131,7 @@ class OrganisationsController extends AbstractController {
                                                     input: "$people",
                                                     as: "p",
                                                     cond: {
-                                                        $eq: [
-                                                            "$$p._id",
-                                                            "$$t.member",
-                                                        ],
+                                                        $eq: ["$$p._id", "$$t.member"],
                                                     },
                                                 },
                                             },
@@ -166,10 +162,7 @@ class OrganisationsController extends AbstractController {
                                                     input: "$tools",
                                                     as: "t",
                                                     cond: {
-                                                        $eq: [
-                                                            "$$t._id",
-                                                            "$$e.equipment",
-                                                        ],
+                                                        $eq: ["$$t._id", "$$e.equipment"],
                                                     },
                                                 },
                                             },
@@ -195,20 +188,14 @@ class OrganisationsController extends AbstractController {
             //need to get back the people looked up into team.member.
         ]);
 
-        const aggregateService = new ServiceAggregate(
-            Organisation.getInstance()
-        );
+        const aggregateService = new ServiceAggregate(Organisation.getInstance());
 
-        const results: any = await aggregateService.lookupMultiple(
-            { slug: slug },
-            query
-        );
+        const results: any = await aggregateService.lookupMultiple({ slug: slug }, query);
 
         //aggregation inter bd don't work (that I red).
         const userAppModel: User = User.getInstance();
         const users: mongoose.Model<any> = userAppModel.mongooseModel;
-        const taxonomies: mongoose.Model<any> =
-            Taxonomy.getInstance().mongooseModel;
+        const taxonomies: mongoose.Model<any> = Taxonomy.getInstance().mongooseModel;
         const media: mongoose.Model<any> = Media.getInstance().mongooseModel;
         //const equipment:mongoose.Model<any> = Equipment.getInstance().mongooseModel;
 
@@ -238,18 +225,10 @@ class OrganisationsController extends AbstractController {
         });
 
         if (results.length > 0) {
-            return SuccessResponse.create(
-                results[0],
-                StatusCodes.OK,
-                ReasonPhrases.OK
-            );
+            return SuccessResponse.create(results[0], StatusCodes.OK, ReasonPhrases.OK);
         }
 
-        return ErrorResponse.create(
-            new Error(""),
-            StatusCodes.NOT_FOUND,
-            ReasonPhrases.NOT_FOUND
-        );
+        return ErrorResponse.create(new Error(""), StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
     }
 }
 export default OrganisationsController;

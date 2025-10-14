@@ -7,9 +7,7 @@ import { ApiResponseContract } from "../Responses/ApiResponse";
  * This would call the controller method directly in the route definition to have like :
  * UsersRouter.post('/update', UsersController.updateEndpoint);
  */
-abstract class ApiEndPointsController
-    implements ApiEndPointsControllerContract
-{
+abstract class ApiEndPointsController implements ApiEndPointsControllerContract {
     public service: Service | any;
     public controler: any; //ControllerContract
     public entity: any; //EntityContract;

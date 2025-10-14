@@ -24,8 +24,7 @@ const licencesCollection: any = {
         description: "",
         guide: "L'Oeuvre fait partie du domaine public. Il n'y a aucun droits d'auteur.<br/>Vous pouvez copier, modifier, distribuer, représenter l'oeuvre, même à des fins commerciales, sans avoir besoin de demander l'autorisation.",
         source: "https://creativecommons.org/publicdomain/zero/1.0/deed.fr",
-        "legal-source":
-            "https://creativecommons.org/publicdomain/zero/1.0/legalcode.fr",
+        "legal-source": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.fr",
         undernote: "",
         image: "https://i.creativecommons.org/p/zero/1.0/88x31.png",
         language: "fr",
@@ -40,8 +39,7 @@ const licencesCollection: any = {
         description: "",
         guide: "Permet seulement le partage.<br/>Vous devez créditer l'auteur-trice, ne pouvez pas utiliser l'oeuvre de façon commerciale et n'êtes pas autorisé à modifier l'oeuvre. Si vous modifier l'oeuvre, vous n'êtes pas autorisé à la partager ou la distribuer.",
         source: "https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fr",
-        "legal-source":
-            "https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode.fr",
+        "legal-source": "https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode.fr",
         undernote: "",
         image: "https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png",
         language: "fr",
@@ -56,8 +54,7 @@ const licencesCollection: any = {
         description: "",
         guide: "Permet le partage et la modification de l'oeuvre.<br/>Vous devez créditer l'auteur-trice, ne pouvez pas utiliser l'oeuvre de façon commerciale et devez partager l'oeuvre sous la même licence que l'originale.",
         source: "https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr",
-        "legal-source":
-            "https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.fr",
+        "legal-source": "https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.fr",
         undernote: "",
         image: "https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png",
         language: "fr",
@@ -72,8 +69,7 @@ const licencesCollection: any = {
         description: "",
         guide: "Permet le partage et la modification de l'oeuvre.<br/>Vous devez créditer l'auteur-trice et ne pouvez pas utiliser l'oeuvre de façon commerciale.",
         source: "https://creativecommons.org/licenses/by-nc/4.0/deed.fr",
-        "legal-source":
-            "https://creativecommons.org/licenses/by-nc/4.0/legalcode.fr",
+        "legal-source": "https://creativecommons.org/licenses/by-nc/4.0/legalcode.fr",
         undernote: "",
         image: "https://i.creativecommons.org/l/by-nc/4.0/88x31.png",
         language: "fr",
@@ -88,8 +84,7 @@ const licencesCollection: any = {
         description: "",
         guide: "Permet seulement le partage, y compris pour une utilisation commerciale.<br/>Vous devez créditer l'auteur-trice. Vous ne pouvez pas modifier l'oeuvre. Si vous modifier l'oeuvre, vous n'êtes pas autorisé à la partager ou la distribuer.",
         source: "https://creativecommons.org/licenses/by-nd/4.0/deed.fr",
-        "legal-source":
-            "https://creativecommons.org/licenses/by-nd/4.0/legalcode.fr",
+        "legal-source": "https://creativecommons.org/licenses/by-nd/4.0/legalcode.fr",
         undernote: "",
         image: "https://i.creativecommons.org/l/by-nd/4.0/88x31.png",
         language: "fr",
@@ -104,8 +99,7 @@ const licencesCollection: any = {
         description: "",
         guide: "Permet le partage et la modification de l'oeuvre, y compris pour une utilisation commerciale.<br/>Vous devez créditer l'auteur-trice et si vous modifier l'oeuvre, vous devez la partager sous la même licence que l'originale.",
         source: "https://creativecommons.org/licenses/by-sa/4.0/deed.fr",
-        "legal-source":
-            "https://creativecommons.org/licenses/by-sa/4.0/legalcode.fr",
+        "legal-source": "https://creativecommons.org/licenses/by-sa/4.0/legalcode.fr",
         undernote: "",
         image: "https://i.creativecommons.org/l/by-sa/4.0/88x31.png",
         language: "fr",
@@ -120,8 +114,7 @@ const licencesCollection: any = {
         description: "",
         guide: "Permet le partage et la modification de l'oeuvre, y compris pour une utilisation commerciale.<br/>Vous devez créditer l'auteur-trice.",
         source: "https://creativecommons.org/licenses/by/4.0/deed.fr",
-        "legal-source":
-            "https://creativecommons.org/licenses/by/4.0/legalcode.fr",
+        "legal-source": "https://creativecommons.org/licenses/by/4.0/legalcode.fr",
         undernote:
             'Ce(tte) œuvre est mise à disposition selon les termes de la <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Licence Creative Commons Attribution 4.0 International</a>',
         image: "https://i.creativecommons.org/l/by/4.0/88x31.png",

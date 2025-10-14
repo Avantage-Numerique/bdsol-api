@@ -5,10 +5,7 @@ import AbstractModel from "../../Abstract/Model";
 import * as fs from "fs";
 import PersonsService from "../Services/PersonsService";
 import { Meta, SubMeta } from "@src/Moderation/Schemas/MetaSchema";
-import {
-    middlewarePopulateProperty,
-    taxonomyPopulate,
-} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import { populateUser } from "@src/Users/Middlewares/populateUser";
 import { SkillGroup } from "@src/Taxonomy/Schemas/SkillGroupSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
@@ -323,11 +320,9 @@ class Person extends AbstractModel {
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
-            this.schema.pre(
-                "findOneAndUpdate",
-                async function (next: any): Promise<any> {
-                    const updatedDocument: any = this.getUpdate();
-                    /*if (updatedDocument["occupations"] != undefined){
+            this.schema.pre("findOneAndUpdate", async function (next: any): Promise<any> {
+                const updatedDocument: any = this.getUpdate();
+                /*if (updatedDocument["occupations"] != undefined){
                     const idList = updatedDocument.occupations.map( (el:any) => {
                         return el.skills.map( (id:any) =>{
                             return new mongoose.Types.ObjectId(id);
@@ -336,11 +331,10 @@ class Person extends AbstractModel {
                     await middlewareTaxonomy(idList, TaxonomyController, "occupations.skills");
                 }
                 */
-                    //Check and insert badges
-                    middlewareInsertBadges(updatedDocument);
-                    return next();
-                }
-            );
+                //Check and insert badges
+                middlewareInsertBadges(updatedDocument);
+                return next();
+            });
         }
     }
 

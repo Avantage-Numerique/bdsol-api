@@ -72,49 +72,27 @@ class AdminRoutes extends AbstractRoute {
      * Allow routes Manager to declare route on the same router.
      * @param router {express.Router} The router to associate other routes, at the target Routes scope.
      */
-    public setupAdditionnalPublicRoutes(
-        router: express.Router
-    ): express.Router {
+    public setupAdditionnalPublicRoutes(router: express.Router): express.Router {
         return router;
     }
 
-    public async dashboardHandler(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
-        res.serviceResponse =
-            await this.controllerInstance.renderAdminDashboard();
+    public async dashboardHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        res.serviceResponse = await this.controllerInstance.renderAdminDashboard();
         return next();
     }
 
-    public async dashboardDockerManagement(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
-        res.serviceResponse =
-            await this.controllerInstance.renderDockerManager();
+    public async dashboardDockerManagement(req: Request, res: Response, next: NextFunction): Promise<any> {
+        res.serviceResponse = await this.controllerInstance.renderDockerManager();
         return next();
     }
 
-    public async renderRoutesStructureHandler(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
-        res.serviceResponse =
-            await this.controllerInstance.renderRoutesStructure();
+    public async renderRoutesStructureHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        res.serviceResponse = await this.controllerInstance.renderRoutesStructure();
         return next();
     }
 
-    public async renderRoutesTestingHandler(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
-        res.serviceResponse =
-            await this.controllerInstance.renderRoutesTesting();
+    public async renderRoutesTestingHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        res.serviceResponse = await this.controllerInstance.renderRoutesTesting();
         return next();
     }
 
@@ -124,33 +102,17 @@ class AdminRoutes extends AbstractRoute {
      * @param res {Response}
      * @protected
      */
-    protected async renderDefaultTemplate(
-        req: Request,
-        res: Response
-    ): Promise<any> {
+    protected async renderDefaultTemplate(req: Request, res: Response): Promise<any> {
         const logger = new LogHelper(req);
         logger.log(`Response status ${StatusCodes.OK}, ${StatusCodes["OK"]}`);
 
         res.set("Content-Type", "text/html");
-        return res
-            .status(StatusCodes.OK)
-            .send(Buffer.from(res.serviceResponse));
+        return res.status(StatusCodes.OK).send(Buffer.from(res.serviceResponse));
     }
 
-    public async staticContentNotFound(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
-        if (
-            res.serviceResponse === undefined ||
-            res.serviceResponse === null ||
-            res.serviceResponse === ""
-        ) {
-            res.serviceResponse = ErrorResponse.create(
-                new Error(ReasonPhrases.NOT_FOUND),
-                StatusCodes.NOT_FOUND
-            );
+    public async staticContentNotFound(req: Request, res: Response, next: NextFunction): Promise<any> {
+        if (res.serviceResponse === undefined || res.serviceResponse === null || res.serviceResponse === "") {
+            res.serviceResponse = ErrorResponse.create(new Error(ReasonPhrases.NOT_FOUND), StatusCodes.NOT_FOUND);
         }
         return next();
     }

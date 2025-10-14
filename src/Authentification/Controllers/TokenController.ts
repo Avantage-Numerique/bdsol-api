@@ -18,18 +18,11 @@ export class TokenController {
     public static generate(encapsulateData: any): string {
         TokenController.initConfig();
 
-        return jwt.sign(
-            encapsulateData,
-            TokenController.config.tokenSecret,
-            TokenController.config.jwt.defaultOptions
-        );
+        return jwt.sign(encapsulateData, TokenController.config.tokenSecret, TokenController.config.jwt.defaultOptions);
     }
 
     public static initConfig() {
-        if (
-            TokenController.config === undefined ||
-            TokenController.config === null
-        ) {
+        if (TokenController.config === undefined || TokenController.config === null) {
             TokenController.config = getApiConfig();
         }
     }
@@ -39,19 +32,13 @@ export class TokenController {
      * It assign the results to the callback TokenController.onVerifyToken
      * @param token
      */
-    public static async verify(
-        token: string
-    ): Promise<string | JwtPayload | undefined | any> {
+    public static async verify(token: string): Promise<string | JwtPayload | undefined | any> {
         let verifiedToken;
         TokenController.initConfig();
         try {
-            await jwt.verify(
-                token,
-                TokenController.config.tokenSecret,
-                (err: any, decoded: any) => {
-                    verifiedToken = TokenController.onVerifyToken(err, decoded);
-                }
-            );
+            await jwt.verify(token, TokenController.config.tokenSecret, (err: any, decoded: any) => {
+                verifiedToken = TokenController.onVerifyToken(err, decoded);
+            });
             return verifiedToken;
         } catch (error: any) {
             LogHelper.error(`Verify Token Error ${error.message}`, error);
@@ -89,20 +76,14 @@ export class TokenController {
      * @param decoded {JwtPayload|null}
      * @protected
      */
-    protected static onVerifyToken(
-        err: VerifyErrors | null,
-        decoded: any | JwtPayload | undefined
-    ) {
+    protected static onVerifyToken(err: VerifyErrors | null, decoded: any | JwtPayload | undefined) {
         if (err) {
             //could be : JsonWebTokenError
             // could be : TokenExpiredError
             throw err;
         }
 
-        if (
-            TokenController.isValid(decoded) &&
-            TokenController.isActive(decoded)
-        ) {
+        if (TokenController.isValid(decoded) && TokenController.isActive(decoded)) {
             // we assume here,it will be an Object that we can deconstructed.
             decoded.validated = true;
             return decoded;
@@ -116,10 +97,7 @@ export class TokenController {
      * @protected
      */
     protected static updateTokenLife(verifiedToken: any): any {
-        if (
-            TokenController.isValid(verifiedToken) &&
-            TokenController.isActive(verifiedToken)
-        ) {
+        if (TokenController.isValid(verifiedToken) && TokenController.isActive(verifiedToken)) {
             //const now = date();
             //if augment lifespan
             //add params with last updated

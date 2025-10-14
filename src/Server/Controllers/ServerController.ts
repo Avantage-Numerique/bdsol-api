@@ -47,14 +47,10 @@ export default class ServerController {
      * @private
      */
     private static _setDBDriver() {
-        LogHelper.info(
-            `[BD] Initiation du driver ${ServerController.api.config.db.driver} de la base de données.`
-        );
+        LogHelper.info(`[BD] Initiation du driver ${ServerController.api.config.db.driver} de la base de données.`);
 
         if (ServerController.api.config.db.driver === "mongodb") {
-            ServerController.database = new MongooseDBDriver(
-                ServerController.api.config.db
-            );
+            ServerController.database = new MongooseDBDriver(ServerController.api.config.db);
             return;
         }
     }
@@ -79,9 +75,7 @@ export default class ServerController {
         LogHelper.info("Démarrage de l'API");
         ServerController.api.start();
 
-        LogHelper.info(
-            "Configuration terminée, départ de l'écoute sur le serveur"
-        );
+        LogHelper.info("Configuration terminée, départ de l'écoute sur le serveur");
         this.server.listen(ServerController.api.config.port);
     }
 
@@ -99,18 +93,13 @@ export default class ServerController {
         // handle specific listen errors with friendly messages
         switch (error.code) {
             case "EACCES":
-                this.exitApi(
-                    StatusCodes.FORBIDDEN,
-                    bind + ReasonPhrases.FORBIDDEN
-                );
+                this.exitApi(StatusCodes.FORBIDDEN, bind + ReasonPhrases.FORBIDDEN);
                 break;
 
             case "EADDRINUSE":
                 this.exitApi(
                     StatusCodes.INTERNAL_SERVER_ERROR,
-                    bind +
-                        "is already in use" +
-                        ReasonPhrases.INTERNAL_SERVER_ERROR
+                    bind + "is already in use" + ReasonPhrases.INTERNAL_SERVER_ERROR
                 );
                 break;
 

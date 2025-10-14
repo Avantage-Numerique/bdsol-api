@@ -75,16 +75,12 @@ class EquipmentController extends AbstractController {
 
         const aggregateService = new ServiceAggregate(Equipment.getInstance());
 
-        const results: any = await aggregateService.lookupMultiple(
-            { slug: slug },
-            query
-        );
+        const results: any = await aggregateService.lookupMultiple({ slug: slug }, query);
 
         //agregation inter bd don't work (that I red).
         const userAppModel: User = User.getInstance();
         const users: mongoose.Model<any> = userAppModel.mongooseModel;
-        const taxonomies: mongoose.Model<any> =
-            Taxonomy.getInstance().mongooseModel;
+        const taxonomies: mongoose.Model<any> = Taxonomy.getInstance().mongooseModel;
         const media: mongoose.Model<any> = Media.getInstance().mongooseModel;
 
         await taxonomies.populate(results, { path: "domains.domain" });
@@ -104,18 +100,10 @@ class EquipmentController extends AbstractController {
         });
 
         if (results.length > 0) {
-            return SuccessResponse.create(
-                results[0],
-                StatusCodes.OK,
-                ReasonPhrases.OK
-            );
+            return SuccessResponse.create(results[0], StatusCodes.OK, ReasonPhrases.OK);
         }
 
-        return ErrorResponse.create(
-            new Error(""),
-            StatusCodes.NOT_FOUND,
-            ReasonPhrases.NOT_FOUND
-        );
+        return ErrorResponse.create(new Error(""), StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
     }
 }
 

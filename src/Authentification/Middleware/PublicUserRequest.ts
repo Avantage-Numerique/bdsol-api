@@ -13,11 +13,7 @@ export class PublicUserRequest {
          * @param next {NextFunction}
          * @return Promise<Response<any, Record<string, any>> | undefined>
          */
-        return async function (
-            req: Request,
-            res: Response,
-            next: NextFunction
-        ) {
+        return async function (req: Request, res: Response, next: NextFunction) {
             /*const mediasIgnoreRegex = /(\/medias\/(person|organisation)).;
             if (req.originalUrl !== '/ping' &&
                 !mediasIgnoreRegex.test(req.originalUrl)

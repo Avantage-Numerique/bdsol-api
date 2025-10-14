@@ -220,9 +220,7 @@ class MonitoringController {
         return false;
     }
 
-    private async _pingDatabase(
-        dbName: string = "bdsol-data"
-    ): Promise<boolean> {
+    private async _pingDatabase(dbName: string = "bdsol-data"): Promise<boolean> {
         const driver: MongoDBDriver = new MongoDBDriver(config.db);
         const client: MongoClient = driver.client;
         let ping: any;

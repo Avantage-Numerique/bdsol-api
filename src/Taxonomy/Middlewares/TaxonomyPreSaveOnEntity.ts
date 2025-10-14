@@ -21,9 +21,7 @@ const middlewareTaxonomy = async (
             const foundOccupationCount = occupationsExist.data.length;
 
             if (flatenedList.length != foundOccupationCount) {
-                throw new Error(
-                    `Pre save Erreur data ${taxonomy} existe pas ou doublons`
-                );
+                throw new Error(`Pre save Erreur data ${taxonomy} existe pas ou doublons`);
             }
         }
     }

@@ -85,14 +85,12 @@ describe("Extend Node native encodings", function () {
         });
 
         it("Readable#setEncoding() and collect", function (done) {
-            fs.createReadStream(__filename, { encoding: "win1251" }).collect(
-                function (err, str) {
-                    assert.ifError(err);
-                    assert.equal(typeof str, "string");
-                    assert.notEqual(str.indexOf(markerInWin1251), -1);
-                    done();
-                }
-            );
+            fs.createReadStream(__filename, { encoding: "win1251" }).collect(function (err, str) {
+                assert.ifError(err);
+                assert.equal(typeof str, "string");
+                assert.notEqual(str.indexOf(markerInWin1251), -1);
+                done();
+            });
         });
 
         it("HTTP and Request example", function (done) {

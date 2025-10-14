@@ -25,13 +25,7 @@ const addIsVerifyToUsers: any = [
  */
 export async function up(): Promise<void> {
     const driver: MongoDBDriver = new MongoDBDriver(config.migrations);
-    await runQueriesOnDatabase(
-        driver,
-        "bdsol-users",
-        addIsVerifyToUsers,
-        "Adding the field verify to users ",
-        "up"
-    );
+    await runQueriesOnDatabase(driver, "bdsol-users", addIsVerifyToUsers, "Adding the field verify to users ", "up");
 }
 
 /**

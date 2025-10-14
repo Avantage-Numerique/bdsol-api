@@ -19,11 +19,7 @@ export class AddUserToRequest {
          * @param next {NextFunction}
          * @return Promise<Response<any, Record<string, any>> | undefined>
          */
-        return async function (
-            req: Request,
-            res: Response,
-            next: NextFunction
-        ) {
+        return async function (req: Request, res: Response, next: NextFunction) {
             next();
         };
     }

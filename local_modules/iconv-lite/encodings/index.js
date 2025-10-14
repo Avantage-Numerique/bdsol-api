@@ -16,7 +16,5 @@ var modules = [
 // Put all encoding/alias/codec definitions to single object and export it.
 for (var i = 0; i < modules.length; i++) {
     var module = modules[i];
-    for (var enc in module)
-        if (Object.prototype.hasOwnProperty.call(module, enc))
-            exports[enc] = module[enc];
+    for (var enc in module) if (Object.prototype.hasOwnProperty.call(module, enc)) exports[enc] = module[enc];
 }

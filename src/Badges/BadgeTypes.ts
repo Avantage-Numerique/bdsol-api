@@ -1,7 +1,4 @@
-import {
-    insertBadgeInArray,
-    removeBadgeFromArray,
-} from "./MiddlewareInsertBadges";
+import { insertBadgeInArray, removeBadgeFromArray } from "./MiddlewareInsertBadges";
 
 class BadgeTypes {
     /**
@@ -19,20 +16,12 @@ class BadgeTypes {
             iconDescription: "",
             condition(document: any) {
                 if (document?.region !== undefined) {
-                    if (
-                        BadgeTypes.badges.CB.acceptedRegion.includes(
-                            document.region
-                        )
-                    )
+                    if (BadgeTypes.badges.CB.acceptedRegion.includes(document.region))
                         insertBadgeInArray(document.badges, "CB");
                     else removeBadgeFromArray(document.badges, "CB");
                 }
             },
-            acceptedRegion: [
-                "abitibi-temiscamingue",
-                "north Ontario",
-                "baies-james",
-            ],
+            acceptedRegion: ["abitibi-temiscamingue", "north Ontario", "baies-james"],
             type: "Badge",
         },
     };

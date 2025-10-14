@@ -10,10 +10,7 @@ const RegistrationRouter = express.Router();
 //  LOGIN
 RegistrationRouter.post("/register", async (req, res) => {
     const { data } = req.body;
-    LogHelper.info(
-        "A user trying to register into the system with data :",
-        data
-    );
+    LogHelper.info("A user trying to register into the system with data :", data);
     const controller = new RegistrationController();
     const response = await controller.register(data);
 

@@ -4,12 +4,7 @@ import { UserHistorySchema } from "../Schemas/UserHistorySchema";
 import { ApiResponseContract } from "../../Http/Responses/ApiResponse";
 
 export class UserHistoryComposer {
-    public async createHistoryHandler(
-        req: any,
-        res: any,
-        response: any,
-        action: string
-    ): Promise<ApiResponseContract> {
+    public async createHistoryHandler(req: any, res: any, response: any, action: string): Promise<ApiResponseContract> {
         //Action on the data
         //action <---
 
@@ -43,11 +38,8 @@ export class UserHistoryComposer {
         } as UserHistorySchema;
     }
 
-    protected async insertUserHistory(
-        data: UserHistorySchema
-    ): Promise<ApiResponseContract> {
-        const userHistoryService: UsersHistoryService =
-            UsersHistoryService.getInstance(UserHistory.getInstance());
+    protected async insertUserHistory(data: UserHistorySchema): Promise<ApiResponseContract> {
+        const userHistoryService: UsersHistoryService = UsersHistoryService.getInstance(UserHistory.getInstance());
 
         //Service call to add UserHistory
         return userHistoryService.insert(data);

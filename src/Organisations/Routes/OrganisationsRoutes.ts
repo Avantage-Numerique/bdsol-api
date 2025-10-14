@@ -10,8 +10,7 @@ import { dateSanitizerAlias } from "@src/Security/SanitizerAliases/DateSanitizer
 import { entityNameSanitizerAlias } from "@src/Security/SanitizerAliases/EntityNameSanitizerAlias";
 
 class OrganisationsRoutes extends CrudRoute {
-    controllerInstance: AbstractController =
-        OrganisationsController.getInstance();
+    controllerInstance: AbstractController = OrganisationsController.getInstance();
     routerInstance: express.Router = express.Router();
     routerInstanceAuthentification: express.Router = express.Router();
 

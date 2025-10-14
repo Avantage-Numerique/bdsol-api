@@ -16,23 +16,12 @@ export class ApiErrorHandler {
          * @param next {NextFunction}
          * @return Promise<Response<any, Record<string, any>> | undefined>
          */
-        return async function (
-            err: Error,
-            req: Request,
-            res: Response,
-            next: NextFunction
-        ) {
+        return async function (err: Error, req: Request, res: Response, next: NextFunction) {
             const httpError: HttpError = err as HttpError;
             LogHelper.error("ApiErrorHandler", httpError.message);
             return res
                 .status(httpError.status || 500)
-                .json(
-                    ErrorResponse.create(
-                        httpError,
-                        httpError.status,
-                        httpError.message
-                    )
-                )
+                .json(ErrorResponse.create(httpError, httpError.status, httpError.message))
                 .end();
         };
     }

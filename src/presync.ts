@@ -5,16 +5,9 @@ import { leadingZero } from "@src/Helpers/DateTime";
 import config from "@src/config";
 import { MongooseDBDriver } from "@database/Drivers/MongooseDriver";
 
-export const backupBeforeSyncProdToStaging = async (
-    dbName: string = "bdsol-data"
-) => {
-    LogHelper.info(
-        `[Command][syncProdToStaging] ${dbName} in ${config.environnement}`
-    );
-    if (
-        config.environnement === "staging" ||
-        config.environnement === "development"
-    ) {
+export const backupBeforeSyncProdToStaging = async (dbName: string = "bdsol-data") => {
+    LogHelper.info(`[Command][syncProdToStaging] ${dbName} in ${config.environnement}`);
+    if (config.environnement === "staging" || config.environnement === "development") {
         LogHelper.info(`[Command][syncProdToStaging] ${dbName}`);
         const dbDistant = new MongooseDBDriver(config.distantDb);
         const db = new MongooseDBDriver(config.localhostDb);
@@ -33,9 +26,7 @@ export const backupBeforeSyncProdToStaging = async (
         const distantDbFileName: string = backupFileName(dbName);
         const distantPath: string = `${distantBasePath}/${distantDbFileName}`;
 
-        LogHelper.info(
-            `[Command][syncProdToStaging] dumping ${dbName} from distant config`
-        );
+        LogHelper.info(`[Command][syncProdToStaging] dumping ${dbName} from distant config`);
         //backup distant db locally
         const backupDistantDb = await MongoSpawn("mongodump", {
             uri: `${dbDistant.connectionUrl(dbName)}`,
@@ -44,9 +35,7 @@ export const backupBeforeSyncProdToStaging = async (
             gzip: true,
         });
 
-        LogHelper.info(
-            `[Command][syncProdToStaging] backuping ${dbName} before restoring from local config`
-        );
+        LogHelper.info(`[Command][syncProdToStaging] backuping ${dbName} before restoring from local config`);
         //Backup local ??
         const backupLocalDb = await MongoSpawn("mongodump", {
             uri: `${db.connectionUrl(dbName)}`,

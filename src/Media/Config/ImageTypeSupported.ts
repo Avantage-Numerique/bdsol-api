@@ -9,8 +9,7 @@ export const ImageMimeTypeSupported = [
 const imgMimeTypeExtensions: any = {};
 
 for (const mimetype in ImageMimeTypeSupported) {
-    imgMimeTypeExtensions[mimetype] =
-        mimeTypesDb[mimetype].extensions ?? undefined;
+    imgMimeTypeExtensions[mimetype] = mimeTypesDb[mimetype].extensions ?? undefined;
     //throw error if the mime type set in support isn't present in the mine-db.
 }
 

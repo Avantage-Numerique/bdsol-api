@@ -11,56 +11,29 @@ describe("Generic UTF8-UCS2 tests", function () {
         assert.ok(iconv.encode(testString, "utf8") instanceof Buffer);
 
         var s = iconv.decode(new Buffer(testString), "utf8");
-        assert.strictEqual(
-            Object.prototype.toString.call(s),
-            "[object String]"
-        );
+        assert.strictEqual(Object.prototype.toString.call(s), "[object String]");
     });
 
     it("Internal encodings all correctly encoded/decoded", function () {
         ["utf8", "UTF-8", "UCS2", "binary"].forEach(function (enc) {
-            assert.strictEqual(
-                iconv.encode(testStringLatin1, enc).toString(enc),
-                testStringLatin1
-            );
-            assert.strictEqual(
-                iconv.decode(new Buffer(testStringLatin1, enc), enc),
-                testStringLatin1
-            );
+            assert.strictEqual(iconv.encode(testStringLatin1, enc).toString(enc), testStringLatin1);
+            assert.strictEqual(iconv.decode(new Buffer(testStringLatin1, enc), enc), testStringLatin1);
         });
     });
 
     it("Base64 correctly encoded/decoded", function () {
-        assert.strictEqual(
-            iconv.encode(testStringBase64, "base64").toString("binary"),
-            testString
-        );
-        assert.strictEqual(
-            iconv.decode(new Buffer(testString, "binary"), "base64"),
-            testStringBase64
-        );
+        assert.strictEqual(iconv.encode(testStringBase64, "base64").toString("binary"), testString);
+        assert.strictEqual(iconv.decode(new Buffer(testString, "binary"), "base64"), testStringBase64);
     });
 
     it("Hex correctly encoded/decoded", function () {
-        assert.strictEqual(
-            iconv.encode(testStringHex, "hex").toString("binary"),
-            testString
-        );
-        assert.strictEqual(
-            iconv.decode(new Buffer(testString, "binary"), "hex"),
-            testStringHex
-        );
+        assert.strictEqual(iconv.encode(testStringHex, "hex").toString("binary"), testString);
+        assert.strictEqual(iconv.decode(new Buffer(testString, "binary"), "hex"), testStringHex);
     });
 
     it("Latin1 correctly encoded/decoded", function () {
-        assert.strictEqual(
-            iconv.encode(testStringLatin1, "latin1").toString("binary"),
-            testStringLatin1
-        );
-        assert.strictEqual(
-            iconv.decode(new Buffer(testStringLatin1, "binary"), "latin1"),
-            testStringLatin1
-        );
+        assert.strictEqual(iconv.encode(testStringLatin1, "latin1").toString("binary"), testStringLatin1);
+        assert.strictEqual(iconv.decode(new Buffer(testStringLatin1, "binary"), "latin1"), testStringLatin1);
     });
 
     it("Convert to string, not buffer (utf8 used)", function () {
@@ -79,10 +52,7 @@ describe("Generic UTF8-UCS2 tests", function () {
     });
 
     it("Convert non-strings and non-buffers", function () {
-        assert.strictEqual(
-            iconv.encode({}, "utf8").toString(),
-            "[object Object]"
-        );
+        assert.strictEqual(iconv.encode({}, "utf8").toString(), "[object Object]");
         assert.strictEqual(iconv.encode(10, "utf8").toString(), "10");
         assert.strictEqual(iconv.encode(undefined, "utf8").toString(), "");
     });
@@ -130,9 +100,6 @@ describe("Canonicalize encoding function", function () {
     });
 
     it("correctly strips year and non-alpha chars", function () {
-        assert.equal(
-            iconv._canonicalizeEncoding("ISO_8859-5:1988"),
-            "iso88595"
-        );
+        assert.equal(iconv._canonicalizeEncoding("ISO_8859-5:1988"), "iso88595");
     });
 });

@@ -25,8 +25,7 @@ export class CrudSchemaSanitizer {
      */
     public static middlewareFunction(entity: string) {
         const entitysSchema: any = entity;
-        let entitysSanitizationRules: any =
-            CrudSchemaSanitizer.parseSchema(entitysSchema);
+        let entitysSanitizationRules: any = CrudSchemaSanitizer.parseSchema(entitysSchema);
 
         //since all properties are sanitize by itself in a middleware slot (as an array elements). We need to return an array with all the rules
 
@@ -37,11 +36,7 @@ export class CrudSchemaSanitizer {
          * @param next {NextFunction}
          * @return Promise<Response<any, Record<string, any>> | undefined>
          */
-        return async function (
-            req: Request,
-            res: Response,
-            next: NextFunction
-        ) {
+        return async function (req: Request, res: Response, next: NextFunction) {
             entitysSanitizationRules = {};
             next();
         };

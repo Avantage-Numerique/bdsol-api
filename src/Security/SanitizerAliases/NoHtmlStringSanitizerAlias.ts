@@ -20,10 +20,7 @@ const noHtmlStringSanitizerAlias = (
         chain = baseChain.notEmpty();
     }
 
-    return chain
-        .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-        .stripLow()
-        .trim();
+    return chain.customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer()).stripLow().trim();
 };
 
 export { noHtmlStringSanitizerAlias };

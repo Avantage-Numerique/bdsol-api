@@ -11,12 +11,7 @@ import { User } from "@src/Users/Models/User";
  */
 const populateUser = (document: any, schemaProperty: string) => {
     const appModel = User.getInstance();
-    mongoosePopulate(
-        document,
-        schemaProperty,
-        appModel.publicFields(),
-        appModel.mongooseModel
-    );
+    mongoosePopulate(document, schemaProperty, appModel.publicFields(), appModel.mongooseModel);
 };
 
 export { populateUser };

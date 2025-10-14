@@ -38,18 +38,10 @@ const MongoSpawn = async (command: string, params: any) => {
     mongoSpawn.on("exit", (code, signal) => {
         LogHelper.info(`${logPrefix} process exited`);
         if (code) {
-            LogHelper.error(
-                `${logPrefix} process exited with code`,
-                code,
-                `(${typeof code})`
-            );
+            LogHelper.error(`${logPrefix} process exited with code`, code, `(${typeof code})`);
         }
         if (signal) {
-            LogHelper.error(
-                `${logPrefix} process was killed with signal`,
-                signal,
-                `(${typeof signal})`
-            );
+            LogHelper.error(`${logPrefix} process was killed with signal`, signal, `(${typeof signal})`);
         }
 
         if (!signal && !code) {

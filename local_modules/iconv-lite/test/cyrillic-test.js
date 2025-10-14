@@ -8,10 +8,8 @@ var baseStrings = {
         "\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\x0c\r\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f" +
         " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\x7f",
     rus: "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя",
-    additional1:
-        "ЂЃ‚ѓ„…†‡€‰Љ‹ЊЌЋЏђ‘’“”•–—™љ›њќћџ ЎўЈ¤Ґ¦§Ё©Є«¬\xAD®Ї°±Ііґµ¶·ё№є»јЅѕї",
-    additional2:
-        "─│┌┐└┘├┤┬┴┼▀▄█▌▐░▒▓⌠■∙√≈≤≥ ⌡°²·÷═║╒ё╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡Ё╢╣╤╥╦╧╨╩╪╫╬©",
+    additional1: "ЂЃ‚ѓ„…†‡€‰Љ‹ЊЌЋЏђ‘’“”•–—™љ›њќћџ ЎўЈ¤Ґ¦§Ё©Є«¬\xAD®Ї°±Ііґµ¶·ё№є»јЅѕї",
+    additional2: "─│┌┐└┘├┤┬┴┼▀▄█▌▐░▒▓⌠■∙√≈≤≥ ⌡°²·÷═║╒ё╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡Ё╢╣╤╥╦╧╨╩╪╫╬©",
     additional3: " ЁЂЃЄЅІЇЈЉЊЋЌ­ЎЏ№ёђѓєѕіїјљњћќ§ўџ",
     untranslatable: "£Åçþÿ¿",
 };
@@ -77,10 +75,7 @@ describe("Test Cyrillic encodings", function () {
         describe(encoding.name + ":", function () {
             it("Convert from buffer", function () {
                 for (var key in encoding.encodedStrings)
-                    assert.strictEqual(
-                        iconv.decode(encoding.encodedStrings[key], enc),
-                        baseStrings[key]
-                    );
+                    assert.strictEqual(iconv.decode(encoding.encodedStrings[key], enc), baseStrings[key]);
             });
 
             it("Convert to buffer", function () {
@@ -93,10 +88,7 @@ describe("Test Cyrillic encodings", function () {
 
             it("Try different variations of encoding", function () {
                 encoding.variations.forEach(function (enc) {
-                    assert.strictEqual(
-                        iconv.decode(encoding.encodedStrings[key], enc),
-                        baseStrings[key]
-                    );
+                    assert.strictEqual(iconv.decode(encoding.encodedStrings[key], enc), baseStrings[key]);
                     assert.strictEqual(
                         iconv.encode(baseStrings[key], enc).toString("binary"),
                         encoding.encodedStrings[key].toString("binary")
@@ -111,12 +103,7 @@ describe("Test Cyrillic encodings", function () {
                         return iconv.defaultCharSingleByte;
                     })
                     .join("");
-                assert.strictEqual(
-                    iconv
-                        .encode(baseStrings.untranslatable, enc)
-                        .toString("binary"),
-                    expected
-                ); // Only '?' characters.
+                assert.strictEqual(iconv.encode(baseStrings.untranslatable, enc).toString("binary"), expected); // Only '?' characters.
             });
         });
     });

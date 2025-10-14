@@ -2,10 +2,7 @@ import { SeederContract } from "../Contracts/SeederContract";
 import { Service } from "../Service";
 import SeedData from "@database/Seeders/SeedData";
 
-export default class SeedPersistantData
-    extends SeedData
-    implements SeederContract
-{
+export default class SeedPersistantData extends SeedData implements SeederContract {
     /**
      * Class to simplify the process of adding data into its collection (service).
      * @param service {Service} The target service that this seeder need to add data

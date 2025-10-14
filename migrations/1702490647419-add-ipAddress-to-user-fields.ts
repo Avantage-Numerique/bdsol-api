@@ -47,13 +47,7 @@ const addIpToFields: any = [
  */
 export async function up(): Promise<void> {
     const driver: MongoDBDriver = new MongoDBDriver(config.migrations);
-    await runQueriesOnDatabase(
-        driver,
-        "bdsol-users",
-        addIpToFields,
-        "Adding the field verify to users ",
-        "up"
-    );
+    await runQueriesOnDatabase(driver, "bdsol-users", addIpToFields, "Adding the field verify to users ", "up");
 }
 
 /**

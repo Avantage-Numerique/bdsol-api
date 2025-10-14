@@ -10,9 +10,7 @@ export async function up(): Promise<void> {
     if (db?.providers?.data) {
         return;
     } else {
-        return Promise.reject(
-            Error("Migration up, can't initiate the data provider.")
-        );
+        return Promise.reject(Error("Migration up, can't initiate the data provider."));
     }
 }
 
@@ -25,8 +23,6 @@ export async function down(): Promise<void> {
     if (db?.providers?.data) {
         return;
     } else {
-        return Promise.reject(
-            Error("Migration up, can't initiate the data provider.")
-        );
+        return Promise.reject(Error("Migration up, can't initiate the data provider."));
     }
 }

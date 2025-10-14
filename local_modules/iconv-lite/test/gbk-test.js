@@ -3,20 +3,12 @@ var fs = require("fs"),
     iconv = require(__dirname + "/../");
 
 var testString = "中国abc", //unicode contains GBK-code and ascii
-    testStringGBKBuffer = new Buffer([
-        0xd6, 0xd0, 0xb9, 0xfa, 0x61, 0x62, 0x63,
-    ]);
+    testStringGBKBuffer = new Buffer([0xd6, 0xd0, 0xb9, 0xfa, 0x61, 0x62, 0x63]);
 
 describe("GBK tests", function () {
     it("GBK correctly encoded/decoded", function () {
-        assert.strictEqual(
-            iconv.encode(testString, "GBK").toString("binary"),
-            testStringGBKBuffer.toString("binary")
-        );
-        assert.strictEqual(
-            iconv.decode(testStringGBKBuffer, "GBK"),
-            testString
-        );
+        assert.strictEqual(iconv.encode(testString, "GBK").toString("binary"), testStringGBKBuffer.toString("binary"));
+        assert.strictEqual(iconv.decode(testStringGBKBuffer, "GBK"), testString);
     });
 
     it("GB2312 correctly encoded/decoded", function () {
@@ -24,10 +16,7 @@ describe("GBK tests", function () {
             iconv.encode(testString, "GB2312").toString("binary"),
             testStringGBKBuffer.toString("binary")
         );
-        assert.strictEqual(
-            iconv.decode(testStringGBKBuffer, "GB2312"),
-            testString
-        );
+        assert.strictEqual(iconv.decode(testStringGBKBuffer, "GB2312"), testString);
     });
 
     it("GBK file read decoded,compare with iconv result", function () {
@@ -42,10 +31,7 @@ describe("GBK tests", function () {
         // Reference: http://www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP936.TXT
         var chars = "·×";
         var gbkChars = new Buffer([0xa1, 0xa4, 0xa1, 0xc1]);
-        assert.strictEqual(
-            iconv.encode(chars, "GBK").toString("binary"),
-            gbkChars.toString("binary")
-        );
+        assert.strictEqual(iconv.encode(chars, "GBK").toString("binary"), gbkChars.toString("binary"));
         assert.strictEqual(iconv.decode(gbkChars, "GBK"), chars);
     });
 
@@ -63,31 +49,20 @@ describe("GBK tests", function () {
         assert.strictEqual(iconv.decode(gbkEuroEncoding2, "GB18030"), strEuro);
 
         // But when decoding, GBK should produce 0x80, but GB18030 - 0xA2 0xE3.
-        assert.strictEqual(
-            iconv.encode(strEuro, "GBK").toString("hex"),
-            gbkEuroEncoding1.toString("hex")
-        );
-        assert.strictEqual(
-            iconv.encode(strEuro, "GB18030").toString("hex"),
-            gbkEuroEncoding2.toString("hex")
-        );
+        assert.strictEqual(iconv.encode(strEuro, "GBK").toString("hex"), gbkEuroEncoding1.toString("hex"));
+        assert.strictEqual(iconv.encode(strEuro, "GB18030").toString("hex"), gbkEuroEncoding2.toString("hex"));
     });
 
     it("GB18030 findIdx works correctly", function () {
         function findIdxAlternative(table, val) {
-            for (var i = 0; i < table.length; i++)
-                if (table[i] > val) return i - 1;
+            for (var i = 0; i < table.length; i++) if (table[i] > val) return i - 1;
             return table.length - 1;
         }
 
         var codec = iconv.getEncoder("gb18030");
 
         for (var i = 0; i < 0x100; i++)
-            assert.strictEqual(
-                codec.findIdx(codec.gb18030.uChars, i),
-                findIdxAlternative(codec.gb18030.uChars, i),
-                i
-            );
+            assert.strictEqual(codec.findIdx(codec.gb18030.uChars, i), findIdxAlternative(codec.gb18030.uChars, i), i);
 
         var tests = [0xffff, 0x10000, 0x10001, 0x30000];
         for (var i = 0; i < tests.length; i++)
@@ -99,8 +74,7 @@ describe("GBK tests", function () {
     });
 
     function swapBytes(buf) {
-        for (var i = 0; i < buf.length; i += 2)
-            buf.writeUInt16LE(buf.readUInt16BE(i), i);
+        for (var i = 0; i < buf.length; i += 2) buf.writeUInt16LE(buf.readUInt16BE(i), i);
         return buf;
     }
     function spacify4(str) {
@@ -121,14 +95,8 @@ describe("GBK tests", function () {
         };
         for (var uChar in chars) {
             var gbkBuf = chars[uChar];
-            assert.strictEqual(
-                iconv.encode(uChar, "GB18030").toString("hex"),
-                gbkBuf.toString("hex")
-            );
-            assert.strictEqual(
-                strToHex(iconv.decode(gbkBuf, "GB18030")),
-                strToHex(uChar)
-            );
+            assert.strictEqual(iconv.encode(uChar, "GB18030").toString("hex"), gbkBuf.toString("hex"));
+            assert.strictEqual(strToHex(iconv.decode(gbkBuf, "GB18030")), strToHex(uChar));
         }
     });
 
@@ -145,16 +113,11 @@ describe("GBK tests", function () {
             "�1\u4fdb": new Buffer([0x82, 0x31, 0x82, 0x61]),
             "�1\u5010\u0061": new Buffer([0x82, 0x31, 0x82, 0x82, 0x61]),
             "\u399f\u4fdb": new Buffer([0x82, 0x31, 0x82, 0x31, 0x82, 0x61]),
-            "�1\u50101�1": new Buffer([
-                0x82, 0x31, 0x82, 0x82, 0x31, 0x82, 0x31,
-            ]),
+            "�1\u50101�1": new Buffer([0x82, 0x31, 0x82, 0x82, 0x31, 0x82, 0x31]),
         };
         for (var uChar in chars) {
             var gbkBuf = chars[uChar];
-            assert.strictEqual(
-                strToHex(iconv.decode(gbkBuf, "GB18030")),
-                strToHex(uChar)
-            );
+            assert.strictEqual(strToHex(iconv.decode(gbkBuf, "GB18030")), strToHex(uChar));
         }
     });
 });

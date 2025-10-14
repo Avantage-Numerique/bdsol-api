@@ -92,9 +92,7 @@ export default class Api {
         // parse application/json
         this.express.use(express.json());
         if (this._config.environnement === "development" && this._slowDown) {
-            console.warn(
-                `--=== SLOWDOWN MIDDLEWARE ACTIVATED ===-- ${this._config.debugSlowDuration}ms`
-            );
+            console.warn(`--=== SLOWDOWN MIDDLEWARE ACTIVATED ===-- ${this._config.debugSlowDuration}ms`);
             this.express.use(
                 SlowDownMiddleware({
                     delay: this._config.debugSlowDuration,
@@ -207,8 +205,7 @@ export default class Api {
     private _initRouter() {
         LogHelper.info("[ROUTES] Configuration des routes de l'API ...");
 
-        if (this._config.logPerformance)
-            this.express.use(RequestDuration.middleware());
+        if (this._config.logPerformance) this.express.use(RequestDuration.middleware());
 
         this.mainRouter = express.Router(); //this seeem to be a "branch" independant. Middle ware pass here, and error handling are only manage into the same "router's hierarchy" may I labled.
         this.mainRouter.use(GetRequestIp.middleware()); // Set an empty user in req.visitor property in Request there. Would be possible to feed with more default info.
@@ -252,10 +249,7 @@ export default class Api {
          * Init all the entities routes from theirs managers.
          */
         for (const route of this.entitiesRoutes) {
-            this.mainRouter.use(
-                route.baseRoute,
-                route.manager.setupPublicRoutes()
-            );
+            this.mainRouter.use(route.baseRoute, route.manager.setupPublicRoutes());
         }
     }
 
@@ -276,11 +270,7 @@ export default class Api {
          * Init all the entities routes from theirs managers.
          */
         for (const route of this.entitiesRoutes) {
-            this.mainRouter.use(
-                route.baseRoute,
-                verifyTokenMiddleware,
-                route.manager.setupAuthRoutes()
-            );
+            this.mainRouter.use(route.baseRoute, verifyTokenMiddleware, route.manager.setupAuthRoutes());
         }
     }
 
@@ -288,15 +278,8 @@ export default class Api {
         this.scheduler = new JobScheduler();
 
         const jobSheets: Array<JobSheet> = [
-            this.scheduler.createSheet(
-                "Embed Taxonomy's metas (entities count, etc.",
-                EmbedTaxonomiesMetas
-            ), //use default rule : 00:15.
-            this.scheduler.createSheet(
-                "Backuping BD",
-                BackukDbJob,
-                this.scheduler.createRule("hour", 0)
-            ),
+            this.scheduler.createSheet("Embed Taxonomy's metas (entities count, etc.", EmbedTaxonomiesMetas), //use default rule : 00:15.
+            this.scheduler.createSheet("Backuping BD", BackukDbJob, this.scheduler.createRule("hour", 0)),
         ];
         LogHelper.info("[Jobs] Registred and strating scheduler.");
         this.scheduler.init(jobSheets);

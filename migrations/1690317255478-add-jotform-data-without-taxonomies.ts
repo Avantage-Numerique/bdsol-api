@@ -31,17 +31,11 @@ export async function up(): Promise<void> {
                 whereKeys: ["name"],
             },
         ];
-        LogHelper.info(
-            "[Migration][add persistant jotform data] task using the taskSeeder"
-        );
+        LogHelper.info("[Migration][add persistant jotform data] task using the taskSeeder");
 
         await taskSeeder(tasks, SeedData);
     } else {
-        return Promise.reject(
-            Error(
-                "Entites Services are unaccessible to heat yp the task Seeder in this migration."
-            )
-        );
+        return Promise.reject(Error("Entites Services are unaccessible to heat yp the task Seeder in this migration."));
     }
 }
 

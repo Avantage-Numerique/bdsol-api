@@ -14,8 +14,7 @@ export class AuthentificationRoutes {
     /**
      * Controller of a specific entity.
      */
-    public controllerInstance: AuthentificationController =
-        AuthentificationController.getInstance();
+    public controllerInstance: AuthentificationController = AuthentificationController.getInstance();
 
     /**
      * Router for public route.
@@ -44,17 +43,9 @@ export class AuthentificationRoutes {
                 .normalizeEmail()
                 .trim(),
             //body('data.password'),
-            body("data.avatar")
-                .isURL()
-                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .trim(),
-            body("data.name")
-                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .trim(),
-            body("data.role")
-                .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .stripLow()
-                .trim(),
+            body("data.avatar").isURL().customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer()).trim(),
+            body("data.name").customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer()).trim(),
+            body("data.role").customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer()).stripLow().trim(),
         ],
         email: [
             body("data.email")
@@ -101,13 +92,9 @@ export class AuthentificationRoutes {
 
         this.routerInstance.post("/login", [this.loginHandler.bind(this)]);
 
-        this.routerInstance.post("/verify-token", [
-            this.verifyTokenHandler.bind(this),
-        ]);
+        this.routerInstance.post("/verify-token", [this.verifyTokenHandler.bind(this)]);
 
-        this.routerInstance.post("/generate-token", [
-            this.generateTokenDevHandler.bind(this),
-        ]);
+        this.routerInstance.post("/generate-token", [this.generateTokenDevHandler.bind(this)]);
 
         this.routerInstance.post("/reset-password", [
             ...this.addMiddlewares("email"),
@@ -115,12 +102,8 @@ export class AuthentificationRoutes {
         ]);
 
         //Route to check if /reset-password/:token is valid url
-        this.routerInstance.get("/reset-password/:token", [
-            this.verifyResetPasswordTokenUrl.bind(this),
-        ]);
-        this.routerInstance.post("/reset-password/:token", [
-            this.updateForgottenPasswordHandler.bind(this),
-        ]);
+        this.routerInstance.get("/reset-password/:token", [this.verifyResetPasswordTokenUrl.bind(this)]);
+        this.routerInstance.post("/reset-password/:token", [this.updateForgottenPasswordHandler.bind(this)]);
 
         this.routerInstance.post("/verify-account/resend", [
             ...this.addMiddlewares("email"),
@@ -128,9 +111,7 @@ export class AuthentificationRoutes {
         ]);
 
         //Verify user account (post or get?)
-        this.routerInstance.get("/verify-account/:token", [
-            this.verifyUserAccountHandler.bind(this),
-        ]);
+        this.routerInstance.get("/verify-account/:token", [this.verifyUserAccountHandler.bind(this)]);
 
         this.routerInstance.get("/login", [this.loginGetHandler.bind(this)]);
 
@@ -158,14 +139,10 @@ export class AuthentificationRoutes {
     public async registerHandler(req: Request, res: Response): Promise<any> {
         const { data } = req.body;
         const visitorIp = req.visitor.ip;
-        res.serviceResponse = await this.controllerInstance.register(
-            data,
-            visitorIp
-        );
+        res.serviceResponse = await this.controllerInstance.register(data, visitorIp);
         res.serviceResponse.action = "create";
         //History of registration
-        if (!res.serviceResponse.error)
-            await UsersController.getInstance().createUserHistory(req, res);
+        if (!res.serviceResponse.error) await UsersController.getInstance().createUserHistory(req, res);
 
         return res.status(res.serviceResponse.code).send(res.serviceResponse);
     }
@@ -179,10 +156,7 @@ export class AuthentificationRoutes {
      */
     public async loginHandler(req: Request, res: Response): Promise<any> {
         const { username, password } = req.body;
-        const response = await this.controllerInstance.login(
-            username,
-            password
-        );
+        const response = await this.controllerInstance.login(username, password);
 
         return res.status(response.code).send(response);
     }
@@ -195,9 +169,7 @@ export class AuthentificationRoutes {
      * @return {Promise<any>}
      */
     public async logoutHandler(req: Request, res: Response): Promise<any> {
-        const response = await this.controllerInstance.logout(
-            req.body.username
-        );
+        const response = await this.controllerInstance.logout(req.body.username);
         return res.status(response.code).send(response);
     }
 
@@ -209,9 +181,7 @@ export class AuthentificationRoutes {
      * @return {Promise<any>}
      */
     public async verifyTokenHandler(req: Request, res: Response): Promise<any> {
-        const response = await this.controllerInstance.verifyToken(
-            req.body.token
-        );
+        const response = await this.controllerInstance.verifyToken(req.body.token);
         return res.status(response.code).send(response);
     }
 
@@ -222,10 +192,7 @@ export class AuthentificationRoutes {
      * @param res {Response}
      * @return {Promise<any>}
      */
-    public async generateTokenDevHandler(
-        req: Request,
-        res: Response
-    ): Promise<any> {
+    public async generateTokenDevHandler(req: Request, res: Response): Promise<any> {
         if (config.isDevelopment) {
             const token = await this.controllerInstance.generateToken();
 
@@ -246,19 +213,12 @@ export class AuthentificationRoutes {
      * @param res {Response}
      * @return {Promise<any>}
      */
-    public async changePasswordHandler(
-        req: Request,
-        res: Response
-    ): Promise<any> {
+    public async changePasswordHandler(req: Request, res: Response): Promise<any> {
         //UserId must be replaced by some id in the request (to not be able to forge request of password change)
         const { oldPassword, newPassword } = req.body.data;
         const userId = req.user?._id;
 
-        const response = await this.controllerInstance.changePassword(
-            userId,
-            oldPassword,
-            newPassword
-        );
+        const response = await this.controllerInstance.changePassword(userId, oldPassword, newPassword);
         return res.status(response.code).send(response);
     }
 
@@ -268,17 +228,10 @@ export class AuthentificationRoutes {
      * @param res {Response}
      * @return {Promise<any>}
      */
-    public async sendResetPasswordLinkByEmailHandler(
-        req: Request,
-        res: Response
-    ): Promise<any> {
+    public async sendResetPasswordLinkByEmailHandler(req: Request, res: Response): Promise<any> {
         const email = req.body.data?.email;
         const visitorIp = req.visitor.ip;
-        const response =
-            await this.controllerInstance.sendResetPasswordLinkByEmail(
-                email,
-                visitorIp
-            );
+        const response = await this.controllerInstance.sendResetPasswordLinkByEmail(email, visitorIp);
         return res.status(response.code).send(response);
     }
 
@@ -288,10 +241,7 @@ export class AuthentificationRoutes {
      * @param res {Response}
      * @return {Promise<any>}
      */
-    public async updateForgottenPasswordHandler(
-        req: Request,
-        res: Response
-    ): Promise<any> {
+    public async updateForgottenPasswordHandler(req: Request, res: Response): Promise<any> {
         const password = req.body.data?.password;
         const response = await this.controllerInstance.updateForgottenPassword(
             req.params?.token.toString() ?? "",
@@ -307,13 +257,9 @@ export class AuthentificationRoutes {
      * @param res {Response}
      * @return {Promise<any>}
      */
-    public async resendEmailVerificationTokenHandler(
-        req: Request,
-        res: Response
-    ): Promise<any> {
+    public async resendEmailVerificationTokenHandler(req: Request, res: Response): Promise<any> {
         const email = req.body.data?.email;
-        const response =
-            await this.controllerInstance.resendVerificationToken(email);
+        const response = await this.controllerInstance.resendVerificationToken(email);
         return res.status(response.code).send(response);
     }
 
@@ -324,13 +270,9 @@ export class AuthentificationRoutes {
      * @param res {Response}
      * @return {Promise<any>}
      */
-    public async verifyResetPasswordTokenUrl(
-        req: Request,
-        res: Response
-    ): Promise<any> {
+    public async verifyResetPasswordTokenUrl(req: Request, res: Response): Promise<any> {
         const token = req.params?.token.toString();
-        const response =
-            await this.controllerInstance.verifyResetPasswordToken(token);
+        const response = await this.controllerInstance.verifyResetPasswordToken(token);
         return res.status(response.code).send(response);
     }
 
@@ -340,16 +282,10 @@ export class AuthentificationRoutes {
      * @param res {Response}
      * @return {Promise<any>}
      */
-    public async verifyUserAccountHandler(
-        req: Request,
-        res: Response
-    ): Promise<any> {
+    public async verifyUserAccountHandler(req: Request, res: Response): Promise<any> {
         const token = req.params.token?.toString() ?? "";
         const visitorIp = req.visitor.ip;
-        const response = await this.controllerInstance.verifyAccount(
-            token,
-            visitorIp
-        );
+        const response = await this.controllerInstance.verifyAccount(token, visitorIp);
         return res.status(response.code).send(response);
     }
 

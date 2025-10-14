@@ -14,10 +14,7 @@ const contactPointSanitizerAlias = (
         chain = chain.notEmpty().withMessage("Is required");
     }
 
-    return chain
-        .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-        .stripLow()
-        .trim(); //.normalizeEmail()
+    return chain.customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer()).stripLow().trim(); //.normalizeEmail()
 };
 
 export { contactPointSanitizerAlias };

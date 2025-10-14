@@ -34,10 +34,7 @@ class Taxonomy extends AbstractModel {
     public registerIndexes(): void {
         //Indexes
         Taxonomy._instance.schema.index({ category: 1 });
-        Taxonomy._instance.schema.index(
-            { name: 1, category: 1 },
-            { unique: true }
-        );
+        Taxonomy._instance.schema.index({ name: 1, category: 1 }, { unique: true });
         Taxonomy._instance.schema.index(
             {
                 name: "text",
@@ -106,17 +103,10 @@ class Taxonomy extends AbstractModel {
                         domain: {
                             type: mongoose.Types.ObjectId,
                             ref: "Taxonomy",
-                            validate: function (
-                                value: mongoose.Types.ObjectId | null
-                            ) {
+                            validate: function (value: mongoose.Types.ObjectId | null) {
                                 const currentDocument = this as any; // Cast 'this' to any to access the document
-                                if (
-                                    value &&
-                                    value.equals(currentDocument._id)
-                                ) {
-                                    throw new Error(
-                                        "Can't assign self as a domain."
-                                    );
+                                if (value && value.equals(currentDocument._id)) {
+                                    throw new Error("Can't assign self as a domain.");
                                 }
                                 return true;
                             },

@@ -532,8 +532,7 @@ var iconvCannotDecode = {
 };
 
 function swapBytes(buf) {
-    for (var i = 0; i < buf.length; i += 2)
-        buf.writeUInt16LE(buf.readUInt16BE(i), i);
+    for (var i = 0; i < buf.length; i += 2) buf.writeUInt16LE(buf.readUInt16BE(i), i);
     return buf;
 }
 function spacify2(str) {
@@ -561,52 +560,39 @@ describe("Full DBCS encoding tests", function () {
                     var iconvCannotDecodeChars = iconvCannotDecode[enc] || {};
                     var converter = new Iconv(aliases[enc] || enc, "utf-8");
                     var errors = [];
-                    forAllChars(
-                        converter.convert.bind(converter),
-                        function (valid, inp, outp) {
-                            var strActual = iconv.decode(inp, enc);
+                    forAllChars(converter.convert.bind(converter), function (valid, inp, outp) {
+                        var strActual = iconv.decode(inp, enc);
 
-                            if (
-                                0xe000 <= strActual.charCodeAt(0) &&
-                                strActual.charCodeAt(0) < 0xf900
-                            )
+                        if (0xe000 <= strActual.charCodeAt(0) && strActual.charCodeAt(0) < 0xf900)
+                            // Skip Private use area.
+                            return;
+
+                        if (valid) {
+                            var strExpected = outp.toString("utf-8");
+                            if (strActual === strExpected) return;
+
+                            if (0xe000 <= strExpected.charCodeAt(0) && strExpected.charCodeAt(0) < 0xf900)
                                 // Skip Private use area.
                                 return;
 
-                            if (valid) {
-                                var strExpected = outp.toString("utf-8");
-                                if (strActual === strExpected) return;
+                            if (iconvChgs[strExpected] === strActual)
+                                // Skip iconv changes.
+                                return;
+                        } else {
+                            var strExpected = "�";
+                            if (strActual[0] === "�") return;
 
-                                if (
-                                    0xe000 <= strExpected.charCodeAt(0) &&
-                                    strExpected.charCodeAt(0) < 0xf900
-                                )
-                                    // Skip Private use area.
-                                    return;
-
-                                if (iconvChgs[strExpected] === strActual)
-                                    // Skip iconv changes.
-                                    return;
-                            } else {
-                                var strExpected = "�";
-                                if (strActual[0] === "�") return;
-
-                                if (
-                                    iconvCannotDecodeChars[
-                                        inp.toString("hex")
-                                    ] === strActual
-                                )
-                                    // Skip what iconv cannot encode.
-                                    return;
-                            }
-
-                            errors.push({
-                                input: inp.toString("hex"),
-                                strExpected: strExpected,
-                                strActual: strActual,
-                            });
+                            if (iconvCannotDecodeChars[inp.toString("hex")] === strActual)
+                                // Skip what iconv cannot encode.
+                                return;
                         }
-                    );
+
+                        errors.push({
+                            input: inp.toString("hex"),
+                            strExpected: strExpected,
+                            strActual: strActual,
+                        });
+                    });
 
                     if (errors.length > 0)
                         assert.fail(
@@ -652,28 +638,17 @@ describe("Full DBCS encoding tests", function () {
 
                         if (strExpected == strActual) continue;
 
-                        if (
-                            strExpected == "3f" &&
-                            iconvCannotDecodeChars[strActual] == str
-                        )
-                            continue; // Check the iconv cannot encode this char, but we encoded correctly.
+                        if (strExpected == "3f" && iconvCannotDecodeChars[strActual] == str) continue; // Check the iconv cannot encode this char, but we encoded correctly.
 
                         var str1 = iconv.decode(bufExpected, enc);
                         var str12 = iconv.decode(bufActual, enc);
-                        var str2 = convertWithDefault(
-                            converterBack,
-                            bufActual
-                        ).toString();
-                        var str22 = convertWithDefault(
-                            converterBack,
-                            bufExpected
-                        ).toString();
+                        var str2 = convertWithDefault(converterBack, bufActual).toString();
+                        var str22 = convertWithDefault(converterBack, bufExpected).toString();
                         if (
                             str1 == str &&
                             str12 == str &&
                             str22 == str &&
-                            (str2 == str ||
-                                iconvCannotDecodeChars[strActual] == str)
+                            (str2 == str || iconvCannotDecodeChars[strActual] == str)
                         )
                             continue; // There are multiple ways to encode str, so it doesn't matter which we choose.
 

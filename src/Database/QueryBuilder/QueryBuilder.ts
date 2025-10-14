@@ -1,9 +1,4 @@
-import {
-    defaultModifier,
-    objectIdModifier,
-    PropertyModifier,
-    stringToArrayModifier,
-} from "./PropertyModifier";
+import { defaultModifier, objectIdModifier, PropertyModifier, stringToArrayModifier } from "./PropertyModifier";
 import ApiQuery from "./ApiQuery";
 
 /**
@@ -107,8 +102,7 @@ export default class QueryBuilder {
         //loop through the raw query to validate if it has a section {logical: [section params object Array]}
         for (const logicalParam in query.raw) {
             if (QueryBuilder.isSupportedLogicalParam(logicalParam)) {
-                const logicalParamParsed: any =
-                    QueryBuilder.logicalSections[logicalParam];
+                const logicalParamParsed: any = QueryBuilder.logicalSections[logicalParam];
                 const logicalParamSettings: any = query.raw[logicalParam];
                 const logicalSectionCandidate: any = {
                     [logicalParamParsed.queryProperty]: logicalParamSettings,
@@ -121,20 +115,14 @@ export default class QueryBuilder {
 
                     if (Array.isArray(logicalParamSettings)) {
                         for (const sectionSubParam of logicalParamSettings) {
-                            const parsedSectionSubParamsQuery =
-                                QueryBuilder.parseParams(sectionSubParam);
-                            parseSectionSubParams.push(
-                                parsedSectionSubParamsQuery.query
-                            );
-                            parseSectionSubOptions.push(
-                                parsedSectionSubParamsQuery.options
-                            );
+                            const parsedSectionSubParamsQuery = QueryBuilder.parseParams(sectionSubParam);
+                            parseSectionSubParams.push(parsedSectionSubParamsQuery.query);
+                            parseSectionSubOptions.push(parsedSectionSubParamsQuery.options);
                         }
                     }
 
                     const logicalSectionCandidate: any = {
-                        [logicalParamParsed.queryProperty]:
-                            parseSectionSubParams,
+                        [logicalParamParsed.queryProperty]: parseSectionSubParams,
                     };
 
                     query.sections.push(logicalSectionCandidate);
@@ -190,11 +178,7 @@ export default class QueryBuilder {
 
             if (QueryBuilder.fieldIsDeclared(field, query)) {
                 const like = !(field.split(".").length > 1); //Allow "offers.offer" to be directly assigned without options ($regex, $option are not allowed)
-                parsedQuery[field] = QueryBuilder.parseParam(
-                    field,
-                    query[field],
-                    like
-                );
+                parsedQuery[field] = QueryBuilder.parseParam(field, query[field], like);
             }
         }
         return { query: parsedQuery, options: options };
@@ -206,8 +190,7 @@ export default class QueryBuilder {
 
         if (QueryBuilder.haveProperty(value)) {
             // for now we only have ObjectId modifier for properties.
-            const modifier: PropertyModifier =
-                QueryBuilder.fieldPropertiesModifiers[field] ?? defaultModifier; //this should be a list too to assign modifier to target type of field. For now _id seem to be the only one needed for that.
+            const modifier: PropertyModifier = QueryBuilder.fieldPropertiesModifiers[field] ?? defaultModifier; //this should be a list too to assign modifier to target type of field. For now _id seem to be the only one needed for that.
 
             parsedValue = QueryBuilder.propertyToQueryObject(value, modifier);
             fieldChanged = true;
@@ -231,37 +214,21 @@ export default class QueryBuilder {
      * @param modifier {any} Modifier the value that will be set to the property.
      * @param field {string} precise the field that this will be added to.
      */
-    static propertyToQueryObject(
-        value: string,
-        modifier: PropertyModifier = defaultModifier,
-        field: string = ""
-    ): any {
+    static propertyToQueryObject(value: string, modifier: PropertyModifier = defaultModifier, field: string = ""): any {
         const queryProperty: any = {};
         for (const supportedProperty in QueryBuilder.queryProperties) {
-            const propertyParams: any =
-                QueryBuilder.queryProperties[supportedProperty];
-            const propertyModifier: any =
-                propertyParams.modifier ?? defaultModifier;
+            const propertyParams: any = QueryBuilder.queryProperties[supportedProperty];
+            const propertyModifier: any = propertyParams.modifier ?? defaultModifier;
             const propertyPrefix: string = `${supportedProperty}${QueryBuilder.propertySeperator}`;
 
             if (QueryBuilder.haveProperty(value, propertyPrefix)) {
                 if (propertyParams.queryProperty !== "") {
                     queryProperty[propertyParams.queryProperty] = modifier(
-                        propertyModifier(
-                            QueryBuilder.queryPropertyValue(
-                                value,
-                                propertyPrefix.length
-                            )
-                        )
+                        propertyModifier(QueryBuilder.queryPropertyValue(value, propertyPrefix.length))
                     );
                     return queryProperty;
                 }
-                return modifier(
-                    QueryBuilder.queryPropertyValue(
-                        value,
-                        propertyPrefix.length
-                    )
-                );
+                return modifier(QueryBuilder.queryPropertyValue(value, propertyPrefix.length));
             }
         }
     }
@@ -285,10 +252,7 @@ export default class QueryBuilder {
      * @param value {Array<any>} the section array.
      * @param field {string} precise the field that this will be added to.
      */
-    static sectionLogicalParamSupported(
-        value: Array<any>,
-        field: string = ""
-    ): any {
+    static sectionLogicalParamSupported(value: Array<any>, field: string = ""): any {
         if (QueryBuilder.isSupportedLogicalParam(field)) {
             const logicalParam: any = QueryBuilder.logicalSections[field];
             return { [logicalParam.queryProperty]: value };
@@ -318,8 +282,7 @@ export default class QueryBuilder {
             for (const candidatePropertyName of Object.keys(candidate)) {
                 const candidateProperty = candidate[candidatePropertyName];
                 candidatePropertiesAreValid =
-                    typeof candidatePropertyName === "string" &&
-                    Array.isArray(candidateProperty);
+                    typeof candidatePropertyName === "string" && Array.isArray(candidateProperty);
 
                 if (candidatePropertiesAreValid) candidatePropertiesGood++;
                 if (!candidatePropertiesAreValid) candidatePropertiesWrong++;
@@ -353,10 +316,6 @@ export default class QueryBuilder {
      * @return {boolean} if the query is an object, and not null/undefined.
      */
     static queryIsSet(query: ApiQuery): boolean {
-        return (
-            query.initQuery !== null &&
-            query.initQuery !== undefined &&
-            typeof query.initQuery === "object"
-        );
+        return query.initQuery !== null && query.initQuery !== undefined && typeof query.initQuery === "object";
     }
 }

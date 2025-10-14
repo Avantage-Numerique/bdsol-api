@@ -65,14 +65,11 @@ process.stdin.on("end", function () {
             forAllChars(
                 converter,
                 function (valid, inp, outp) {
-                    res.isASCII =
-                        res.isASCII &&
-                        (inp[0] >= 0x80 || (valid && inp[0] == outp[0]));
+                    res.isASCII = res.isASCII && (inp[0] >= 0x80 || (valid && inp[0] == outp[0]));
                     res.isSBCS = res.isSBCS && inp.length == 1;
                     res.isDBCS =
                         res.isDBCS &&
-                        ((inp.length == 1 && (inp[0] < 0x80 || !valid)) ||
-                            (inp.length == 2 && inp[0] >= 0x80));
+                        ((inp.length == 1 && (inp[0] < 0x80 || !valid)) || (inp.length == 2 && inp[0] >= 0x80));
                     res.maxChars = Math.max(res.maxChars, inp.length);
                     hash.update(inp);
                     if (valid) {
@@ -81,8 +78,7 @@ process.stdin.on("end", function () {
                     } else {
                         res.invalid++;
                     }
-                    if (res.valid + res.invalid > 1000000)
-                        throw new Error("Too long");
+                    if (res.valid + res.invalid > 1000000) throw new Error("Too long");
                 },
                 buf,
                 1

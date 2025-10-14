@@ -10,10 +10,7 @@ export abstract class Seeder implements SeederContract {
      * Wall method to define if this can be done or not.
      */
     public async conditions(): Promise<boolean> {
-        return (
-            (await this.isModelConnectionActive()) &&
-            (await this.seederConditions())
-        );
+        return (await this.isModelConnectionActive()) && (await this.seederConditions());
     }
 
     /**
@@ -75,9 +72,7 @@ export abstract class Seeder implements SeederContract {
      * Getter like to count the target collection.
      */
     public async countCollection(): Promise<number> {
-        return await this.service.appModel.connection
-            .collection(this.service.appModel.collectionName)
-            .countDocuments();
+        return await this.service.appModel.connection.collection(this.service.appModel.collectionName).countDocuments();
     }
 
     // Conditions

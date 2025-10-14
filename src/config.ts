@@ -16,14 +16,11 @@ const getApiConfig = () => {
         isStaging: process.env.ENVIRONNEMENT === "staging",
         isDevelopment: process.env.ENVIRONNEMENT === "development",
 
-        debugSlowConnection:
-            process.env.DEBUG_SLOW_CONNEXION === "true" || false,
+        debugSlowConnection: process.env.DEBUG_SLOW_CONNEXION === "true" || false,
         debugSlowDuration: process.env.DEBUG_SLOW_DURATION || 1000,
 
         // Dev configuration.
-        mongooseDebug:
-            process.env.ENVIRONNEMENT === "development" &&
-            process.env.MONGOOSE_DEBUG === "true",
+        mongooseDebug: process.env.ENVIRONNEMENT === "development" && process.env.MONGOOSE_DEBUG === "true",
 
         appName: process.env.APP_NAME || "API",
         port: process.env.PORT || "8001",
@@ -57,14 +54,11 @@ const getApiConfig = () => {
             driver: process.env.DB_DRIVER || "mongodb",
             prefix: process.env.DB_PREFIX || "mongodb",
             authSource:
-                process.env.DB_AUTHSOURCE !== "false" &&
-                process.env.DB_AUTHSOURCE !== "0"
+                process.env.DB_AUTHSOURCE !== "false" && process.env.DB_AUTHSOURCE !== "0"
                     ? process.env.DB_AUTHSOURCE
                     : "",
             addAuthSource: process.env.DB_ADD_AUTHSOURCE === "true",
-            additionalUrlParams: process.env.DB_ADDITIONAL_URL_PARAMS
-                ? process.env.DB_ADDITIONAL_URL_PARAMS
-                : "", // '&replicaSet=replicaset&tls=true',
+            additionalUrlParams: process.env.DB_ADDITIONAL_URL_PARAMS ? process.env.DB_ADDITIONAL_URL_PARAMS : "", // '&replicaSet=replicaset&tls=true',
             host: process.env.DB_HOST || "not set",
             hostName: process.env.DB_HOST_NAME || "not set",
             port: process.env.DB_PORT || 27017,
@@ -81,8 +75,7 @@ const getApiConfig = () => {
             driver: process.env.LOCALHOST_DB_DRIVER || "mongodb",
             prefix: process.env.LOCALHOST_DB_PREFIX || "mongodb",
             authSource:
-                process.env.LOCALHOST_DB_AUTHSOURCE !== "false" &&
-                process.env.LOCALHOST_DB_AUTHSOURCE !== "0"
+                process.env.LOCALHOST_DB_AUTHSOURCE !== "false" && process.env.LOCALHOST_DB_AUTHSOURCE !== "0"
                     ? process.env.LOCALHOST_DB_AUTHSOURCE
                     : "",
             addAuthSource: process.env.LOCALHOST_DB_ADD_AUTHSOURCE === "true",
@@ -104,8 +97,7 @@ const getApiConfig = () => {
             driver: process.env.DISTANT_DB_DRIVER || "mongodb",
             prefix: process.env.DISTANT_DB_PREFIX || "mongodb",
             authSource:
-                process.env.DB_AUTHSOURCE !== "false" &&
-                process.env.DB_AUTHSOURCE !== "0"
+                process.env.DB_AUTHSOURCE !== "false" && process.env.DB_AUTHSOURCE !== "0"
                     ? process.env.DB_AUTHSOURCE
                     : "",
             addAuthSource: process.env.DB_ADD_AUTHSOURCE === "true",
@@ -126,8 +118,7 @@ const getApiConfig = () => {
             driver: process.env.DB_MIGRATION_DRIVER || "mongodb",
             prefix: process.env.DB_MIGRATION_PREFIX || "mongodb", //use the same prefix of config.db
             authSource:
-                process.env.DB_MIGRATION_AUTHSOURCE !== "false" &&
-                process.env.DB_MIGRATION_AUTHSOURCE !== "0"
+                process.env.DB_MIGRATION_AUTHSOURCE !== "false" && process.env.DB_MIGRATION_AUTHSOURCE !== "0"
                     ? process.env.DB_MIGRATION_AUTHSOURCE
                     : "",
             addAuthSource: process.env.DB_MIGRATION_ADD_AUTHSOURCE === "true",

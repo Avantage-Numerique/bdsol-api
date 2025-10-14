@@ -46,9 +46,7 @@ class ProjectsRoutes extends CrudRoute {
             noHtmlStringSanitizerAlias("data.scheduleBudget.eta"),
             noHtmlStringSanitizerAlias("data.scheduleBudget.timeframe.*.step"),
             noHtmlStringSanitizerAlias("data.scheduleBudget.timeframe.*.eta"),
-            noHtmlStringSanitizerAlias(
-                "data.scheduleBudget.timeframe.*.budgetRange"
-            ),
+            noHtmlStringSanitizerAlias("data.scheduleBudget.timeframe.*.budgetRange"),
 
             //skills
             objectIdSanitizerAlias("data.skills.*"),
@@ -61,10 +59,7 @@ class ProjectsRoutes extends CrudRoute {
             //sponsor
             basicHtmlSanitizerAlias("data.sponsor.*.name"),
             objectIdSanitizerAlias("data.sponsor.*.entity"),
-            isInEnumSanitizerAlias(
-                "data.sponsor.*.entityType",
-                EntityTypesEnum
-            ),
+            isInEnumSanitizerAlias("data.sponsor.*.entityType", EntityTypesEnum),
             IntegerSanitizerAlias("data.sponsor.*.subMeta.order"),
 
             //contactPoint
@@ -98,9 +93,7 @@ class ProjectsRoutes extends CrudRoute {
             noHtmlStringSanitizerAlias("data.scheduleBudget.eta"),
             noHtmlStringSanitizerAlias("data.scheduleBudget.timeframe.*.step"),
             noHtmlStringSanitizerAlias("data.scheduleBudget.timeframe.*.eta"),
-            noHtmlStringSanitizerAlias(
-                "data.scheduleBudget.timeframe.*.budgetRange"
-            ),
+            noHtmlStringSanitizerAlias("data.scheduleBudget.timeframe.*.budgetRange"),
 
             //skills
             objectIdSanitizerAlias("data.skills.*"),
@@ -113,10 +106,7 @@ class ProjectsRoutes extends CrudRoute {
             //sponsor
             basicHtmlSanitizerAlias("data.sponsor.*.name"),
             objectIdSanitizerAlias("data.sponsor.*.entity"),
-            isInEnumSanitizerAlias(
-                "data.sponsor.*.entityType",
-                EntityTypesEnum
-            ),
+            isInEnumSanitizerAlias("data.sponsor.*.entityType", EntityTypesEnum),
             IntegerSanitizerAlias("data.sponsor.*.subMeta.order"),
 
             //contactPoint
@@ -132,9 +122,7 @@ class ProjectsRoutes extends CrudRoute {
         getdoc: [],
     };
 
-    public setupAdditionnalPublicRoutes(
-        router: express.Router
-    ): express.Router {
+    public setupAdditionnalPublicRoutes(router: express.Router): express.Router {
         return router;
     }
 

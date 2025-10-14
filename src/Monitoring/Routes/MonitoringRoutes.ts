@@ -41,9 +41,7 @@ class MonitoringRoutes extends AbstractRoute {
      * @public @method
      */
     public setupPublicRoutes(): express.Router {
-        this.routerInstance.get("/status", [
-            this.gatherStatusesHandler.bind(this),
-        ]);
+        this.routerInstance.get("/status", [this.gatherStatusesHandler.bind(this)]);
 
         return this.routerInstance;
     }
@@ -52,20 +50,13 @@ class MonitoringRoutes extends AbstractRoute {
      * Allow routes Manager to declare route on the same router.
      * @param router {express.Router} The router to associate other routes, at the target Routes scope.
      */
-    public setupAdditionnalPublicRoutes(
-        router: express.Router
-    ): express.Router {
+    public setupAdditionnalPublicRoutes(router: express.Router): express.Router {
         return router;
     }
 
-    public async gatherStatusesHandler(
-        req: Request,
-        res: Response
-    ): Promise<any> {
+    public async gatherStatusesHandler(req: Request, res: Response): Promise<any> {
         res.set("Content-Type", "text/html");
-        return res
-            .status(StatusCodes.OK)
-            .send(await this.controllerInstance.statusesLayout());
+        return res.status(StatusCodes.OK).send(await this.controllerInstance.statusesLayout());
     }
 }
 

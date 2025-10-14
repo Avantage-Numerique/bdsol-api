@@ -169,10 +169,8 @@ InternalDecoderCesu8.prototype.write = function (buf) {
                 accBytes++;
                 if (contBytes === 0) {
                     // Check for overlong encoding, but support Modified UTF-8 (encoding NULL as C0 80)
-                    if (accBytes === 2 && acc < 0x80 && acc > 0)
-                        res += this.defaultCharUnicode;
-                    else if (accBytes === 3 && acc < 0x800)
-                        res += this.defaultCharUnicode;
+                    if (accBytes === 2 && acc < 0x80 && acc > 0) res += this.defaultCharUnicode;
+                    else if (accBytes === 3 && acc < 0x800) res += this.defaultCharUnicode;
                     else
                         // Actually add character.
                         res += String.fromCharCode(acc);

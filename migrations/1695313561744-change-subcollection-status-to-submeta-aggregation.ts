@@ -60,11 +60,7 @@ const getAggregationSkillGroupQuery = (mainField: string) => {
 const renameStatusToMetaTasks: any = [
     {
         collection: "organisations",
-        queries: [
-            renameDomainStatus,
-            renameTeamMembers,
-            getAggregationSkillGroupQuery("offers"),
-        ],
+        queries: [renameDomainStatus, renameTeamMembers, getAggregationSkillGroupQuery("offers")],
     },
     {
         collection: "events",
@@ -72,10 +68,7 @@ const renameStatusToMetaTasks: any = [
     },
     {
         collection: "people",
-        queries: [
-            renameDomainStatus,
-            getAggregationSkillGroupQuery("occupations"),
-        ],
+        queries: [renameDomainStatus, getAggregationSkillGroupQuery("occupations")],
     },
     {
         collection: "projects",

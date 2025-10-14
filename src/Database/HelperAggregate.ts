@@ -40,9 +40,4 @@ const lookupModelsByQueries = (queries: any, by: string = "_id") => {
     return lookups;
 };
 
-export {
-    lookupByQuery,
-    lookupByQueries,
-    lookupModelByQuery,
-    lookupModelsByQueries,
-};
+export { lookupByQuery, lookupByQueries, lookupModelByQuery, lookupModelsByQueries };

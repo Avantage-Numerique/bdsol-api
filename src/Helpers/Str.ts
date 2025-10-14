@@ -20,8 +20,7 @@ export class Str {
         /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
     //public static URL = /|[^a-z0-9-~+_.?#=!&;,/:%@$\|*\'()\[\]\\x80-\\xff]|i]/;
     //public static URL = /[a-z0-9]/g;//use this for the slug function : https://www.npmjs.com/package/any-ascii
-    public static URL: RegExp =
-        /((http)?s?(:\/\/)?)?(www.)?[a-zA-Z0-9/]+\.[a-zA-Z]+[/a-zA-Z0-9=%?.]*/gi; //use this for the slug function : https://www.npmjs.com/package/any-ascii
+    public static URL: RegExp = /((http)?s?(:\/\/)?)?(www.)?[a-zA-Z0-9/]+\.[a-zA-Z]+[/a-zA-Z0-9=%?.]*/gi; //use this for the slug function : https://www.npmjs.com/package/any-ascii
     //public static URL = /^(?:(?:https?|mailto|data|ftp|tel|file|sms):|[^&:/?#]*(?:[/?#]|$))/gi;//from angular https://github.com/angular/angular/blob/main/packages/core/src/sanitization/url_sanitizer.ts
     //public static URL = /((((https?|ftps?|gopher|telnet|nntp)://)|(mailto:|news:))(%[0-9A-Fa-f]{2}|[-()_.!~*';/?:@&=+$,A-Za-z0-9])+)([).!';/?:,][[:blank:|:blank:]])/gi;//from OWAsp https://owasp.org/www-community/OWASP_Validation_Regex_Repository
 
@@ -48,10 +47,7 @@ export class Str {
         const key: string = str;
         const cacheScope = Str.initCache("camel", key);
 
-        if (
-            cacheScope[key] !== undefined &&
-            typeof cacheScope[key] === "string"
-        ) {
+        if (cacheScope[key] !== undefined && typeof cacheScope[key] === "string") {
             return cacheScope[key];
         }
 
@@ -77,10 +73,7 @@ export class Str {
         const key: string = str;
         const cacheScope = Str.initCache("snake", key);
 
-        if (
-            cacheScope[key] !== undefined &&
-            cacheScope[key][delimiter] !== undefined
-        ) {
+        if (cacheScope[key] !== undefined && cacheScope[key][delimiter] !== undefined) {
             return cacheScope[key][delimiter];
         }
 
@@ -91,9 +84,7 @@ export class Str {
         }
 
         str = str.replace(Str.NO_SPACE, "");
-        str = Str.lower(
-            str.replace(/(.)(?=[A-Z])/g, "$1" + Str.DELIMITERS[delimiter])
-        );
+        str = Str.lower(str.replace(/(.)(?=[A-Z])/g, "$1" + Str.DELIMITERS[delimiter]));
 
         return (cacheScope[key][delimiter] = str);
     }
@@ -106,10 +97,7 @@ export class Str {
         const key: string = str;
         const cacheScope = Str.initCache("studly", key);
 
-        if (
-            cacheScope[key] !== undefined &&
-            typeof cacheScope[key] === "string"
-        ) {
+        if (cacheScope[key] !== undefined && typeof cacheScope[key] === "string") {
             return cacheScope[key];
         }
         str = Str.allowedChars(str);

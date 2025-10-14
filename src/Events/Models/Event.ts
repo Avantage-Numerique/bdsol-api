@@ -6,10 +6,7 @@ import EventsService from "@src/Events/Services/EventsService";
 import { TeamField } from "@src/Team/Schemas/TeamSchema";
 import { Meta, SubMeta } from "@src/Moderation/Schemas/MetaSchema";
 import * as fs from "fs";
-import {
-    middlewarePopulateProperty,
-    taxonomyPopulate,
-} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import { populateUser } from "@src/Users/Middlewares/populateUser";
 import { Schedule } from "@src/Database/Schemas/ScheduleSchema";
 import { EventFormatEnum } from "../EventFormatEnum";
@@ -179,15 +176,7 @@ class Event extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields(): object {
-        return [
-            "name",
-            "alternateName",
-            "description",
-            "eventType",
-            "startDate",
-            "endDate",
-            "contactPoint",
-        ];
+        return ["name", "alternateName", "description", "eventType", "startDate", "endDate", "contactPoint"];
     }
 
     public dropIndexes(): void {

@@ -26,10 +26,7 @@ export class PasswordsController {
      * @param storedPassword {string} Hashed stored password
      * @param targetPassword {string} target password, mainly in login.
      */
-    public static async matches(
-        storedPassword: string,
-        targetPassword: string
-    ): Promise<boolean> {
+    public static async matches(storedPassword: string, targetPassword: string): Promise<boolean> {
         //directly return the verify response on try.
         return await argon2.verify(storedPassword, targetPassword);
     }

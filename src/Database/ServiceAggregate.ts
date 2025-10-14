@@ -10,18 +10,11 @@ export default class ServiceAggregate {
     }
 
     public async lookupFor($query: any, $lookupQUery: any): Promise<any> {
-        return this.model.mongooseModel
-            .aggregate([{ $match: $query }, { $lookup: $lookupQUery }])
-            .exec();
+        return this.model.mongooseModel.aggregate([{ $match: $query }, { $lookup: $lookupQUery }]).exec();
     }
 
-    public async lookupMultiple(
-        query: any,
-        lookupQueries: Array<any>
-    ): Promise<any> {
-        return this.model.mongooseModel
-            .aggregate([{ $match: query }, ...lookupQueries])
-            .exec();
+    public async lookupMultiple(query: any, lookupQueries: Array<any>): Promise<any> {
+        return this.model.mongooseModel.aggregate([{ $match: query }, ...lookupQueries]).exec();
     }
 
     public populatePropertyInSubCollection(property: string) {

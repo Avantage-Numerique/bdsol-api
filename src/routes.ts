@@ -18,9 +18,7 @@ ApiRouter.get("/", async (req, res) => {
     const index = new PublicTemplate(); //template have already a default in the EmailContent.Prepare.
     const title: string = `${updatedConfig.appName} (version ${updatedConfig.version})`;
     let body: string =
-        updatedConfig.environnement === "development"
-            ? `<p>écoute sur le port: ${updatedConfig.port}<br /></p>`
-            : "";
+        updatedConfig.environnement === "development" ? `<p>écoute sur le port: ${updatedConfig.port}<br /></p>` : "";
     body += `<p>${baseData.api.description}</p>`;
     body +=
         updatedConfig.environnement === "development"
@@ -108,8 +106,7 @@ if (config.environnement === "development") {
         const testNotification: EmailNotification = new EmailNotification(
             {
                 recipient: "marcandre.martin@gmail.com",
-                subject:
-                    "Mam, Confirmez ce courriel pour votre compte sur avnu.ca",
+                subject: "Mam, Confirmez ce courriel pour votre compte sur avnu.ca",
             },
             EmailConfirmationContent(
                 "mam",
@@ -118,9 +115,7 @@ if (config.environnement === "development") {
         );
         //testNotification.send();
         res.set("Content-Type", "text/html");
-        return res
-            .status(StatusCodes.OK)
-            .send(await testNotification.preview());
+        return res.status(StatusCodes.OK).send(await testNotification.preview());
     });
 
     ApiRouter.get("/sync-db", async (req, res) => {

@@ -20,11 +20,7 @@ export class GetRequestIp {
          * If the proxy isn't 'yours', I wouldn't trust the 'x-forwarded-for' header, because it can be spoofed. (https://stackoverflow.com/questions/10849687/express-js-how-to-get-remote-client-address)
          * You need to keep in mind that you have to put this directive proxy_set_header X-Forwarded-For $remote_addr; into your nginx configuration in case you are using your own reverse proxy.
          */
-        return async function (
-            req: Request,
-            res: Response,
-            next: NextFunction
-        ) {
+        return async function (req: Request, res: Response, next: NextFunction) {
             req.visitor = GetRequestIp.parseHeader(req);
             next();
         };

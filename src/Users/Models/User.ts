@@ -216,10 +216,7 @@ export class User extends AbstractModel {
         // CREATE users, we hash the password.
         this.schema.pre("save", HashingMiddleware.handler());
         this.schema.pre("updateOne", HashingMiddleware.handler()); //
-        this.schema.pre(
-            "findOneAndUpdate",
-            HashingMiddleware.findOneAndUpdateHandler()
-        ); //this is used in updateOrCreate method.
+        this.schema.pre("findOneAndUpdate", HashingMiddleware.findOneAndUpdateHandler()); //this is used in updateOrCreate method.
         //}
     }
 }

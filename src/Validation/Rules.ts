@@ -28,14 +28,12 @@ abstract class AbstractRuleHandler implements RuleHandler {
 export class isDefined extends AbstractRuleHandler {
     public handle(rule: string, value: any, param?: any): string {
         if (rule === "isDefined") {
-            if (value !== undefined && typeof value !== "undefined")
-                return "OK";
+            if (value !== undefined && typeof value !== "undefined") return "OK";
             return "Valeur : " + value + " rule " + this.errMsg;
         }
         return super.handle(rule, value, param);
     }
-    public errMsg =
-        "isDefined : n'est pas définie (typeof == undefined || == null).";
+    public errMsg = "isDefined : n'est pas définie (typeof == undefined || == null).";
 }
 
 export class isNotNull extends AbstractRuleHandler {
@@ -79,8 +77,7 @@ export class minLength extends AbstractRuleHandler {
         }
         return super.handle(rule, value, param);
     }
-    public errMsg =
-        "minLength : n'a pas la longueur minimale requise ou n'est pas un string.";
+    public errMsg = "minLength : n'a pas la longueur minimale requise ou n'est pas un string.";
 }
 
 export class maxLength extends AbstractRuleHandler {
@@ -91,8 +88,7 @@ export class maxLength extends AbstractRuleHandler {
         }
         return super.handle(rule, value, param);
     }
-    public errMsg =
-        "maxLength : dépasse la longueur maximal permise ou n'est pas un string.";
+    public errMsg = "maxLength : dépasse la longueur maximal permise ou n'est pas un string.";
 }
 
 export class idValid extends AbstractRuleHandler {
@@ -120,14 +116,12 @@ export class isObject extends AbstractRuleHandler {
 export class objectNotEmpty extends AbstractRuleHandler {
     public handle(rule: string, value: any, param?: any): string {
         if (rule === "objectNotEmpty") {
-            if (value !== undefined && typeof value !== "undefined")
-                return "OK";
+            if (value !== undefined && typeof value !== "undefined") return "OK";
             return "Valeur : " + value + " rule " + this.errMsg;
         }
         return super.handle(rule, value, param);
     }
-    public errMsg =
-        "objectNotEmpty : l'objet à traiter ne contient aucun champs";
+    public errMsg = "objectNotEmpty : l'objet à traiter ne contient aucun champs";
 }
 
 export class isDate extends AbstractRuleHandler {

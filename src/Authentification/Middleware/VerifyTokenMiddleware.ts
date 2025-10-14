@@ -10,11 +10,7 @@ import HttpError from "../../Error/HttpError";
  * @param next {NextFunction}
  * @return Promise<Response<any, Record<string, any>> | undefined>
  */
-const verifyTokenMiddleware = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
+const verifyTokenMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     // Get token from header
     //const headers = req.headers;
     if (req.headers && req.headers.authorization) {
@@ -27,11 +23,7 @@ const verifyTokenMiddleware = async (
 
         // Check if no token
         if (!userToken) {
-            next(
-                HttpError.Unauthorized(
-                    "Token is missing the authentification header. We can't verify the user."
-                )
-            );
+            next(HttpError.Unauthorized("Token is missing the authentification header. We can't verify the user."));
             return;
         }
 
@@ -42,9 +34,7 @@ const verifyTokenMiddleware = async (
                 // Set the user in the request, for the last middlewares and endpoints.
                 req.user.ip = req.socket.remoteAddress; //when reverse proxy : req.headers['x-forwarded-for'] ||
                 req.user = verifiedToken;
-                LogHelper.info(
-                    `User's token verified, next to url ${req.originalUrl}`
-                );
+                LogHelper.info(`User's token verified, next to url ${req.originalUrl}`);
                 // Here is the only reason why we allow the request to do the next() function.
                 next();
                 return; //prevent the head from going into the end of the function.
@@ -94,26 +84,19 @@ export class VerifyTokenMiddleware {
                 }
 
                 try {
-                    const verifiedToken: any =
-                        await TokenController.verify(userToken);
+                    const verifiedToken: any = await TokenController.verify(userToken);
 
                     if (verifiedToken.validated === true) {
                         // Set the user in the request, for the last middlewares and endpoints.
                         req.user.ip = req.socket.remoteAddress; //when reverse proxy : req.headers['x-forwarded-for'] ||
                         req.user = verifiedToken;
-                        LogHelper.info(
-                            `User's token verified, next to url ${req.originalUrl}`
-                        );
+                        LogHelper.info(`User's token verified, next to url ${req.originalUrl}`);
                         // Here is the only reason why we allow the request to do the next() function.
                         next();
                         return; //prevent the head from going into the end of the function.
                     }
                 } catch (err) {
-                    next(
-                        HttpError.Unauthorized(
-                            "Token verification error catched."
-                        )
-                    );
+                    next(HttpError.Unauthorized("Token verification error catched."));
                     return;
                 }
             }

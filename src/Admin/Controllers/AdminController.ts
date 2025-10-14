@@ -88,28 +88,17 @@ nav ul li a {
                 basesRoutesColors.set(basePathName, pathColor);
             }
 
-            const color: string =
-                basesRoutesColors.get(basePathName) ?? "#FF0000";
+            const color: string = basesRoutesColors.get(basePathName) ?? "#FF0000";
             const border: string = "2px solid " + color + ";";
-            routesRender +=
-                "<li style='padding: 1rem; margin:2rem; border-left:" +
-                border +
-                "'>";
+            routesRender += "<li style='padding: 1rem; margin:2rem; border-left:" + border + "'>";
             routesRender += this.methodToHtml(
                 route.methods,
                 "div",
                 "display:inline-block; padding:5px; margin-right:5px; font-size:10px; background-color:#F8F8F8; border-top:" +
                     border
             );
-            routesRender +=
-                pathPrefix +
-                route.path +
-                " (" +
-                basePathName +
-                " ) " +
-                pathSuffix;
-            routesRender +=
-                prefix + this.methodToHtml(route.middlewares, "li") + suffix;
+            routesRender += pathPrefix + route.path + " (" + basePathName + " ) " + pathSuffix;
+            routesRender += prefix + this.methodToHtml(route.middlewares, "li") + suffix;
             routesRender += "</li>";
         }
         routesRender += "</u>";
@@ -142,11 +131,7 @@ nav ul li a {
         return this._render(routesTestContent);
     }
 
-    private methodToHtml(
-        methods: any,
-        tag: string = "div",
-        styles: string = ""
-    ) {
+    private methodToHtml(methods: any, tag: string = "div", styles: string = "") {
         let html: string = "";
         for (const method of methods) {
             html += this.tagString(method, tag, styles);
@@ -154,13 +139,8 @@ nav ul li a {
         return html;
     }
 
-    private tagString(
-        content: string,
-        tag: string = "div",
-        styles: string = ""
-    ) {
-        const openTag: string =
-            styles !== "" ? `<${tag} style="${styles}">` : `<${tag}>`;
+    private tagString(content: string, tag: string = "div", styles: string = "") {
+        const openTag: string = styles !== "" ? `<${tag} style="${styles}">` : `<${tag}>`;
         const closingTag: string = `</${tag}>`;
         return openTag + content + closingTag;
     }

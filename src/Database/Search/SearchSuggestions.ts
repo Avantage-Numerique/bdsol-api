@@ -21,19 +21,13 @@ class SearchSuggestions {
         if (SearchSuggestions._instance === undefined) {
             SearchSuggestions._instance = new SearchSuggestions();
 
-            SearchSuggestions._instance.personModel =
-                Person.getInstance().mongooseModel;
-            SearchSuggestions._instance.organisationModel =
-                Organisation.getInstance().mongooseModel;
-            SearchSuggestions._instance.taxonomyModel =
-                Taxonomy.getInstance().mongooseModel;
-            SearchSuggestions._instance.projectModel =
-                Project.getInstance().mongooseModel;
-            SearchSuggestions._instance.eventModel =
-                Event.getInstance().mongooseModel;
+            SearchSuggestions._instance.personModel = Person.getInstance().mongooseModel;
+            SearchSuggestions._instance.organisationModel = Organisation.getInstance().mongooseModel;
+            SearchSuggestions._instance.taxonomyModel = Taxonomy.getInstance().mongooseModel;
+            SearchSuggestions._instance.projectModel = Project.getInstance().mongooseModel;
+            SearchSuggestions._instance.eventModel = Event.getInstance().mongooseModel;
 
-            SearchSuggestions._instance.searchResults_instance =
-                SearchResults.getInstance();
+            SearchSuggestions._instance.searchResults_instance = SearchResults.getInstance();
         }
         return SearchSuggestions._instance;
     }

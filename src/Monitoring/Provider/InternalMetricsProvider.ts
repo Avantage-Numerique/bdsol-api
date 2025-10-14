@@ -274,56 +274,39 @@ class MongoDBMetricsMonitor {
 
         try {
             if (!dataConnection) throw Error("MongoDB connection not found");
-            if (dataConnection.readyState !== 1)
-                throw Error("MongoDB connection not established");
+            if (dataConnection.readyState !== 1) throw Error("MongoDB connection not established");
 
             // Get database admin stats
             const adminDb = dataConnection.db.admin();
-            const [serverStatus, dbStats, replSetStatus] =
-                await Promise.allSettled([
-                    adminDb.serverStatus(),
-                    dataConnection.db.stats(),
-                    this.getReplSetStatus(adminDb),
-                ]);
+            const [serverStatus, dbStats, replSetStatus] = await Promise.allSettled([
+                adminDb.serverStatus(),
+                dataConnection.db.stats(),
+                this.getReplSetStatus(adminDb),
+            ]);
 
             return {
                 timestamp: new Date().toISOString(),
                 uptime: Date.now() - this.startTime,
                 connectionPool: this.getConnectionPoolMetrics(dataConnection),
                 performance: this.getPerformanceMetrics(
-                    serverStatus.status === "fulfilled"
-                        ? serverStatus.value
-                        : null
+                    serverStatus.status === "fulfilled" ? serverStatus.value : null
                 ),
-                database: this.getDatabaseMetrics(
-                    dbStats.status === "fulfilled" ? dbStats.value : null
-                ),
+                database: this.getDatabaseMetrics(dbStats.status === "fulfilled" ? dbStats.value : null),
                 application: this.getApplicationMetrics(),
-                server: this.getServerMetrics(
-                    serverStatus.status === "fulfilled"
-                        ? serverStatus.value
-                        : null
-                ),
-                replication:
-                    replSetStatus.status === "fulfilled"
-                        ? replSetStatus.value
-                        : null,
+                server: this.getServerMetrics(serverStatus.status === "fulfilled" ? serverStatus.value : null),
+                replication: replSetStatus.status === "fulfilled" ? replSetStatus.value : null,
                 errors: this.getErrorMetrics(),
                 health: this.getHealthMetrics(dataConnection),
             };
         } catch (error) {
-            throw new Error(
-                `Failed to collect metrics: ${(error as Error).message}`
-            );
+            throw new Error(`Failed to collect metrics: ${(error as Error).message}`);
         }
     }
 
     /**
      * Get connection pool specific metrics
      */
-    private getConnectionPoolMetrics(
-        connection: Connection
-    ): ConnectionPoolMetrics {
+    private getConnectionPoolMetrics(connection: Connection): ConnectionPoolMetrics {
         const client = (connection as any).getClient?.();
         const topology = client?.topology;
 
@@ -344,14 +327,10 @@ class MongoDBMetricsMonitor {
                 if (server.pool) {
                     poolMetrics = {
                         ...poolMetrics,
-                        availableConnections:
-                            server.pool.availableConnectionCount || 0,
-                        checkedOutConnections:
-                            server.pool.checkedOutConnectionCount || 0,
-                        createdConnections:
-                            server.pool.createdConnectionCount || 0,
-                        destroyedConnections:
-                            server.pool.destroyedConnectionCount || 0,
+                        availableConnections: server.pool.availableConnectionCount || 0,
+                        checkedOutConnections: server.pool.checkedOutConnectionCount || 0,
+                        createdConnections: server.pool.createdConnectionCount || 0,
+                        destroyedConnections: server.pool.destroyedConnectionCount || 0,
                         totalConnections: server.pool.totalConnectionCount || 0,
                         minPoolSize: server.pool.options?.minPoolSize || 0,
                         maxPoolSize: server.pool.options?.maxPoolSize || 100,
@@ -368,9 +347,7 @@ class MongoDBMetricsMonitor {
     /**
      * Get performance metrics from server status
      */
-    private getPerformanceMetrics(
-        serverStatus: any
-    ): PerformanceMetrics | null {
+    private getPerformanceMetrics(serverStatus: any): PerformanceMetrics | null {
         if (!serverStatus) return null;
 
         return {
@@ -412,18 +389,9 @@ class MongoDBMetricsMonitor {
             // WiredTiger metrics (if available)
             wiredTiger: serverStatus.wiredTiger
                 ? {
-                      cacheSize:
-                          serverStatus.wiredTiger.cache?.[
-                              "maximum bytes configured"
-                          ] || 0,
-                      cacheUsed:
-                          serverStatus.wiredTiger.cache?.[
-                              "bytes currently in the cache"
-                          ] || 0,
-                      cacheDirty:
-                          serverStatus.wiredTiger.cache?.[
-                              "tracked dirty bytes in the cache"
-                          ] || 0,
+                      cacheSize: serverStatus.wiredTiger.cache?.["maximum bytes configured"] || 0,
+                      cacheUsed: serverStatus.wiredTiger.cache?.["bytes currently in the cache"] || 0,
+                      cacheDirty: serverStatus.wiredTiger.cache?.["tracked dirty bytes in the cache"] || 0,
                   }
                 : null,
         };
@@ -503,9 +471,7 @@ class MongoDBMetricsMonitor {
     /**
      * Get replication set status
      */
-    private async getReplSetStatus(
-        adminDb: any
-    ): Promise<ReplicationMetrics | null> {
+    private async getReplSetStatus(adminDb: any): Promise<ReplicationMetrics | null> {
         try {
             const status = await adminDb.replSetGetStatus();
             return {
@@ -534,9 +500,7 @@ class MongoDBMetricsMonitor {
      */
     private getErrorMetrics(): ErrorMetrics {
         const now = Date.now();
-        const last24h = this.errors.filter(
-            (error) => now - error.timestamp < 24 * 60 * 60 * 1000
-        );
+        const last24h = this.errors.filter((error) => now - error.timestamp < 24 * 60 * 60 * 1000);
 
         const errorTypes: Record<string, number> = {};
         last24h.forEach((error) => {
@@ -593,10 +557,7 @@ class MongoDBMetricsMonitor {
         if (!locks) return null;
 
         const result: Record<string, LockMetric> = {};
-        for (const [lockType, lockData] of Object.entries(locks) as [
-            string,
-            any,
-        ][]) {
+        for (const [lockType, lockData] of Object.entries(locks) as [string, any][]) {
             if (lockData.acquireCount) {
                 result[lockType] = {
                     acquireCount: lockData.acquireCount,
@@ -613,9 +574,7 @@ class MongoDBMetricsMonitor {
         for (const [operation, times] of Object.entries(this.operationTimes)) {
             if (times.length > 0) {
                 averages[operation] = {
-                    average:
-                        times.reduce((a: any, b: any) => a + b, 0) /
-                        times.length,
+                    average: times.reduce((a: any, b: any) => a + b, 0) / times.length,
                     min: Math.min(...times),
                     max: Math.max(...times),
                     count: times.length,
@@ -633,9 +592,7 @@ class MongoDBMetricsMonitor {
         this.operationTimes[operation].push(duration);
 
         // Keep only recent operations
-        if (
-            this.operationTimes[operation].length > this.maxOperationTimeHistory
-        ) {
+        if (this.operationTimes[operation].length > this.maxOperationTimeHistory) {
             this.operationTimes[operation].shift();
         }
     }
@@ -707,9 +664,7 @@ class MongoDBMetricsMonitor {
                     total: metrics.connectionPool?.totalConnections,
                 },
                 operations: {
-                    total: Object.values(
-                        metrics.application?.operationCounts || {}
-                    ).reduce((a, b) => a + b, 0),
+                    total: Object.values(metrics.application?.operationCounts || {}).reduce((a, b) => a + b, 0),
                     errors: metrics.errors?.total || 0,
                 },
                 memory: {

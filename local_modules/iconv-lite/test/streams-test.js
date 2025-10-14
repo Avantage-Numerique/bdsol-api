@@ -55,13 +55,8 @@ function checkStreamOutput(options) {
             try {
                 while ((chunk = stream.read()) != null) {
                     if (options.outputType)
-                        if (/^buffer/.test(options.outputType))
-                            assert(chunk instanceof Buffer);
-                        else
-                            assert.strictEqual(
-                                typeof chunk,
-                                options.outputType
-                            );
+                        if (/^buffer/.test(options.outputType)) assert(chunk instanceof Buffer);
+                        else assert.strictEqual(typeof chunk, options.outputType);
                     res.push(chunk);
                 }
             } catch (e) {
@@ -75,20 +70,10 @@ function checkStreamOutput(options) {
             try {
                 if (options.checkError) {
                     assert(err, "Expected error, but got success");
-                    if (
-                        Object.prototype.toString.call(options.checkError) ==
-                        "[object RegExp]"
-                    )
+                    if (Object.prototype.toString.call(options.checkError) == "[object RegExp]")
                         assert(options.checkError.test(err.message));
-                    else if (typeof options.checkError == "function")
-                        options.checkError(err);
-                    else
-                        assert.fail(
-                            null,
-                            null,
-                            "Invalid type of options.checkError: " +
-                                typeof options.checkError
-                        );
+                    else if (typeof options.checkError == "function") options.checkError(err);
+                    else assert.fail(null, null, "Invalid type of options.checkError: " + typeof options.checkError);
                 } else {
                     assert.ifError(err);
 
@@ -97,8 +82,7 @@ function checkStreamOutput(options) {
                         if ((r = /^buffer-?(.*)/.exec(options.outputType))) {
                             res = Buffer.concat(res);
                             if (r[1]) res = res.toString(r[1]); // Convert to string to make comparing buffers easier.
-                        } else if (options.outputType == "string")
-                            res = res.join("");
+                        } else if (options.outputType == "string") res = res.join("");
 
                         options.checkOutput(res);
                     }
@@ -113,13 +97,10 @@ function checkStreamOutput(options) {
 
 function checkEncodeStream(opts) {
     opts.createStream = function () {
-        return feeder(opts.input).pipe(
-            iconv.encodeStream(opts.encoding, opts.encodingOptions)
-        );
+        return feeder(opts.input).pipe(iconv.encodeStream(opts.encoding, opts.encodingOptions));
     };
     if (opts.outputType == null) opts.outputType = "buffer-hex";
-    if (Buffer.isBuffer(opts.output) && opts.outputType == "buffer-hex")
-        opts.output = opts.output.toString("hex");
+    if (Buffer.isBuffer(opts.output) && opts.outputType == "buffer-hex") opts.output = opts.output.toString("hex");
 
     opts.checkOutput =
         opts.checkOutput ||
@@ -132,9 +113,7 @@ function checkEncodeStream(opts) {
 
 function checkDecodeStream(opts) {
     opts.createStream = function () {
-        return feeder(opts.input).pipe(
-            iconv.decodeStream(opts.encoding, opts.encodingOptions)
-        );
+        return feeder(opts.input).pipe(iconv.decodeStream(opts.encoding, opts.encodingOptions));
     };
     if (opts.outputType == null) opts.outputType = "string";
     opts.checkOutput =
@@ -381,11 +360,7 @@ describe("Streaming mode", function () {
         "Decoding of UTF-7 with base64 between chunks",
         checkDecodeStream({
             encoding: "UTF-7",
-            input: [
-                new Buffer("+T2"),
-                new Buffer("BZf"),
-                new Buffer("Q hei+AN8-t"),
-            ],
+            input: [new Buffer("+T2"), new Buffer("BZf"), new Buffer("Q hei+AN8-t")],
             output: "\u4F60\u597D heißt",
         })
     );
@@ -403,11 +378,7 @@ describe("Streaming mode", function () {
         "Decoding of UTF-7-IMAP with base64 between chunks",
         checkDecodeStream({
             encoding: "UTF-7-IMAP",
-            input: [
-                new Buffer("&T2"),
-                new Buffer("BZf"),
-                new Buffer("Q hei&AN8-t"),
-            ],
+            input: [new Buffer("&T2"), new Buffer("BZf"), new Buffer("Q hei&AN8-t")],
             output: "\u4F60\u597D heißt",
         })
     );

@@ -9,10 +9,7 @@ var baseUrl = "http://www.unicode.org/Public/6.3.0/ucd/";
 async.parallel(
     {
         data: utils.getFile.bind(null, baseUrl + "UnicodeData.txt"),
-        exclusions: utils.getFile.bind(
-            null,
-            baseUrl + "CompositionExclusions.txt"
-        ),
+        exclusions: utils.getFile.bind(null, baseUrl + "CompositionExclusions.txt"),
     },
     errTo(console.log, function (data) {
         var features = {};
@@ -55,9 +52,7 @@ async.parallel(
             var feat = features[ch];
             if (
                 feat.canonical &&
-                (feat.decomp.length == 1 ||
-                    feat.combiningClass ||
-                    (features[feat.decomp[0]] || {}).combiningClass)
+                (feat.decomp.length == 1 || feat.combiningClass || (features[feat.decomp[0]] || {}).combiningClass)
             ) {
                 //console.log("Excluded:", (+ch).toString(16));
                 feat.noCompose = true;
@@ -163,21 +158,11 @@ async.parallel(
             if (feat.decomp && feat.canonical) {
                 if (feat.decomp.length == 1) {
                     if (f(feat.decomp[0]).combiningClass != feat.combiningClass)
-                        console.log(
-                            "!!1",
-                            hex(charCode),
-                            "->",
-                            feat.decomp.map(hex)
-                        );
+                        console.log("!!1", hex(charCode), "->", feat.decomp.map(hex));
                 } else if (feat.decomp.length == 2) {
                     if (f(feat.decomp[0]).combiningClass != feat.combiningClass)
                         // || f(feat.decomp[1]).combiningClass == 0)
-                        console.log(
-                            "!!2",
-                            hex(charCode),
-                            "->",
-                            feat.decomp.map(hex)
-                        );
+                        console.log("!!2", hex(charCode), "->", feat.decomp.map(hex));
                 } else {
                     console.log("comp - not 1 or 2", hex(charCode));
                 }

@@ -15,9 +15,7 @@ export class HashingMiddleware {
             const updatedEntry: any = this.getUpdate();
 
             if (updatedEntry.password === undefined) return next();
-            updatedEntry.password = await PasswordsController.hash(
-                updatedEntry.password
-            );
+            updatedEntry.password = await PasswordsController.hash(updatedEntry.password);
 
             return next();
         };

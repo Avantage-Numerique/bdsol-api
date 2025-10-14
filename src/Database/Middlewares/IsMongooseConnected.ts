@@ -14,20 +14,12 @@ export class IsMongooseConnected {
          * @param next {NextFunction}
          * @return Promise<Response<any, Record<string, any>> | undefined>
          */
-        return async function (
-            req: Request,
-            res: Response,
-            next: NextFunction
-        ) {
+        return async function (req: Request, res: Response, next: NextFunction) {
             if (ServerController.database) {
                 if (ServerController.database.isConnected()) {
-                    LogHelper.info(
-                        "[DB][Middleware] database is connected ! passing to next"
-                    );
+                    LogHelper.info("[DB][Middleware] database is connected ! passing to next");
                 } else {
-                    LogHelper.error(
-                        "[DB][Middleware] database isn't connected. Trying to reconnect"
-                    );
+                    LogHelper.error("[DB][Middleware] database isn't connected. Trying to reconnect");
                     await ServerController.database.initProviders();
                 }
             }

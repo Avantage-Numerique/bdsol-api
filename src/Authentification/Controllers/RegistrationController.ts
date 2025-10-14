@@ -25,13 +25,10 @@ export class RegistrationController {
         }
 
         const formattedData = this.formatRequestDataForDocument(requestData);
-        const createdDocumentResponse: ApiResponseContract =
-            await this.service.insert(formattedData);
+        const createdDocumentResponse: ApiResponseContract = await this.service.insert(formattedData);
 
         if (!createdDocumentResponse.error) {
-            createdDocumentResponse.data = this.userModel.dataTransfertObject(
-                createdDocumentResponse.data
-            );
+            createdDocumentResponse.data = this.userModel.dataTransfertObject(createdDocumentResponse.data);
             //generate un token ? direct ?
             // ou on fait connecter l'utilisateur ?
             // Il faut faire le flow post inscription.

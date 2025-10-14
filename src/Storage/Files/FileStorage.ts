@@ -24,11 +24,7 @@ export default class FileStorage {
         if (!fs.existsSync(path)) fs.mkdirSync(path, { recursive: true });
     }
 
-    public static generateFilename(
-        values: Array<string>,
-        extension: string,
-        sep: string = "-"
-    ) {
+    public static generateFilename(values: Array<string>, extension: string, sep: string = "-") {
         return `${values.join(sep)}.${extension}`.replace(/\s/g, "");
     }
 
@@ -49,14 +45,9 @@ export default class FileStorage {
         const extension: string | false = mime.extension(file.mimetype);
 
         if (extension !== false) {
-            const fileTypeIsSupported: boolean = FileStorage.fileTypeSupported(
-                fileExtensionList,
-                extension
-            );
+            const fileTypeIsSupported: boolean = FileStorage.fileTypeSupported(fileExtensionList, extension);
             return callback(
-                fileTypeIsSupported
-                    ? null
-                    : new Error("Error: file extension not accepted"),
+                fileTypeIsSupported ? null : new Error("Error: file extension not accepted"),
                 fileTypeIsSupported
             );
         }
@@ -64,10 +55,7 @@ export default class FileStorage {
         return callback(new Error("Error: file extension not accepted"), false);
     }
 
-    public static fileTypeSupported(
-        supportedExtensionsList: Array<any>,
-        fileExtension: string
-    ): boolean {
+    public static fileTypeSupported(supportedExtensionsList: Array<any>, fileExtension: string): boolean {
         return supportedExtensionsList.includes(fileExtension);
     }
 
@@ -83,11 +71,7 @@ export default class FileStorage {
      * @param entityId {string}
      * @param basePath {string} Added to avoid adding static value. that method should be integrate in another scope.
      */
-    public static generatePath(
-        entityType: string,
-        entityId: string,
-        basePath: string = FileStorage.basePath
-    ): string {
+    public static generatePath(entityType: string, entityId: string, basePath: string = FileStorage.basePath): string {
         return `${basePath}/${entityType}/${entityId}`;
         //FileStorage.basePath + '/' + entityType + '/' + entityId + '/';
     }
@@ -116,10 +100,7 @@ export default class FileStorage {
         return new Promise((resolve, reject) => {
             fs.unlink(record.pathWithFilename, (err) => {
                 if (err) {
-                    LogHelper.error(
-                        "Couldn't delete file at path : " +
-                            record.pathWithFilename
-                    );
+                    LogHelper.error("Couldn't delete file at path : " + record.pathWithFilename);
                     reject();
                 }
             });

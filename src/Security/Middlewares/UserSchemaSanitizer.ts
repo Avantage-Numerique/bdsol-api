@@ -83,8 +83,7 @@ export class UserSchemaSanitizer {
      */
     public static middlewareFunction(entity: string) {
         const entitysSchema: any = "User" || entity;
-        let entitysSanitizationRules: any =
-            UserSchemaSanitizer.parseSchema(entitysSchema);
+        let entitysSanitizationRules: any = UserSchemaSanitizer.parseSchema(entitysSchema);
 
         //since all properties are sanitize by itself in a middleware slot (as an array elements). We need to return an array with all the rules
 
@@ -95,11 +94,7 @@ export class UserSchemaSanitizer {
          * @param next {NextFunction}
          * @return Promise<Response<any, Record<string, any>> | undefined>
          */
-        return async function (
-            req: Request,
-            res: Response,
-            next: NextFunction
-        ) {
+        return async function (req: Request, res: Response, next: NextFunction) {
             entitysSanitizationRules = {};
             next();
         };
@@ -107,12 +102,7 @@ export class UserSchemaSanitizer {
 
     public static sanitizingMethods(): Array<any> {
         return [
-            body("data.email")
-                .isString()
-                .isEmail()
-                .trim()
-                .escape()
-                .normalizeEmail(),
+            body("data.email").isString().isEmail().trim().escape().normalizeEmail(),
             body("data.username").isString().trim().escape(),
             body("data.password").isString(),
         ];

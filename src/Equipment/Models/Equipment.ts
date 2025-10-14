@@ -5,10 +5,7 @@ import { EquipmentSchema } from "@src/Equipment/Schemas/EquipmentSchema";
 import EquipmentService from "@src/Equipment/Services/EquipmentService";
 import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 import { populateUser } from "@src/Users/Middlewares/populateUser";
-import {
-    middlewarePopulateProperty,
-    taxonomyPopulate,
-} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 
 class Equipment extends AbstractModel {

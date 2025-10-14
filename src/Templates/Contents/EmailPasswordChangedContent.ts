@@ -1,8 +1,4 @@
-const EmailPasswordChangedContent: any = (
-    welcomeName: string,
-    link: string,
-    additionnalContext: any = {}
-) => {
+const EmailPasswordChangedContent: any = (welcomeName: string, link: string, additionnalContext: any = {}) => {
     return {
         context: {
             welcome: `Salut, ${welcomeName}`, //to define from the content.//getter to concatenate ?

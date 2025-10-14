@@ -38,13 +38,7 @@ const storage = multer.diskStorage({
         const extension: string = tryExt !== false ? tryExt : "";
 
         //cb(null, `${fieldname}-${userId}-${uniqueSuffix}-${originalname}${extension != undefined ? '.' + extension : ""}`);
-        cb(
-            null,
-            FileStorage.generateFilename(
-                [fieldname, userId, uniqueSuffix, originalname],
-                extension
-            )
-        );
+        cb(null, FileStorage.generateFilename([fieldname, userId, uniqueSuffix, originalname], extension));
     },
 });
 

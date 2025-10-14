@@ -10,9 +10,7 @@ module.exports = function (iconv) {
     // Node authors rewrote Buffer internals to make it compatible with
     // Uint8Array and we cannot patch key functions since then.
     // Note: this does use older Buffer API on a purpose
-    iconv.supportsNodeEncodingsExtension = !(
-        Buffer.from || new Buffer(0) instanceof Uint8Array
-    );
+    iconv.supportsNodeEncodingsExtension = !(Buffer.from || new Buffer(0) instanceof Uint8Array);
 
     iconv.extendNodeEncodings = function extendNodeEncodings() {
         if (original) return;
@@ -22,9 +20,7 @@ module.exports = function (iconv) {
             console.error(
                 "ACTION NEEDED: require('iconv-lite').extendNodeEncodings() is not supported in your version of Node"
             );
-            console.error(
-                "See more info at https://github.com/ashtuchkin/iconv-lite/wiki/Node-v4-compatibility"
-            );
+            console.error("See more info at https://github.com/ashtuchkin/iconv-lite/wiki/Node-v4-compatibility");
             return;
         }
 
@@ -53,13 +49,7 @@ module.exports = function (iconv) {
             encoding = String(encoding || "utf8").toLowerCase();
 
             // Use native conversion when possible
-            if (Buffer.isNativeEncoding(encoding))
-                return original.SlowBufferToString.call(
-                    this,
-                    encoding,
-                    start,
-                    end
-                );
+            if (Buffer.isNativeEncoding(encoding)) return original.SlowBufferToString.call(this, encoding, start, end);
 
             // Otherwise, use our decoding method.
             if (typeof start == "undefined") start = 0;
@@ -68,12 +58,7 @@ module.exports = function (iconv) {
         };
 
         original.SlowBufferWrite = SlowBuffer.prototype.write;
-        SlowBuffer.prototype.write = function (
-            string,
-            offset,
-            length,
-            encoding
-        ) {
+        SlowBuffer.prototype.write = function (string, offset, length, encoding) {
             // Support both (string, offset, length, encoding)
             // and the legacy (string, encoding, offset, length)
             if (isFinite(offset)) {
@@ -103,13 +88,7 @@ module.exports = function (iconv) {
 
             // Use native conversion when possible
             if (Buffer.isNativeEncoding(encoding))
-                return original.SlowBufferWrite.call(
-                    this,
-                    string,
-                    offset,
-                    length,
-                    encoding
-                );
+                return original.SlowBufferWrite.call(this, string, offset, length, encoding);
 
             if (string.length > 0 && (length < 0 || offset < 0))
                 throw new RangeError("attempt to write beyond buffer bounds");
@@ -125,10 +104,7 @@ module.exports = function (iconv) {
 
         original.BufferIsEncoding = Buffer.isEncoding;
         Buffer.isEncoding = function (encoding) {
-            return (
-                Buffer.isNativeEncoding(encoding) ||
-                iconv.encodingExists(encoding)
-            );
+            return Buffer.isNativeEncoding(encoding) || iconv.encodingExists(encoding);
         };
 
         original.BufferByteLength = Buffer.byteLength;
@@ -136,8 +112,7 @@ module.exports = function (iconv) {
             encoding = String(encoding || "utf8").toLowerCase();
 
             // Use native conversion when possible
-            if (Buffer.isNativeEncoding(encoding))
-                return original.BufferByteLength.call(this, str, encoding);
+            if (Buffer.isNativeEncoding(encoding)) return original.BufferByteLength.call(this, str, encoding);
 
             // Slow, I know, but we don't have a better way yet.
             return iconv.encode(str, encoding).length;
@@ -148,8 +123,7 @@ module.exports = function (iconv) {
             encoding = String(encoding || "utf8").toLowerCase();
 
             // Use native conversion when possible
-            if (Buffer.isNativeEncoding(encoding))
-                return original.BufferToString.call(this, encoding, start, end);
+            if (Buffer.isNativeEncoding(encoding)) return original.BufferToString.call(this, encoding, start, end);
 
             // Otherwise, use our decoding method.
             if (typeof start == "undefined") start = 0;
@@ -181,13 +155,7 @@ module.exports = function (iconv) {
 
             // Use native conversion when possible
             if (Buffer.isNativeEncoding(encoding))
-                return original.BufferWrite.call(
-                    this,
-                    string,
-                    _offset,
-                    _length,
-                    _encoding
-                );
+                return original.BufferWrite.call(this, string, _offset, _length, _encoding);
 
             offset = +offset || 0;
             var remaining = this.length - offset;
@@ -217,10 +185,7 @@ module.exports = function (iconv) {
             var Readable = require("stream").Readable;
 
             original.ReadableSetEncoding = Readable.prototype.setEncoding;
-            Readable.prototype.setEncoding = function setEncoding(
-                enc,
-                options
-            ) {
+            Readable.prototype.setEncoding = function setEncoding(enc, options) {
                 // Use our own decoder, it has the same interface.
                 // We cannot use original function as it doesn't handle BOM-s.
                 this._readableState.decoder = iconv.getDecoder(enc, options);

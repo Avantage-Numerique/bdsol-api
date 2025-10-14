@@ -25,10 +25,7 @@ class BaseTemplate {
      */
     public async render(content: any) {
         this.content = content;
-        return Nunjucks.render(
-            `${this.contentPath}/${this.name}`,
-            this.content.context
-        );
+        return Nunjucks.render(`${this.contentPath}/${this.name}`, this.content.context);
     }
 
     public async preview(content: any): Promise<string> {

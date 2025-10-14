@@ -105,9 +105,7 @@ class EventsRoutes extends CrudRoute {
         getdoc: [],
     };
 
-    public setupAdditionnalPublicRoutes(
-        router: express.Router
-    ): express.Router {
+    public setupAdditionnalPublicRoutes(router: express.Router): express.Router {
         return router;
     }
 

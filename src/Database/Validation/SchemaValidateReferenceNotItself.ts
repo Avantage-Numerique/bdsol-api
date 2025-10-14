@@ -31,16 +31,8 @@ const schemaValidateNoReferenceToItself = async function (
     return true;
 };
 
-const taxonomyDomainNoSelfReference = async function (
-    this: mongoose.Document<any>,
-    refId: Types.ObjectId | undefined
-) {
-    return schemaValidateNoReferenceToItself(
-        this,
-        refId,
-        Taxonomy.getInstance().mongooseModel,
-        "domain"
-    );
+const taxonomyDomainNoSelfReference = async function (this: mongoose.Document<any>, refId: Types.ObjectId | undefined) {
+    return schemaValidateNoReferenceToItself(this, refId, Taxonomy.getInstance().mongooseModel, "domain");
 };
 
 export { taxonomyDomainNoSelfReference, isSameId };

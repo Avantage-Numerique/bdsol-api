@@ -61,8 +61,7 @@ export class MongooseDBDriver implements DBDriver {
         this.haveCredentials =
             typeof this.urlConfig.haveCredentials !== "undefined"
                 ? this.urlConfig.haveCredentials
-                : this.urlConfig.db.user !== "" &&
-                  this.urlConfig.db.password !== "";
+                : this.urlConfig.db.user !== "" && this.urlConfig.db.password !== "";
         this.isSRV = this.urlConfig.isSRV;
         this.authSource = this.urlConfig.db.authSource;
         this.client = null;
@@ -111,47 +110,23 @@ export class MongooseDBDriver implements DBDriver {
 
         if (this.providers.users.isConnected) {
             //order is important for populate. If the schema in relation isn't declare before, it will not work.
-            this.providers.users.assign(
-                UsersService.getInstance(User.getInstance())
-            );
-            this.providers.users.assign(
-                CommunicationsService.getInstance(Communication.getInstance())
-            );
+            this.providers.users.assign(UsersService.getInstance(User.getInstance()));
+            this.providers.users.assign(CommunicationsService.getInstance(Communication.getInstance()));
         }
 
         if (this.providers.data.isConnected) {
             const doIndexes = true;
 
-            this.providers.data.assign(
-                TaxonomyService.getInstance(Taxonomy.getInstance(doIndexes))
-            );
-            this.providers.data.assign(
-                MediasService.getInstance(Media.getInstance(doIndexes))
-            );
-            this.providers.data.assign(
-                UsersHistoryService.getInstance(UserHistory.getInstance())
-            );
+            this.providers.data.assign(TaxonomyService.getInstance(Taxonomy.getInstance(doIndexes)));
+            this.providers.data.assign(MediasService.getInstance(Media.getInstance(doIndexes)));
+            this.providers.data.assign(UsersHistoryService.getInstance(UserHistory.getInstance()));
 
-            this.providers.data.assign(
-                PersonsService.getInstance(Person.getInstance(doIndexes))
-            );
-            this.providers.data.assign(
-                OrganisationsService.getInstance(
-                    Organisation.getInstance(doIndexes)
-                )
-            );
-            this.providers.data.assign(
-                ProjectsService.getInstance(Project.getInstance(doIndexes))
-            );
-            this.providers.data.assign(
-                EventsService.getInstance(Event.getInstance(doIndexes))
-            );
-            this.providers.data.assign(
-                PlacesService.getInstance(Place.getInstance(doIndexes))
-            );
-            this.providers.data.assign(
-                EquipmentService.getInstance(Equipment.getInstance(doIndexes))
-            );
+            this.providers.data.assign(PersonsService.getInstance(Person.getInstance(doIndexes)));
+            this.providers.data.assign(OrganisationsService.getInstance(Organisation.getInstance(doIndexes)));
+            this.providers.data.assign(ProjectsService.getInstance(Project.getInstance(doIndexes)));
+            this.providers.data.assign(EventsService.getInstance(Event.getInstance(doIndexes)));
+            this.providers.data.assign(PlacesService.getInstance(Place.getInstance(doIndexes)));
+            this.providers.data.assign(EquipmentService.getInstance(Equipment.getInstance(doIndexes)));
         }
     }
 
@@ -208,8 +183,7 @@ export class MongooseDBDriver implements DBDriver {
         for (const key in this.providers) {
             const provider: DbProvider = this.providers[key];
             if (provider.isConnected) {
-                isProviderDisconnected =
-                    isProviderDisconnected && !provider.isConnected;
+                isProviderDisconnected = isProviderDisconnected && !provider.isConnected;
             }
         }
         return !isProviderDisconnected;

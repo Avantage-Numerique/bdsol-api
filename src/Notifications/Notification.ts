@@ -17,11 +17,7 @@ class Notification {
     public content: NotificationContent;
     public textContent: string;
 
-    constructor(
-        config: NotificationConfig,
-        content: NotificationContent,
-        textContent = ""
-    ) {
+    constructor(config: NotificationConfig, content: NotificationContent, textContent = "") {
         this.method = config.method ?? this.default_method;
         this.content = content;
         this.textContent = textContent;

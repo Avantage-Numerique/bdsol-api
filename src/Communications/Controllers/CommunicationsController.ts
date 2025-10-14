@@ -41,9 +41,7 @@ class CommunicationsController extends AbstractController {
      * @param {any} requestData - Containing information for the create
      * @return {ApiResponseContract} Promise
      */
-    public async createContactUs(
-        requestData: any
-    ): Promise<ApiResponseContract> {
+    public async createContactUs(requestData: any): Promise<ApiResponseContract> {
         const { name, email, message } = requestData;
         const communicationObject = {
             communicationType: "contact-us",
@@ -51,30 +49,26 @@ class CommunicationsController extends AbstractController {
             email: email,
             message: message,
         };
-        const createdDocumentResponse =
-            await this.service.insert(communicationObject);
+        const createdDocumentResponse = await this.service.insert(communicationObject);
 
         if (createdDocumentResponse !== undefined) {
             //Send email to notify that we received message and will respond asap
-            const contactUsReceivedEmail: EmailNotification =
-                new EmailNotification(
-                    {
-                        recipient: email,
-                        subject:
-                            name + ", Nous avons bien reçu votre commentaire",
-                    },
-                    EmailContactUsReceivedContent(name, config.frontendAppUrl)
-                );
+            const contactUsReceivedEmail: EmailNotification = new EmailNotification(
+                {
+                    recipient: email,
+                    subject: name + ", Nous avons bien reçu votre commentaire",
+                },
+                EmailContactUsReceivedContent(name, config.frontendAppUrl)
+            );
             await contactUsReceivedEmail.send();
 
-            const adminNotificationOfContactUs: EmailNotification =
-                new EmailNotification(
-                    {
-                        recipient: "bonjour@avnu.ca", //Add email config
-                        subject: "Nouveau message nous-joindre",
-                    },
-                    EmailAdminNotification(createdDocumentResponse.data)
-                );
+            const adminNotificationOfContactUs: EmailNotification = new EmailNotification(
+                {
+                    recipient: "bonjour@avnu.ca", //Add email config
+                    subject: "Nouveau message nous-joindre",
+                },
+                EmailAdminNotification(createdDocumentResponse.data)
+            );
             await adminNotificationOfContactUs.send();
 
             return createdDocumentResponse;
@@ -94,17 +88,8 @@ class CommunicationsController extends AbstractController {
      * @param {string} ip - visitor ip of the incoming report request
      * @return {ApiResponseContract} Promise
      */
-    public async createReportEntity(
-        requestData: any,
-        userId: any,
-        ip: string
-    ): Promise<ApiResponseContract> {
-        const {
-            message,
-            reportedEntityId,
-            reportedEntityType,
-            reportedEntitySlug,
-        } = requestData;
+    public async createReportEntity(requestData: any, userId: any, ip: string): Promise<ApiResponseContract> {
+        const { message, reportedEntityId, reportedEntityType, reportedEntitySlug } = requestData;
         const communicationObject = {
             communicationType: "report",
             message: message,
@@ -116,18 +101,16 @@ class CommunicationsController extends AbstractController {
                 ip: ip ?? "not-set",
             },
         };
-        const createdDocumentResponse =
-            await this.service.insert(communicationObject);
+        const createdDocumentResponse = await this.service.insert(communicationObject);
 
         if (createdDocumentResponse !== undefined) {
-            const adminNotificationOfReport: EmailNotification =
-                new EmailNotification(
-                    {
-                        recipient: "bonjour@avnu.ca", //Add email config
-                        subject: "Nouveau signalement",
-                    },
-                    EmailAdminNotification(createdDocumentResponse.data)
-                );
+            const adminNotificationOfReport: EmailNotification = new EmailNotification(
+                {
+                    recipient: "bonjour@avnu.ca", //Add email config
+                    subject: "Nouveau signalement",
+                },
+                EmailAdminNotification(createdDocumentResponse.data)
+            );
             adminNotificationOfReport.send();
             return createdDocumentResponse;
         }

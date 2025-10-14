@@ -25,11 +25,7 @@ class Sheet implements JobSheet {
     }
 
     public schedule() {
-        this.scheduledJob = schedule.scheduleJob(
-            this.name,
-            this.rule,
-            this.callback
-        );
+        this.scheduledJob = schedule.scheduleJob(this.name, this.rule, this.callback);
         this._registerEvents();
         return this.scheduledJob;
     }

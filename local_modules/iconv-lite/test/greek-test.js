@@ -14,14 +14,7 @@ var baseStrings = {
 var encodings = [
     {
         name: "windows1253",
-        variations: [
-            "windows-1253",
-            "win-1253",
-            "win1253",
-            "cp1253",
-            "cp-1253",
-            1253,
-        ],
+        variations: ["windows-1253", "win-1253", "win1253", "cp1253", "cp-1253", 1253],
         encodedStrings: {
             empty: new Buffer(""),
             hi: new Buffer("\xc3\xe5\xe9\xdc!", "binary"),
@@ -34,14 +27,7 @@ var encodings = [
     },
     {
         name: "iso88597",
-        variations: [
-            "iso-8859-7",
-            "greek",
-            "greek8",
-            "cp28597",
-            "cp-28597",
-            28597,
-        ],
+        variations: ["iso-8859-7", "greek", "greek8", "cp28597", "cp-28597", 28597],
         encodedStrings: {
             empty: new Buffer(""),
             hi: new Buffer("\xc3\xe5\xe9\xdc!", "binary"),
@@ -74,10 +60,7 @@ describe("Test Greek encodings", function () {
         describe(encoding.name + ":", function () {
             it("Convert from buffer", function () {
                 for (var key in encoding.encodedStrings)
-                    assert.strictEqual(
-                        iconv.decode(encoding.encodedStrings[key], enc),
-                        baseStrings[key]
-                    );
+                    assert.strictEqual(iconv.decode(encoding.encodedStrings[key], enc), baseStrings[key]);
             });
 
             it("Convert to buffer", function () {
@@ -90,10 +73,7 @@ describe("Test Greek encodings", function () {
 
             it("Try different variations of encoding", function () {
                 encoding.variations.forEach(function (enc) {
-                    assert.strictEqual(
-                        iconv.decode(encoding.encodedStrings[key], enc),
-                        baseStrings[key]
-                    );
+                    assert.strictEqual(iconv.decode(encoding.encodedStrings[key], enc), baseStrings[key]);
                     assert.strictEqual(
                         iconv.encode(baseStrings[key], enc).toString("binary"),
                         encoding.encodedStrings[key].toString("binary")
@@ -108,12 +88,7 @@ describe("Test Greek encodings", function () {
                         return iconv.defaultCharSingleByte;
                     })
                     .join("");
-                assert.strictEqual(
-                    iconv
-                        .encode(baseStrings.untranslatable, enc)
-                        .toString("binary"),
-                    expected
-                ); // Only '?' characters.
+                assert.strictEqual(iconv.encode(baseStrings.untranslatable, enc).toString("binary"), expected); // Only '?' characters.
             });
         });
     });

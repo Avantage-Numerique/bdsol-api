@@ -4,10 +4,7 @@ import type { DbProvider } from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import ProjectsService from "../Services/ProjectsService";
 import { Meta, SubMeta } from "@src/Moderation/Schemas/MetaSchema";
-import {
-    middlewarePopulateProperty,
-    taxonomyPopulate,
-} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import { populateUser } from "@src/Users/Middlewares/populateUser";
 import { Sponsor } from "@database/Schemas/SponsorSchema";
 import { ScheduleBudget } from "@database/Schemas/ScheduleBudgetSchema";

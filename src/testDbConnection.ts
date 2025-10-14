@@ -7,20 +7,13 @@ import { MongoDBDriver } from "@database/Drivers/MongoDriver";
 
 export const testDbConnection = async () => {
     LogHelper.info(`[Command][testDbConnection] in ${config.environnement}`);
-    if (
-        config.environnement === "staging" ||
-        config.environnement === "development"
-    ) {
+    if (config.environnement === "staging" || config.environnement === "development") {
         LogHelper.info(`[Command][testDbConnection]`);
         const driver: MongooseDBDriver = new MongooseDBDriver(config.db);
 
         const logPrefix: string = "[Command][testDbConnection] ";
-        LogHelper.info(
-            `${logPrefix} Full : ${driver.urlToLog(driver.connectionUrl())}`
-        );
-        LogHelper.info(
-            `${logPrefix} base : ${driver.urlToLog(driver.connectionBaseUrl())}`
-        );
+        LogHelper.info(`${logPrefix} Full : ${driver.urlToLog(driver.connectionUrl())}`);
+        LogHelper.info(`${logPrefix} base : ${driver.urlToLog(driver.connectionBaseUrl())}`);
     }
 };
 
@@ -40,9 +33,7 @@ async function run() {
         await client.connect();
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
-        console.log(
-            "Pinged your deployment. You successfully connected to MongoDB!"
-        );
+        console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
         await client.close();

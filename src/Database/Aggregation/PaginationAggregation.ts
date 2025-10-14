@@ -13,11 +13,7 @@ interface AggregationResultContract {
  * @param limit {number} the current limit from what we are checking the max skip.
  * @param totalDocuments {number} total length of the current query.
  */
-function safeSkip(
-    requestedPage: number,
-    limit: number,
-    totalDocuments: number
-): number {
+function safeSkip(requestedPage: number, limit: number, totalDocuments: number): number {
     const page = Math.max(1, Math.floor(requestedPage));
     const pageSize = Math.max(1, Math.floor(limit));
     const totalPages = Math.ceil(totalDocuments / pageSize);
@@ -49,10 +45,7 @@ async function paginationAggregation(
 ): Promise<AggregationResultContract> {
     try {
         // Count total documents matching initial pipeline stages
-        const countPipeline = [
-            ...aggregationPipeline,
-            { $count: "totalDocuments" },
-        ];
+        const countPipeline = [...aggregationPipeline, { $count: "totalDocuments" }];
         const [countResult] = await model.aggregate(countPipeline);
         const totalDocuments = countResult ? countResult.totalDocuments : 0;
 
@@ -63,10 +56,7 @@ async function paginationAggregation(
         // Calculate expected page length
         const lastPageSkipNumber = totalDocuments - (totalDocuments - skip); //weird, mais c'est ce que je pense qui est ok.
         const firstDocumentOnPageIndex = Number(currentPage) * Number(limit);
-        const nextPageLength = Math.min(
-            limit,
-            totalDocuments - firstDocumentOnPageIndex
-        ); //check if the current skip is in the last page, and adjust to it.
+        const nextPageLength = Math.min(limit, totalDocuments - firstDocumentOnPageIndex); //check if the current skip is in the last page, and adjust to it.
         const modificatedParameters: any = {};
 
         const nextSkip = safeSkip(currentPage + 1, limit, totalDocuments); //Math.min(firstDocumentOnPageIndex, lastPageSkipNumber);
@@ -82,11 +72,7 @@ async function paginationAggregation(
             ...aggregationPipeline,
             {
                 $facet: {
-                    paginatedResults: [
-                        { $sort: { updatedAt: sort } },
-                        { $skip: nextSkip },
-                        { $limit: limit },
-                    ],
+                    paginatedResults: [{ $sort: { updatedAt: sort } }, { $skip: nextSkip }, { $limit: limit }],
                     meta: [
                         {
                             $count: "count",
@@ -100,13 +86,8 @@ async function paginationAggregation(
         const results = await model.aggregate(paginatedPipeline);
 
         // Verify result length matches expected
-        if (
-            results[0].paginatedResults.length > nextPageLength &&
-            results[0].paginatedResults.length === 0
-        ) {
-            throw new Error(
-                "Pagination result count does not match expected length"
-            );
+        if (results[0].paginatedResults.length > nextPageLength && results[0].paginatedResults.length === 0) {
+            throw new Error("Pagination result count does not match expected length");
         }
 
         return {

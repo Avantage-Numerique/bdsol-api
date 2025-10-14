@@ -99,11 +99,9 @@ class MediasController extends AbstractController {
             [Equipment.getInstance().modelName]: ["mainImage"],
         };
         //For all keys (modelName) check if image is accepted
-        if (!Object.keys(entities).includes(requestData.entityType))
-            return false;
+        if (!Object.keys(entities).includes(requestData.entityType)) return false;
         //For all values, check if mediaField is accepted for that model
-        if (!entities[requestData.entityType].includes(requestData.mediaField))
-            return false;
+        if (!entities[requestData.entityType].includes(requestData.mediaField)) return false;
         return true; //this could be change for a
     }
 
@@ -116,8 +114,7 @@ class MediasController extends AbstractController {
             .catch(function () {
                 LogHelper.log("It catched that the saveFile didn't work!");
                 res.serviceResponse.multer.error = true;
-                res.serviceResponse.multer.message =
-                    "Couldn't save file to the server :( , saving file failed";
+                res.serviceResponse.multer.message = "Couldn't save file to the server :( , saving file failed";
                 return false;
             });
         return true;
@@ -128,8 +125,7 @@ class MediasController extends AbstractController {
         const mediaResponse = await this.internalCreateFromRecord(record);
         res.serviceResponse = mediaResponse;
         if (mediaResponse.error) {
-            res.serviceResponse.failMessage =
-                "Couldn't save file, creating media failed";
+            res.serviceResponse.failMessage = "Couldn't save file, creating media failed";
 
             //Delete file
             FileStorage.deleteFile(record);
@@ -142,30 +138,19 @@ class MediasController extends AbstractController {
         return mediaResponse.data._id;
     }
 
-    public async linkEntityToMedia(
-        res: Response,
-        record: Record,
-        toLinkMediaId: any
-    ) {
+    public async linkEntityToMedia(res: Response, record: Record, toLinkMediaId: any) {
         const updateRequest = {
             id: record.entityId,
             [record.mediaField]: toLinkMediaId,
         };
         let linkingMediaResponse;
-        const controller = EntityControllerFactory.getControllerFromEntity(
-            record.entityType
-        );
-        if (controller !== undefined)
-            linkingMediaResponse = await controller.update(updateRequest);
+        const controller = EntityControllerFactory.getControllerFromEntity(record.entityType);
+        if (controller !== undefined) linkingMediaResponse = await controller.update(updateRequest);
 
         if (linkingMediaResponse !== undefined && linkingMediaResponse.error) {
             //Delete media
-            res.serviceResponse = await this.internalDelete(
-                record.entityId,
-                record.filenameNoExt
-            );
-            res.serviceResponse.failMessage =
-                "Couldn't save file, failed to link media to entity";
+            res.serviceResponse = await this.internalDelete(record.entityId, record.filenameNoExt);
+            res.serviceResponse.failMessage = "Couldn't save file, failed to link media to entity";
             //Delete file
             FileStorage.deleteFile(record);
 
@@ -183,11 +168,8 @@ class MediasController extends AbstractController {
             dbStatus: "archived",
         });
         if (!res.serviceResponse.oldMedia.error)
-            res.serviceResponse.oldMedia.message =
-                "old media meta set to archived successfully";
-        else
-            res.serviceResponse.oldMedia.message =
-                "old media meta update to archived failed";
+            res.serviceResponse.oldMedia.message = "old media meta set to archived successfully";
+        else res.serviceResponse.oldMedia.message = "old media meta update to archived failed";
     }
 }
 

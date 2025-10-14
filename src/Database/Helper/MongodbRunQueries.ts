@@ -22,18 +22,10 @@ const runQueriesOnDatabase = async (
 
                 for (const query of task.queries) {
                     queryCount++;
-                    currentResults = await db
-                        .collection(task.collection)
-                        .updateMany(matchQuery, query);
-                    LogHelper.info(
-                        `${queryCount}. Results : `,
-                        currentResults,
-                        ` on ${task.collection}`
-                    );
+                    currentResults = await db.collection(task.collection).updateMany(matchQuery, query);
+                    LogHelper.info(`${queryCount}. Results : `, currentResults, ` on ${task.collection}`);
                 }
-                LogHelper.info(
-                    `<< [DB][Migration][${name}][${direction}] Ending for ${task.collection}`
-                );
+                LogHelper.info(`<< [DB][Migration][${name}][${direction}] Ending for ${task.collection}`);
             }
         }
     } catch (e: any) {
@@ -41,9 +33,7 @@ const runQueriesOnDatabase = async (
     } finally {
         // Ensures that the client will close when you finish/error
         await driver.close();
-        LogHelper.info(
-            `[DB][Migration][${name}][${direction}] Closing direct MongoClient`
-        );
+        LogHelper.info(`[DB][Migration][${name}][${direction}] Closing direct MongoClient`);
     }
 };
 

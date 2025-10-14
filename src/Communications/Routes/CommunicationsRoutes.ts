@@ -57,9 +57,7 @@ class CommunicationsRoutes extends AbstractRoute implements RouteContract {
     }
 
     setupAuthRoutes(): express.Router {
-        return this.setupAdditionnalAuthRoutes(
-            this.routerInstanceAuthentification
-        );
+        return this.setupAdditionnalAuthRoutes(this.routerInstanceAuthentification);
     }
     setupAdditionnalAuthRoutes(router: express.Router): express.Router {
         return router;
@@ -92,14 +90,8 @@ class CommunicationsRoutes extends AbstractRoute implements RouteContract {
      * @param next {NextFunction}
      * @return {Promise<any>}
      */
-    public async contactUsHandler(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
-        res.serviceResponse = await this.controllerInstance.createContactUs(
-            req.body.data
-        );
+    public async contactUsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        res.serviceResponse = await this.controllerInstance.createContactUs(req.body.data);
         res.serviceResponse.action = Service.CREATE_STATE;
         return next();
     }
@@ -111,11 +103,7 @@ class CommunicationsRoutes extends AbstractRoute implements RouteContract {
      * @param next {NextFunction}
      * @return {Promise<any>}
      */
-    public async reportEntityHandler(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
+    public async reportEntityHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
         res.serviceResponse = await this.controllerInstance.createReportEntity(
             req.body.data,
             req.body.data?.userId,

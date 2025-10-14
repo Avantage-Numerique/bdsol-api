@@ -1,10 +1,6 @@
 import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
 
-const EmailContactUsReceivedContent: any = (
-    welcomeName: string,
-    link: string,
-    additionnalContext: any = {}
-) => {
+const EmailContactUsReceivedContent: any = (welcomeName: string, link: string, additionnalContext: any = {}) => {
     const baseData = getTemplateBaseData();
     return {
         context: {

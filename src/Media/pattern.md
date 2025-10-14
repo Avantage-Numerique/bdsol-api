@@ -53,10 +53,7 @@ const upload = multer({
 const storage = multer.diskStorage({
     destination: "./uploadedContent",
     filename: function (_req, file, cb) {
-        cb(
-            null,
-            file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-        );
+        cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
     },
 });
 var upload = multer({
@@ -76,9 +73,7 @@ function checkFileType(file, cb) {
     // Allowed ext
     const filetypes = /jpeg|jpg|png|gif/;
     // Check ext
-    const extname = filetypes.test(
-        path.extname(file.originalname).toLowerCase()
-    );
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
     // Check mime
     const mimetype = filetypes.test(file.mimetype);
 

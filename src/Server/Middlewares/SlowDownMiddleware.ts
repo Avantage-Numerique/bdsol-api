@@ -30,9 +30,7 @@ const SlowDownMiddleware = (options = {} as SlowDownOptions) => {
             if (verbose) {
                 const endTime = Date.now();
                 const actualDelay = endTime - startTime;
-                console.log(
-                    `Request to ${req.path} delayed by ${actualDelay}ms`
-                );
+                console.log(`Request to ${req.path} delayed by ${actualDelay}ms`);
             }
 
             next();

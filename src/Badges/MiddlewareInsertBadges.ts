@@ -13,18 +13,12 @@ export const middlewareInsertBadges = (document: any) => {
     });
 };
 
-export const insertBadgeInArray = (
-    badgesArray: [string],
-    badgeType: string
-) => {
+export const insertBadgeInArray = (badgesArray: [string], badgeType: string) => {
     //if badgeType is not included, insert it
     if (!badgesArray.includes(badgeType)) badgesArray.push(badgeType);
 };
 
-export const removeBadgeFromArray = (
-    badgesArray: [string],
-    badgeType: string
-) => {
+export const removeBadgeFromArray = (badgesArray: [string], badgeType: string) => {
     //if badgeType is in array
     if (badgesArray.includes(badgeType)) {
         const index = badgesArray.indexOf(badgeType);

@@ -127,13 +127,7 @@ const tasksRenameMetaToStatus: any = [
  */
 export async function up(): Promise<void> {
     const driver: MongoDBDriver = new MongoDBDriver(config.migrations);
-    await runQueriesOnDatabase(
-        driver,
-        "bdsol-data",
-        tasksRenameStatus,
-        "Renaming meta",
-        "up"
-    );
+    await runQueriesOnDatabase(driver, "bdsol-data", tasksRenameStatus, "Renaming meta", "up");
 }
 
 /**
@@ -141,13 +135,7 @@ export async function up(): Promise<void> {
  */
 export async function down(): Promise<void> {
     const driver: MongoDBDriver = new MongoDBDriver(config.migrations);
-    await runQueriesOnDatabase(
-        driver,
-        "bdsol-data",
-        tasksRenameMetaToStatus,
-        "Renaming status to meta",
-        "down"
-    );
+    await runQueriesOnDatabase(driver, "bdsol-data", tasksRenameMetaToStatus, "Renaming status to meta", "down");
 }
 
 /**
@@ -189,19 +177,12 @@ export async function upMongoose(): Promise<void> {
         ];
 
         for (const task of tasks) {
-            LogHelper.info(
-                "[Migration][Changing names] Creating the the seeder with task data"
-            );
-            const results = await task.service.model.updateMany(
-                {},
-                { $rename: { status: "meta" } }
-            );
+            LogHelper.info("[Migration][Changing names] Creating the the seeder with task data");
+            const results = await task.service.model.updateMany({}, { $rename: { status: "meta" } });
             console.log(task.service.model);
             console.log("results", results);
         }
     } else {
-        return Promise.reject(
-            Error("Migration up, can't initiate the data provider.")
-        );
+        return Promise.reject(Error("Migration up, can't initiate the data provider."));
     }
 }

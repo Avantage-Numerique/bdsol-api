@@ -52,16 +52,12 @@ function arrToStr(arr) {
     for (var i = 0; i < arr.length; i++)
         if (Array.isArray(arr[i])) {
             if (arr[i].length == 1) s += arrToStr(arr[i]);
-            else if (arr[i].length > 1)
-                s +=
-                    String.fromCharCode(0xfff - (arr[i].length - 2)) +
-                    arrToStr(arr[i]);
+            else if (arr[i].length > 1) s += String.fromCharCode(0xfff - (arr[i].length - 2)) + arrToStr(arr[i]);
         } else if (arr[i] > 0xffff) {
             // Surrogates
             s +=
-                String.fromCharCode(
-                    0xd800 + Math.floor((arr[i] - 0x10000) / 0x400)
-                ) + String.fromCharCode(0xdc00 + ((arr[i] - 0x10000) % 0x400));
+                String.fromCharCode(0xd800 + Math.floor((arr[i] - 0x10000) / 0x400)) +
+                String.fromCharCode(0xdc00 + ((arr[i] - 0x10000) % 0x400));
         } else {
             // Basic characters.
             s += String.fromCharCode(arr[i]);
@@ -109,8 +105,7 @@ exports.generateTable = function (dbcs, maxBytes) {
             block.push(dbcs[i]);
         } else if (range) {
             // Range finished, write last segments.
-            if (seqLen >= minSeqLen)
-                range.push(arrToStr(block.slice(0, -seqLen)), seqLen);
+            if (seqLen >= minSeqLen) range.push(arrToStr(block.slice(0, -seqLen)), seqLen);
             else range.push(arrToStr(block));
 
             table.push(range);
@@ -134,8 +129,5 @@ exports.writeTable = function (name, table) {
 };
 
 exports.writeFile = function (name, body) {
-    fs.writeFileSync(
-        path.join(__dirname, "../encodings/tables", name + ".json"),
-        body
-    );
+    fs.writeFileSync(path.join(__dirname, "../encodings/tables", name + ".json"), body);
 };

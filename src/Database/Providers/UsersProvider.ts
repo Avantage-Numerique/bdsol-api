@@ -45,8 +45,7 @@ export class UsersProvider extends BaseProvider implements DbProvider {
     public async connect(): Promise<mongoose.Connection | boolean> {
         try {
             LogHelper.info("[BD] UserProvider Connecting to DB");
-            const serverConnection: mongoose.Connection | boolean =
-                await super.connect();
+            const serverConnection: mongoose.Connection | boolean = await super.connect();
             if (serverConnection !== false) {
                 return this.connection;
             }

@@ -63,9 +63,7 @@ abstract class AbstractRoute implements RouteContract {
      * Allow routes Manager to declare route on the same router.
      * @param router {express.Router} The router to associate other routes, at the target Routes scope.
      */
-    abstract setupAdditionnalPublicRoutes(
-        router: express.Router
-    ): express.Router;
+    abstract setupAdditionnalPublicRoutes(router: express.Router): express.Router;
 
     //  Middlewares
 
@@ -75,8 +73,7 @@ abstract class AbstractRoute implements RouteContract {
      * @param middlewares {string}
      */
     public addMiddlewares(route: string, middlewares: string = ""): Array<any> {
-        const defaultRoutes: any =
-            this.defaultMiddlewaresDistribution[route] ?? [];
+        const defaultRoutes: any = this.defaultMiddlewaresDistribution[route] ?? [];
         const currentRouter: any = this.middlewaresDistribution[route] ?? [];
         return [...defaultRoutes, ...currentRouter];
     }
@@ -89,11 +86,7 @@ abstract class AbstractRoute implements RouteContract {
      * @param res {Response} The curren response.
      */
     public async routeSendResponse(req: Request, res: Response): Promise<any> {
-        return await this.defaultReturnResponseJson(
-            res.serviceResponse,
-            req,
-            res
-        );
+        return await this.defaultReturnResponseJson(res.serviceResponse, req, res);
     }
 
     /**
@@ -101,15 +94,9 @@ abstract class AbstractRoute implements RouteContract {
      * @param req
      * @param res
      */
-    public async disabledRouteHandler(
-        req: Request,
-        res: Response
-    ): Promise<any> {
+    public async disabledRouteHandler(req: Request, res: Response): Promise<any> {
         return await this.defaultReturnResponseJson(
-            ErrorResponse.create(
-                new Error(ReasonPhrases.NOT_FOUND),
-                StatusCodes.NOT_FOUND
-            ),
+            ErrorResponse.create(new Error(ReasonPhrases.NOT_FOUND), StatusCodes.NOT_FOUND),
             req,
             res
         );
@@ -130,9 +117,7 @@ abstract class AbstractRoute implements RouteContract {
         res: Response
     ): Promise<any> {
         const logger = new LogHelper(req);
-        logger.log(
-            `Response status ${appResponse.code}, ${StatusCodes[appResponse.code]}`
-        );
+        logger.log(`Response status ${appResponse.code}, ${StatusCodes[appResponse.code]}`);
         return res.status(appResponse.code).send(appResponse);
     }
 
@@ -143,11 +128,7 @@ abstract class AbstractRoute implements RouteContract {
      * @param res {Response}
      * @protected
      */
-    protected async defaultReturnTemplate(
-        appResponse: any,
-        req: Request,
-        res: Response
-    ): Promise<any> {
+    protected async defaultReturnTemplate(appResponse: any, req: Request, res: Response): Promise<any> {
         const logger = new LogHelper(req);
         logger.log(`Response status ${StatusCodes.OK}, ${StatusCodes["OK"]}`);
         return res.status(StatusCodes.OK).send(appResponse);
@@ -160,9 +141,7 @@ abstract class AbstractRoute implements RouteContract {
      * @protected
      */
     protected logRoute(code: any, req: Request): void {
-        LogHelper.log(
-            `${req.originalUrl} response : ${code}, ${StatusCodes[code]}`
-        );
+        LogHelper.log(`${req.originalUrl} response : ${code}, ${StatusCodes[code]}`);
     }
 
     /**
@@ -172,11 +151,7 @@ abstract class AbstractRoute implements RouteContract {
      * @param res
      * @param next
      */
-    public async contentTypeParser(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
+    public async contentTypeParser(req: Request, res: Response, next: NextFunction): Promise<any> {
         //quand on save le fichier en temp. Il est cleared à la fin de la equest est est passé en buffer dans le request.
         /**
          * cb(null, {
@@ -200,11 +175,7 @@ abstract class AbstractRoute implements RouteContract {
         return next();
     }
 
-    public async validatingResults(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
+    public async validatingResults(req: Request, res: Response, next: NextFunction): Promise<any> {
         const validationResults: Result = validationResult(req);
 
         if (validationResults.isEmpty()) {

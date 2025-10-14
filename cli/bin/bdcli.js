@@ -6,14 +6,8 @@
 var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.cli = void 0;
-const version =
-    (_a = process.env.npm_package_version) !== null && _a !== void 0
-        ? _a
-        : "0.0.0 hardcoded";
-const name =
-    (_b = process.env.npm_package_name) !== null && _b !== void 0
-        ? _b
-        : "BDCLI hardcoded";
+const version = (_a = process.env.npm_package_version) !== null && _a !== void 0 ? _a : "0.0.0 hardcoded";
+const name = (_b = process.env.npm_package_name) !== null && _b !== void 0 ? _b : "BDCLI hardcoded";
 const cli = (args) => {
     console.log(args);
 };

@@ -36,8 +36,7 @@ StripBOMWrapper.prototype.write = function (buf) {
 
     if (res[0] === BOMChar) {
         res = res.slice(1);
-        if (typeof this.options.stripBOM === "function")
-            this.options.stripBOM();
+        if (typeof this.options.stripBOM === "function") this.options.stripBOM();
     }
 
     this.pass = true;

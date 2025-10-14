@@ -132,35 +132,24 @@ class MediasRoutes extends AbstractRoute {
             this.routeSendResponse.bind(this),
         ]);
 
-        this.routerInstanceAuthentification.get(
-            "/delete/:entity/:id/:fileName",
-            [
-                ...this.addMiddlewares("all"),
-                this.deleteHandler.bind(this),
-                this.routeSendResponse.bind(this),
-            ]
-        );
+        this.routerInstanceAuthentification.get("/delete/:entity/:id/:fileName", [
+            ...this.addMiddlewares("all"),
+            this.deleteHandler.bind(this),
+            this.routeSendResponse.bind(this),
+        ]);
 
-        return this.setupAdditionnalAuthRoutes(
-            this.routerInstanceAuthentification
-        );
+        return this.setupAdditionnalAuthRoutes(this.routerInstanceAuthentification);
     }
 
     public setupAdditionnalAuthRoutes(router: express.Router): express.Router {
         return router;
     }
 
-    public setupAdditionnalPublicRoutes(
-        router: express.Router
-    ): express.Router {
+    public setupAdditionnalPublicRoutes(router: express.Router): express.Router {
         return router;
     }
 
-    public async createOrUpdateDispatch(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
+    public async createOrUpdateDispatch(req: Request, res: Response, next: NextFunction): Promise<any> {
         //If file attached (either upload or update)
         if (req.files !== undefined) {
             await this.createAndReplaceHandler(req, res);
@@ -168,11 +157,7 @@ class MediasRoutes extends AbstractRoute {
         //if no file attached
         else {
             if (req.url == "/upload") {
-                res.serviceResponse = ErrorResponse.create(
-                    new Error(),
-                    StatusCodes.BAD_REQUEST,
-                    "File not received"
-                );
+                res.serviceResponse = ErrorResponse.create(new Error(), StatusCodes.BAD_REQUEST, "File not received");
             }
             //if url /update and no file
             else {
@@ -182,10 +167,7 @@ class MediasRoutes extends AbstractRoute {
         return next();
     }
 
-    public async createAndReplaceHandler(
-        req: Request,
-        res: Response
-    ): Promise<any> {
+    public async createAndReplaceHandler(req: Request, res: Response): Promise<any> {
         res.serviceResponse = {};
 
         /*const createMediaResponse = await createMedia();
@@ -214,22 +196,13 @@ class MediasRoutes extends AbstractRoute {
 
         const { entityId, mediaField, entityType } = req.body.data;
         //Get old media ID if exist
-        const controller =
-            EntityControllerFactory.getControllerFromEntity(entityType);
+        const controller = EntityControllerFactory.getControllerFromEntity(entityType);
         let entityResponse;
-        if (controller !== undefined)
-            entityResponse = await controller.search({ id: entityId });
+        if (controller !== undefined) entityResponse = await controller.search({ id: entityId });
 
         const oldMediaId = entityResponse?.data?.[mediaField]?._id;
 
-        const record = new Record(
-            req.body.data,
-            req.files,
-            req.user._id,
-            entityId,
-            mediaField,
-            entityType
-        );
+        const record = new Record(req.body.data, req.files, req.user._id, entityId, mediaField, entityType);
         if (!record.isValid()) {
             res.serviceResponse = ErrorResponse.create(
                 new Error(),
@@ -244,18 +217,11 @@ class MediasRoutes extends AbstractRoute {
         if (!isFileSaved) return;
 
         //Insert new media object in db and handle error (delete file if fail)
-        const toLinkMediaId = await this.controllerInstance.insertMedia(
-            res,
-            record
-        );
+        const toLinkMediaId = await this.controllerInstance.insertMedia(res, record);
         //toLinkMediaId is false if failed
         if (toLinkMediaId === false) return;
 
-        const isLinkedSuccess = await this.controllerInstance.linkEntityToMedia(
-            res,
-            record,
-            toLinkMediaId
-        );
+        const isLinkedSuccess = await this.controllerInstance.linkEntityToMedia(res, record, toLinkMediaId);
         if (!isLinkedSuccess) return;
 
         //If entity had old media then update it
@@ -264,11 +230,9 @@ class MediasRoutes extends AbstractRoute {
         }
 
         //Everything succeeded
-        res.serviceResponse.message =
-            "Success to save file, create media, and link media to entity!";
+        res.serviceResponse.message = "Success to save file, create media, and link media to entity!";
         res.serviceResponse.action = "create";
-        const userHistoryCreated: boolean =
-            await this.controllerInstance.createUserHistory(req, res);
+        const userHistoryCreated: boolean = await this.controllerInstance.createUserHistory(req, res);
         return;
     }
 
@@ -283,49 +247,34 @@ class MediasRoutes extends AbstractRoute {
             }
         });
 
-        res.serviceResponse =
-            await this.controllerInstance.service.update(updateData);
+        res.serviceResponse = await this.controllerInstance.service.update(updateData);
         return;
     }
 
-    public async deleteHandler(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
+    public async deleteHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
         //`/${req.params.entity}/${req.params.id}/${req.params.fileName}`
 
         const lowerEntity: string = req.params.entity.toLowerCase();
         //delete file
         // Assuming that 'path/file.txt' is a regular file.
-        fs.unlink(
-            `./localStorage/public/${lowerEntity}/${req.params.id}/${req.params.fileName}`,
-            (err) => {
-                if (err) LogHelper.error("Deleting file failed : ", err);
-                else
-                    LogHelper.log(
-                        `./localStorage/public/${lowerEntity}/${req.params.id}/${req.params.fileName} was deleted`
-                    );
-            }
-        );
+        fs.unlink(`./localStorage/public/${lowerEntity}/${req.params.id}/${req.params.fileName}`, (err) => {
+            if (err) LogHelper.error("Deleting file failed : ", err);
+            else
+                LogHelper.log(
+                    `./localStorage/public/${lowerEntity}/${req.params.id}/${req.params.fileName} was deleted`
+                );
+        });
 
         const mediaController = MediasController.getInstance();
-        const entityController =
-            EntityControllerFactory.getControllerFromEntity(req.params.entity);
+        const entityController = EntityControllerFactory.getControllerFromEntity(req.params.entity);
         const filenameNoExt = FileStorage.removeExtension(req.params.fileName);
 
         //delete media from fileName && entityId (params.id)
-        res.serviceResponse = await mediaController.internalDelete(
-            req.params.id,
-            filenameNoExt
-        );
+        res.serviceResponse = await mediaController.internalDelete(req.params.id, filenameNoExt);
 
         //if entity media was in use => need to update entity media to null
         //NOTE : IF WE HAVE AN ENTITY WITH MULTIPLE MEDIA FIELD, THIS APPROACH DOESN'T WORK (because multiple media could be "in use")
-        if (
-            res.serviceResponse.data.dbStatus == "in use" &&
-            entityController !== undefined
-        ) {
+        if (res.serviceResponse.data.dbStatus == "in use" && entityController !== undefined) {
             res.serviceResponse.update = await entityController.service.update({
                 id: req.params.id,
                 mainImage: null,
@@ -341,11 +290,7 @@ class MediasRoutes extends AbstractRoute {
      * @param res {Response}
      * @param next {NextFunction}
      */
-    public async viewMedia(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
+    public async viewMedia(req: Request, res: Response, next: NextFunction): Promise<any> {
         const options: any = {
             //Removed this root option and added path.resolve to the return work with targetMediaPath
             //root: config.basepath,
@@ -358,11 +303,7 @@ class MediasRoutes extends AbstractRoute {
         const { entity, id, fileName } = req.params;
         //type('image/jpeg')
         const lowerEntity: string = entity.toLowerCase();
-        const targetMediaPath = path.resolve(
-            path.join(
-                `${PublicStorage.basePath}/${lowerEntity}/${id}/${fileName}`
-            )
-        );
+        const targetMediaPath = path.resolve(path.join(`${PublicStorage.basePath}/${lowerEntity}/${id}/${fileName}`));
         await res.sendFile(targetMediaPath, options, (error) => {
             if (error) {
                 //res.serviceResponse.code = StatusCodes.NOT_FOUND;
@@ -380,11 +321,7 @@ class MediasRoutes extends AbstractRoute {
         });
     }
 
-    public async getMediaData(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
+    public async getMediaData(req: Request, res: Response, next: NextFunction): Promise<any> {
         res.serviceResponse = await this.controllerInstance.get({
             _id: req.params.id,
         });

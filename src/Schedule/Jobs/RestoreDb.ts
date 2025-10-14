@@ -22,12 +22,7 @@ const RestoreDb = async (dbName: string) => {
     });
 };
 
-const restoreFileName = (
-    dbName: string,
-    date: string,
-    time: string,
-    extension: string = "gzip"
-) => {
+const restoreFileName = (dbName: string, date: string, time: string, extension: string = "gzip") => {
     const sep: string = "-";
     return `${date}${sep}${time}${sep}${dbName}.${extension}`;
 };

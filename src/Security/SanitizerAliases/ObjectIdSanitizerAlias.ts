@@ -23,9 +23,7 @@ const objectIdSanitizerAlias = (
 
     return chain
         .custom(IsObjectIdStringValid.validatorCustom())
-        .withMessage(
-            `${isOptional ? "Optional" : "Required"} Isn't a valid objectID`
-        )
+        .withMessage(`${isOptional ? "Optional" : "Required"} Isn't a valid objectID`)
         .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer());
 };
 

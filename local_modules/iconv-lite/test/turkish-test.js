@@ -8,14 +8,7 @@ var ascii =
 var encodings = [
     {
         name: "windows1254",
-        variations: [
-            "windows-1254",
-            "win-1254",
-            "win1254",
-            "cp1254",
-            "cp-1254",
-            1254,
-        ],
+        variations: ["windows-1254", "win-1254", "win1254", "cp1254", "cp-1254", 1254],
         strings: {
             empty: "",
             ascii: ascii,
@@ -41,14 +34,7 @@ var encodings = [
     },
     {
         name: "iso88599",
-        variations: [
-            "iso-8859-9",
-            "turkish",
-            "turkish8",
-            "cp28599",
-            "cp-28599",
-            28599,
-        ],
+        variations: ["iso-8859-9", "turkish", "turkish8", "cp28599", "cp-28599", 28599],
         strings: {
             empty: "",
             ascii: ascii,
@@ -79,32 +65,22 @@ describe("Test Turkish encodings", function () {
         describe(encoding.name + ":", function () {
             it("Convert from buffer", function () {
                 for (var key in encoding.encodedStrings)
-                    assert.strictEqual(
-                        iconv.decode(encoding.encodedStrings[key], enc),
-                        encoding.strings[key]
-                    );
+                    assert.strictEqual(iconv.decode(encoding.encodedStrings[key], enc), encoding.strings[key]);
             });
 
             it("Convert to buffer", function () {
                 for (var key in encoding.encodedStrings)
                     assert.strictEqual(
-                        iconv
-                            .encode(encoding.strings[key], enc)
-                            .toString("binary"),
+                        iconv.encode(encoding.strings[key], enc).toString("binary"),
                         encoding.encodedStrings[key].toString("binary")
                     );
             });
 
             it("Try different variations of encoding", function () {
                 encoding.variations.forEach(function (enc) {
+                    assert.strictEqual(iconv.decode(encoding.encodedStrings[key], enc), encoding.strings[key]);
                     assert.strictEqual(
-                        iconv.decode(encoding.encodedStrings[key], enc),
-                        encoding.strings[key]
-                    );
-                    assert.strictEqual(
-                        iconv
-                            .encode(encoding.strings[key], enc)
-                            .toString("binary"),
+                        iconv.encode(encoding.strings[key], enc).toString("binary"),
                         encoding.encodedStrings[key].toString("binary")
                     );
                 });
@@ -117,12 +93,7 @@ describe("Test Turkish encodings", function () {
                         return iconv.defaultCharSingleByte;
                     })
                     .join("");
-                assert.strictEqual(
-                    iconv
-                        .encode(encoding.strings.untranslatable, enc)
-                        .toString("binary"),
-                    expected
-                ); // Only '?' characters.
+                assert.strictEqual(iconv.encode(encoding.strings.untranslatable, enc).toString("binary"), expected); // Only '?' characters.
             });
         });
     });

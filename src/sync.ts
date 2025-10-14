@@ -4,20 +4,14 @@ import config from "@src/config";
 import { MongooseDBDriver } from "@database/Drivers/MongooseDriver";
 
 export const syncProdToStaging = async (dbName: string = "bdsol-data") => {
-    LogHelper.info(
-        `[Command][syncProdToStaging] ${dbName} in ${config.environnement}`
-    );
-    if (
-        config.environnement === "staging" ||
-        config.environnement === "development"
-    ) {
+    LogHelper.info(`[Command][syncProdToStaging] ${dbName} in ${config.environnement}`);
+    if (config.environnement === "staging" || config.environnement === "development") {
         LogHelper.info(`[Command][syncProdToStaging] ${dbName}`);
         //const dbDistant = new MongooseDBDriver(config.distantDb);
         // const db = new MongooseDBDriver(config.localhostDb);
         const db = new MongooseDBDriver(config.db);
 
-        const basePath: string =
-            "D:/web/bdsol-workspace/api/localStorage/backup/db";
+        const basePath: string = "D:/web/bdsol-workspace/api/localStorage/backup/db";
 
         const distantBasePath: string = `${basePath}/distant/${backupFolderName()}`;
 
@@ -28,9 +22,7 @@ export const syncProdToStaging = async (dbName: string = "bdsol-data") => {
         const distantDbFileName: string = backupFileName(dbName);
         const distantPath: string = `${distantBasePath}/${distantDbFileName}`;
 
-        LogHelper.info(
-            `[Command][syncProdToStaging] restoring ${dbName} into local config from ${distantPath} file`
-        );
+        LogHelper.info(`[Command][syncProdToStaging] restoring ${dbName} into local config from ${distantPath} file`);
 
         // Restore to local from the distant.
         const restoreDistantToLocalDb = MongoSpawn("mongorestore", {

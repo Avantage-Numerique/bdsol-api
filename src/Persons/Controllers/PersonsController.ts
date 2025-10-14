@@ -84,10 +84,7 @@ class PersonsController extends AbstractController {
 
         const aggregateService = new ServiceAggregate(Person.getInstance());
 
-        const results: any = await aggregateService.lookupMultiple(
-            { slug: slug },
-            query
-        );
+        const results: any = await aggregateService.lookupMultiple({ slug: slug }, query);
 
         //agregation inter bd don't work (that I red).
         const userAppModel: User = User.getInstance();
@@ -95,8 +92,7 @@ class PersonsController extends AbstractController {
 
         //I'm doing it with populate because of the $lookup is just really fetching, and we need data to stay the same.
         // All the things I found and tests where not working
-        const taxonomies: mongoose.Model<any> =
-            Taxonomy.getInstance().mongooseModel;
+        const taxonomies: mongoose.Model<any> = Taxonomy.getInstance().mongooseModel;
 
         const media: mongoose.Model<any> = Media.getInstance().mongooseModel;
         await taxonomies.populate(results, { path: "occupations.skills" });
@@ -117,18 +113,10 @@ class PersonsController extends AbstractController {
         });
 
         if (results.length > 0) {
-            return SuccessResponse.create(
-                results[0],
-                StatusCodes.OK,
-                ReasonPhrases.OK
-            );
+            return SuccessResponse.create(results[0], StatusCodes.OK, ReasonPhrases.OK);
         }
 
-        return ErrorResponse.create(
-            new Error(""),
-            StatusCodes.NOT_FOUND,
-            ReasonPhrases.NOT_FOUND
-        );
+        return ErrorResponse.create(new Error(""), StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
     }
 }
 

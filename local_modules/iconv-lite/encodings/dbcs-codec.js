@@ -19,10 +19,8 @@ for (var i = 0; i < 0x100; i++) UNASSIGNED_NODE[i] = UNASSIGNED;
 // Class DBCSCodec reads and initializes mapping tables.
 function DBCSCodec(codecOptions, iconv) {
     this.encodingName = codecOptions.encodingName;
-    if (!codecOptions)
-        throw new Error("DBCS codec is called without the data.");
-    if (!codecOptions.table)
-        throw new Error("Encoding '" + this.encodingName + "' has no data.");
+    if (!codecOptions) throw new Error("DBCS codec is called without the data.");
+    if (!codecOptions.table) throw new Error("Encoding '" + this.encodingName + "' has no data.");
 
     // Load tables.
     var mappingTable = codecOptions.table();
@@ -43,8 +41,7 @@ function DBCSCodec(codecOptions, iconv) {
     this.decodeTableSeq = [];
 
     // Actual mapping tables consist of chunks. Use them to fill up decode tables.
-    for (var i = 0; i < mappingTable.length; i++)
-        this._addDecodeChunk(mappingTable[i]);
+    for (var i = 0; i < mappingTable.length; i++) this._addDecodeChunk(mappingTable[i]);
 
     this.defaultCharUnicode = iconv.defaultCharUnicode;
 
@@ -69,9 +66,7 @@ function DBCSCodec(codecOptions, iconv) {
         for (var i = 0; i < codecOptions.encodeSkipVals.length; i++) {
             var val = codecOptions.encodeSkipVals[i];
             if (typeof val === "number") skipEncodeChars[val] = true;
-            else
-                for (var j = val.from; j <= val.to; j++)
-                    skipEncodeChars[j] = true;
+            else for (var j = val.from; j <= val.to; j++) skipEncodeChars[j] = true;
         }
 
     // Use decode trie to recursively fill out encode tables.
@@ -80,22 +75,12 @@ function DBCSCodec(codecOptions, iconv) {
     // Add more encoding pairs when needed.
     if (codecOptions.encodeAdd) {
         for (var uChar in codecOptions.encodeAdd)
-            if (
-                Object.prototype.hasOwnProperty.call(
-                    codecOptions.encodeAdd,
-                    uChar
-                )
-            )
-                this._setEncodeChar(
-                    uChar.charCodeAt(0),
-                    codecOptions.encodeAdd[uChar]
-                );
+            if (Object.prototype.hasOwnProperty.call(codecOptions.encodeAdd, uChar))
+                this._setEncodeChar(uChar.charCodeAt(0), codecOptions.encodeAdd[uChar]);
     }
 
-    this.defCharSB =
-        this.encodeTable[0][iconv.defaultCharSingleByte.charCodeAt(0)];
-    if (this.defCharSB === UNASSIGNED)
-        this.defCharSB = this.encodeTable[0]["?"];
+    this.defCharSB = this.encodeTable[0][iconv.defaultCharSingleByte.charCodeAt(0)];
+    if (this.defCharSB === UNASSIGNED) this.defCharSB = this.encodeTable[0]["?"];
     if (this.defCharSB === UNASSIGNED) this.defCharSB = "?".charCodeAt(0);
 
     // Load & create GB18030 tables when needed.
@@ -104,21 +89,17 @@ function DBCSCodec(codecOptions, iconv) {
 
         // Add GB18030 decode tables.
         var thirdByteNodeIdx = this.decodeTables.length;
-        var thirdByteNode = (this.decodeTables[thirdByteNodeIdx] =
-            UNASSIGNED_NODE.slice(0));
+        var thirdByteNode = (this.decodeTables[thirdByteNodeIdx] = UNASSIGNED_NODE.slice(0));
 
         var fourthByteNodeIdx = this.decodeTables.length;
-        var fourthByteNode = (this.decodeTables[fourthByteNodeIdx] =
-            UNASSIGNED_NODE.slice(0));
+        var fourthByteNode = (this.decodeTables[fourthByteNodeIdx] = UNASSIGNED_NODE.slice(0));
 
         for (var i = 0x81; i <= 0xfe; i++) {
             var secondByteNodeIdx = NODE_START - this.decodeTables[0][i];
             var secondByteNode = this.decodeTables[secondByteNodeIdx];
-            for (var j = 0x30; j <= 0x39; j++)
-                secondByteNode[j] = NODE_START - thirdByteNodeIdx;
+            for (var j = 0x30; j <= 0x39; j++) secondByteNode[j] = NODE_START - thirdByteNodeIdx;
         }
-        for (var i = 0x81; i <= 0xfe; i++)
-            thirdByteNode[i] = NODE_START - fourthByteNodeIdx;
+        for (var i = 0x81; i <= 0xfe; i++) thirdByteNode[i] = NODE_START - fourthByteNodeIdx;
         for (var i = 0x30; i <= 0x39; i++) fourthByteNode[i] = GB18030_CODE;
     }
 }
@@ -144,13 +125,7 @@ DBCSCodec.prototype._getDecodeTrieNode = function (addr) {
         } else if (val <= NODE_START) {
             // Existing node.
             node = this.decodeTables[NODE_START - val];
-        } else
-            throw new Error(
-                "Overwrite byte in " +
-                    this.encodingName +
-                    ", addr: " +
-                    addr.toString(16)
-            );
+        } else throw new Error("Overwrite byte in " + this.encodingName + ", addr: " + addr.toString(16));
     }
     return node;
 };
@@ -174,26 +149,15 @@ DBCSCodec.prototype._addDecodeChunk = function (chunk) {
                     // Decode surrogate
                     var codeTrail = part.charCodeAt(l++);
                     if (0xdc00 <= codeTrail && codeTrail < 0xe000)
-                        writeTable[curAddr++] =
-                            0x10000 +
-                            (code - 0xd800) * 0x400 +
-                            (codeTrail - 0xdc00);
-                    else
-                        throw new Error(
-                            "Incorrect surrogate pair in " +
-                                this.encodingName +
-                                " at chunk " +
-                                chunk[0]
-                        );
+                        writeTable[curAddr++] = 0x10000 + (code - 0xd800) * 0x400 + (codeTrail - 0xdc00);
+                    else throw new Error("Incorrect surrogate pair in " + this.encodingName + " at chunk " + chunk[0]);
                 } else if (0x0ff0 < code && code <= 0x0fff) {
                     // Character sequence (our own encoding used)
                     var len = 0xfff - code + 2;
                     var seq = [];
-                    for (var m = 0; m < len; m++)
-                        seq.push(part.charCodeAt(l++)); // Simple variation: don't support surrogates or subsequences in seq.
+                    for (var m = 0; m < len; m++) seq.push(part.charCodeAt(l++)); // Simple variation: don't support surrogates or subsequences in seq.
 
-                    writeTable[curAddr++] =
-                        SEQ_START - this.decodeTableSeq.length;
+                    writeTable[curAddr++] = SEQ_START - this.decodeTableSeq.length;
                     this.decodeTableSeq.push(seq);
                 } else writeTable[curAddr++] = code; // Basic char
             }
@@ -203,30 +167,17 @@ DBCSCodec.prototype._addDecodeChunk = function (chunk) {
             for (var l = 0; l < part; l++) writeTable[curAddr++] = charCode++;
         } else
             throw new Error(
-                "Incorrect type '" +
-                    typeof part +
-                    "' given in " +
-                    this.encodingName +
-                    " at chunk " +
-                    chunk[0]
+                "Incorrect type '" + typeof part + "' given in " + this.encodingName + " at chunk " + chunk[0]
             );
     }
     if (curAddr > 0xff)
-        throw new Error(
-            "Incorrect chunk in " +
-                this.encodingName +
-                " at addr " +
-                chunk[0] +
-                ": too long" +
-                curAddr
-        );
+        throw new Error("Incorrect chunk in " + this.encodingName + " at addr " + chunk[0] + ": too long" + curAddr);
 };
 
 // Encoder helpers
 DBCSCodec.prototype._getEncodeBucket = function (uCode) {
     var high = uCode >> 8; // This could be > 0xFF because of astral characters.
-    if (this.encodeTable[high] === undefined)
-        this.encodeTable[high] = UNASSIGNED_NODE.slice(0); // Create bucket on demand.
+    if (this.encodeTable[high] === undefined) this.encodeTable[high] = UNASSIGNED_NODE.slice(0); // Create bucket on demand.
     return this.encodeTable[high];
 };
 
@@ -271,11 +222,7 @@ DBCSCodec.prototype._setEncodeSequence = function (seq, dbcsCode) {
     node[uCode] = dbcsCode;
 };
 
-DBCSCodec.prototype._fillEncodeTable = function (
-    nodeIdx,
-    prefix,
-    skipEncodeChars
-) {
+DBCSCodec.prototype._fillEncodeTable = function (nodeIdx, prefix, skipEncodeChars) {
     var node = this.decodeTables[nodeIdx];
     for (var i = 0; i < 0x100; i++) {
         var uCode = node[i];
@@ -283,17 +230,8 @@ DBCSCodec.prototype._fillEncodeTable = function (
         if (skipEncodeChars[mbCode]) continue;
 
         if (uCode >= 0) this._setEncodeChar(uCode, mbCode);
-        else if (uCode <= NODE_START)
-            this._fillEncodeTable(
-                NODE_START - uCode,
-                mbCode << 8,
-                skipEncodeChars
-            );
-        else if (uCode <= SEQ_START)
-            this._setEncodeSequence(
-                this.decodeTableSeq[SEQ_START - uCode],
-                mbCode
-            );
+        else if (uCode <= NODE_START) this._fillEncodeTable(NODE_START - uCode, mbCode << 8, skipEncodeChars);
+        else if (uCode <= SEQ_START) this._setEncodeSequence(this.decodeTableSeq[SEQ_START - uCode], mbCode);
     }
 };
 
@@ -345,10 +283,7 @@ DBCSEncoder.prototype.write = function (str) {
             } else {
                 // We've got trail surrogate.
                 if (leadSurrogate !== -1) {
-                    uCode =
-                        0x10000 +
-                        (leadSurrogate - 0xd800) * 0x400 +
-                        (uCode - 0xdc00);
+                    uCode = 0x10000 + (leadSurrogate - 0xd800) * 0x400 + (uCode - 0xdc00);
                     leadSurrogate = -1;
                 } else {
                     // Incomplete surrogate pair - only trail surrogate found.
@@ -405,9 +340,7 @@ DBCSEncoder.prototype.write = function (str) {
                 // Use GB18030 algorithm to find character(s) to write.
                 var idx = findIdx(this.gb18030.uChars, uCode);
                 if (idx != -1) {
-                    var dbcsCode =
-                        this.gb18030.gbChars[idx] +
-                        (uCode - this.gb18030.uChars[idx]);
+                    var dbcsCode = this.gb18030.gbChars[idx] + (uCode - this.gb18030.uChars[idx]);
                     newBuf[j++] = 0x81 + Math.floor(dbcsCode / 12600);
                     dbcsCode = dbcsCode % 12600;
                     newBuf[j++] = 0x30 + Math.floor(dbcsCode / 1260);
@@ -519,15 +452,9 @@ DBCSDecoder.prototype.write = function (buf) {
             var curSeq =
                 seqStart >= 0
                     ? buf.slice(seqStart, i + 1)
-                    : prevBuf.slice(
-                          seqStart + prevBufOffset,
-                          i + 1 + prevBufOffset
-                      );
+                    : prevBuf.slice(seqStart + prevBufOffset, i + 1 + prevBufOffset);
             var ptr =
-                (curSeq[0] - 0x81) * 12600 +
-                (curSeq[1] - 0x30) * 1260 +
-                (curSeq[2] - 0x81) * 10 +
-                (curSeq[3] - 0x30);
+                (curSeq[0] - 0x81) * 12600 + (curSeq[1] - 0x30) * 1260 + (curSeq[2] - 0x81) * 10 + (curSeq[3] - 0x30);
             var idx = findIdx(this.gb18030.gbChars, ptr);
             uCode = this.gb18030.uChars[idx] + ptr - this.gb18030.gbChars[idx];
         } else if (uCode <= NODE_START) {
@@ -545,12 +472,7 @@ DBCSDecoder.prototype.write = function (buf) {
             uCode = seq[seq.length - 1];
         } else
             throw new Error(
-                "iconv-lite internal error: invalid decoding table value " +
-                    uCode +
-                    " at " +
-                    nodeIdx +
-                    "/" +
-                    curByte
+                "iconv-lite internal error: invalid decoding table value " + uCode + " at " + nodeIdx + "/" + curByte
             );
 
         // Write the character to buffer, handling higher planes using surrogate pair.
@@ -571,10 +493,7 @@ DBCSDecoder.prototype.write = function (buf) {
     }
 
     this.nodeIdx = nodeIdx;
-    this.prevBuf =
-        seqStart >= 0
-            ? buf.slice(seqStart)
-            : prevBuf.slice(seqStart + prevBufOffset);
+    this.prevBuf = seqStart >= 0 ? buf.slice(seqStart) : prevBuf.slice(seqStart + prevBufOffset);
     return newBuf.slice(0, j).toString("ucs2");
 };
 

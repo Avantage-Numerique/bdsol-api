@@ -41,12 +41,8 @@ class PagesRoutes extends AbstractRoute {
      * @public @method
      */
     public setupPublicRoutes(): express.Router {
-        this.routerInstance.get("/versions", [
-            this.versionsLayoutHandler.bind(this),
-        ]);
-        this.routerInstance.get("/statistics", [
-            this.statisticsLayoutHandler.bind(this),
-        ]);
+        this.routerInstance.get("/versions", [this.versionsLayoutHandler.bind(this)]);
+        this.routerInstance.get("/statistics", [this.statisticsLayoutHandler.bind(this)]);
 
         return this.routerInstance;
     }
@@ -55,39 +51,19 @@ class PagesRoutes extends AbstractRoute {
      * Allow routes Manager to declare route on the same router.
      * @param router {express.Router} The router to associate other routes, at the target Routes scope.
      */
-    public setupAdditionnalPublicRoutes(
-        router: express.Router
-    ): express.Router {
+    public setupAdditionnalPublicRoutes(router: express.Router): express.Router {
         return router;
     }
 
-    public async statisticsLayoutHandler(
-        req: Request,
-        res: Response
-    ): Promise<any> {
-        return this.layoutHandler(
-            await this.controllerInstance.statistics(),
-            req,
-            res
-        );
+    public async statisticsLayoutHandler(req: Request, res: Response): Promise<any> {
+        return this.layoutHandler(await this.controllerInstance.statistics(), req, res);
     }
 
-    public async versionsLayoutHandler(
-        req: Request,
-        res: Response
-    ): Promise<any> {
-        return this.layoutHandler(
-            await this.controllerInstance.versions(),
-            req,
-            res
-        );
+    public async versionsLayoutHandler(req: Request, res: Response): Promise<any> {
+        return this.layoutHandler(await this.controllerInstance.versions(), req, res);
     }
 
-    public async layoutHandler(
-        renderedLayout: any,
-        req: Request,
-        res: Response
-    ): Promise<any> {
+    public async layoutHandler(renderedLayout: any, req: Request, res: Response): Promise<any> {
         res.set("Content-Type", "text/html");
         return res.status(StatusCodes.OK).send(renderedLayout);
     }

@@ -145,16 +145,7 @@ class Place extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields(): object {
-        return [
-            "name",
-            "description",
-            "address",
-            "region",
-            "mrc",
-            "province",
-            "country",
-            "postalCode",
-        ];
+        return ["name", "description", "address", "region", "mrc", "province", "country", "postalCode"];
     }
 
     /**

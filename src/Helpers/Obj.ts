@@ -49,10 +49,7 @@ export class Obj {
         return "";
     }
 
-    public static pluck(
-        obj: Array<any | object>,
-        property: string
-    ): Array<any> {
+    public static pluck(obj: Array<any | object>, property: string): Array<any> {
         const pluckedValues: Array<any> = [];
         for (const element of obj) {
             pluckedValues.push(element[property]);

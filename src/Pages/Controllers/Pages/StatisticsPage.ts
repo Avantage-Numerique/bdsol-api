@@ -15,11 +15,7 @@ interface Note {
 }
 
 class StatisticsPage extends Page {
-    constructor(
-        name: string,
-        layout: string = "",
-        content: PageContent = { title: "Page", body: "contenu" }
-    ) {
+    constructor(name: string, layout: string = "", content: PageContent = { title: "Page", body: "contenu" }) {
         super(name, "page", content);
         this.content.title = this.title();
         this.content.body = this.body();
@@ -44,10 +40,7 @@ class StatisticsPage extends Page {
             if (typeof version.notes === "string") {
                 body += `<p>${version.notes}</p>`;
             }
-            if (
-                typeof version.notes === "object" &&
-                Array.isArray(version.notes)
-            ) {
+            if (typeof version.notes === "object" && Array.isArray(version.notes)) {
                 for (const note of version.notes) {
                     body += `<p${note.additionnalClasses && note.additionnalClasses !== "" ? "class='" + note.additionnalClasses + "'" : ""}>${note.value}</p>`;
                 }

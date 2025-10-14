@@ -57,18 +57,11 @@ class StaticContentsController implements ControllerContract {
     public async getLicencesContent(): Promise<ApiResponseContract> {
         try {
             if (this.licences !== null) {
-                return SuccessResponse.create(
-                    this.licences,
-                    StatusCodes.OK,
-                    ReasonPhrases.OK
-                );
+                return SuccessResponse.create(this.licences, StatusCodes.OK, ReasonPhrases.OK);
             }
             return SuccessResponse.create({}, StatusCodes.OK, ReasonPhrases.OK);
         } catch (getAllErrors: any) {
-            return ErrorResponse.create(
-                getAllErrors,
-                StatusCodes.INTERNAL_SERVER_ERROR
-            );
+            return ErrorResponse.create(getAllErrors, StatusCodes.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -77,29 +70,15 @@ class StaticContentsController implements ControllerContract {
      * @param {string} licenceSlug - Research terms { "nom":"Jean" }
      * @return {ApiResponseContract} Promise containing a list of documents
      */
-    public async getTargetLicenceContent(
-        licenceSlug: string
-    ): Promise<ApiResponseContract> {
+    public async getTargetLicenceContent(licenceSlug: string): Promise<ApiResponseContract> {
         try {
             const targetLicence: any = this.licences[licenceSlug];
 
-            return targetLicence !== null &&
-                targetLicence !== undefined &&
-                targetLicence !== ""
-                ? SuccessResponse.create(
-                      targetLicence,
-                      StatusCodes.OK,
-                      ReasonPhrases.OK
-                  )
-                : ErrorResponse.create(
-                      new Error(ReasonPhrases.NOT_FOUND),
-                      StatusCodes.NOT_FOUND
-                  );
+            return targetLicence !== null && targetLicence !== undefined && targetLicence !== ""
+                ? SuccessResponse.create(targetLicence, StatusCodes.OK, ReasonPhrases.OK)
+                : ErrorResponse.create(new Error(ReasonPhrases.NOT_FOUND), StatusCodes.NOT_FOUND);
         } catch (getAllErrors: any) {
-            return ErrorResponse.create(
-                getAllErrors,
-                StatusCodes.INTERNAL_SERVER_ERROR
-            );
+            return ErrorResponse.create(getAllErrors, StatusCodes.INTERNAL_SERVER_ERROR);
         }
     }
 }

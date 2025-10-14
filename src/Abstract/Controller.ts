@@ -31,8 +31,7 @@ abstract class AbstractController implements ControllerContract {
     public async create(requestData: any): Promise<ApiResponseContract> {
         const createdDocumentResponse = await this.service.insert(requestData);
 
-        if (createdDocumentResponse !== undefined)
-            return createdDocumentResponse;
+        if (createdDocumentResponse !== undefined) return createdDocumentResponse;
 
         return ErrorResponse.create(
             new Error(ReasonPhrases.INTERNAL_SERVER_ERROR),
@@ -47,8 +46,7 @@ abstract class AbstractController implements ControllerContract {
      * @return {ApiResponseContract} Promise
      */
     public async update(requestData: any): Promise<ApiResponseContract> {
-        const updatedModelResponse: any =
-            await this.service.update(requestData);
+        const updatedModelResponse: any = await this.service.update(requestData);
         if (updatedModelResponse !== undefined) return updatedModelResponse;
 
         return ErrorResponse.create(
@@ -104,10 +102,7 @@ abstract class AbstractController implements ControllerContract {
      * @param {any} params - Research terms { "nom":"Jean" }
      * @return {ApiResponseContract} Promise containing a list of documents
      */
-    public async getBy(
-        params: string,
-        requestData: any
-    ): Promise<ApiResponseContract> {
+    public async getBy(params: string, requestData: any): Promise<ApiResponseContract> {
         const query = QueryBuilder.build(requestData, true);
         return await this.service.get(query);
     }
@@ -143,14 +138,7 @@ abstract class AbstractController implements ControllerContract {
      * @return {ApiResponseContract} Promise containing rules and attributes for every field of the entity
      */
     public async getInfo(requestData: any): Promise<ApiResponseContract> {
-        const routes = [
-            "create",
-            "update",
-            "list",
-            "search",
-            "delete",
-            "getinfo",
-        ];
+        const routes = ["create", "update", "list", "search", "delete", "getinfo"];
         if (!routes.includes(requestData.route)) {
             requestData.route = "default";
         }
@@ -169,12 +157,8 @@ abstract class AbstractController implements ControllerContract {
         return this.entity.documentation();
     }
 
-    public async createUserHistory(
-        req: any,
-        res: any
-    ): Promise<ApiResponseContract> {
-        const userHistoryService: UsersHistoryService =
-            UsersHistoryService.getInstance(UserHistory.getInstance());
+    public async createUserHistory(req: any, res: any): Promise<ApiResponseContract> {
+        const userHistoryService: UsersHistoryService = UsersHistoryService.getInstance(UserHistory.getInstance());
         const response: any = res.serviceResponse;
         const action: string = res.serviceResponse.action;
         try {

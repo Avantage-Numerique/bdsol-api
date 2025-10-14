@@ -14,11 +14,7 @@ const dateSanitizerAlias = (
         chain = chain.notEmpty().withMessage("Is required");
     }
 
-    chain = chain
-        .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-        .trim()
-        .isISO8601()
-        .toDate();
+    chain = chain.customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer()).trim().isISO8601().toDate();
 
     return chain;
 };

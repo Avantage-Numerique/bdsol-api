@@ -18,11 +18,7 @@ class Page {
     public renderedTemplate: any;
     private _noCache: boolean = true;
 
-    constructor(
-        name: string,
-        layout: string = "page",
-        content: PageContent = { title: "Page", body: "contenu" }
-    ) {
+    constructor(name: string, layout: string = "page", content: PageContent = { title: "Page", body: "contenu" }) {
         this.name = name;
         this.layout = layout;
         this.content = content;

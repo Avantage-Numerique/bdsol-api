@@ -6,10 +6,7 @@ import * as fs from "fs";
 import OrganisationsService from "../Services/OrganisationsService";
 import { Member } from "@src/Team/Schemas/MemberSchema";
 import { Meta, SubMeta } from "@src/Moderation/Schemas/MetaSchema";
-import {
-    middlewarePopulateProperty,
-    taxonomyPopulate,
-} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import { populateUser } from "@src/Users/Middlewares/populateUser";
 import { SkillGroup } from "@src/Taxonomy/Schemas/SkillGroupSchema";
 import { EquipmentLink } from "@src/Database/Schemas/EquipmentLinkSchema";
@@ -163,15 +160,7 @@ class Organisation extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields(): object {
-        return [
-            "name",
-            "description",
-            "url",
-            "contactPoint",
-            "fondationDate",
-            "offers",
-            "domains",
-        ];
+        return ["name", "description", "url", "contactPoint", "fondationDate", "offers", "domains"];
     }
 
     /**
@@ -243,11 +232,9 @@ class Organisation extends AbstractModel {
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
-            this.schema.pre(
-                "findOneAndUpdate",
-                async function (next: any): Promise<any> {
-                    const updatedDocument: any = this.getUpdate();
-                    /*
+            this.schema.pre("findOneAndUpdate", async function (next: any): Promise<any> {
+                const updatedDocument: any = this.getUpdate();
+                /*
                 if (updatedDocument && updatedDocument["offers"] != undefined){
                     const idList = updatedDocument["offers"].map( (el:any) => {
                         return el.skills.map( (id:any) =>{
@@ -257,11 +244,10 @@ class Organisation extends AbstractModel {
                     await middlewareTaxonomy(idList.flat(), TaxonomyController, "offers.skills");
                 }
                 */
-                    //Check and insert badges
-                    middlewareInsertBadges(updatedDocument);
-                    return next();
-                }
-            );
+                //Check and insert badges
+                middlewareInsertBadges(updatedDocument);
+                return next();
+            });
         }
     }
 

@@ -23,9 +23,7 @@ class UsersRoutes extends CrudRoute {
                 .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
                 .customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
                 .stripLow()
-                .customSanitizer(
-                    AlphaNumOnlySanitizer.validatorCustomSanitizer()
-                )
+                .customSanitizer(AlphaNumOnlySanitizer.validatorCustomSanitizer())
                 .trim(),
             //ajouter lowercase
             body("data.email")

@@ -54,8 +54,7 @@ export abstract class BaseProvider implements DbProvider {
      * @return {DbProvider}
      */
     public async connect(): Promise<mongoose.Connection | boolean> {
-        if (this.verbose)
-            LogHelper.info(`[BD] Testing server url ${this._databaseName}`);
+        if (this.verbose) LogHelper.info(`[BD] Testing server url ${this._databaseName}`);
         //await this.testConnection();//removing for testing with mongo atlas.
 
         if (!this.isConnected) {
@@ -79,10 +78,7 @@ export abstract class BaseProvider implements DbProvider {
                     return this.connection;
                 }
             } catch (error: any) {
-                LogHelper.error(
-                    `Can't connect to mongo server in ${this.databaseName} provider`,
-                    error
-                );
+                LogHelper.error(`Can't connect to mongo server in ${this.databaseName} provider`, error);
                 return false;
             }
         }
@@ -96,16 +92,11 @@ export abstract class BaseProvider implements DbProvider {
     }
 
     public async testConnection(): Promise<boolean> {
-        if (this.verbose)
-            LogHelper.info(
-                `[DB][testConnection] on ${this._databaseName} database`
-            );
+        if (this.verbose) LogHelper.info(`[DB][testConnection] on ${this._databaseName} database`);
 
         if (this.connection && this.connection.readyState === 1) {
             if (this.verbose)
-                LogHelper.info(
-                    `[DB][testConnection] already connected to database ${this._databaseName} `
-                );
+                LogHelper.info(`[DB][testConnection] already connected to database ${this._databaseName} `);
             this.isServerUp = true;
             return this.isServerUp;
         }
@@ -114,20 +105,13 @@ export abstract class BaseProvider implements DbProvider {
             const mongooseConnection = await this.createMongooseConnection();
 
             if (typeof mongooseConnection !== "undefined") {
-                if (this.verbose)
-                    LogHelper.info(
-                        `[DB][testConnection] CONNECTION TO Mongoose succeed`
-                    );
+                if (this.verbose) LogHelper.info(`[DB][testConnection] CONNECTION TO Mongoose succeed`);
                 await mongooseConnection.close();
                 this.isServerUp = true;
                 return this.isServerUp;
             }
         } catch (error) {
-            if (this.verbose)
-                LogHelper.error(
-                    `[DB][testConnection] CONNECTION TO Mongoose failed`,
-                    error
-                );
+            if (this.verbose) LogHelper.error(`[DB][testConnection] CONNECTION TO Mongoose failed`, error);
             //keep _serverIsUp as false (in the constructor).
             return this.isServerUp;
         }
@@ -187,10 +171,7 @@ export abstract class BaseProvider implements DbProvider {
 
     public assign(service: Service): void {
         try {
-            if (this.verbose)
-                LogHelper.info(
-                    `[DB] assigning ${service.constructor.name} to ${this.constructor.name}`
-                );
+            if (this.verbose) LogHelper.info(`[DB] assigning ${service.constructor.name} to ${this.constructor.name}`);
             // we may can delete the model's provider property because everything is already handler within the model's connecion set here.
 
             service.appModel.provider = this;
@@ -205,26 +186,21 @@ export abstract class BaseProvider implements DbProvider {
                 );
             this.addService(service);
         } catch (error: any) {
-            LogHelper.error(
-                `[DB] Failed to assign ${service.constructor.name} to ${this.constructor.name}`
-            );
+            LogHelper.error(`[DB] Failed to assign ${service.constructor.name} to ${this.constructor.name}`);
             throw error;
         }
     }
 
     public async initServicesIndexes() {
         for (const service of this._services) {
-            LogHelper.info(
-                `[DB] provider Initiating indexes of ${service.constructor.name}`
-            );
+            LogHelper.info(`[DB] provider Initiating indexes of ${service.constructor.name}`);
             service.appModel.registerIndexes();
         }
     }
 
     public async removeServicesIndexes() {
         for (const [serviceName, service] of this._services) {
-            if (this.verbose)
-                LogHelper.info(`[DB] Initiating indexes of ${serviceName}`);
+            if (this.verbose) LogHelper.info(`[DB] Initiating indexes of ${serviceName}`);
             service.appModel.removeIndexes();
         }
     }

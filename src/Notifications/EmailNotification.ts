@@ -1,9 +1,6 @@
 import config from "@src/config";
 import { createTransport, Transporter } from "nodemailer";
-import Notification, {
-    NotificationConfig,
-    NotificationContent,
-} from "@src/Notifications/Notification";
+import Notification, { NotificationConfig, NotificationContent } from "@src/Notifications/Notification";
 import EmailTemplate from "@src/Templates/EmailTemplate";
 import EmailContent from "@src/Templates/EmailContent";
 import { NoHtmlSanitizer } from "@src/Security/Sanitizers/NoHtmlSanitizer";
@@ -22,11 +19,7 @@ class EmailNotification extends Notification {
     private _emailTemplate: EmailTemplate;
     private LogHelper: any;
 
-    constructor(
-        config: NotificationConfig,
-        content: NotificationContent,
-        textContent = ""
-    ) {
+    constructor(config: NotificationConfig, content: NotificationContent, textContent = "") {
         super(config, EmailContent.prepare(content));
 
         this._emailTemplate = new EmailTemplate(content.template); //tempalte have already a default in the EmailContent.Prepare.
@@ -41,9 +34,7 @@ class EmailNotification extends Notification {
                 from: config.notifications.email.from,
                 replyTo: config.notifications.email.replyTo,
                 to: this.config.recipient,
-                subject:
-                    this.config.subject ??
-                    `Un courriel de la part de ${config.appName}`,
+                subject: this.config.subject ?? `Un courriel de la part de ${config.appName}`,
                 text: this.contentToTextOnly(),
                 html: await this._emailTemplate.render(this.content),
             };

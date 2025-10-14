@@ -9,11 +9,7 @@ import { ValidationChain } from "express-validator/src/chain/validation-chain";
  * @param isOptional {boolean}
  * @param source {any} it's a param to change from body to params
  */
-const isObjectIdArray = (
-    param: string,
-    isOptional: boolean = true,
-    source = body
-): ValidationChain => {
+const isObjectIdArray = (param: string, isOptional: boolean = true, source = body): ValidationChain => {
     const baseChain: ValidationChain = source(param);
     let chain = baseChain.exists({ checkFalsy: true }).bail();
 

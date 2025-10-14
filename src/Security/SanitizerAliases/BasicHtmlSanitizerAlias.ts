@@ -20,9 +20,7 @@ const basicHtmlSanitizerAlias = (
         chain = baseChain.notEmpty().withMessage("Is required");
     }
 
-    return chain
-        .customSanitizer(HtmlSanitizer.validatorCustomSanitizer())
-        .trim();
+    return chain.customSanitizer(HtmlSanitizer.validatorCustomSanitizer()).trim();
 };
 
 export { basicHtmlSanitizerAlias };

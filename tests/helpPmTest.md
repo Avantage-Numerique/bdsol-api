@@ -67,13 +67,13 @@ pm.test("async test", function (done) {
 
 - `pm.response.to.have.status(201);` renverra la réponse -->
 
-            AssertionError: expected response to have status code 201 but got 200
+                AssertionError: expected response to have status code 201 but got 200
 
 - `pm.expect(pm.response.code).to.equal(201);` renverra la réponse -->
   AssertionError: expected 200 to equal 201
 - `pm.expect(false, 'nooo why fail??').to.be.ok;` _(noter le message d'erreur personnalisé)_ renverra la réponse -->
 
-            AssertionError: nooo why fail??: expected false to be truthy
+                AssertionError: nooo why fail??: expected false to be truthy
 
 Il sera pertinent d'utiliser différentes fonctions `pm.test` pour séparer des sections d'assertions. Par exemple, une pour valider le status de retour, une autre le schéma et les données etc. Cela permettra de cibler plus facilement l'erreur en cause d'un test échoué.
 
@@ -216,15 +216,7 @@ const schema = {
                 createdAt: { type: "string" },
                 updatedAt: { type: "string" },
             },
-            required: [
-                "_id",
-                "nom",
-                "prenom",
-                "surnom",
-                "description",
-                "createdAt",
-                "updatedAt",
-            ],
+            required: ["_id", "nom", "prenom", "surnom", "description", "createdAt", "updatedAt"],
         },
     },
     required: ["error", "code", "message", "errors", "data"],
@@ -308,11 +300,7 @@ _Requête "CreateMultiple" Section Pre-request Script_
 const tableNom = ["Falconne", "Falconne", "Yitubi"];
 const tablePrenom = ["Jimmy", "Theresa", "Markiplier"];
 const tableSurnom = ["Jimmy", "Bimbo", "Mark"];
-const tableDescription = [
-    "Grand Mafioso et traitre au grand coeur",
-    "Fille du mafieux",
-    "Youtubeur",
-];
+const tableDescription = ["Grand Mafioso et traitre au grand coeur", "Fille du mafieux", "Youtubeur"];
 
 if (!pm.environment.has("index")) pm.environment.set("index", Number(0));
 

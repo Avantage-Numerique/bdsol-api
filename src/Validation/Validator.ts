@@ -67,11 +67,7 @@ export default class Validator {
 
         //Object empty check
         if (!emptyOk) {
-            if (
-                data == undefined ||
-                typeof data != "object" ||
-                Object.entries(data).length == 0
-            ) {
+            if (data == undefined || typeof data != "object" || Object.entries(data).length == 0) {
                 message += "\n L'objet à valider est vide.";
                 isValid = false;
                 return { isValid, message };
@@ -89,13 +85,8 @@ export default class Validator {
 
                 //Remove (gte, lte) operator if needed (those are for QueryBuilder)
                 if (dataField !== undefined) {
-                    if (
-                        dataField.toString().indexOf("gte:") == 0 ||
-                        dataField.toString().indexOf("lte:") == 0
-                    ) {
-                        dataField = dataField
-                            .toString()
-                            .substring(4, dataField.toString().length);
+                    if (dataField.toString().indexOf("gte:") == 0 || dataField.toString().indexOf("lte:") == 0) {
+                        dataField = dataField.toString().substring(4, dataField.toString().length);
                     }
                 }
 
@@ -109,17 +100,11 @@ export default class Validator {
 
                 //Verify rule if data is there |OR| if data is not but should be (isDefined)
                 if (
-                    (dataField !== undefined &&
-                        typeof dataField !== "undefined") ||
-                    ((dataField == undefined ||
-                        typeof dataField == "undefined") &&
+                    (dataField !== undefined && typeof dataField !== "undefined") ||
+                    ((dataField == undefined || typeof dataField == "undefined") &&
                         ruleSet[field].includes("isDefined"))
                 ) {
-                    const ruleMsg = this.isdefined.handle(
-                        rule,
-                        dataField,
-                        param
-                    );
+                    const ruleMsg = this.isdefined.handle(rule, dataField, param);
                     if (ruleMsg != "OK") {
                         message += ruleMsg;
                         isValid = false;

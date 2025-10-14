@@ -37,14 +37,7 @@ export default class Record {
     public file_path: any;
     public file_buffer: any;
 
-    constructor(
-        data: any,
-        files: any,
-        userId: any,
-        entityId: string,
-        mediaField: string,
-        entityType: string
-    ) {
+    constructor(data: any, files: any, userId: any, entityId: string, mediaField: string, entityType: string) {
         const file = files[mediaField][0];
         this.userId = userId;
         this.mediaField = mediaField;
@@ -62,17 +55,10 @@ export default class Record {
                 ],
                 this.extension
             );
-            this.filenameNoExt = FileStorage.removeExtension(
-                this.filenameAndExt
-            );
+            this.filenameNoExt = FileStorage.removeExtension(this.filenameAndExt);
         } else {
             this.filenameNoExt = FileStorage.generateFilename(
-                [
-                    mediaField,
-                    this.userId,
-                    FileStorage.getUniquePrefix(),
-                    file.originalname,
-                ],
+                [mediaField, this.userId, FileStorage.getUniquePrefix(), file.originalname],
                 ""
             );
             this.filenameAndExt = this.filenameNoExt;
@@ -80,20 +66,10 @@ export default class Record {
         this.entityType = entityType;
         this.entityTypePath = entityType.toLowerCase();
         this.entityId = entityId;
-        this.pathNoFilename = FileStorage.generatePath(
-            this.entityTypePath,
-            this.entityId,
-            PublicStorage.basePath
-        ); // I did add the third parameters for relative purposes, but it's weird.
+        this.pathNoFilename = FileStorage.generatePath(this.entityTypePath, this.entityId, PublicStorage.basePath); // I did add the third parameters for relative purposes, but it's weird.
         this.pathWithFilename = this.pathNoFilename + "/" + this.filenameAndExt;
 
-        this.url =
-            "/medias/" +
-            this.entityTypePath +
-            "/" +
-            this.entityId +
-            "/" +
-            this.filenameAndExt;
+        this.url = "/medias/" + this.entityTypePath + "/" + this.entityId + "/" + this.filenameAndExt;
 
         //Media info
         if (data !== undefined) {

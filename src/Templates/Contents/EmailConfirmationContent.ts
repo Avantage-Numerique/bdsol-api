@@ -1,10 +1,6 @@
 import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
 
-const EmailConfirmationContent: any = (
-    welcomeName: string,
-    link: string,
-    additionnalContext: any = {}
-) => {
+const EmailConfirmationContent: any = (welcomeName: string, link: string, additionnalContext: any = {}) => {
     const baseData = getTemplateBaseData();
     return {
         context: {

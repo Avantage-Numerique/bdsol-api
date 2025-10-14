@@ -35,12 +35,8 @@ class UsersController extends AbstractController {
         return UsersController._instance;
     }
 
-    public async createUserHistory(
-        req: any,
-        res: any
-    ): Promise<ApiResponseContract> {
-        const userHistoryService: UsersHistoryService =
-            UsersHistoryService.getInstance(UserHistory.getInstance());
+    public async createUserHistory(req: any, res: any): Promise<ApiResponseContract> {
+        const userHistoryService: UsersHistoryService = UsersHistoryService.getInstance(UserHistory.getInstance());
         const response: any = res.serviceResponse;
         const action: string = res.serviceResponse.action;
         try {

@@ -30,12 +30,7 @@ export class ErrorResponse extends ApiResponse {
             singleError = ErrorResponse.getDefaultError();
         }
 
-        return ErrorResponse.createWithMultipleErrors(
-            singleError,
-            code,
-            message,
-            data
-        );
+        return ErrorResponse.createWithMultipleErrors(singleError, code, message, data);
     }
 
     /**

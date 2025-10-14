@@ -25,19 +25,12 @@ export default class HttpError extends Error {
      * @param {boolean} log - Si on log l'erreur @default true
      * @returns {ApiResponseContract}
      */
-    static NotAcceptable(
-        message: string = "",
-        log = true
-    ): ApiResponseContract {
+    static NotAcceptable(message: string = "", log = true): ApiResponseContract {
         if (log) {
             LogHelper.error(ReasonPhrases.NOT_ACCEPTABLE, message);
         }
 
-        return ErrorResponse.create(
-            new Error(ReasonPhrases.NOT_ACCEPTABLE),
-            StatusCodes.NOT_ACCEPTABLE,
-            message
-        );
+        return ErrorResponse.create(new Error(ReasonPhrases.NOT_ACCEPTABLE), StatusCodes.NOT_ACCEPTABLE, message);
     }
 
     /**
@@ -50,29 +43,14 @@ export default class HttpError extends Error {
      *      @returns {ServiceResponse}
      */
     static NotImplemented(message: string = ""): ApiResponseContract {
-        LogHelper.error(
-            ReasonPhrases.NOT_IMPLEMENTED,
-            StatusCodes.NOT_IMPLEMENTED,
-            message
-        );
-        return ErrorResponse.create(
-            new Error(ReasonPhrases.NOT_IMPLEMENTED),
-            StatusCodes.NOT_IMPLEMENTED,
-            message
-        );
+        LogHelper.error(ReasonPhrases.NOT_IMPLEMENTED, StatusCodes.NOT_IMPLEMENTED, message);
+        return ErrorResponse.create(new Error(ReasonPhrases.NOT_IMPLEMENTED), StatusCodes.NOT_IMPLEMENTED, message);
     }
 
     static Unauthorized(message: string = "") {
-        const msg: string =
-            message !== ""
-                ? message
-                : "Ce chemin d'accès nécessiste un token pour être utilisé.";
+        const msg: string = message !== "" ? message : "Ce chemin d'accès nécessiste un token pour être utilisé.";
 
-        LogHelper.error(
-            ReasonPhrases.UNAUTHORIZED,
-            StatusCodes.UNAUTHORIZED,
-            msg
-        );
+        LogHelper.error(ReasonPhrases.UNAUTHORIZED, StatusCodes.UNAUTHORIZED, msg);
 
         const unauthorizedError: HttpError = new HttpError(msg);
         unauthorizedError.name = "UNAUTHORIZED";

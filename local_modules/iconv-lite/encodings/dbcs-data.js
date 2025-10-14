@@ -95,9 +95,7 @@ module.exports = {
     gbk: {
         type: "_dbcs",
         table: function () {
-            return require("./tables/cp936.json").concat(
-                require("./tables/gbk-added.json")
-            );
+            return require("./tables/cp936.json").concat(require("./tables/gbk-added.json"));
         },
     },
     xgbk: "gbk",
@@ -111,9 +109,7 @@ module.exports = {
     gb18030: {
         type: "_dbcs",
         table: function () {
-            return require("./tables/cp936.json").concat(
-                require("./tables/gbk-added.json")
-            );
+            return require("./tables/cp936.json").concat(require("./tables/gbk-added.json"));
         },
         gb18030: function () {
             return require("./tables/gb18030-ranges.json");
@@ -183,9 +179,7 @@ module.exports = {
     big5hkscs: {
         type: "_dbcs",
         table: function () {
-            return require("./tables/cp950.json").concat(
-                require("./tables/big5-added.json")
-            );
+            return require("./tables/cp950.json").concat(require("./tables/big5-added.json"));
         },
         encodeSkipVals: [0xa2cc],
     },

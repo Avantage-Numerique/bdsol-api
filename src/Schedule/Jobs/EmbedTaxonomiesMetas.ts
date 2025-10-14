@@ -33,31 +33,21 @@ const EmbedTaxonomiesMetas = async () => {
         const page: number = 1;
         const totalPages: number = totalTaxonomies / chunk;
 
-        LogHelper.info(
-            `[Job][EmbedTaxonomiesMetas] chunk size : ${chunk}, pages :  ${page} / ${totalPages}`
-        );
-        LogHelper.info(
-            `[Job][EmbedTaxonomiesMetas] preparing chunking ${(page - 1) * chunk}; ${page * chunk}`
-        );
+        LogHelper.info(`[Job][EmbedTaxonomiesMetas] chunk size : ${chunk}, pages :  ${page} / ${totalPages}`);
+        LogHelper.info(`[Job][EmbedTaxonomiesMetas] preparing chunking ${(page - 1) * chunk}; ${page * chunk}`);
 
         //  Loop through chunk of taxonomy.
         for (let i = (page - 1) * chunk; i < page * chunk; i++) {
             const taxonomy = taxonomies[i];
 
             if (taxonomy) {
-                LogHelper.info(
-                    `[Job][EmbedTaxonomiesMetas] Searching for entities tagged with : ${taxonomy.name}`
-                );
+                LogHelper.info(`[Job][EmbedTaxonomiesMetas] Searching for entities tagged with : ${taxonomy.name}`);
 
                 // execute an async search to get all the entity with this taxonmy
-                const results: any = await search.findEntityLinkedToTaxonomy(
-                    taxonomy._id
-                );
+                const results: any = await search.findEntityLinkedToTaxonomy(taxonomy._id);
 
                 if (taxonomy.meta?.count !== results.length) {
-                    LogHelper.info(
-                        `[Job][EmbedTaxonomiesMetas] embeding : ${results.length} in ${taxonomy.name}`
-                    );
+                    LogHelper.info(`[Job][EmbedTaxonomiesMetas] embeding : ${results.length} in ${taxonomy.name}`);
                     // embed target metas in the meta property of the taxonomy document.
                     await service.embedCount(taxonomy, results); //          total Count
                     //Count per entity types ?

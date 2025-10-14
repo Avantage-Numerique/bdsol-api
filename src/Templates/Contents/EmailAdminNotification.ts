@@ -1,7 +1,4 @@
-const EmailAdminNotification: any = (
-    communicationObject: any,
-    additionnalContext: any = {}
-) => {
+const EmailAdminNotification: any = (communicationObject: any, additionnalContext: any = {}) => {
     return {
         context: {
             welcome: `Salut,`, //to define from the content.//getter to concatenate ?
@@ -15,8 +12,7 @@ const EmailAdminNotification: any = (
                 reportedEntityId : ${communicationObject?.reportedEntityId ?? "-"}<br/>
                 reportedEntityType : ${communicationObject?.reportedEntityType ?? "-"}<br/>
                 reportedEntitySlug : ${communicationObject?.reportedEntitySlug ?? "-"}<br/>`,
-            conclusion:
-                "<br/>Merci de traitez cette demande comme il se doit :)",
+            conclusion: "<br/>Merci de traitez cette demande comme il se doit :)",
             /* cta: {
                 link: `${link}`,//to define from the content
                 label: "Se connecter à avnu.ca"

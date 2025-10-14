@@ -102,17 +102,11 @@ class SearchRoutes extends AbstractRoute {
         return router;
     }
 
-    public setupAdditionnalPublicRoutes(
-        router: express.Router
-    ): express.Router {
+    public setupAdditionnalPublicRoutes(router: express.Router): express.Router {
         return router;
     }
 
-    public async fetchHomePageEntityHandler(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
+    public async fetchHomePageEntityHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
         res.serviceResponse = SuccessResponse.create(
             await this.searchResults_instance.lastUpdatedEntities(),
             StatusCodes.OK,
@@ -121,22 +115,14 @@ class SearchRoutes extends AbstractRoute {
         return next();
     }
 
-    public async searchByTypeHandler(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
-        const apiQueryLimit = parseInt(
-            process?.env?.QUERY_DEFAULT_LIMIT ?? "50"
-        );
+    public async searchByTypeHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        const apiQueryLimit = parseInt(process?.env?.QUERY_DEFAULT_LIMIT ?? "50");
         const type: string = req.body?.data?.type ?? "";
         const limit: number =
-            parseInt(req.body?.data?.limit) > 0 &&
-            parseInt(req.body?.data?.limit) <= apiQueryLimit
+            parseInt(req.body?.data?.limit) > 0 && parseInt(req.body?.data?.limit) <= apiQueryLimit
                 ? req.body.data.limit
                 : apiQueryLimit;
-        let skip: number =
-            parseInt(req.body?.data?.skip) >= 0 ? req.body.data.skip : 0;
+        let skip: number = parseInt(req.body?.data?.skip) >= 0 ? req.body.data.skip : 0;
 
         //Added to dismiss scientific notation (e.g. 2e+53)
         if (/[^0-9]/.test(req.body?.data?.skip)) {
@@ -150,24 +136,13 @@ class SearchRoutes extends AbstractRoute {
             count = await this.searchResults_instance.countByType(type);
             //If count > skip the page exist.
             if (count?.data != undefined && count.data > skip - limit)
-                res.serviceResponse =
-                    await this.searchResults_instance.searchByType(
-                        type,
-                        skip,
-                        limit
-                    );
+                res.serviceResponse = await this.searchResults_instance.searchByType(type, skip, limit);
             //else fetch last page, because skip number is too big to be fetched
             else {
-                if (count.data % limit != 0)
-                    realSkip = count.data - (count.data % limit);
+                if (count.data % limit != 0) realSkip = count.data - (count.data % limit);
                 else realSkip = count.data - limit;
 
-                res.serviceResponse =
-                    await this.searchResults_instance.searchByType(
-                        type,
-                        realSkip,
-                        limit
-                    );
+                res.serviceResponse = await this.searchResults_instance.searchByType(type, realSkip, limit);
             }
         }
 
@@ -186,38 +161,20 @@ class SearchRoutes extends AbstractRoute {
         return next();
     }
 
-    public async fullSearchHandler(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
-        const searchIndex = req.query.searchIndex
-            ? decodeURI(req.query.searchIndex.toString())
-            : "";
-        let textSearchResults =
-            await this.searchResults_instance.getTextSearchResult(searchIndex);
-        const regexSearchResults =
-            await this.searchSuggestions_instance.getTextSearchSuggestions(
-                searchIndex
-            );
+    public async fullSearchHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        const searchIndex = req.query.searchIndex ? decodeURI(req.query.searchIndex.toString()) : "";
+        let textSearchResults = await this.searchResults_instance.getTextSearchResult(searchIndex);
+        const regexSearchResults = await this.searchSuggestions_instance.getTextSearchSuggestions(searchIndex);
 
         if (textSearchResults == undefined) textSearchResults = [];
 
         const uniqueResults: any[] = [];
-        const combinedResults: any[] = [
-            ...textSearchResults,
-            ...regexSearchResults,
-        ];
+        const combinedResults: any[] = [...textSearchResults, ...regexSearchResults];
         combinedResults.forEach((elem) => {
-            if (!uniqueResults.some((unique) => unique._id == elem._id))
-                uniqueResults.push(elem);
+            if (!uniqueResults.some((unique) => unique._id == elem._id)) uniqueResults.push(elem);
         });
 
-        res.serviceResponse = SuccessResponse.create(
-            uniqueResults,
-            StatusCodes.OK,
-            ReasonPhrases.OK
-        );
+        res.serviceResponse = SuccessResponse.create(uniqueResults, StatusCodes.OK, ReasonPhrases.OK);
         return next();
     }
 
@@ -229,20 +186,11 @@ class SearchRoutes extends AbstractRoute {
      * @param next {NextFunction}
      * @return {Promise<any>}
      */
-    public async textSearchSuggestionsHandler(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
-        const textSearchSuggestions =
-            await this.searchSuggestions_instance.getTextSearchSuggestions(
-                req.query.searchIndex?.toString()
-            );
-        res.serviceResponse = SuccessResponse.create(
-            textSearchSuggestions,
-            StatusCodes.OK,
-            ReasonPhrases.OK
+    public async textSearchSuggestionsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        const textSearchSuggestions = await this.searchSuggestions_instance.getTextSearchSuggestions(
+            req.query.searchIndex?.toString()
         );
+        res.serviceResponse = SuccessResponse.create(textSearchSuggestions, StatusCodes.OK, ReasonPhrases.OK);
         //res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.INTERNAL_SERVER_ERROR, "SearchSuggestion failed to find with request error:"+e, [])
         return next();
     }
@@ -255,67 +203,37 @@ class SearchRoutes extends AbstractRoute {
      * @param next {NextFunction}
      * @return {Promise<any>}
      */
-    public async textSearchResultsHandler(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
-        const textSearchResults =
-            await this.searchResults_instance.getTextSearchResult(
-                req.query.searchIndex?.toString()
-            );
-        //Send back full (DTO) of each entity search result in an array sorted,
-        res.serviceResponse = SuccessResponse.create(
-            textSearchResults,
-            StatusCodes.OK,
-            ReasonPhrases.OK
+    public async textSearchResultsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        const textSearchResults = await this.searchResults_instance.getTextSearchResult(
+            req.query.searchIndex?.toString()
         );
+        //Send back full (DTO) of each entity search result in an array sorted,
+        res.serviceResponse = SuccessResponse.create(textSearchResults, StatusCodes.OK, ReasonPhrases.OK);
         return next();
     }
 
-    public async nearTaxonomyToSearchIndex(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
-        const nearTaxonomy =
-            await this.searchSuggestions_instance.findNearTaxonomy(
-                req.query.searchIndex?.toString()
-            );
+    public async nearTaxonomyToSearchIndex(req: Request, res: Response, next: NextFunction): Promise<any> {
+        const nearTaxonomy = await this.searchSuggestions_instance.findNearTaxonomy(req.query.searchIndex?.toString());
         let linkedEntityToNearestTaxonomy = [];
         //Find linked entity if nearestTaxo exist
         if (nearTaxonomy?.nearestTaxonomy?._id != undefined)
-            linkedEntityToNearestTaxonomy =
-                await this.searchResults_instance.findEntityLinkedToTaxonomy(
-                    nearTaxonomy.nearestTaxonomy._id
-                );
+            linkedEntityToNearestTaxonomy = await this.searchResults_instance.findEntityLinkedToTaxonomy(
+                nearTaxonomy.nearestTaxonomy._id
+            );
 
         const nearTaxonomyResponseObject = {
             ...nearTaxonomy,
             linkedEntityToNearestTaxonomy: linkedEntityToNearestTaxonomy,
         };
-        res.serviceResponse = SuccessResponse.create(
-            nearTaxonomyResponseObject,
-            StatusCodes.OK,
-            ReasonPhrases.OK
-        );
+        res.serviceResponse = SuccessResponse.create(nearTaxonomyResponseObject, StatusCodes.OK, ReasonPhrases.OK);
         return next();
     }
 
-    public async taxonomyLinkedEntitiesHandler(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
-        const linkedEntityToTaxonomyArray =
-            await this.searchResults_instance.findEntityLinkedToTaxonomy(
-                req.params.linkId
-            );
-        res.serviceResponse = SuccessResponse.create(
-            linkedEntityToTaxonomyArray,
-            StatusCodes.OK,
-            ReasonPhrases.OK
+    public async taxonomyLinkedEntitiesHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        const linkedEntityToTaxonomyArray = await this.searchResults_instance.findEntityLinkedToTaxonomy(
+            req.params.linkId
         );
+        res.serviceResponse = SuccessResponse.create(linkedEntityToTaxonomyArray, StatusCodes.OK, ReasonPhrases.OK);
         //res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Search TagResult failed to find entity linked to taxonomy with error: "+e, []);
         return next();
     }
@@ -325,27 +243,17 @@ class SearchRoutes extends AbstractRoute {
         res: Response,
         next: NextFunction
     ): Promise<any> {
-        const taxonomyLinkedEntities =
-            await this.searchResults_instance.getLinkedEntitiesToTaxonomyByCatAndSlug(
-                req.params.category,
-                req.params.slug
-            );
-        res.serviceResponse = SuccessResponse.create(
-            taxonomyLinkedEntities,
-            StatusCodes.OK,
-            ReasonPhrases.OK
+        const taxonomyLinkedEntities = await this.searchResults_instance.getLinkedEntitiesToTaxonomyByCatAndSlug(
+            req.params.category,
+            req.params.slug
         );
+        res.serviceResponse = SuccessResponse.create(taxonomyLinkedEntities, StatusCodes.OK, ReasonPhrases.OK);
         //res.serviceResponse = ErrorResponse.create(new Error, StatusCodes.BAD_REQUEST, "Search TagResult failed to find entity linked to taxonomy with error: "+e, []);
         return next();
     }
 
-    public async aggregateAllHandler(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
-        let skip: number =
-            parseInt(req.body?.data?.skip) >= 0 ? req.body.data.skip : 0;
+    public async aggregateAllHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        let skip: number = parseInt(req.body?.data?.skip) >= 0 ? req.body.data.skip : 0;
         const limit: number = req.body?.data?.limit ?? 16;
         const sort: number = req.body?.data?.sort === "asc" ? 1 : -1;
 
@@ -355,11 +263,7 @@ class SearchRoutes extends AbstractRoute {
         }
         console.log("Route", "skip", skip, "limit", limit, "sort", sort);
 
-        let allEntityInOrder = await this.searchResults_instance.searchPaginate(
-            skip,
-            limit,
-            sort
-        );
+        let allEntityInOrder = await this.searchResults_instance.searchPaginate(skip, limit, sort);
         let aggregationPaginated = allEntityInOrder.results ?? null;
 
         let paginationMeta = {};
@@ -372,12 +276,7 @@ class SearchRoutes extends AbstractRoute {
             let newSkip = skip;
             if (allEntityInOrder.meta.count <= skip) {
                 newSkip = (pageCount - 1) * limit;
-                allEntityInOrder =
-                    await this.searchResults_instance.searchPaginate(
-                        newSkip,
-                        limit,
-                        sort
-                    );
+                allEntityInOrder = await this.searchResults_instance.searchPaginate(newSkip, limit, sort);
                 aggregationPaginated = allEntityInOrder.results ?? null;
             }
             const currentPage = Math.ceil(skip / limit) + 1;
@@ -387,16 +286,11 @@ class SearchRoutes extends AbstractRoute {
                     skipped: newSkip,
                     limit: limit,
                     pageCount: pageCount,
-                    currentPage:
-                        currentPage > pageCount ? pageCount : currentPage,
+                    currentPage: currentPage > pageCount ? pageCount : currentPage,
                 },
             }; // meta override.
         }
-        res.serviceResponse = SuccessResponse.create(
-            aggregationPaginated,
-            StatusCodes.OK,
-            ReasonPhrases.OK
-        );
+        res.serviceResponse = SuccessResponse.create(aggregationPaginated, StatusCodes.OK, ReasonPhrases.OK);
         res.serviceResponse.meta = paginationMeta;
 
         /*

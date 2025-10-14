@@ -63,9 +63,7 @@ class StaticContentsRoutes extends AbstractRoute {
      * Allow routes Manager to declare route on the same router.
      * @param router {express.Router} The router to associate other routes, at the target Routes scope.
      */
-    public setupAdditionnalPublicRoutes(
-        router: express.Router
-    ): express.Router {
+    public setupAdditionnalPublicRoutes(router: express.Router): express.Router {
         return router;
     }
 
@@ -75,14 +73,9 @@ class StaticContentsRoutes extends AbstractRoute {
      * @param res {Response}
      * @param next {NextFunction}
      */
-    public async getByUriParamsHandler(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
+    public async getByUriParamsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
         if (req.params["slug"] === "licences") {
-            res.serviceResponse =
-                await this.controllerInstance.getLicencesContent();
+            res.serviceResponse = await this.controllerInstance.getLicencesContent();
         }
 
         return next();
@@ -96,10 +89,7 @@ class StaticContentsRoutes extends AbstractRoute {
      */
     public async viewEmailMedia(req: Request, res: Response): Promise<any> {
         const { filename } = req.params;
-        await SendMedia(
-            `${StaticPublicStorage.basePath}/emails/${filename}`,
-            res
-        );
+        await SendMedia(`${StaticPublicStorage.basePath}/emails/${filename}`, res);
     }
 
     /**
@@ -108,43 +98,21 @@ class StaticContentsRoutes extends AbstractRoute {
      * @param res {Response}
      * @param next {NextFunction}
      */
-    public async getByTwoLevelUriParamsHandler(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
+    public async getByTwoLevelUriParamsHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
         if (req.params["slug"] === "licences") {
-            res.serviceResponse =
-                await this.controllerInstance.getLicencesContent();
+            res.serviceResponse = await this.controllerInstance.getLicencesContent();
         }
 
-        if (
-            req.params["slug"] === "licence" &&
-            req.params["secondSlug"] !== undefined
-        ) {
-            res.serviceResponse =
-                await this.controllerInstance.getTargetLicenceContent(
-                    req.params["secondSlug"]
-                );
+        if (req.params["slug"] === "licence" && req.params["secondSlug"] !== undefined) {
+            res.serviceResponse = await this.controllerInstance.getTargetLicenceContent(req.params["secondSlug"]);
         }
 
         return next();
     }
 
-    public async staticContentNotFound(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<any> {
-        if (
-            res.serviceResponse === undefined ||
-            res.serviceResponse === null ||
-            res.serviceResponse === ""
-        ) {
-            res.serviceResponse = ErrorResponse.create(
-                new Error(ReasonPhrases.NOT_FOUND),
-                StatusCodes.NOT_FOUND
-            );
+    public async staticContentNotFound(req: Request, res: Response, next: NextFunction): Promise<any> {
+        if (res.serviceResponse === undefined || res.serviceResponse === null || res.serviceResponse === "") {
+            res.serviceResponse = ErrorResponse.create(new Error(ReasonPhrases.NOT_FOUND), StatusCodes.NOT_FOUND);
         }
         return next();
     }
