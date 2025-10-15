@@ -1,10 +1,9 @@
 ---
 name: Ajout de fonctionnalité
 about: Suggérez votre idée pour le projet
-title: ''
+title: ""
 labels: ajout de fonctionnalité
-assignees: ''
-
+assignees: ""
 ---
 
 **Est-ce que la fonctionnalité règle un problème existant ?**

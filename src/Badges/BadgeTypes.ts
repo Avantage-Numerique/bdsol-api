@@ -1,15 +1,12 @@
-import {insertBadgeInArray, removeBadgeFromArray} from "./MiddlewareInsertBadges";
+import { insertBadgeInArray, removeBadgeFromArray } from "./MiddlewareInsertBadges";
 
 class BadgeTypes {
-
     /**
      * @param CB{any}
      * @method CB.condition
      */
-    static badges:any =
-    {
-        CB :
-        {
+    static badges: any = {
+        CB: {
             name: "CB",
             fullName: "Croissant boréal",
             label: "Croissant boréal",
@@ -17,31 +14,29 @@ class BadgeTypes {
             iconPath: "/badges-icons/badge-croissant-boreal.svg",
             iconAlt: "Badge Croissant boréal",
             iconDescription: "",
-            condition(document:any){
-                if(document?.region !== undefined){
-                    if(BadgeTypes.badges.CB.acceptedRegion.includes(document.region))
+            condition(document: any) {
+                if (document?.region !== undefined) {
+                    if (BadgeTypes.badges.CB.acceptedRegion.includes(document.region))
                         insertBadgeInArray(document.badges, "CB");
-                    else
-                        removeBadgeFromArray(document.badges, "CB");
+                    else removeBadgeFromArray(document.badges, "CB");
                 }
             },
-            acceptedRegion:["abitibi-temiscamingue", "north Ontario", "baies-james"],
-            type:"Badge"
-        }
+            acceptedRegion: ["abitibi-temiscamingue", "north Ontario", "baies-james"],
+            type: "Badge",
+        },
+    };
+
+    static allBadgeTypes() {
+        return Object.keys(this.badges);
     }
 
-    static allBadgeTypes(){
-        return Object.keys(this.badges)
-    }
-
-    static populateBadgesArray(document:any){
+    static populateBadgesArray(document: any) {
         //If badges exist
-        const populatedBadge :any = [];
-        if(Array.isArray(document.badges) && document.badges.length > 0)
-        {
+        const populatedBadge: any = [];
+        if (Array.isArray(document.badges) && document.badges.length > 0) {
             document.badges.forEach((elem: any) => {
-                if(BadgeTypes.badges?.[elem] !== undefined){
-                    populatedBadge.push(BadgeTypes.badges[elem])
+                if (BadgeTypes.badges?.[elem] !== undefined) {
+                    populatedBadge.push(BadgeTypes.badges[elem]);
                 }
             });
         }
@@ -50,4 +45,4 @@ class BadgeTypes {
     }
 }
 
-export default BadgeTypes
+export default BadgeTypes;

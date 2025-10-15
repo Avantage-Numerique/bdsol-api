@@ -1,10 +1,9 @@
-import {NextFunction, Request, Response} from "express";
+import { NextFunction, Request, Response } from "express";
 
 /**
  * Express JS middleware for verifying the token.
  */
 export class AddUserToRequest {
-
     /**
      * This rith in a method return an error in typescript return an error. The types are not good.
      */
@@ -12,8 +11,7 @@ export class AddUserToRequest {
     /**
      * Getter for the anonumous function that will act as the middleware, with the parameters and the next() call.
      */
-    public static middlewareFunction()
-    {
+    public static middlewareFunction() {
         /**
          * The AddUserToRequest anonymous function.
          * @param req {Request}
@@ -23,7 +21,6 @@ export class AddUserToRequest {
          */
         return async function (req: Request, res: Response, next: NextFunction) {
             next();
-        }
+        };
     }
-
 }

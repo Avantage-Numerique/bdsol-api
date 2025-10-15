@@ -1,11 +1,11 @@
 import express from "express";
 import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 import EmailNotification from "@src/Notifications/EmailNotification";
-import {StatusCodes} from "http-status-codes";
-import {EmailConfirmationContent} from "@src/Templates/Contents/EmailConfirmationContent";
-import config, {getApiConfig} from "@src/config";
+import { StatusCodes } from "http-status-codes";
+import { EmailConfirmationContent } from "@src/Templates/Contents/EmailConfirmationContent";
+import config, { getApiConfig } from "@src/config";
 import PublicTemplate from "@src/Templates/PublicTemplate";
-import {getTemplateBaseData} from "@src/Templates/Emails/EmailData";
+import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
 import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
@@ -15,70 +15,84 @@ const ApiRouter = express.Router();
 ApiRouter.get("/", async (req, res) => {
     const updatedConfig = getApiConfig();
     const baseData = getTemplateBaseData();
-    const index = new PublicTemplate();//template have already a default in the EmailContent.Prepare.
-    const title:string = `${updatedConfig.appName} (version ${updatedConfig.version})`;
-    let body:string = updatedConfig.environnement === 'development' ? `<p>écoute sur le port: ${updatedConfig.port}<br /></p>` : '';
+    const index = new PublicTemplate(); //template have already a default in the EmailContent.Prepare.
+    const title: string = `${updatedConfig.appName} (version ${updatedConfig.version})`;
+    let body: string =
+        updatedConfig.environnement === "development" ? `<p>écoute sur le port: ${updatedConfig.port}<br /></p>` : "";
     body += `<p>${baseData.api.description}</p>`;
-    body += updatedConfig.environnement === 'development' ? `<p>Slow Down Middleware est <strong>${updatedConfig.debugSlowConnection ? 'activé' : 'désactivé'}</strong> et ralenti avec ${updatedConfig.debugSlowDuration}ms</p>` : "";
-    res.set('Content-Type', 'text/html');
+    body +=
+        updatedConfig.environnement === "development"
+            ? `<p>Slow Down Middleware est <strong>${updatedConfig.debugSlowConnection ? "activé" : "désactivé"}</strong> et ralenti avec ${updatedConfig.debugSlowDuration}ms</p>`
+            : "";
+    res.set("Content-Type", "text/html");
     LogHelper.info("Rendering index", baseData);
-    return res.status(StatusCodes.OK).send(await index.render({
-        context: {
-            ...baseData,//basic app and api default string and links
-            ...DefaultEmailTheme,//basic theme for colors and sizes.
-            title: `${title}`,
-            body: `${body}`,
-            meta: {
+    return res.status(StatusCodes.OK).send(
+        await index.render({
+            context: {
+                ...baseData, //basic app and api default string and links
+                ...DefaultEmailTheme, //basic theme for colors and sizes.
                 title: `${title}`,
-                description: `${body}`,
-                author: `${updatedConfig.appName}`
-            }
-        }
-    }));
+                body: `${body}`,
+                meta: {
+                    title: `${title}`,
+                    description: `${body}`,
+                    author: `${updatedConfig.appName}`,
+                },
+            },
+        })
+    );
     //return res.status(StatusCodes.OK).send("OK");
 });
 
 //Disalow indexing for all path of the api.
-ApiRouter.get('/robots.txt', function (req, res) {
-    res.type('text/plain');
+ApiRouter.get("/robots.txt", function (req, res) {
+    res.type("text/plain");
     res.send("User-agent: *\nDisallow: /");
 });
 
-
-ApiRouter.get('/quarante-deux',async (req, res) => {
+ApiRouter.get("/quarante-deux", async (req, res) => {
     const baseData = getTemplateBaseData();
-    const index42 = new PublicTemplate("quarante-deux");//tempalte have already a default in the EmailContent.Prepare.
-    const title:string = `The Answer to the Ultimate Question of Life, the Universe, and Everything`;
-    const body:string = '';
-    res.set('Content-Type', 'text/html');
-    return res.status(StatusCodes.OK).send(await index42.render({
-        context: {
-            ...baseData,//basic app and api default string and links
-            ...DefaultEmailTheme,//basic theme for colors and sizes.
-            title: `${title}`,
-            body: `${body}`,
-            meta: {
+    const index42 = new PublicTemplate("quarante-deux"); //tempalte have already a default in the EmailContent.Prepare.
+    const title: string = `The Answer to the Ultimate Question of Life, the Universe, and Everything`;
+    const body: string = "";
+    res.set("Content-Type", "text/html");
+    return res.status(StatusCodes.OK).send(
+        await index42.render({
+            context: {
+                ...baseData, //basic app and api default string and links
+                ...DefaultEmailTheme, //basic theme for colors and sizes.
                 title: `${title}`,
-                description: `${body}`,
-                author: `${config.appName}`
-            }
-        }
-    }));
+                body: `${body}`,
+                meta: {
+                    title: `${title}`,
+                    description: `${body}`,
+                    author: `${config.appName}`,
+                },
+            },
+        })
+    );
 });
 
-
-ApiRouter.get('/42',async (req, res) => {
-    res.send('<style> body {white-space : pre; background-color : #22211f; color : white}</style>'+
-    '<h1>The Answer to the Ultimate Question of Life, the Universe, and Everything.</h1>'+
-    '<pre><h1 style="font-size:66">'+
-    " ___   ___    _______  "+"<br/>"+
-    "|\\  \\ |\\  \\  /  ___  \\    "+"<br/>"+
-    "\\ \\  \\\\_\\  \\/__/|_/  /|   "+"<br/>"+
-    " \\ \\______  \\__|//  / /  "+"<br/>"+
-    "  \\|_____|\\  \\  /  /_/__  "+"<br/>"+
-    "         \\ \\__\\|\\________\\"+"<br/>"+
-    "          \\|__| \\|_______|"+"<br/>"+
-    '</h1></pre>'
+ApiRouter.get("/42", async (req, res) => {
+    res.send(
+        "<style> body {white-space : pre; background-color : #22211f; color : white}</style>" +
+            "<h1>The Answer to the Ultimate Question of Life, the Universe, and Everything.</h1>" +
+            '<pre><h1 style="font-size:66">' +
+            " ___   ___    _______  " +
+            "<br/>" +
+            "|\\  \\ |\\  \\  /  ___  \\    " +
+            "<br/>" +
+            "\\ \\  \\\\_\\  \\/__/|_/  /|   " +
+            "<br/>" +
+            " \\ \\______  \\__|//  / /  " +
+            "<br/>" +
+            "  \\|_____|\\  \\  /  /_/__  " +
+            "<br/>" +
+            "         \\ \\__\\|\\________\\" +
+            "<br/>" +
+            "          \\|__| \\|_______|" +
+            "<br/>" +
+            "</h1></pre>"
     );
 });
 
@@ -87,43 +101,46 @@ ApiRouter.get("/embed-taxonomies-metas", async (req, res) => {
     await EmbedTaxonomiesMetas();
 });
 
-if (config.environnement === 'development') {
+if (config.environnement === "development") {
     ApiRouter.get("/test-email", async (req, res) => {
-        const testNotification:EmailNotification = new EmailNotification(
+        const testNotification: EmailNotification = new EmailNotification(
             {
-                recipient:"marcandre.martin@gmail.com",
-                subject: "Mam, Confirmez ce courriel pour votre compte sur avnu.ca"
+                recipient: "marcandre.martin@gmail.com",
+                subject: "Mam, Confirmez ce courriel pour votre compte sur avnu.ca",
             },
-            EmailConfirmationContent("mam", "http://localhost:8000/verify-account/ef2254979c0f073a1f75bf03a404fa3b2547cb9bc858c54f06f5571a68a892156602c101370f08ef6d0cd15c3004663dbee15fdb052107da5e5bc30cf16ce4a133c250cda6f1478e25c7614326706af37d5fbec12f545040621cdfdd548d32c984116652d1aab97f7f6a734c19c125f2d610e1528d8529822c1a73912e53e389")
+            EmailConfirmationContent(
+                "mam",
+                "http://localhost:8000/verify-account/ef2254979c0f073a1f75bf03a404fa3b2547cb9bc858c54f06f5571a68a892156602c101370f08ef6d0cd15c3004663dbee15fdb052107da5e5bc30cf16ce4a133c250cda6f1478e25c7614326706af37d5fbec12f545040621cdfdd548d32c984116652d1aab97f7f6a734c19c125f2d610e1528d8529822c1a73912e53e389"
+            )
         );
         //testNotification.send();
-        res.set('Content-Type', 'text/html');
+        res.set("Content-Type", "text/html");
         return res.status(StatusCodes.OK).send(await testNotification.preview());
     });
 
     ApiRouter.get("/sync-db", async (req, res) => {
+        const index = new PublicTemplate("default"); //tempalte have already a default in the EmailContent.Prepare.
+        const title: string = `Syncing db`;
+        const body: string = "Sync prod into staging data only.";
 
-        const index = new PublicTemplate("default");//tempalte have already a default in the EmailContent.Prepare.
-        const title:string = `Syncing db`;
-        let body:string = 'Sync prod into staging data only.';
-
-        res.set('Content-Type', 'text/html');
+        res.set("Content-Type", "text/html");
         const baseData = getTemplateBaseData();
-        return res.status(StatusCodes.OK).send(await index.render({
-            context: {
-                ...baseData,//basic app and api default string and links
-                ...DefaultEmailTheme,//basic theme for colors and sizes.
-                title: `${title}`,
-                body: `${body}`,
-                meta: {
+        return res.status(StatusCodes.OK).send(
+            await index.render({
+                context: {
+                    ...baseData, //basic app and api default string and links
+                    ...DefaultEmailTheme, //basic theme for colors and sizes.
                     title: `${title}`,
-                    description: `${body}`,
-                    author: `${config.appName}`
-                }
-            }
-        }));
+                    body: `${body}`,
+                    meta: {
+                        title: `${title}`,
+                        description: `${body}`,
+                        author: `${config.appName}`,
+                    },
+                },
+            })
+        );
     });
 }
 
-
-export {ApiRouter};
+export { ApiRouter };

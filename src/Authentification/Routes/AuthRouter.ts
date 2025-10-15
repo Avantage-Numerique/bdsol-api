@@ -1,9 +1,8 @@
-import express, {RouterOptions} from "express";
+import express, { RouterOptions } from "express";
 
 //const AuthRouter = express.Router();
 
 export class AuthRouter {
-
     public router;
 
     constructor(options?: RouterOptions) {

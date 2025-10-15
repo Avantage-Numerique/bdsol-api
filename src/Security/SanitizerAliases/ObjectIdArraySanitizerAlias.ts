@@ -1,7 +1,7 @@
-import {IsObjectIdStringValid} from "../Validators/IsObjectidValidator";
-import {ObjectIdStringSanitizer} from "../Sanitizers/ObjectIdStringSanitizer";
-import {body} from "express-validator";
-import {ValidationChain} from "express-validator/src/chain/validation-chain";
+import { IsObjectIdStringValid } from "../Validators/IsObjectidValidator";
+import { ObjectIdStringSanitizer } from "../Sanitizers/ObjectIdStringSanitizer";
+import { body } from "express-validator";
+import { ValidationChain } from "express-validator/src/chain/validation-chain";
 
 /**
  * Optionnal check if the element is set, and if it's an ObjectID.
@@ -9,10 +9,9 @@ import {ValidationChain} from "express-validator/src/chain/validation-chain";
  * @param isOptional {boolean}
  * @param source {any} it's a param to change from body to params
  */
-const isObjectIdArray = (param:string, isOptional:boolean=true, source=body):ValidationChain => {
-
-    const baseChain:ValidationChain = source(param);
-    let chain = baseChain.exists({checkFalsy:true}).bail();
+const isObjectIdArray = (param: string, isOptional: boolean = true, source = body): ValidationChain => {
+    const baseChain: ValidationChain = source(param);
+    let chain = baseChain.exists({ checkFalsy: true }).bail();
 
     if (!isOptional) {
         chain = baseChain.notEmpty();
@@ -20,7 +19,7 @@ const isObjectIdArray = (param:string, isOptional:boolean=true, source=body):Val
 
     return chain
         .custom(IsObjectIdStringValid.validatorCustom())
-        .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
-}
+        .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer());
+};
 
-export {isObjectIdArray}
+export { isObjectIdArray };

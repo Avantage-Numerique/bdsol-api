@@ -1,7 +1,7 @@
-import {IsObjectIdStringValid} from "../Validators/IsObjectidValidator";
-import {ObjectIdStringSanitizer} from "../Sanitizers/ObjectIdStringSanitizer";
-import {body} from "express-validator";
-import {ApiValidatingSanitizingChainType} from "../ExpressValidator/ApiValidatingSanitizingChain";
+import { IsObjectIdStringValid } from "../Validators/IsObjectidValidator";
+import { ObjectIdStringSanitizer } from "../Sanitizers/ObjectIdStringSanitizer";
+import { body } from "express-validator";
+import { ApiValidatingSanitizingChainType } from "../ExpressValidator/ApiValidatingSanitizingChain";
 
 /**
  * Optionnal check if the element is set, and if it's an ObjectID.
@@ -9,10 +9,13 @@ import {ApiValidatingSanitizingChainType} from "../ExpressValidator/ApiValidatin
  * @param isOptional {boolean}
  * @param source {any} it's a param to change from body to params
  */
-const objectIdSanitizerAlias = (param:string, isOptional:boolean=true, source=body):ApiValidatingSanitizingChainType => {
-
-    let chain:ApiValidatingSanitizingChainType = source(param);
-    chain = chain.optional({values:"falsy"})
+const objectIdSanitizerAlias = (
+    param: string,
+    isOptional: boolean = true,
+    source = body
+): ApiValidatingSanitizingChainType => {
+    let chain: ApiValidatingSanitizingChainType = source(param);
+    chain = chain.optional({ values: "falsy" });
 
     if (!isOptional) {
         chain = chain.notEmpty().withMessage("Is required");
@@ -20,8 +23,8 @@ const objectIdSanitizerAlias = (param:string, isOptional:boolean=true, source=bo
 
     return chain
         .custom(IsObjectIdStringValid.validatorCustom())
-        .withMessage(`${(isOptional ? "Optional" : "Required")} Isn't a valid objectID`)
-        .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer())
-}
+        .withMessage(`${isOptional ? "Optional" : "Required"} Isn't a valid objectID`)
+        .customSanitizer(ObjectIdStringSanitizer.validatorCustomSanitizer());
+};
 
-export {objectIdSanitizerAlias}
+export { objectIdSanitizerAlias };

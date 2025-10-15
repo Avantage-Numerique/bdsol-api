@@ -9,34 +9,40 @@ import PlacesController from "@src/Places/Controllers/PlacesController";
 import EquipmentController from "@src/Equipment/Controllers/EquipmentController";
 
 class EntityControllerFactory {
+    public static typeList = ["person", "organisation", "taxonomy", "project", "media", "event", "place", "equipment"];
 
-    public static typeList = ["person", "organisation", "taxonomy", "project", "media", "event", "place", "equipment"]
-
-    public static getControllerFromEntity(entityType:string):AbstractController | undefined{
+    public static getControllerFromEntity(entityType: string): AbstractController | undefined {
         let instance;
-        switch(entityType.toLocaleLowerCase()){
+        switch (entityType.toLocaleLowerCase()) {
             case "person":
-                instance = PersonsController.getInstance();break;
+                instance = PersonsController.getInstance();
+                break;
             case "organisation":
-                instance = OrganisationsController.getInstance();break;
+                instance = OrganisationsController.getInstance();
+                break;
             case "taxonomy":
-                instance = TaxonomyController.getInstance();break;
+                instance = TaxonomyController.getInstance();
+                break;
             case "project":
-                instance = ProjectsController.getInstance();break;
+                instance = ProjectsController.getInstance();
+                break;
             case "event":
-                instance = EventsController.getInstance();break;
+                instance = EventsController.getInstance();
+                break;
             case "media":
-                instance = MediasController.getInstance();break;
+                instance = MediasController.getInstance();
+                break;
             case "place":
-                instance = PlacesController.getInstance();break;
-            case "equipment": 
-                instance = EquipmentController.getInstance();break;
+                instance = PlacesController.getInstance();
+                break;
+            case "equipment":
+                instance = EquipmentController.getInstance();
+                break;
 
-            default:instance = undefined;
+            default:
+                instance = undefined;
         }
         return instance;
     }
-
-    
 }
 export default EntityControllerFactory;

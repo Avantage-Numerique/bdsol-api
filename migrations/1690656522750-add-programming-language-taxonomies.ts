@@ -1,21 +1,21 @@
-import {getDbDriver} from "@database/Migrations/MigrationDbConnexion";
+import { getDbDriver } from "@database/Migrations/MigrationDbConnexion";
 import SeederTaskContract from "@database/Seeders/SeederTaskContract";
-import {taskSeeder} from "@database/Migrations/MigrationTaskSeeder";
+import { taskSeeder } from "@database/Migrations/MigrationTaskSeeder";
 import SeedData from "@database/Seeders/SeedData";
-import {DBDriver} from "@database/Drivers/DBDriver";
+import { DBDriver } from "@database/Drivers/DBDriver";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
-import {ProgramingLanguagePersistantData} from "@src/Data/Taxonomies/ProgramingLanguagePersistantData";
+import { ProgramingLanguagePersistantData } from "@src/Data/Taxonomies/ProgramingLanguagePersistantData";
 
 export async function up(): Promise<void> {
-    const db:DBDriver = getDbDriver();
-    await db.connect();//check this when it's run in the env. of the API already running.
+    const db: DBDriver = getDbDriver();
+    await db.connect(); //check this when it's run in the env. of the API already running.
     if (db?.providers?.data) {
         const persistantDataTasks: Array<SeederTaskContract> = [
             {
                 service: db.providers.data.services.TaxonomyService,
                 data: ProgramingLanguagePersistantData,
-                whereKeys: ['category', 'name']
-            }
+                whereKeys: ["category", "name"],
+            },
         ];
         LogHelper.info("[Migration][add persistant data] task using the taskSeeder");
         await taskSeeder(persistantDataTasks, SeedData);

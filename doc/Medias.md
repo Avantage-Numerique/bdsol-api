@@ -1,12 +1,14 @@
 Retour à la base de [Documention de l"API](readme.md)
 
-# Médias 
+# Médias
+
 Présentement utilisé seulement dans les licences médias.
 Implémenté dans le domaine StaticContent.
 
 Présentement les données sont entré et fetch directement dans un json.
 
 ## GET `/medias/:entity/:id/:fileName`
+
 Get du média afin d"être vue dans le browser.
 
 ### Retour si tout a fonctionné
@@ -14,8 +16,8 @@ Get du média afin d"être vue dans le browser.
 Code : **200** : lorsque les informations sont OK<br>
 **Renvoie le fichier visible dans le browser.**
 
-
 ## GET `/medias/data/:id`
+
 Route publique qui renvoie les données médias grâce au id du média.
 
 ### Retour si tout a fonctionné

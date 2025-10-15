@@ -1,6 +1,5 @@
-import {Document, Schema} from "mongoose";
-import {SubMeta} from "@src/Moderation/Schemas/MetaSchema";
-
+import { Document, Schema } from "mongoose";
+import { SubMeta } from "@src/Moderation/Schemas/MetaSchema";
 
 export interface ScheduleSchema extends Document {
     name: string;
@@ -11,30 +10,29 @@ export interface ScheduleSchema extends Document {
     subMeta: SubMeta;
 }
 
-
 export class Schedule {
-
     /** @static schema */
-    static schema:Schema =
-    new Schema<ScheduleSchema>({
-        name: {
-            type:String
+    static schema: Schema = new Schema<ScheduleSchema>(
+        {
+            name: {
+                type: String,
+            },
+            startDate: {
+                type: Date,
+            },
+            startTime: {
+                type: String,
+            },
+            endDate: {
+                type: Date,
+            },
+            endTime: {
+                type: String,
+            },
+            subMeta: {
+                type: SubMeta.schema,
+            },
         },
-        startDate: {
-            type: Date
-        },
-        startTime: {
-            type: String
-        },
-        endDate:{
-            type: Date
-        },
-        endTime:{
-            type: String
-        },
-        subMeta: {
-            type: SubMeta.schema,
-        }
-    },{ _id : false }
+        { _id: false }
     );
 }

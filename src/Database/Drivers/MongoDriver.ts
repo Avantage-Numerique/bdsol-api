@@ -1,30 +1,28 @@
 import * as mongoDB from "mongodb";
-import {MongoClient, ServerApiVersion} from "mongodb";
+import { MongoClient, ServerApiVersion } from "mongodb";
 import config from "@src/config";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
-import {buildConnectionUrlParams, getConnectionUrl, MongoDbUrlParamsContract} from "@database/Drivers/Connection";
-
+import { buildConnectionUrlParams, getConnectionUrl, MongoDbUrlParamsContract } from "@database/Drivers/Connection";
 
 export class MongoDBDriver {
-
     public driverPrefix: string;
     public isSRV: boolean;
-    public authSource:string;
+    public authSource: string;
     public client: mongoDB.MongoClient;
     public db: string;
     public baseUrl: string;
     public providers: any;
-    public config:any;
-    public haveCredentials:boolean;
-    public urlConfig:MongoDbUrlParamsContract;
-    public timeOut:number;
+    public config: any;
+    public haveCredentials: boolean;
+    public urlConfig: MongoDbUrlParamsContract;
+    public timeOut: number;
 
     public plugins: any;
 
     /**
      * Constructor fo this driver. Object is created 1 time in  ServerController.
      */
-    constructor(driverConfig?:any) {
+    constructor(driverConfig?: any) {
         this.config = driverConfig ?? config.db;
         this.timeOut = 300;
 
@@ -37,21 +35,20 @@ export class MongoDBDriver {
      * Method mandatory in DBDriver, to init this driver.
      */
     public async init() {
-        const url:string = getConnectionUrl(this.urlConfig);
+        const url: string = getConnectionUrl(this.urlConfig);
         this.client = new MongoClient(url, {
-                connectTimeoutMS: this.timeOut,
-                serverApi: {
-                    version: ServerApiVersion.v1,
-                    strict: true,
-                    deprecationErrors: true,
-                },
-                auth: {
-                    username: this.urlConfig.db.user,
-                    password: this.urlConfig.db.password
-                },
-                authSource: this.urlConfig.db.authSource
-            }
-        );
+            connectTimeoutMS: this.timeOut,
+            serverApi: {
+                version: ServerApiVersion.v1,
+                strict: true,
+                deprecationErrors: true,
+            },
+            auth: {
+                username: this.urlConfig.db.user,
+                password: this.urlConfig.db.password,
+            },
+            authSource: this.urlConfig.db.authSource,
+        });
     }
 
     public async connect() {
@@ -65,15 +62,13 @@ export class MongoDBDriver {
         await this.client?.close();
     }
 
-
-    public urlToLog(uri:string):string {
+    public urlToLog(uri: string): string {
         return prepareUriForLoging(uri);
     }
 }
 
-
-const prepareUriForLoging = (uri:string):string => {
-    let creds = uri.slice(uri.indexOf('://')+3, uri.indexOf('@'));
-    let noCreds = uri.split(creds);
+const prepareUriForLoging = (uri: string): string => {
+    const creds = uri.slice(uri.indexOf("://") + 3, uri.indexOf("@"));
+    const noCreds = uri.split(creds);
     return noCreds.join("*****:*****");
-}
+};

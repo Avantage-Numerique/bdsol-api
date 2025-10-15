@@ -10,4 +10,4 @@ const api = new Api();
 const serverController = ServerController.getInstance(api);
 if (serverController !== undefined) serverController.start();
 
-export {api, serverController};
+export { api, serverController };

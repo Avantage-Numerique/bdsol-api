@@ -1,19 +1,18 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import AbstractModel from "@core/Model";
-import type {DbProvider} from "@database/DatabaseDomain";
-import {PlaceSchema} from "@src/Places/Schemas/PlaceSchema";
+import type { DbProvider } from "@database/DatabaseDomain";
+import { PlaceSchema } from "@src/Places/Schemas/PlaceSchema";
 import PlacesService from "@src/Places/Services/PlacesService";
-import {middlewarePopulateProperty} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
-import {Meta} from "@src/Moderation/Schemas/MetaSchema";
-import {populateUser} from "@src/Users/Middlewares/populateUser";
+import { middlewarePopulateProperty } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import { Meta } from "@src/Moderation/Schemas/MetaSchema";
+import { populateUser } from "@src/Users/Middlewares/populateUser";
 
 class Place extends AbstractModel {
-
     /** @protected @static Singleton instance */
     protected static _instance: Place;
 
     /** @public @static Model singleton instance constructor */
-    public static getInstance(doIndexes=true): Place {
+    public static getInstance(doIndexes = true): Place {
         if (Place._instance === undefined) {
             Place._instance = new Place();
 
@@ -21,7 +20,9 @@ class Place extends AbstractModel {
             Place._instance.registerEvents();
 
             //Setting virtuals
-            Place._instance.schema.virtual("type").get( function () { return Place._instance.modelName });
+            Place._instance.schema.virtual("type").get(function () {
+                return Place._instance.modelName;
+            });
 
             if (doIndexes) Place._instance.registerIndexes();
 
@@ -33,32 +34,40 @@ class Place extends AbstractModel {
         return Place._instance;
     }
 
-    public registerIndexes():void {
+    public registerIndexes(): void {
         //Indexes
         Place._instance.schema.index(
-            { name:"text", slug:"text", city:"text", province:"text", country:"text", description:"text" },
+            {
+                name: "text",
+                slug: "text",
+                city: "text",
+                province: "text",
+                country: "text",
+                description: "text",
+            },
             {
                 default_language: "french",
                 //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
-                weights:{
+                weights: {
                     name: 1,
                     city: 1,
                     province: 1,
                     country: 1,
                     slug: 1,
-                    description: 1
-                }
-            });
+                    description: 1,
+                },
+            }
+        );
     }
     public dropIndexes(): void {
         return;
     }
 
     /** @public Model lastName */
-    modelName: string = 'Place';
+    modelName: string = "Place";
 
     /** @public Collection Name in database*/
-    collectionName: string = 'Places';
+    collectionName: string = "Places";
 
     /** @public Connection mongoose */
     connection: mongoose.Connection;
@@ -67,62 +76,63 @@ class Place extends AbstractModel {
     mongooseModel: mongoose.Model<any>;
 
     /** @public Database schema */
-    schema: Schema =
-        new Schema<PlaceSchema>({
+    schema: Schema = new Schema<PlaceSchema>(
+        {
             name: {
                 type: String,
                 minlength: 2,
-                required: true
+                required: true,
             },
             description: {
-                type: String
+                type: String,
             },
             slug: {
                 type: String,
                 slug: "name",
                 slugPaddingSize: 3,
                 index: true,
-                unique: true
+                unique: true,
             },
             mainImage: {
                 type: mongoose.Types.ObjectId,
-                ref : "Media"
+                ref: "Media",
             },
             address: {
-                type: String
+                type: String,
             },
             city: {
-                type: String
+                type: String,
             },
             region: {
-                type: String
+                type: String,
             },
             mrc: {
-                type: String
+                type: String,
             },
             province: {
-                type: String
+                type: String,
             },
             postalCode: {
-                type: String
+                type: String,
             },
             country: {
-                type: String
+                type: String,
             },
             latitude: {
-                type: String
+                type: String,
             },
             longitude: {
-                type: String
+                type: String,
             },
-            meta:{
-                type: Meta.schema
-            }
+            meta: {
+                type: Meta.schema,
+            },
         },
-            {
-                toJSON: {virtuals: true},
-                timestamps: true,
-            });
+        {
+            toJSON: { virtuals: true },
+            timestamps: true,
+        }
+    );
 
     /** @abstract Used to return attributes and rules for each field of this entity. */
     public fieldInfo: any = [];
@@ -135,7 +145,7 @@ class Place extends AbstractModel {
      * @return {Object} the field slug/names.
      */
     get searchSearchableFields(): object {
-        return ["name","description","address","region","mrc","province","country","postalCode"];
+        return ["name", "description", "address", "region", "mrc", "province", "country", "postalCode"];
     }
 
     /**
@@ -146,26 +156,25 @@ class Place extends AbstractModel {
      */
     public dataTransfertObject(document: any) {
         return {
-            _id: document._id ?? '',
-            name: document.name ?? '',
-            description: document.description ?? '',
-            slug: document.slug ?? '',
-            mainImage: document.mainImage ?? '',
-            address: document.address ?? '',
-            city: document.city ?? '',
-            region: document.region ?? '',
-            mrc: document.mrc ?? '',
-            province: document.province ?? '',
-            postalCode: document.postalCode ?? '',
-            country: document.country ?? '',
-            latitude: document.latitude ?? '',
-            longitude: document.longitude ?? '',
-            meta: document.meta ?? '',
-            type: document.type ?? '',
-            createdAt: document.createdAt ?? '',
-            updatedAt: document.updatedAt ?? ''
-
-        }
+            _id: document._id ?? "",
+            name: document.name ?? "",
+            description: document.description ?? "",
+            slug: document.slug ?? "",
+            mainImage: document.mainImage ?? "",
+            address: document.address ?? "",
+            city: document.city ?? "",
+            region: document.region ?? "",
+            mrc: document.mrc ?? "",
+            province: document.province ?? "",
+            postalCode: document.postalCode ?? "",
+            country: document.country ?? "",
+            latitude: document.latitude ?? "",
+            longitude: document.longitude ?? "",
+            meta: document.meta ?? "",
+            type: document.type ?? "",
+            createdAt: document.createdAt ?? "",
+            updatedAt: document.updatedAt ?? "",
+        };
     }
 
     public async documentation(): Promise<any> {
@@ -176,15 +185,15 @@ class Place extends AbstractModel {
      * Register mongoose events, for now pre-save, pre-findOneAndUpdate
      */
     public registerEvents(): void {
-        this.schema.pre('find', function() {
+        this.schema.pre("find", function () {
             middlewarePopulateProperty(this, "mainImage");
 
             //populateUser(this, "meta.requestedBy");
             //populateUser(this, "meta.lastModifiedBy");
         });
 
-        this.schema.pre('findOne', function() {
-            middlewarePopulateProperty(this, 'mainImage');
+        this.schema.pre("findOne", function () {
+            middlewarePopulateProperty(this, "mainImage");
 
             populateUser(this, "meta.requestedBy");
             populateUser(this, "meta.lastModifiedBy");

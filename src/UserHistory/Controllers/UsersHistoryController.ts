@@ -1,20 +1,19 @@
 import UserHistory from "../Models/UserHistory";
 import UsersHistoryService from "../Services/UsersHistoryService";
 import AbstractController from "../../Abstract/Controller";
-import {ApiResponseContract} from "../../Http/Responses/ApiResponse"
+import { ApiResponseContract } from "../../Http/Responses/ApiResponse";
 import QueryBuilder from "@database/QueryBuilder/QueryBuilder";
 import ApiQuery from "@database/QueryBuilder/ApiQuery";
 
 class UsersHistoryController extends AbstractController {
-
     /** @private @static Singleton instance */
-    private static _instance:AbstractController;
+    private static _instance: AbstractController;
 
     /** @public UsersHistoryService */
-    service:UsersHistoryService;
+    service: UsersHistoryService;
 
     /** @public Model */
-    entity:UserHistory;
+    entity: UserHistory;
 
     constructor() {
         super();
@@ -23,10 +22,10 @@ class UsersHistoryController extends AbstractController {
     }
 
     /**
-     * @public @static @method getInstance Create the singleton instance if not existing 
+     * @public @static @method getInstance Create the singleton instance if not existing
      * @return {UsersHistoryController} Controller singleton constructor
-    */
-    public static getInstance():AbstractController {
+     */
+    public static getInstance(): AbstractController {
         if (UsersHistoryController._instance === undefined) {
             UsersHistoryController._instance = new UsersHistoryController();
         }
@@ -38,12 +37,12 @@ class UsersHistoryController extends AbstractController {
      * @param {any} requestData - Research terms { "nom":"Jean" }
      * @return {ApiResponseContract} Promise containing a list of documents
      */
-     public async list(requestData: any): Promise<ApiResponseContract> {
-        const query:ApiQuery = QueryBuilder.build(requestData, true);
+    public async list(requestData: any): Promise<ApiResponseContract> {
+        const query: ApiQuery = QueryBuilder.build(requestData, true);
         /*query.options = {
             sort: { "createdAt": -1 }
         }*/
         return await this.service.all(query);
     }
 }
-export {UsersHistoryController};
+export { UsersHistoryController };

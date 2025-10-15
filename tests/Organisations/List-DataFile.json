@@ -1,87 +1,79 @@
 [
     {
-        "infoTest":
-        {
-            "name":"List empty data give no error",
-            "count":5,
-            "error":false,
-            "status":200
+        "infoTest": {
+            "name": "List empty data give no error",
+            "count": 5,
+            "error": false,
+            "status": 200
         }
     },
     {
-        "infoTest":
-        {
-            "name":"List no result no error",
-            "count":0,
-            "error":false,
-            "status":200
+        "infoTest": {
+            "name": "List no result no error",
+            "count": 0,
+            "error": false,
+            "status": 200
         },
-        "name" : "raasdfdbtfadsf"
+        "name": "raasdfdbtfadsf"
     },
     {
-        "infoTest":
-        {
-            "name":"List 2 result no error",
-            "count":2,
-            "error":false,
-            "status":200
+        "infoTest": {
+            "name": "List 2 result no error",
+            "count": 2,
+            "error": false,
+            "status": 200
         },
-        "name" : "ra"
+        "name": "ra"
     },
     {
-        "infoTest":
-        {
-            "name":"List 1 id",
+        "infoTest": {
+            "name": "List 1 id",
             "note": "if(id==1) id=realId",
-            "count":1,
-            "error":false,
-            "status":200
+            "count": 1,
+            "error": false,
+            "status": 200
         },
-        "id" : 1
+        "id": 1
     },
     {
-        "infoTest":
-        {
-            "name":"List id and other",
+        "infoTest": {
+            "name": "List id and other",
             "note": "if(id==1) id=realId",
-            "count":1,
-            "error":false,
-            "status":200
+            "count": 1,
+            "error": false,
+            "status": 200
         },
-        "id" : 1,
+        "id": 1,
         "name": "Petit t"
     },
     {
-        "infoTest":
-        {
-            "name":"List fake id",
+        "infoTest": {
+            "name": "List fake id",
             "note": "if(id==1) id=realId",
-            "count":0,
-            "error":false,
-            "status":200
+            "count": 0,
+            "error": false,
+            "status": 200
         },
-        "id" : "123456789123456789123456"
+        "id": "123456789123456789123456"
     },
     {
-        "infoTest":
-        {
-            "name":"List fake id length != 24",
+        "infoTest": {
+            "name": "List fake id length != 24",
             "note": "if(id==1) id=realId",
-            "count":0,
-            "error":true,
-            "status":500
+            "count": 0,
+            "error": true,
+            "status": 500
         },
-        "id" : "123456789123456"
+        "id": "123456789123456"
     },
     {
-        "infoTest":
-        {
-            "name":"List 2 fields",
-            "count":2,
-            "error":false,
-            "status":200
+        "infoTest": {
+            "name": "List 2 fields",
+            "count": 2,
+            "error": false,
+            "status": 200
         },
-        "name" : "ra",
-        "description" : "é"
+        "name": "ra",
+        "description": "é"
     }
 ]

@@ -1,6 +1,5 @@
 Retour à la base de [Documention de l'API](readme.md)
 
-
 # Registration
 
 ## POST `/register`

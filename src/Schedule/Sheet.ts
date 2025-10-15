@@ -1,23 +1,23 @@
-import schedule, {Job} from "node-schedule";
+import schedule, { Job } from "node-schedule";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 interface JobSheet {
-    name:string;
-    messages?:any;
-    callback:any;
-    rule:schedule.RecurrenceRule;
-    scheduledJob:Job;
+    name: string;
+    messages?: any;
+    callback: any;
+    rule: schedule.RecurrenceRule;
+    scheduledJob: Job;
     schedule: () => Job;
 }
 
 class Sheet implements JobSheet {
-    public name:string;
-    public messages:any;
-    public callback:any;
-    public rule:schedule.RecurrenceRule;
-    public scheduledJob:Job;
+    public name: string;
+    public messages: any;
+    public callback: any;
+    public rule: schedule.RecurrenceRule;
+    public scheduledJob: Job;
 
-    constructor(jobParams:any) {
+    constructor(jobParams: any) {
         this.name = jobParams.name;
         this.messages = jobParams.messages;
         this.callback = jobParams.callback;
@@ -29,7 +29,6 @@ class Sheet implements JobSheet {
         this._registerEvents();
         return this.scheduledJob;
     }
-
 
     /**
      * A `run` event after each execution.
@@ -57,27 +56,25 @@ class Sheet implements JobSheet {
         this.scheduledJob.removeListener("success", this.onSuccess);
     }
 
-    public onRun(e:Event) {
+    public onRun(e: Event) {
         LogHelper.debug("OnRUn", e);
     }
 
-    public onScheduled(e:Event) {
+    public onScheduled(e: Event) {
         LogHelper.debug("OnScheduled", e);
     }
 
-    public onCanceled(e:Event) {
+    public onCanceled(e: Event) {
         LogHelper.debug("OnCanceled", e);
     }
 
-    public onError(e:Event) {
+    public onError(e: Event) {
         LogHelper.debug("OnError", e);
     }
 
-    public onSuccess(e:Event) {
+    public onSuccess(e: Event) {
         LogHelper.debug("OnSuccess", e);
     }
-
-
 }
 
-export {Sheet, JobSheet}
+export { Sheet, JobSheet };

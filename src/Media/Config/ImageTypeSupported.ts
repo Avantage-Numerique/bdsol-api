@@ -1,12 +1,12 @@
 import * as mimeTypesDb from "mime-db";
 
 export const ImageMimeTypeSupported = [
-    'image/png',
-    'image/jpeg',//'image/jpg',
-    'image/webp'
+    "image/png",
+    "image/jpeg", //'image/jpg',
+    "image/webp",
 ];
 
-const imgMimeTypeExtensions:any = {};
+const imgMimeTypeExtensions: any = {};
 
 for (const mimetype in ImageMimeTypeSupported) {
     imgMimeTypeExtensions[mimetype] = mimeTypesDb[mimetype].extensions ?? undefined;
@@ -15,7 +15,6 @@ for (const mimetype in ImageMimeTypeSupported) {
 
 export const ImageExtensionsSupported = imgMimeTypeExtensions;
 
-
-export const imageSupported = (file:any) => {
+export const imageSupported = (file: any) => {
     return file;
-}
+};

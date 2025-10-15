@@ -1,14 +1,12 @@
-import {NextFunction, Request, Response} from "express";
+import { NextFunction, Request, Response } from "express";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 import ServerController from "@src/Server/Controllers/ServerController";
 
 export class IsMongooseConnected {
-
     /**
      * Getter for the anonumous function that will act as the middleware, with the parameters and the next() call.
      */
-    public static middleware()
-    {
+    public static middleware() {
         /**
          * The IsMongooseConnected function just set an blank you
          * @param req {Request}
@@ -24,9 +22,8 @@ export class IsMongooseConnected {
                     LogHelper.error("[DB][Middleware] database isn't connected. Trying to reconnect");
                     await ServerController.database.initProviders();
                 }
-
             }
             next();
-        }
+        };
     }
 }

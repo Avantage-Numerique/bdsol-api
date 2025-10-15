@@ -1,11 +1,10 @@
-import mongoose, {Schema} from "mongoose";
-import {StaticContentSchema} from "../Schemas/StaticContentSchema";
-import type {DbProvider} from "../../Database/DatabaseDomain";
+import mongoose, { Schema } from "mongoose";
+import { StaticContentSchema } from "../Schemas/StaticContentSchema";
+import type { DbProvider } from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import StaticContentsService from "../Services/StaticContentsService";
 
 class StaticContent extends AbstractModel {
-
     /** @protected @static Singleton instance */
     protected static _instance: StaticContent;
 
@@ -37,10 +36,10 @@ class StaticContent extends AbstractModel {
     }
 
     /** @public Model lastName */
-    modelName: string = 'StaticContent';
+    modelName: string = "StaticContent";
 
     /** @public Collection Name in database*/
-    collectionName: string = 'StaticContents';
+    collectionName: string = "StaticContents";
 
     /** @public Connection mongoose */
     connection: mongoose.Connection;
@@ -49,12 +48,13 @@ class StaticContent extends AbstractModel {
     mongooseModel: mongoose.Model<any>;
 
     /** @public Database schema */
-    schema: Schema =
-        new Schema<StaticContentSchema>({},
-            {
-                toJSON: {virtuals: true},
-                timestamps: true,
-            });
+    schema: Schema = new Schema<StaticContentSchema>(
+        {},
+        {
+            toJSON: { virtuals: true },
+            timestamps: true,
+        }
+    );
 
     /** @abstract Used to return attributes and rules for each field of this entity. */
     public fieldInfo: any = [];
@@ -78,21 +78,20 @@ class StaticContent extends AbstractModel {
      */
     public dataTransfertObject(document: any) {
         return {
-            _id: document._id ?? '',
-        }
+            _id: document._id ?? "",
+        };
     }
 
     public async documentation(): Promise<any> {
         return "";
     }
 
-
     /**
      * Register mongoose events, for now pre-save, pre-findOneAndUpdate
      */
     public registerPreEvents() {
         if (this.schema !== undefined) {
-            return true
+            return true;
         }
     }
 

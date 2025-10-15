@@ -1,21 +1,25 @@
-import {body} from "express-validator";
-import {NoHtmlSanitizer} from "../Sanitizers/NoHtmlSanitizer";
-import {NoSpaceSanitizer} from "../Sanitizers/NoSpaceSanitizer";
-import {NoAccentSanitizer} from "../Sanitizers/NoAccentSanitizer";
-import {LatinSanitizer} from "../Sanitizers/LatinSanitizer";
-import {UrlSanitizer} from "../Sanitizers/UrlSanitizer";
-import {ApiValidatingSanitizingChainType} from "../ExpressValidator/ApiValidatingSanitizingChain";
+import { body } from "express-validator";
+import { NoHtmlSanitizer } from "../Sanitizers/NoHtmlSanitizer";
+import { NoSpaceSanitizer } from "../Sanitizers/NoSpaceSanitizer";
+import { NoAccentSanitizer } from "../Sanitizers/NoAccentSanitizer";
+import { LatinSanitizer } from "../Sanitizers/LatinSanitizer";
+import { UrlSanitizer } from "../Sanitizers/UrlSanitizer";
+import { ApiValidatingSanitizingChainType } from "../ExpressValidator/ApiValidatingSanitizingChain";
 
-const urlSanitizerAlias = (param:string, isOptional:boolean=true, source=body):ApiValidatingSanitizingChainType => {
-
-    let chain:ApiValidatingSanitizingChainType = source(param);
-    chain = chain.optional({values:"falsy"});
+const urlSanitizerAlias = (
+    param: string,
+    isOptional: boolean = true,
+    source = body
+): ApiValidatingSanitizingChainType => {
+    let chain: ApiValidatingSanitizingChainType = source(param);
+    chain = chain.optional({ values: "falsy" });
 
     if (!isOptional) {
         chain = chain.notEmpty().withMessage("Is required");
     }
 
-    chain = chain.stripLow()
+    chain = chain
+        .stripLow()
         .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
         .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
         .customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
@@ -24,6 +28,6 @@ const urlSanitizerAlias = (param:string, isOptional:boolean=true, source=body):A
         .customSanitizer(UrlSanitizer.validatorCustomSanitizer());
 
     return chain;
-}
+};
 
-export {urlSanitizerAlias}
+export { urlSanitizerAlias };

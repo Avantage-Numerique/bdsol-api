@@ -1,13 +1,11 @@
-import {NextFunction, Request, Response} from "express";
+import { NextFunction, Request, Response } from "express";
 import LogHelper from "../../Monitoring/Helpers/LogHelper";
 
 export class PublicUserRequest {
-
     /**
      * Getter for the anonumous function that will act as the middleware, with the parameters and the next() call.
      */
-    public static middleware()
-    {
+    public static middleware() {
         /**
          * The PublicUserRequest just set an blank you
          * @param req {Request}
@@ -22,7 +20,9 @@ export class PublicUserRequest {
             ) {
 
             }*/
-            LogHelper.info(`Public user (${req.visitor.ip}) requested : ${req.originalUrl} from app/server : ${req.ip}`);
+            LogHelper.info(
+                `Public user (${req.visitor.ip}) requested : ${req.originalUrl} from app/server : ${req.ip}`
+            );
             req.user = {
                 id: "",
                 username: "",
@@ -33,6 +33,6 @@ export class PublicUserRequest {
                 ip: req.visitor.ip,
             };
             next();
-        }
+        };
     }
 }
