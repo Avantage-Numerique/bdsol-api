@@ -33,7 +33,6 @@ export class AuthentificationRoutes {
         register: [
             body("data.username")
                 .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
-                .stripLow()
                 .customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
                 .customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
                 .trim(),
@@ -45,6 +44,8 @@ export class AuthentificationRoutes {
             //body('data.password'),
             body("data.avatar").isURL().customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer()).trim(),
             body("data.name").customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer()).trim(),
+            body("data.firstName").customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer()).trim(),
+            body("data.lastName").customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer()).trim(),
             body("data.role").customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer()).stripLow().trim(),
         ],
         email: [
@@ -85,10 +86,7 @@ export class AuthentificationRoutes {
      * @public @method
      */
     public setupPublicRoutes(): express.Router {
-        this.routerInstance.post("/register", [
-            //...this.addMiddlewares("register"),
-            this.registerHandler.bind(this),
-        ]);
+        this.routerInstance.post("/register", [...this.addMiddlewares("register"), this.registerHandler.bind(this)]);
 
         this.routerInstance.post("/login", [this.loginHandler.bind(this)]);
 
