@@ -5,9 +5,9 @@ import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import AuthentificationController from "../Controllers/AuthentificationController";
 import { VerifyTokenMiddleware } from "../Middleware/VerifyTokenMiddleware";
 import { body } from "express-validator";
-import { NoHtmlSanitizer } from "../../Security/Sanitizers/NoHtmlSanitizer";
-import { NoSpaceSanitizer } from "../../Security/Sanitizers/NoSpaceSanitizer";
-import { NoAccentSanitizer } from "../../Security/Sanitizers/NoAccentSanitizer";
+import { NoHtmlSanitizer } from "@src/Security/Sanitizers/NoHtmlSanitizer";
+import { NoSpaceSanitizer } from "@src/Security/Sanitizers/NoSpaceSanitizer";
+import { NoAccentSanitizer } from "@src/Security/Sanitizers/NoAccentSanitizer";
 import { UsersController } from "../../Users/UsersDomain";
 
 export class AuthentificationRoutes {
@@ -119,9 +119,8 @@ export class AuthentificationRoutes {
     /**
      * Add middleware from target array into the middlewares space in route declaration.
      * @param route {string} the route / property of the middlewares array to push into middleware for this.
-     * @param middlewares {string} Not used yet.
      */
-    public addMiddlewares(route: string, middlewares: string = ""): Array<any> {
+    public addMiddlewares(route: string): Array<any> {
         return this.middlewaresDistribution[route] ?? [];
     }
 
