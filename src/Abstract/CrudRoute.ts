@@ -191,7 +191,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @return {Promise<any>}
      */
     public async createHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        res.serviceResponse = await this.controllerInstance.create(req.body.data);
+        res.serviceResponse = await this.controllerInstance.create(req.body);
         res.serviceResponse.action = Service.CREATE_STATE;
 
         return next();
@@ -206,7 +206,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @return {Promise<any>}
      */
     public async updateHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        res.serviceResponse = await this.controllerInstance.update(req.body.data);
+        res.serviceResponse = await this.controllerInstance.update(req.body);
         res.serviceResponse.action = Service.UPDATE_STATE;
 
         return next();
@@ -221,7 +221,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @return {Promise<any>}
      */
     public async deleteHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        res.serviceResponse = await this.controllerInstance.delete(req.body.data);
+        res.serviceResponse = await this.controllerInstance.delete(req.body);
         res.serviceResponse.action = Service.DELETE_STATE;
 
         return next();
@@ -238,12 +238,12 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @return {Promise<any>}
      */
     public async searchHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        res.serviceResponse = await this.controllerInstance.search(req.body.data);
+        res.serviceResponse = await this.controllerInstance.search(req.body);
         return next();
     }
 
     public async textSearchHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        res.serviceResponse = await this.controllerInstance.textSearch(req.body.data);
+        res.serviceResponse = await this.controllerInstance.textSearch(req.body);
         return next();
     }
 
@@ -256,12 +256,12 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @return {Promise<any>}
      */
     public async listHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        res.serviceResponse = await this.controllerInstance.list(req.body.data);
+        res.serviceResponse = await this.controllerInstance.list(req.body);
         return next();
     }
 
     public async countHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        res.serviceResponse = await this.controllerInstance.count(req.body.data);
+        res.serviceResponse = await this.controllerInstance.count(req.body);
         return next();
     }
 
@@ -274,7 +274,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @return {Promise<any>}
      */
     public async getInfoHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-        res.serviceResponse = await this.controllerInstance.getInfo(req.body.data);
+        res.serviceResponse = await this.controllerInstance.getInfo(req.body);
         return next();
     }
 
