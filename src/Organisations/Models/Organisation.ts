@@ -76,6 +76,7 @@ class Organisation extends AbstractModel {
                 required: true,
                 index: true,
                 unique: true,
+                minlength: 2,
                 //alias: 'nom'
             },
             slug: {
