@@ -1,7 +1,7 @@
 import { IsObjectIdStringValid } from "../Validators/IsObjectidValidator";
 import { ObjectIdStringSanitizer } from "../Sanitizers/ObjectIdStringSanitizer";
 import { body } from "express-validator";
-import { ValidationChain } from "express-validator/src/chain/validation-chain";
+import { ValidationChain } from "express-validator/lib/chain/validation-chain";
 
 /**
  * Optionnal check if the element is set, and if it's an ObjectID.
