@@ -14,10 +14,10 @@ const entityNameSanitizerAlias = (
         chain = chain.notEmpty().withMessage("Is required");
     }
 
-    const minLength: number = 2;
+    //const minLength: number = 2;
     chain = chain
-        .isLength({ min: minLength })
-        .withMessage(`must be at least ${minLength} chars long`)
+        //.isLength({ min: minLength })
+        //.withMessage(`must be at least ${minLength} chars long`)
         .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
         .stripLow()
         .trim();
