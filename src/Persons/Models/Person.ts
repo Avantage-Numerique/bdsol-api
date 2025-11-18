@@ -12,6 +12,7 @@ import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import BadgeTypes from "@src/Badges/BadgeTypes";
 import { middlewareInsertBadges } from "@src/Badges/MiddlewareInsertBadges";
+import { RegionEnum } from "@src/Badges/RegionEnum";
 
 class Person extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -152,6 +153,7 @@ class Person extends AbstractModel {
             },
             region: {
                 type: String,
+                enum: RegionEnum,
             },
             badges: {
                 type: [String],
