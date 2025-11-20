@@ -1,4 +1,4 @@
-import {Service} from "@database/DatabaseDomain";
+import { Service } from "@database/DatabaseDomain";
 import Equipment from "@src/Equipment/Models/Equipment";
 
 class EquipmentService extends Service {

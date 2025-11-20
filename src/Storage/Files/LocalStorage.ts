@@ -1,5 +1,5 @@
-import {getApiConfig} from "@src/config";
+import { getApiConfig } from "@src/config";
 
 export default class LocalStorage {
-    public static basePath:string = `${getApiConfig().serverPath}/localStorage/`;
+    public static basePath: string = `${getApiConfig().serverPath}/localStorage/`;
 }

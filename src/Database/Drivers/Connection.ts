@@ -1,46 +1,48 @@
 interface MongoDbUrlParamsContract {
-    driverPrefix:string,
-    haveCredentials:boolean,
-    isSRV:boolean,
-    db:any,
-    addAuthSource:boolean
+    driverPrefix: string;
+    haveCredentials: boolean;
+    isSRV: boolean;
+    db: any;
+    addAuthSource: boolean;
 }
 
-const buildConnectionUrlParams = (dbConfig:any):MongoDbUrlParamsContract => {
-    const prefix:string = dbConfig.prefix ?? "mongodb";
+const buildConnectionUrlParams = (dbConfig: any): MongoDbUrlParamsContract => {
+    const prefix: string = dbConfig.prefix ?? "mongodb";
     return {
         driverPrefix: prefix,
-        haveCredentials: (dbConfig.user !== '' && dbConfig.password !== ''),
-        isSRV: prefix.includes('+srv'),
+        haveCredentials: dbConfig.user !== "" && dbConfig.password !== "",
+        isSRV: prefix.includes("+srv"),
         db: dbConfig,
-        addAuthSource: dbConfig.authSource !== '' && dbConfig.authSource !== false && typeof dbConfig.authSource !== 'undefined',
+        addAuthSource:
+            dbConfig.authSource !== "" && dbConfig.authSource !== false && typeof dbConfig.authSource !== "undefined",
     } as MongoDbUrlParamsContract;
-}
-
+};
 
 /**
  * Get the connection url in one place.
  * @param params {MongoDbUrlParamsContract} MongoDbUrlParams parameters to get the url for the db.
  * @param db string to get the connection to mongo db.
  */
-const getConnectionUrl = (params:MongoDbUrlParamsContract, db:string='') => {
+const getConnectionUrl = (params: MongoDbUrlParamsContract, db: string = "") => {
     let url: string = `${getConnectionBaseUrl(params)}${db}`;
-    const needAuthSourceQueryVar:boolean = params.haveCredentials && params.db.addAuthSource;
-    url += `${(needAuthSourceQueryVar ? `?authSource=${params.db.authSource}` : '')}`;
+    const needAuthSourceQueryVar: boolean = params.haveCredentials && params.db.addAuthSource;
+    url += `${needAuthSourceQueryVar ? `?authSource=${params.db.authSource}` : ""}`;
 
-    const queryVarsStartCaracter:string = needAuthSourceQueryVar ? '&' : '?';
-    url += typeof params.db.additionalUrlParams === 'string' && params.db.additionalUrlParams !== '' ? `${queryVarsStartCaracter}${params.db.additionalUrlParams}` : '';
+    const queryVarsStartCaracter: string = needAuthSourceQueryVar ? "&" : "?";
+    url +=
+        typeof params.db.additionalUrlParams === "string" && params.db.additionalUrlParams !== ""
+            ? `${queryVarsStartCaracter}${params.db.additionalUrlParams}`
+            : "";
 
     return url;
-}
+};
 
 /**
  *
  * @param params MongoDbUrlParams parameters to get the url for the db.
  */
-const getConnectionBaseUrl = (params:MongoDbUrlParamsContract) => {
-
-    const credential = params.haveCredentials ? `${params.db.user}:${params.db.password}@` : '';
+const getConnectionBaseUrl = (params: MongoDbUrlParamsContract) => {
+    const credential = params.haveCredentials ? `${params.db.user}:${params.db.password}@` : "";
     let baseUrl = "";
     if (params.isSRV) {
         baseUrl = `${params.driverPrefix}://${credential}${params.db.host}/`;
@@ -49,14 +51,18 @@ const getConnectionBaseUrl = (params:MongoDbUrlParamsContract) => {
         baseUrl = `${params.driverPrefix}://${credential}${params.db.host}:${params.db.port}/`;
     }
     return baseUrl;
-}
+};
 
-
-const prepareUriForLoging = (uri:string):string => {
-    let creds = uri.slice(uri.indexOf('://')+3, uri.indexOf('@'));
-    let noCreds = uri.split(creds);
+const prepareUriForLoging = (uri: string): string => {
+    const creds = uri.slice(uri.indexOf("://") + 3, uri.indexOf("@"));
+    const noCreds = uri.split(creds);
     return noCreds.join("*****:*****");
-}
+};
 
-
-export {getConnectionUrl, getConnectionBaseUrl, MongoDbUrlParamsContract, prepareUriForLoging, buildConnectionUrlParams};
+export {
+    getConnectionUrl,
+    getConnectionBaseUrl,
+    MongoDbUrlParamsContract,
+    prepareUriForLoging,
+    buildConnectionUrlParams,
+};

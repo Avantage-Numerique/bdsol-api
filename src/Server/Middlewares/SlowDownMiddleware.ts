@@ -1,9 +1,9 @@
-import {NextFunction, Request, Response} from "express";
+import { NextFunction, Request, Response } from "express";
 
 interface SlowDownOptions {
     delay?: number;
     verbose?: boolean;
-    shouldDelay?:any;
+    shouldDelay?: any;
 }
 
 /**
@@ -14,12 +14,8 @@ interface SlowDownOptions {
  * @param {function} options.shouldDelay Custom function to determine if request should be delayed (optional)
  * @returns {function} Express middleware function
  */
-const SlowDownMiddleware = (options = {} as SlowDownOptions ) => {
-    const {
-        delay = 3000,
-        verbose = false,
-        shouldDelay = () => true
-    } = options;
+const SlowDownMiddleware = (options = {} as SlowDownOptions) => {
+    const { delay = 3000, verbose = false, shouldDelay = () => true } = options;
 
     return async (req: Request, res: Response, next: NextFunction) => {
         const startTime = Date.now();
@@ -29,7 +25,7 @@ const SlowDownMiddleware = (options = {} as SlowDownOptions ) => {
         }
 
         try {
-            await new Promise(resolve => setTimeout(resolve, delay));
+            await new Promise((resolve) => setTimeout(resolve, delay));
 
             if (verbose) {
                 const endTime = Date.now();
@@ -42,7 +38,7 @@ const SlowDownMiddleware = (options = {} as SlowDownOptions ) => {
             next(error);
         }
     };
-}
+};
 
 export default SlowDownMiddleware;
-export {SlowDownOptions};
+export { SlowDownOptions };

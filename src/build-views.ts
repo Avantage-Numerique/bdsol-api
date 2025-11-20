@@ -1,6 +1,6 @@
 // copy-nunjucks.ts
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from "fs";
+import * as path from "path";
 
 function cp(src: string, dest: string) {
     // Create destination directory if it doesn't exist
@@ -12,7 +12,7 @@ function cp(src: string, dest: string) {
     const files = fs.readdirSync(src);
 
     // Copy each file or directory
-    files.forEach(file => {
+    files.forEach((file) => {
         const srcPath = path.join(src, file);
         const destPath = path.join(dest, file);
 
@@ -25,5 +25,5 @@ function cp(src: string, dest: string) {
     });
 }
 
-cp('./views', './build/views');
-cp('./public', './build/public');
+cp("./views", "./build/views");
+cp("./public", "./build/public");

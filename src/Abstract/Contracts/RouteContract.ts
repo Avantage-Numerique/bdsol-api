@@ -1,5 +1,5 @@
-import type {Router} from "express";
-import {ControllerContract} from "./ControllerContract";
+import type { Router } from "express";
+import { ControllerContract } from "./ControllerContract";
 
 export interface RouteContract {
     controllerInstance: ControllerContract;
@@ -9,5 +9,5 @@ export interface RouteContract {
 
     setupAuthRoutes(): Router;
     setupPublicRoutes(): Router;
-    addMiddlewares(route:string, middlewares:string): Array<any>;
+    addMiddlewares(route: string, middlewares: string): Array<any>;
 }

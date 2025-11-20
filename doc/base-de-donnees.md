@@ -2,7 +2,6 @@
 
 ## Schema actuel de la bd
 
-
 ```mermaid
 erDiagram
     %% Entity Package
@@ -82,7 +81,7 @@ erDiagram
         String alternateName
         SocialHandle[] url
         String description
-        ObjectId entityInCharge 
+        ObjectId entityInCharge
         ObjectId organizer
         ObjectId[] eventType
         String eventFormat

@@ -1,12 +1,14 @@
 Retour à la base de [Documention de l'API](readme.md)
 
 # Licences
+
 Présentement utilisé seulement dans les licences médias.
 Implémenté dans le domaine StaticContent.
 
 Présentement les données sont entré et fetch directement dans un json.
 
 ## GET `/static/licences`
+
 Route publique qui renvoie toutes les licences enregistrées.
 
 ### Retour si tout a fonctionné
@@ -27,7 +29,7 @@ Code : **200** : lorsque les informations sont OK
             "slug": "[Utiliser le slug de la licence et non cette prop] to deprecate]",
             "form": "[Valeur à utiliser dans un formulaire.]",
             "version": "[Version de la licence chez Creative common]",
-            "description":"[texte de description de la licence]",
+            "description": "[texte de description de la licence]",
             "guide": "[Simplification du légal en mode : comment ça s'applique]",
             "source": "[URL] Source de la licence",
             "legal-source": "[URL] Du texte légal",
@@ -53,8 +55,8 @@ Code : **404** : Lors que le contenu n'est pas trouvé
 }
 ```
 
-
 ## GET `/static/licence/[slug]`
+
 Route publique qui renvoie la licence associé à ce slug
 
 ### Retour si tout a fonctionné
@@ -73,7 +75,7 @@ Code : **200** : lorsque les informations sont OK
         "simpleSlug": "[slug basic utilisé par creative common dans leur url]",
         "slug": "[Utiliser le slug de la licence et non cette prop] to deprecate]",
         "version": "[Version de la licence chez Creative common]",
-        "description":"[texte de description de la licence]",
+        "description": "[texte de description de la licence]",
         "guide": "[Simplification du légal en mode : comment ça s'applique]",
         "source": "[URL] Source de la licence",
         "legal-source": "[URL] Du texte légal",

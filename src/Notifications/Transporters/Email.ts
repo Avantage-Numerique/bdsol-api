@@ -1,4 +1,1 @@
-
-class EmailTransporter {
-
-}
+class EmailTransporter {}

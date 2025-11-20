@@ -3,7 +3,7 @@ import LicencesData from "../../Data/Licences/LicencesData";
 
 export const licenceList = Object.keys(LicencesData.raw());
 
-    /*[
+/*[
     "Public Domain (CC0)",
     "CC By",
     "CC By-SA",

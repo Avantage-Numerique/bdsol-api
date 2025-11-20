@@ -1,31 +1,28 @@
 [
     {
-        "infoTest":
-        {
-            "name":"Search empty data give error",
-            "count":0,
-            "error":false,
-            "status":200
+        "infoTest": {
+            "name": "Search empty data give error",
+            "count": 0,
+            "error": false,
+            "status": 200
         }
     },
     {
-        "infoTest":
-        {
-            "name":"Search no result no error",
-            "count":404,
-            "error":true,
-            "status":200
+        "infoTest": {
+            "name": "Search no result no error",
+            "count": 404,
+            "error": true,
+            "status": 200
         },
-        "name" : "Éclair"
+        "name": "Éclair"
     },
     {
-        "infoTest":
-        {
-            "name":"Search 1 result no error",
-            "count":1,
-            "error":false,
-            "status":200
+        "infoTest": {
+            "name": "Search 1 result no error",
+            "count": 1,
+            "error": false,
+            "status": 200
         },
-        "name" : "La moust"
+        "name": "La moust"
     }
 ]

@@ -1,122 +1,113 @@
 [
     {
-        "infoTest":
-        {
-            "name":"Create Full",
-            "error":false,
-            "status":201,
+        "infoTest": {
+            "name": "Create Full",
+            "error": false,
+            "status": 201,
             "expectedProperties": {
-                "lastName":"Parent",
-                "firstName":"Jean-marc",
-                "nickname":"Mickette",
-                "description":"Humour"
+                "lastName": "Parent",
+                "firstName": "Jean-marc",
+                "nickname": "Mickette",
+                "description": "Humour"
             }
         },
-        "lastName":"Parent",
-        "firstName":"Jean-marc",
-        "nickname":"Mickette",
-        "description":"Humour"
+        "lastName": "Parent",
+        "firstName": "Jean-marc",
+        "nickname": "Mickette",
+        "description": "Humour"
     },
     {
-        "infoTest":
-        {
-            "name":"Create Full",
-            "error":false,
-            "status":201,
+        "infoTest": {
+            "name": "Create Full",
+            "error": false,
+            "status": 201,
             "expectedProperties": {
-                "lastName":"Tremblay",
-                "firstName":"Michel",
-                "nickname":"Dj Pro Grand Gangsta",
-                "description":"La musica fiesta"
+                "lastName": "Tremblay",
+                "firstName": "Michel",
+                "nickname": "Dj Pro Grand Gangsta",
+                "description": "La musica fiesta"
             }
         },
-        "lastName":"Tremblay",
-        "firstName":"Michel",
-        "nickname":"Dj Pro Grand Gangsta",
-        "description":"La musica fiesta"
+        "lastName": "Tremblay",
+        "firstName": "Michel",
+        "nickname": "Dj Pro Grand Gangsta",
+        "description": "La musica fiesta"
     },
     {
-        "infoTest":
-        {
-            "name":"Create no lastName",
-            "error":true,
-            "status":422
+        "infoTest": {
+            "name": "Create no lastName",
+            "error": true,
+            "status": 422
         },
-        "firstName":"Sarah",
-        "nickname":"Le Patin Mou",
-        "description":""
+        "firstName": "Sarah",
+        "nickname": "Le Patin Mou",
+        "description": ""
     },
     {
-        "infoTest":
-        {
-            "name":"Create no firstName",
-            "error":true,
-            "status":422
+        "infoTest": {
+            "name": "Create no firstName",
+            "error": true,
+            "status": 422
         },
-        "lastName":"Daigneault",
-        "nickname":"Pikotte",
-        "description":"Circus is love, circus is life"
+        "lastName": "Daigneault",
+        "nickname": "Pikotte",
+        "description": "Circus is love, circus is life"
     },
     {
-        "infoTest":
-        {
-            "name":"Create empty lastName",
-            "error":true,
-            "status":422
+        "infoTest": {
+            "name": "Create empty lastName",
+            "error": true,
+            "status": 422
         },
-        "lastName":"",
-        "firstName":"Adelard",
-        "nickname":"Jean-guy la moustache",
-        "description":"Moustachios"
+        "lastName": "",
+        "firstName": "Adelard",
+        "nickname": "Jean-guy la moustache",
+        "description": "Moustachios"
     },
     {
-        "infoTest":
-        {
-            "name":"Create empty firstName",
-            "error":true,
-            "status":422
+        "infoTest": {
+            "name": "Create empty firstName",
+            "error": true,
+            "status": 422
         },
-        "lastName":"Boutin",
-        "firstName":"",
-        "nickname":"Prime Minister",
-        "description":"Redneck"
+        "lastName": "Boutin",
+        "firstName": "",
+        "nickname": "Prime Minister",
+        "description": "Redneck"
     },
     {
-        "infoTest":
-        {
-            "name":"Create empty non req",
-            "error":false,
-            "status":201,
+        "infoTest": {
+            "name": "Create empty non req",
+            "error": false,
+            "status": 201,
             "expectedProperties": {
-                "lastName":"Croche",
-                "firstName":"Sarah"
+                "lastName": "Croche",
+                "firstName": "Sarah"
             }
         },
-        "lastName":"Croche",
-        "firstName":"Sarah",
-        "nickname":"",
-        "description":""
+        "lastName": "Croche",
+        "firstName": "Sarah",
+        "nickname": "",
+        "description": ""
     },
     {
-        "infoTest":
-        {
-            "name":"Create no non req",
-            "error":false,
-            "status":201,
+        "infoTest": {
+            "name": "Create no non req",
+            "error": false,
+            "status": 201,
             "expectedProperties": {
-                "lastName":"Neutron",
-                "firstName":"Jimmy"
+                "lastName": "Neutron",
+                "firstName": "Jimmy"
             }
         },
-        "lastName":"Neutron",
-        "firstName":"Jimmy"
+        "lastName": "Neutron",
+        "firstName": "Jimmy"
     },
     {
-        "infoTest":
-        {
-            "name":"Create empty data",
-            "error":true,
-            "status":422
+        "infoTest": {
+            "name": "Create empty data",
+            "error": true,
+            "status": 422
         }
     }
 ]

@@ -4,7 +4,7 @@
 export interface LogoutResponse {
     error: boolean;
     code: number;
-    errors: object|null;
+    errors: object | null;
     message: string;
-    data: any|null;
+    data: any | null;
 }

@@ -1,4 +1,4 @@
-import mongoose, {Document} from "mongoose";
+import mongoose, { Document } from "mongoose";
 
 export interface UserHistorySchema extends Document {
     user: mongoose.ObjectId;

@@ -1,7 +1,7 @@
-import mongoose, {Connection} from 'mongoose';
-import * as os from 'os';
+import mongoose, { Connection } from "mongoose";
+import * as os from "os";
 import ServerController from "@src/Server/Controllers/ServerController";
-import {DataProvider} from "@database/Providers/DataProvider";
+import { DataProvider } from "@database/Providers/DataProvider";
 
 // Type definitions
 interface OperationCounts {
@@ -185,7 +185,7 @@ interface HealthCheck {
 }
 
 interface HealthMetrics {
-    status: 'healthy' | 'unhealthy';
+    status: "healthy" | "unhealthy";
     checks: HealthCheck;
     issues: string[];
 }
@@ -211,7 +211,7 @@ interface MetricsError {
 }
 
 interface HealthCheckResult {
-    status: 'healthy' | 'unhealthy';
+    status: "healthy" | "unhealthy";
     pingTime?: number;
     error?: string;
     timestamp: string;
@@ -253,14 +253,14 @@ class MongoDBMetricsMonitor {
             insert: 0,
             update: 0,
             delete: 0,
-            aggregate: 0
+            aggregate: 0,
         };
         this.operationTimes = {
             find: [],
             insert: [],
             update: [],
             delete: [],
-            aggregate: []
+            aggregate: [],
         };
         this.errors = [];
         this.maxOperationTimeHistory = 1000; // Keep last 1000 operations for averages
@@ -270,7 +270,6 @@ class MongoDBMetricsMonitor {
      * Get comprehensive MongoDB metrics
      */
     async getMetrics(): Promise<CompleteMetrics> {
-
         const dataConnection = DataProvider.instance()?.connection;
 
         try {
@@ -282,7 +281,7 @@ class MongoDBMetricsMonitor {
             const [serverStatus, dbStats, replSetStatus] = await Promise.allSettled([
                 adminDb.serverStatus(),
                 dataConnection.db.stats(),
-                this.getReplSetStatus(adminDb)
+                this.getReplSetStatus(adminDb),
             ]);
 
             return {
@@ -290,18 +289,14 @@ class MongoDBMetricsMonitor {
                 uptime: Date.now() - this.startTime,
                 connectionPool: this.getConnectionPoolMetrics(dataConnection),
                 performance: this.getPerformanceMetrics(
-                    serverStatus.status === 'fulfilled' ? serverStatus.value : null
+                    serverStatus.status === "fulfilled" ? serverStatus.value : null
                 ),
-                database: this.getDatabaseMetrics(
-                    dbStats.status === 'fulfilled' ? dbStats.value : null
-                ),
+                database: this.getDatabaseMetrics(dbStats.status === "fulfilled" ? dbStats.value : null),
                 application: this.getApplicationMetrics(),
-                server: this.getServerMetrics(
-                    serverStatus.status === 'fulfilled' ? serverStatus.value : null
-                ),
-                replication: replSetStatus.status === 'fulfilled' ? replSetStatus.value : null,
+                server: this.getServerMetrics(serverStatus.status === "fulfilled" ? serverStatus.value : null),
+                replication: replSetStatus.status === "fulfilled" ? replSetStatus.value : null,
                 errors: this.getErrorMetrics(),
-                health: this.getHealthMetrics(dataConnection)
+                health: this.getHealthMetrics(dataConnection),
             };
         } catch (error) {
             throw new Error(`Failed to collect metrics: ${(error as Error).message}`);
@@ -321,7 +316,7 @@ class MongoDBMetricsMonitor {
             maxPoolSize: connection.getMaxListeners(), // Approximate
             host: connection.host,
             port: connection.port,
-            name: connection.name
+            name: connection.name,
         };
 
         // Try to get detailed pool stats if available
@@ -340,7 +335,7 @@ class MongoDBMetricsMonitor {
                         minPoolSize: server.pool.options?.minPoolSize || 0,
                         maxPoolSize: server.pool.options?.maxPoolSize || 100,
                         maxIdleTimeMS: server.pool.options?.maxIdleTimeMS || 0,
-                        waitQueueSize: server.pool.waitQueueSize || 0
+                        waitQueueSize: server.pool.waitQueueSize || 0,
                     };
                 }
             }
@@ -363,14 +358,14 @@ class MongoDBMetricsMonitor {
                 update: serverStatus.opcounters?.update || 0,
                 delete: serverStatus.opcounters?.delete || 0,
                 getmore: serverStatus.opcounters?.getmore || 0,
-                command: serverStatus.opcounters?.command || 0
+                command: serverStatus.opcounters?.command || 0,
             },
 
             // Network metrics
             network: {
                 bytesIn: serverStatus.network?.bytesIn || 0,
                 bytesOut: serverStatus.network?.bytesOut || 0,
-                numRequests: serverStatus.network?.numRequests || 0
+                numRequests: serverStatus.network?.numRequests || 0,
             },
 
             // Memory metrics
@@ -378,25 +373,27 @@ class MongoDBMetricsMonitor {
                 resident: serverStatus.mem?.resident || 0,
                 virtual: serverStatus.mem?.virtual || 0,
                 mapped: serverStatus.mem?.mapped || 0,
-                mappedWithJournal: serverStatus.mem?.mappedWithJournal || 0
+                mappedWithJournal: serverStatus.mem?.mappedWithJournal || 0,
             },
 
             // Connection metrics
             connections: {
                 current: serverStatus.connections?.current || 0,
                 available: serverStatus.connections?.available || 0,
-                totalCreated: serverStatus.connections?.totalCreated || 0
+                totalCreated: serverStatus.connections?.totalCreated || 0,
             },
 
             // Lock metrics
             locks: this.parseLockMetrics(serverStatus.locks),
 
             // WiredTiger metrics (if available)
-            wiredTiger: serverStatus.wiredTiger ? {
-                cacheSize: serverStatus.wiredTiger.cache?.['maximum bytes configured'] || 0,
-                cacheUsed: serverStatus.wiredTiger.cache?.['bytes currently in the cache'] || 0,
-                cacheDirty: serverStatus.wiredTiger.cache?.['tracked dirty bytes in the cache'] || 0
-            } : null
+            wiredTiger: serverStatus.wiredTiger
+                ? {
+                      cacheSize: serverStatus.wiredTiger.cache?.["maximum bytes configured"] || 0,
+                      cacheUsed: serverStatus.wiredTiger.cache?.["bytes currently in the cache"] || 0,
+                      cacheDirty: serverStatus.wiredTiger.cache?.["tracked dirty bytes in the cache"] || 0,
+                  }
+                : null,
         };
     }
 
@@ -416,7 +413,7 @@ class MongoDBMetricsMonitor {
             indexes: dbStats.indexes || 0,
             indexSize: dbStats.indexSize || 0,
             totalSize: dbStats.totalSize || 0,
-            scaleFactor: dbStats.scaleFactor || 1
+            scaleFactor: dbStats.scaleFactor || 1,
         };
     }
 
@@ -427,15 +424,15 @@ class MongoDBMetricsMonitor {
         return {
             operationCounts: { ...this.operationCounts },
             averageOperationTimes: this.getAverageOperationTimes(),
-            recentErrors: this.errors.slice(-10).map(error => ({
+            recentErrors: this.errors.slice(-10).map((error) => ({
                 type: error.type,
                 message: error.message,
-                timestamp: new Date(error.timestamp).toISOString()
+                timestamp: new Date(error.timestamp).toISOString(),
             })),
             totalErrors: this.errors.length,
             activeModels: Object.keys(mongoose.models).length,
             processMemory: process.memoryUsage(),
-            processUptime: process.uptime() * 1000 // Convert to ms
+            processUptime: process.uptime() * 1000, // Convert to ms
         };
     }
 
@@ -453,19 +450,21 @@ class MongoDBMetricsMonitor {
                 totalMemory: os.totalmem(),
                 freeMemory: os.freemem(),
                 uptime: os.uptime() * 1000,
-                loadAverage: os.loadavg()
+                loadAverage: os.loadavg(),
             },
 
             // MongoDB server info
-            mongodb: serverStatus ? {
-                version: serverStatus.version,
-                process: serverStatus.process,
-                pid: serverStatus.pid,
-                uptime: serverStatus.uptime * 1000,
-                uptimeMillis: serverStatus.uptimeMillis,
-                uptimeEstimate: serverStatus.uptimeEstimate * 1000,
-                localTime: serverStatus.localTime
-            } : null
+            mongodb: serverStatus
+                ? {
+                      version: serverStatus.version,
+                      process: serverStatus.process,
+                      pid: serverStatus.pid,
+                      uptime: serverStatus.uptime * 1000,
+                      uptimeMillis: serverStatus.uptimeMillis,
+                      uptimeEstimate: serverStatus.uptimeEstimate * 1000,
+                      localTime: serverStatus.localTime,
+                  }
+                : null,
         };
     }
 
@@ -478,14 +477,17 @@ class MongoDBMetricsMonitor {
             return {
                 set: status.set,
                 myState: status.myState,
-                members: status.members?.map((member: any): ReplicationMember => ({
-                    name: member.name,
-                    health: member.health,
-                    state: member.state,
-                    stateStr: member.stateStr,
-                    uptime: member.uptime,
-                    lastHeartbeat: member.lastHeartbeat
-                })) || []
+                members:
+                    status.members?.map(
+                        (member: any): ReplicationMember => ({
+                            name: member.name,
+                            health: member.health,
+                            state: member.state,
+                            stateStr: member.stateStr,
+                            uptime: member.uptime,
+                            lastHeartbeat: member.lastHeartbeat,
+                        })
+                    ) || [],
             };
         } catch (error) {
             // Not a replica set or access denied
@@ -498,12 +500,10 @@ class MongoDBMetricsMonitor {
      */
     private getErrorMetrics(): ErrorMetrics {
         const now = Date.now();
-        const last24h = this.errors.filter(error =>
-            now - error.timestamp < 24 * 60 * 60 * 1000
-        );
+        const last24h = this.errors.filter((error) => now - error.timestamp < 24 * 60 * 60 * 1000);
 
         const errorTypes: Record<string, number> = {};
-        last24h.forEach(error => {
+        last24h.forEach((error) => {
             errorTypes[error.type] = (errorTypes[error.type] || 0) + 1;
         });
 
@@ -511,11 +511,11 @@ class MongoDBMetricsMonitor {
             total: this.errors.length,
             last24Hours: last24h.length,
             errorTypes,
-            recentErrors: this.errors.slice(-5).map(error => ({
+            recentErrors: this.errors.slice(-5).map((error) => ({
                 type: error.type,
                 message: error.message,
-                timestamp: new Date(error.timestamp).toISOString()
-            }))
+                timestamp: new Date(error.timestamp).toISOString(),
+            })),
         };
     }
 
@@ -524,17 +524,17 @@ class MongoDBMetricsMonitor {
      */
     private getHealthMetrics(connection: Connection): HealthMetrics {
         const health: HealthMetrics = {
-            status: 'healthy',
+            status: "healthy",
             checks: {
                 connection: connection.readyState === 1,
-                ping: false
+                ping: false,
             },
-            issues: []
+            issues: [],
         };
 
         if (connection.readyState !== 1) {
-            health.status = 'unhealthy';
-            health.issues.push('Database connection not established');
+            health.status = "unhealthy";
+            health.issues.push("Database connection not established");
         }
 
         return health;
@@ -545,12 +545,12 @@ class MongoDBMetricsMonitor {
      */
     private getReadyStateText(state: number): string {
         const states: Record<number, string> = {
-            0: 'disconnected',
-            1: 'connected',
-            2: 'connecting',
-            3: 'disconnecting'
+            0: "disconnected",
+            1: "connected",
+            2: "connecting",
+            3: "disconnecting",
         };
-        return states[state] || 'unknown';
+        return states[state] || "unknown";
     }
 
     private parseLockMetrics(locks: any): Record<string, LockMetric> | null {
@@ -562,7 +562,7 @@ class MongoDBMetricsMonitor {
                 result[lockType] = {
                     acquireCount: lockData.acquireCount,
                     acquireWaitCount: lockData.acquireWaitCount || 0,
-                    timeAcquiringMicros: lockData.timeAcquiringMicros || 0
+                    timeAcquiringMicros: lockData.timeAcquiringMicros || 0,
                 };
             }
         }
@@ -574,10 +574,10 @@ class MongoDBMetricsMonitor {
         for (const [operation, times] of Object.entries(this.operationTimes)) {
             if (times.length > 0) {
                 averages[operation] = {
-                    average: times.reduce((a:any, b:any) => a + b, 0) / times.length,
+                    average: times.reduce((a: any, b: any) => a + b, 0) / times.length,
                     min: Math.min(...times),
                     max: Math.max(...times),
-                    count: times.length
+                    count: times.length,
                 };
             }
         }
@@ -600,12 +600,12 @@ class MongoDBMetricsMonitor {
     /**
      * Track error for metrics
      */
-    public trackError(error: Error | string, type: string = 'unknown'): void {
+    public trackError(error: Error | string, type: string = "unknown"): void {
         this.errors.push({
             timestamp: Date.now(),
             type,
             message: error instanceof Error ? error.message : error.toString(),
-            stack: error instanceof Error ? error.stack : undefined
+            stack: error instanceof Error ? error.stack : undefined,
         });
 
         // Keep only recent errors (last 1000)
@@ -624,15 +624,15 @@ class MongoDBMetricsMonitor {
             const pingTime = Date.now() - start;
 
             return {
-                status: 'healthy',
+                status: "healthy",
                 pingTime,
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
             };
         } catch (error) {
             return {
-                status: 'unhealthy',
+                status: "unhealthy",
                 error: (error as Error).message,
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
             };
         }
     }
@@ -643,36 +643,36 @@ class MongoDBMetricsMonitor {
     public async getFormattedMetrics(): Promise<FormattedMetrics> {
         const metrics = await this.getMetrics();
 
-        if ('error' in metrics) {
+        if ("error" in metrics) {
             return {
                 summary: {
-                    status: 'error',
+                    status: "error",
                     connections: {},
                     operations: { total: 0, errors: 0 },
-                    memory: {}
+                    memory: {},
                 },
-                detailed: metrics
+                detailed: metrics,
             };
         }
 
         return {
             summary: {
-                status: metrics.health?.status || 'unknown',
+                status: metrics.health?.status || "unknown",
                 connections: {
                     available: metrics.connectionPool?.availableConnections,
                     checkedOut: metrics.connectionPool?.checkedOutConnections,
-                    total: metrics.connectionPool?.totalConnections
+                    total: metrics.connectionPool?.totalConnections,
                 },
                 operations: {
                     total: Object.values(metrics.application?.operationCounts || {}).reduce((a, b) => a + b, 0),
-                    errors: metrics.errors?.total || 0
+                    errors: metrics.errors?.total || 0,
                 },
                 memory: {
                     mongoResident: metrics.performance?.memory?.resident,
-                    processRSS: metrics.application?.processMemory?.rss
-                }
+                    processRSS: metrics.application?.processMemory?.rss,
+                },
             },
-            detailed: metrics
+            detailed: metrics,
         };
     }
 }
@@ -691,7 +691,7 @@ export type {
     ServerMetrics,
     ReplicationMetrics,
     ErrorMetrics,
-    HealthMetrics
+    HealthMetrics,
 };
 
 // Usage example:

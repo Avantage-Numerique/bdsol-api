@@ -1,56 +1,58 @@
-import mongoose, {Schema} from "mongoose";
-import {OrganisationSchema} from "../Schemas/OrganisationSchema";
-import {DbProvider} from "../../Database/DatabaseDomain";
+import mongoose, { Schema } from "mongoose";
+import { OrganisationSchema } from "../Schemas/OrganisationSchema";
+import { DbProvider } from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
-import * as fs from 'fs';
+import * as fs from "fs";
 import OrganisationsService from "../Services/OrganisationsService";
-import {Member} from "@src/Team/Schemas/MemberSchema";
-import {Meta, SubMeta} from "@src/Moderation/Schemas/MetaSchema";
-import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
-import {populateUser} from "@src/Users/Middlewares/populateUser";
-import {SkillGroup} from "@src/Taxonomy/Schemas/SkillGroupSchema";
-import {EquipmentLink} from "@src/Database/Schemas/EquipmentLinkSchema";
-import {SocialHandle} from "@src/Database/Schemas/SocialHandleSchema";
-import {ContactPoint} from "@src/Database/Schemas/ContactPointSchema";
+import { Member } from "@src/Team/Schemas/MemberSchema";
+import { Meta, SubMeta } from "@src/Moderation/Schemas/MetaSchema";
+import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import { populateUser } from "@src/Users/Middlewares/populateUser";
+import { SkillGroup } from "@src/Taxonomy/Schemas/SkillGroupSchema";
+import { EquipmentLink } from "@src/Database/Schemas/EquipmentLinkSchema";
+import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
+import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 import BadgeTypes from "@src/Badges/BadgeTypes";
 import { middlewareInsertBadges } from "@src/Badges/MiddlewareInsertBadges";
 
-
 class Organisation extends AbstractModel {
-
     /** @protected @static Singleton instance of model Organisation */
     protected static _instance: Organisation;
 
     /** @public @static Model singleton instance constructor */
-    public static getInstance(doIndexes=true): Organisation {
+    public static getInstance(doIndexes = true): Organisation {
         if (Organisation._instance === undefined) {
             Organisation._instance = new Organisation();
             Organisation._instance.registerPreEvents();
             Organisation._instance.registerEvents();
 
-            Organisation._instance.schema.virtual("type").get( function () { return Organisation._instance.modelName });
+            Organisation._instance.schema.virtual("type").get(function () {
+                return Organisation._instance.modelName;
+            });
             if (doIndexes) Organisation._instance.registerIndexes();
             Organisation._instance.initSchema();
         }
         return Organisation._instance;
     }
 
-    public registerIndexes():void {
+    public registerIndexes(): void {
         //Indexes
-        this.schema.index({ "offers.skills":1});
-        this.schema.index({ "team.member":1});
+        this.schema.index({ "offers.skills": 1 });
+        this.schema.index({ "team.member": 1 });
         this.schema.index(
-            { name:"text", description:"text", slug:"text"},
+            { name: "text", description: "text", slug: "text" },
             {
                 default_language: "french",
                 //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
-                weights:{
-                    name:4,
-                    description:2
-                }});
+                weights: {
+                    name: 4,
+                    description: 2,
+                },
+            }
+        );
     }
 
-    public dropIndexes():void {
+    public dropIndexes(): void {
         return;
     }
 
@@ -58,7 +60,7 @@ class Organisation extends AbstractModel {
     modelName: string = "Organisation";
 
     /** @public Collection name in database */
-    collectionName: string = 'organisations';
+    collectionName: string = "organisations";
 
     /** @public Connection mongoose */
     connection: mongoose.Connection;
@@ -67,88 +69,92 @@ class Organisation extends AbstractModel {
     provider: DbProvider;
 
     /** @public Database schema */
-    schema: Schema =
-        new Schema<OrganisationSchema>({
-                name: {
-                    type: String,
-                    required: true,
-                    index:true,
-                    unique: true,
-                    //alias: 'nom'
-                },
-                slug: {
-                    type: String,
-                    slug: "name",
-                    slugPaddingSize: 3,
-                    index: true,
-                    unique: true
-                },
-                description: {
-                    type: String,
-                    //alias: 'desc'
-                },
-                url: {
-                    type: [SocialHandle.schema]
-                },
-                contactPoint: {
-                    type: ContactPoint.schema,
-                },
-                fondationDate: {
-                    type: Date,
-                },
-                // DRY this with groupName to have this "skillGroup as
-                offers: {
-                    type: [SkillGroup.schema],
-                },
-                domains: {
-                    type: [{
+    schema: Schema = new Schema<OrganisationSchema>(
+        {
+            name: {
+                type: String,
+                required: true,
+                index: true,
+                unique: true,
+                minlength: 2,
+                //alias: 'nom'
+            },
+            slug: {
+                type: String,
+                slug: "name",
+                slugPaddingSize: 3,
+                index: true,
+                unique: true,
+            },
+            description: {
+                type: String,
+                //alias: 'desc'
+            },
+            url: {
+                type: [SocialHandle.schema],
+            },
+            contactPoint: {
+                type: ContactPoint.schema,
+            },
+            fondationDate: {
+                type: Date,
+            },
+            // DRY this with groupName to have this "skillGroup as
+            offers: {
+                type: [SkillGroup.schema],
+            },
+            domains: {
+                type: [
+                    {
                         domain: {
                             type: mongoose.Types.ObjectId,
-                            ref: "Taxonomy"
+                            ref: "Taxonomy",
                         },
                         subMeta: SubMeta.schema,
-                        _id:false
-                    }]
-                },
-                team: {
-                    type: [Member.schema],
-                    ref: "Person"
-                },
-                mainImage: {
-                    type: mongoose.Types.ObjectId,
-                    ref : "Media"
-                },
-                catchphrase: {
-                    type: String
-                },
-                location: {
-                    type: [mongoose.Types.ObjectId],
-                    ref: "Place"
-                },
-                equipment: {
-                    type: [EquipmentLink.schema]
-                },
-                region: {
-                    type: String
-                },
-                badges: {
-                    type: [String],
-                    enum: BadgeTypes.allBadgeTypes()
-                },
-                meta: {
-                    type: Meta.schema
-                }
+                        _id: false,
+                    },
+                ],
             },
-            {
-                toJSON: { virtuals: true },
-                timestamps: true
-            });
+            team: {
+                type: [Member.schema],
+                ref: "Person",
+            },
+            mainImage: {
+                type: mongoose.Types.ObjectId,
+                ref: "Media",
+            },
+            catchphrase: {
+                type: String,
+            },
+            location: {
+                type: [mongoose.Types.ObjectId],
+                ref: "Place",
+            },
+            equipment: {
+                type: [EquipmentLink.schema],
+            },
+            region: {
+                type: String,
+            },
+            badges: {
+                type: [String],
+                enum: BadgeTypes.allBadgeTypes(),
+            },
+            meta: {
+                type: Meta.schema,
+            },
+        },
+        {
+            toJSON: { virtuals: true },
+            timestamps: true,
+        }
+    );
 
     /** @deprecated */
     fieldInfo = {};
 
     /**  @deprecated*/
-    ruleSet: any = {}
+    ruleSet: any = {};
 
     /**
      * @get the field that are searchable.
@@ -165,31 +171,35 @@ class Organisation extends AbstractModel {
      */
     public dataTransfertObject(document: any): any {
         return {
-            _id: document._id ?? '',
-            name: document.name ?? '',
-            description: document.description ?? '',
+            _id: document._id ?? "",
+            name: document.name ?? "",
+            description: document.description ?? "",
             url: document.url ?? [],
-            contactPoint: document.contactPoint ?? {tel:{num:"", ext:""}, email:{address:""}, website:{url:""}},
-            fondationDate: document.fondationDate ?? '',
-            offers: document.offers ?? '',
-            domains: document.domains ?? '',
-            team: document.team ?? '',
-            mainImage: document.mainImage ?? '',
-            slug: document.slug ?? '',
-            catchphrase: document.catchphrase ?? '',
-            meta : document.meta ?? '',
+            contactPoint: document.contactPoint ?? {
+                tel: { num: "", ext: "" },
+                email: { address: "" },
+                website: { url: "" },
+            },
+            fondationDate: document.fondationDate ?? "",
+            offers: document.offers ?? "",
+            domains: document.domains ?? "",
+            team: document.team ?? "",
+            mainImage: document.mainImage ?? "",
+            slug: document.slug ?? "",
+            catchphrase: document.catchphrase ?? "",
+            meta: document.meta ?? "",
             location: document.location ?? [],
             equipment: document.equipment ?? [],
             region: document.region ?? "",
             badges: document.badges ?? [],
-            type: document.type ?? '',
-            createdAt : document.createdAt ?? '',
-            updatedAt : document.updatedAt ?? '',
-        }
+            type: document.type ?? "",
+            createdAt: document.createdAt ?? "",
+            updatedAt: document.updatedAt ?? "",
+        };
     }
 
     public async documentation(): Promise<any> {
-        return fs.readFileSync('/api/doc/Organisations.md', 'utf-8');
+        return fs.readFileSync("/api/doc/Organisations.md", "utf-8");
     }
 
     /**
@@ -206,7 +216,7 @@ class Organisation extends AbstractModel {
         if (this.schema !== undefined) {
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
-            this.schema.pre('save', async function (next: any): Promise<any> {
+            this.schema.pre("save", async function (next: any): Promise<any> {
                 /* VOIR DOCUMENTATION TECHNIQUE, FONCTIONNALITÉ API, VALIDATION.MD */
                 /*
                 const idList = this.offers.map( (el:any) => {
@@ -223,8 +233,8 @@ class Organisation extends AbstractModel {
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
-            this.schema.pre('findOneAndUpdate', async function (next: any): Promise<any> {
-                const updatedDocument:any = this.getUpdate();
+            this.schema.pre("findOneAndUpdate", async function (next: any): Promise<any> {
+                const updatedDocument: any = this.getUpdate();
                 /*
                 if (updatedDocument && updatedDocument["offers"] != undefined){
                     const idList = updatedDocument["offers"].map( (el:any) => {
@@ -245,25 +255,24 @@ class Organisation extends AbstractModel {
     /**
      * For a find or findOne, We populate relations
      */
-    public registerEvents():void {
-
-        this.schema.pre('find', function() {
-            taxonomyPopulate(this, 'offers.skills');
-            taxonomyPopulate(this, 'domains.domain');
-            middlewarePopulateProperty(this, 'equipment.equipment');
-            middlewarePopulateProperty(this, 'team.member');
+    public registerEvents(): void {
+        this.schema.pre("find", function () {
+            taxonomyPopulate(this, "offers.skills");
+            taxonomyPopulate(this, "domains.domain");
+            //middlewarePopulateProperty(this, 'equipment.equipment');
+            //middlewarePopulateProperty(this, 'team.member');
             middlewarePopulateProperty(this, "mainImage");
-            middlewarePopulateProperty(this, "location");
+            //middlewarePopulateProperty(this, "location");
 
-            populateUser(this, "meta.requestedBy");
-            populateUser(this, "meta.lastModifiedBy");
+            //populateUser(this, "meta.requestedBy");
+            //populateUser(this, "meta.lastModifiedBy");
         });
-        
-        this.schema.pre('findOne', function() {
-            taxonomyPopulate(this, 'offers.skills');
-            taxonomyPopulate(this, 'domains.domain');
-            middlewarePopulateProperty(this, 'equipment.equipment');
-            middlewarePopulateProperty(this, 'team.member');
+
+        this.schema.pre("findOne", function () {
+            taxonomyPopulate(this, "offers.skills");
+            taxonomyPopulate(this, "domains.domain");
+            middlewarePopulateProperty(this, "equipment.equipment");
+            middlewarePopulateProperty(this, "team.member");
             middlewarePopulateProperty(this, "mainImage");
             middlewarePopulateProperty(this, "location");
 
