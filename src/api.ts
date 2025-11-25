@@ -54,7 +54,9 @@ export default class Api {
 
     private _slowDown: boolean;
 
-    constructor() {}
+    constructor() {
+        //nothing here.
+    }
 
     public start() {
         this._initEntitiesRouters();
