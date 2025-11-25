@@ -107,6 +107,7 @@ export default class Api {
         this.templateSystem = Nunjucks.configure(this.templateBasePath, {
             express: this.express,
             autoescape: true,
+            noCache: this._config.isDevelopment,
         });
     }
 
