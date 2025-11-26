@@ -5,7 +5,6 @@ import EventsController from "@src/Events/Controllers/EventsController";
 import { objectIdSanitizerAlias } from "@src/Security/SanitizerAliases/ObjectIdSanitizerAlias";
 import { noHtmlStringSanitizerAlias } from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
 import { basicHtmlSanitizerAlias } from "@src/Security/SanitizerAliases/BasicHtmlSanitizerAlias";
-import { contactPointSanitizerAlias } from "@src/Security/SanitizerAliases/ContactSanitizerAlias";
 import { entityNameSanitizerAlias } from "@src/Security/SanitizerAliases/EntityNameSanitizerAlias";
 import { urlSanitizerAlias } from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
 import { dateSanitizerAlias } from "@src/Security/SanitizerAliases/DateSanitizerAlias";
