@@ -8,6 +8,8 @@ import { basicHtmlSanitizerAlias } from "@src/Security/SanitizerAliases/BasicHtm
 import { urlSanitizerAlias } from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
 import { dateSanitizerAlias } from "@src/Security/SanitizerAliases/DateSanitizerAlias";
 import { entityNameSanitizerAlias } from "@src/Security/SanitizerAliases/EntityNameSanitizerAlias";
+import { isInEnumSanitizerAlias } from "@src/Security/SanitizerAliases/IsInEnumSanitizerAlias";
+import { RegionEnum } from "@src/Badges/RegionEnum";
 
 class OrganisationsRoutes extends CrudRoute {
     controllerInstance: AbstractController = OrganisationsController.getInstance();
@@ -34,6 +36,7 @@ class OrganisationsRoutes extends CrudRoute {
             noHtmlStringSanitizerAlias("data.catchphrase"),
             objectIdSanitizerAlias("data.location.*"),
             objectIdSanitizerAlias("data.equipment.*.equipment"),
+            isInEnumSanitizerAlias("data.region", RegionEnum),
 
             //contactPoint
             noHtmlStringSanitizerAlias("data.contactPoint.tel.num"),

@@ -6,6 +6,7 @@ import { BudgetRangeEnum, TimeframeEtaEnum } from "../../Database/Schemas/Schedu
 import EnumHelper from "../../Helpers/EnumHelper";
 import { EventFormatEnum } from "@src/Events/EventFormatEnum";
 import BadgeTypes from "@src/Badges/BadgeTypes";
+import { RegionEnum } from "@src/Badges/RegionEnum";
 
 class ModerationRoutes {
     public routerInstance: express.Router;
@@ -28,6 +29,7 @@ class ModerationRoutes {
         this.routerInstance.get("/budgetrange-enum", this.getBudgetRangeEnumHandler);
         this.routerInstance.get("/timeframeeta-enum", this.getTimeframeEtaEnumHandler);
         this.routerInstance.get("/eventformat-enum", this.getEventFormatEnumHandler);
+        this.routerInstance.get("/region-enum", this.getRegionEnumHandler);
         this.routerInstance.get("/badges", this.getBadgesInfoHandler);
         return this.routerInstance;
     }
@@ -57,6 +59,9 @@ class ModerationRoutes {
     }
     public async getEventFormatEnumHandler(req: Request, res: Response): Promise<any> {
         return res.status(StatusCodes.OK).send(EnumHelper.enumToSelectOptions(EventFormatEnum));
+    }
+    public async getRegionEnumHandler(req: Request, res: Response): Promise<any> {
+        return res.status(StatusCodes.OK).send(EnumHelper.enumToSelectOptions(RegionEnum));
     }
     public async getBadgesInfoHandler(req: Request, res: Response): Promise<any> {
         return res.status(StatusCodes.OK).send(BadgeTypes.badges);
