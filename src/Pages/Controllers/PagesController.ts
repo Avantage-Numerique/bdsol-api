@@ -1,6 +1,8 @@
 import Page, { PageContent } from "@src/Pages/Controllers/Pages/Page";
 import VersionsPage from "@src/Pages/Controllers/Pages/VersionsPage";
 import StatisticsPage from "@src/Pages/Controllers/Pages/StatisticsPage";
+import ReferentialPage from "@src/Pages/Controllers/Pages/ReferentialPage";
+import ReferentialSinglePage from "@src/Pages/Controllers/Pages/ReferentialSinglePage";
 
 class PagesController {
     /** @private @static Singleton instance */
@@ -30,6 +32,18 @@ class PagesController {
         const versionsPage = new StatisticsPage("statistics");
 
         return await versionsPage.render();
+    }
+
+    public async referential(): Promise<string> {
+        const referentialPage = new ReferentialPage("referential");
+
+        return await referentialPage.render();
+    }
+
+    public async referentialSingle(): Promise<string> {
+        const referentialPageSingle = new ReferentialSinglePage("referentialSingle");
+
+        return await referentialPageSingle.render();
     }
 
     public async layout(name = "page", content: PageContent): Promise<string> {

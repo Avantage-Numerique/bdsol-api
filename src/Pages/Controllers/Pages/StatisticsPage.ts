@@ -16,7 +16,7 @@ interface Note {
 
 class StatisticsPage extends Page {
     constructor(name: string, layout: string = "", content: PageContent = { title: "Page", body: "contenu" }) {
-        super(name, "page", content);
+        super(name, layout || "page", content);
         this.content.title = this.title();
         this.content.body = this.body();
     }

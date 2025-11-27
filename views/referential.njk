@@ -1,0 +1,69 @@
+{% extends 'default.njk' %}
+
+{% block content %}
+
+    <div class="indexContent">
+
+        {% block contentHeader %}
+            {% include "Partials/header.njk" %}
+        {% endblock %}
+
+        <h1>{{ title }}</h1>
+
+        {% if items.primary %}
+
+            <h2>Entités</h2>
+
+            <table>
+
+                <thead>
+                    <th>Item</th>
+                    <th>URL</th>
+                </thead>
+
+                <tbody>
+                    {% for label, item in items.primary %}
+                        <tr>
+                            <td>{{ label }}</td>
+                            <td>
+                                <a href="{{ baseRoute }}{{ item.url }}">{{ baseRoute }}{{ item.url }}</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        {% else %}
+            <p>Rien à afficher!</p>
+        {% endif %}
+
+        {% if items.secondary %}
+
+            <h2>Relations</h2>
+
+            <table>
+
+                <thead>
+                    <th>Item</th>
+                    <th>URL</th>
+                </thead>
+
+                <tbody>
+                    {% for label, item in items.secondary %}
+                        <tr>
+                            <td>{{ label }}</td>
+                            <td>
+                                <a href="{{ baseRoute }}{{ item.url }}">{{ baseRoute }}{{ item.url }}</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        {% else %}
+            <p>Rien à afficher!</p>
+        {% endif %}
+
+    </div>
+
+{% endblock %}
