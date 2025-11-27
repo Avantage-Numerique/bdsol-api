@@ -2,6 +2,8 @@ import express, { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import ReferentialController from "../Routes/ReferentialController";
 
+import { refData } from "../data";
+
 class ReferentialRoutes {
     public routerInstance: express.Router;
     public routerInstanceAuthentification: express.Router;
@@ -19,7 +21,8 @@ class ReferentialRoutes {
      * @public @method
      */
     public setupPublicRoutes(): express.Router {
-        this.routerInstance.get("/", this.getRefHomeHandler);
+        this.routerInstance.get("/", [this.getRefHomeHandler.bind(this)]);
+        this.routerInstance.get("/:single", [this.getRefSingleHandler.bind(this)]);
         return this.routerInstance;
     }
 
@@ -35,15 +38,32 @@ class ReferentialRoutes {
      */
     public async getRefHomeHandler(req: Request, res: Response): Promise<any> {
         if ("json" in req.query) {
-            return res.status(StatusCodes.OK).send({
-                Personnes: [{ "Titre 1": "https://api.avnu.ca/ref/person/bidon" }, { "Titre 2": "url/bidon.test2" }],
-                Organisation: [{ "Titre 3": "url/bidon.test5" }, { "Titre 4": "url/bidon.test6" }],
-                Project: "url/pas/bidon/pentoute.ca",
-                Event: ["ici", "là", "plein", "de", "url"],
-            });
+            res.set("Content-Type", "application/json");
+
+            return res.status(StatusCodes.OK).send(refData);
         }
-        //ToDo else return homepage of api with template
-        return res.status(StatusCodes.OK).send("Todo");
+
+        res.set("Content-Type", "text/html");
+        return res.status(StatusCodes.OK).send(await this.controllerInstance.referentialLayout());
+    }
+
+    /**
+     *
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async getRefSingleHandler(req: Request, res: Response): Promise<any> {
+        const { params } = req;
+
+        if ("json" in req.query) {
+            res.set("Content-Type", "application/json");
+
+            return res.status(StatusCodes.OK).send(refData.primary[params.single]);
+        }
+
+        res.set("Content-Type", "text/html");
+        return res.status(StatusCodes.OK).send(await this.controllerInstance.referentialSingleLayout(params.single));
     }
 }
 export default ReferentialRoutes;

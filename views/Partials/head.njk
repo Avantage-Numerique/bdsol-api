@@ -1,12 +1,12 @@
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8"/>
     <title>{{ meta.title }}</title>
-    <meta name="description" content="{{ meta.description }}">
-    <meta name="author" content="{{ meta.author }}">
+    <meta name="description" content="{{ meta.description }}"/>
+    <meta name="author" content="{{ meta.author }}"/>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet"/>
 
     <style>
         html,
@@ -17,12 +17,15 @@
             height: 100%;
             font-family: 'Poppins', sans-serif;
             font-size: 16px;
-            background-color: {{ theme.bg }};
-            color: {{ theme.color }};
+            background-color: {{theme.bg}}
+            ;
+            color: {{theme.color}}
+            ;
         }
         hr {
-            background-color: {{ theme.bg2 }};
-            border:0;
+            background-color: {{theme.bg2}}
+            ;
+            border: 0;
             height: 1px;
             margin: 1rem 0;
         }
@@ -37,7 +40,7 @@
         }
         .mainContent .indexContent {
             width: 100%;
-            max-width: 18%;
+            max-width: 60ch;
             padding: 2rem;
         }
         .mainContent header {
@@ -57,7 +60,7 @@
         .disconnected {
             color: #D74B32;
         }
-        .badge{
+        .badge {
             font-size: 0.85em;
             padding: 0.1em 0.2em;
             border: 0;
@@ -75,10 +78,20 @@
             background-color: #AAD287;
         }
         .bg-secondary {
-            background-color: {{ theme.bg2 }};
+            background-color: {{theme.bg2}}
+            ;
         }
         .text-bold {
             font-weight: 700;
+        }
+        table {
+            border: 2px solid black;
+            border-collapse: collapse;
+        }
+        th,
+        td {
+            border: 2px solid black;
+            padding: 0.5em;
         }
     </style>
 </head>
