@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import ReferentialController from "../Routes/ReferentialController";
+import ReferentialController from "../Controllers/ReferentialController";
 
 import { refData } from "../data";
 
@@ -21,8 +21,8 @@ class ReferentialRoutes {
      * @public @method
      */
     public setupPublicRoutes(): express.Router {
-        this.routerInstance.get("/", [this.getRefHomeHandler.bind(this)]);
-        this.routerInstance.get("/:single", [this.getRefSingleHandler.bind(this)]);
+        this.routerInstance.get("/", [this.getRefIndexHandler.bind(this)]);
+        this.routerInstance.get("/:entity", [this.getRefEntityHandler.bind(this)]);
         return this.routerInstance;
     }
 
@@ -36,7 +36,7 @@ class ReferentialRoutes {
      * @param res {Response}
      * @return {Promise<any>}
      */
-    public async getRefHomeHandler(req: Request, res: Response): Promise<any> {
+    public async getRefIndexHandler(req: Request, res: Response): Promise<any> {
         if ("json" in req.query) {
             res.set("Content-Type", "application/json");
 
@@ -53,17 +53,19 @@ class ReferentialRoutes {
      * @param res {Response}
      * @return {Promise<any>}
      */
-    public async getRefSingleHandler(req: Request, res: Response): Promise<any> {
+    public async getRefEntityHandler(req: Request, res: Response): Promise<any> {
         const { params } = req;
 
         if ("json" in req.query) {
             res.set("Content-Type", "application/json");
 
-            return res.status(StatusCodes.OK).send(refData.primary[params.single]);
+            return res.status(StatusCodes.OK).send(refData.primary[params.entity]);
         }
 
         res.set("Content-Type", "text/html");
-        return res.status(StatusCodes.OK).send(await this.controllerInstance.referentialSingleLayout(params.single));
+        return res
+            .status(StatusCodes.OK)
+            .send(await this.controllerInstance.referentialSingleEntityLayout(params.entity));
     }
 }
 export default ReferentialRoutes;
