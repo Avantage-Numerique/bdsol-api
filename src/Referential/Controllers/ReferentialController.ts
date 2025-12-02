@@ -2,7 +2,7 @@ import config from "@src/config";
 import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
 import PublicTemplate from "@src/Templates/PublicTemplate";
 import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
-import { refData } from "../data";
+import { refData } from "../Data/data";
 
 class ReferentialController {
     /** @private @static Singleton instance */
