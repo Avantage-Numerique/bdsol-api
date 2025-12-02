@@ -23,11 +23,12 @@
                         <th rowspan='2'>Format</th>
                         <th rowspan='2'>Description</th>
                         <th colspan='2'>Compatibilité</th>
+                        <th rowspan='2'>Note</th>
                     </tr>
 
                     <tr>
-                        <th>ArtsData/schema.org</th>
-                        <th>Arts de la scène</th>
+                        <th>Avec</th>
+                        <th>Nom de leur propriété</th>
                     </tr>
                 </thead>
 
@@ -45,6 +46,8 @@
                                     <a href="{{ value[1] }}">{{ value[0] }}</a>
                                 </td>
                             {% endfor %}
+
+                            <td>{{ row.note }}</td>
 
                         </tr>
                     {% endfor %}

@@ -49,12 +49,12 @@ class ReferentialController {
         });
     }
 
-    public async referentialSingleLayout(single: string): Promise<string> {
+    public async referentialSingleEntityLayout(entity: string): Promise<string> {
         const baseData = getTemplateBaseData();
 
         const index = new PublicTemplate("referentialSingle"); //tempalte have already a default in the EmailContent.Prepare.
 
-        const title: string = `Référentiel de ${config.appName} - ${single}`;
+        const title: string = `Référentiel de ${config.appName} - ${entity}`;
         let body: string = ``;
 
         return await index.render({
@@ -66,7 +66,7 @@ class ReferentialController {
 
                 baseRoute: "/ref",
 
-                item: refData.primary[single],
+                item: refData.primary[entity],
 
                 meta: {
                     title: `${title}`,

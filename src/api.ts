@@ -17,7 +17,7 @@ import LogHelper from "./Monitoring/Helpers/LogHelper";
 import { ApiErrorHandler } from "./Error/Middlewares/ApiErrorHandler";
 import { GetRequestIp } from "./Monitoring/Middlewares/GetRequestIp";
 import ModerationRoutes from "./Moderation/Routes/ModerationRoutes";
-import ReferentialRoutes from "./Referential/Controllers/ReferentialRoutes";
+import ReferentialRoutes from "./Referential/Routes/ReferentialRoutes";
 import SearchRoutes from "./Database/Search/SearchRoutes";
 import { StaticContentsRoutes } from "./StaticContent/Routes/StaticContentsRoutes";
 import { ProjectsRoutes } from "./Projects/Routes/ProjectsRoute";
