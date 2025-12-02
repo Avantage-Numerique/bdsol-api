@@ -6,14 +6,6 @@ class EmailTemplate extends BaseTemplate {
     constructor(name: string = "default") {
         super(name, "/Emails");
         this.name = name + ".njk";
-
-        LogHelper.info(
-            "Initiating templates for emails",
-            `on path : ${this.basePath}`,
-            `app base path ${config.basepath}`,
-            `content : ${this.contentPath}`,
-            `includes : ${this.includePath}`
-        );
     }
 }
 
