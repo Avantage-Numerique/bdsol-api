@@ -94,7 +94,7 @@ class AuthentificationController {
             user.tokenVerified = true;
 
             //Modify lastLogin date
-            const lastLogin = await User.getInstance().mongooseModel.findOneAndUpdate(
+            await User.getInstance().mongooseModel.findOneAndUpdate(
                 { _id: targetUser.data._id },
                 { lastLogin: new Date() }
             );
@@ -148,6 +148,7 @@ class AuthentificationController {
     /**
      * @comment Password is beeing hashed inside findOneAndUpdate 'pre' event in the model
      * @param requestData
+     * @param visitorIp
      * @returns
      */
     public async register(requestData: any, visitorIp: any): Promise<ApiResponseContract> {
@@ -403,7 +404,7 @@ class AuthentificationController {
 
     /**
      * Allow user to reset his password by email.
-     * @param {string} email email of user to send email to reset password
+     * @param {string} token the token used to verify.
      * @param {string} password email of user to send email to reset password
      * @return {Promise} of type Any.
      * @public
@@ -428,7 +429,7 @@ class AuthentificationController {
                     );
 
                 //Check if password is ok in length and conditions
-                if (typeof password == "string" && password.length >= 8) {
+                if (typeof password === "string" && password.length >= 8) {
                     //If user password and old match, procceed to change password
                     const updatedUser = await User.getInstance().mongooseModel.findOneAndUpdate(
                         { _id: targetUser._id },
@@ -475,7 +476,8 @@ class AuthentificationController {
 
     /**
      * Verify account if verification token is associated with a user.
-     * @param token string of 128 characters of random nature
+     * @param token {string} of 128 characters of random nature
+     * @param visitorIp {any} should be string or unkown.
      * @return {Promise} of type Any.
      * @public
      */
@@ -487,7 +489,7 @@ class AuthentificationController {
             const targetUser = await User.getInstance().mongooseModel.findOne({
                 "verify.token": token,
             });
-
+            LogHelper.log("Verify account", targetUser);
             //If user is found
             if (targetUser !== null) {
                 //if he's already verified
@@ -512,13 +514,13 @@ class AuthentificationController {
                     {
                         verify: {
                             isVerified: true,
-                            token: null,
-                            expireDate: null,
+                            token: targetUser.verify.token || null,
+                            expireDate: targetUser.verify.expireDate || null,
                             validatedOn: new Date(),
                             ipAddress: visitorIp,
                         },
                     },
-                    { new: true }
+                    { new: true } //return the user objet.
                 );
                 const dtoResponse = User.getInstance().dataTransfertObject(response);
 
