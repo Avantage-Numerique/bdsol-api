@@ -1,6 +1,6 @@
 import Page, { PageContent } from "@src/Pages/Controllers/Pages/Page";
 
-import { refData } from "@src/Referential/data";
+import { refData } from "@src/Referential/Data/data";
 
 class ReferentialPage extends Page {
     constructor(name: string, layout: string = "", content: PageContent = { title: "Page", body: "contenu" }) {

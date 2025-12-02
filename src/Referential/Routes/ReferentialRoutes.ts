@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import ReferentialController from "../Controllers/ReferentialController";
 
-import { refData } from "../data";
+import { refData } from "../Data/data";
 
 class ReferentialRoutes {
     public routerInstance: express.Router;
