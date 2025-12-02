@@ -1,3 +1,3 @@
-import {Document} from "mongoose";
+import { Document } from "mongoose";
 
-export type StaticContentSchema = Document
+export type StaticContentSchema = Document;

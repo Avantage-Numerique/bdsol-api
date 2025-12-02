@@ -1,6 +1,5 @@
-import {CustomValidator} from 'express-validator';
+import { CustomValidator } from "express-validator";
 import mongoose from "mongoose";
-
 
 export class IsObjectIdStringValid {
     /**
@@ -8,9 +7,8 @@ export class IsObjectIdStringValid {
      * @param raw {string}
      * @return Boolean
      */
-    public static validate(raw:string):boolean
-    {
-        return mongoose.isObjectIdOrHexString(raw);//https://mongoosejs.com/docs/api.html#mongoose_Mongoose-isObjectIdOrHexString
+    public static validate(raw: string): boolean {
+        return mongoose.isObjectIdOrHexString(raw); //https://mongoosejs.com/docs/api.html#mongoose_Mongoose-isObjectIdOrHexString
     }
 
     //  MIDDLEWARE et CUSTOM Validator
@@ -18,9 +16,9 @@ export class IsObjectIdStringValid {
     /**
      * Middleware getter of the function to be added as the function.
      */
-    public static validatorCustom():CustomValidator {
+    public static validatorCustom(): CustomValidator {
         return (value) => {
             return IsObjectIdStringValid.validate(value);
-        }
+        };
     }
 }

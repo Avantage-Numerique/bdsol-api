@@ -3,7 +3,6 @@ import PlacesService from "@src/Places/Services/PlacesService";
 import Place from "@src/Places/Models/Place";
 
 class PlacesController extends AbstractController {
-
     /** @private @static Singleton instance */
     private static _instance: AbstractController;
 

@@ -1,15 +1,13 @@
-import {ReasonPhrases, StatusCodes} from "http-status-codes";
-import {ApiResponseContract} from "@src/Http/Responses/ApiResponse";
-import {ErrorResponse} from "@src/Http/Responses/ErrorResponse";
-import {User, UserContract, UsersService} from "@src/Users/UsersDomain";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import { ApiResponseContract } from "@src/Http/Responses/ApiResponse";
+import { ErrorResponse } from "@src/Http/Responses/ErrorResponse";
+import { User, UserContract, UsersService } from "@src/Users/UsersDomain";
 import config from "@src/config";
 
-
 export class RegistrationController {
-
     /** @public UsersService and model */
-    public service:UsersService;
-    public userModel:User;
+    public service: UsersService;
+    public userModel: User;
 
     /** @constructor */
     constructor() {
@@ -17,11 +15,8 @@ export class RegistrationController {
         this.userModel = User.getInstance();
     }
 
-
-    public async register(requestData:any):Promise<ApiResponseContract>
-    {
-        if (!this.validateData(requestData))
-        {
+    public async register(requestData: any): Promise<ApiResponseContract> {
+        if (!this.validateData(requestData)) {
             return ErrorResponse.create(
                 new Error(ReasonPhrases.BAD_REQUEST),
                 StatusCodes.BAD_REQUEST,
@@ -30,8 +25,7 @@ export class RegistrationController {
         }
 
         const formattedData = this.formatRequestDataForDocument(requestData);
-        const createdDocumentResponse:ApiResponseContract = await this.service.insert(formattedData);
-
+        const createdDocumentResponse: ApiResponseContract = await this.service.insert(formattedData);
 
         if (!createdDocumentResponse.error) {
             createdDocumentResponse.data = this.userModel.dataTransfertObject(createdDocumentResponse.data);
@@ -42,8 +36,7 @@ export class RegistrationController {
         return createdDocumentResponse;
     }
 
-    public validateData(data:any):any
-    {
+    public validateData(data: any): any {
         const message = "validateData register";
         /*
         //pour appliquer la validation sur les données reçus.
@@ -55,7 +48,7 @@ export class RegistrationController {
         }
         */
         if (data !== undefined && data !== null) {
-            let isValid = typeof data === 'object';
+            let isValid = typeof data === "object";
             isValid = data.name !== undefined && isValid;
             isValid = data.username !== undefined && isValid;
             isValid = data.email !== undefined && isValid;
@@ -70,15 +63,14 @@ export class RegistrationController {
         return false;
     }
 
-
-    public formatRequestDataForDocument(data:any):UserContract {
+    public formatRequestDataForDocument(data: any): UserContract {
         return {
             name: data.name,
             email: data.email,
             username: data.username,
             password: data.password,
             avatar: data.avatar,
-            role: config.users.roles.default
+            role: config.users.roles.default,
         } as UserContract;
     }
 }

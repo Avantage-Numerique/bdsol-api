@@ -1,78 +1,86 @@
-
 export interface ApiResponseContract {
-
-    error:boolean;
-    code:number;//statusCode - ?
-    message:string;
-    errors:any;
+    error: boolean;
+    code: number; //statusCode - ?
+    message: string;
+    errors: any;
     data: any;
+    meta?: any;
 }
 
 export default class ApiResponse implements ApiResponseContract {
-
     //public statusCode;
-    protected _rawResponse:ApiResponseContract;
-    protected _response:ApiResponseContract;
-    protected _data:object;
-    protected _code:number;
-    protected _error:boolean = true;
-    protected _errors:any;
-    protected _message:string;
+    protected _rawResponse: ApiResponseContract;
+    protected _response: ApiResponseContract;
+    protected _data: object;
+    protected _code: number;
+    protected _error: boolean = true;
+    protected _errors: any;
+    protected _message: string;
+    protected _meta: any;
 
-    constructor(responseParams:ApiResponseContract) {
+    constructor(responseParams: ApiResponseContract) {
         this.error = responseParams.error;
         this.code = responseParams.code;
         this.message = responseParams.message;
         this.errors = responseParams.errors;
         this.data = responseParams.data;
         this.response = responseParams;
+        this.meta = responseParams.meta;
     }
 
-    public get response():ApiResponseContract {
+    public get response(): ApiResponseContract {
         return {
-            "error": this.error,
-            "code": this.code,
-            "message": this.message,
-            "errors": this.errors,
-            "data": this.data,
+            error: this.error,
+            code: this.code,
+            message: this.message,
+            errors: this.errors,
+            data: this.data,
+            meta: this.meta,
         } as ApiResponseContract;
     }
-    public set response(response:ApiResponseContract) {
+    public set response(response: ApiResponseContract) {
         this._rawResponse = response;
     }
 
-    public get error():boolean {
+    public get error(): boolean {
         return this._error;
     }
-    public set error(error:boolean) {
+    public set error(error: boolean) {
         this._error = error;
     }
 
-    public get errors():Array<any> {
+    public get errors(): Array<any> {
         return this._errors;
     }
-    public set errors(errors:Array<any>) {
+    public set errors(errors: Array<any>) {
         this._errors = errors;
     }
 
-    public get code():number {
+    public get code(): number {
         return this._code;
     }
-    public set code(code:number) {
+    public set code(code: number) {
         this._code = code;
     }
 
-    public get message():string {
+    public get message(): string {
         return this._message;
     }
-    public set message(message:string) {
+    public set message(message: string) {
         this._message = message;
     }
 
-    public get data():object {
+    public get data(): object {
         return this._data;
     }
-    public set data(message:object) {
+    public set data(message: object) {
         this._data = message;
+    }
+
+    public get meta(): object {
+        return this._meta;
+    }
+    public set meta(message: object) {
+        this._meta = message;
     }
 }

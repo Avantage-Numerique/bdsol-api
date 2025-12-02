@@ -1,5 +1,5 @@
 import express from "express";
-import {UsersHistoryController} from "../Controllers/UsersHistoryController";
+import { UsersHistoryController } from "../Controllers/UsersHistoryController";
 import AbstractController from "../../Abstract/Controller";
 import CrudRoute from "../../Abstract/CrudRoute";
 
@@ -8,7 +8,7 @@ class UsersHistoryRoutes extends CrudRoute {
     routerInstance: express.Router = express.Router();
     routerInstanceAuthentification: express.Router = express.Router();
 
-    middlewaresDistribution:any = {
+    middlewaresDistribution: any = {
         all: [],
         createUpdate: [],
         create: [],
@@ -18,18 +18,14 @@ class UsersHistoryRoutes extends CrudRoute {
         list: [],
         getinfo: [],
         getdoc: [],
-    }
-
+    };
 
     public setupAdditionnalPublicRoutes(router: express.Router) {
-
         //  GET
         //disabling this from the default Route class, because this take advantage on what's in the route object
-        router.get('/:slug', [
-            this.disabledRouteHandler.bind(this)
-        ]);
+        router.get("/:slug", [this.disabledRouteHandler.bind(this)]);
 
         return router;
     }
 }
-export {UsersHistoryRoutes};
+export { UsersHistoryRoutes };

@@ -1,25 +1,24 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import AbstractModel from "@core/Model";
-import type {DbProvider} from "@database/DatabaseDomain";
-import {EventSchema} from "@src/Events/Schemas/EventSchema";
+import type { DbProvider } from "@database/DatabaseDomain";
+import { EventSchema } from "@src/Events/Schemas/EventSchema";
 import EventsService from "@src/Events/Services/EventsService";
-import {TeamField} from "@src/Team/Schemas/TeamSchema";
-import {Meta, SubMeta} from "@src/Moderation/Schemas/MetaSchema";
-import * as fs from 'fs';
-import {middlewarePopulateProperty, taxonomyPopulate} from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
-import {populateUser} from "@src/Users/Middlewares/populateUser";
-import {Schedule} from "@src/Database/Schemas/ScheduleSchema";
-import {EventFormatEnum} from "../EventFormatEnum";
-import {SocialHandle} from "@src/Database/Schemas/SocialHandleSchema";
-import {ContactPoint} from "@src/Database/Schemas/ContactPointSchema";
+import { TeamField } from "@src/Team/Schemas/TeamSchema";
+import { Meta, SubMeta } from "@src/Moderation/Schemas/MetaSchema";
+import * as fs from "fs";
+import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
+import { populateUser } from "@src/Users/Middlewares/populateUser";
+import { Schedule } from "@src/Database/Schemas/ScheduleSchema";
+import { EventFormatEnum } from "../EventFormatEnum";
+import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
+import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 
 class Event extends AbstractModel {
-
     /** @protected @static Singleton instance */
     protected static _instance: Event;
 
     /** @public @static Model singleton instance constructor */
-    public static getInstance(doIndexes=true): Event {
+    public static getInstance(doIndexes = true): Event {
         if (Event._instance === undefined) {
             Event._instance = new Event();
 
@@ -27,38 +26,39 @@ class Event extends AbstractModel {
             Event._instance.registerEvents();
 
             //Setting virtuals
-            Event._instance.schema.virtual("type").get( function () { return Event._instance.modelName });
+            Event._instance.schema.virtual("type").get(function () {
+                return Event._instance.modelName;
+            });
 
             //Index
             if (doIndexes) Event._instance.registerIndexes();
 
             Event._instance.initSchema();
-
-
         }
         return Event._instance;
     }
 
-    public registerIndexes():void {
+    public registerIndexes(): void {
         //Indexes
         Event._instance.schema.index(
-            { name:"text", alternateNate:"text", slug:"text" },
+            { name: "text", alternateNate: "text", slug: "text" },
             {
                 default_language: "french",
                 //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
-                weights:{
-                    name:3,
-                    alternateName:3,
-                    slug:3,
-                }
-            });
+                weights: {
+                    name: 3,
+                    alternateName: 3,
+                    slug: 3,
+                },
+            }
+        );
     }
 
     /** @public Model lastName */
-    modelName: string = 'Event';
+    modelName: string = "Event";
 
     /** @public Collection Name in database*/
-    collectionName: string = 'Events';
+    collectionName: string = "Events";
 
     /** @public Connection mongoose */
     connection: mongoose.Connection;
@@ -67,25 +67,25 @@ class Event extends AbstractModel {
     mongooseModel: mongoose.Model<any>;
 
     /** @public Database schema */
-    schema: Schema =
-        new Schema<EventSchema>({
+    schema: Schema = new Schema<EventSchema>(
+        {
             name: {
                 type: String,
                 minLength: 2,
-                required: true
+                required: true,
             },
             slug: {
                 type: String,
                 slug: "name",
                 slugPaddingSize: 3,
                 index: true,
-                unique: true
+                unique: true,
             },
             alternateName: {
-                type: String
+                type: String,
             },
             url: {
-                type: [SocialHandle.schema]
+                type: [SocialHandle.schema],
             },
             description: {
                 type: String,
@@ -93,74 +93,77 @@ class Event extends AbstractModel {
             entityInCharge: {
                 type: mongoose.Types.ObjectId,
                 //required: true,
-                ref: "Organisation"
+                ref: "Organisation",
             },
             organizer: {
                 type: mongoose.Types.ObjectId,
-                ref: "Organisation"
+                ref: "Organisation",
             },
             eventType: {
-                type : [mongoose.Types.ObjectId],
-                ref: "Taxonomy"
+                type: [mongoose.Types.ObjectId],
+                ref: "Taxonomy",
             },
             eventFormat: {
-                type : String,
-                enum: EventFormatEnum
+                type: String,
+                enum: EventFormatEnum,
             },
             team: TeamField,
             startDate: {
-                type: Date
+                type: Date,
             },
             endDate: {
-                type: Date
+                type: Date,
             },
             contactPoint: {
-                type: ContactPoint.schema
+                type: ContactPoint.schema,
             },
             mainImage: {
                 type: mongoose.Types.ObjectId,
-                ref: "Media"
+                ref: "Media",
             },
-            attendees : {
+            attendees: {
                 type: [mongoose.Types.ObjectId],
-                ref: "Person"
+                ref: "Person",
             },
             skills: {
                 type: [mongoose.Types.ObjectId],
-                ref: "Taxonomy"
+                ref: "Taxonomy",
             },
             domains: {
-                type: [{
-                    domain: {
-                        type: mongoose.Types.ObjectId,
-                        ref: "Taxonomy"
+                type: [
+                    {
+                        domain: {
+                            type: mongoose.Types.ObjectId,
+                            ref: "Taxonomy",
+                        },
+                        subMeta: SubMeta.schema,
                     },
-                    subMeta: SubMeta.schema
-                }]
+                ],
             },
             schedule: {
-                type: [Schedule.schema]
+                type: [Schedule.schema],
             },
             subEvents: {
                 type: [mongoose.Types.ObjectId],
-                ref: "Event"
+                ref: "Event",
             },
             location: {
                 type: [mongoose.Types.ObjectId],
-                ref: "Place"
+                ref: "Place",
             },
-            photoGallery:{
+            photoGallery: {
                 type: mongoose.Types.ObjectId,
-                ref: "Media"
+                ref: "Media",
             },
             meta: {
-                type: Meta.schema
-            }
+                type: Meta.schema,
+            },
         },
-            {
-                toJSON: {virtuals: true},
-                timestamps: true,
-            });
+        {
+            toJSON: { virtuals: true },
+            timestamps: true,
+        }
+    );
 
     /** @abstract Used to return attributes and rules for each field of this entity. */
     public fieldInfo: any = [];
@@ -176,7 +179,7 @@ class Event extends AbstractModel {
         return ["name", "alternateName", "description", "eventType", "startDate", "endDate", "contactPoint"];
     }
 
-    public dropIndexes():void {
+    public dropIndexes(): void {
         return;
     }
 
@@ -188,92 +191,92 @@ class Event extends AbstractModel {
      */
     public dataTransfertObject(document: any) {
         return {
-            _id: document._id ?? '',
-            name: document.name ?? '',
-            slug: document.slug ?? '',
-            alternateName: document.alternateName ?? '',
+            _id: document._id ?? "",
+            name: document.name ?? "",
+            slug: document.slug ?? "",
+            alternateName: document.alternateName ?? "",
             url: document.url ?? [],
-            description: document.description ?? '',
-            entityInCharge: document.entityInCharge ?? '',
-            organizer: document.organizer ?? '',
-            eventType: document.eventType ?? '',
-            eventFormat: document.eventFormat ?? '',
+            description: document.description ?? "",
+            entityInCharge: document.entityInCharge ?? "",
+            organizer: document.organizer ?? "",
+            eventType: document.eventType ?? "",
+            eventFormat: document.eventFormat ?? "",
             team: document.team ?? [],
-            startDate: document.startDate ?? '',
-            endDate: document.endDate ?? '',
-            contactPoint: document.contactPoint ?? {tel:{num:"", ext:""}, email:{address:""}, website:{url:""}},
-            mainImage: document.mainImage ?? '',
+            startDate: document.startDate ?? "",
+            endDate: document.endDate ?? "",
+            contactPoint: document.contactPoint ?? {
+                tel: { num: "", ext: "" },
+                email: { address: "" },
+                website: { url: "" },
+            },
+            mainImage: document.mainImage ?? "",
             attendees: document.attendees ?? [],
             skills: document.skills ?? [],
             domains: document.domains ?? [],
             schedule: document.schedule ?? [],
             subEvents: document.subEvents ?? [],
             location: document.location ?? [],
-            photoGallery: document.photoGallery ?? '',
-            meta: document.meta ?? '',
-            type: document.type ?? '',
-            createdAt: document.createdAt ?? '',
-            updatedAt: document.updatedAt ?? ''
-        }
+            photoGallery: document.photoGallery ?? "",
+            meta: document.meta ?? "",
+            type: document.type ?? "",
+            createdAt: document.createdAt ?? "",
+            updatedAt: document.updatedAt ?? "",
+        };
     }
 
     public async documentation(): Promise<any> {
-        return fs.readFileSync('/api/doc/Event.md', 'utf-8');
+        return fs.readFileSync("/api/doc/Event.md", "utf-8");
     }
 
-
-    public registerAggregate() {
-
-    }
+    public registerAggregate() {}
 
     /**
      * Register mongoose events, for now pre-save, pre-findOneAndUpdate
      */
     public registerEvents(): void {
-
-        this.schema.pre('find', function(next) {
-
+        this.schema.pre("find", function (next) {
             // @ts-ignore //it sucks, but we need this to be the documents so shut up typescript.
             if (this.options?._recursed) {
                 return next();
             }
-            middlewarePopulateProperty(this, 'team.member');
+            //middlewarePopulateProperty(this, 'team.member');
 
-            taxonomyPopulate(this, 'skills');
-            taxonomyPopulate(this, 'domains.domain');
+            taxonomyPopulate(this, "skills");
+            taxonomyPopulate(this, "domains.domain");
 
-            middlewarePopulateProperty(this, 'mainImage');
-            middlewarePopulateProperty(this, 'organizer');
-            middlewarePopulateProperty(this, 'attendees');
-            middlewarePopulateProperty(this, 'entityInCharge');
-            //middlewarePopulateProperty(this, 'subEvents');
-            middlewarePopulateProperty(this, 'eventType');
-            middlewarePopulateProperty(this, 'location');
-            middlewarePopulateProperty(this, 'photoGallery');
+            middlewarePopulateProperty(this, "mainImage");
+            //middlewarePopulateProperty(this, 'organizer');
+            //middlewarePopulateProperty(this, 'attendees');
+            //middlewarePopulateProperty(this, 'entityInCharge');
 
-            populateUser(this, "meta.requestedBy");
-            populateUser(this, "meta.lastModifiedBy");
+            //feature remove temporarly //middlewarePopulateProperty(this, 'subEvents');
+
+            //middlewarePopulateProperty(this, 'eventType');
+            //middlewarePopulateProperty(this, 'location');
+            //middlewarePopulateProperty(this, 'photoGallery');
+
+            //populateUser(this, "meta.requestedBy");
+            //populateUser(this, "meta.lastModifiedBy");
 
             next();
         });
 
-        this.schema.pre('findOne', function(next) {
-
+        this.schema.pre("findOne", function (next) {
             // @ts-ignore //it sucks, but we need this to be the documents so shut up typescript.
             if (this.options?._recursed) {
                 return next();
             }
-            middlewarePopulateProperty(this, 'team.member');
-            taxonomyPopulate(this, 'skills');
-            taxonomyPopulate(this, 'domains.domain');
-            middlewarePopulateProperty(this, 'mainImage');
-            middlewarePopulateProperty(this, 'organizer');
-            middlewarePopulateProperty(this, 'attendees');
-            middlewarePopulateProperty(this, 'entityInCharge');
+            middlewarePopulateProperty(this, "team.member");
+            taxonomyPopulate(this, "skills");
+            taxonomyPopulate(this, "domains.domain");
+            middlewarePopulateProperty(this, "mainImage");
+            middlewarePopulateProperty(this, "organizer");
+            middlewarePopulateProperty(this, "attendees");
+            middlewarePopulateProperty(this, "entityInCharge");
             //middlewarePopulateProperty(this, 'subEvents');
-            middlewarePopulateProperty(this, 'eventType');
-            middlewarePopulateProperty(this, 'location');
-            middlewarePopulateProperty(this, 'photoGallery');
+            middlewarePopulateProperty(this, "eventType");
+            middlewarePopulateProperty(this, "location");
+            middlewarePopulateProperty(this, "photoGallery");
             populateUser(this, "meta.requestedBy");
             populateUser(this, "meta.lastModifiedBy");
 

@@ -1,18 +1,16 @@
-import {Service} from "@database/DatabaseDomain";
+import { Service } from "@database/DatabaseDomain";
 import Organisation from "@src/Organisations/Models/Organisation";
 
-class OrganisationsService extends Service
-{
-
+class OrganisationsService extends Service {
     /** @private @static Singleton instance */
-    private static _instance:OrganisationsService;
+    private static _instance: OrganisationsService;
 
-    constructor(entity:Organisation) {
+    constructor(entity: Organisation) {
         super(entity);
     }
 
     /** @public @static Singleton constructor for OrganisationsService */
-    public static getInstance(model:any):OrganisationsService {
+    public static getInstance(model: any): OrganisationsService {
         if (OrganisationsService._instance === undefined) {
             OrganisationsService._instance = new OrganisationsService(model);
         }

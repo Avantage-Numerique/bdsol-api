@@ -1,10 +1,7 @@
-import ApiResponse, {ApiResponseContract} from "./ApiResponse";
+import ApiResponse, { ApiResponseContract } from "./ApiResponse";
 
-export class ErrorResponse extends ApiResponse
-{
-
-    constructor(response:ApiResponseContract)
-    {
+export class ErrorResponse extends ApiResponse {
+    constructor(response: ApiResponseContract) {
         super(response);
         this.error = true;
     }
@@ -17,26 +14,24 @@ export class ErrorResponse extends ApiResponse
      * @param message string the error message
      * @param data the data almost always empty
      */
-    public static create(errorsObj:Error, code:number, message:string="Erreur", data:object={}):ApiResponseContract
-    {
+    public static create(
+        errorsObj: Error,
+        code: number,
+        message: string = "Erreur",
+        data: object = {}
+    ): ApiResponseContract {
         let singleError;
-        if (errorsObj !== undefined &&
-            errorsObj.name !== undefined)
-        {
-            singleError =
-                {
-                    name: errorsObj.name,
-                    message: errorsObj.message
-                };
-        }
-        else
-        {
+        if (errorsObj !== undefined && errorsObj.name !== undefined) {
+            singleError = {
+                name: errorsObj.name,
+                message: errorsObj.message,
+            };
+        } else {
             singleError = ErrorResponse.getDefaultError();
         }
 
         return ErrorResponse.createWithMultipleErrors(singleError, code, message, data);
     }
-
 
     /**
      * Allow to push multiple error in the same response.
@@ -45,19 +40,23 @@ export class ErrorResponse extends ApiResponse
      * @param message string the error message
      * @param data the data almost always empty
      */
-    public static createWithMultipleErrors(errors:any, code:number, message:string="Erreur", data:object={}):ApiResponseContract
-    {
+    public static createWithMultipleErrors(
+        errors: any,
+        code: number,
+        message: string = "Erreur",
+        data: object = {}
+    ): ApiResponseContract {
         const error = new ErrorResponse({
-            error:true,
+            error: true,
             code: code,
             message: message,
             errors: errors,
-            data: data
+            data: data,
         } as ApiResponseContract);
         return error.response;
     }
 
-    public static getDefaultError():Error {
+    public static getDefaultError(): Error {
         return new Error("Error HTTP par défault. Something went wrong.");
     }
 }

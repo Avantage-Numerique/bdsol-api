@@ -1,9 +1,8 @@
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
-import {Service} from "@database/DatabaseDomain";
-import {SeederContract} from "../Contracts/SeederContract";
+import { Service } from "@database/DatabaseDomain";
+import { SeederContract } from "../Contracts/SeederContract";
 
 export abstract class Seeder implements SeederContract {
-
     abstract service: Service;
     abstract name: string;
 
@@ -11,15 +10,13 @@ export abstract class Seeder implements SeederContract {
      * Wall method to define if this can be done or not.
      */
     public async conditions(): Promise<boolean> {
-        return await this.isModelConnectionActive() &&
-            await this.seederConditions();
+        return (await this.isModelConnectionActive()) && (await this.seederConditions());
     }
 
     /**
      * Abstract to setup conditions in heir classes.
      */
     abstract seederConditions(): Promise<boolean>;
-
 
     /**
      * Execute the seeding process of this seeder.
@@ -37,7 +34,6 @@ export abstract class Seeder implements SeederContract {
      */
     abstract seed(): Promise<void>;
 
-
     /**
      * Execute on the reverse seed : unseed if conditions passes.
      */
@@ -51,7 +47,6 @@ export abstract class Seeder implements SeederContract {
      * Concrete unseeding method define in heir classe execute in up method if the conditions passes.
      */
     abstract unSeed(): Promise<void>;
-
 
     /**
      * Event not called yet, to be execute on seed up
@@ -71,7 +66,6 @@ export abstract class Seeder implements SeederContract {
         LogHelper.error(error, result);
     }
 
-
     //  Getter
 
     /**
@@ -80,7 +74,6 @@ export abstract class Seeder implements SeederContract {
     public async countCollection(): Promise<number> {
         return await this.service.appModel.connection.collection(this.service.appModel.collectionName).countDocuments();
     }
-
 
     // Conditions
 
@@ -95,13 +88,13 @@ export abstract class Seeder implements SeederContract {
      * Check if the collection is empty from countCollection method.
      */
     public async collectionEmpty(): Promise<boolean> {
-        return await this.countCollection() <= 0;
+        return (await this.countCollection()) <= 0;
     }
 
     /**
      * Check if the collection is not empty, from the countCollection method.
      */
     public async collectionNotEmpty(): Promise<boolean> {
-        return await this.countCollection() > 0;
+        return (await this.countCollection()) > 0;
     }
 }

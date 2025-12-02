@@ -1,14 +1,13 @@
-import {RouteContract} from "./Contracts/RouteContract";
+import { RouteContract } from "./Contracts/RouteContract";
 import AbstractRoute from "./Route";
-import express, {NextFunction, Request, Response} from "express";
+import express, { NextFunction, Request, Response } from "express";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
-import {ApiResponseContract} from "../Http/Responses/ApiResponse";
-import {param} from "express-validator";
+import { ApiResponseContract } from "../Http/Responses/ApiResponse";
+import { param } from "express-validator";
 import AbstractController from "./Controller";
-import {Service} from "@database/Service";
-import {urlSanitizerAlias} from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
-import {SlugSanitizer} from "@src/Security/Sanitizers/SlugSanitizer";
-
+import { Service } from "@database/Service";
+import { urlSanitizerAlias } from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
+import { SlugSanitizer } from "@src/Security/Sanitizers/SlugSanitizer";
 
 /**
  * The CrudRoute class is an abstract class that provides the basic functionality for CRUD (Create, Read, Update, Delete) operations on a specific entity.
@@ -20,7 +19,6 @@ import {SlugSanitizer} from "@src/Security/Sanitizers/SlugSanitizer";
  * @implements RouteContract
  */
 abstract class CrudRoute extends AbstractRoute implements RouteContract {
-
     /**
      * Controller of a specific entity.
      * @abstract
@@ -60,10 +58,9 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         getinfo: [],
         getdoc: [],
         bySlug: [
-            urlSanitizerAlias('slug', false, param),
-            param('slug')
-                .customSanitizer(SlugSanitizer.validatorCustomSanitizer())
-        ]
+            urlSanitizerAlias("slug", false, param),
+            param("slug").customSanitizer(SlugSanitizer.validatorCustomSanitizer()),
+        ],
     };
 
     /**
@@ -73,9 +70,8 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @public @method
      */
     public setupAuthRoutes(): express.Router {
-
         //create target entity with upload
-        this.routerInstanceAuthentification.post('/create', [
+        this.routerInstanceAuthentification.post("/create", [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("create"),
             this.validatingResults.bind(this),
@@ -84,7 +80,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
             this.routeSendResponse.bind(this),
         ]);
 
-        this.routerInstanceAuthentification.post('/update', [
+        this.routerInstanceAuthentification.post("/update", [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("update"),
             this.validatingResults.bind(this),
@@ -93,7 +89,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
             this.routeSendResponse.bind(this),
         ]);
 
-        this.routerInstanceAuthentification.post('/delete', [
+        this.routerInstanceAuthentification.post("/delete", [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("delete"),
             this.validatingResults.bind(this),
@@ -105,8 +101,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         return this.setupAdditionnalAuthRoutes(this.routerInstanceAuthentification);
     }
 
-
-    public setupAdditionnalAuthRoutes(router: express.Router):express.Router {
+    public setupAdditionnalAuthRoutes(router: express.Router): express.Router {
         return router;
     }
 
@@ -117,8 +112,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @public @method
      */
     public setupPublicRoutes(): express.Router {
-
-        this.routerInstance.post('/search', [
+        this.routerInstance.post("/search", [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("search"),
             this.validatingResults.bind(this),
@@ -126,7 +120,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
             this.routeSendResponse.bind(this),
         ]);
 
-        this.routerInstance.post('/textsearch', [
+        this.routerInstance.post("/textsearch", [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("search"),
             this.validatingResults.bind(this),
@@ -134,7 +128,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
             this.routeSendResponse.bind(this),
         ]);
 
-        this.routerInstance.post('/list', [
+        this.routerInstance.post("/list", [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("list"),
             this.validatingResults.bind(this),
@@ -142,7 +136,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
             this.routeSendResponse.bind(this),
         ]);
 
-        this.routerInstance.post('/getinfo', [
+        this.routerInstance.post("/getinfo", [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("getinfo"),
             this.validatingResults.bind(this),
@@ -152,7 +146,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
         //  Get
 
-        this.routerInstance.get('/getdoc', [
+        this.routerInstance.get("/getdoc", [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("getdoc"),
             this.validatingResults.bind(this),
@@ -160,8 +154,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
             this.routeSendResponse.bind(this),
         ]);
 
-
-        this.routerInstance.get('/list', [
+        this.routerInstance.get("/list", [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("list"),
             this.validatingResults.bind(this),
@@ -169,11 +162,10 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
             this.routeSendResponse.bind(this),
         ]);
 
-
         //  Get
 
         // Set the /:slug handler at the end of other route, to allow the routes sets in setupAdditionnalPublicRoutes to be 1 in priority.
-        this.routerInstance.get('/:slug', [
+        this.routerInstance.get("/:slug", [
             ...this.addMiddlewares("all"),
             ...this.addMiddlewares("bySlug"),
             this.validatingResults.bind(this),
@@ -184,8 +176,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         return this.setupAdditionnalPublicRoutes(this.routerInstance);
     }
 
-    public setupAdditionnalPublicRoutes(router: express.Router):express.Router {
-
+    public setupAdditionnalPublicRoutes(router: express.Router): express.Router {
         return router;
     }
 
@@ -206,7 +197,6 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         return next();
     }
 
-
     /**
      * UPDATE
      * Handle the update method of the controller of the entity, passing the data to it.
@@ -221,7 +211,6 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
 
         return next();
     }
-
 
     /**
      * DELETE
@@ -258,7 +247,6 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         return next();
     }
 
-
     /**
      * LIST
      * Handle the list method of the controller of the entity, passing the data to it.
@@ -290,7 +278,6 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         return next();
     }
 
-
     //  GET handlers
 
     /**
@@ -301,12 +288,10 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
      * @return {Promise<any>}
      */
     public async getDocumentationHandler(req: Request, res: Response): Promise<any> {
-
         const response: ApiResponseContract = await this.controllerInstance.getDoc();
-        const style = '<style> body {white-space : pre; background-color : #22211f; color : white}</style>';
+        const style = "<style> body {white-space : pre; background-color : #22211f; color : white}</style>";
         return await this.defaultReturnTemplate(style + response, req, res);
     }
-
 
     /**
      * Route handler to transform all the URI params into query to the get
@@ -324,7 +309,6 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         return next();
     }
 
-
     /**
      * Route handler to transform all the URI params into query to the get
      * @param req {Request}
@@ -339,25 +323,27 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
         }
         const data = req.body.data ?? {};
 
-        const query:any = {...initialQuery, ...data}
+        const query: any = { ...initialQuery, ...data };
 
         res.serviceResponse = await this.controllerInstance.list(query);
         return next();
     }
 
     public async createUserHistoryEntryHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
-
         const logger = new LogHelper(req);
         if (!res.serviceResponse.error) {
             const userHistoryCreated: ApiResponseContract = await this.controllerInstance.createUserHistory(req, res);
-            logger.log(`UserHistory have been : ${!userHistoryCreated.error ? "Created successfuly" : "with Error "+userHistoryCreated.message}`);
+            logger.log(
+                `UserHistory have been : ${!userHistoryCreated.error ? "Created successfuly" : "with Error " + userHistoryCreated.message}`
+            );
         } else {
-            logger.log(`Couldn't create userHistory, service response error : ${res.serviceResponse.message}, code ${res.serviceResponse.code}`);
+            logger.log(
+                `Couldn't create userHistory, service response error : ${res.serviceResponse.message}, code ${res.serviceResponse.code}`
+            );
         }
 
         next();
     }
-
 }
 
 export default CrudRoute;

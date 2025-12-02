@@ -1,4 +1,4 @@
-import {Service} from "@database/DatabaseDomain";
+import { Service } from "@database/DatabaseDomain";
 import Place from "@src/Places/Models/Place";
 
 class PlacesService extends Service {
