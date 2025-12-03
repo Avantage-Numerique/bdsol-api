@@ -2,7 +2,8 @@ import express, { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import ReferentialController from "../Controllers/ReferentialController";
 
-import { refData } from "../Data/data";
+import { refData } from "@ref/Data/data";
+import { findEntityByURL } from "@ref/Data/utils";
 
 class ReferentialRoutes {
     public routerInstance: express.Router;
@@ -59,13 +60,13 @@ class ReferentialRoutes {
         if ("json" in req.query) {
             res.set("Content-Type", "application/json");
 
-            return res.status(StatusCodes.OK).send(refData.primary[params.entity]);
+            return res.status(StatusCodes.OK).send(findEntityByURL(params.entity.toLowerCase()));
         }
 
         res.set("Content-Type", "text/html");
         return res
             .status(StatusCodes.OK)
-            .send(await this.controllerInstance.referentialSingleEntityLayout(params.entity));
+            .send(await this.controllerInstance.referentialSingleEntityLayout(params.entity.toLowerCase()));
     }
 }
 export default ReferentialRoutes;

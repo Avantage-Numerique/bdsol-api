@@ -2,19 +2,22 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export type RefItem = {
     label: string;
-    url: string;
+    url: `/${string}`;
     similarTo?: RefCompatibility[];
     description?: string;
     ref: RefField[];
 };
 
+type externalOntologies = "schema";
+
 type RefFieldBase = {
     field?: string;
-    //ontologyProperty: string;
+    ontologyProperty?: `an:${string}`;
     label: string;
     cardinality?: Cardinality;
     description?: string;
     compatibility?: RefCompatibility[];
+    note?: string;
 };
 
 export type RefField =
@@ -23,8 +26,8 @@ export type RefField =
     | (RefFieldBase & { type: Exclude<FieldType, "object" | "id">; subSchema?: never; entityRef?: never });
 
 export type RefData = {
-    primary: Record<string, RefItem>;
-    secondary: Record<string, RefItem>;
+    entities: Record<string, RefItem>;
+    subschemas: Record<string, RefItem>;
 };
 
 export type RefCompatibility = {
@@ -35,7 +38,7 @@ export type RefCompatibility = {
     };
     mapping: {
         externalField: string;
-        ontologyProperty?: string;
+        ontologyProperty?: `${externalOntologies}:${string}`;
         ontologyUri?: string;
     };
     relation?: string;

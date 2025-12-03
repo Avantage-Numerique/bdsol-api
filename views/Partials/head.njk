@@ -40,7 +40,7 @@
         }
         .mainContent .indexContent {
             width: 100%;
-            max-width: 62%;
+            max-width: 120ch;
             padding: 2rem;
         }
         .mainContent header {
@@ -84,14 +84,64 @@
         .text-bold {
             font-weight: 700;
         }
+        code {
+            background: lightgrey;
+            border-radius: 0.2em;
+            padding-inline: 0.3em;
+        }
         table {
             border: 2px solid black;
             border-collapse: collapse;
+
+            min-width: 100%;
+
+            & .nodata {
+                text-align: center;
+                padding: 0.5em;
+                grid-column: 1 / -1;
+                opacity: .5;
+            }
+
+            &.ref td,
+            &.ref th {
+
+                &:first-child,
+                &:nth-child(2) {
+                    width: 20ch;
+                }
+            }
         }
         th,
         td {
             border: 2px solid black;
+
             padding: 0.5em;
+
+            &:has(.compat-grid) {
+                padding: 0;
+                vertical-align: top;
+            }
+        }
+        .compat-header th {
+            width: 20ch;
+        }
+        .compat-grid {
+            display: grid;
+            grid: auto-flow / 1fr 1fr;
+
+            & > div {
+                padding: 0.25em;
+
+                &:not(:nth-last-child(-n + 2)) {
+                    border-bottom: 2px dashed;
+                }
+            }
+        }
+        @media print {
+            html,
+            body {
+                background: none;
+            }
         }
     </style>
 </head>

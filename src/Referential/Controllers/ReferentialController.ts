@@ -2,7 +2,8 @@ import config from "@src/config";
 import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
 import PublicTemplate from "@src/Templates/PublicTemplate";
 import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
-import { refData } from "../Data/data";
+import { refData } from "@ref/Data/data";
+import { findEntityByURL } from "@ref/Data/utils";
 
 class ReferentialController {
     /** @private @static Singleton instance */
@@ -27,14 +28,14 @@ class ReferentialController {
         const index = new PublicTemplate("referential"); //tempalte have already a default in the EmailContent.Prepare.
 
         const title: string = `Référentiel de ${config.appName}`;
-        let body: string = ``;
+        // let body: string = ``;
 
         return await index.render({
             context: {
                 ...baseData, //basic app and api default string and links
                 ...DefaultEmailTheme, //basic theme for colors and sizes.
                 title: `${title}`,
-                body: `${body}`,
+                // body: `${body}`,
 
                 baseRoute: "/ref",
 
@@ -42,7 +43,7 @@ class ReferentialController {
 
                 meta: {
                     title: `${title}`,
-                    description: `${body}`,
+                    // description: `${body}`,
                     author: `${config.appName}`,
                 },
             },
@@ -54,23 +55,26 @@ class ReferentialController {
 
         const index = new PublicTemplate("referentialSingle"); //tempalte have already a default in the EmailContent.Prepare.
 
-        const title: string = `Référentiel de ${config.appName} - ${entity}`;
-        let body: string = ``;
+        const title: string = `Référentiel de ${config.appName} &rarr; <code>/ref/${entity}</code>`;
+        // let body: string = ``;
 
         return await index.render({
             context: {
                 ...baseData, //basic app and api default string and links
                 ...DefaultEmailTheme, //basic theme for colors and sizes.
                 title: `${title}`,
-                body: `${body}`,
+                // body: `${body}`,
 
+                baseUrl: config.baseUrl,
                 baseRoute: "/ref",
 
-                item: refData.primary[entity],
+                // item: refData.primary[entity] ?? refData.secondary[entity],
+
+                item: findEntityByURL(entity),
 
                 meta: {
                     title: `${title}`,
-                    description: `${body}`,
+                    // description: `${body}`,
                     author: `${config.appName}`,
                 },
             },
