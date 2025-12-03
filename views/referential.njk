@@ -10,24 +10,28 @@
 
         <h1>{{ title }}</h1>
 
-        {% if items.primary %}
+        {% if items.entities %}
 
-            <h2>Entités</h2>
+            <h2>Entités principales</h2>
 
-            <table>
+            <p>Les entities principales de la plateforme AVNU.</p>
+
+            <table class="ref">
 
                 <thead>
                     <th>Item</th>
                     <th>URL</th>
+                    <th>Description</th>
                 </thead>
 
                 <tbody>
-                    {% for label, item in items.primary %}
+                    {% for label, item in items.entities %}
                         <tr>
                             <td>{{ label }}</td>
                             <td>
-                                <a href="{{ baseRoute }}{{ item.url }}">{{ baseRoute }}{{ item.url }}</a>
+                                <a href="{{ baseUrl }}{{ baseRoute }}{{ item.url }}">{{ baseRoute }}{{ item.url }}</a>
                             </td>
+                            <td>{{ item.description }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -37,24 +41,28 @@
             <p>Rien à afficher!</p>
         {% endif %}
 
-        {% if items.secondary %}
+        {% if items.subschemas %}
 
-            <h2>Relations</h2>
+            <h2>Sous-schémas</h2>
 
-            <table>
+            <p>Formes d'objets des sous-propriétés complexes des entitées principales.</p>
+
+            <table class="ref">
 
                 <thead>
                     <th>Item</th>
                     <th>URL</th>
+                    <th>Description</th>
                 </thead>
 
                 <tbody>
-                    {% for label, item in items.secondary %}
+                    {% for label, item in items.subschemas %}
                         <tr>
                             <td>{{ label }}</td>
                             <td>
-                                <a href="{{ baseRoute }}{{ item.url }}">{{ baseRoute }}{{ item.url }}</a>
+                                <a href="{{ baseUrl }}{{ baseRoute }}{{ item.url }}">{{ baseRoute }}{{ item.url }}</a>
                             </td>
+                            <td>{{ item.description }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

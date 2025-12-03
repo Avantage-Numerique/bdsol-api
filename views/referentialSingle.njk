@@ -8,11 +8,21 @@
             {% include "Partials/header.njk" %}
         {% endblock %}
 
-        <h1>{{ title }}</h1>
+        {% if item %}
+
+            <h1>{{ title | safe }}</h1>
+
+        {% endif %}
+
+        <div class="breadcrumbs">
+            <a href="/ref">Référentiel</a>
+        </div>
 
         {% if item %}
 
             <h2>{{ item.label }}</h2>
+
+            <p>{{ item.description }}</p>
 
             <table>
 
@@ -26,26 +36,63 @@
                         <th rowspan='2'>Note</th>
                     </tr>
 
-                    <tr>
-                        <th>Avec</th>
-                        <th>Nom de leur propriété</th>
+                    <tr class="compat-header">
+                        <th>Ontologie</th>
+                        <th>Propriété</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     {% for row in item.ref %}
                         <tr>
-                            <td>{{ row.name }}</td>
+                            <td>{{ row.label }}</td>
 
-                            <td>{{ row.format }}</td>
+                            <td>
+
+                                {% if row.type === 'object' %}
+                                    <a href="/ref{{ row.subSchema.url }}">
+                                        {{ row.subSchema.label }}
+                                    </a>
+                                {% elseif row.type === 'id' %}
+                                    ID de :
+
+                                    {% for entityRef in row.entityRef %}
+
+                                        <a href="/ref/{{ entityRef }}">{{ entityRef }}</a>
+
+                                    {% endfor %}
+
+                                {% else %}
+                                    {{ row.type }}
+                                {% endif %}
+                            </td>
 
                             <td>{{ row.description }}</td>
 
-                            {% for key, value in row.compatibility %}
-                                <td>
-                                    <a href="{{ value[1] }}">{{ value[0] }}</a>
-                                </td>
-                            {% endfor %}
+                            <td colspan="2">
+
+                                <div class="compat-grid">
+
+                                    {% for compatItem in row.compatibility %}
+
+                                        <div>
+                                            {{ compatItem.externalSource.name }}
+                                        </div>
+
+                                        <div>
+                                            <a href="{{ compatItem.documentationUrl }}" target="_blank">
+                                                {{ compatItem.mapping.externalField }}
+                                            </a>
+                                        </div>
+
+                                    {% else %}
+
+                                        <span class="nodata">Aucune donnée disponible.</span>
+
+                                    {% endfor %}
+                                </div>
+
+                            </td>
 
                             <td>{{ row.note }}</td>
 

@@ -1,5 +1,6 @@
-import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { RefItem } from "../types";
+import { EntityTypesEnum } from "@src/Entities/EntityTypes";
+
 import { refSubMeta } from "./ReferentialSubMeta";
 
 export const refSkillGroup: RefItem = {

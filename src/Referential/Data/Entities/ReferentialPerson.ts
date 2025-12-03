@@ -1,9 +1,11 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
-import { refContactPoint } from "../SubSchema/ReferentialContactPoint";
-import { refDomainList } from "../SubSchema/ReferentialDomainList";
-import { refSkillGroup } from "../SubSchema/ReferentialSkillGroup";
-import { RefItem } from "../types";
-import { refSocialHandle } from "../SubSchema/ReferentialSocialHandle";
+
+import { refContactPoint } from "@ref/Data/SubSchema/ReferentialContactPoint";
+import { refDomainList } from "@ref/Data/SubSchema/ReferentialDomainList";
+import { refSkillGroup } from "@ref/Data/SubSchema/ReferentialSkillGroup";
+import { refSocialHandle } from "@ref/Data/SubSchema/ReferentialSocialHandle";
+
+import { RefItem } from "@ref/Data/types";
 
 export const refPerson: RefItem = {
     label: "Personne",
@@ -37,7 +39,7 @@ export const refPerson: RefItem = {
     ref: [
         {
             field: "type",
-            //ontologyProperty: "an:type",
+            // ontologyProperty: "an:type",
             label: "Type",
             type: "string",
             cardinality: "1..1",
