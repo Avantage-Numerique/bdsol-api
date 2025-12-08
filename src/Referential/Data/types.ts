@@ -2,7 +2,7 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export type RefItem = {
     label: string;
-    url: `/${string}`;
+    url?: `/${string}`;
     similarTo?: RefCompatibility[];
     description?: string;
     ref: RefField[];
@@ -47,7 +47,7 @@ export type RefCompatibility = {
 
 export type SchemaRef = {
     label: string;
-    url: string;
+    url?: string;
 };
 
 export type FieldType = "string" | "number" | "boolean" | "object" | "id";
