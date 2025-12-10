@@ -1,9 +1,10 @@
-import { RefItem } from "../types";
+import { RefEntityOrSchema } from "../types";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 import { refSubMeta } from "./ReferentialSubMeta";
 
-export const refSkillGroup: RefItem = {
+export const refSkillGroup: RefEntityOrSchema = {
+    field: "offers",
     label: "Groupe de compétences",
     url: "/skillgroup",
     description:

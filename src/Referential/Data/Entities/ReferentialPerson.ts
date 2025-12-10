@@ -5,13 +5,15 @@ import { refDomainList } from "@ref/Data/SubSchema/ReferentialDomainList";
 import { refSkillGroup } from "@ref/Data/SubSchema/ReferentialSkillGroup";
 import { refSocialHandle } from "@ref/Data/SubSchema/ReferentialSocialHandle";
 
-import { RefItem } from "@ref/Data/types";
+import { RefEntityOrSchema } from "@ref/Data/types";
+import { refType } from "../Properties/ReferentialType";
+import { refDescription } from "../Properties/ReferentialDescription";
 
-export const refPerson: RefItem = {
+export const refPerson: RefEntityOrSchema = {
     label: "Personne",
     url: "/person",
     description: "Entité qui désigne une personne, qui décrit ses activités, ces compétences et autres.",
-    similarTo: [
+    compatibility: [
         {
             externalSource: {
                 name: "Schema.org",
@@ -37,29 +39,8 @@ export const refPerson: RefItem = {
         },
     ],
     ref: [
-        {
-            field: "type",
-            // ontologyProperty: "an:type",
-            label: "Type",
-            type: "string",
-            cardinality: "1..1",
-            compatibility: [
-                //Pas le même vocabulaire https://datascene.ca/references/vocabulaires/types_de_contributeurs/
-                /* {
-                            externalSource: {
-                                name: "Datascene",
-                                //sparqlEndpoint: ""
-                            },
-                            mapping: {
-                                externalField: "Type de contributeur",
-                                //ontologyProperty: "",
-                                //ontologyUri: "",
-                            },
-                            documentationUrl: "https://datascene.ca/references/vocabulaires/types_de_contributeurs/",
-                        }, */
-            ],
-            description: "Type de l'entité statique, dans ce cas ci 'Person. Virtuel, statique et non-modifiable.",
-        },
+        //type
+        { ...refType },
         //Pas implémenté dans notre api
         /* {
                     label: "Identifiants",
@@ -167,38 +148,7 @@ export const refPerson: RefItem = {
             description:
                 "Autre appellation parfois utilisé pour designer la personne. Exemple : 'Coeur de pirate' pour 'Béatrice Martin'.",
         },
-        {
-            field: "description",
-            //ontologyProperty: "an:description",
-            label: "Description",
-            type: "string",
-            cardinality: "0..1",
-            compatibility: [
-                {
-                    externalSource: {
-                        name: "Schema.org",
-                    },
-                    mapping: {
-                        externalField: "description",
-                        ontologyProperty: "schema:description",
-                        ontologyUri: "https://schema.org/description",
-                    },
-                    documentationUrl: "https://schema.org/description",
-                },
-                {
-                    externalSource: {
-                        name: "Datascene",
-                    },
-                    mapping: {
-                        externalField: "Description",
-                        //ontologyProperty: "",
-                        //ontologyUri: "",
-                    },
-                    documentationUrl: "https://datascene.ca/references/proprietes/contributeur/",
-                },
-            ],
-            description: "Description, à propos, biographie. Il s'agit d'un court texte pour décrire la personne.",
-        },
+        { ...refDescription },
         //Aucune trace de short-description dans notre api.
         /* {
                     label: "short-description",
@@ -218,7 +168,7 @@ export const refPerson: RefItem = {
         },
         {
             field: "url",
-            //ontologyProperty: "an:socialhandle",
+            //ontologyProperty: "avnu:socialHandle",
             label: "url",
             type: "object",
             cardinality: "0..N",
@@ -268,7 +218,7 @@ export const refPerson: RefItem = {
         },
         {
             field: "contactPoint",
-            //ontologyProperty: "an:contactPoint",
+            //ontologyProperty: "avnu:contactPoint",
             label: refContactPoint.label,
             type: "object",
             cardinality: "0..1",

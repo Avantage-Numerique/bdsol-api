@@ -12,7 +12,6 @@ import { refSubMeta } from "./SubSchema/ReferentialSubMeta";
 export const refData: RefData = {
     entities: {
         [refPerson.label]: refPerson,
-
         [refMedia.label]: refMedia,
     },
 
