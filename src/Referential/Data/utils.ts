@@ -1,5 +1,5 @@
 import { refData } from "./data";
-import { RefItem } from "./types";
+import { RefEntityOrSchema } from "./types";
 
 export function findEntityByURL(url: string) {
     return Object.values(refData)
@@ -8,7 +8,7 @@ export function findEntityByURL(url: string) {
 }
 
 export function mapEntityByURL() {
-    const routesMap: Map<string, RefItem> = new Map();
+    const routesMap: Map<string, RefEntityOrSchema> = new Map();
 
     Object.values(refData)
         .flatMap((x) => Object.values(x))

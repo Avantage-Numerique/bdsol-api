@@ -3,7 +3,7 @@ import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
 import PublicTemplate from "@src/Templates/PublicTemplate";
 import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
 import { refData } from "@ref/Data/data";
-import { findEntityByURL, mapEntityByURL } from "@ref/Data/utils";
+import { mapEntityByURL } from "@ref/Data/utils";
 
 class ReferentialController {
     /** @private @static Singleton instance */
@@ -55,8 +55,6 @@ class ReferentialController {
     }
 
     public async referentialSingleEntityLayout(entity: string): Promise<string> {
-        console.log(this._routes);
-
         const baseData = getTemplateBaseData();
 
         const index = new PublicTemplate("referentialSingle"); //tempalte have already a default in the EmailContent.Prepare.
