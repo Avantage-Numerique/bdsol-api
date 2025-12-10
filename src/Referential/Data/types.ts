@@ -1,33 +1,33 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
-export type RefItem = {
-    label: string;
-    url?: `/${string}`;
-    similarTo?: RefCompatibility[];
-    description?: string;
-    ref: RefField[];
-};
-
 type externalOntologies = "schema";
 
-type RefFieldBase = {
-    field?: string;
-    ontologyProperty?: `an:${string}`;
-    label: string;
-    cardinality?: Cardinality;
-    description?: string;
-    compatibility?: RefCompatibility[];
-    note?: string;
+//Property no ref
+export type RefPropertyBase = {
+    field?: string; //Default field name
+    ontologyProperty?: `avnu:${string}`; //our ontology property name
+    url?: `/${string}`;
+    label: string; //Default label
+    cardinality?: Cardinality; //Default cardinality
+    description?: string; //description of the property
+    compatibility?: RefCompatibility[]; //compatibility to other ontologies
+    note?: string; //Note
 };
 
-export type RefField =
-    | (RefFieldBase & { type: "object"; subSchema: SchemaRef; entityRef?: never })
-    | (RefFieldBase & { type: "id"; entityRef: EntityTypesEnum[]; subSchema?: never })
-    | (RefFieldBase & { type: Exclude<FieldType, "object" | "id">; subSchema?: never; entityRef?: never });
+export type RefEntityOrSchema = RefPropertyBase & {
+    ref: RefProperty[];
+};
+
+export type RefProperty =
+    | (RefPropertyBase & { type: "object"; subSchema: SchemaRef; entityRef?: never })
+    | (RefPropertyBase & { type: "id"; entityRef: EntityTypesEnum[]; subSchema?: never })
+    | (RefPropertyBase & { type: Exclude<FieldType, "object" | "id">; subSchema?: never; entityRef?: never });
+
+export type RefPropertyPrimitive = RefPropertyBase & { type: PrimitiveType };
 
 export type RefData = {
-    entities: Record<string, RefItem>;
-    subschemas: Record<string, RefItem>;
+    entities: Record<string, RefEntityOrSchema>;
+    subschemas: Record<string, RefEntityOrSchema>;
 };
 
 export type RefCompatibility = {
@@ -47,8 +47,9 @@ export type RefCompatibility = {
 
 export type SchemaRef = {
     label: string;
-    url?: string;
+    url?: `/${string}`;
 };
 
+export type PrimitiveType = "string" | "number" | "boolean";
 export type FieldType = "string" | "number" | "boolean" | "object" | "id";
 export type Cardinality = "0..1" | "1..1" | "0..N" | "1..N" | "N..N";
