@@ -6,7 +6,7 @@ import { ObjectId } from "mongodb";
 import { Sponsor } from "@database/Schemas/SponsorSchema";
 import { ScheduleBudget } from "@database/Schemas/ScheduleBudgetSchema";
 import { ProjectContextEnum } from "../ProjectContextEnum";
-import { DomainSchema } from "@src/Taxonomy/Schemas/DomainSchema";
+import { DomainListSchema } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 
@@ -25,7 +25,7 @@ export interface ProjectSchema extends Document {
     sponsor: [Sponsor];
     scheduleBudget: ScheduleBudget;
     skills: [ObjectId];
-    domains: [DomainSchema];
+    domains: [DomainListSchema];
     context: ProjectContextEnum;
     equipment: [ObjectId];
     meta: Meta;

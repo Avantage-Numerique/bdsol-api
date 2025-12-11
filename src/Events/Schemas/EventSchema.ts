@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import Media from "@src/Media/Models/Media";
-import { DomainSchema } from "@src/Taxonomy/Schemas/DomainSchema";
+import { DomainListSchema } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 import { Document } from "mongoose";
 import { Member } from "@src/Team/Schemas/MemberSchema";
@@ -25,7 +25,7 @@ export interface EventSchema extends Document {
     contactPoint: ContactPoint;
     mainImage: Media;
     attendees: [ObjectId];
-    domains: [DomainSchema];
+    domains: [DomainListSchema];
     skills: [ObjectId];
     schedule: [Schedule];
     subEvents: [ObjectId];

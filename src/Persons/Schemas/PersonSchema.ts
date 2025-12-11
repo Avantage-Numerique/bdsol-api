@@ -1,7 +1,7 @@
 import { Document } from "mongoose";
 import Media from "../../Media/Models/Media";
 import { Meta } from "../../Moderation/Schemas/MetaSchema";
-import { DomainSchema } from "../../Taxonomy/Schemas/DomainSchema";
+import { DomainListSchema } from "../../Taxonomy/Schemas/DomainListSchema";
 import { SkillGroup } from "../../Taxonomy/Schemas/SkillGroupSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
@@ -13,7 +13,7 @@ export interface PersonSchema extends Document {
     nickname: string;
     description: string;
     occupations: [SkillGroup];
-    domains: [DomainSchema];
+    domains: [DomainListSchema];
     mainImage: Media; //ça fonctionne ça ?
     catchphrase: string;
     contactPoint: ContactPoint;

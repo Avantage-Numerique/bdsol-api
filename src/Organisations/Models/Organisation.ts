@@ -14,6 +14,7 @@ import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 import BadgeTypes from "@src/Badges/BadgeTypes";
 import { middlewareInsertBadges } from "@src/Badges/MiddlewareInsertBadges";
+import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { RegionEnum } from "@src/Badges/RegionEnum";
 
 class Organisation extends AbstractModel {
@@ -136,7 +137,6 @@ class Organisation extends AbstractModel {
             },
             region: {
                 type: String,
-                enum: RegionEnum,
             },
             badges: {
                 type: [String],
