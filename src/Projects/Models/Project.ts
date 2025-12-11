@@ -13,6 +13,7 @@ import { TeamField } from "@src/Team/Schemas/TeamSchema";
 import * as fs from "fs";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
+import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
 
 class Project extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -127,15 +128,7 @@ class Project extends AbstractModel {
                 ref: "Taxonomy",
             },
             domains: {
-                type: [
-                    {
-                        domain: {
-                            type: mongoose.Types.ObjectId,
-                            ref: "Taxonomy",
-                        },
-                        subMeta: SubMeta.schema,
-                    },
-                ],
+                type: [DomainList.schema],
             },
             context: {
                 type: String,

@@ -12,6 +12,7 @@ import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import BadgeTypes from "@src/Badges/BadgeTypes";
 import { middlewareInsertBadges } from "@src/Badges/MiddlewareInsertBadges";
+import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
 
 class Person extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -126,16 +127,7 @@ class Person extends AbstractModel {
                 type: [SkillGroup.schema],
             },
             domains: {
-                type: [
-                    {
-                        domain: {
-                            type: mongoose.Types.ObjectId,
-                            ref: "Taxonomy",
-                        },
-                        subMeta: SubMeta.schema,
-                        _id: false,
-                    },
-                ],
+                type: [DomainList.schema],
             },
             mainImage: {
                 type: mongoose.Types.ObjectId,

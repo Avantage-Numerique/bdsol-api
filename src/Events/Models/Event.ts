@@ -12,6 +12,7 @@ import { Schedule } from "@src/Database/Schemas/ScheduleSchema";
 import { EventFormatEnum } from "../EventFormatEnum";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
+import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
 
 class Event extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -130,15 +131,7 @@ class Event extends AbstractModel {
                 ref: "Taxonomy",
             },
             domains: {
-                type: [
-                    {
-                        domain: {
-                            type: mongoose.Types.ObjectId,
-                            ref: "Taxonomy",
-                        },
-                        subMeta: SubMeta.schema,
-                    },
-                ],
+                type: [DomainList.schema],
             },
             schedule: {
                 type: [Schedule.schema],

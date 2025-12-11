@@ -14,6 +14,7 @@ import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 import BadgeTypes from "@src/Badges/BadgeTypes";
 import { middlewareInsertBadges } from "@src/Badges/MiddlewareInsertBadges";
+import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
 
 class Organisation extends AbstractModel {
     /** @protected @static Singleton instance of model Organisation */
@@ -104,16 +105,7 @@ class Organisation extends AbstractModel {
                 type: [SkillGroup.schema],
             },
             domains: {
-                type: [
-                    {
-                        domain: {
-                            type: mongoose.Types.ObjectId,
-                            ref: "Taxonomy",
-                        },
-                        subMeta: SubMeta.schema,
-                        _id: false,
-                    },
-                ],
+                type: [DomainList.schema],
             },
             team: {
                 type: [Member.schema],
