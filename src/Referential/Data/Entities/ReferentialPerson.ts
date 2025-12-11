@@ -8,6 +8,9 @@ import { refSocialHandle } from "@ref/Data/SubSchema/ReferentialSocialHandle";
 import { RefEntityOrSchema } from "@ref/Data/types";
 import { refType } from "../Properties/ReferentialType";
 import { refDescription } from "../Properties/ReferentialDescription";
+import { refCatchphrase } from "../Properties/ReferentialCatchphrase";
+import { refRegion } from "../Properties/ReferentialRegion";
+import { refBadges } from "../Properties/ReferentialBadges";
 
 export const refPerson: RefEntityOrSchema = {
     label: "Personne",
@@ -157,106 +160,18 @@ export const refPerson: RefEntityOrSchema = {
                         datascene: ["Description Courte", "https://datascene.ca/references/proprietes/contributeur/"],
                     },
                 }, */
+        { ...refCatchphrase },
         {
-            field: "catchphrase",
-            //ontologyProperty: "an:catchphrase",
-            label: "Slogan",
-            type: "string",
-            cardinality: "0..1",
-            compatibility: [],
-            description: "Courte phrase d'accroche, moto, slogan, citation.",
-        },
-        {
+            ...refSocialHandle,
             field: "url",
-            //ontologyProperty: "avnu:socialHandle",
-            label: "url",
-            type: "object",
-            cardinality: "0..N",
-            subSchema: {
-                label: refSocialHandle.label,
-                url: refSocialHandle.url,
-            },
-            compatibility: [
-                //Propriété non conforme, SocialHandle (object) != sameAs (string)
-                /* {
-                            externalSource: {
-                                name: "Schema.org",
-                            },
-                            mapping: {
-                                externalField: "sameAs",
-                                ontologyProperty: "schema:sameAs",
-                                ontologyUri: "https://schema.org/sameAs",
-                            },
-                            documentationUrl: "https://schema.org/sameAs",
-                        }, */
-            ],
-            description: "Liste de lien vers des réseaux sociaux ou site de la personne.",
         },
+        { ...refRegion },
+        { ...refContactPoint },
         {
-            field: "region",
-            //ontologyProperty: "an:region",
-            label: "Région",
-            type: "string",
-            cardinality: "0..1",
-            compatibility: [
-                //Propriété non conforme à datascene "associations géographiques".
-                //Similaire à "associations géographiques: ville", mais pas array
-                /* {
-                            externalSource: {
-                                name: "Datascene",
-                            },
-                            mapping: {
-                                externalField: "Associations géographiques",
-                                //ontologyProperty: "",
-                                //ontologyUri: "",
-                            },
-                            documentationUrl: "https://datascene.ca/references/proprietes/contributeur/",
-                        }, */
-            ],
-            description:
-                "Région d'appartenance. Texte parmi la liste : ['', 'abitibi-temiscamingue', 'north Ontario', 'baies-james', 'other']",
-        },
-        {
-            field: "contactPoint",
-            //ontologyProperty: "avnu:contactPoint",
-            label: refContactPoint.label,
-            type: "object",
-            cardinality: "0..1",
-            subSchema: {
-                label: refContactPoint.label,
-                url: refContactPoint.url,
-            },
-            compatibility: [],
-            description: "Téléphone, courriel et site web principal pour contacter la personne.",
-        },
-        {
+            ...refSkillGroup,
             field: "occupations",
-            //ontologyProperty: "an:occupations",
-            label: "Compétences",
-            type: "object",
-            cardinality: "0..N",
-            subSchema: {
-                label: refSkillGroup.label,
-                url: refSkillGroup.url,
-            },
-            compatibility: [],
-            description:
-                "Groupe de compétences, habiletés et/ou de technologies, tirés de notre base de données, utilisés par la personne et accompagné d'un libellé qui décrit le regroupement.",
         },
-        {
-            field: "domains",
-            //ontologyProperty: "an:domains",
-            label: "Domaine d'activités",
-            //Ajouter un schema secondaire. Bien que non défini dans la BD
-            type: "object",
-            cardinality: "0..N",
-            subSchema: {
-                label: refDomainList.label,
-                url: refDomainList.url,
-            },
-            compatibility: [],
-            description: "Liste de domaines correspondants aux compétences et au travail de la personne.",
-        },
+        { ...refDomainList },
         {
             field: "mainImage",
             //ontologyProperty: "an:mainImage",
@@ -267,16 +182,7 @@ export const refPerson: RefEntityOrSchema = {
             compatibility: [],
             description: "Référence à une image stockée sur notre serveur comme image de profil.",
         },
-        {
-            field: "badges",
-            //ontologyProperty: "an:badges",
-            label: "Badges",
-            type: "string",
-            cardinality: "0..N",
-            compatibility: [],
-            description:
-                "Liste de badges donnés à une personne. Chaque badge indique une information supplémentaire en lien avec la personne. Non-modifiable.",
-        },
+        { ...refBadges },
         //Non existant dans l'api et aucune source externe autre que notre ontologie :
         //Projets
         //Organisations

@@ -1,8 +1,45 @@
 import { RefEntityOrSchema } from "../types";
 
 export const refContactPoint: RefEntityOrSchema = {
-    label: "Moyen de contact",
+    field: "contactPoint",
+    ontologyProperty: "avnu:contactPoint",
     url: "/contactpoint",
+    label: "Moyen de contact",
+    cardinality: "0..1",
     description: "",
-    ref: [],
+    ref: [
+        {
+            field: "email",
+            type: "string",
+            //ontologyProperty: "avnu:email",
+            //url: "/email",
+            label: "Courriel",
+            cardinality: "0..1",
+            description: "Courriel",
+            compatibility: [],
+            //note:"",
+        },
+        {
+            field: "tel",
+            type: "string",
+            //ontologyProperty: "avnu:tel",
+            //url: "/tel",
+            label: "Numéro de téléphone",
+            cardinality: "0..1",
+            description: "Numéro de téléphone",
+            compatibility: [],
+            //note:"",
+        },
+        {
+            field: "website",
+            type: "string",
+            //ontologyProperty: "avnu:website",
+            //url: "/website",
+            label: "Site web",
+            cardinality: "0..1",
+            description: "Site web principal",
+            compatibility: [],
+            //note:"",
+        },
+    ],
 };
