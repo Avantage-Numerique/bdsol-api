@@ -33,6 +33,7 @@ import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 import { BackukDbJob } from "@src/Schedule/Jobs/BackupDb";
 import { PagesRoutes } from "@src/Pages/Routes/PagesRoutes";
 import SlowDownMiddleware from "@src/Server/Middlewares/SlowDownMiddleware";
+import { OntologyRoutes } from "@src/Ontology/Routes/OntologyRoutes";
 
 /**
  * Main class for the API
@@ -53,7 +54,9 @@ export default class Api {
 
     private _slowDown: boolean;
 
-    constructor() {}
+    constructor() {
+        /*Silence my fellow, silence or noise*/
+    }
 
     public start() {
         this._initEntitiesRouters();
@@ -182,6 +185,10 @@ export default class Api {
             {
                 baseRoute: "/monitoring",
                 manager: new MonitoringRoutes(),
+            },
+            {
+                baseRoute: "/o",
+                manager: new OntologyRoutes(),
             },
             {
                 baseRoute: "/",

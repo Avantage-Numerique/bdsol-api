@@ -63,6 +63,7 @@ class OntologyRoutes extends AbstractRoute {
      * @param next {NextFunction}
      */
     public async indexHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        res.serviceResponse = await this.controllerInstance.index();
         return next();
     }
 
