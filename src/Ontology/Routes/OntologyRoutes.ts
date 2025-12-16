@@ -45,6 +45,11 @@ class OntologyRoutes extends AbstractRoute {
             this.notFoundHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
+        this.routerInstance.get("/entity/:slug", [
+            this.entityBySlugHandler.bind(this),
+            this.notFoundHandler.bind(this),
+            this.routeSendResponse.bind(this),
+        ]);
         return this.routerInstance;
     }
 
@@ -57,12 +62,27 @@ class OntologyRoutes extends AbstractRoute {
     }
 
     /**
-     * Route handler to transform all the URI params into query to the get
+     * Route handler base of the ontology ?
      * @param req {Request}
      * @param res {Response}
      * @param next {NextFunction}
      */
     public async indexHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        res.serviceResponse = await this.controllerInstance.index();
+        return next();
+    }
+
+    /**
+     * Route handler base of the ontology ?
+     * @param req {Request}
+     * @param res {Response}
+     * @param next {NextFunction}
+     */
+    public async entityBySlugHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        //plan
+        //start with basic slug get and return json.
+        //Add 303 redirect with a queryvars ?uri on the base of /entity.
+
         res.serviceResponse = await this.controllerInstance.index();
         return next();
     }
