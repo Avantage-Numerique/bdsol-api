@@ -27,10 +27,13 @@ export type RefProperty =
     | RefEntityOrSchema; //Allows multilayer schema (Skillgroup.subMeta.order)
 
 export type RefPropertyPrimitive = RefPropertyBase & { type: PrimitiveType };
+export type RefPropertyRelationLink = RefPropertyBase & { type: "id"; entityRef: EntityTypesEnum[] };
 
 export type RefData = {
     entities: Record<string, RefEntityOrSchema>;
     subschemas: Record<string, RefEntityOrSchema>;
+    properties: Record<string, RefPropertyPrimitive>;
+    relationLinks: Record<string, RefPropertyRelationLink>;
 };
 
 export type RefCompatibility = {

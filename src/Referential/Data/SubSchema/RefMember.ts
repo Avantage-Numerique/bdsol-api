@@ -1,6 +1,6 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { RefEntityOrSchema } from "../types";
-import { refSubMeta } from "./ReferentialSubMeta";
+import { refSubMeta } from "./RefSubMeta";
 
 export const refMember: RefEntityOrSchema = {
     //field: "member",

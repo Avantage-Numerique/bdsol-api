@@ -1,11 +1,11 @@
 import { RefEntityOrSchema } from "../types";
-import { refSubMeta } from "./ReferentialSubMeta";
+import { refSubMeta } from "./RefSubMeta";
 
 export const refSocialHandle: RefEntityOrSchema = {
     //field: "" ?,
     label: "Contact de réseaux sociaux",
     ontologyProperty: "avnu:socialHandle",
-    url: "/socialhandle",
+    url: "/socialHandle",
     description: "Liens vers différent réseau sociaux et leur noms.",
     compatibility: [
         //Propriété non conforme, SocialHandle (object) != sameAs (string)
