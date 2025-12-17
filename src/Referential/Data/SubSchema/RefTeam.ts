@@ -1,5 +1,5 @@
 import { RefEntityOrSchema } from "../types";
-import { refMember } from "./ReferentialMember";
+import { refMember } from "./RefMember";
 
 export const refTeam: RefEntityOrSchema = {
     field: "team",

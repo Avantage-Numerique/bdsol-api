@@ -1,16 +1,14 @@
-import { EntityTypesEnum } from "@src/Entities/EntityTypes";
-
-import { refContactPoint } from "@ref/Data/SubSchema/ReferentialContactPoint";
-import { refDomainList } from "@ref/Data/SubSchema/ReferentialDomainList";
-import { refSkillGroup } from "@ref/Data/SubSchema/ReferentialSkillGroup";
-import { refSocialHandle } from "@ref/Data/SubSchema/ReferentialSocialHandle";
-
 import { RefEntityOrSchema } from "@ref/Data/types";
-import { refType } from "../Properties/ReferentialType";
-import { refDescription } from "../Properties/ReferentialDescription";
-import { refCatchphrase } from "../Properties/ReferentialCatchphrase";
-import { refRegion } from "../Properties/ReferentialRegion";
-import { refBadges } from "../Properties/ReferentialBadges";
+import { refContactPoint } from "@src/Referential/Data/SubSchema/RefContactPoint";
+import { refDomainList } from "@src/Referential/Data/SubSchema/RefDomainList";
+import { refSkillGroup } from "@src/Referential/Data/SubSchema/RefSkillGroup";
+import { refSocialHandle } from "@src/Referential/Data/SubSchema/RefSocialHandle";
+import { refType } from "../Properties/RefType";
+import { refDescription } from "../Properties/RefDescription";
+import { refCatchphrase } from "../Properties/RefCatchphrase";
+import { refRegion } from "../Properties/RefRegion";
+import { refBadges } from "../Properties/RefBadges";
+import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 
 export const refPerson: RefEntityOrSchema = {
     label: "Personne",
@@ -42,17 +40,7 @@ export const refPerson: RefEntityOrSchema = {
         },
     ],
     ref: [
-        //type
         { ...refType },
-        //Pas implémenté dans notre api
-        /* {
-                    label: "Identifiants",
-                    type: "list",//?
-                    compatibility: {
-                        schemaorg: ["identifier", "https://schema.org/identifier"],
-                        datascene: ["Identifiants", "https://datascene.ca/references/proprietes/identifiant/"],
-                    },
-                }, */
         {
             field: "lastName",
             //ontologyProperty: "an:lastName",
@@ -172,37 +160,17 @@ export const refPerson: RefEntityOrSchema = {
             field: "occupations",
         },
         { ...refDomainList },
-        {
-            field: "mainImage",
-            //ontologyProperty: "an:mainImage",
-            label: "Média",
-            type: "id",
-            entityRef: [EntityTypesEnum.media],
-            cardinality: "0..1",
-            compatibility: [],
-            description: "Référence à une image stockée sur notre serveur comme image de profil.",
-        },
+        { ...refMainImageLink },
         { ...refBadges },
-        //Non existant dans l'api et aucune source externe autre que notre ontologie :
+        //Ontologie :
+        //Identifiants
         //Projets
         //Organisations
         //Participants à des événements
         //Pronoun
 
-        //Pas dans l'ontologie
-        /* {
-                    field: "slug",
-                    label: "slug",
-                    type: "string",
-                    compatibility: {},
-                    description: "",
-                },
-                {
-                    field: "meta",
-                    label: "meta",
-                    type: "Meta",
-                    compatibility: {},
-                    description: "",
-                }, */
+        //Hors-ontologie :
+        //slug
+        //meta
     ],
 };

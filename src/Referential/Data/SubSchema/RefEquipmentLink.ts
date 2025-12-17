@@ -1,5 +1,5 @@
 import { RefEntityOrSchema } from "../types";
-import { refSubMeta } from "./ReferentialSubMeta";
+import { refSubMeta } from "./RefSubMeta";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const refEquipmentLink: RefEntityOrSchema = {

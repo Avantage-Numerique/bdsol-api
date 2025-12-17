@@ -1,7 +1,7 @@
 import { RefEntityOrSchema } from "../types";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
-import { refSubMeta } from "./ReferentialSubMeta";
+import { refSubMeta } from "./RefSubMeta";
 
 export const refSkillGroup: RefEntityOrSchema = {
     //field: "offers"||"occupations",
