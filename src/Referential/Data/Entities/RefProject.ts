@@ -13,6 +13,7 @@ import { refScheduleBudget } from "../SubSchema/RefScheduleBudget";
 import { refPlaceLink } from "../RelationLinks/RefPlaceLink";
 import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 import { refEquipmentLinkSimpleArray } from "../RelationLinks/RefEquipmentLinkSimpleArray";
+import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
 
 export const refProject: RefEntityOrSchema = {
     ontologyProperty: "avnu:project",
@@ -56,14 +57,12 @@ export const refProject: RefEntityOrSchema = {
         { ...refSponsor },
         { ...refScheduleBudget },
         {
+            ...refTaxonomyLink,
             field: "skills",
-            //ontologyProperty: "an:mainImage",
             label: "Compétences ou technologies",
-            type: "id",
-            entityRef: [EntityTypesEnum.taxonomy],
             cardinality: "0..N",
-            compatibility: [],
             description: "Référence à une ou plusieurs taxonomies de type 'skills' ou 'technologies'.",
+            //note: "Restreint à un type particulier?"
         },
         { ...refDomainList },
         {

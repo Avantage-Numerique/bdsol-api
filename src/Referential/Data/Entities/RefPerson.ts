@@ -11,6 +11,7 @@ import { refBadges } from "../Properties/RefBadges";
 import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 
 export const refPerson: RefEntityOrSchema = {
+    ontologyProperty: "avnu:person",
     label: "Personne",
     url: "/person",
     description: "Entité qui désigne une personne, qui décrit ses activités, ces compétences et autres.",
