@@ -79,6 +79,7 @@ class Equipment extends AbstractModel {
             },
             label: {
                 type: String,
+                //minLength: 2,
                 required: true,
             },
             description: {

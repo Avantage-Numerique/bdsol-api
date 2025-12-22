@@ -39,7 +39,6 @@ export const refOrganisation: RefEntityOrSchema = {
         { ...refCatchphrase },
         {
             ...refSocialHandle,
-            field: "url",
         },
         { ...refContactPoint },
         {

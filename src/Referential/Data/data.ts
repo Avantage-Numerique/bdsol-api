@@ -4,6 +4,9 @@ import { RefData } from "./types";
 import { refPerson } from "./Entities/RefPerson";
 import { refOrganisation } from "./Entities/RefOrganisation";
 import { refProject } from "./Entities/RefProject";
+import { refTaxonomy } from "./Entities/RefTaxonomy";
+import { refEquipment } from "./Entities/RefEquipment";
+import { refPlace } from "./Entities/RefPlace";
 import { refMedia } from "./Entities/RefMedia";
 
 //SubSchema
@@ -38,6 +41,9 @@ export const refData: RefData = {
         [refPerson.label]: refPerson,
         [refOrganisation.label]: refOrganisation,
         [refProject.label]: refProject,
+        [refTaxonomy.label]: refTaxonomy,
+        [refEquipment.label]: refEquipment,
+        [refPlace.label]: refPlace,
         [refMedia.label]: refMedia,
     },
 
