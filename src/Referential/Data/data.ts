@@ -3,11 +3,12 @@ import { RefData } from "./types";
 //Entities
 import { refPerson } from "./Entities/RefPerson";
 import { refOrganisation } from "./Entities/RefOrganisation";
-import { refProject } from "./Entities/RefProject";
 import { refTaxonomy } from "./Entities/RefTaxonomy";
-import { refEquipment } from "./Entities/RefEquipment";
-import { refPlace } from "./Entities/RefPlace";
+import { refProject } from "./Entities/RefProject";
+import { refEvent } from "./Entities/RefEvent";
 import { refMedia } from "./Entities/RefMedia";
+import { refPlace } from "./Entities/RefPlace";
+import { refEquipment } from "./Entities/RefEquipment";
 
 //SubSchema
 import { refSkillGroup } from "./SubSchema/RefSkillGroup";
@@ -40,11 +41,12 @@ export const refData: RefData = {
     entities: {
         [refPerson.label]: refPerson,
         [refOrganisation.label]: refOrganisation,
-        [refProject.label]: refProject,
         [refTaxonomy.label]: refTaxonomy,
-        [refEquipment.label]: refEquipment,
-        [refPlace.label]: refPlace,
+        [refProject.label]: refProject,
+        [refEvent.label]: refEvent,
         [refMedia.label]: refMedia,
+        [refPlace.label]: refPlace,
+        [refEquipment.label]: refEquipment,
     },
 
     subschemas: {

@@ -14,29 +14,21 @@ import { refPlaceLink } from "../RelationLinks/RefPlaceLink";
 import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 import { refEquipmentLinkSimpleArray } from "../RelationLinks/RefEquipmentLinkSimpleArray";
 import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
+import { refAlternateName } from "../Properties/RefAlternateName";
 
 export const refProject: RefEntityOrSchema = {
     ontologyProperty: "avnu:project",
     url: "/project",
     label: "Projet",
-    description: "",
+    description: "Décrit un projet : les organisations qui en sont responsable, les équipements utilisé etc.",
     compatibility: [],
     //note:"",
     ref: [
         { ...refType },
         { ...refName },
         {
-            field: "alternateName",
-            type: "string",
-            //ontologyProperty: "avnu:alternateName",
-            //url: "/alternateName",
-            label: "Nom secondaire",
-            cardinality: "0..1",
+            ...refAlternateName,
             description: "Autre nom sous lequel le projet est également connu.",
-            compatibility: [
-                //schemaOrg:alternateName
-            ],
-            //note: "",
         },
         { ...refDescription },
         {
