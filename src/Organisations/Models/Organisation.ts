@@ -106,16 +106,7 @@ class Organisation extends AbstractModel {
                 type: [SkillGroup.schema],
             },
             domains: {
-                type: [
-                    {
-                        domain: {
-                            type: mongoose.Types.ObjectId,
-                            ref: "Taxonomy",
-                        },
-                        subMeta: SubMeta.schema,
-                        _id: false,
-                    },
-                ],
+                type: [DomainList.schema],
             },
             team: {
                 type: [Member.schema],
@@ -137,6 +128,7 @@ class Organisation extends AbstractModel {
             },
             region: {
                 type: String,
+                enum: RegionEnum,
             },
             badges: {
                 type: [String],
