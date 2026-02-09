@@ -1,4 +1,5 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
+import { CompatibleOntologyPropertyPrefix } from "@ref/Data/Compatibility/CompatibleOntology";
 
 type externalOntologies = "schema";
 
@@ -44,7 +45,7 @@ export type RefCompatibility = {
     };
     mapping: {
         externalField: string;
-        ontologyProperty?: `${externalOntologies}:${string}`;
+        ontologyProperty?: CompatibleOntologyPropertyPrefix;
         ontologyUri?: string;
     };
     relation?: string;

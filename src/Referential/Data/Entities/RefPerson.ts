@@ -9,6 +9,7 @@ import { refCatchphrase } from "../Properties/RefCatchphrase";
 import { refRegion } from "../Properties/RefRegion";
 import { refBadges } from "../Properties/RefBadges";
 import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
+import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
 
 export const refPerson: RefEntityOrSchema = {
     ontologyProperty: "avnu:person",
@@ -51,14 +52,14 @@ export const refPerson: RefEntityOrSchema = {
             compatibility: [
                 {
                     externalSource: {
-                        name: "Schema.org",
+                        name: compatibilitySchemaOrg.name,
                     },
                     mapping: {
                         externalField: "familyName",
-                        ontologyProperty: "schema:familyName",
-                        ontologyUri: "https://schema.org/familyName",
+                        ontologyProperty: compatibilitySchemaOrg.ontologyProperty("familyName"),
+                        ontologyUri: compatibilitySchemaOrg.refUri("familyName"), //https://schema.org/familyName",
                     },
-                    documentationUrl: "https://schema.org/familyName",
+                    documentationUrl: compatibilitySchemaOrg.ontologyUri("familyName"),
                 },
             ],
             description: "Nom de famille de la personne.",
