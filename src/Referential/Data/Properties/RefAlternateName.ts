@@ -1,4 +1,5 @@
 import { RefPropertyPrimitive } from "../types";
+import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
 
 export const refAlternateName: RefPropertyPrimitive = {
     field: "alternateName",
@@ -8,8 +9,6 @@ export const refAlternateName: RefPropertyPrimitive = {
     label: "Nom secondaire",
     cardinality: "0..1",
     description: "Autre nom sous lequel l'entité est également connu.",
-    compatibility: [
-        //schemaOrg:alternateName
-    ],
+    compatibility: [compatibilitySchemaOrg.getOntologyCompatibilityArray("alternateName")],
     //note: "",
 };
