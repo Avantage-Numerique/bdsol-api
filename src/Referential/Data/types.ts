@@ -1,7 +1,7 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { CompatibleOntologyPropertyPrefix } from "@ref/Data/Compatibility/CompatibleOntology";
 
-type externalOntologies = "schema";
+//type externalOntologies = "schema";//note: added this type CompatibleOntologyPropertyPrefix as base for that. To allow multiple Ontology compatibility.
 
 //Property no ref
 export type RefPropertyBase = {
