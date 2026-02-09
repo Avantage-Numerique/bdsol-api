@@ -1,4 +1,5 @@
 import { RefPropertyPrimitive } from "../types";
+import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
 
 export const refDescription: RefPropertyPrimitive = {
     field: "description",
@@ -18,17 +19,11 @@ export const refDescription: RefPropertyPrimitive = {
             },
             documentationUrl: "https://schema.org/description",
         },
-        {
-            externalSource: {
-                name: "Datascene",
-            },
-            mapping: {
-                externalField: "Description",
-                //ontologyProperty: "",
-                //ontologyUri: "",
-            },
-            documentationUrl: "https://datascene.ca/references/proprietes/contributeur/",
-        },
+        compatibilityDataScene.getOntologyCompatibilityArray(
+            "description",
+            "Description",
+            "https://documentation.datascene.ca/references/contributor/#4-propriete-contributeur-contributor-name-nom"
+        ),
     ],
     description: "Description, à propos, biographie. Il s'agit d'un court texte pour décrire la personne.",
 };

@@ -10,6 +10,7 @@ import { refRegion } from "../Properties/RefRegion";
 import { refBadges } from "../Properties/RefBadges";
 import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
+import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
 
 export const refPerson: RefEntityOrSchema = {
     ontologyProperty: "avnu:person",
@@ -17,29 +18,8 @@ export const refPerson: RefEntityOrSchema = {
     url: "/person",
     description: "Entité qui désigne une personne, qui décrit ses activités, ces compétences et autres.",
     compatibility: [
-        {
-            externalSource: {
-                name: "Schema.org",
-            },
-            mapping: {
-                externalField: "Person",
-                ontologyProperty: "schema:person",
-                ontologyUri: "https://schema.org/Person",
-            },
-            documentationUrl: "https://schema.org/Person",
-        },
-        {
-            externalSource: {
-                name: "Datascene",
-                //sparqlEndpoint: ""
-            },
-            mapping: {
-                externalField: "Contributeur",
-                //ontologyProperty: "",
-                //ontologyUri: "",
-            },
-            documentationUrl: "https://datascene.ca/references/proprietes/contributeur/",
-        },
+        compatibilitySchemaOrg.getOntologyCompatibilityArray("person", "Person"),
+        compatibilityDataScene.getOntologyCompatibilityArray("person", "Contributor"),
     ],
     ref: [
         { ...refType },
@@ -49,19 +29,7 @@ export const refPerson: RefEntityOrSchema = {
             label: "Nom",
             type: "string",
             cardinality: "1..1",
-            compatibility: [
-                {
-                    externalSource: {
-                        name: compatibilitySchemaOrg.name,
-                    },
-                    mapping: {
-                        externalField: "familyName",
-                        ontologyProperty: compatibilitySchemaOrg.ontologyProperty("familyName"),
-                        ontologyUri: compatibilitySchemaOrg.refUri("familyName"), //https://schema.org/familyName",
-                    },
-                    documentationUrl: compatibilitySchemaOrg.ontologyUri("familyName"),
-                },
-            ],
+            compatibility: [compatibilitySchemaOrg.getOntologyCompatibilityArray("familyName")],
             description: "Nom de famille de la personne.",
         },
         {
@@ -70,19 +38,7 @@ export const refPerson: RefEntityOrSchema = {
             label: "Prénom",
             type: "string",
             cardinality: "1..1",
-            compatibility: [
-                {
-                    externalSource: {
-                        name: "Schema.org",
-                    },
-                    mapping: {
-                        externalField: "givenName",
-                        ontologyProperty: "schema:givenName",
-                        ontologyUri: "https://schema.org/givenName",
-                    },
-                    documentationUrl: "https://schema.org/givenName",
-                },
-            ],
+            compatibility: [compatibilitySchemaOrg.getOntologyCompatibilityArray("givenName")],
             description: "Prénom de la personne.",
         },
         {
@@ -92,17 +48,11 @@ export const refPerson: RefEntityOrSchema = {
             type: "string",
             cardinality: "1..1",
             compatibility: [
-                {
-                    externalSource: {
-                        name: "Datascene",
-                    },
-                    mapping: {
-                        externalField: "Nom",
-                        //ontologyProperty: "",
-                        //ontologyUri: "",
-                    },
-                    documentationUrl: "https://datascene.ca/references/proprietes/contributeur/",
-                },
+                compatibilityDataScene.getOntologyCompatibilityArray(
+                    "name",
+                    "Nom",
+                    "https://documentation.datascene.ca/references/contributor/#4-propriete-contributeur-contributor-name-nom"
+                ),
             ],
             description:
                 "Prénom et nom. Virtuel et non-modifiable, il s'agit de la simple concaténation du prénom suivi du nom tel qu'inscrit dans les champs 'Nom' et 'Prénom'",
@@ -113,31 +63,19 @@ export const refPerson: RefEntityOrSchema = {
             label: "Surnom",
             type: "string",
             cardinality: "0..1",
-            compatibility: [
-                {
-                    externalSource: {
-                        name: "Schema.org",
-                    },
-                    mapping: {
-                        externalField: "alternateName",
-                        ontologyProperty: "schema:alternateName",
-                        ontologyUri: "https://schema.org/alternateName",
-                    },
-                    documentationUrl: "https://schema.org/alternateName",
+            compatibility: [compatibilitySchemaOrg.getOntologyCompatibilityArray("alternateName")],
+            //Propriété non conforme, il s'agit d'une liste de noms alternatifs.
+            /* {
+                externalSource: {
+                    name: "Datascene",
                 },
-                //Propriété non conforme, il s'agit d'une liste de noms alternatifs.
-                /* {
-                            externalSource: {
-                                name: "Datascene",
-                            },
-                            mapping: {
-                                externalField: "Nom alternatifs",
-                                ontologyProperty: "",
-                                ontologyUri: "",
-                            },
-                            documentationUrl: "https://datascene.ca/references/proprietes/contributeur/",
-                        }, */
-            ],
+                mapping: {
+                    externalField: "Nom alternatifs",
+                    ontologyProperty: "",
+                    ontologyUri: "",
+                },
+                documentationUrl: "https://datascene.ca/references/proprietes/contributeur/",
+            }, */
             description:
                 "Autre appellation parfois utilisé pour designer la personne. Exemple : 'Coeur de pirate' pour 'Béatrice Martin'.",
         },
