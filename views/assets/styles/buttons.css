@@ -1,0 +1,18 @@
+.btn,
+.btn:active,
+.btn:focus,
+.btn:visited {
+    font-size: 1em;
+    text-decoration: none;
+    padding: 0.5em 1em;
+    border: 0;
+    border-radius: var(--default-radius);
+    transition: all 0.1s ease-in-out;
+    color: var(--button-color);
+    background-color: var(--button-bg);
+}
+
+.btn:hover {
+    background-color: var(--button-over-bg);
+    color: var(--button-over-color);
+}

@@ -15,21 +15,12 @@ class HomePage extends Page {
         return `${this.apiConfig.appName} (version ${this.apiConfig.version})`;
     }
     public body() {
-        const updatedConfig = getApiConfig();
-
         let body = "<div>";
-        body += "Dans le controler de page !";
-        body +=
-            updatedConfig.environnement === "development"
-                ? `<p>écoute sur le port: ${this.apiConfig.port}<br /></p>`
-                : "";
-
-        body += `<p>${this.data.api.description}</p>`;
-        body +=
-            this.apiConfig.environnement === "development"
-                ? `<p>Slow Down Middleware est <strong>${this.apiConfig.debugSlowConnection ? "activé" : "désactivé"}</strong> et ralenti avec ${this.apiConfig.debugSlowDuration}ms</p>`
-                : "";
-
+        if (this.apiConfig.environnement === "development") {
+            body += `<p><strong>Développement</strong></p><hr/>`;
+            body += `<p>Écoute sur le port: ${this.apiConfig.port}<br /></p>`;
+            body += `<p>Slow Down Middleware est <strong>${this.apiConfig.debugSlowConnection ? "activé" : "désactivé"}</strong> et ralenti avec ${this.apiConfig.debugSlowDuration}ms</p>`;
+        }
         body += "</div>";
         return body;
     }
