@@ -45,7 +45,11 @@
                 <tbody>
                     {% for row in item.ref %}
                         <tr>
-                            <td>{{ row.label }}</td>
+                            <td>{{ row.label }}
+                                {% if row.ontologyProperty %}
+                                    <br><code>{{ row.ontologyProperty }}</code>
+                                {% endif %}
+                            </td>
 
                             <td>
 

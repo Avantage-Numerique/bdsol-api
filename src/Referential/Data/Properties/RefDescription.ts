@@ -1,5 +1,7 @@
 import { RefPropertyPrimitive } from "../types";
 import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
+import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
+import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
 
 export const refDescription: RefPropertyPrimitive = {
     field: "description",
@@ -8,17 +10,8 @@ export const refDescription: RefPropertyPrimitive = {
     type: "string",
     cardinality: "0..1",
     compatibility: [
-        {
-            externalSource: {
-                name: "Schema.org",
-            },
-            mapping: {
-                externalField: "description",
-                ontologyProperty: "schema:description",
-                ontologyUri: "https://schema.org/description",
-            },
-            documentationUrl: "https://schema.org/description",
-        },
+        compatibilitySchemaOrg.getOntologyCompatibilityArray("description"),
+        compatibilityArtsdata.getOntologyCompatibilityArray("alternadescriptionteName"),
         compatibilityDataScene.getOntologyCompatibilityArray(
             "description",
             "Description",

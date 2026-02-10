@@ -67,57 +67,7 @@ code {
     border-radius: 0.2em;
     padding-inline: 0.3em;
 }
-table {
-    border: 2px solid black;
-    border-collapse: collapse;
 
-    min-width: 100%;
-
-    & .nodata {
-        text-align: center;
-        padding: 0.5em;
-        grid-column: 1 / -1;
-        opacity: 0.5;
-    }
-
-    &.ref td,
-    &.ref th {
-        &:first-child,
-        &:nth-child(2) {
-            width: 20ch;
-        }
-    }
-}
-th,
-td {
-    border: 2px solid black;
-    height: 100%;
-    padding: 0.5em;
-
-    &:has(.compat-grid) {
-        padding: 0;
-        vertical-align: top;
-    }
-}
-.compat-header th {
-    width: 20ch;
-}
-.compat-grid {
-    display: grid;
-    /*grid: auto-flow / 1fr 1fr;*/
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    height: 100%;
-    width: 100%;
-
-    & > div {
-        padding: 0.25em;
-
-        &:not(:nth-last-child(-n + 2)) {
-            border-bottom: 2px dashed;
-        }
-    }
-}
 @media print {
     html,
     body {

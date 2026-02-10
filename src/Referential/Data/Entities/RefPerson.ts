@@ -11,6 +11,8 @@ import { refBadges } from "../Properties/RefBadges";
 import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
 import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
+import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
+import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
 
 export const refPerson: RefEntityOrSchema = {
     ontologyProperty: "avnu:person",
@@ -22,7 +24,54 @@ export const refPerson: RefEntityOrSchema = {
         compatibilityDataScene.getOntologyCompatibilityArray("person", "Contributor"),
     ],
     ref: [
-        { ...refType },
+        {
+            field: "type",
+            ontologyProperty: "avnu:type",
+            type: "string",
+            label: "Type",
+            cardinality: "1..1",
+            compatibility: [
+                compatibilityAvnu.getOntologyCompatibilityArray("Person"),
+                compatibilityArtsdata.getOntologyCompatibilityArray(
+                    "Person",
+                    "Person",
+                    "https://docs.artsdata.ca/classes/person.html"
+                ),
+                compatibilitySchemaOrg.getOntologyCompatibilityArray("Person"),
+                compatibilityDataScene.getOntologyCompatibilityArray(
+                    "contributor",
+                    "Contributor",
+                    "https://documentation.datascene.ca/references/contributor/#1-propriete-contributeur-contributor-type"
+                ),
+            ],
+            //Pas le même vocabulaire https://datascene.ca/references/vocabulaires/types_de_contributeurs/
+            /* {
+                externalSource: {
+                    name: "Datascene",
+                    //sparqlEndpoint: ""
+                },
+                mapping: {
+                    externalField: "Type de contributeur",
+                    //ontologyProperty: "",
+                    //ontologyUri: "",
+                },
+                documentationUrl: "https://datascene.ca/references/vocabulaires/types_de_contributeurs/",
+            }, */
+            description: "Le type varie selon l'ontologie.",
+        },
+        {
+            field: "identifiers",
+            //ontologyProperty: "an:lastName",
+            label: "Identifiants",
+            type: "string",
+            cardinality: "0..N",
+            compatibility: [
+                compatibilitySchemaOrg.getOntologyCompatibilityArray("identifier"),
+                compatibilityArtsdata.getOntologyCompatibilityArray("identifier"),
+            ],
+            description: "Identifiants de la personne",
+            note: "À implémenter",
+        },
         {
             field: "lastName",
             //ontologyProperty: "an:lastName",
@@ -53,6 +102,8 @@ export const refPerson: RefEntityOrSchema = {
                     "Nom",
                     "https://documentation.datascene.ca/references/contributor/#4-propriete-contributeur-contributor-name-nom"
                 ),
+                compatibilityAvnu.getOntologyCompatibilityArray("fullname"),
+                compatibilityArtsdata.getOntologyCompatibilityArray("name"),
             ],
             description:
                 "Prénom et nom. Virtuel et non-modifiable, il s'agit de la simple concaténation du prénom suivi du nom tel qu'inscrit dans les champs 'Nom' et 'Prénom'",
@@ -63,7 +114,10 @@ export const refPerson: RefEntityOrSchema = {
             label: "Surnom",
             type: "string",
             cardinality: "0..1",
-            compatibility: [compatibilitySchemaOrg.getOntologyCompatibilityArray("alternateName")],
+            compatibility: [
+                compatibilitySchemaOrg.getOntologyCompatibilityArray("alternateName"),
+                compatibilityArtsdata.getOntologyCompatibilityArray("alternateName"),
+            ],
             //Propriété non conforme, il s'agit d'une liste de noms alternatifs.
             /* {
                 externalSource: {

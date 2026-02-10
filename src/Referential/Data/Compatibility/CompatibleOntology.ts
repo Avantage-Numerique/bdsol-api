@@ -8,6 +8,7 @@ export interface CompatibleOntologyParam {
     ontologyUrl: string;
     name: string;
     prefix: string;
+    suffix?: string;
 }
 
 export default class CompatibleOntology implements Ontology {
@@ -15,16 +16,21 @@ export default class CompatibleOntology implements Ontology {
     ontologyUrl: string;
     name: string;
     prefix: string;
+    suffix: string;
 
     constructor(params: CompatibleOntologyParam) {
         this.referentialUrl = params.referentialUrl;
         this.ontologyUrl = params.ontologyUrl;
         this.name = params.name;
         this.prefix = params.prefix;
+        this.suffix = params.suffix ?? "";
     }
 
+    ontologyClass(value: string): string {
+        return `${value}`;
+    }
     ontologyProperty(value: string): CompatibleOntologyPropertyPrefix {
-        return `${this.prefix}:${value.toLowerCase()}` as CompatibleOntologyPropertyPrefix;
+        return `${this.prefix}:${value.toLowerCase()}${this.suffix}` as CompatibleOntologyPropertyPrefix;
     }
 
     refUri(path: string, prependSlash: boolean = true): string {
@@ -35,6 +41,12 @@ export default class CompatibleOntology implements Ontology {
         return this.ontologyUrl + (prependSlash ? "/" : "") + path;
     }
 
+    /**
+     *
+     * @param property {string} the property of in the target compatibility ontologie
+     * @param field {string}
+     * @param refUrlOverwrite {string}
+     */
     getOntologyCompatibilityArray(
         property: string,
         field: string = "",

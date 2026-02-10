@@ -57,6 +57,6 @@ export type SchemaRef = {
     url?: `/${string}`;
 };
 
-export type PrimitiveType = "string" | "number" | "boolean" | "date";
+export type PrimitiveType = "string" | "number" | "boolean" | "date" | "list";
 export type FieldType = PrimitiveType | "object" | "id";
 export type Cardinality = "0..1" | "1..1" | "0..N" | "1..N" | "N..N";
