@@ -15,7 +15,7 @@
         {% endif %}
 
         <div class="breadcrumbs">
-            <a href="/ref">Référentiel</a>
+            <a class="btn" href="/ref" title="Référentiel">&larr; Référentiel</a>
         </div>
 
         {% if item %}
@@ -46,13 +46,12 @@
                     {% for row in item.ref %}
                         <tr>
                             <td>{{ row.label }}
-                                {% if row.ontologyProperty %}
+                                {% if row.ontologyProperty and row.ontologyProperty !== "" %}
                                     <br><code>{{ row.ontologyProperty }}</code>
                                 {% endif %}
                             </td>
 
                             <td>
-
                                 {% if row.type === 'object' %}
                                     <a href="/ref{{ row.subSchema.url }}">
                                         {{ row.subSchema.label }}

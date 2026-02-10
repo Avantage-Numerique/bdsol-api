@@ -3,7 +3,7 @@ import { refContactPoint } from "@src/Referential/Data/SubSchema/RefContactPoint
 import { refDomainList } from "@src/Referential/Data/SubSchema/RefDomainList";
 import { refSkillGroup } from "@src/Referential/Data/SubSchema/RefSkillGroup";
 import { refSocialHandle } from "@src/Referential/Data/SubSchema/RefSocialHandle";
-import { refType } from "../Properties/RefType";
+//import { refType } from "../Properties/RefType";
 import { refDescription } from "../Properties/RefDescription";
 import { refCatchphrase } from "../Properties/RefCatchphrase";
 import { refRegion } from "../Properties/RefRegion";
@@ -61,7 +61,7 @@ export const refPerson: RefEntityOrSchema = {
         },
         {
             field: "identifiers",
-            //ontologyProperty: "an:lastName",
+            ontologyProperty: "avnu:identifiers",
             label: "Identifiants",
             type: "string",
             cardinality: "0..N",

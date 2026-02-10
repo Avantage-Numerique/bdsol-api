@@ -11,11 +11,11 @@ export const refDescription: RefPropertyPrimitive = {
     cardinality: "0..1",
     compatibility: [
         compatibilitySchemaOrg.getOntologyCompatibilityArray("description"),
-        compatibilityArtsdata.getOntologyCompatibilityArray("alternadescriptionteName"),
+        compatibilityArtsdata.getOntologyCompatibilityArray("alternateName"),
         compatibilityDataScene.getOntologyCompatibilityArray(
             "description",
             "Description",
-            "https://documentation.datascene.ca/references/contributor/#4-propriete-contributeur-contributor-name-nom"
+            "https://documentation.datascene.ca/references/contributor/#6-propriete-contributeur-contributor-description-description"
         ),
     ],
     description: "Description, à propos, biographie. Il s'agit d'un court texte pour décrire la personne.",
