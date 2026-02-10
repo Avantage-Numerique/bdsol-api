@@ -9,6 +9,7 @@ import PublicTemplate from "@src/Templates/PublicTemplate";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 import { StatusCodes } from "http-status-codes";
 import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
+import HomePage from "@src/Pages/Controllers/Pages/HomePage";
 
 class PagesController {
     /** @private @static Singleton instance */
@@ -36,7 +37,7 @@ class PagesController {
     }
 
     public async homePage(): Promise<string> {
-        const updatedConfig = getApiConfig();
+        /*const updatedConfig = getApiConfig();
         const baseData = getTemplateBaseData();
         const index = new PublicTemplate(); //template have already a default in the EmailContent.Prepare.
         const title: string = `${updatedConfig.appName} (version ${updatedConfig.version})`;
@@ -63,7 +64,10 @@ class PagesController {
                     author: `${updatedConfig.appName}`,
                 },
             },
-        });
+        });*/
+        const homePage = new HomePage("homePage");
+
+        return await homePage.render();
     }
 
     public async statistics(): Promise<string> {
