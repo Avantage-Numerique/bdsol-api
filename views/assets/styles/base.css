@@ -1,0 +1,133 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+    background-color: var(--default-bg);
+    color: var(--default-color);
+}
+hr {
+    background-color: var(--default-bg2);
+    border: 0;
+    height: 1px;
+    margin: 1rem 0;
+}
+.mainContent {
+    width: 100%;
+    min-height: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: start;
+}
+.mainContent .indexContent {
+    width: 100%;
+    max-width: 120ch;
+    padding: 2rem;
+}
+.mainContent header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+figure {
+    padding: 0;
+    margin: 0;
+}
+.connected {
+    color: #aad287;
+}
+.disconnected {
+    color: #d74b32;
+}
+.badge {
+    font-size: 0.85em;
+    padding: 0.1em 0.2em;
+    border: 0;
+    border-radius: 0.3em;
+}
+.btn {
+    font-size: 1em;
+    text-decoration: none;
+    padding: 0.1em 0.2em;
+    border: 0;
+    border-radius: 0.3em;
+}
+.bg-primary {
+    background-color: #aad287;
+}
+.bg-secondary {
+    background-color: var(--default-bg2);
+}
+.text-bold {
+    font-weight: 700;
+}
+code {
+    background: lightgrey;
+    border-radius: 0.2em;
+    padding-inline: 0.3em;
+}
+table {
+    border: 2px solid black;
+    border-collapse: collapse;
+
+    min-width: 100%;
+    min-height: 100vh;
+
+    & .nodata {
+        text-align: center;
+        padding: 0.5em;
+        grid-column: 1 / -1;
+        opacity: 0.5;
+    }
+
+    &.ref td,
+    &.ref th {
+        &:first-child,
+        &:nth-child(2) {
+            width: 20ch;
+        }
+    }
+}
+th,
+td {
+    border: 2px solid black;
+    height: 100%;
+    padding: 0.5em;
+
+    &:has(.compat-grid) {
+        padding: 0;
+        vertical-align: top;
+    }
+}
+.compat-header th {
+    width: 20ch;
+}
+.compat-grid {
+    display: grid;
+    /*grid: auto-flow / 1fr 1fr;*/
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    height: 100%;
+    width: 100%;
+
+    & > div {
+        padding: 0.25em;
+
+        &:not(:nth-last-child(-n + 2)) {
+            border-bottom: 2px dashed;
+        }
+    }
+}
+@media print {
+    html,
+    body {
+        background: none;
+    }
+}

@@ -34,6 +34,7 @@ import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 import { BackukDbJob } from "@src/Schedule/Jobs/BackupDb";
 import { PagesRoutes } from "@src/Pages/Routes/PagesRoutes";
 import SlowDownMiddleware from "@src/Server/Middlewares/SlowDownMiddleware";
+import path from "path";
 
 /**
  * Main class for the API
@@ -111,6 +112,10 @@ export default class Api {
             autoescape: true,
             noCache: this._config.isDevelopment,
         });
+
+        const staticAssetsPath = `${this._config.appPath}/views/assets`;
+        LogHelper.info(`SERVING STATICS WEB ASSETS AT ${staticAssetsPath}`);
+        this.express.use(express.static(path.join(staticAssetsPath)));
     }
 
     private _initBaseRoutes() {

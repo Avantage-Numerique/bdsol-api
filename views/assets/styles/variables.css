@@ -1,0 +1,39 @@
+:root {
+    --default-bg: #fbf7f5;
+    --default-bg2: #f3edea;
+    --default-color: #1f1f2e;
+    --default-title-color: #1f1f2e;
+    --default-radius: 30px;
+    --default-content-bg: #fbf7f5;
+    --default-content-color: #1f1f2e;
+    --default-spacing: 20px;
+    --default-h-spacing: 20px;
+    --default-v-spacing: 20px;
+    --button-radius: 30px;
+    --button-size: 20px;
+    --button-padding: 20px;
+    --button-bg: #6ec8cd;
+    --button-color: #1f1f2e;
+    --button-over-bg: #c4eaeb;
+    --button-over-color: #6ec8cd;
+}
+
+/*
+radius: "30px",
+size: "20px",
+padding: "20px",
+bg: "#6EC8CD",
+color: "#1F1F2E",
+over: {
+    bg: "#C4EAEB",
+    color: "#6EC8CD",
+},
+ */
+
+/*
+bg: "#FBF7F5",
+color: "#1F1F2E",
+hspacing: "20px",
+wspacing: "20px",
+spacing: "20px",
+ */
