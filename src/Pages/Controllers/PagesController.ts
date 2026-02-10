@@ -3,6 +3,12 @@ import VersionsPage from "@src/Pages/Controllers/Pages/VersionsPage";
 import StatisticsPage from "@src/Pages/Controllers/Pages/StatisticsPage";
 import ReferentialPage from "@src/Pages/Controllers/Pages/ReferentialPage";
 import ReferentialSinglePage from "@src/Pages/Controllers/Pages/ReferentialSinglePage";
+import { getApiConfig } from "@src/config";
+import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
+import PublicTemplate from "@src/Templates/PublicTemplate";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
+import { StatusCodes } from "http-status-codes";
+import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
 
 class PagesController {
     /** @private @static Singleton instance */
@@ -28,6 +34,38 @@ class PagesController {
 
         return await versionsPage.render();
     }
+
+    public async homePage(): Promise<string> {
+        const updatedConfig = getApiConfig();
+        const baseData = getTemplateBaseData();
+        const index = new PublicTemplate(); //template have already a default in the EmailContent.Prepare.
+        const title: string = `${updatedConfig.appName} (version ${updatedConfig.version})`;
+        let body: string = "Dans le controler de page !";
+        body +=
+            updatedConfig.environnement === "development"
+                ? `<p>écoute sur le port: ${updatedConfig.port}<br /></p>`
+                : "";
+
+        body += `<p>${baseData.api.description}</p>`;
+        body +=
+            updatedConfig.environnement === "development"
+                ? `<p>Slow Down Middleware est <strong>${updatedConfig.debugSlowConnection ? "activé" : "désactivé"}</strong> et ralenti avec ${updatedConfig.debugSlowDuration}ms</p>`
+                : "";
+        return await index.render({
+            context: {
+                ...baseData, //basic app and api default string and links
+                ...DefaultEmailTheme, //basic theme for colors and sizes.
+                title: `${title}`,
+                body: `${body}`,
+                meta: {
+                    title: `${title}`,
+                    description: `${body}`,
+                    author: `${updatedConfig.appName}`,
+                },
+            },
+        });
+    }
+
     public async statistics(): Promise<string> {
         const versionsPage = new StatisticsPage("statistics");
 
