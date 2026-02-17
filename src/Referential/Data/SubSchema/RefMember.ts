@@ -11,6 +11,8 @@ export const refMember: RefEntityOrSchema = {
     description: "Identifiant d'un membre d'équipe et le libellé de son rôle dans l'équipe.",
     compatibility: [],
     //note: "",
+
+    type: "object",
     ref: [
         {
             field: "member",

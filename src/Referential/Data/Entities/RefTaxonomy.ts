@@ -11,6 +11,8 @@ export const refTaxonomy: RefEntityOrSchema = {
     description: "Vocabulaire de catégorie pour décrire et regrouper des compétences, des technologies ou autres.",
     compatibility: [],
     //note: "",
+
+    type: "object",
     ref: [
         { ...refType },
         {

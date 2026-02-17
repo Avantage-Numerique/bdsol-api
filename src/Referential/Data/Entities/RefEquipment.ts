@@ -13,6 +13,8 @@ export const refEquipment: RefEntityOrSchema = {
     description: "Entité décrivant un équipement, son modèle, sa marque, ses particularités.",
     compatibility: [],
     //note: "",
+
+    type: "object",
     ref: [
         { ...refType },
         {

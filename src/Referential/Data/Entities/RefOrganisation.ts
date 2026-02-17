@@ -21,6 +21,8 @@ export const refOrganisation: RefEntityOrSchema = {
     description: "",
     compatibility: [],
     note: "",
+
+    type: "object",
     ref: [
         { ...refType },
         { ...refName },

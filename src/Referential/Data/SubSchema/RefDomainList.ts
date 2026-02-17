@@ -9,6 +9,8 @@ export const refDomainList: RefEntityOrSchema = {
     url: "/domainList",
     cardinality: "0..N",
     description: "Taxonomie de catégorie 'domain'.",
+
+    type: "object",
     ref: [
         {
             field: "domain",

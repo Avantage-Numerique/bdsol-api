@@ -11,6 +11,8 @@ export const refSponsor: RefEntityOrSchema = {
     description: "Partenaires de projet, que ce soit au niveau moral, matériel, financier ou autres.",
     compatibility: [],
     //note: "",
+
+    type: "object",
     ref: [
         {
             field: "name",

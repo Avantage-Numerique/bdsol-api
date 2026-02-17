@@ -11,6 +11,8 @@ export const refSkillGroup: RefEntityOrSchema = {
     cardinality: "0..N",
     description:
         "Groupe de compétences, habiletés et/ou de technologies, tirés de notre base de données, accompagné d'un libellé qui décrit le regroupement.",
+
+    type: "object",
     ref: [
         {
             field: "groupName",

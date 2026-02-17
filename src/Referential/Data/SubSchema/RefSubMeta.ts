@@ -7,6 +7,8 @@ export const refSubMeta: RefEntityOrSchema = {
     cardinality: "0..1",
     url: "/submeta",
     description: "Objet de méta qui conserve des informations pour les sous-schéma.",
+
+    type: "object",
     ref: [
         {
             field: "order",

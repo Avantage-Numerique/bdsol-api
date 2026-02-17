@@ -10,5 +10,7 @@ export const refTeam: RefEntityOrSchema = {
     description: "Liste des membres d'une équipe et un libellé de leur fonction.",
     compatibility: [],
     //note: "",
+
+    type: "object",
     ref: [{ ...refMember }],
 };

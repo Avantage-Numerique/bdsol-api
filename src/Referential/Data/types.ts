@@ -16,15 +16,15 @@ export type RefPropertyBase = {
 };
 
 export type RefEntityOrSchema = RefPropertyBase & {
+    type: "object";
     ref: RefProperty[];
 };
 
 //RefProperty can have either Object and subSchema, id and entityRef, primitive types or can be another EntityOrSchema
 //E.g. SkillGroup.subMeta is a RefEntityOrSchema that has a RefEntitySubSchema as a RefProperty instead of a single layer
 export type RefProperty =
-    | (RefPropertyBase & { type: "object"; subSchema: SchemaRef; entityRef?: never })
-    | (RefPropertyBase & { type: "id"; entityRef: EntityTypesEnum[]; subSchema?: never })
-    | (RefPropertyBase & { type: Exclude<FieldType, "object" | "id">; subSchema?: never; entityRef?: never })
+    | (RefPropertyBase & { type: "id"; entityRef: EntityTypesEnum[] })
+    | (RefPropertyBase & { type: Exclude<FieldType, "object" | "id">; entityRef?: never })
     | RefEntityOrSchema; //Allows multilayer schema (Skillgroup.subMeta.order)
 
 export type RefPropertyPrimitive = RefPropertyBase & { type: PrimitiveType };
@@ -50,11 +50,6 @@ export type RefCompatibility = {
     };
     relation?: string;
     documentationUrl?: string;
-};
-
-export type SchemaRef = {
-    label: string;
-    url?: `/${string}`;
 };
 
 export type PrimitiveType = "string" | "number" | "boolean" | "date" | "list";

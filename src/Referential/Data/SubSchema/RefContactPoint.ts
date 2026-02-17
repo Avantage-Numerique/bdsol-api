@@ -7,6 +7,8 @@ export const refContactPoint: RefEntityOrSchema = {
     label: "Moyen de contact",
     cardinality: "0..1",
     description: "",
+
+    type: "object",
     ref: [
         {
             field: "email",

@@ -52,9 +52,9 @@
                             </td>
 
                             <td>
-                                {% if row.type === 'object' %}
-                                    <a href="/ref{{ row.subSchema.url }}">
-                                        {{ row.subSchema.label }}
+                                {% if row.ref %}
+                                    <a href="/ref{{ row.url }}">
+                                        {{ row.label }}
                                     </a>
                                 {% elseif row.type === 'id' %}
                                     ID de :
@@ -66,7 +66,15 @@
                                     {% endfor %}
 
                                 {% else %}
-                                    {{ row.type }}
+
+                                    {% if row.url %}
+                                        <a href="/ref{{ row.url }}">{{ row.label }}</a> ({{ row.type }})
+                                        
+                                         {# <br><br> (<a href="/ref/{{ row.type }}">{{ row.type }}</a>) #}
+                                    {% else %}
+                                        {{ row.type }}
+                                    {% endif %}
+
                                 {% endif %}
                             </td>
 

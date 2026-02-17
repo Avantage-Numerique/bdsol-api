@@ -23,6 +23,8 @@ export const refPerson: RefEntityOrSchema = {
         compatibilitySchemaOrg.getOntologyCompatibilityArray("person", "Person"),
         compatibilityDataScene.getOntologyCompatibilityArray("person", "Contributor"),
     ],
+
+    type: "object",
     ref: [
         {
             field: "type",
@@ -77,6 +79,9 @@ export const refPerson: RefEntityOrSchema = {
             //ontologyProperty: "an:lastName",
             label: "Nom",
             type: "string",
+
+            url: "/lastname",
+
             cardinality: "1..1",
             compatibility: [compatibilitySchemaOrg.getOntologyCompatibilityArray("familyName")],
             description: "Nom de famille de la personne.",

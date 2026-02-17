@@ -10,6 +10,8 @@ export const refTimeframe: RefEntityOrSchema = {
     description: "Étape de progression, avec un temps estimé et un budget associé.",
     compatibility: [],
     //note: "",
+
+    type: "object",
     ref: [
         {
             field: "step",

@@ -22,6 +22,8 @@ export const refSocialHandle: RefEntityOrSchema = {
                 documentationUrl: "https://schema.org/sameAs",
             }, */
     ],
+
+    type: "object",
     ref: [
         {
             field: "label",

@@ -11,6 +11,8 @@ export const refSchedule: RefEntityOrSchema = {
     description: "Décris une plage horaire avec un nom, une date et heure de début et de fin.",
     compatibility: [],
     //note: "",
+
+    type: "object",
     ref: [
         {
             field: "name",

@@ -22,6 +22,8 @@ export const refEvent: RefEntityOrSchema = {
     description: "Décrit un événement, son lieu, son horaire, ses caractéristiques etc.",
     compatibility: [],
     //note:"",
+
+    type: "object",
     ref: [
         { ...refType },
         { ...refName },

@@ -11,6 +11,8 @@ export const refScheduleBudget: RefEntityOrSchema = {
     description: "Échéancier et budget général et/ou par étapes.",
     compatibility: [],
     //note: "",
+
+    type: "object",
     ref: [
         {
             field: "startDate",

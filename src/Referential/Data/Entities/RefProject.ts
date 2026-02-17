@@ -23,6 +23,8 @@ export const refProject: RefEntityOrSchema = {
     description: "Décrit un projet : les organisations qui en sont responsable, les équipements utilisé etc.",
     compatibility: [],
     //note:"",
+
+    type: "object",
     ref: [
         { ...refType },
         { ...refName },

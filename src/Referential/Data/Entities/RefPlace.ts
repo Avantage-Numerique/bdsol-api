@@ -12,6 +12,8 @@ export const refPlace: RefEntityOrSchema = {
     description: "Entité décrivant un lieu, son emplacement physique ou virtuel.",
     compatibility: [],
     //note: "",
+
+    type: "object",
     ref: [
         { ...refType },
         { ...refName },

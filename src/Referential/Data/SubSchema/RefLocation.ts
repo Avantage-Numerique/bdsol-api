@@ -9,6 +9,8 @@ export const refLocation: RefEntityOrSchema = {
     description: "Moyen de localisation via une adresse, des coordonnées ou autre.",
     compatibility: [],
     //note: "",
+
+    type: "object",
     ref: [
         {
             field: "address",

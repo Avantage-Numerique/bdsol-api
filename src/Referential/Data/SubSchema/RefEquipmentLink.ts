@@ -11,6 +11,8 @@ export const refEquipmentLink: RefEntityOrSchema = {
     description: "Fait référence à une entité Équipement et lui ajoute une quantité.",
     compatibility: [],
     //note: "",
+
+    type: "object",
     ref: [
         {
             field: "equipment",
