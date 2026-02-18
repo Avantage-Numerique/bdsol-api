@@ -1,8 +1,9 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
-import { RefEntityOrSchema } from "../types";
+import { RefProperty } from "../types";
 import { refSubMeta } from "./RefSubMeta";
+import { createRefType } from "../utils";
 
-export const refDomainList: RefEntityOrSchema = {
+export const refDomainList: RefProperty = {
     field: "domains",
     label: "Domaine d'activité",
     ontologyProperty: "avnu:domainList",
@@ -10,14 +11,13 @@ export const refDomainList: RefEntityOrSchema = {
     cardinality: "0..N",
     description: "Taxonomie de catégorie 'domain'.",
 
-    type: "object",
+    type: createRefType("object"),
     ref: [
         {
             field: "domain",
             label: "Domaine",
             cardinality: "0..1",
-            type: "id",
-            entityRef: [EntityTypesEnum.taxonomy],
+            type: createRefType("reference", [EntityTypesEnum.taxonomy]),
             description: "Référence à une taxonomie de type 'domain'",
         },
         { ...refSubMeta },

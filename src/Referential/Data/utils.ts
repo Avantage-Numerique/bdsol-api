@@ -1,5 +1,7 @@
 import { refData } from "./data";
-import { RefEntityOrSchema } from "./types";
+import { RefProperty } from "./types";
+import type { PrimitiveType, RefType, RefTypeObject, RefTypePrimitive, RefTypeReference } from "./types";
+import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export function findEntityByURL(url: string) {
     return Object.values(refData)
@@ -8,7 +10,7 @@ export function findEntityByURL(url: string) {
 }
 
 export function mapEntityByURL() {
-    const routesMap: Map<string, RefEntityOrSchema> = new Map();
+    const routesMap: Map<string, RefProperty> = new Map();
 
     Object.values(refData)
         .flatMap((x) => Object.values(x))
@@ -17,4 +19,21 @@ export function mapEntityByURL() {
         });
 
     return routesMap;
+}
+
+export function createRefType(type: PrimitiveType): RefTypePrimitive;
+export function createRefType(type: "object"): RefTypeObject;
+export function createRefType(type: "reference", arg: EntityTypesEnum[]): RefTypeReference;
+
+export function createRefType(type: PrimitiveType | "object" | "reference", arg: EntityTypesEnum[] = []): RefType {
+    if (type === "object") {
+        return { kind: "object" } as RefTypeObject;
+    }
+
+    if (type === "reference") {
+        return { kind: "reference", targets: arg } as RefTypeReference;
+    }
+
+    // otherwise it's a primitive
+    return { kind: "primitive", name: type } as RefTypePrimitive;
 }

@@ -1,4 +1,4 @@
-import { RefEntityOrSchema } from "@ref/Data/types";
+import { RefProperty } from "@ref/Data/types";
 import { refContactPoint } from "@src/Referential/Data/SubSchema/RefContactPoint";
 import { refDomainList } from "@src/Referential/Data/SubSchema/RefDomainList";
 import { refSkillGroup } from "@src/Referential/Data/SubSchema/RefSkillGroup";
@@ -13,8 +13,9 @@ import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
 import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
 import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
 import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
+import { createRefType } from "../utils";
 
-export const refPerson: RefEntityOrSchema = {
+export const refPerson: RefProperty = {
     ontologyProperty: "avnu:person",
     label: "Personne",
     url: "/person",
@@ -24,12 +25,12 @@ export const refPerson: RefEntityOrSchema = {
         compatibilityDataScene.getOntologyCompatibilityArray("person", "Contributor"),
     ],
 
-    type: "object",
+    type: createRefType("object"),
     ref: [
         {
             field: "type",
             ontologyProperty: "avnu:type",
-            type: "string",
+            type: createRefType("string"),
             label: "Type",
             cardinality: "1..1",
             compatibility: [
@@ -65,7 +66,7 @@ export const refPerson: RefEntityOrSchema = {
             field: "identifiers",
             ontologyProperty: "avnu:identifiers",
             label: "Identifiants",
-            type: "string",
+            type: createRefType("string"),
             cardinality: "0..N",
             compatibility: [
                 compatibilitySchemaOrg.getOntologyCompatibilityArray("identifier"),
@@ -78,7 +79,7 @@ export const refPerson: RefEntityOrSchema = {
             field: "lastName",
             //ontologyProperty: "an:lastName",
             label: "Nom",
-            type: "string",
+            type: createRefType("string"),
 
             url: "/lastname",
 
@@ -90,7 +91,7 @@ export const refPerson: RefEntityOrSchema = {
             field: "firstName",
             //ontologyProperty: "an:firstName",
             label: "Prénom",
-            type: "string",
+            type: createRefType("string"),
             cardinality: "1..1",
             compatibility: [compatibilitySchemaOrg.getOntologyCompatibilityArray("givenName")],
             description: "Prénom de la personne.",
@@ -99,7 +100,7 @@ export const refPerson: RefEntityOrSchema = {
             field: "fullName", // ou "name",
             label: "Nom complet",
             //ontologyProperty: "an:fullName",
-            type: "string",
+            type: createRefType("string"),
             cardinality: "1..1",
             compatibility: [
                 compatibilityDataScene.getOntologyCompatibilityArray(
@@ -117,7 +118,7 @@ export const refPerson: RefEntityOrSchema = {
             field: "nickname",
             //ontologyProperty: "an:nickname",
             label: "Surnom",
-            type: "string",
+            type: createRefType("string"),
             cardinality: "0..1",
             compatibility: [
                 compatibilitySchemaOrg.getOntologyCompatibilityArray("alternateName"),

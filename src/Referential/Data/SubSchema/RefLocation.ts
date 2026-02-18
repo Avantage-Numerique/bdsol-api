@@ -1,6 +1,7 @@
-import { RefEntityOrSchema } from "../types";
+import { RefProperty } from "../types";
+import { createRefType } from "../utils";
 
-export const refLocation: RefEntityOrSchema = {
+export const refLocation: RefProperty = {
     field: "location",
     ontologyProperty: "avnu:location",
     url: "/location",
@@ -10,11 +11,11 @@ export const refLocation: RefEntityOrSchema = {
     compatibility: [],
     //note: "",
 
-    type: "object",
+    type: createRefType("object"),
     ref: [
         {
             field: "address",
-            type: "string",
+            type: createRefType("string"),
             label: "Adresse",
             cardinality: "0..1",
             description: "Numéro civique et rue",
@@ -23,7 +24,7 @@ export const refLocation: RefEntityOrSchema = {
         },
         {
             field: "city",
-            type: "string",
+            type: createRefType("string"),
             label: "Ville",
             cardinality: "0..1",
             description: "Nom de la ville",
@@ -32,7 +33,7 @@ export const refLocation: RefEntityOrSchema = {
         },
         {
             field: "region",
-            type: "string",
+            type: createRefType("string"),
             label: "Région",
             cardinality: "0..1",
             description: "Nom de la région si applicable",
@@ -41,7 +42,7 @@ export const refLocation: RefEntityOrSchema = {
         },
         {
             field: "mrc",
-            type: "string",
+            type: createRefType("string"),
             label: "Mrc (Municipalité régionale de comté",
             cardinality: "0..1",
             description: "Entités administratives assurant la gestion régionale des municipalités locales",
@@ -50,7 +51,7 @@ export const refLocation: RefEntityOrSchema = {
         },
         {
             field: "province",
-            type: "string",
+            type: createRefType("string"),
             label: "Province",
             cardinality: "0..1",
             description: "Province ou état",
@@ -59,7 +60,7 @@ export const refLocation: RefEntityOrSchema = {
         },
         {
             field: "postalCode",
-            type: "string",
+            type: createRefType("string"),
             label: "Code postal",
             cardinality: "0..1",
             description: "Code postal",
@@ -68,7 +69,7 @@ export const refLocation: RefEntityOrSchema = {
         },
         {
             field: "country",
-            type: "string",
+            type: createRefType("string"),
             label: "Pays",
             cardinality: "0..1",
             description: "Nom du pays",
@@ -77,7 +78,7 @@ export const refLocation: RefEntityOrSchema = {
         },
         {
             field: "latitude",
-            type: "string",
+            type: createRefType("string"),
             label: "Latitude géographique",
             cardinality: "0..1",
             description: "Latitude géographique en degrés décimaux (valeur flottante, de -90 à 90).",
@@ -86,7 +87,7 @@ export const refLocation: RefEntityOrSchema = {
         },
         {
             field: "longitude",
-            type: "string",
+            type: createRefType("string"),
             label: "Longitude géographique",
             cardinality: "0..1",
             description: "Longitude géographique en degrés décimaux (valeur flottante, de -180 à 180).",

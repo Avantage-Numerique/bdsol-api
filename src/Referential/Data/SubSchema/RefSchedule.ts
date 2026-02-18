@@ -1,8 +1,9 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
-import { RefEntityOrSchema } from "../types";
+import { RefProperty } from "../types";
 import { refSubMeta } from "./RefSubMeta";
+import { createRefType } from "../utils";
 
-export const refSchedule: RefEntityOrSchema = {
+export const refSchedule: RefProperty = {
     field: "schedule",
     ontologyProperty: "avnu:schedule",
     url: "/schedule",
@@ -12,11 +13,11 @@ export const refSchedule: RefEntityOrSchema = {
     compatibility: [],
     //note: "",
 
-    type: "object",
+    type: createRefType("object"),
     ref: [
         {
             field: "name",
-            type: "string",
+            type: createRefType("string"),
             //ontologyProperty:"avnu:",
             //url: "",
             label: "Nom de l'activité",
@@ -27,7 +28,7 @@ export const refSchedule: RefEntityOrSchema = {
         },
         {
             field: "startDate",
-            type: "date",
+            type: createRefType("date"),
             //ontologyProperty:"avnu:",
             //url: "",
             label: "Date de début de l'activité (plage horaire)",
@@ -38,7 +39,7 @@ export const refSchedule: RefEntityOrSchema = {
         },
         {
             field: "startTime",
-            type: "string",
+            type: createRefType("string"),
             //ontologyProperty:"avnu:",
             //url: "",
             label: "Heure de début de l'activité (plage horaire)",
@@ -49,7 +50,7 @@ export const refSchedule: RefEntityOrSchema = {
         },
         {
             field: "endDate",
-            type: "date",
+            type: createRefType("date"),
             //ontologyProperty:"avnu:",
             //url: "",
             label: "Date de début de l'activité (plage horaire)",
@@ -60,7 +61,7 @@ export const refSchedule: RefEntityOrSchema = {
         },
         {
             field: "endTime",
-            type: "string",
+            type: createRefType("string"),
             //ontologyProperty:"avnu:",
             //url: "",
             label: "Heure de début de l'activité (plage horaire)",

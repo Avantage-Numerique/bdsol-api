@@ -1,6 +1,7 @@
-import { RefEntityOrSchema } from "../types";
+import { RefProperty } from "../types";
+import { createRefType } from "../utils";
 
-export const refContactPoint: RefEntityOrSchema = {
+export const refContactPoint: RefProperty = {
     field: "contactPoint",
     ontologyProperty: "avnu:contactPoint",
     url: "/contactpoint",
@@ -8,11 +9,11 @@ export const refContactPoint: RefEntityOrSchema = {
     cardinality: "0..1",
     description: "",
 
-    type: "object",
+    type: createRefType("object"),
     ref: [
         {
             field: "email",
-            type: "string",
+            type: createRefType("string"),
             //ontologyProperty: "avnu:email",
             //url: "/email",
             label: "Courriel",
@@ -23,7 +24,7 @@ export const refContactPoint: RefEntityOrSchema = {
         },
         {
             field: "tel",
-            type: "string",
+            type: createRefType("string"),
             //ontologyProperty: "avnu:tel",
             //url: "/tel",
             label: "Numéro de téléphone",
@@ -34,7 +35,7 @@ export const refContactPoint: RefEntityOrSchema = {
         },
         {
             field: "website",
-            type: "string",
+            type: createRefType("string"),
             //ontologyProperty: "avnu:website",
             //url: "/website",
             label: "Site web",

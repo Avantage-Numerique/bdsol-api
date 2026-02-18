@@ -4,22 +4,22 @@ import { refType } from "../Properties/RefType";
 import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
 import { refSocialHandle } from "../SubSchema/RefSocialHandle";
-import { RefEntityOrSchema } from "../types";
+import { RefProperty } from "../types";
+import { createRefType } from "../utils";
 
-export const refEquipment: RefEntityOrSchema = {
+export const refEquipment: RefProperty = {
     ontologyProperty: "avnu:equipment",
     url: "/equipment",
     label: "Équipement",
     description: "Entité décrivant un équipement, son modèle, sa marque, ses particularités.",
     compatibility: [],
     //note: "",
-
-    type: "object",
+    type: createRefType("object"),
     ref: [
         { ...refType },
         {
             field: "name",
-            type: "string",
+            type: createRefType("string"),
             label: "Nom combiné de l'équipement",
             description:
                 "Libellé retourné par l'API qui est une concaténation de la marque, du modèle et du libellé de l'équipement",
@@ -43,7 +43,7 @@ export const refEquipment: RefEntityOrSchema = {
             field: "brand",
             //ontologyProperty: "avnu:brand",
             //url: "/brand",
-            type: "string",
+            type: createRefType("string"),
             label: "Marque",
             cardinality: "0..1",
             description: "Compagnie ou marque qui produit l'équipement.",
@@ -54,7 +54,7 @@ export const refEquipment: RefEntityOrSchema = {
             field: "modelName",
             //ontologyProperty: "avnu:modelName",
             //url: "/modelName",
-            type: "string",
+            type: createRefType("string"),
             label: "Nom du modèle",
             cardinality: "0..1",
             description: "Modèle de l'équipement",

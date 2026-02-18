@@ -6,15 +6,16 @@ import { refDomainList } from "../SubSchema/RefDomainList";
 import { refSkillGroup } from "../SubSchema/RefSkillGroup";
 import { refSocialHandle } from "../SubSchema/RefSocialHandle";
 import { refTeam } from "../SubSchema/RefTeam";
-import { RefEntityOrSchema } from "../types";
+import { RefProperty } from "../types";
 import { refName } from "../Properties/RefName";
 import { refEquipmentLink } from "../SubSchema/RefEquipmentLink";
 import { refRegion } from "../Properties/RefRegion";
 import { refBadges } from "../Properties/RefBadges";
 import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 import { refPlaceLink } from "../RelationLinks/RefPlaceLink";
+import { createRefType } from "../utils";
 
-export const refOrganisation: RefEntityOrSchema = {
+export const refOrganisation: RefProperty = {
     ontologyProperty: "avnu:organisation",
     url: "/organisation",
     label: "Organisation",
@@ -22,14 +23,14 @@ export const refOrganisation: RefEntityOrSchema = {
     compatibility: [],
     note: "",
 
-    type: "object",
+    type: createRefType("object"),
     ref: [
         { ...refType },
         { ...refName },
         { ...refDescription },
         {
             field: "fondationDate",
-            type: "date",
+            type: createRefType("date"),
             //ontologyProperty: "fondationDate",
             //url: "/fondationDate",
             label: "Date de fondation",

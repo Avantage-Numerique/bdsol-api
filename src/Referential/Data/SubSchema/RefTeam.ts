@@ -1,7 +1,8 @@
-import { RefEntityOrSchema } from "../types";
+import { RefProperty } from "../types";
+import { createRefType } from "../utils";
 import { refMember } from "./RefMember";
 
-export const refTeam: RefEntityOrSchema = {
+export const refTeam: RefProperty = {
     field: "team",
     ontologyProperty: "avnu:team",
     url: "/team",
@@ -11,6 +12,6 @@ export const refTeam: RefEntityOrSchema = {
     compatibility: [],
     //note: "",
 
-    type: "object",
+    type: createRefType("object"),
     ref: [{ ...refMember }],
 };

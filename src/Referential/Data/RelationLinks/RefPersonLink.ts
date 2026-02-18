@@ -1,13 +1,13 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
-import { RefPropertyRelationLink } from "../types";
+import { RefProperty } from "../types";
+import { createRefType } from "../utils";
 
-export const refPersonLink: RefPropertyRelationLink = {
+export const refPersonLink: RefProperty = {
     //field: "location",
     ontologyProperty: "avnu:relationLinks.person",
     url: "/personLink",
     label: "Référence à une personne",
-    type: "id",
-    entityRef: [EntityTypesEnum.person],
+    type: createRefType("reference", [EntityTypesEnum.person]),
     cardinality: "0..N",
     compatibility: [],
     description: "Référence à une entité personne.",

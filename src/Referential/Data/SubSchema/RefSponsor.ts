@@ -1,8 +1,9 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
-import { RefEntityOrSchema } from "../types";
+import { RefProperty } from "../types";
 import { refSubMeta } from "./RefSubMeta";
+import { createRefType } from "../utils";
 
-export const refSponsor: RefEntityOrSchema = {
+export const refSponsor: RefProperty = {
     field: "sponsor",
     ontologyProperty: "avnu:sponsor",
     url: "/sponsor",
@@ -12,11 +13,11 @@ export const refSponsor: RefEntityOrSchema = {
     compatibility: [],
     //note: "",
 
-    type: "object",
+    type: createRefType("object"),
     ref: [
         {
             field: "name",
-            type: "string",
+            type: createRefType("string"),
             //ontologyProperty,
             //url,
             label: "Qualificatif du partenaire. Exemple : Partenaire 'Or' ou Financeur principal",
@@ -27,8 +28,7 @@ export const refSponsor: RefEntityOrSchema = {
         },
         {
             field: "entity",
-            type: "id",
-            entityRef: [EntityTypesEnum.person, EntityTypesEnum.organisation],
+            type: createRefType("reference", [EntityTypesEnum.person, EntityTypesEnum.organisation]),
             //ontologyProperty,
             //url,
             label: "Référence à l'entité partenaire",
@@ -39,7 +39,7 @@ export const refSponsor: RefEntityOrSchema = {
         },
         {
             field: "entityType",
-            type: "string",
+            type: createRefType("string"),
             //ontologyProperty,
             //url,
             label: "Type de l'entité du champ 'entity' de cet objet.",
@@ -50,4 +50,4 @@ export const refSponsor: RefEntityOrSchema = {
         },
         { ...refSubMeta },
     ],
-};
+} satisfies RefProperty;

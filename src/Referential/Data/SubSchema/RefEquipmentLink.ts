@@ -1,8 +1,9 @@
-import { RefEntityOrSchema } from "../types";
+import { RefProperty } from "../types";
+import { createRefType } from "../utils";
 import { refSubMeta } from "./RefSubMeta";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
-export const refEquipmentLink: RefEntityOrSchema = {
+export const refEquipmentLink: RefProperty = {
     field: "equipment",
     ontologyProperty: "avnu:equipmentLink",
     url: "/equipmentLink",
@@ -12,12 +13,11 @@ export const refEquipmentLink: RefEntityOrSchema = {
     compatibility: [],
     //note: "",
 
-    type: "object",
+    type: createRefType("object"),
     ref: [
         {
             field: "equipment",
-            type: "id",
-            entityRef: [EntityTypesEnum.equipment],
+            type: createRefType("reference", [EntityTypesEnum.equipment]),
             //ontologyProperty: "avnu:",
             //url: "",
             label: "Identifiant d'équipement.",
@@ -28,7 +28,7 @@ export const refEquipmentLink: RefEntityOrSchema = {
         },
         {
             field: "qty",
-            type: "number",
+            type: createRefType("number"),
             //ontologyProperty: "avnu:",
             //url: "",
             label: "Quantité",

@@ -1,13 +1,14 @@
-import { RefPropertyPrimitive } from "../types";
+import { RefProperty } from "../types";
 import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
 import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
 import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
+import { createRefType } from "../utils";
 
-export const refDescription: RefPropertyPrimitive = {
+export const refDescription: RefProperty = {
     field: "description",
     ontologyProperty: "avnu:description",
     label: "Description",
-    type: "string",
+    type: createRefType("string"),
     cardinality: "0..1",
     compatibility: [
         compatibilitySchemaOrg.getOntologyCompatibilityArray("description"),

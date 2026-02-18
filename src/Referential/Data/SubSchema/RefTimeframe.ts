@@ -1,7 +1,8 @@
-import { RefEntityOrSchema } from "../types";
+import { RefProperty } from "../types";
+import { createRefType } from "../utils";
 import { refSubMeta } from "./RefSubMeta";
 
-export const refTimeframe: RefEntityOrSchema = {
+export const refTimeframe: RefProperty = {
     field: "timeframe",
     ontologyProperty: "avnu:timeframe",
     url: "/timeframe",
@@ -11,11 +12,11 @@ export const refTimeframe: RefEntityOrSchema = {
     compatibility: [],
     //note: "",
 
-    type: "object",
+    type: createRefType("object"),
     ref: [
         {
             field: "step",
-            type: "string",
+            type: createRefType("string"),
             //ontologyProperty,
             //url,
             label: "Nom de l'étape",
@@ -26,7 +27,7 @@ export const refTimeframe: RefEntityOrSchema = {
         },
         {
             field: "eta",
-            type: "string",
+            type: createRefType("string"),
             //ontologyProperty,
             //url,
             label: "Durée estimé de l'étape",
@@ -37,7 +38,7 @@ export const refTimeframe: RefEntityOrSchema = {
         },
         {
             field: "budgetRange",
-            type: "string",
+            type: createRefType("string"),
             //ontologyProperty,
             //url,
             label: "Budget estimé pour l'étape",

@@ -13,9 +13,10 @@ import { refLocation } from "../SubSchema/RefLocation";
 import { refSchedule } from "../SubSchema/RefSchedule";
 import { refSocialHandle } from "../SubSchema/RefSocialHandle";
 import { refTeam } from "../SubSchema/RefTeam";
-import { RefEntityOrSchema } from "../types";
+import { RefProperty } from "../types";
+import { createRefType } from "../utils";
 
-export const refEvent: RefEntityOrSchema = {
+export const refEvent: RefProperty = {
     ontologyProperty: "avnu:event",
     url: "/event",
     label: "Événement",
@@ -23,7 +24,7 @@ export const refEvent: RefEntityOrSchema = {
     compatibility: [],
     //note:"",
 
-    type: "object",
+    type: createRefType("object"),
     ref: [
         { ...refType },
         { ...refName },
@@ -49,7 +50,7 @@ export const refEvent: RefEntityOrSchema = {
         },
         {
             field: "eventFormat",
-            type: "string",
+            type: createRefType("string"),
             //ontologyProperty
             //url:
             label: "Format de l'événement",
@@ -61,7 +62,7 @@ export const refEvent: RefEntityOrSchema = {
         { ...refTeam },
         {
             field: "startDate",
-            type: "date",
+            type: createRefType("date"),
             //ontologyProperty:
             //url:
             label: "Date de début",
@@ -72,7 +73,7 @@ export const refEvent: RefEntityOrSchema = {
         },
         {
             field: "endDate",
-            type: "date",
+            type: createRefType("date"),
             //ontologyProperty:
             //url:
             label: "Date de fin",

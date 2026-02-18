@@ -1,6 +1,7 @@
-import { RefEntityOrSchema } from "../types";
+import { RefProperty } from "../types";
+import { createRefType } from "../utils";
 
-export const refSubMeta: RefEntityOrSchema = {
+export const refSubMeta: RefProperty = {
     field: "subMeta",
     ontologyProperty: "avnu:submeta",
     label: "Sous-méta",
@@ -8,11 +9,11 @@ export const refSubMeta: RefEntityOrSchema = {
     url: "/submeta",
     description: "Objet de méta qui conserve des informations pour les sous-schéma.",
 
-    type: "object",
+    type: createRefType("object"),
     ref: [
         {
             field: "order",
-            type: "number",
+            type: createRefType("number"),
             //ontologyProperty: "avnu:order",
             label: "Ordre",
             cardinality: "0..1",

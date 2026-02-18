@@ -1,11 +1,12 @@
-import { RefPropertyPrimitive } from "../types";
+import { RefProperty } from "../types";
+import { createRefType } from "../utils";
 
-export const refBadges: RefPropertyPrimitive = {
+export const refBadges: RefProperty = {
     field: "badges",
     ontologyProperty: "avnu:badges",
     url: "/badges",
     label: "Badges",
-    type: "string",
+    type: createRefType("string"),
     cardinality: "0..N",
     compatibility: [],
     description:

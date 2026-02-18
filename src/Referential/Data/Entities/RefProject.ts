@@ -1,4 +1,4 @@
-import { RefEntityOrSchema } from "../types";
+import { RefProperty } from "../types";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { refDescription } from "../Properties/RefDescription";
 import { refName } from "../Properties/RefName";
@@ -15,8 +15,9 @@ import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 import { refEquipmentLinkSimpleArray } from "../RelationLinks/RefEquipmentLinkSimpleArray";
 import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
 import { refAlternateName } from "../Properties/RefAlternateName";
+import { createRefType } from "../utils";
 
-export const refProject: RefEntityOrSchema = {
+export const refProject: RefProperty = {
     ontologyProperty: "avnu:project",
     url: "/project",
     label: "Projet",
@@ -24,7 +25,7 @@ export const refProject: RefEntityOrSchema = {
     compatibility: [],
     //note:"",
 
-    type: "object",
+    type: createRefType("object"),
     ref: [
         { ...refType },
         { ...refName },
@@ -63,7 +64,7 @@ export const refProject: RefEntityOrSchema = {
             field: "context",
             //ontologyProperty: "avnu:context",
             //url: "/context",
-            type: "string",
+            type: createRefType("string"),
             label: "Contexte du projet",
             cardinality: "0..1",
             description: "Contexte du projet. Enum 'academic', 'hobby', 'professional'.",

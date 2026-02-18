@@ -1,10 +1,11 @@
-import { RefPropertyPrimitive } from "../types";
+import { RefProperty } from "../types";
 import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
 import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
+import { createRefType } from "../utils";
 
-export const refAlternateName: RefPropertyPrimitive = {
+export const refAlternateName: RefProperty = {
     field: "alternateName",
-    type: "string",
+    type: createRefType("string"),
     ontologyProperty: "avnu:alternateName",
     url: "/alternateName",
     label: "Nom secondaire",

@@ -1,7 +1,8 @@
-import { RefEntityOrSchema } from "../types";
+import { RefProperty } from "../types";
+import { createRefType } from "../utils";
 import { refSubMeta } from "./RefSubMeta";
 
-export const refSocialHandle: RefEntityOrSchema = {
+export const refSocialHandle: RefProperty = {
     field: "url",
     ontologyProperty: "avnu:socialHandle",
     url: "/socialHandle",
@@ -23,11 +24,11 @@ export const refSocialHandle: RefEntityOrSchema = {
             }, */
     ],
 
-    type: "object",
+    type: createRefType("object"),
     ref: [
         {
             field: "label",
-            type: "string",
+            type: createRefType("string"),
             //ontologyProperty: "avnu:label",
             //url:"/label",
             label: "label",
@@ -38,7 +39,7 @@ export const refSocialHandle: RefEntityOrSchema = {
         },
         {
             field: "url",
-            type: "string",
+            type: createRefType("string"),
             //ontologyProperty: "avnu:url",
             //url:"/url",
             label: "Hyperlien vers le site",

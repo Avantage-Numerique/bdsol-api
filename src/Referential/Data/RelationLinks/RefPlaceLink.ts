@@ -1,13 +1,13 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
-import { RefPropertyRelationLink } from "../types";
+import { RefProperty } from "../types";
+import { createRefType } from "../utils";
 
-export const refPlaceLink: RefPropertyRelationLink = {
+export const refPlaceLink: RefProperty = {
     field: "location",
     ontologyProperty: "avnu:relationLinks.placeLink",
     url: "/placeLink",
     label: "Référence à un lieu",
-    type: "id",
-    entityRef: [EntityTypesEnum.place],
+    type: createRefType("reference", [EntityTypesEnum.place]),
     cardinality: "0..N",
     compatibility: [],
     description: "Référence à une entité Place, qui décrit un lieu.",

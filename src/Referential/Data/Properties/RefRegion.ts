@@ -1,11 +1,12 @@
-import { RefPropertyPrimitive } from "../types";
+import { RefProperty } from "../types";
+import { createRefType } from "../utils";
 
-export const refRegion: RefPropertyPrimitive = {
+export const refRegion: RefProperty = {
     field: "region",
     ontologyProperty: "avnu:region",
     url: "/region",
     label: "Région",
-    type: "string",
+    type: createRefType("string"),
     cardinality: "0..1",
     compatibility: [
         //Propriété non conforme à datascene "associations géographiques".

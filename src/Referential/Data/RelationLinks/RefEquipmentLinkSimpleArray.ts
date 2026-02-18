@@ -1,13 +1,13 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
-import { RefPropertyRelationLink } from "../types";
+import { RefProperty } from "../types";
+import { createRefType } from "../utils";
 
-export const refEquipmentLinkSimpleArray: RefPropertyRelationLink = {
+export const refEquipmentLinkSimpleArray: RefProperty = {
     field: "equipment",
     url: "/equipmentLinkSimpleArray",
     ontologyProperty: "avnu:relationLinks.equipmentLink",
     label: "Équipements liés",
-    type: "id",
-    entityRef: [EntityTypesEnum.equipment],
+    type: createRefType("reference", [EntityTypesEnum.equipment]),
     cardinality: "0..N",
     compatibility: [],
     description: "Référence à un ou plusieurs equipements utilisé ou liée à l'entité.",

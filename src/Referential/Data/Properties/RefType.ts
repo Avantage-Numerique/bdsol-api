@@ -1,9 +1,10 @@
-import { RefPropertyPrimitive } from "../types";
+import { RefProperty } from "../types";
+import { createRefType } from "../utils";
 
-export const refType: RefPropertyPrimitive = {
+export const refType: RefProperty = {
     field: "type",
     ontologyProperty: "avnu:type",
-    type: "string",
+    type: createRefType("string"),
     url: "/type",
     label: "Type d'entité",
     cardinality: "1..1",

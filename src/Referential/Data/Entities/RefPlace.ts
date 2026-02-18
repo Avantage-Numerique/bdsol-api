@@ -3,9 +3,10 @@ import { refName } from "../Properties/RefName";
 import { refType } from "../Properties/RefType";
 import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 import { refLocation } from "../SubSchema/RefLocation";
-import { RefEntityOrSchema } from "../types";
+import { RefProperty } from "../types";
+import { createRefType } from "../utils";
 
-export const refPlace: RefEntityOrSchema = {
+export const refPlace: RefProperty = {
     ontologyProperty: "avnu:Place",
     url: "/place",
     label: "Lieu",
@@ -13,7 +14,7 @@ export const refPlace: RefEntityOrSchema = {
     compatibility: [],
     //note: "",
 
-    type: "object",
+    type: createRefType("object"),
     ref: [
         { ...refType },
         { ...refName },

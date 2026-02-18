@@ -1,9 +1,15 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { CompatibleOntologyPropertyPrefix } from "@ref/Data/Compatibility/CompatibleOntology";
 
-//type externalOntologies = "schema";//note: added this type CompatibleOntologyPropertyPrefix as base for that. To allow multiple Ontology compatibility.
+//The object that structure the whole Ref tree
+export type RefData = {
+    entities: Record<string, RefProperty>;
+    subschemas: Record<string, RefProperty>;
+    properties: Record<string, RefProperty>;
+    relationLinks: Record<string, RefProperty>;
+};
 
-//Property no ref
+//Properties no ref
 export type RefPropertyBase = {
     field?: string; //Default field name
     ontologyProperty?: `avnu:${string}`; //our ontology property name
@@ -15,27 +21,10 @@ export type RefPropertyBase = {
     note?: string; //Note
 };
 
-export type RefEntityOrSchema = RefPropertyBase & {
-    type: "object";
-    ref: RefProperty[];
-};
-
-//RefProperty can have either Object and subSchema, id and entityRef, primitive types or can be another EntityOrSchema
-//E.g. SkillGroup.subMeta is a RefEntityOrSchema that has a RefEntitySubSchema as a RefProperty instead of a single layer
+//RefProperty represent the list of entity, subschema, properties (primitive) or relationLinks
 export type RefProperty =
-    | (RefPropertyBase & { type: "id"; entityRef: EntityTypesEnum[] })
-    | (RefPropertyBase & { type: Exclude<FieldType, "object" | "id">; entityRef?: never })
-    | RefEntityOrSchema; //Allows multilayer schema (Skillgroup.subMeta.order)
-
-export type RefPropertyPrimitive = RefPropertyBase & { type: PrimitiveType };
-export type RefPropertyRelationLink = RefPropertyBase & { type: "id"; entityRef: EntityTypesEnum[] };
-
-export type RefData = {
-    entities: Record<string, RefEntityOrSchema>;
-    subschemas: Record<string, RefEntityOrSchema>;
-    properties: Record<string, RefPropertyPrimitive>;
-    relationLinks: Record<string, RefPropertyRelationLink>;
-};
+    | (RefPropertyBase & { type: RefTypePrimitive | RefTypeReference; ref?: never })
+    | (RefPropertyBase & { type: RefTypeObject; ref: RefProperty[] });
 
 export type RefCompatibility = {
     externalSource: {
@@ -52,6 +41,10 @@ export type RefCompatibility = {
     documentationUrl?: string;
 };
 
-export type PrimitiveType = "string" | "number" | "boolean" | "date" | "list";
-export type FieldType = PrimitiveType | "object" | "id";
+export type PrimitiveType = "string" | "number" | "boolean" | "date";
 export type Cardinality = "0..1" | "1..1" | "0..N" | "1..N" | "N..N";
+
+export type RefTypePrimitive = { kind: "primitive"; name: PrimitiveType };
+export type RefTypeReference = { kind: "reference"; targets: EntityTypesEnum[] };
+export type RefTypeObject = { kind: "object" };
+export type RefType = RefTypePrimitive | RefTypeReference | RefTypeObject;

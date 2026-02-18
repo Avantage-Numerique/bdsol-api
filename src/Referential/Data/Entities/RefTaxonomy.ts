@@ -2,9 +2,10 @@ import { refDescription } from "../Properties/RefDescription";
 import { refName } from "../Properties/RefName";
 import { refType } from "../Properties/RefType";
 import { refDomainList } from "../SubSchema/RefDomainList";
-import { RefEntityOrSchema } from "../types";
+import { RefProperty } from "../types";
+import { createRefType } from "../utils";
 
-export const refTaxonomy: RefEntityOrSchema = {
+export const refTaxonomy: RefProperty = {
     ontologyProperty: "avnu:taxonomy",
     url: "/taxonomy",
     label: "Taxonomie (catégorie)",
@@ -12,14 +13,14 @@ export const refTaxonomy: RefEntityOrSchema = {
     compatibility: [],
     //note: "",
 
-    type: "object",
+    type: createRefType("object"),
     ref: [
         { ...refType },
         {
             field: "category",
             //ontologyProperty: "avnu: category",
             //url: "/category",
-            type: "string",
+            type: createRefType("string"),
             label: "Type de taxonomie",
             cardinality: "1..1",
             description:

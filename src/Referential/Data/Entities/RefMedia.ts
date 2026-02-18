@@ -1,10 +1,11 @@
-import { RefEntityOrSchema } from "../types";
+import { RefProperty } from "../types";
+import { createRefType } from "../utils";
 
-export const refMedia: RefEntityOrSchema = {
+export const refMedia: RefProperty = {
     label: "Média",
     description: "Usage interne seulement. Référence un média dans la plateforme par son identifiant unique.",
     url: "/media",
 
-    type: "object",
+    type: createRefType("object"),
     ref: [],
 };

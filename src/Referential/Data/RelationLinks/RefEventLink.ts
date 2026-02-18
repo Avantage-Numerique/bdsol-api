@@ -1,13 +1,13 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
-import { RefPropertyRelationLink } from "../types";
+import { RefProperty } from "../types";
+import { createRefType } from "../utils";
 
-export const refEventLink: RefPropertyRelationLink = {
+export const refEventLink: RefProperty = {
     //field: "location",
     ontologyProperty: "avnu:relationLinks.event",
     url: "/eventLink",
     label: "Référence à un événement",
-    type: "id",
-    entityRef: [EntityTypesEnum.event],
+    type: createRefType("reference", [EntityTypesEnum.event]),
     cardinality: "0..N",
     compatibility: [],
     description: "Référence à une entité événement.",
