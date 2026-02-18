@@ -23,6 +23,7 @@ class ReferentialRoutes {
      */
     public setupPublicRoutes(): express.Router {
         this.routerInstance.get("/", [this.getRefIndexHandler.bind(this)]);
+        this.routerInstance.get("/primitives", [this.getRefPrimitiveHandler.bind(this)]);
         this.routerInstance.get("/:entity", [this.getRefEntityHandler.bind(this)]);
         return this.routerInstance;
     }
@@ -67,6 +68,26 @@ class ReferentialRoutes {
         return res
             .status(StatusCodes.OK)
             .send(await this.controllerInstance.referentialSingleEntityLayout(params.entity.toLowerCase()));
+    }
+
+    /**
+     *
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async getRefPrimitiveHandler(req: Request, res: Response): Promise<any> {
+        const { params } = req;
+
+        // TODO: clarifier le comportement en mode JSON
+        // if ("json" in req.query) {
+        //     res.set("Content-Type", "application/json");
+
+        //     return res.status(StatusCodes.OK).send(findEntityByURL(params.type.toLowerCase()));
+        // }
+
+        res.set("Content-Type", "text/html");
+        return res.status(StatusCodes.OK).send(await this.controllerInstance.referentialPrimitivesLayout());
     }
 }
 export default ReferentialRoutes;

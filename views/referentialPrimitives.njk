@@ -1,0 +1,112 @@
+{% extends 'default.njk' %}
+
+{% block content %}
+
+    <div class="indexContent">
+
+        {% block contentHeader %}
+            {% include "Partials/header.njk" %}
+        {% endblock %}
+
+        <h1>{{ title | safe }}</h1>
+
+        <div class="breadcrumbs">
+            <a class="btn" href="/ref" title="Référentiel">&larr; Référentiel</a>
+        </div>
+
+        {% for item in items %}
+
+            <h2 id="{{ item.ontologyProperty }}">{{ item.label }}</h2>
+
+            <p>{{ item.description }}</p>
+
+            {# TODO #}
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th rowspan='2'>Nom dans l'ontologie</th>
+                        <th rowspan='2'>Format</th>
+                        <th rowspan='2'>Description</th>
+                        <th colspan='2'>Compatibilité</th>
+                        <th rowspan='2'>Note</th>
+                    </tr>
+
+                    <tr class="compat-header">
+                        <th>Ontologie</th>
+                        <th>Propriété</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>{{ item.label }}
+                            {% if item.ontologyProperty and item.ontologyProperty !== "" %}
+                                <br/>
+                                <code>{{ item.ontologyProperty }}</code>
+                            {% endif %}
+                        </td>
+
+                        <td>
+
+                            {% if item.type.kind === 'reference' %}
+                                ID de :
+
+                                {% for entityRef in item.type.targets %}
+
+                                    <a href="/ref/{{ entityRef }}">{{ entityRef }}</a>
+
+                                {% endfor %}
+
+                            {% else %}
+
+                                {# <a href="/ref/primitive/{{ item.type }}">{{ item.type }}</a> #}
+
+                                {{ item.type.name }}
+
+                            {% endif %}
+                        </td>
+
+                        <td>{{ item.description }}</td>
+
+                        <td colspan="2">
+
+                            <div class="compat-grid">
+
+                                {% for compatItem in item.compatibility %}
+
+                                    <div>
+                                        {{ compatItem.externalSource.name }}
+                                    </div>
+
+                                    <div>
+                                        <a href="{{ compatItem.documentationUrl }}" target="_blank">
+                                            {{ compatItem.mapping.externalField }}
+                                        </a>
+                                    </div>
+
+                                {% else %}
+
+                                    <span class="nodata">Aucune donnée de compatibilité disponible.</span>
+
+                                {% endfor %}
+                            </div>
+
+                        </td>
+
+                        <td>{{ item.note }}</td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

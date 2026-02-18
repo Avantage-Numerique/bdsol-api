@@ -1,15 +1,21 @@
 import Page, { PageContent } from "@src/Pages/Controllers/Pages/Page";
+
+import PublicTemplate from "@src/Templates/PublicTemplate";
+import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
+
+import HomePage from "@src/Pages/Controllers/Pages/HomePage";
 import VersionsPage from "@src/Pages/Controllers/Pages/VersionsPage";
 import StatisticsPage from "@src/Pages/Controllers/Pages/StatisticsPage";
+
 import ReferentialPage from "@src/Pages/Controllers/Pages/ReferentialPage";
 import ReferentialSinglePage from "@src/Pages/Controllers/Pages/ReferentialSinglePage";
+import ReferentialPrimitivesPage from "./Pages/ReferentialPrimitivesPage";
+
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
+
 import { getApiConfig } from "@src/config";
 import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
-import PublicTemplate from "@src/Templates/PublicTemplate";
-import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 import { StatusCodes } from "http-status-codes";
-import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
-import HomePage from "@src/Pages/Controllers/Pages/HomePage";
 
 class PagesController {
     /** @private @static Singleton instance */
@@ -86,6 +92,12 @@ class PagesController {
         const referentialPageSingle = new ReferentialSinglePage("referentialSingle");
 
         return await referentialPageSingle.render();
+    }
+
+    public async referentialPrimitives(): Promise<string> {
+        const referentialPagePrimitives = new ReferentialPrimitivesPage("referentialPrimitives");
+
+        return await referentialPagePrimitives.render();
     }
 
     public async layout(name = "page", content: PageContent): Promise<string> {

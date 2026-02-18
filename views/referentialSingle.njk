@@ -51,74 +51,74 @@
                         <tr>
                             <td>{{ row.label }}
                                 {% if row.ontologyProperty and row.ontologyProperty !== "" %}
-                                    <br><code>{{ row.ontologyProperty }}</code>
-                                {% endif %}
-                            </td>
-
-                            <td>
-                                {% if row.ref %}
-                                    <a href="/ref{{ row.url }}">
-                                        {{ row.label }}
-                                    </a>
-                                {% elseif row.type === 'id' %}
-                                    ID de :
-
-                                    {% for entityRef in row.entityRef %}
-
-                                        <a href="/ref/{{ entityRef }}">{{ entityRef }}</a>
-
-                                    {% endfor %}
-
-                                {% else %}
-
-                                    {% if row.url %}
-                                        <a href="/ref{{ row.url }}">{{ row.label }}</a> ({{ row.type }})
-                                        
-                                         {# <br><br> (<a href="/ref/{{ row.type }}">{{ row.type }}</a>) #}
-                                    {% else %}
-                                        {{ row.type }}
+                                    <br>
+                                        <code>{{ row.ontologyProperty }}</code>
                                     {% endif %}
+                                </td>
 
-                                {% endif %}
-                            </td>
+                                <td>
+                                    {% if row.type.kind === "object" %}
+                                        <a href="/ref{{ row.url }}">
+                                            {{ row.label }}
+                                        </a>
+                                    {% elseif row.type.kind === 'id' %}
+                                        ID de :
 
-                            <td>{{ row.description }}</td>
+                                        {% for entityRef in row.type.targets %}
 
-                            <td colspan="2">
+                                            <a href="/ref/{{ entityRef }}">{{ entityRef }}</a>
 
-                                <div class="compat-grid">
-
-                                    {% for compatItem in row.compatibility %}
-
-                                        <div>
-                                            {{ compatItem.externalSource.name }}
-                                        </div>
-
-                                        <div>
-                                            <a href="{{ compatItem.documentationUrl }}" target="_blank">
-                                                {{ compatItem.mapping.externalField }}
-                                            </a>
-                                        </div>
+                                        {% endfor %}
 
                                     {% else %}
+
+                                        {% if row.url %}
+                                            <a href="/ref/primitives#{{ row.ontologyProperty }}">{{ row.label }}</a>
+                                            ({{ row.type.name }})
+                                        {% else %}
+                                            {{ row.type.name }}
+                                        {% endif %}
+
+                                    {% endif %}
+                                </td>
+
+                                <td>{{ row.description }}</td>
+
+                                <td colspan="2">
+
+                                    <div class="compat-grid">
+
+                                        {% for compatItem in row.compatibility %}
+
+                                            <div>
+                                                {{ compatItem.externalSource.name }}
+                                            </div>
+
+                                            <div>
+                                                <a href="{{ compatItem.documentationUrl }}" target="_blank">
+                                                    {{ compatItem.mapping.externalField }}
+                                                </a>
+                                            </div>
+
+                                        {% else %}
 
                                             <span class="nodata">Aucune donnée de compatibilité disponible.</span>
 
-                                    {% endfor %}
-                                </div>
+                                        {% endfor %}
+                                    </div>
 
-                            </td>
+                                </td>
 
-                            <td>{{ row.note }}</td>
+                                <td>{{ row.note }}</td>
 
-                        </tr>
-                    {% endfor %}
-                </tbody>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
 
-            </table>
-        {% else %}
-            <p>Rien à afficher!</p>
-        {% endif %}
+                </table>
+            {% else %}
+                <p>Rien à afficher!</p>
+            {% endif %}
 
-    </div>
-{% endblock %}
+        </div>
+    {% endblock %}
