@@ -19,6 +19,12 @@ table {
         }
     }
 }
+
+tr:target {
+    outline: 3px solid var(--button-bg);
+    outline-offset: 0px;
+}
+
 th,
 td {
     border: 2px solid black;
