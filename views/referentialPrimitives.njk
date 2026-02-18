@@ -14,35 +14,31 @@
             <a class="btn" href="/ref" title="Référentiel">&larr; Référentiel</a>
         </div>
 
-        {% for item in items %}
+        <h2>Liste des propriétes</h2>
 
-            <h2 id="{{ item.ontologyProperty }}">{{ item.label }}</h2>
+        <table style="margin-bottom: 100vh;">
 
-            <p>{{ item.description }}</p>
+            <thead>
 
-            {# TODO #}
+                <tr>
+                    <th rowspan='2'>Nom dans l'ontologie</th>
+                    <th rowspan='2'>Format</th>
+                    <th rowspan='2'>Description</th>
+                    <th colspan='2'>Compatibilité</th>
+                    <th rowspan='2'>Note</th>
+                </tr>
 
-            <table>
+                <tr class="compat-header">
+                    <th>Ontologie</th>
+                    <th>Propriété</th>
+                </tr>
+            </thead>
 
-                <thead>
+            <tbody>
 
-                    <tr>
-                        <th rowspan='2'>Nom dans l'ontologie</th>
-                        <th rowspan='2'>Format</th>
-                        <th rowspan='2'>Description</th>
-                        <th colspan='2'>Compatibilité</th>
-                        <th rowspan='2'>Note</th>
-                    </tr>
+                {% for item in items %}
 
-                    <tr class="compat-header">
-                        <th>Ontologie</th>
-                        <th>Propriété</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    <tr>
+                    <tr id="{{ item.ontologyProperty }}">
                         <td>{{ item.label }}
                             {% if item.ontologyProperty and item.ontologyProperty !== "" %}
                                 <br/>
@@ -57,13 +53,11 @@
 
                                 {% for entityRef in item.type.targets %}
 
-                                    <a href="/ref/{{ entityRef }}">{{ entityRef }}</a>
+                                    <a href="{{ baseRoute }}/{{ entityRef }}">{{ entityRef }}</a>
 
                                 {% endfor %}
 
                             {% else %}
-
-                                {# <a href="/ref/primitive/{{ item.type }}">{{ item.type }}</a> #}
 
                                 {{ item.type.name }}
 
@@ -101,11 +95,11 @@
 
                     </tr>
 
-                </tbody>
+                {% endfor %}
 
-            </table>
+            </tbody>
 
-        {% endfor %}
+        </table>
 
     </div>
 

@@ -58,7 +58,7 @@
 
                                 <td>
                                     {% if row.type.kind === "object" %}
-                                        <a href="/ref{{ row.url }}">
+                                        <a href="{{ baseRoute }}{{ row.url }}">
                                             {{ row.label }}
                                         </a>
                                     {% elseif row.type.kind === 'id' %}
@@ -66,14 +66,14 @@
 
                                         {% for entityRef in row.type.targets %}
 
-                                            <a href="/ref/{{ entityRef }}">{{ entityRef }}</a>
+                                            <a href="{{ baseRoute }}/{{ entityRef }}">{{ entityRef }}</a>
 
                                         {% endfor %}
 
                                     {% else %}
 
                                         {% if row.url %}
-                                            <a href="/ref/primitives#{{ row.ontologyProperty }}">{{ row.label }}</a>
+                                            <a href="{{ baseRoute }}{{ row.url }}">{{ row.label }}</a>
                                             ({{ row.type.name }})
                                         {% else %}
                                             {{ row.type.name }}

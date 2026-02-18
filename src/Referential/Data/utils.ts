@@ -6,7 +6,7 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 export function findEntityByURL(url: string) {
     return Object.values(refData)
         .flatMap((x) => Object.values(x).flat())
-        .find((i) => `/${url}` === i.url.toLowerCase());
+        .find((i) => `/${url}` === i.url?.toLowerCase());
 }
 
 export function mapEntityByURL() {
@@ -36,4 +36,20 @@ export function createRefType(type: PrimitiveType | "object" | "reference", arg:
 
     // otherwise it's a primitive
     return { kind: "primitive", name: type } as RefTypePrimitive;
+}
+
+export function createPrimitiveUrl(name: string): `/${string}#avnu:${string}` {
+    return ("/primitives#avnu:" + name) as `/${string}#avnu:${string}`;
+}
+
+export function getAllPrimitives(base: RefProperty[]) {
+    const entities = base;
+
+    const filtered = entities.filter((i) => i.type.kind === "primitive");
+
+    for (const entity of entities) {
+        if (entity.ref) filtered.push(...getAllPrimitives(entity.ref));
+    }
+
+    return filtered;
 }
