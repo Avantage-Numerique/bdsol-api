@@ -12,6 +12,10 @@
 
             <h1>{{ title | safe }}</h1>
 
+        {% else %}
+
+            <h1>Référentiel de AVNU API</h1>
+
         {% endif %}
 
         <div class="breadcrumbs">
@@ -98,7 +102,7 @@
 
                                     {% else %}
 
-                                        <span class="nodata">Aucune donnée disponible.</span>
+                                            <span class="nodata">Aucune donnée de compatibilité disponible.</span>
 
                                     {% endfor %}
                                 </div>

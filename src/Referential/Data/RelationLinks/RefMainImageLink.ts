@@ -3,8 +3,8 @@ import { RefPropertyRelationLink } from "../types";
 
 export const refMainImageLink: RefPropertyRelationLink = {
     field: "mainImage",
-    ontologyProperty: "avnu:relationLinks.mainImageLink",
-    url: "/mainImageLink",
+    ontologyProperty: "avnu:mainImage",
+    url: "/mainImage",
     label: "Image principale de profil",
     type: "id",
     entityRef: [EntityTypesEnum.media],

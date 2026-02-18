@@ -6,6 +6,7 @@ import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
 export const refDescription: RefPropertyPrimitive = {
     field: "description",
     ontologyProperty: "avnu:description",
+    url: "/description",
     label: "Description",
     type: "string",
     cardinality: "0..1",
