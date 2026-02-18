@@ -7,6 +7,7 @@ import { createRefType } from "../utils";
 export const refDescription: RefProperty = {
     field: "description",
     ontologyProperty: "avnu:description",
+    url: "/description",
     label: "Description",
     type: createRefType("string"),
     cardinality: "0..1",

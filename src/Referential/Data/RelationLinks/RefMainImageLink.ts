@@ -4,8 +4,8 @@ import { createRefType } from "../utils";
 
 export const refMainImageLink: RefProperty = {
     field: "mainImage",
-    ontologyProperty: "avnu:relationLinks.mainImageLink",
-    url: "/mainImageLink",
+    ontologyProperty: "avnu:mainImage",
+    url: "/mainImage",
     label: "Image principale de profil",
     type: createRefType("reference", [EntityTypesEnum.media]),
     cardinality: "0..1",
