@@ -5,7 +5,7 @@ import { createRefType } from "../utils";
 export const refEventLink: RefProperty = {
     //field: "location",
     ontologyProperty: "avnu:relationLinks.event",
-    url: "/eventLink",
+    url: "/relationLinks.eventLink",
     label: "Référence à un événement",
     type: createRefType("reference", [EntityTypesEnum.event]),
     cardinality: "0..N",

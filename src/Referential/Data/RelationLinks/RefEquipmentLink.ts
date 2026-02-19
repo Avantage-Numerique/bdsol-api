@@ -4,7 +4,7 @@ import { createRefType } from "../utils";
 
 export const refEquipmentLink: RefProperty = {
     field: "equipment",
-    url: "/equipmentLink",
+    url: "/relationLinks.equipmentLink",
     ontologyProperty: "avnu:relationLinks.equipmentLink",
     label: "Équipements liés",
     type: createRefType("reference", [EntityTypesEnum.equipment]),

@@ -6,7 +6,7 @@ export const refOrganisationLink: RefProperty = {
     //field: "entityInCharge",
     //field: "producer",
     ontologyProperty: "avnu:relationLinks.organisationLink",
-    url: "/organisationLink",
+    url: "/relationLinks.organisationLink",
     label: "Organisations associées",
     type: createRefType("reference", [EntityTypesEnum.organisation]),
     cardinality: "0..N",

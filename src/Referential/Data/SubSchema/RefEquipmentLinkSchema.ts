@@ -1,4 +1,4 @@
-import { refEquipmentLink } from "../RelationLinks/RefEquipmentLinkSimpleArray";
+import { refEquipmentLink } from "../RelationLinks/RefEquipmentLink";
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
 import { refSubMeta } from "./RefSubMeta";

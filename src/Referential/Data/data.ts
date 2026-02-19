@@ -15,7 +15,7 @@ import { refSkillGroup } from "./SubSchema/RefSkillGroup";
 import { refDomainList } from "./SubSchema/RefDomainList";
 import { refContactPoint } from "./SubSchema/RefContactPoint";
 import { refSocialHandle } from "./SubSchema/RefSocialHandle";
-import { refEquipmentLinkSchema } from "./SubSchema/RefEquipmentLink";
+import { refEquipmentLinkSchema } from "./SubSchema/RefEquipmentLinkSchema";
 import { refTimeframe } from "./SubSchema/RefTimeframe";
 import { refMember } from "./SubSchema/RefMember";
 import { refScheduleBudget } from "./SubSchema/RefScheduleBudget";
@@ -32,7 +32,7 @@ import { refRegion } from "./Properties/RefRegion";
 import { refType } from "./Properties/RefType";
 
 //RelationsLinks
-import { refEquipmentLink } from "./RelationLinks/RefEquipmentLinkSimpleArray";
+import { refEquipmentLink } from "./RelationLinks/RefEquipmentLink";
 import { refMainImageLink } from "./RelationLinks/RefMainImageLink";
 import { refOrganisationLink } from "./RelationLinks/RefOrganisationLink";
 import { refPlaceLink } from "./RelationLinks/RefPlaceLink";

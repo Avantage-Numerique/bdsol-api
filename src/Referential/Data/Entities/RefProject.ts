@@ -12,7 +12,7 @@ import { refSponsor } from "../SubSchema/RefSponsor";
 import { refScheduleBudget } from "../SubSchema/RefScheduleBudget";
 import { refPlaceLink } from "../RelationLinks/RefPlaceLink";
 import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
-import { refEquipmentLink } from "../RelationLinks/RefEquipmentLinkSimpleArray";
+import { refEquipmentLink } from "../RelationLinks/RefEquipmentLink";
 import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
 import { refAlternateName } from "../Properties/RefAlternateName";
 import { createPrimitiveUrl, createRefType } from "../utils";

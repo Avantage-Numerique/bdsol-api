@@ -8,7 +8,7 @@ import { refSocialHandle } from "../SubSchema/RefSocialHandle";
 import { refTeam } from "../SubSchema/RefTeam";
 import { RefProperty } from "../types";
 import { refName } from "../Properties/RefName";
-import { refEquipmentLinkSchema } from "../SubSchema/RefEquipmentLink";
+import { refEquipmentLinkSchema } from "../SubSchema/RefEquipmentLinkSchema";
 import { refRegion } from "../Properties/RefRegion";
 import { refBadges } from "../Properties/RefBadges";
 import { refMainImageLink } from "../RelationLinks/RefMainImageLink";

@@ -5,7 +5,7 @@ import { createRefType } from "../utils";
 export const refTaxonomyLink: RefProperty = {
     //field: "location",
     ontologyProperty: "avnu:relationLinks.taxonomy",
-    url: "/taxonomyLink",
+    url: "/relationLinks.taxonomyLink",
     label: "Référence à une taxonomie",
     type: createRefType("reference", [EntityTypesEnum.taxonomy]),
     cardinality: "0..N",

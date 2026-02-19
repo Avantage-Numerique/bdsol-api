@@ -5,7 +5,7 @@ import { createRefType } from "../utils";
 export const refPlaceLink: RefProperty = {
     field: "location",
     ontologyProperty: "avnu:relationLinks.placeLink",
-    url: "/placeLink",
+    url: "/relationLinks.placeLink",
     label: "Référence à un lieu",
     type: createRefType("reference", [EntityTypesEnum.place]),
     cardinality: "0..N",

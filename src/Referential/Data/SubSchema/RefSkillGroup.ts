@@ -26,7 +26,7 @@ export const refSkillGroup: RefProperty = {
         {
             field: "skills",
             ontologyProperty: "avnu:skills",
-            url: createPrimitiveUrl("skills"),
+            url: "/skills",
             label: "Compétences",
             type: createRefType("reference", [EntityTypesEnum.taxonomy]),
             description: "Liste de compétences, habiletés ou de technologies.",
