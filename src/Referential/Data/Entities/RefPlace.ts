@@ -7,7 +7,7 @@ import { RefProperty } from "../types";
 import { createRefType } from "../utils";
 
 export const refPlace: RefProperty = {
-    ontologyProperty: "avnu:Place",
+    ontologyProperty: "avnu:place",
     url: "/place",
     label: "Lieu",
     description: "Entité décrivant un lieu, son emplacement physique ou virtuel.",

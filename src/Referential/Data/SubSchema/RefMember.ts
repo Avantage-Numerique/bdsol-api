@@ -1,7 +1,8 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { RefProperty } from "../types";
 import { refSubMeta } from "./RefSubMeta";
-import { createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "../utils";
+import { refPersonLink } from "../RelationLinks/RefPersonLink";
 
 export const refMember: RefProperty = {
     //field: "member",
@@ -16,10 +17,8 @@ export const refMember: RefProperty = {
     type: createRefType("object"),
     ref: [
         {
+            ...refPersonLink,
             field: "member",
-            type: createRefType("reference", [EntityTypesEnum.person]),
-            //ontologyProperty:"avnu:member",
-            //url: "",
             label: "Membre de l'équipe",
             cardinality: "0..1",
             description: "",
@@ -29,8 +28,8 @@ export const refMember: RefProperty = {
         {
             field: "role",
             type: createRefType("string"),
-            //ontologyProperty:"avnu:role",
-            //url: "",
+            ontologyProperty: "avnu:role",
+            url: createPrimitiveUrl("role"),
             label: "",
             cardinality: "0..1",
             description: "",

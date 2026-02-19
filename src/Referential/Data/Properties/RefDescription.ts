@@ -2,12 +2,12 @@ import { RefProperty } from "../types";
 import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
 import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
 import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
-import { createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "../utils";
 
 export const refDescription: RefProperty = {
     field: "description",
     ontologyProperty: "avnu:description",
-    url: "/description",
+    url: createPrimitiveUrl("description"),
     label: "Description",
     type: createRefType("string"),
     cardinality: "0..1",

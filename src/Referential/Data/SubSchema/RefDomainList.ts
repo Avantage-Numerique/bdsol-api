@@ -2,6 +2,7 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { RefProperty } from "../types";
 import { refSubMeta } from "./RefSubMeta";
 import { createRefType } from "../utils";
+import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
 
 export const refDomainList: RefProperty = {
     field: "domains",
@@ -14,10 +15,10 @@ export const refDomainList: RefProperty = {
     type: createRefType("object"),
     ref: [
         {
+            ...refTaxonomyLink,
             field: "domain",
             label: "Domaine",
             cardinality: "0..1",
-            type: createRefType("reference", [EntityTypesEnum.taxonomy]),
             description: "Référence à une taxonomie de type 'domain'",
         },
         { ...refSubMeta },

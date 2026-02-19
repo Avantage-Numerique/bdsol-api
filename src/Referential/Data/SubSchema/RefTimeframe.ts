@@ -1,5 +1,5 @@
 import { RefProperty } from "../types";
-import { createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "../utils";
 import { refSubMeta } from "./RefSubMeta";
 
 export const refTimeframe: RefProperty = {
@@ -17,8 +17,8 @@ export const refTimeframe: RefProperty = {
         {
             field: "step",
             type: createRefType("string"),
-            //ontologyProperty,
-            //url,
+            ontologyProperty: "avnu:step",
+            url: createPrimitiveUrl("step"),
             label: "Nom de l'étape",
             cardinality: "1..1",
             description: "Libellé descriptif de l'étape",
@@ -28,8 +28,8 @@ export const refTimeframe: RefProperty = {
         {
             field: "eta",
             type: createRefType("string"),
-            //ontologyProperty,
-            //url,
+            ontologyProperty: "avnu:timeframeEta",
+            url: createPrimitiveUrl("timeframeEta"),
             label: "Durée estimé de l'étape",
             cardinality: "0..1",
             description: "Parmis l'enum TimeframeEtaEnum",
@@ -39,8 +39,8 @@ export const refTimeframe: RefProperty = {
         {
             field: "budgetRange",
             type: createRefType("string"),
-            //ontologyProperty,
-            //url,
+            ontologyProperty: "avnu:budgetRange",
+            url: createPrimitiveUrl("budgetRange"),
             label: "Budget estimé pour l'étape",
             cardinality: "0..1",
             description: "Parmis l'enum BudgetRangeEnum",

@@ -1,10 +1,10 @@
 import { RefProperty } from "../types";
-import { createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "../utils";
 
 export const refBadges: RefProperty = {
     field: "badges",
     ontologyProperty: "avnu:badges",
-    url: "/badges",
+    url: createPrimitiveUrl("badges"),
     label: "Badges",
     type: createRefType("string"),
     cardinality: "0..N",

@@ -1,5 +1,5 @@
 import { RefProperty } from "../types";
-import { createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "../utils";
 
 export const refContactPoint: RefProperty = {
     field: "contactPoint",
@@ -14,8 +14,8 @@ export const refContactPoint: RefProperty = {
         {
             field: "email",
             type: createRefType("string"),
-            //ontologyProperty: "avnu:email",
-            //url: "/email",
+            ontologyProperty: "avnu:email",
+            url: createPrimitiveUrl("email"),
             label: "Courriel",
             cardinality: "0..1",
             description: "Courriel",
@@ -25,8 +25,8 @@ export const refContactPoint: RefProperty = {
         {
             field: "tel",
             type: createRefType("string"),
-            //ontologyProperty: "avnu:tel",
-            //url: "/tel",
+            ontologyProperty: "avnu:tel",
+            url: createPrimitiveUrl("tel"),
             label: "Numéro de téléphone",
             cardinality: "0..1",
             description: "Numéro de téléphone",
@@ -36,8 +36,8 @@ export const refContactPoint: RefProperty = {
         {
             field: "website",
             type: createRefType("string"),
-            //ontologyProperty: "avnu:website",
-            //url: "/website",
+            ontologyProperty: "avnu:website",
+            url: createPrimitiveUrl("website"),
             label: "Site web",
             cardinality: "0..1",
             description: "Site web principal",

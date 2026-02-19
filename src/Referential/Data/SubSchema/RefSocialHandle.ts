@@ -1,5 +1,5 @@
 import { RefProperty } from "../types";
-import { createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "../utils";
 import { refSubMeta } from "./RefSubMeta";
 
 export const refSocialHandle: RefProperty = {
@@ -29,8 +29,8 @@ export const refSocialHandle: RefProperty = {
         {
             field: "label",
             type: createRefType("string"),
-            //ontologyProperty: "avnu:label",
-            //url:"/label",
+            ontologyProperty: "avnu:label",
+            url: createPrimitiveUrl("label"),
             label: "label",
             cardinality: "0..1",
             description: "Libellé du site ou du nom à afficher en lien cliquable.",
@@ -40,8 +40,8 @@ export const refSocialHandle: RefProperty = {
         {
             field: "url",
             type: createRefType("string"),
-            //ontologyProperty: "avnu:url",
-            //url:"/url",
+            ontologyProperty: "avnu:url",
+            url: createPrimitiveUrl("url"),
             label: "Hyperlien vers le site",
             cardinality: "0..1",
             description: "Hyperlien qui mène vers le site internet.",

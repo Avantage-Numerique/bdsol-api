@@ -1,10 +1,10 @@
 import { RefProperty } from "../types";
-import { createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "../utils";
 
 export const refRegion: RefProperty = {
     field: "region",
     ontologyProperty: "avnu:region",
-    url: "/region",
+    url: createPrimitiveUrl("region"),
     label: "Région",
     type: createRefType("string"),
     cardinality: "0..1",

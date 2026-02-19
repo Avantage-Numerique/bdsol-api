@@ -13,7 +13,8 @@ import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
 import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
 import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
 import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
-import { createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "../utils";
+import { refType } from "../Properties/RefType";
 
 export const refPerson: RefProperty = {
     ontologyProperty: "avnu:person",
@@ -21,52 +22,29 @@ export const refPerson: RefProperty = {
     url: "/person",
     description: "Entité qui désigne une personne, qui décrit ses activités, ces compétences et autres.",
     compatibility: [
-        compatibilitySchemaOrg.getOntologyCompatibilityArray("person", "Person"),
-        compatibilityDataScene.getOntologyCompatibilityArray("person", "Contributor"),
+        compatibilityAvnu.getOntologyCompatibilityArray("Person"),
+        compatibilityArtsdata.getOntologyCompatibilityArray(
+            "Person",
+            "Person",
+            "https://docs.artsdata.ca/classes/person.html"
+        ),
+        compatibilitySchemaOrg.getOntologyCompatibilityArray("Person"),
+        compatibilityDataScene.getOntologyCompatibilityArray(
+            "contributor",
+            "Contributor",
+            "https://documentation.datascene.ca/references/contributor/#1-propriete-contributeur-contributor-type"
+        ),
     ],
 
     type: createRefType("object"),
     ref: [
-        {
-            field: "type",
-            ontologyProperty: "avnu:type",
-            type: createRefType("string"),
-            label: "Type",
-            cardinality: "1..1",
-            compatibility: [
-                compatibilityAvnu.getOntologyCompatibilityArray("Person"),
-                compatibilityArtsdata.getOntologyCompatibilityArray(
-                    "Person",
-                    "Person",
-                    "https://docs.artsdata.ca/classes/person.html"
-                ),
-                compatibilitySchemaOrg.getOntologyCompatibilityArray("Person"),
-                compatibilityDataScene.getOntologyCompatibilityArray(
-                    "contributor",
-                    "Contributor",
-                    "https://documentation.datascene.ca/references/contributor/#1-propriete-contributeur-contributor-type"
-                ),
-            ],
-            //Pas le même vocabulaire https://datascene.ca/references/vocabulaires/types_de_contributeurs/
-            /* {
-                externalSource: {
-                    name: "Datascene",
-                    //sparqlEndpoint: ""
-                },
-                mapping: {
-                    externalField: "Type de contributeur",
-                    //ontologyProperty: "",
-                    //ontologyUri: "",
-                },
-                documentationUrl: "https://datascene.ca/references/vocabulaires/types_de_contributeurs/",
-            }, */
-            description: "Le type varie selon l'ontologie.",
-        },
+        { ...refType },
         {
             field: "identifiers",
             ontologyProperty: "avnu:identifiers",
             label: "Identifiants",
             type: createRefType("string"),
+            url: createPrimitiveUrl("identifiers"),
             cardinality: "0..N",
             compatibility: [
                 compatibilitySchemaOrg.getOntologyCompatibilityArray("identifier"),
@@ -77,21 +55,20 @@ export const refPerson: RefProperty = {
         },
         {
             field: "lastName",
-            //ontologyProperty: "an:lastName",
+            ontologyProperty: "avnu:lastName",
             label: "Nom",
             type: createRefType("string"),
-
-            url: "/lastname",
-
+            url: createPrimitiveUrl("lastName"),
             cardinality: "1..1",
             compatibility: [compatibilitySchemaOrg.getOntologyCompatibilityArray("familyName")],
             description: "Nom de famille de la personne.",
         },
         {
             field: "firstName",
-            //ontologyProperty: "an:firstName",
+            ontologyProperty: "avnu:firstName",
             label: "Prénom",
             type: createRefType("string"),
+            url: createPrimitiveUrl("firstName"),
             cardinality: "1..1",
             compatibility: [compatibilitySchemaOrg.getOntologyCompatibilityArray("givenName")],
             description: "Prénom de la personne.",
@@ -99,8 +76,9 @@ export const refPerson: RefProperty = {
         {
             field: "fullName", // ou "name",
             label: "Nom complet",
-            //ontologyProperty: "an:fullName",
+            ontologyProperty: "avnu:fullName",
             type: createRefType("string"),
+            url: createPrimitiveUrl("fullName"),
             cardinality: "1..1",
             compatibility: [
                 compatibilityDataScene.getOntologyCompatibilityArray(
@@ -116,9 +94,10 @@ export const refPerson: RefProperty = {
         },
         {
             field: "nickname",
-            //ontologyProperty: "an:nickname",
+            ontologyProperty: "avnu:nickname",
             label: "Surnom",
             type: createRefType("string"),
+            url: createPrimitiveUrl("nickname"),
             cardinality: "0..1",
             compatibility: [
                 compatibilitySchemaOrg.getOntologyCompatibilityArray("alternateName"),

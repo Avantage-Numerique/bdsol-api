@@ -1,5 +1,5 @@
 import { RefProperty } from "../types";
-import { createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "../utils";
 
 export const refSubMeta: RefProperty = {
     field: "subMeta",
@@ -14,7 +14,8 @@ export const refSubMeta: RefProperty = {
         {
             field: "order",
             type: createRefType("number"),
-            //ontologyProperty: "avnu:order",
+            ontologyProperty: "avnu:order",
+            url: createPrimitiveUrl("order"),
             label: "Ordre",
             cardinality: "0..1",
             description: "Order des éléments pour le visuel",

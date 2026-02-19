@@ -1,9 +1,10 @@
+import { refEquipmentLink } from "../RelationLinks/RefEquipmentLinkSimpleArray";
 import { RefProperty } from "../types";
-import { createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "../utils";
 import { refSubMeta } from "./RefSubMeta";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
-export const refEquipmentLink: RefProperty = {
+export const refEquipmentLinkSchema: RefProperty = {
     field: "equipment",
     ontologyProperty: "avnu:equipmentLink",
     url: "/equipmentLink",
@@ -17,10 +18,8 @@ export const refEquipmentLink: RefProperty = {
     ref: [
         {
             field: "equipment",
-            type: createRefType("reference", [EntityTypesEnum.equipment]),
-            //ontologyProperty: "avnu:",
-            //url: "",
-            label: "Identifiant d'équipement.",
+            ...refEquipmentLink,
+            label: "Identifiant d'équipement",
             cardinality: "0..1",
             description: "Fait référence à un équipement.",
             compatibility: [],
@@ -29,8 +28,8 @@ export const refEquipmentLink: RefProperty = {
         {
             field: "qty",
             type: createRefType("number"),
-            //ontologyProperty: "avnu:",
-            //url: "",
+            ontologyProperty: "avnu:qty",
+            url: createPrimitiveUrl("qty"),
             label: "Quantité",
             cardinality: "0..1",
             description: "Décris la quantité d'un équipement possédé en plusieurs exemplaires.",

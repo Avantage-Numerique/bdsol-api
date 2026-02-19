@@ -12,10 +12,10 @@ import { refSponsor } from "../SubSchema/RefSponsor";
 import { refScheduleBudget } from "../SubSchema/RefScheduleBudget";
 import { refPlaceLink } from "../RelationLinks/RefPlaceLink";
 import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
-import { refEquipmentLinkSimpleArray } from "../RelationLinks/RefEquipmentLinkSimpleArray";
+import { refEquipmentLink } from "../RelationLinks/RefEquipmentLinkSimpleArray";
 import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
 import { refAlternateName } from "../Properties/RefAlternateName";
-import { createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "../utils";
 
 export const refProject: RefProperty = {
     ontologyProperty: "avnu:project",
@@ -62,8 +62,8 @@ export const refProject: RefProperty = {
         { ...refDomainList },
         {
             field: "context",
-            //ontologyProperty: "avnu:context",
-            //url: "/context",
+            ontologyProperty: "avnu:context",
+            url: createPrimitiveUrl("context"),
             type: createRefType("string"),
             label: "Contexte du projet",
             cardinality: "0..1",
@@ -71,7 +71,7 @@ export const refProject: RefProperty = {
             compatibility: [],
             //note: "",
         },
-        { ...refEquipmentLinkSimpleArray },
+        { ...refEquipmentLink },
 
         //Ontologie :
         //Identifiant

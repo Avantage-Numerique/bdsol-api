@@ -1,7 +1,7 @@
 import { RefProperty } from "@ref/Data/types";
 import { refSubMeta } from "./RefSubMeta";
 import { refTimeframe } from "./RefTimeframe";
-import { createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "../utils";
 
 export const refScheduleBudget: RefProperty = {
     field: "scheduleBudget",
@@ -17,8 +17,8 @@ export const refScheduleBudget: RefProperty = {
     ref: [
         {
             field: "startDate",
-            //ontologyProperty: "avnu:startDate",
-            //url: "/startDate",
+            ontologyProperty: "avnu:budgetStartDate",
+            url: createPrimitiveUrl("budgetStartDate"),
             type: createRefType("date"),
             label: "Date de début",
             cardinality: "0..1",
@@ -28,8 +28,8 @@ export const refScheduleBudget: RefProperty = {
         },
         {
             field: "endDateEstimate",
-            //ontologyProperty: "avnu:endDateEstimate",
-            //url: "/endDateEstimate",
+            ontologyProperty: "avnu:endDateEstimate",
+            url: createPrimitiveUrl("endDateEstimate"),
             type: createRefType("date"),
             label: "Estimé de la date de fin",
             cardinality: "0..1",
@@ -39,8 +39,8 @@ export const refScheduleBudget: RefProperty = {
         },
         {
             field: "completionDate",
-            //ontologyProperty: "avnu:completionDate",
-            //url: "/completionDate",
+            ontologyProperty: "avnu:completionDate",
+            url: createPrimitiveUrl("completionDate"),
             type: createRefType("date"),
             label: "Date d'aboutissement du projet",
             cardinality: "0..1",
@@ -50,8 +50,8 @@ export const refScheduleBudget: RefProperty = {
         },
         {
             field: "estimatedTotalBudget",
-            //ontologyProperty: "avnu:estimatedTotalBudget",
-            //url: "/estimatedTotalBudget",
+            ontologyProperty: "avnu:estimatedTotalBudget",
+            url: createPrimitiveUrl("estimatedTotalBudget"),
             type: createRefType("number"),
             label: "Budget total estimé",
             cardinality: "0..1",
@@ -61,8 +61,8 @@ export const refScheduleBudget: RefProperty = {
         },
         {
             field: "eta",
-            //ontologyProperty: "avnu:eta",
-            //url: "/eta",
+            ontologyProperty: "avnu:budgetEta",
+            url: createPrimitiveUrl("budgetEta"),
             type: createRefType("string"),
             label: "Durée estimée du projet",
             cardinality: "0..1",

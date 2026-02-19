@@ -1,5 +1,5 @@
 import { RefProperty } from "../types";
-import { createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "../utils";
 
 export const refLocation: RefProperty = {
     field: "location",
@@ -15,6 +15,8 @@ export const refLocation: RefProperty = {
     ref: [
         {
             field: "address",
+            ontologyProperty: "avnu:address",
+            url: createPrimitiveUrl("address"),
             type: createRefType("string"),
             label: "Adresse",
             cardinality: "0..1",
@@ -24,6 +26,8 @@ export const refLocation: RefProperty = {
         },
         {
             field: "city",
+            ontologyProperty: "avnu:city",
+            url: createPrimitiveUrl("city"),
             type: createRefType("string"),
             label: "Ville",
             cardinality: "0..1",
@@ -33,6 +37,8 @@ export const refLocation: RefProperty = {
         },
         {
             field: "region",
+            ontologyProperty: "avnu:region",
+            url: createPrimitiveUrl("region"),
             type: createRefType("string"),
             label: "Région",
             cardinality: "0..1",
@@ -42,6 +48,8 @@ export const refLocation: RefProperty = {
         },
         {
             field: "mrc",
+            ontologyProperty: "avnu:mrc",
+            url: createPrimitiveUrl("mrc"),
             type: createRefType("string"),
             label: "Mrc (Municipalité régionale de comté",
             cardinality: "0..1",
@@ -51,6 +59,8 @@ export const refLocation: RefProperty = {
         },
         {
             field: "province",
+            ontologyProperty: "avnu:province",
+            url: createPrimitiveUrl("province"),
             type: createRefType("string"),
             label: "Province",
             cardinality: "0..1",
@@ -60,6 +70,8 @@ export const refLocation: RefProperty = {
         },
         {
             field: "postalCode",
+            ontologyProperty: "avnu:postalCode",
+            url: createPrimitiveUrl("postalCode"),
             type: createRefType("string"),
             label: "Code postal",
             cardinality: "0..1",
@@ -69,6 +81,8 @@ export const refLocation: RefProperty = {
         },
         {
             field: "country",
+            ontologyProperty: "avnu:country",
+            url: createPrimitiveUrl("country"),
             type: createRefType("string"),
             label: "Pays",
             cardinality: "0..1",
@@ -78,6 +92,8 @@ export const refLocation: RefProperty = {
         },
         {
             field: "latitude",
+            ontologyProperty: "avnu:latitude",
+            url: createPrimitiveUrl("latitude"),
             type: createRefType("string"),
             label: "Latitude géographique",
             cardinality: "0..1",
@@ -87,6 +103,8 @@ export const refLocation: RefProperty = {
         },
         {
             field: "longitude",
+            ontologyProperty: "avnu:longitude",
+            url: createPrimitiveUrl("longitude"),
             type: createRefType("string"),
             label: "Longitude géographique",
             cardinality: "0..1",

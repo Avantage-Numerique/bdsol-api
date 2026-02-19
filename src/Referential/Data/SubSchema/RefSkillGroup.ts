@@ -2,7 +2,7 @@ import { RefProperty } from "../types";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 import { refSubMeta } from "./RefSubMeta";
-import { createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "../utils";
 
 export const refSkillGroup: RefProperty = {
     //field: "offers"||"occupations",
@@ -17,14 +17,16 @@ export const refSkillGroup: RefProperty = {
     ref: [
         {
             field: "groupName",
-            //ontologyProperty: "avnu:groupName",
+            ontologyProperty: "avnu:groupName",
+            url: createPrimitiveUrl("groupName"),
             label: "Nom du groupe",
             type: createRefType("string"),
             description: "Libellé utilisé par la personne pour décrire son groupe de compétences",
         },
         {
             field: "skills",
-            //ontologyProperty: "avnu:skills",
+            ontologyProperty: "avnu:skills",
+            url: createPrimitiveUrl("skills"),
             label: "Compétences",
             type: createRefType("reference", [EntityTypesEnum.taxonomy]),
             description: "Liste de compétences, habiletés ou de technologies.",

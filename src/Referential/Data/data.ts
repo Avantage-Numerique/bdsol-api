@@ -15,7 +15,7 @@ import { refSkillGroup } from "./SubSchema/RefSkillGroup";
 import { refDomainList } from "./SubSchema/RefDomainList";
 import { refContactPoint } from "./SubSchema/RefContactPoint";
 import { refSocialHandle } from "./SubSchema/RefSocialHandle";
-import { refEquipmentLink } from "./SubSchema/RefEquipmentLink";
+import { refEquipmentLinkSchema } from "./SubSchema/RefEquipmentLink";
 import { refTimeframe } from "./SubSchema/RefTimeframe";
 import { refMember } from "./SubSchema/RefMember";
 import { refScheduleBudget } from "./SubSchema/RefScheduleBudget";
@@ -32,7 +32,7 @@ import { refRegion } from "./Properties/RefRegion";
 import { refType } from "./Properties/RefType";
 
 //RelationsLinks
-import { refEquipmentLinkSimpleArray } from "./RelationLinks/RefEquipmentLinkSimpleArray";
+import { refEquipmentLink } from "./RelationLinks/RefEquipmentLinkSimpleArray";
 import { refMainImageLink } from "./RelationLinks/RefMainImageLink";
 import { refOrganisationLink } from "./RelationLinks/RefOrganisationLink";
 import { refPlaceLink } from "./RelationLinks/RefPlaceLink";
@@ -54,7 +54,7 @@ export const refData: RefData = {
         [refDomainList.label]: refDomainList,
         [refContactPoint.label]: refContactPoint,
         [refSocialHandle.label]: refSocialHandle,
-        [refEquipmentLink.label]: refEquipmentLink,
+        [refEquipmentLinkSchema.label]: refEquipmentLinkSchema,
         [refTimeframe.label]: refTimeframe,
         [refMember.label]: refMember,
         [refScheduleBudget.label]: refScheduleBudget,
@@ -73,7 +73,7 @@ export const refData: RefData = {
     },
 
     relationLinks: {
-        [refEquipmentLinkSimpleArray.label]: refEquipmentLinkSimpleArray,
+        [refEquipmentLink.label]: refEquipmentLink,
         [refMainImageLink.label]: refMainImageLink,
         [refOrganisationLink.label]: refOrganisationLink,
         [refPlaceLink.label]: refPlaceLink,

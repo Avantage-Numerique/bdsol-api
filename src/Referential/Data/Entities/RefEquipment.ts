@@ -5,7 +5,7 @@ import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
 import { refSocialHandle } from "../SubSchema/RefSocialHandle";
 import { RefProperty } from "../types";
-import { createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "../utils";
 
 export const refEquipment: RefProperty = {
     ontologyProperty: "avnu:equipment",
@@ -19,7 +19,9 @@ export const refEquipment: RefProperty = {
         { ...refType },
         {
             field: "name",
+            ontologyProperty: "avnu:equipment.name",
             type: createRefType("string"),
+            url: createPrimitiveUrl("equipment.name"),
             label: "Nom combiné de l'équipement",
             description:
                 "Libellé retourné par l'API qui est une concaténation de la marque, du modèle et du libellé de l'équipement",
@@ -41,8 +43,8 @@ export const refEquipment: RefProperty = {
         { ...refDescription },
         {
             field: "brand",
-            //ontologyProperty: "avnu:brand",
-            //url: "/brand",
+            ontologyProperty: "avnu:brand",
+            url: createPrimitiveUrl("brand"),
             type: createRefType("string"),
             label: "Marque",
             cardinality: "0..1",
@@ -52,8 +54,8 @@ export const refEquipment: RefProperty = {
         },
         {
             field: "modelName",
-            //ontologyProperty: "avnu:modelName",
-            //url: "/modelName",
+            ontologyProperty: "avnu:modelName",
+            url: createPrimitiveUrl("modelName"),
             type: createRefType("string"),
             label: "Nom du modèle",
             cardinality: "0..1",

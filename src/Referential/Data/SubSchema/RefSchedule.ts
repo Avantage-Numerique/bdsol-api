@@ -1,7 +1,7 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { RefProperty } from "../types";
 import { refSubMeta } from "./RefSubMeta";
-import { createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "../utils";
 
 export const refSchedule: RefProperty = {
     field: "schedule",
@@ -18,8 +18,8 @@ export const refSchedule: RefProperty = {
         {
             field: "name",
             type: createRefType("string"),
-            //ontologyProperty:"avnu:",
-            //url: "",
+            ontologyProperty: "avnu:scheduleName",
+            url: createPrimitiveUrl("scheduleName"),
             label: "Nom de l'activité",
             cardinality: "0..1",
             description: "",
@@ -29,8 +29,8 @@ export const refSchedule: RefProperty = {
         {
             field: "startDate",
             type: createRefType("date"),
-            //ontologyProperty:"avnu:",
-            //url: "",
+            ontologyProperty: "avnu:scheduleStartDate",
+            url: createPrimitiveUrl("scheduleStartDate"),
             label: "Date de début de l'activité (plage horaire)",
             cardinality: "0..1",
             description: "",
@@ -40,8 +40,8 @@ export const refSchedule: RefProperty = {
         {
             field: "startTime",
             type: createRefType("string"),
-            //ontologyProperty:"avnu:",
-            //url: "",
+            ontologyProperty: "avnu:startTime",
+            url: createPrimitiveUrl("startTime"),
             label: "Heure de début de l'activité (plage horaire)",
             cardinality: "0..1",
             description: "",
@@ -51,8 +51,8 @@ export const refSchedule: RefProperty = {
         {
             field: "endDate",
             type: createRefType("date"),
-            //ontologyProperty:"avnu:",
-            //url: "",
+            ontologyProperty: "avnu:scheduleEndDate",
+            url: createPrimitiveUrl("scheduleEndDate"),
             label: "Date de début de l'activité (plage horaire)",
             cardinality: "0..1",
             description: "",
@@ -62,8 +62,8 @@ export const refSchedule: RefProperty = {
         {
             field: "endTime",
             type: createRefType("string"),
-            //ontologyProperty:"avnu:",
-            //url: "",
+            ontologyProperty: "avnu:endTime",
+            url: createPrimitiveUrl("endTime"),
             label: "Heure de début de l'activité (plage horaire)",
             cardinality: "0..1",
             description: "",

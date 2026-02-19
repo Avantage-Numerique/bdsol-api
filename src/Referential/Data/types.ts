@@ -12,8 +12,8 @@ export type RefData = {
 //Properties no ref
 export type RefPropertyBase = {
     field?: string; //Default field name
-    ontologyProperty?: `avnu:${string}`; //our ontology property name
-    url?: `/${string}`;
+    ontologyProperty: `avnu:${string}`; //our ontology property name
+    url: `/${string}`;
     label: string; //Default label
     cardinality?: Cardinality; //Default cardinality
     description?: string; //description of the property

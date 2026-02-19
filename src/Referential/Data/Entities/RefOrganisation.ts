@@ -8,12 +8,12 @@ import { refSocialHandle } from "../SubSchema/RefSocialHandle";
 import { refTeam } from "../SubSchema/RefTeam";
 import { RefProperty } from "../types";
 import { refName } from "../Properties/RefName";
-import { refEquipmentLink } from "../SubSchema/RefEquipmentLink";
+import { refEquipmentLinkSchema } from "../SubSchema/RefEquipmentLink";
 import { refRegion } from "../Properties/RefRegion";
 import { refBadges } from "../Properties/RefBadges";
 import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 import { refPlaceLink } from "../RelationLinks/RefPlaceLink";
-import { createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "../utils";
 
 export const refOrganisation: RefProperty = {
     ontologyProperty: "avnu:organisation",
@@ -31,8 +31,8 @@ export const refOrganisation: RefProperty = {
         {
             field: "fondationDate",
             type: createRefType("date"),
-            //ontologyProperty: "fondationDate",
-            //url: "/fondationDate",
+            ontologyProperty: "avnu:fondationDate",
+            url: createPrimitiveUrl("fondationDate"),
             label: "Date de fondation",
             cardinality: "0..1",
             description: "Date où l'entité a été fondé.",
@@ -53,7 +53,7 @@ export const refOrganisation: RefProperty = {
 
         { ...refMainImageLink },
         { ...refPlaceLink },
-        { ...refEquipmentLink },
+        { ...refEquipmentLinkSchema },
         { ...refRegion },
         { ...refBadges },
 

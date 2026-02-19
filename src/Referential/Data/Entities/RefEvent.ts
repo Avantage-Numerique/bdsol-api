@@ -14,7 +14,7 @@ import { refSchedule } from "../SubSchema/RefSchedule";
 import { refSocialHandle } from "../SubSchema/RefSocialHandle";
 import { refTeam } from "../SubSchema/RefTeam";
 import { RefProperty } from "../types";
-import { createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "../utils";
 
 export const refEvent: RefProperty = {
     ontologyProperty: "avnu:event",
@@ -51,8 +51,8 @@ export const refEvent: RefProperty = {
         {
             field: "eventFormat",
             type: createRefType("string"),
-            //ontologyProperty
-            //url:
+            ontologyProperty: "avnu:eventFormat",
+            url: createPrimitiveUrl("eventFormat"),
             label: "Format de l'événement",
             cardinality: "0..1",
             description: "L'événement se déroule de quelle façon : 'En ligne', 'Présentiel' etc.",
@@ -63,8 +63,8 @@ export const refEvent: RefProperty = {
         {
             field: "startDate",
             type: createRefType("date"),
-            //ontologyProperty:
-            //url:
+            ontologyProperty: "avnu:startDate",
+            url: createPrimitiveUrl("startDate"),
             label: "Date de début",
             cardinality: "0..1",
             description: "Date et heure de début de l'événement.",
@@ -74,8 +74,8 @@ export const refEvent: RefProperty = {
         {
             field: "endDate",
             type: createRefType("date"),
-            //ontologyProperty:
-            //url:
+            ontologyProperty: "avnu:endDate",
+            url: createPrimitiveUrl("endDate"),
             label: "Date de fin",
             cardinality: "0..1",
             description: "Date et heure de fin de l'événement.",

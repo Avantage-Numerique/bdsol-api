@@ -18,8 +18,8 @@ export const refTaxonomy: RefProperty = {
         { ...refType },
         {
             field: "category",
-            //ontologyProperty: "avnu: category",
-            //url: "/category",
+            ontologyProperty: "avnu:category",
+            url: "/category",
             type: createRefType("string"),
             label: "Type de taxonomie",
             cardinality: "1..1",

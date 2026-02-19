@@ -1,10 +1,10 @@
 import { RefProperty } from "../types";
-import { createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "../utils";
 
 export const refCatchphrase: RefProperty = {
     field: "catchphrase",
     ontologyProperty: "avnu:catchphrase",
-    url: "/catchphrase",
+    url: createPrimitiveUrl("catchphrase"),
     label: "Slogan",
     type: createRefType("string"),
     cardinality: "0..1",
