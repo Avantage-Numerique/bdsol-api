@@ -61,7 +61,7 @@
                                         <a href="{{ baseRoute }}{{ row.url }}">
                                             {{ row.label }}
                                         </a>
-                                    {% elseif row.type.kind === 'id' %}
+                                    {% elseif row.type.kind === 'reference' %}
                                         ID de :
 
                                         {% for entityRef in row.type.targets %}
