@@ -1,20 +1,24 @@
 import { RefProperty } from "@ref/Data/types";
+
 import { refContactPoint } from "@src/Referential/Data/SubSchema/RefContactPoint";
 import { refDomainList } from "@src/Referential/Data/SubSchema/RefDomainList";
 import { refSkillGroup } from "@src/Referential/Data/SubSchema/RefSkillGroup";
 import { refSocialHandle } from "@src/Referential/Data/SubSchema/RefSocialHandle";
-//import { refType } from "../Properties/RefType";
-import { refDescription } from "../Properties/RefDescription";
-import { refCatchphrase } from "../Properties/RefCatchphrase";
-import { refRegion } from "../Properties/RefRegion";
-import { refBadges } from "../Properties/RefBadges";
-import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
+
+import { refMainImageLink } from "@ref/Data/RelationLinks/RefMainImageLink";
+
+import { refDescription } from "@ref/Data/Properties/RefDescription";
+import { refCatchphrase } from "@ref/Data/Properties/RefCatchphrase";
+import { refRegion } from "@ref/Data/Properties/RefRegion";
+import { refBadges } from "@ref/Data/Properties/RefBadges";
+import { refType } from "@ref/Data/Properties/RefType";
+
 import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
 import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
 import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
 import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
-import { createPrimitiveUrl, createRefType } from "../utils";
-import { refType } from "../Properties/RefType";
+
+import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
 
 export const refPerson: RefProperty = {
     ontologyProperty: "avnu:person",

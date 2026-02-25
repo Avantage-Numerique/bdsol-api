@@ -3,7 +3,7 @@ import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
 import PublicTemplate from "@src/Templates/PublicTemplate";
 import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
 import { refData } from "@ref/Data/data";
-import { getAllPrimitives, mapEntityByURL } from "@ref/Data/utils";
+import { getAllUniquePrimitives, mapEntityByURL } from "@ref/Data/utils";
 
 class ReferentialController {
     /** @private @static Singleton instance */
@@ -105,7 +105,7 @@ class ReferentialController {
                 baseUrl: config.baseUrl,
                 baseRoute,
 
-                items: getAllPrimitives(Object.values(refData).flatMap((item) => Object.values(item))),
+                items: getAllUniquePrimitives(Object.values(refData).flatMap((item) => Object.values(item))),
 
                 meta: {
                     title: `${title}`,

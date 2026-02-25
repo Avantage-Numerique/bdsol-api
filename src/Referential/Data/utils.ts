@@ -42,7 +42,7 @@ export function createPrimitiveUrl(name: string): `/${string}#avnu:${string}` {
     return ("/primitives#avnu:" + name) as `/${string}#avnu:${string}`;
 }
 
-export function getAllPrimitives(base: RefProperty[]) {
+function getAllPrimitives(base: RefProperty[]) {
     const entities = base;
 
     const filtered = entities.filter((i) => i.type.kind === "primitive");
@@ -52,4 +52,17 @@ export function getAllPrimitives(base: RefProperty[]) {
     }
 
     return filtered;
+}
+
+export function getAllUniquePrimitives(base: RefProperty[]) {
+    const distinctsKeys = new Set();
+
+    return getAllPrimitives(base).filter((item) => {
+        if (item.ontologyProperty && distinctsKeys.has(item.ontologyProperty)) {
+            return false;
+        } else {
+            distinctsKeys.add(item.ontologyProperty);
+            return true;
+        }
+    });
 }
