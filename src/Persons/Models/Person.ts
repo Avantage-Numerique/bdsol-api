@@ -123,6 +123,10 @@ class Person extends AbstractModel {
             description: {
                 type: String,
             },
+            shortDescription: {
+                type: String,
+                maxLength: 160,
+            },
             // DRY this with groupName to have this "skillGroup as
             occupations: {
                 type: [SkillGroup.schema],
@@ -242,6 +246,7 @@ class Person extends AbstractModel {
             firstName: document.firstName ?? "",
             nickname: document.nickname ?? "",
             description: document.description ?? "",
+            shortDescription: document.shortDescription ?? "",
             occupations: document.occupations ?? "",
             domains: document.domains ?? "",
             mainImage: document.mainImage ?? "",
