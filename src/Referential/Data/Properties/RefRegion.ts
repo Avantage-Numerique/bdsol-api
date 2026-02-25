@@ -1,3 +1,4 @@
+import { RegionEnum } from "@src/Badges/RegionEnum";
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
 
@@ -25,4 +26,7 @@ export const refRegion: RefProperty = {
     ],
     description:
         "Région d'appartenance. Texte parmi la liste : ['', 'abitibi-temiscamingue', 'north Ontario', 'baies-james', 'other']",
+    constraints: {
+        enum: RegionEnum,
+    },
 };

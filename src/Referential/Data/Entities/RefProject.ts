@@ -16,6 +16,7 @@ import { refEquipmentLink } from "../RelationLinks/RefEquipmentLink";
 import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
 import { refAlternateName } from "../Properties/RefAlternateName";
 import { createPrimitiveUrl, createRefType } from "../utils";
+import { ProjectContextEnum } from "@src/Projects/ProjectContextEnum";
 
 export const refProject: RefProperty = {
     ontologyProperty: "avnu:project",
@@ -69,6 +70,9 @@ export const refProject: RefProperty = {
             cardinality: "0..1",
             description: "Contexte du projet. Enum 'academic', 'hobby', 'professional'.",
             compatibility: [],
+            constraints: {
+                enum: ProjectContextEnum,
+            },
             //note: "",
         },
         { ...refEquipmentLink },

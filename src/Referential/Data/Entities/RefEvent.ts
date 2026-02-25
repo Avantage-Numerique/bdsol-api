@@ -1,3 +1,4 @@
+import { EventFormatEnum } from "@src/Events/EventFormatEnum";
 import { refAlternateName } from "../Properties/RefAlternateName";
 import { refDescription } from "../Properties/RefDescription";
 import { refName } from "../Properties/RefName";
@@ -57,6 +58,9 @@ export const refEvent: RefProperty = {
             cardinality: "0..1",
             description: "L'événement se déroule de quelle façon : 'En ligne', 'Présentiel' etc.",
             compatibility: [],
+            constraints: {
+                enum: EventFormatEnum,
+            },
             note: "Parmis EventFormatEnum",
         },
         { ...refTeam },
