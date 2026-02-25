@@ -1,6 +1,14 @@
 import { refData } from "./data";
 import { RefProperty } from "./types";
-import type { PrimitiveType, RefType, RefTypeObject, RefTypePrimitive, RefTypeReference } from "./types";
+import type {
+    PrimitiveType,
+    RefPropertyObject,
+    RefPropertyPrimitive,
+    RefType,
+    RefTypeObject,
+    RefTypePrimitive,
+    RefTypeReference,
+} from "./types";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export function findEntityByURL(url: string) {
@@ -21,34 +29,42 @@ export function mapEntityByURL() {
     return routesMap;
 }
 
-export function createRefType(type: PrimitiveType): RefTypePrimitive;
+export function createRefType<T extends PrimitiveType>(type: T): RefTypePrimitive<T>;
 export function createRefType(type: "object"): RefTypeObject;
 export function createRefType(type: "reference", arg: EntityTypesEnum[]): RefTypeReference;
-
 export function createRefType(type: PrimitiveType | "object" | "reference", arg: EntityTypesEnum[] = []): RefType {
     if (type === "object") {
-        return { kind: "object" } as RefTypeObject;
+        return { kind: "object" };
     }
 
     if (type === "reference") {
-        return { kind: "reference", targets: arg } as RefTypeReference;
+        return { kind: "reference", targets: arg };
     }
 
-    // otherwise it's a primitive
-    return { kind: "primitive", name: type } as RefTypePrimitive;
+    return { kind: "primitive", name: type };
 }
 
 export function createPrimitiveUrl(name: string): `/${string}#avnu:${string}` {
     return ("/primitives#avnu:" + name) as `/${string}#avnu:${string}`;
 }
 
-function getAllPrimitives(base: RefProperty[]) {
-    const entities = base;
+export function isObjectProp(entity: RefProperty): entity is RefPropertyObject {
+    return entity.type.kind === "object";
+}
 
-    const filtered = entities.filter((i) => i.type.kind === "primitive");
+function getAllPrimitives(base: RefProperty[]): RefPropertyPrimitive[] {
+    const filtered: RefPropertyPrimitive[] = [];
 
-    for (const entity of entities) {
-        if (entity.ref) filtered.push(...getAllPrimitives(entity.ref));
+    for (const entity of base) {
+        // Primitive branch
+        if (entity.type.kind === "primitive") {
+            filtered.push(entity as RefPropertyPrimitive);
+        }
+
+        // Object branch
+        if (isObjectProp(entity)) {
+            filtered.push(...getAllPrimitives(entity.ref));
+        }
     }
 
     return filtered;

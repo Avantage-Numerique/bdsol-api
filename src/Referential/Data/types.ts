@@ -21,10 +21,28 @@ export type RefPropertyBase = {
     note?: string; //Note
 };
 
+export type RefPropertyPrimitive = {
+    [K in PrimitiveType]: RefPropertyBase & {
+        type: { kind: "primitive"; name: K };
+        constraints?: PrimitiveConstraintsMap[K];
+        //ref?: never;
+    };
+}[PrimitiveType];
+
+type RefPropertyReference = RefPropertyBase & {
+    type: RefTypeReference;
+    //ref?: never;
+    constraints?: never;
+};
+
+export type RefPropertyObject = RefPropertyBase & {
+    type: RefTypeObject;
+    ref: RefProperty[];
+    constraints?: never;
+};
+
 //RefProperty represent the list of entity, subschema, properties (primitive) or relationLinks
-export type RefProperty =
-    | (RefPropertyBase & { type: RefTypePrimitive | RefTypeReference; ref?: never })
-    | (RefPropertyBase & { type: RefTypeObject; ref: RefProperty[] });
+export type RefProperty = RefPropertyPrimitive | RefPropertyReference | RefPropertyObject;
 
 export type RefCompatibility = {
     externalSource: {
@@ -41,10 +59,32 @@ export type RefCompatibility = {
     documentationUrl?: string;
 };
 
-export type PrimitiveType = "string" | "number" | "boolean" | "date";
 export type Cardinality = "0..1" | "1..1" | "0..N" | "1..N" | "N..N";
+export type PrimitiveType = "string" | "number" | "boolean" | "date";
 
-export type RefTypePrimitive = { kind: "primitive"; name: PrimitiveType };
+export type RefTypePrimitive<T extends PrimitiveType = PrimitiveType> = {
+    kind: "primitive";
+    name: T;
+};
 export type RefTypeReference = { kind: "reference"; targets: EntityTypesEnum[] };
 export type RefTypeObject = { kind: "object" };
 export type RefType = RefTypePrimitive | RefTypeReference | RefTypeObject;
+
+type PrimitiveConstraintsMap = {
+    string: RefStringConstraints;
+    number: RefNumberConstraints;
+    boolean: never;
+    date: never;
+};
+
+export type RefStringConstraints = {
+    minLength?: number;
+    maxLength?: number;
+    pattern?: string;
+    enum?: string[];
+};
+
+export type RefNumberConstraints = {
+    minimum?: number;
+    maximum?: number;
+};

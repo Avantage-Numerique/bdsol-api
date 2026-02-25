@@ -19,7 +19,7 @@ export const refContactPoint: RefProperty = {
             label: "Courriel",
             cardinality: "0..1",
             description: "Courriel",
-            compatibility: [],
+            //compatibility: [],
             //note:"",
         },
         {
