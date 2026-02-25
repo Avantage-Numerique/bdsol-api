@@ -9,6 +9,9 @@ body {
     background-color: var(--default-bg);
     color: var(--default-color);
 }
+h2 {
+    margin-top: 2em;
+}
 hr {
     background-color: var(--default-bg2);
     border: 0;
