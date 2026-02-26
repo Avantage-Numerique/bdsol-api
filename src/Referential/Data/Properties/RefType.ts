@@ -1,3 +1,4 @@
+import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
 
@@ -24,4 +25,7 @@ export const refType: RefProperty = {
         }, */
     ],
     description: "Type de l'entité statique. Virtuel, statique et non-modifiable.",
+    constraints: {
+        enum: EntityTypesEnum,
+    },
 };

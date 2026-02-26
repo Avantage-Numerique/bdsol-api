@@ -8,5 +8,7 @@ export const refMedia: RefProperty = {
     url: "/media",
 
     type: createRefType("object"),
-    ref: [],
+    ref: [
+        //enum ImageLicenceEnum
+    ],
 };

@@ -1,3 +1,4 @@
+import { BudgetRangeEnum, TimeframeEtaEnum } from "@src/Database/Schemas/ScheduleBudgetSchema";
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
 import { refSubMeta } from "./RefSubMeta";
@@ -34,6 +35,9 @@ export const refTimeframe: RefProperty = {
             cardinality: "0..1",
             description: "Parmis l'enum TimeframeEtaEnum",
             compatibility: [],
+            constraints: {
+                enum: TimeframeEtaEnum,
+            },
             //note: "",
         },
         {
@@ -45,6 +49,9 @@ export const refTimeframe: RefProperty = {
             cardinality: "0..1",
             description: "Parmis l'enum BudgetRangeEnum",
             compatibility: [],
+            constraints: {
+                enum: BudgetRangeEnum,
+            },
             //note: "",
         },
         { ...refSubMeta },

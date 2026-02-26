@@ -1,3 +1,4 @@
+import { TaxonomiesCategoriesEnum } from "@src/Taxonomy/TaxonomiesCategoriesEnum";
 import { refDescription } from "../Properties/RefDescription";
 import { refName } from "../Properties/RefName";
 import { refType } from "../Properties/RefType";
@@ -26,6 +27,9 @@ export const refTaxonomy: RefProperty = {
             description:
                 "Vocabulaire pour distinguer quel type de taxonomie il s'agit. S'il s'agit d'une compétence, ou d'une technologie par exemple.",
             compatibility: [],
+            constraints: {
+                enum: TaxonomiesCategoriesEnum,
+            },
             note: "Fait partie de l'enum 'TaxonomiesCategoriesEnum'. Ces vocabulaires servent à décrire des groupes de quelque chose, autant de compétence, technologie ou type d'événement et type d'équipement etc.",
         },
         { ...refName },

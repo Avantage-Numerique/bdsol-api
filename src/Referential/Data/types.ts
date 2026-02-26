@@ -81,7 +81,7 @@ export type RefStringConstraints = {
     minLength?: number;
     maxLength?: number;
     pattern?: string;
-    enum?: string[];
+    enum?: Record<string, string>;
 };
 
 export type RefNumberConstraints = {
