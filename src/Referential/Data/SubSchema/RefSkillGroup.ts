@@ -3,6 +3,10 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 import { refSubMeta } from "./RefSubMeta";
 import { createPrimitiveUrl, createRefType } from "../utils";
+import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
+import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
+import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
+import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
 
 export const refSkillGroup: RefProperty = {
     //field: "offers"||"occupations",
@@ -13,6 +17,7 @@ export const refSkillGroup: RefProperty = {
     description:
         "Groupe de compétences, habiletés et/ou de technologies, tirés de notre base de données, accompagné d'un libellé qui décrit le regroupement.",
 
+    compatibility: [compatibilityAvnu.getOntologyCompatibilityArray("Skillgroup")],
     type: createRefType("object"),
     ref: [
         {
@@ -21,6 +26,7 @@ export const refSkillGroup: RefProperty = {
             url: createPrimitiveUrl("groupName"),
             label: "Nom du groupe",
             type: createRefType("string"),
+            cardinality: "1..1",
             description: "Libellé utilisé par la personne pour décrire son groupe de compétences",
         },
         {
@@ -30,6 +36,20 @@ export const refSkillGroup: RefProperty = {
             label: "Compétences",
             type: createRefType("reference", [EntityTypesEnum.taxonomy]),
             description: "Liste de compétences, habiletés ou de technologies.",
+            cardinality: "0..N",
+            compatibility: [
+                compatibilityAvnu.getOntologyCompatibilityArray("Event"),
+                compatibilityArtsdata.getOntologyCompatibilityArray(
+                    "Event",
+                    "Event",
+                    "https://docs.artsdata.ca/classes/event.html"
+                ),
+                compatibilitySchemaOrg.getOntologyCompatibilityArray("Event"),
+                compatibilityDataScene.getOntologyCompatibilityArray(
+                    "performance",
+                    "Représentation (type:Performance)"
+                ),
+            ],
         },
         { ...refSubMeta },
     ],

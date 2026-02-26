@@ -21,16 +21,33 @@ table {
 }
 
 tr:target {
-    outline: 3px solid var(--button-bg);
+    background-color: var(--secondary-lighter);
+    outline: 3px solid var(--primary);
     outline-offset: 0px;
+}
+tr:target + tr.note {
+    background-color: var(--secondary-lighter);
 }
 
 th,
 td {
-    border: 2px solid black;
+    border-top: var(--table-default-border);
+    border-bottom: var(--table-default-border);
+    border-left: var(--table-default-border);
+    border-right: var(--table-default-border);
+
     height: 100%;
     padding: 0.5em;
-
+    &.no-border-left {
+        border-left: none;
+    }
+    &.no-border-right {
+        border-right: none;
+    }
+    &.no-border-x {
+        border-left: none;
+        border-right: none;
+    }
     &:has(.compat-grid) {
         padding: 0;
         vertical-align: top;
