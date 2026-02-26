@@ -1,4 +1,4 @@
-.mainContent {
+.content {
     width: 100%;
     min-height: 100%;
     height: 100%;
@@ -7,12 +7,12 @@
     justify-content: center;
     align-items: start;
 }
-.mainContent .indexContent {
+.content .container {
     width: 100%;
     max-width: 120ch;
     padding: 2rem;
 }
-.mainContent header {
+.content header {
     width: 100%;
     display: flex;
     flex-direction: row;
