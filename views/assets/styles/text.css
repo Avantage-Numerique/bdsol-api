@@ -1,3 +1,16 @@
 .text-primary {
     color: var(--primary);
 }
+
+.text-center {
+    text-align: center;
+}
+
+.is-required {
+    background-color: var(--primary);
+    border-radius: var(--default-radius);
+    padding: 1px 5px;
+    &.in-table {
+        margin-left: -1.5rem;
+    }
+}

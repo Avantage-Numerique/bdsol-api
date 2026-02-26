@@ -1,5 +1,5 @@
 {% extends 'default.njk' %}
-
+{% from "Partials/isRequire.njk" import isRequire %}
 {% block content %}
 
     <div class="indexContent">
@@ -67,7 +67,7 @@
                 <tbody>
                     {% for row in item.ref %}
                         <tr>
-                            <td>{{ row.label }}
+                            <td>{{ isRequire(row.cardinality) }}{{ row.label }}
                                 {% if row.ontologyProperty and row.ontologyProperty !== "" %}
                                     <br>
                                         <code>{{ row.ontologyProperty }}</code>
@@ -99,7 +99,7 @@
                                     {% endif %}
                                 </td>
 
-                                <td align="center">{{ row.cardinality }}</td>
+                                <td class="text-center">{{ row.cardinality }}</td>
 
                                 <td>{{ row.description }}</td>
 
@@ -146,4 +146,8 @@
             {% endif %}
 
         </div>
+    {% endblock %}
+
+    {% block footerContent %}
+
     {% endblock %}

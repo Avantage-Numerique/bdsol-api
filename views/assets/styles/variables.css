@@ -1,5 +1,6 @@
 :root {
     --primary: #6ec8cd;
+    --primary-dark: #1da6a8;
     --primary-light: #c4eaeb;
 
     --secondary-lighter: #fdece1;
@@ -21,6 +22,7 @@
     --default-spacing: 1rem;
     --default-h-spacing: 1rem;
     --default-v-spacing: 1rem;
+
     --button-radius: 2rem;
     --button-size: 1rem;
     --button-padding: 1rem;
@@ -28,7 +30,7 @@
     --button-bg: var(--primary);
     --button-color: var(--dark);
     --button-over-bg: var(--primary-light);
-    --button-over-color: var(--primary);
+    --button-over-color: var(--primary-dark);
 
     --code-bg: var(--gray-light);
 
