@@ -112,3 +112,13 @@
     </div>
 
 {% endblock %}
+{% block contentFooter %}
+    <section class="container">
+        <div class="legende">
+            <h3>Légende</h3>
+            <p>
+                {{ isRequire("1..1", false) }} : Cette propriété est requise
+            </p>
+        </div>
+    </section>
+{% endblock %}

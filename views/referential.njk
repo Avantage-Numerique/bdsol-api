@@ -1,5 +1,7 @@
 {% extends 'default.njk' %}
 
+{% from "Partials/isRequire.njk" import isRequire %}
+
 {% block content %}
 
     <div class="container">
@@ -19,9 +21,11 @@
             <table class="ref">
 
                 <thead>
-                    <th>Classe</th>
-                    <th>URL</th>
-                    <th>Description</th>
+                    <tr>
+                        <th>Classe</th>
+                        <th>URL</th>
+                        <th>Description</th>
+                    </tr>
                 </thead>
 
                 <tbody>
@@ -50,9 +54,11 @@
             <table class="ref">
 
                 <thead>
-                    <th>Classe</th>
-                    <th>URL</th>
-                    <th>Description</th>
+                    <tr>
+                        <th>Classe</th>
+                        <th>URL</th>
+                        <th>Description</th>
+                    </tr>
                 </thead>
 
                 <tbody>
@@ -84,7 +90,17 @@
         </p>
 
         <a href="{{ baseUrl }}{{ baseRoute }}/primitives">Liste des propriétés primitives</a>
-
     </div>
 
+{% endblock %}
+
+{% block contentFooter %}
+    <section class="container">
+        <div class="legende">
+            <h3>Légende</h3>
+            <p>
+                {{ isRequire("1..1", false) }} : Cette propriété est requise
+            </p>
+        </div>
+    </section>
 {% endblock %}
