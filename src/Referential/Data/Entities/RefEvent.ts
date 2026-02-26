@@ -16,13 +16,26 @@ import { refSocialHandle } from "../SubSchema/RefSocialHandle";
 import { refTeam } from "../SubSchema/RefTeam";
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
+import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
+import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
+import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
+import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
 
 export const refEvent: RefProperty = {
     ontologyProperty: "avnu:event",
     url: "/event",
     label: "Événement",
     description: "Décrit un événement, son lieu, son horaire, ses caractéristiques etc.",
-    compatibility: [],
+    compatibility: [
+        compatibilityAvnu.getOntologyCompatibilityArray("Event"),
+        compatibilityArtsdata.getOntologyCompatibilityArray(
+            "Event",
+            "Event",
+            "https://docs.artsdata.ca/classes/event.html"
+        ),
+        compatibilitySchemaOrg.getOntologyCompatibilityArray("Event"),
+        compatibilityDataScene.getOntologyCompatibilityArray("performance", "Représentation (type:Performance)"),
+    ],
     //note:"",
 
     type: createRefType("object"),

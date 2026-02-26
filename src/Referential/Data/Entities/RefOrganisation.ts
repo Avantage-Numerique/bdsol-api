@@ -14,13 +14,30 @@ import { refBadges } from "../Properties/RefBadges";
 import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 import { refPlaceLink } from "../RelationLinks/RefPlaceLink";
 import { createPrimitiveUrl, createRefType } from "../utils";
+import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
+import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
+import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
+import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
 
 export const refOrganisation: RefProperty = {
     ontologyProperty: "avnu:organisation",
     url: "/organisation",
     label: "Organisation",
     description: "",
-    compatibility: [],
+    compatibility: [
+        compatibilityAvnu.getOntologyCompatibilityArray("Organisation"),
+        compatibilityArtsdata.getOntologyCompatibilityArray(
+            "Organization",
+            "Organization",
+            "https://docs.artsdata.ca/classes/organization.html"
+        ),
+        compatibilitySchemaOrg.getOntologyCompatibilityArray("Organization"),
+        compatibilityDataScene.getOntologyCompatibilityArray(
+            "contributor",
+            "Contributor (type:Organization)",
+            "https://documentation.datascene.ca/references/contributor/#1-propriete-contributeur-contributor-type"
+        ),
+    ],
     note: "",
 
     type: createRefType("object"),

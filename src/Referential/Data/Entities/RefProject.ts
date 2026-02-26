@@ -17,13 +17,26 @@ import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
 import { refAlternateName } from "../Properties/RefAlternateName";
 import { createPrimitiveUrl, createRefType } from "../utils";
 import { ProjectContextEnum } from "@src/Projects/ProjectContextEnum";
+import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
+import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
+import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
+import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
 
 export const refProject: RefProperty = {
     ontologyProperty: "avnu:project",
     url: "/project",
     label: "Projet",
     description: "Décrit un projet : les organisations qui en sont responsable, les équipements utilisé etc.",
-    compatibility: [],
+    compatibility: [
+        compatibilityAvnu.getOntologyCompatibilityArray("Project"),
+        compatibilityArtsdata.getOntologyCompatibilityArray(
+            "CreativeWork",
+            "CreativeWork",
+            "https://schema.org/CreativeWork"
+        ),
+        compatibilitySchemaOrg.getOntologyCompatibilityArray("Project"),
+        compatibilityDataScene.getOntologyCompatibilityArray("show", "Show"),
+    ],
     //note:"",
 
     type: createRefType("object"),

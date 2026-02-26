@@ -35,7 +35,7 @@ export const refPerson: RefProperty = {
         compatibilitySchemaOrg.getOntologyCompatibilityArray("Person"),
         compatibilityDataScene.getOntologyCompatibilityArray(
             "contributor",
-            "Contributor",
+            "Contributor (type:Person)",
             "https://documentation.datascene.ca/references/contributor/#1-propriete-contributeur-contributor-type"
         ),
     ],
