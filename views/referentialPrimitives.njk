@@ -1,5 +1,7 @@
 {% extends 'default.njk' %}
 
+{% from "Partials/isRequire.njk" import isRequire %}
+
 {% block content %}
 
     <div class="container">
@@ -16,7 +18,7 @@
 
         <h2>Liste des propriétes</h2>
 
-        <table style="margin-bottom: 100vh;">
+        <table>
 
             <thead>
 
@@ -80,7 +82,7 @@
 
                                     <div>
                                         <a href="{{ compatItem.documentationUrl }}" target="_blank">
-                                            {{ compatItem.mapping.externalField }}
+                                            {{ compatItem.mapping.externalField }} <i class="la la-external-link"></i>
                                         </a>
                                     </div>
 
@@ -96,8 +98,7 @@
                     </tr>
                     {% if item.note %}
                         <tr class="note" id="note-{{ item.ontologyProperty }}">
-                            <td class="no-border-right">&nbsp;</td>
-                            <td colspan="5" class="no-border-left">
+                            <td colspan="6">
                                 <label>Note :</label><br>
                                 {{ item.note }}
                             </td>
@@ -112,6 +113,7 @@
     </div>
 
 {% endblock %}
+
 {% block contentFooter %}
     <section class="container">
         <div class="legende">

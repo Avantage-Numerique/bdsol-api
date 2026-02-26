@@ -115,7 +115,7 @@
 
                                             <div>
                                                 <a href="{{ compatItem.documentationUrl }}" target="_blank">
-                                                    {{ compatItem.mapping.externalField }}
+                                                    {{ compatItem.mapping.externalField }} <i class="la la-external-link"></i>
                                                 </a>
                                             </div>
 
@@ -130,8 +130,7 @@
                             </tr>
                             {% if row.note %}
                                 <tr>
-                                    <td class="no-border-right">&nbsp;</td>
-                                    <td colspan="5" class="no-border-left">
+                                    <td colspan="6">
                                         <strong>Note :</strong><br>
                                         {{ row.note }}
                                     </td>
