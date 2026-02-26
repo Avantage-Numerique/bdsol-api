@@ -24,10 +24,27 @@
 
         {% if item %}
 
-            <h2>{{ item.label }}</h2>
-
+            <h2>{{ item.label }} <code>{{ item.ontologyProperty }}</code></h2>
+            {% if item.compatibility.length > 0 %}
+                <nav class="nav-compatibility small">
+                    <ul>
+                        <li><i class="la la-arrow-right"></i> Compatibilité <i class="la la-arrow-right"></i> ontologies <i class="la la-arrow-right"></i></li>
+                        {% for compatItem in item.compatibility %}
+                            <li>
+                                <span>
+                                    {{ compatItem.externalSource.name }}
+                                </span>
+                                <span>
+                                    <a href="{{ compatItem.documentationUrl }}" target="_blank" class="btn external code">
+                                        <i class="la la-link"></i>{{ compatItem.mapping.externalField }} <i class="la la-external-link"></i>
+                                    </a>
+                                </span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            {% endif %}
             <p>{{ item.description }}</p>
-
             <table>
 
                 <thead>

@@ -55,3 +55,12 @@ td {
         }
     }
 }
+
+.grid-2columns {
+    display: grid;
+    grid: auto-flow / 1fr 1fr;
+    width: 100%;
+    & > div {
+        padding: 0.25em;
+    }
+}

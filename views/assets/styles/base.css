@@ -63,8 +63,8 @@ figure {
     font-weight: 700;
 }
 code {
-    background: lightgrey;
-    border-radius: 0.2em;
+    background: var(--code-bg);
+    border-radius: calc(var(--default-radius) * 0.2);
     padding-inline: 0.3em;
 }
 
