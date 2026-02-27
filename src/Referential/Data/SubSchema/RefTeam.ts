@@ -1,6 +1,10 @@
 import { RefProperty } from "../types";
 import { createRefType } from "../utils";
 import { refMember } from "./RefMember";
+import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
+import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
+import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
+import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
 
 export const refTeam: RefProperty = {
     field: "team",
@@ -9,7 +13,20 @@ export const refTeam: RefProperty = {
     label: "Équipe",
     cardinality: "0..N",
     description: "Liste des membres d'une équipe et un libellé de leur fonction.",
-    compatibility: [],
+    compatibility: [
+        compatibilityAvnu.getOntologyCompatibilityArray("Person"),
+        compatibilityArtsdata.getOntologyCompatibilityArray(
+            "Person",
+            "Person",
+            "https://docs.artsdata.ca/classes/person.html"
+        ),
+        compatibilitySchemaOrg.getOntologyCompatibilityArray("Person"),
+        compatibilityDataScene.getOntologyCompatibilityArray(
+            "contributor",
+            "Contributor (type:Person)",
+            "https://documentation.datascene.ca/references/contributor/#1-propriete-contributeur-contributor-type"
+        ),
+    ],
     //note: "",
 
     type: createRefType("object"),

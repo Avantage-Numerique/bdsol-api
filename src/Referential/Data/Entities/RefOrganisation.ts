@@ -53,7 +53,7 @@ export const refOrganisation: RefProperty = {
             label: "Date de fondation",
             cardinality: "0..1",
             description: "Date où l'entité a été fondé.",
-            compatibility: [],
+            compatibility: [compatibilitySchemaOrg.getOntologyCompatibilityArray("foundingDate")],
             //note: "",
         },
         { ...refCatchphrase },

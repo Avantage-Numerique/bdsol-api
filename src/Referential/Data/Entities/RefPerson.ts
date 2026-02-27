@@ -90,7 +90,6 @@ export const refPerson: RefProperty = {
                     "Nom",
                     "https://documentation.datascene.ca/references/contributor/#4-propriete-contributeur-contributor-name-nom"
                 ),
-                compatibilityAvnu.getOntologyCompatibilityArray("fullname"),
                 compatibilityArtsdata.getOntologyCompatibilityArray("name"),
             ],
             description:
@@ -107,18 +106,6 @@ export const refPerson: RefProperty = {
                 compatibilitySchemaOrg.getOntologyCompatibilityArray("alternateName"),
                 compatibilityArtsdata.getOntologyCompatibilityArray("alternateName"),
             ],
-            //Propriété non conforme, il s'agit d'une liste de noms alternatifs.
-            /* {
-                externalSource: {
-                    name: "Datascene",
-                },
-                mapping: {
-                    externalField: "Nom alternatifs",
-                    ontologyProperty: "",
-                    ontologyUri: "",
-                },
-                documentationUrl: "https://datascene.ca/references/proprietes/contributeur/",
-            }, */
             description:
                 "Autre appellation parfois utilisé pour designer la personne. Exemple : 'Coeur de pirate' pour 'Béatrice Martin'.",
         },
@@ -131,7 +118,7 @@ export const refPerson: RefProperty = {
                         datascene: ["Description Courte", "https://datascene.ca/references/proprietes/contributeur/"],
                     },
                 }, */
-        { ...refCatchphrase },
+        { ...refCatchphrase, compatibility: [compatibilitySchemaOrg.getOntologyCompatibilityArray("additionalName")] },
         {
             ...refSocialHandle,
             field: "url",
