@@ -23,7 +23,7 @@ table {
 tr:target {
     background-color: var(--secondary-lighter);
     outline: 3px solid var(--primary);
-    outline-offset: 0px;
+    outline-offset: 0;
 }
 tr:target + tr.note {
     background-color: var(--secondary-lighter);
