@@ -5,6 +5,9 @@
 .text-center {
     text-align: center;
 }
+.text-right {
+    text-align: right;
+}
 
 .is-required {
     background-color: var(--primary);
