@@ -7,9 +7,7 @@ import { refSocialHandle } from "../SubSchema/RefSocialHandle";
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
 import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
-import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
-import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refEquipment: RefProperty = {
     ontologyProperty: "avnu:equipment",

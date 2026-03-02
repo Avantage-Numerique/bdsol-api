@@ -1,5 +1,4 @@
 import { RefProperty } from "../types";
-import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { refDescription } from "../Properties/RefDescription";
 import { refName } from "../Properties/RefName";
 import { refType } from "../Properties/RefType";
