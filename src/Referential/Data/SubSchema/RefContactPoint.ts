@@ -11,7 +11,7 @@ export const refContactPoint: RefProperty = {
     description: "",
 
     type: createRefType("object"),
-    compatibility: [AvnuCompatibility.getOntologyCompatibilityArray("contactpoint")],
+    compatibility: [AvnuCompatibility.onlyCompatibleWithThis()],
     ref: [
         {
             field: "email",

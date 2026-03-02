@@ -1,6 +1,7 @@
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
 import { refSubMeta } from "./RefSubMeta";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 
 export const refSocialHandle: RefProperty = {
     field: "url",
@@ -10,6 +11,7 @@ export const refSocialHandle: RefProperty = {
     cardinality: "0..N",
     description: "Liens vers différent réseau sociaux et leur noms.",
     compatibility: [
+        AvnuCompatibility.onlyCompatibleWithThis(),
         //Propriété non conforme, SocialHandle (object) != sameAs (string)
         /* {
                 externalSource: {

@@ -108,17 +108,21 @@
                                     <div class="compat-grid">
 
                                         {% for compatItem in row.compatibility %}
+                                            {% if compatItem.messageOnly and compatItem.messageOnly !== "" %}
+                                                <div class="full-width">
+                                                    {{ compatItem.messageOnly }}
+                                                </div>
+                                            {% else %}
+                                                <div>
+                                                    {{ compatItem.externalSource.name }}
+                                                </div>
 
-                                            <div>
-                                                {{ compatItem.externalSource.name }}
-                                            </div>
-
-                                            <div>
-                                                <a href="{{ compatItem.documentationUrl }}" target="_blank">
-                                                    {{ compatItem.mapping.externalField }} <i class="la la-external-link"></i>
-                                                </a>
-                                            </div>
-
+                                                <div>
+                                                    <a href="{{ compatItem.documentationUrl }}" target="_blank">
+                                                        {{ compatItem.mapping.externalField }} <i class="la la-external-link"></i>
+                                                    </a>
+                                                </div>
+                                            {% endif %}
                                         {% else %}
 
                                             <span class="nodata">Aucune donnée de compatibilité disponible.</span>
@@ -130,8 +134,10 @@
                             </tr>
                             {% if row.note %}
                                 <tr>
-                                    <td colspan="6">
-                                        <strong>Note :</strong><br>
+                                    <td>
+                                        <strong>Note :</strong>
+                                    </td>
+                                    <td colspan="5">
                                         {{ row.note }}
                                     </td>
                                 </tr>

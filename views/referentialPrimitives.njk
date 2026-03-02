@@ -98,8 +98,10 @@
                     </tr>
                     {% if item.note %}
                         <tr class="note" id="note-{{ item.ontologyProperty }}">
-                            <td colspan="6">
-                                <label>Note :</label><br>
+                            <td>
+                                <strong>Note :</strong>
+                            </td>
+                            <td colspan="5">
                                 {{ item.note }}
                             </td>
                         </tr>
