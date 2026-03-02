@@ -14,10 +14,7 @@ export const refEquipment: RefProperty = {
     url: "/equipment",
     label: "Équipement",
     description: "Entité décrivant un équipement, son modèle, sa marque, ses particularités.",
-    compatibility: [
-        AvnuCompatibility.getOntologyCompatibilityArray("Equipment"),
-        SchemaOrgCompatibility.getOntologyCompatibilityArray("Product"),
-    ],
+    compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("Product")],
     //note: "",
     type: createRefType("object"),
     ref: [

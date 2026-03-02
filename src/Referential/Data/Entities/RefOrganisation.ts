@@ -25,7 +25,6 @@ export const refOrganisation: RefProperty = {
     label: "Organisation",
     description: "",
     compatibility: [
-        AvnuCompatibility.getOntologyCompatibilityArray("Organisation"),
         ArtsdataCompatibility.getOntologyCompatibilityArray(
             "Organization",
             "Organization",

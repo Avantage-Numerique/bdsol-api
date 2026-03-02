@@ -16,7 +16,6 @@ export const refPlace: RefProperty = {
     label: "Lieu",
     description: "Entité décrivant un lieu, son emplacement physique ou virtuel.",
     compatibility: [
-        AvnuCompatibility.getOntologyCompatibilityArray("Place"),
         ArtsdataCompatibility.getOntologyCompatibilityArray(
             "place",
             "Place",

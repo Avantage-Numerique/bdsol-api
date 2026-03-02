@@ -27,7 +27,6 @@ export const refProject: RefProperty = {
     label: "Projet",
     description: "Décrit un projet : les organisations qui en sont responsable, les équipements utilisé etc.",
     compatibility: [
-        AvnuCompatibility.getOntologyCompatibilityArray("Project"),
         ArtsdataCompatibility.getOntologyCompatibilityArray(
             "CreativeWork",
             "CreativeWork",

@@ -12,7 +12,6 @@ export const refMedia: RefProperty = {
     url: "/media",
     type: createRefType("object"),
     compatibility: [
-        AvnuCompatibility.getOntologyCompatibilityArray("Media"),
         ArtsdataCompatibility.getOntologyCompatibilityArray("image", "ImageObject", "https://schema.org/ImageObject"),
         SchemaOrgCompatibility.getOntologyCompatibilityArray("MediaObject"),
         DataSceneCompatibility.getOntologyCompatibilityArray("media", "Media"),

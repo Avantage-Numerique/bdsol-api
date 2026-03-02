@@ -26,7 +26,6 @@ export const refPerson: RefProperty = {
     url: "/person",
     description: "Entité qui désigne une personne, qui décrit ses activités, ces compétences et autres.",
     compatibility: [
-        AvnuCompatibility.getOntologyCompatibilityArray("Person"),
         ArtsdataCompatibility.getOntologyCompatibilityArray(
             "Person",
             "Person",

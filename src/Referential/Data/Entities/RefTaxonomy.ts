@@ -15,7 +15,6 @@ export const refTaxonomy: RefProperty = {
     label: "Taxonomie (catégorie)",
     description: "Vocabulaire de catégorie pour décrire et regrouper des compétences, des technologies ou autres.",
     compatibility: [
-        AvnuCompatibility.getOntologyCompatibilityArray("taxonomy"),
         SchemaOrgCompatibility.getOntologyCompatibilityArray("DefinedTerm"),
         DataSceneCompatibility.getOntologyCompatibilityArray("term", "Term"),
     ],

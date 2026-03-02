@@ -27,7 +27,6 @@ export const refEvent: RefProperty = {
     label: "Événement",
     description: "Décrit un événement, son lieu, son horaire, ses caractéristiques etc.",
     compatibility: [
-        AvnuCompatibility.getOntologyCompatibilityArray("Event"),
         ArtsdataCompatibility.getOntologyCompatibilityArray(
             "Event",
             "Event",
