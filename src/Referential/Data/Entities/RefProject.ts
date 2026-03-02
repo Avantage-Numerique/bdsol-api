@@ -17,10 +17,10 @@ import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
 import { refAlternateName } from "../Properties/RefAlternateName";
 import { createPrimitiveUrl, createRefType } from "../utils";
 import { ProjectContextEnum } from "@src/Projects/ProjectContextEnum";
-import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
-import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
-import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
-import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refProject: RefProperty = {
     ontologyProperty: "avnu:project",
@@ -28,14 +28,14 @@ export const refProject: RefProperty = {
     label: "Projet",
     description: "Décrit un projet : les organisations qui en sont responsable, les équipements utilisé etc.",
     compatibility: [
-        compatibilityAvnu.getOntologyCompatibilityArray("Project"),
-        compatibilityArtsdata.getOntologyCompatibilityArray(
+        AvnuCompatibility.getOntologyCompatibilityArray("Project"),
+        ArtsdataCompatibility.getOntologyCompatibilityArray(
             "CreativeWork",
             "CreativeWork",
             "https://schema.org/CreativeWork"
         ),
-        compatibilitySchemaOrg.getOntologyCompatibilityArray("Project"),
-        compatibilityDataScene.getOntologyCompatibilityArray("show", "Show"),
+        SchemaOrgCompatibility.getOntologyCompatibilityArray("Project"),
+        DataSceneCompatibility.getOntologyCompatibilityArray("show", "Show"),
     ],
     //note:"",
 

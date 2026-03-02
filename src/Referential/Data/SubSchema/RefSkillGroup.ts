@@ -3,10 +3,10 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 import { refSubMeta } from "./RefSubMeta";
 import { createPrimitiveUrl, createRefType } from "../utils";
-import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
-import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
-import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
-import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refSkillGroup: RefProperty = {
     //field: "offers"||"occupations",
@@ -17,7 +17,7 @@ export const refSkillGroup: RefProperty = {
     description:
         "Groupe de compétences, habiletés et/ou de technologies, tirés de notre base de données, accompagné d'un libellé qui décrit le regroupement.",
 
-    compatibility: [compatibilityAvnu.getOntologyCompatibilityArray("skillgroup")],
+    compatibility: [AvnuCompatibility.getOntologyCompatibilityArray("skillgroup")],
     type: createRefType("object"),
     ref: [
         {
@@ -38,14 +38,14 @@ export const refSkillGroup: RefProperty = {
             description: "Liste de compétences, habiletés ou de technologies.",
             cardinality: "0..N",
             compatibility: [
-                compatibilityAvnu.getOntologyCompatibilityArray("Event"),
-                compatibilityArtsdata.getOntologyCompatibilityArray(
+                AvnuCompatibility.getOntologyCompatibilityArray("Event"),
+                ArtsdataCompatibility.getOntologyCompatibilityArray(
                     "Event",
                     "Event",
                     "https://docs.artsdata.ca/classes/event.html"
                 ),
-                compatibilitySchemaOrg.getOntologyCompatibilityArray("Event"),
-                compatibilityDataScene.getOntologyCompatibilityArray(
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("Event"),
+                DataSceneCompatibility.getOntologyCompatibilityArray(
                     "performance",
                     "Représentation (type:Performance)"
                 ),

@@ -1,9 +1,9 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { RefProperty } from "../types";
 import { createRefType } from "../utils";
-import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
-import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
-import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
+import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refPlaceLink: RefProperty = {
     field: "location",
@@ -13,13 +13,13 @@ export const refPlaceLink: RefProperty = {
     type: createRefType("reference", [EntityTypesEnum.place]),
     cardinality: "0..N",
     compatibility: [
-        compatibilityArtsdata.getOntologyCompatibilityArray(
+        ArtsdataCompatibility.getOntologyCompatibilityArray(
             "place",
             "Place",
             "https://docs.artsdata.ca/classes/place.html"
         ),
-        compatibilitySchemaOrg.getOntologyCompatibilityArray("Place"),
-        compatibilityDataScene.getOntologyCompatibilityArray("place"),
+        SchemaOrgCompatibility.getOntologyCompatibilityArray("Place"),
+        DataSceneCompatibility.getOntologyCompatibilityArray("place"),
     ],
     description: "Référence à une entité Place, qui décrit un lieu.",
 };

@@ -1,10 +1,10 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { RefProperty } from "../types";
 import { createRefType } from "../utils";
-import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
-import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
-import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
-import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refMainImageLink: RefProperty = {
     field: "mainImage",
@@ -14,10 +14,10 @@ export const refMainImageLink: RefProperty = {
     type: createRefType("reference", [EntityTypesEnum.media]),
     cardinality: "0..1",
     compatibility: [
-        compatibilityAvnu.getOntologyCompatibilityArray("Media"),
-        compatibilityArtsdata.getOntologyCompatibilityArray("image", "ImageObject", "https://schema.org/ImageObject"),
-        compatibilitySchemaOrg.getOntologyCompatibilityArray("MediaObject"),
-        compatibilityDataScene.getOntologyCompatibilityArray("media", "Media"),
+        AvnuCompatibility.getOntologyCompatibilityArray("Media"),
+        ArtsdataCompatibility.getOntologyCompatibilityArray("image", "ImageObject", "https://schema.org/ImageObject"),
+        SchemaOrgCompatibility.getOntologyCompatibilityArray("MediaObject"),
+        DataSceneCompatibility.getOntologyCompatibilityArray("media", "Media"),
     ],
     description: "Référence à une entité média, une image stockée.",
 };

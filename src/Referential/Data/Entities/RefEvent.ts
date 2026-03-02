@@ -16,10 +16,10 @@ import { refSocialHandle } from "../SubSchema/RefSocialHandle";
 import { refTeam } from "../SubSchema/RefTeam";
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
-import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
-import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
-import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
-import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refEvent: RefProperty = {
     ontologyProperty: "avnu:event",
@@ -27,14 +27,14 @@ export const refEvent: RefProperty = {
     label: "Événement",
     description: "Décrit un événement, son lieu, son horaire, ses caractéristiques etc.",
     compatibility: [
-        compatibilityAvnu.getOntologyCompatibilityArray("Event"),
-        compatibilityArtsdata.getOntologyCompatibilityArray(
+        AvnuCompatibility.getOntologyCompatibilityArray("Event"),
+        ArtsdataCompatibility.getOntologyCompatibilityArray(
             "Event",
             "Event",
             "https://docs.artsdata.ca/classes/event.html"
         ),
-        compatibilitySchemaOrg.getOntologyCompatibilityArray("Event"),
-        compatibilityDataScene.getOntologyCompatibilityArray("performance", "Représentation (type:Performance)"),
+        SchemaOrgCompatibility.getOntologyCompatibilityArray("Event"),
+        DataSceneCompatibility.getOntologyCompatibilityArray("performance", "Représentation (type:Performance)"),
     ],
     //note:"",
 

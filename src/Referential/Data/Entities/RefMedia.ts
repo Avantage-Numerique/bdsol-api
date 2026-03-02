@@ -1,9 +1,9 @@
 import { RefProperty } from "../types";
 import { createRefType } from "../utils";
-import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
-import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
-import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
-import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refMedia: RefProperty = {
     label: "Média",
@@ -12,10 +12,10 @@ export const refMedia: RefProperty = {
     url: "/media",
     type: createRefType("object"),
     compatibility: [
-        compatibilityAvnu.getOntologyCompatibilityArray("Media"),
-        compatibilityArtsdata.getOntologyCompatibilityArray("image", "ImageObject", "https://schema.org/ImageObject"),
-        compatibilitySchemaOrg.getOntologyCompatibilityArray("MediaObject"),
-        compatibilityDataScene.getOntologyCompatibilityArray("media", "Media"),
+        AvnuCompatibility.getOntologyCompatibilityArray("Media"),
+        ArtsdataCompatibility.getOntologyCompatibilityArray("image", "ImageObject", "https://schema.org/ImageObject"),
+        SchemaOrgCompatibility.getOntologyCompatibilityArray("MediaObject"),
+        DataSceneCompatibility.getOntologyCompatibilityArray("media", "Media"),
     ],
     ref: [
         //enum ImageLicenceEnum

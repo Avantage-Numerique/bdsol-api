@@ -14,10 +14,10 @@ import { refBadges } from "../Properties/RefBadges";
 import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 import { refPlaceLink } from "../RelationLinks/RefPlaceLink";
 import { createPrimitiveUrl, createRefType } from "../utils";
-import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
-import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
-import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
-import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refOrganisation: RefProperty = {
     ontologyProperty: "avnu:organisation",
@@ -25,14 +25,14 @@ export const refOrganisation: RefProperty = {
     label: "Organisation",
     description: "",
     compatibility: [
-        compatibilityAvnu.getOntologyCompatibilityArray("Organisation"),
-        compatibilityArtsdata.getOntologyCompatibilityArray(
+        AvnuCompatibility.getOntologyCompatibilityArray("Organisation"),
+        ArtsdataCompatibility.getOntologyCompatibilityArray(
             "Organization",
             "Organization",
             "https://docs.artsdata.ca/classes/organization.html"
         ),
-        compatibilitySchemaOrg.getOntologyCompatibilityArray("Organization"),
-        compatibilityDataScene.getOntologyCompatibilityArray(
+        SchemaOrgCompatibility.getOntologyCompatibilityArray("Organization"),
+        DataSceneCompatibility.getOntologyCompatibilityArray(
             "contributor",
             "Contributor (type:Organization)",
             "https://documentation.datascene.ca/references/contributor/#1-propriete-contributeur-contributor-type"
@@ -53,7 +53,7 @@ export const refOrganisation: RefProperty = {
             label: "Date de fondation",
             cardinality: "0..1",
             description: "Date où l'entité a été fondé.",
-            compatibility: [compatibilitySchemaOrg.getOntologyCompatibilityArray("foundingDate")],
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("foundingDate")],
             //note: "",
         },
         { ...refCatchphrase },

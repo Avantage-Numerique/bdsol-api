@@ -1,6 +1,6 @@
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
-import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 
 export const refCatchphrase: RefProperty = {
     field: "catchphrase",
@@ -9,6 +9,6 @@ export const refCatchphrase: RefProperty = {
     label: "Slogan",
     type: createRefType("string"),
     cardinality: "0..1",
-    compatibility: [compatibilitySchemaOrg.getOntologyCompatibilityArray("slogan")],
+    compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("slogan")],
     description: "Courte phrase d'accroche, moto, slogan, citation.",
 };

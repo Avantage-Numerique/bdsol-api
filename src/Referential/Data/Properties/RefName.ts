@@ -1,8 +1,8 @@
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
-import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
-import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
-import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
+import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refName: RefProperty = {
     field: "name",
@@ -13,13 +13,13 @@ export const refName: RefProperty = {
     cardinality: "1..1",
     description: "Nom de l'organisation",
     compatibility: [
-        compatibilityArtsdata.getOntologyCompatibilityArray(
+        ArtsdataCompatibility.getOntologyCompatibilityArray(
             "name",
             "name",
             "https://docs.artsdata.ca/classes/organization.html"
         ),
-        compatibilitySchemaOrg.getOntologyCompatibilityArray("name"),
-        compatibilityDataScene.getOntologyCompatibilityArray(
+        SchemaOrgCompatibility.getOntologyCompatibilityArray("name"),
+        DataSceneCompatibility.getOntologyCompatibilityArray(
             "name",
             "name",
             "https://documentation.datascene.ca/references/contributor/#4-propriete-contributeur-contributor-name-nom"

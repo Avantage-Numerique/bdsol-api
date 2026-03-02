@@ -5,10 +5,10 @@ import { refType } from "../Properties/RefType";
 import { refDomainList } from "../SubSchema/RefDomainList";
 import { RefProperty } from "../types";
 import { createRefType } from "../utils";
-import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
-import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
-import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
-import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refTaxonomy: RefProperty = {
     ontologyProperty: "avnu:taxonomy",
@@ -16,9 +16,9 @@ export const refTaxonomy: RefProperty = {
     label: "Taxonomie (catégorie)",
     description: "Vocabulaire de catégorie pour décrire et regrouper des compétences, des technologies ou autres.",
     compatibility: [
-        compatibilityAvnu.getOntologyCompatibilityArray("taxonomy"),
-        compatibilitySchemaOrg.getOntologyCompatibilityArray("DefinedTerm"),
-        compatibilityDataScene.getOntologyCompatibilityArray("term", "Term"),
+        AvnuCompatibility.getOntologyCompatibilityArray("taxonomy"),
+        SchemaOrgCompatibility.getOntologyCompatibilityArray("DefinedTerm"),
+        DataSceneCompatibility.getOntologyCompatibilityArray("term", "Term"),
     ],
     //note: "",
 

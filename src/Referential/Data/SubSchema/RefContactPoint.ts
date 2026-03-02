@@ -1,6 +1,6 @@
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
-import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 
 export const refContactPoint: RefProperty = {
     field: "contactPoint",
@@ -11,7 +11,7 @@ export const refContactPoint: RefProperty = {
     description: "",
 
     type: createRefType("object"),
-    compatibility: [compatibilityAvnu.getOntologyCompatibilityArray("contactpoint")],
+    compatibility: [AvnuCompatibility.getOntologyCompatibilityArray("contactpoint")],
     ref: [
         {
             field: "email",

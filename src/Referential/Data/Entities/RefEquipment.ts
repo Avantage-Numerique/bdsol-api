@@ -6,10 +6,10 @@ import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
 import { refSocialHandle } from "../SubSchema/RefSocialHandle";
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
-import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
-import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
-import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
-import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refEquipment: RefProperty = {
     ontologyProperty: "avnu:equipment",
@@ -17,8 +17,8 @@ export const refEquipment: RefProperty = {
     label: "Équipement",
     description: "Entité décrivant un équipement, son modèle, sa marque, ses particularités.",
     compatibility: [
-        compatibilityAvnu.getOntologyCompatibilityArray("Equipment"),
-        compatibilitySchemaOrg.getOntologyCompatibilityArray("Product"),
+        AvnuCompatibility.getOntologyCompatibilityArray("Equipment"),
+        SchemaOrgCompatibility.getOntologyCompatibilityArray("Product"),
     ],
     //note: "",
     type: createRefType("object"),

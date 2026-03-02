@@ -5,10 +5,10 @@ import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 import { refLocation } from "../SubSchema/RefLocation";
 import { RefProperty } from "../types";
 import { createRefType } from "../utils";
-import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
-import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
-import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
-import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refPlace: RefProperty = {
     ontologyProperty: "avnu:place",
@@ -16,14 +16,14 @@ export const refPlace: RefProperty = {
     label: "Lieu",
     description: "Entité décrivant un lieu, son emplacement physique ou virtuel.",
     compatibility: [
-        compatibilityAvnu.getOntologyCompatibilityArray("Place"),
-        compatibilityArtsdata.getOntologyCompatibilityArray(
+        AvnuCompatibility.getOntologyCompatibilityArray("Place"),
+        ArtsdataCompatibility.getOntologyCompatibilityArray(
             "place",
             "Place",
             "https://docs.artsdata.ca/classes/place.html"
         ),
-        compatibilitySchemaOrg.getOntologyCompatibilityArray("Place"),
-        compatibilityDataScene.getOntologyCompatibilityArray("place", "Place"),
+        SchemaOrgCompatibility.getOntologyCompatibilityArray("Place"),
+        DataSceneCompatibility.getOntologyCompatibilityArray("place", "Place"),
     ],
     //note: "",
 
