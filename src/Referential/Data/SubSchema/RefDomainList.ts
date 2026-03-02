@@ -11,7 +11,7 @@ export const refDomainList: RefProperty = {
     url: "/domainList",
     cardinality: "0..N",
     description: "Taxonomie de catégorie 'domain'.",
-
+    compatibility: [AvnuCompatibility.compatibilityMessage()],
     type: createRefType("object"),
     ref: [
         {
@@ -21,6 +21,6 @@ export const refDomainList: RefProperty = {
             cardinality: "0..1",
             description: "Référence à une taxonomie de type 'domain'",
         },
-        { ...refSubMeta, compatibility: [AvnuCompatibility.onlyCompatibleWithThis()] },
+        { ...refSubMeta, compatibility: [AvnuCompatibility.compatibilityMessage()] },
     ],
 };

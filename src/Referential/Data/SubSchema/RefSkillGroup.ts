@@ -17,7 +17,7 @@ export const refSkillGroup: RefProperty = {
     description:
         "Groupe de compétences, habiletés et/ou de technologies, tirés de notre base de données, accompagné d'un libellé qui décrit le regroupement.",
 
-    compatibility: [AvnuCompatibility.onlyCompatibleWithThis()],
+    compatibility: [AvnuCompatibility.compatibilityMessage()],
     type: createRefType("object"),
     ref: [
         {

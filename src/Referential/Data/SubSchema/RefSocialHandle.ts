@@ -11,7 +11,7 @@ export const refSocialHandle: RefProperty = {
     cardinality: "0..N",
     description: "Liens vers différent réseau sociaux et leur noms.",
     compatibility: [
-        AvnuCompatibility.onlyCompatibleWithThis(),
+        AvnuCompatibility.compatibilityMessage(),
         //Propriété non conforme, SocialHandle (object) != sameAs (string)
         /* {
                 externalSource: {

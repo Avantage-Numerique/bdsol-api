@@ -70,7 +70,7 @@ export const refOrganisation: RefProperty = {
 
         { ...refMainImageLink },
         { ...refPlaceLink },
-        { ...refEquipmentLinkSchema, compatibility: [AvnuCompatibility.onlyCompatibleWithThis()] },
+        { ...refEquipmentLinkSchema, compatibility: [AvnuCompatibility.compatibilityMessage()] },
         { ...refRegion },
         { ...refBadges },
 

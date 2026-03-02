@@ -10,7 +10,7 @@ export const refRegion: RefProperty = {
     label: "Région",
     type: createRefType("string"),
     cardinality: "0..1",
-    compatibility: [AvnuCompatibility.onlyCompatibleWithThis()],
+    compatibility: [AvnuCompatibility.compatibilityMessage()],
     //Propriété non conforme à datascene "associations géographiques".
     //Similaire à "associations géographiques: ville", mais pas array
     /* {

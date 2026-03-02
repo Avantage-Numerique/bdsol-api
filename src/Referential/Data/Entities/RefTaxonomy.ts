@@ -33,7 +33,7 @@ export const refTaxonomy: RefProperty = {
             cardinality: "1..1",
             description:
                 "Vocabulaire pour distinguer quel type de taxonomie il s'agit. S'il s'agit d'une compétence, ou d'une technologie par exemple.",
-            compatibility: [],
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
             constraints: {
                 enum: TaxonomiesCategoriesEnum,
             },
