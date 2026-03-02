@@ -31,7 +31,7 @@ class ReferentialController {
 
         const index = new PublicTemplate("referential"); //tempalte have already a default in the EmailContent.Prepare.
 
-        const title: string = `Référentiel de ${config.appName}`;
+        const title: string = `Référentiel`;
         // let body: string = ``;
 
         return await index.render({
