@@ -19,8 +19,8 @@ export function middlewareHandleShortDescriptionSave(document: any) {
 
         //Else, stripHtml and build seo shortDescription
         const cleanDescription = stripHtml(document.description);
-        const seoDescription = buildSeoShortDescription(cleanDescription);
-        document.shortDescription = seoDescription;
+        //const seoDescription = buildSeoShortDescription(cleanDescription);
+        document.shortDescription = cleanDescription;
     }
 }
 
