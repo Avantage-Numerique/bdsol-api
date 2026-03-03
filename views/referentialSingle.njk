@@ -32,16 +32,22 @@
                     <ul>
                         <li><i class="la la-arrow-right"></i> Compatibilité <i class="la la-arrow-right"></i> ontologies <i class="la la-arrow-right"></i></li>
                         {% for compatItem in item.compatibility %}
-                            <li>
-                                <span>
-                                    {{ compatItem.externalSource.name }}
-                                </span>
-                                <span>
-                                    <a href="{{ compatItem.documentationUrl }}" target="_blank" class="btn external code">
-                                        <i class="la la-link"></i>{{ compatItem.mapping.externalField }} <i class="la la-external-link"></i>
-                                    </a>
-                                </span>
-                            </li>
+                            {% if compatItem.messageOnly and compatItem.messageOnly !== "" %}
+                                <li class="full-width">
+                                    <span>{{ compatItem.messageOnly }}</span>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <span>
+                                        {{ compatItem.externalSource.name }}
+                                    </span>
+                                    <span>
+                                        <a href="{{ compatItem.documentationUrl }}" target="_blank" class="btn external code">
+                                            <i class="la la-link"></i>{{ compatItem.mapping.externalField }} <i class="la la-external-link"></i>
+                                        </a>
+                                    </span>
+                                </li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 </nav>

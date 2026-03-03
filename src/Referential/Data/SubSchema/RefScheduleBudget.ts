@@ -2,6 +2,9 @@ import { RefProperty } from "@ref/Data/types";
 import { refSubMeta } from "./RefSubMeta";
 import { refTimeframe } from "./RefTimeframe";
 import { createPrimitiveUrl, createRefType } from "../utils";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import { refOrder } from "@ref/Data/Properties/RefOrder";
 
 export const refScheduleBudget: RefProperty = {
     field: "scheduleBudget",
@@ -10,7 +13,7 @@ export const refScheduleBudget: RefProperty = {
     label: "Échéancier et budget",
     cardinality: "0..1",
     description: "Échéancier et budget général et/ou par étapes.",
-    compatibility: [],
+    compatibility: [AvnuCompatibility.compatibilityMessage()],
     //note: "",
 
     type: createRefType("object"),
@@ -23,7 +26,7 @@ export const refScheduleBudget: RefProperty = {
             label: "Date de début",
             cardinality: "0..1",
             description: "Date de début",
-            compatibility: [],
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("DateTime")],
             //note: "",
         },
         {
@@ -34,7 +37,7 @@ export const refScheduleBudget: RefProperty = {
             label: "Estimé de la date de fin",
             cardinality: "0..1",
             description: "Estimé de la date de fin",
-            compatibility: [],
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("DateTime")],
             //note: "",
         },
         {
@@ -45,7 +48,7 @@ export const refScheduleBudget: RefProperty = {
             label: "Date d'aboutissement du projet",
             cardinality: "0..1",
             description: "Date de la fin du projet",
-            compatibility: [],
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("DateTime")],
             //note: "",
         },
         {
@@ -56,7 +59,7 @@ export const refScheduleBudget: RefProperty = {
             label: "Budget total estimé",
             cardinality: "0..1",
             description: "estimatedTotalBudget",
-            compatibility: [],
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
             //note: "",
         },
         {
@@ -67,10 +70,9 @@ export const refScheduleBudget: RefProperty = {
             label: "Durée estimée du projet",
             cardinality: "0..1",
             description: "Durée estimé du projet",
-            compatibility: [],
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
             //note: "",
         },
         { ...refTimeframe },
-        { ...refSubMeta },
     ],
 };
