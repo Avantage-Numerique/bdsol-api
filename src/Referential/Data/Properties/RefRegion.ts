@@ -1,4 +1,4 @@
-import { RegionEnum } from "@src/Badges/RegionEnum";
+import { RegionEnum } from "@src/SubProperty/Badges/RegionEnum";
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
 

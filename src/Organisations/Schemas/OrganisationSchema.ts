@@ -1,7 +1,7 @@
 import { Document } from "mongoose";
 import { Meta } from "../../Moderation/Schemas/MetaSchema";
 import Media from "../../Media/Models/Media";
-import { Member } from "../../Team/Schemas/MemberSchema";
+import { Member } from "../../SubProperty/Team/Schemas/MemberSchema";
 import { DomainListSchema } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { SkillGroup } from "../../Taxonomy/Schemas/SkillGroupSchema";
 import { ObjectId } from "mongodb";

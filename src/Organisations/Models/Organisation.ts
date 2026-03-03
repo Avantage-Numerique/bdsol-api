@@ -4,7 +4,7 @@ import { DbProvider } from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from "fs";
 import OrganisationsService from "../Services/OrganisationsService";
-import { Member } from "@src/Team/Schemas/MemberSchema";
+import { Member } from "@src/SubProperty/Team/Schemas/MemberSchema";
 import { Meta, SubMeta } from "@src/Moderation/Schemas/MetaSchema";
 import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import { populateUser } from "@src/Users/Middlewares/populateUser";
@@ -12,10 +12,10 @@ import { SkillGroup } from "@src/Taxonomy/Schemas/SkillGroupSchema";
 import { EquipmentLink } from "@src/Database/Schemas/EquipmentLinkSchema";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
-import BadgeTypes from "@src/Badges/BadgeTypes";
-import { middlewareInsertBadges } from "@src/Badges/MiddlewareInsertBadges";
+import BadgeTypes from "@src/SubProperty/Badges/BadgeTypes";
+import { middlewareInsertBadges } from "@src/SubProperty/Badges/MiddlewareInsertBadges";
 import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
-import { RegionEnum } from "@src/Badges/RegionEnum";
+import { RegionEnum } from "@src/SubProperty/Badges/RegionEnum";
 
 class Organisation extends AbstractModel {
     /** @protected @static Singleton instance of model Organisation */

@@ -3,7 +3,7 @@ import AbstractModel from "@core/Model";
 import type { DbProvider } from "@database/DatabaseDomain";
 import { EventSchema } from "@src/Events/Schemas/EventSchema";
 import EventsService from "@src/Events/Services/EventsService";
-import { TeamField } from "@src/Team/Schemas/TeamSchema";
+import { TeamField } from "@src/SubProperty/Team/Schemas/TeamSchema";
 import { Meta, SubMeta } from "@src/Moderation/Schemas/MetaSchema";
 import * as fs from "fs";
 import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";

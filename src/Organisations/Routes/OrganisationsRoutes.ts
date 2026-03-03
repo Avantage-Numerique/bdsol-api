@@ -9,7 +9,7 @@ import { urlSanitizerAlias } from "@src/Security/SanitizerAliases/UrlSanitizerAl
 import { dateSanitizerAlias } from "@src/Security/SanitizerAliases/DateSanitizerAlias";
 import { entityNameSanitizerAlias } from "@src/Security/SanitizerAliases/EntityNameSanitizerAlias";
 import { isInEnumSanitizerAlias } from "@src/Security/SanitizerAliases/IsInEnumSanitizerAlias";
-import { RegionEnum } from "@src/Badges/RegionEnum";
+import { RegionEnum } from "@src/SubProperty/Badges/RegionEnum";
 
 class OrganisationsRoutes extends CrudRoute {
     controllerInstance: AbstractController = OrganisationsController.getInstance();

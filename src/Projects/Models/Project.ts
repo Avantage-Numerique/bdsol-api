@@ -9,7 +9,7 @@ import { populateUser } from "@src/Users/Middlewares/populateUser";
 import { Sponsor } from "@database/Schemas/SponsorSchema";
 import { ScheduleBudget } from "@database/Schemas/ScheduleBudgetSchema";
 import { ProjectContextEnum } from "../ProjectContextEnum";
-import { TeamField } from "@src/Team/Schemas/TeamSchema";
+import { TeamField } from "@src/SubProperty/Team/Schemas/TeamSchema";
 import * as fs from "fs";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";

@@ -10,10 +10,11 @@ import { populateUser } from "@src/Users/Middlewares/populateUser";
 import { SkillGroup } from "@src/Taxonomy/Schemas/SkillGroupSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
-import BadgeTypes from "@src/Badges/BadgeTypes";
-import { middlewareInsertBadges } from "@src/Badges/MiddlewareInsertBadges";
+import BadgeTypes from "@src/SubProperty/Badges/BadgeTypes";
+import { middlewareInsertBadges } from "@src/SubProperty/Badges/MiddlewareInsertBadges";
 import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
-import { RegionEnum } from "@src/Badges/RegionEnum";
+import { RegionEnum } from "@src/SubProperty/Badges/RegionEnum";
+import { middlewareHandleShortDescriptionSave } from "@src/SubProperty/ShortDescription/MiddlewareHandleShortDescriptionSave";
 
 class Person extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -315,6 +316,9 @@ class Person extends AbstractModel {
                 //Check and insert badges (this == document)
                 middlewareInsertBadges(this);
 
+                //Add shortDescription based on description if shortDescription is empty
+                middlewareHandleShortDescriptionSave(this);
+
                 return next();
             });
 
@@ -332,6 +336,10 @@ class Person extends AbstractModel {
                 */
                 //Check and insert badges
                 middlewareInsertBadges(updatedDocument);
+
+                //Add shortDescription based on description if shortDescription is empty
+                middlewareHandleShortDescriptionSave(updatedDocument);
+
                 return next();
             });
         }
