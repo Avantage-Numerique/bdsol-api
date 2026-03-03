@@ -1,5 +1,6 @@
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 
 export const refSubMeta: RefProperty = {
     field: "subMeta",
@@ -17,8 +18,9 @@ export const refSubMeta: RefProperty = {
             ontologyProperty: "avnu:order",
             url: createPrimitiveUrl("order"),
             label: "Ordre",
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("position")],
             cardinality: "0..1",
-            description: "Order des éléments pour le visuel",
+            description: "Ordre des éléments pour le visuel",
         },
     ],
-};
+}; //https://schema.org/position
