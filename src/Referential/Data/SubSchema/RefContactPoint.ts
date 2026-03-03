@@ -1,6 +1,6 @@
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
-import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 
 export const refContactPoint: RefProperty = {
     field: "contactPoint",
@@ -8,10 +8,10 @@ export const refContactPoint: RefProperty = {
     url: "/contactpoint",
     label: "Moyen de contact",
     cardinality: "0..1",
-    description: "",
-
+    description: "Trois moyen de contacter une entité : courriel, téléphone et site web.",
     type: createRefType("object"),
-    compatibility: [AvnuCompatibility.compatibilityMessage()],
+    compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("ContactPoint")],
+
     ref: [
         {
             field: "email",
@@ -21,7 +21,7 @@ export const refContactPoint: RefProperty = {
             label: "Courriel",
             cardinality: "0..1",
             description: "Courriel",
-            //compatibility: [],
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("email")],
             //note:"",
         },
         {
@@ -32,7 +32,7 @@ export const refContactPoint: RefProperty = {
             label: "Numéro de téléphone",
             cardinality: "0..1",
             description: "Numéro de téléphone",
-            compatibility: [],
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("telephone")],
             //note:"",
         },
         {
@@ -43,8 +43,8 @@ export const refContactPoint: RefProperty = {
             label: "Site web",
             cardinality: "0..1",
             description: "Site web principal",
-            compatibility: [],
-            //note:"",
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("url")],
+            note: "Pour être ajouté aussi dans une propriété sameAs à la base de l'entité.",
         },
     ],
 };
