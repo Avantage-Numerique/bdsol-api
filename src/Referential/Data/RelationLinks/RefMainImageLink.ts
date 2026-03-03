@@ -14,7 +14,6 @@ export const refMainImageLink: RefProperty = {
     type: createRefType("reference", [EntityTypesEnum.media]),
     cardinality: "0..1",
     compatibility: [
-        AvnuCompatibility.getOntologyCompatibilityArray("Media"),
         ArtsdataCompatibility.getOntologyCompatibilityArray("image", "ImageObject", "https://schema.org/ImageObject"),
         SchemaOrgCompatibility.getOntologyCompatibilityArray("MediaObject"),
         DataSceneCompatibility.getOntologyCompatibilityArray("media", "Media"),

@@ -3,6 +3,8 @@ import { RefProperty } from "../types";
 import { refSubMeta } from "./RefSubMeta";
 import { createPrimitiveUrl, createRefType } from "../utils";
 import { refPersonLink } from "../RelationLinks/RefPersonLink";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refMember: RefProperty = {
     //field: "member",
@@ -11,7 +13,14 @@ export const refMember: RefProperty = {
     label: "Membre d'équipe",
     cardinality: "0..1",
     description: "Identifiant d'un membre d'équipe et le libellé de son rôle dans l'équipe.",
-    compatibility: [],
+    compatibility: [
+        SchemaOrgCompatibility.getOntologyCompatibilityArray("member"),
+        DataSceneCompatibility.getOntologyCompatibilityArray(
+            "hasMembers",
+            "hasMembers (of type:Person)",
+            "https://documentation.datascene.ca/references/contributor/#11-propriete-contributeur-contributor-hasmembers-membres"
+        ),
+    ],
     //note: "",
 
     type: createRefType("object"),
@@ -20,7 +29,7 @@ export const refMember: RefProperty = {
             ...refPersonLink,
             field: "member",
             label: "Membre de l'équipe",
-            cardinality: "0..1",
+            cardinality: "1..1",
             description: "",
             compatibility: [],
             //note: "",

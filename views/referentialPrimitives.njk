@@ -75,16 +75,21 @@
                             <div class="compat-grid">
 
                                 {% for compatItem in item.compatibility %}
+                                    {% if compatItem.messageOnly and compatItem.messageOnly !== "" %}
+                                        <div class="full-width">
+                                            {{ compatItem.messageOnly }}
+                                        </div>
+                                    {% else %}
+                                        <div>
+                                            {{ compatItem.externalSource.name }}
+                                        </div>
 
-                                    <div>
-                                        {{ compatItem.externalSource.name }}
-                                    </div>
-
-                                    <div>
-                                        <a href="{{ compatItem.documentationUrl }}" target="_blank">
-                                            {{ compatItem.mapping.externalField }} <i class="la la-external-link"></i>
-                                        </a>
-                                    </div>
+                                        <div>
+                                            <a href="{{ compatItem.documentationUrl }}" target="_blank">
+                                                {{ compatItem.mapping.externalField }} <i class="la la-external-link"></i>
+                                            </a>
+                                        </div>
+                                    {% endif %}
 
                                 {% else %}
 

@@ -14,17 +14,11 @@ export const refTeam: RefProperty = {
     cardinality: "0..N",
     description: "Liste des membres d'une équipe et un libellé de leur fonction.",
     compatibility: [
-        AvnuCompatibility.getOntologyCompatibilityArray("Person"),
-        ArtsdataCompatibility.getOntologyCompatibilityArray(
-            "Person",
-            "Person",
-            "https://docs.artsdata.ca/classes/person.html"
-        ),
-        SchemaOrgCompatibility.getOntologyCompatibilityArray("Person"),
+        SchemaOrgCompatibility.getOntologyCompatibilityArray("member"),
         DataSceneCompatibility.getOntologyCompatibilityArray(
-            "contributor",
-            "Contributor (type:Person)",
-            "https://documentation.datascene.ca/references/contributor/#1-propriete-contributeur-contributor-type"
+            "hasMembers",
+            "hasMembers (of type:Person)",
+            "https://documentation.datascene.ca/references/contributor/#11-propriete-contributeur-contributor-hasmembers-membres"
         ),
     ],
     //note: "",
