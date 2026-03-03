@@ -5,6 +5,7 @@ import { refPersonLink } from "../RelationLinks/RefPersonLink";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 import { refPerson } from "@ref/Data/Entities/RefPerson";
+import { refOrder } from "@ref/Data/Properties/RefOrder";
 
 export const refMember: RefProperty = {
     //field: "member",
@@ -45,6 +46,6 @@ export const refMember: RefProperty = {
             compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("roleName")],
             //note: "",
         },
-        { ...refSubMeta },
+        { ...refOrder },
     ],
 };

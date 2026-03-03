@@ -1,6 +1,8 @@
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
 import { refSubMeta } from "./RefSubMeta";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import { refOrder } from "@ref/Data/Properties/RefOrder";
 
 export const refSocialHandle: RefProperty = {
     field: "url",
@@ -9,20 +11,19 @@ export const refSocialHandle: RefProperty = {
     label: "Contact de réseaux sociaux",
     cardinality: "0..N",
     description: "Liens vers différent réseau sociaux et leur noms.",
-    compatibility: [
-        //Propriété non conforme, SocialHandle (object) != sameAs (string)
-        /* {
-                externalSource: {
-                    name: "Schema.org",
-                },
-                mapping: {
-                    externalField: "sameAs",
-                    ontologyProperty: "schema:sameAs",
-                    ontologyUri: "https://schema.org/sameAs",
-                },
-                documentationUrl: "https://schema.org/sameAs",
-            }, */
-    ],
+    compatibility: [AvnuCompatibility.compatibilityMessage()],
+    //Propriété non conforme, SocialHandle (object) != sameAs (string)
+    /* {
+            externalSource: {
+                name: "Schema.org",
+            },
+            mapping: {
+                externalField: "sameAs",
+                ontologyProperty: "schema:sameAs",
+                ontologyUri: "https://schema.org/sameAs",
+            },
+            documentationUrl: "https://schema.org/sameAs",
+        }, */
 
     type: createRefType("object"),
     ref: [
@@ -48,6 +49,6 @@ export const refSocialHandle: RefProperty = {
             compatibility: [],
             //note: "",
         },
-        { ...refSubMeta },
+        { ...refOrder },
     ],
 };
