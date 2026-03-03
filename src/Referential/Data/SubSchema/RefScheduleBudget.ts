@@ -1,10 +1,8 @@
 import { RefProperty } from "@ref/Data/types";
-import { refSubMeta } from "./RefSubMeta";
 import { refTimeframe } from "./RefTimeframe";
 import { createPrimitiveUrl, createRefType } from "../utils";
 import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
-import { refOrder } from "@ref/Data/Properties/RefOrder";
 
 export const refScheduleBudget: RefProperty = {
     field: "scheduleBudget",

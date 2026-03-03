@@ -1,5 +1,4 @@
 import { RefProperty } from "../types";
-import { refSubMeta } from "./RefSubMeta";
 import { createPrimitiveUrl, createRefType } from "../utils";
 import { refPersonLink } from "../RelationLinks/RefPersonLink";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";

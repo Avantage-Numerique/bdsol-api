@@ -1,7 +1,6 @@
 import { BudgetRangeEnum, TimeframeEtaEnum } from "@src/Database/Schemas/ScheduleBudgetSchema";
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
-import { refSubMeta } from "./RefSubMeta";
 import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 import { refOrder } from "@ref/Data/Properties/RefOrder";
 
