@@ -1,7 +1,6 @@
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
 import { refSubMeta } from "./RefSubMeta";
-import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 
 export const refSocialHandle: RefProperty = {
     field: "url",

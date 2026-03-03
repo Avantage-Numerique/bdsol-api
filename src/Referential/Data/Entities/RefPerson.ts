@@ -15,11 +15,10 @@ import { refType } from "@ref/Data/Properties/RefType";
 
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
-import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 
 import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
-import { refMemberOf } from "@ref/Data/Properties/memberOf";
+import { refMemberOf } from "@ref/Data/Properties/RefMemberOf";
 
 export const refPerson: RefProperty = {
     ontologyProperty: "avnu:person",

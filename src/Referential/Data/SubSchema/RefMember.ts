@@ -1,10 +1,10 @@
-import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { RefProperty } from "../types";
 import { refSubMeta } from "./RefSubMeta";
 import { createPrimitiveUrl, createRefType } from "../utils";
 import { refPersonLink } from "../RelationLinks/RefPersonLink";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
+import { refPerson } from "@ref/Data/Entities/RefPerson";
 
 export const refMember: RefProperty = {
     //field: "member",
@@ -30,8 +30,8 @@ export const refMember: RefProperty = {
             field: "member",
             label: "Membre de l'équipe",
             cardinality: "1..1",
-            description: "",
-            compatibility: [],
+            description: refPerson.description,
+            compatibility: refPerson.compatibility,
             //note: "",
         },
         {
@@ -39,10 +39,10 @@ export const refMember: RefProperty = {
             type: createRefType("string"),
             ontologyProperty: "avnu:role",
             url: createPrimitiveUrl("role"),
-            label: "",
+            label: "Role",
             cardinality: "0..1",
-            description: "",
-            compatibility: [],
+            description: "Role assigné à ce membre.",
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("roleName")],
             //note: "",
         },
         { ...refSubMeta },

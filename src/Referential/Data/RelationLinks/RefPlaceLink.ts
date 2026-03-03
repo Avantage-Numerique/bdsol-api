@@ -7,19 +7,14 @@ import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refPlaceLink: RefProperty = {
     field: "location",
-    ontologyProperty: "avnu:relationLinks.placeLink",
-    url: "/relationLinks.placeLink",
+    ontologyProperty: "avnu:location",
+    url: "/location",
     label: "Référence à un lieu",
     type: createRefType("reference", [EntityTypesEnum.place]),
     cardinality: "0..N",
     compatibility: [
-        ArtsdataCompatibility.getOntologyCompatibilityArray(
-            "place",
-            "Place",
-            "https://docs.artsdata.ca/classes/place.html"
-        ),
-        SchemaOrgCompatibility.getOntologyCompatibilityArray("Place"),
-        DataSceneCompatibility.getOntologyCompatibilityArray("place"),
+        ArtsdataCompatibility.getOntologyCompatibilityArray("location", "location", "https://schema.org/location"),
+        SchemaOrgCompatibility.getOntologyCompatibilityArray("location"),
     ],
     description: "Référence à une entité Place, qui décrit un lieu.",
 };

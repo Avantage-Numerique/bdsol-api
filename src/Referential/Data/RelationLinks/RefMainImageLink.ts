@@ -1,7 +1,6 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { RefProperty } from "../types";
 import { createRefType } from "../utils";
-import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";

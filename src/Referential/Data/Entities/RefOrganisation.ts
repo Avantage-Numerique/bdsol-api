@@ -64,11 +64,11 @@ export const refOrganisation: RefProperty = {
             ...refSkillGroup,
             field: "offers",
         },
+        { ...refPlaceLink },
         { ...refDomainList },
         { ...refTeam },
 
         { ...refMainImageLink },
-        { ...refPlaceLink },
         { ...refEquipmentLinkSchema, compatibility: [AvnuCompatibility.compatibilityMessage()] },
         { ...refRegion },
         { ...refBadges },
