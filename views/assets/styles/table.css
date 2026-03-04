@@ -29,6 +29,15 @@ tr:target + tr.note {
     background-color: var(--secondary-lighter);
 }
 
+.td-note {
+    border-top: 2px dotted;
+    /* border-top: 2px solid; */
+}
+tr:has(+ tr .td-note) td {
+    border-bottom: 2px dotted;
+    /* border-bottom: 2px solid; */
+}
+
 th,
 td {
     border-top: var(--table-default-border);
