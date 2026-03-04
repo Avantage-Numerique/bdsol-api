@@ -57,9 +57,13 @@ td {
         border-left: none;
         border-right: none;
     }
+
     &:has(.compat-grid) {
         padding: 0;
-        vertical-align: top;
+
+        &:not(:has(.full-width)) {
+            vertical-align: top;
+        }
     }
 }
 .compat-header th {
@@ -72,9 +76,12 @@ td {
     grid-template-rows: 1fr 1fr;
     height: 100%;
     width: 100%;
+
     .full-width {
         grid-column: 1 / -1;
+        grid-row: 1 / -1;
     }
+
     & > div {
         padding: 0.25em;
 
