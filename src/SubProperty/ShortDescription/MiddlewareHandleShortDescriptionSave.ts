@@ -18,9 +18,12 @@ export function middlewareHandleShortDescriptionSave(document: any) {
         }
 
         //Else, stripHtml and build seo shortDescription
-        const cleanDescription = stripHtml(document.description);
+        const spacedTagDescription = addTagSpacing(document.description);
+        const sanitizedDescription = stripHtml(spacedTagDescription);
+        const shortenedDescription = reduceToMaxLength(sanitizedDescription, 160);
+
         //const seoDescription = buildSeoShortDescription(cleanDescription);
-        document.shortDescription = cleanDescription;
+        document.shortDescription = shortenedDescription;
     }
 }
 
@@ -38,10 +41,28 @@ function stripHtml(html: string): string {
         .trim();
 }
 
-//Build SEO description
+function addTagSpacing(input: string): string {
+    return input.replace(/</g, " <").replace(/>/g, "> ");
+}
+
+//Reduce text to maxLength
+function reduceToMaxLength(text: string, maxLength: number = 160): string {
+    let words = text.split(/[\., ]+/);
+    let result = "";
+    for (const word of words) {
+        //Si le dernier mot déborde de la limite on le coupe de la description
+        if ((result + " " + word).trim().length > 160) {
+            break;
+        }
+        result = (result + " " + word).trim();
+    }
+    return result;
+}
+
+//UNFINISHED
 //Remplace les ponctuations par des espaces pour séparer en keywords.
 //(pour adapter vers "keywords" il faudrait peut-être retirer les déterminants "le/la/les/de/des/lui" etc.)
-function buildSeoShortDescription(text: string, maxLength: number = 160): string {
+function buildKeyWords(text: string, maxLength: number = 160): string {
     if (!text) return "";
 
     //Replace !letter and !number (punctuation) by spaces
