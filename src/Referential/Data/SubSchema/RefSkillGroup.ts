@@ -7,6 +7,7 @@ import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
+import { refOrder } from "@ref/Data/Properties/RefOrder";
 
 export const refSkillGroup: RefProperty = {
     //field: "offers"||"occupations",
@@ -37,20 +38,8 @@ export const refSkillGroup: RefProperty = {
             type: createRefType("reference", [EntityTypesEnum.taxonomy]),
             description: "Liste de compétences, habiletés ou de technologies.",
             cardinality: "0..N",
-            compatibility: [
-                AvnuCompatibility.getOntologyCompatibilityArray("Event"),
-                ArtsdataCompatibility.getOntologyCompatibilityArray(
-                    "Event",
-                    "Event",
-                    "https://docs.artsdata.ca/classes/event.html"
-                ),
-                SchemaOrgCompatibility.getOntologyCompatibilityArray("Event"),
-                DataSceneCompatibility.getOntologyCompatibilityArray(
-                    "performance",
-                    "Représentation (type:Performance)"
-                ),
-            ],
+            compatibility: [],
         },
-        { ...refSubMeta },
+        { ...refOrder },
     ],
 };
