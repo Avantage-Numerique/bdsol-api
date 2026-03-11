@@ -13,7 +13,7 @@ export const refDescription: RefProperty = {
     cardinality: "0..1",
     compatibility: [
         SchemaOrgCompatibility.getOntologyCompatibilityArray("description"),
-        ArtsdataCompatibility.getOntologyCompatibilityArray("alternateName"),
+        ArtsdataCompatibility.getOntologyCompatibilityArray("description"),
         DataSceneCompatibility.getOntologyCompatibilityArray(
             "description",
             "Description",
