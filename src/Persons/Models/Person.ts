@@ -14,7 +14,7 @@ import BadgeTypes from "@src/SubProperty/Badges/BadgeTypes";
 import { middlewareInsertBadges } from "@src/SubProperty/Badges/MiddlewareInsertBadges";
 import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { RegionEnum } from "@src/SubProperty/Badges/RegionEnum";
-import { middlewareHandleShortDescriptionSave } from "@src/SubProperty/ShortDescription/MiddlewareHandleShortDescriptionSave";
+import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
 
 class Person extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -266,6 +266,7 @@ class Person extends AbstractModel {
             fullName: document.fullName ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
+            _generated: generateEntityContent(document),
         };
     }
 
