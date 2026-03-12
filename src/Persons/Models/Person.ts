@@ -316,9 +316,6 @@ class Person extends AbstractModel {
                 //Check and insert badges (this == document)
                 middlewareInsertBadges(this);
 
-                //Add shortDescription based on description if shortDescription is empty
-                middlewareHandleShortDescriptionSave(this);
-
                 return next();
             });
 
@@ -336,9 +333,6 @@ class Person extends AbstractModel {
                 */
                 //Check and insert badges
                 middlewareInsertBadges(updatedDocument);
-
-                //Add shortDescription based on description if shortDescription is empty
-                middlewareHandleShortDescriptionSave(updatedDocument);
 
                 return next();
             });

@@ -1,6 +1,7 @@
 import sanitizeHtml from "sanitize-html";
 
 /**
+ * @deprecated Change in shortDescription design.
  * Takes and verify informations of document and insert badges
  *
  */
