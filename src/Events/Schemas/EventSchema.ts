@@ -15,6 +15,7 @@ export interface EventSchema extends Document {
     alternateName: string;
     url: [SocialHandle];
     description: string;
+    shortDescription: string;
     entityInCharge: ObjectId;
     organizer: ObjectId;
     eventType: [ObjectId];

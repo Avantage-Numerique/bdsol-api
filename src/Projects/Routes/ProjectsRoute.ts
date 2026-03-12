@@ -28,6 +28,7 @@ class ProjectsRoutes extends CrudRoute {
             objectIdSanitizerAlias("data.entityInCharge.*"),
             objectIdSanitizerAlias("data.producer.*"),
             basicHtmlSanitizerAlias("data.description"),
+            basicHtmlSanitizerAlias("data.shortDescription"),
 
             //SocialHandles
             basicHtmlSanitizerAlias("data.url.*.label"),
@@ -75,6 +76,7 @@ class ProjectsRoutes extends CrudRoute {
             objectIdSanitizerAlias("data.entityInCharge.*"),
             objectIdSanitizerAlias("data.producer.*"),
             basicHtmlSanitizerAlias("data.description"),
+            basicHtmlSanitizerAlias("data.shortDescription"),
 
             //SocialHandles
             basicHtmlSanitizerAlias("data.url.*.label"),

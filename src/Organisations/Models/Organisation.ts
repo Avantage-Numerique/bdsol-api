@@ -16,6 +16,7 @@ import BadgeTypes from "@src/SubProperty/Badges/BadgeTypes";
 import { middlewareInsertBadges } from "@src/SubProperty/Badges/MiddlewareInsertBadges";
 import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { RegionEnum } from "@src/SubProperty/Badges/RegionEnum";
+import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
 
 class Organisation extends AbstractModel {
     /** @protected @static Singleton instance of model Organisation */
@@ -91,6 +92,10 @@ class Organisation extends AbstractModel {
             description: {
                 type: String,
                 //alias: 'desc'
+            },
+            shortDescription: {
+                type: String,
+                maxLength: 160,
             },
             url: {
                 type: [SocialHandle.schema],
@@ -168,6 +173,7 @@ class Organisation extends AbstractModel {
             _id: document._id ?? "",
             name: document.name ?? "",
             description: document.description ?? "",
+            shortDescription: document.shortDescription ?? "",
             url: document.url ?? [],
             contactPoint: document.contactPoint ?? {
                 tel: { num: "", ext: "" },
@@ -189,6 +195,7 @@ class Organisation extends AbstractModel {
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
+            _generated: generateEntityContent(document),
         };
     }
 

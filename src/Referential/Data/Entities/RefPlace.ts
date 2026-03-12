@@ -1,5 +1,6 @@
 import { refDescription } from "../Properties/RefDescription";
 import { refName } from "../Properties/RefName";
+import { refShortDescription } from "../Properties/RefShortDescription";
 import { refType } from "../Properties/RefType";
 import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 import { refLocation } from "../SubSchema/RefLocation";
@@ -19,6 +20,7 @@ export const refPlace: RefProperty = {
         { ...refType },
         { ...refName },
         { ...refDescription },
+        { ...refShortDescription },
         { ...refMainImageLink },
         {
             //À MODIFIER QUAND ON VA MERGE LA BRANCHE DE CARTE.

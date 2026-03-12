@@ -22,6 +22,7 @@ class OrganisationsRoutes extends CrudRoute {
         create: [
             entityNameSanitizerAlias("data.name", false),
             basicHtmlSanitizerAlias("data.description"),
+            basicHtmlSanitizerAlias("data.shortDescription"),
             //SocialHandles
             basicHtmlSanitizerAlias("data.url.*.label"),
             urlSanitizerAlias("data.url.*.url"),
@@ -47,6 +48,7 @@ class OrganisationsRoutes extends CrudRoute {
         update: [
             objectIdSanitizerAlias("data.id", false),
             basicHtmlSanitizerAlias("data.description"),
+            basicHtmlSanitizerAlias("data.shortDescription"),
             //SocialHandles
             basicHtmlSanitizerAlias("data.url.*.label"),
             urlSanitizerAlias("data.url.*.url"),

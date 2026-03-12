@@ -16,6 +16,7 @@ import { refSocialHandle } from "../SubSchema/RefSocialHandle";
 import { refTeam } from "../SubSchema/RefTeam";
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
+import { refShortDescription } from "../Properties/RefShortDescription";
 
 export const refEvent: RefProperty = {
     ontologyProperty: "avnu:event",
@@ -32,6 +33,7 @@ export const refEvent: RefProperty = {
         { ...refAlternateName },
         { ...refSocialHandle },
         { ...refDescription },
+        { ...refShortDescription },
         {
             ...refOrganisationLink,
             field: "entityInCharge",

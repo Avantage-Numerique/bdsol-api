@@ -17,6 +17,7 @@ import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
 import { refAlternateName } from "../Properties/RefAlternateName";
 import { createPrimitiveUrl, createRefType } from "../utils";
 import { ProjectContextEnum } from "@src/Projects/ProjectContextEnum";
+import { refShortDescription } from "../Properties/RefShortDescription";
 
 export const refProject: RefProperty = {
     ontologyProperty: "avnu:project",
@@ -35,6 +36,7 @@ export const refProject: RefProperty = {
             description: "Autre nom sous lequel le projet est également connu.",
         },
         { ...refDescription },
+        { ...refShortDescription },
         {
             ...refOrganisationLink,
             field: "entityInCharge",

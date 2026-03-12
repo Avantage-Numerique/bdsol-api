@@ -13,6 +13,7 @@ import { EventFormatEnum } from "../EventFormatEnum";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
+import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
 
 class Event extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -90,6 +91,10 @@ class Event extends AbstractModel {
             },
             description: {
                 type: String,
+            },
+            shortDescription: {
+                type: String,
+                maxLength: 160,
             },
             entityInCharge: {
                 type: mongoose.Types.ObjectId,
@@ -190,6 +195,7 @@ class Event extends AbstractModel {
             alternateName: document.alternateName ?? "",
             url: document.url ?? [],
             description: document.description ?? "",
+            shortDescription: document.shortDescription ?? "",
             entityInCharge: document.entityInCharge ?? "",
             organizer: document.organizer ?? "",
             eventType: document.eventType ?? "",
@@ -214,6 +220,7 @@ class Event extends AbstractModel {
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
+            _generated: generateEntityContent(document),
         };
     }
 

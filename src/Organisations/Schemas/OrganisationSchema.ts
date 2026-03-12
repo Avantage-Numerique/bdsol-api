@@ -13,6 +13,7 @@ export interface OrganisationSchema extends Document {
     name: string;
     slug: string;
     description: string;
+    shortDescription: string;
     url: [SocialHandle];
     contactPoint: ContactPoint;
     fondationDate: Date;

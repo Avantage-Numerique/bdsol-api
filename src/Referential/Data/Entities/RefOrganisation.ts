@@ -14,6 +14,7 @@ import { refBadges } from "../Properties/RefBadges";
 import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 import { refPlaceLink } from "../RelationLinks/RefPlaceLink";
 import { createPrimitiveUrl, createRefType } from "../utils";
+import { refShortDescription } from "../Properties/RefShortDescription";
 
 export const refOrganisation: RefProperty = {
     ontologyProperty: "avnu:organisation",
@@ -28,6 +29,7 @@ export const refOrganisation: RefProperty = {
         { ...refType },
         { ...refName },
         { ...refDescription },
+        { ...refShortDescription },
         {
             field: "fondationDate",
             type: createRefType("date"),
