@@ -29,6 +29,15 @@ tr:target + tr.note {
     background-color: var(--secondary-lighter);
 }
 
+.td-note {
+    border-top: 2px dotted;
+    /* border-top: 2px solid; */
+}
+tr:has(+ tr .td-note) td {
+    border-bottom: 2px dotted;
+    /* border-bottom: 2px solid; */
+}
+
 th,
 td {
     border-top: var(--table-default-border);
@@ -48,9 +57,13 @@ td {
         border-left: none;
         border-right: none;
     }
+
     &:has(.compat-grid) {
         padding: 0;
-        vertical-align: top;
+
+        &:not(:has(.full-width)) {
+            vertical-align: top;
+        }
     }
 }
 .compat-header th {
@@ -63,9 +76,12 @@ td {
     grid-template-rows: 1fr 1fr;
     height: 100%;
     width: 100%;
+
     .full-width {
         grid-column: 1 / -1;
+        grid-row: 1 / -1;
     }
+
     & > div {
         padding: 0.25em;
 
