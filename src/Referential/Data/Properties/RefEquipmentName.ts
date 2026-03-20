@@ -1,6 +1,5 @@
 import { RefProperty } from "../types";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
-import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 import { createPrimitiveUrl, createRefType } from "../utils";
 
 export const refEquipmentName: RefProperty = {

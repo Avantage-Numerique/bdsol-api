@@ -1,4 +1,3 @@
-import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { RefProperty } from "../types";
 import { refSubMeta } from "./RefSubMeta";
 import { createPrimitiveUrl, createRefType } from "../utils";

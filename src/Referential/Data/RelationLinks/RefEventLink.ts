@@ -3,7 +3,6 @@ import { RefProperty } from "../types";
 import { createRefType } from "../utils";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
-import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refEventLink: RefProperty = {
     //field: "location",
