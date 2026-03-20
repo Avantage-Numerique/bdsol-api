@@ -1,5 +1,7 @@
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 
 export const refLocation: RefProperty = {
     field: "location",
@@ -8,7 +10,7 @@ export const refLocation: RefProperty = {
     label: "Emplacement",
     cardinality: "0..1",
     description: "Moyen de localisation via une adresse, des coordonnées ou autre.",
-    compatibility: [],
+    compatibility: [AvnuCompatibility.compatibilityMessage()],
     //note: "",
 
     type: createRefType("object"),
@@ -21,7 +23,7 @@ export const refLocation: RefProperty = {
             label: "Adresse",
             cardinality: "0..1",
             description: "Numéro civique et rue",
-            compatibility: [],
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("address")],
             //note: "",
         },
         {

@@ -1,6 +1,7 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { RefProperty } from "../types";
 import { createRefType } from "../utils";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 
 export const refTaxonomyLink: RefProperty = {
     //field: "location",
@@ -9,6 +10,6 @@ export const refTaxonomyLink: RefProperty = {
     label: "Référence à une taxonomie",
     type: createRefType("reference", [EntityTypesEnum.taxonomy]),
     cardinality: "0..N",
-    compatibility: [],
+    compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("keywords")],
     description: "Référence à une entité taxonomie.",
 };

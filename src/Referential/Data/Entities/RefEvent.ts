@@ -46,9 +46,11 @@ export const refEvent: RefProperty = {
         { ...refDescription },
         {
             ...refOrganisationLink,
+            url: "/entityInCharge",
             field: "entityInCharge",
             label: "Entité en charge / Créateur·rice",
             cardinality: "0..1",
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("funder")],
         },
         {
             ...refOrganisationLink,
@@ -60,6 +62,14 @@ export const refEvent: RefProperty = {
             ...refTaxonomyLink,
             field: "eventType",
             note: "Taxonomie fixe établi par AVNU de catégorie 'eventType'.",
+            compatibility: [
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("additionalType"),
+                ArtsdataCompatibility.getOntologyCompatibilityArray(
+                    "additionalType",
+                    "additionalType",
+                    "https://docs.artsdata.ca/event-types.html"
+                ),
+            ],
         },
         {
             field: "eventFormat",
@@ -68,8 +78,15 @@ export const refEvent: RefProperty = {
             url: createPrimitiveUrl("eventFormat"),
             label: "Format de l'événement",
             cardinality: "0..1",
-            description: "L'événement se déroule de quelle façon : 'En ligne', 'Présentiel' etc.",
-            compatibility: [],
+            description: "L'événement se déroule de quelle façon : 'En ligne', 'Présentiel' etc.", //
+            compatibility: [
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("eventAttendanceMode"),
+                ArtsdataCompatibility.getOntologyCompatibilityArray(
+                    "eventAttendanceMode",
+                    "eventAttendanceMode",
+                    "http://schema.org/eventAttendanceMode"
+                ),
+            ],
             constraints: {
                 enum: EventFormatEnum,
             },
@@ -84,7 +101,19 @@ export const refEvent: RefProperty = {
             label: "Date de début",
             cardinality: "0..1",
             description: "Date et heure de début de l'événement.",
-            compatibility: [],
+            compatibility: [
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("startDate"),
+                ArtsdataCompatibility.getOntologyCompatibilityArray(
+                    "startDate",
+                    "startDate",
+                    "http://schema.org/startDate"
+                ),
+                DataSceneCompatibility.getOntologyCompatibilityArray(
+                    "startDateTime",
+                    "startDateTime",
+                    "https://documentation.datascene.ca/references/performance/#3-propriete-representation-performance-startdatetime-date-et-heure-de-debut"
+                ),
+            ],
             //note: "",
         },
         {
@@ -95,7 +124,15 @@ export const refEvent: RefProperty = {
             label: "Date de fin",
             cardinality: "0..1",
             description: "Date et heure de fin de l'événement.",
-            compatibility: [],
+            compatibility: [
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("endDate"),
+                ArtsdataCompatibility.getOntologyCompatibilityArray("endDate", "endDate", "http://schema.org/endDate"),
+                DataSceneCompatibility.getOntologyCompatibilityArray(
+                    "endDateTime",
+                    "endDateTime",
+                    "https://documentation.datascene.ca/references/performance/#4-propriete-representation-performance-enddatetime-date-et-heure-de-fin"
+                ),
+            ],
             note: "Doit être ultérieure à la date de début",
         },
         { ...refContactPoint },
@@ -103,12 +140,18 @@ export const refEvent: RefProperty = {
         {
             ...refPersonLink,
             field: "attendees",
+            ontologyProperty: "avnu:attendees",
+            url: "/attendee",
             label: "Participants",
-            description: "Personne déclarant participer à l'événement.",
+            description: "Personnes ayant participé à l'événement.",
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("attendee")],
         },
         {
             ...refTaxonomyLink,
             field: "skills",
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("keywords")],
+            description: "Compétences et technologies associées à l'événement.",
+            //keywords
         },
         { ...refDomainList },
         { ...refSchedule },
@@ -116,8 +159,7 @@ export const refEvent: RefProperty = {
         { ...refLocation },
         {
             ...refMainImageLink,
-            field: "photoGallery",
-            label: "Galerie photo",
+            description: "Ce champs est en cours de développement pour devenir un array d'objet média.",
         },
 
         //Ontologie :

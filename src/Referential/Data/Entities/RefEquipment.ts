@@ -11,7 +11,7 @@ import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 export const refEquipment: RefProperty = {
     ontologyProperty: "avnu:equipment",
     url: "/equipment",
-    label: "Équipement",
+    label: "Equipement",
     description: "Entité décrivant un équipement, son modèle, sa marque, ses particularités.",
     compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("Product")],
     //note: "",
@@ -20,9 +20,9 @@ export const refEquipment: RefProperty = {
         { ...refType },
         {
             field: "name",
-            ontologyProperty: "avnu:equipment.name",
+            ontologyProperty: "avnu:equipmentName",
             type: createRefType("string"),
-            url: createPrimitiveUrl("equipment.name"),
+            url: createPrimitiveUrl("equipmentName"),
             label: "Nom combiné de l'équipement",
             compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("name")], //alternateName
             description:
