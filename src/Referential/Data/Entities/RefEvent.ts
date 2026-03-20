@@ -20,6 +20,7 @@ import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
+import { refPlaceLink } from "@ref/Data/RelationLinks/RefPlaceLink";
 
 export const refEvent: RefProperty = {
     ontologyProperty: "avnu:event",
@@ -156,7 +157,10 @@ export const refEvent: RefProperty = {
         { ...refDomainList },
         { ...refSchedule },
         { ...refEventLink },
-        { ...refLocation },
+        {
+            ...refPlaceLink,
+            description: "Les lieux seront mis à jour prochainement vers cette structure.",
+        },
         {
             ...refMainImageLink,
             description: "Ce champs est en cours de développement pour devenir un array d'objet média.",

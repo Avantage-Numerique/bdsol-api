@@ -36,6 +36,7 @@ import { refEquipmentLink } from "./RelationLinks/RefEquipmentLink";
 import { refMainImageLink } from "./RelationLinks/RefMainImageLink";
 import { refOrganisationLink } from "./RelationLinks/RefOrganisationLink";
 import { refPlaceLink } from "./RelationLinks/RefPlaceLink";
+import { refLocation } from "@ref/Data/SubSchema/RefLocation";
 
 export const refData: RefData = {
     entities: {
@@ -50,6 +51,7 @@ export const refData: RefData = {
     },
 
     subschemas: {
+        [refLocation.label]: refLocation,
         [refSkillGroup.label]: refSkillGroup,
         [refDomainList.label]: refDomainList,
         [refContactPoint.label]: refContactPoint,

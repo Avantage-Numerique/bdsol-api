@@ -5,9 +5,9 @@ import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 
 export const refPlaceLink: RefProperty = {
-    field: "location",
-    ontologyProperty: "avnu:location",
-    url: "/location",
+    field: "placeLocation",
+    ontologyProperty: "avnu:placeLocation",
+    url: "/placeLocation",
     label: "Référence à un lieu",
     type: createRefType("reference", [EntityTypesEnum.place]),
     cardinality: "0..N",

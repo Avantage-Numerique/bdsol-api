@@ -2,6 +2,8 @@ import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
 import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
+import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 
 export const refLocation: RefProperty = {
     field: "location",
@@ -9,8 +11,12 @@ export const refLocation: RefProperty = {
     url: "/location",
     label: "Emplacement",
     cardinality: "0..1",
-    description: "Moyen de localisation via une adresse, des coordonnées ou autre.",
-    compatibility: [AvnuCompatibility.compatibilityMessage()],
+    description: "Lieu et moyen de localisation via une adresse, des coordonnées ou autre.",
+    compatibility: [
+        AvnuCompatibility.compatibilityMessage(
+            "AVNU a combiné l'objet d'adresse, mais un endpoint par ontologie sera fait pour que la structure d'adresse soit respecté."
+        ),
+    ],
     //note: "",
 
     type: createRefType("object"),
@@ -23,7 +29,19 @@ export const refLocation: RefProperty = {
             label: "Adresse",
             cardinality: "0..1",
             description: "Numéro civique et rue",
-            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("address")],
+            compatibility: [
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("streetAddress"),
+                ArtsdataCompatibility.getOntologyCompatibilityArray(
+                    "streetAddress",
+                    "streetAddress",
+                    "https://schema.org/streetAddress"
+                ),
+                DataSceneCompatibility.getOntologyCompatibilityArray(
+                    "streetAddress",
+                    "streetAddress",
+                    "https://documentation.datascene.ca/references/postal_address/#2-propriete-adresse-postale-postal-address-streetaddress-adresse-postale"
+                ),
+            ],
             //note: "",
         },
         {
@@ -34,7 +52,19 @@ export const refLocation: RefProperty = {
             label: "Ville",
             cardinality: "0..1",
             description: "Nom de la ville",
-            compatibility: [],
+            compatibility: [
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("addressLocality"),
+                ArtsdataCompatibility.getOntologyCompatibilityArray(
+                    "addressLocality",
+                    "addressLocality",
+                    "https://schema.org/streetAddress"
+                ),
+                DataSceneCompatibility.getOntologyCompatibilityArray(
+                    "addressLocality",
+                    "addressLocality",
+                    "https://documentation.datascene.ca/references/postal_address/#3-propriete-adresse-postale-postal-address-addresslocality-localite"
+                ),
+            ],
             //note: "",
         },
         {
@@ -45,7 +75,7 @@ export const refLocation: RefProperty = {
             label: "Région",
             cardinality: "0..1",
             description: "Nom de la région si applicable",
-            compatibility: [],
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("addressRegion")],
             //note: "",
         },
         {
@@ -53,10 +83,10 @@ export const refLocation: RefProperty = {
             ontologyProperty: "avnu:mrc",
             url: createPrimitiveUrl("mrc"),
             type: createRefType("string"),
-            label: "Mrc (Municipalité régionale de comté",
+            label: "Mrc (Municipalité régionale de comté)",
             cardinality: "0..1",
-            description: "Entités administratives assurant la gestion régionale des municipalités locales",
-            compatibility: [],
+            description: "Ajout par rapport aux propriété de lieu commune.",
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("AdministrativeArea")],
             //note: "",
         },
         {
@@ -67,7 +97,7 @@ export const refLocation: RefProperty = {
             label: "Province",
             cardinality: "0..1",
             description: "Province ou état",
-            compatibility: [],
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("addressRegion")],
             //note: "",
         },
         {
@@ -78,7 +108,7 @@ export const refLocation: RefProperty = {
             label: "Code postal",
             cardinality: "0..1",
             description: "Code postal",
-            compatibility: [],
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("postalCode")],
             //note: "",
         },
         {
@@ -89,7 +119,7 @@ export const refLocation: RefProperty = {
             label: "Pays",
             cardinality: "0..1",
             description: "Nom du pays",
-            compatibility: [],
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("addressCountry")],
             //note: "",
         },
         {
@@ -100,7 +130,7 @@ export const refLocation: RefProperty = {
             label: "Latitude géographique",
             cardinality: "0..1",
             description: "Latitude géographique en degrés décimaux (valeur flottante, de -90 à 90).",
-            compatibility: [],
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("latitude")],
             //note: "",
         },
         {
@@ -111,7 +141,7 @@ export const refLocation: RefProperty = {
             label: "Longitude géographique",
             cardinality: "0..1",
             description: "Longitude géographique en degrés décimaux (valeur flottante, de -180 à 180).",
-            compatibility: [],
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("longitude")],
             //note: "",
         },
     ],
