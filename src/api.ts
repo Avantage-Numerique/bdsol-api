@@ -35,6 +35,7 @@ import { BackukDbJob } from "@src/Schedule/Jobs/BackupDb";
 import { PagesRoutes } from "@src/Pages/Routes/PagesRoutes";
 import SlowDownMiddleware from "@src/Server/Middlewares/SlowDownMiddleware";
 import path from "path";
+import JSONLDRoutes from "./jsonld/Routes/JSONLDRoutes";
 
 /**
  * Main class for the API
@@ -175,6 +176,10 @@ export default class Api {
             {
                 baseRoute: "/ref",
                 manager: new ReferentialRoutes(),
+            },
+            {
+                baseRoute: "/jsonld",
+                manager: new JSONLDRoutes(),
             },
             {
                 baseRoute: "/communications",
