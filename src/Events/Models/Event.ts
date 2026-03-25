@@ -239,6 +239,7 @@ class Event extends AbstractModel {
             if (this.options?._recursed) {
                 return next();
             }
+            if (this.getOptions().skipPopulate) return next();
             //middlewarePopulateProperty(this, 'team.member');
 
             taxonomyPopulate(this, "skills");
@@ -266,6 +267,8 @@ class Event extends AbstractModel {
             if (this.options?._recursed) {
                 return next();
             }
+            if (this.getOptions().skipPopulate) return next();
+
             middlewarePopulateProperty(this, "team.member");
             taxonomyPopulate(this, "skills");
             taxonomyPopulate(this, "domains.domain");

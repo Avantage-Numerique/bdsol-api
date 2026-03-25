@@ -258,6 +258,8 @@ class Organisation extends AbstractModel {
      */
     public registerEvents(): void {
         this.schema.pre("find", function () {
+            if (this.getOptions().skipPopulate) return;
+
             taxonomyPopulate(this, "offers.skills");
             taxonomyPopulate(this, "domains.domain");
             //middlewarePopulateProperty(this, 'equipment.equipment');
@@ -270,6 +272,8 @@ class Organisation extends AbstractModel {
         });
 
         this.schema.pre("findOne", function () {
+            if (this.getOptions().skipPopulate) return;
+
             taxonomyPopulate(this, "offers.skills");
             taxonomyPopulate(this, "domains.domain");
             middlewarePopulateProperty(this, "equipment.equipment");

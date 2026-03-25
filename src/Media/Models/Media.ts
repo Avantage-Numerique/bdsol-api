@@ -182,11 +182,15 @@ class Media extends AbstractModel {
 
     public registerEvents(): void {
         this.schema.pre("find", function () {
+            if (this.getOptions().skipPopulate) return;
+
             //middlewarePopulateProperty(this, "entityId");
             populateUser(this, "meta.requestedBy");
             populateUser(this, "meta.lastModifiedBy");
         });
         this.schema.pre("findOne", function () {
+            if (this.getOptions().skipPopulate) return;
+
             middlewarePopulateProperty(this, "entityId");
             populateUser(this, "meta.requestedBy");
             populateUser(this, "meta.lastModifiedBy");

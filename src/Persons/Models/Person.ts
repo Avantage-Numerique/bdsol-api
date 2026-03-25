@@ -342,6 +342,8 @@ class Person extends AbstractModel {
 
     public registerEvents(): void {
         this.schema.pre("find", function () {
+            if (this.getOptions().skipPopulate) return;
+
             taxonomyPopulate(this, "occupations.skills");
             taxonomyPopulate(this, "domains.domain");
             middlewarePopulateProperty(this, "mainImage");
@@ -353,6 +355,8 @@ class Person extends AbstractModel {
             //populateUser(this, "occupations.occupation.subMeta.lastModifiedBy", User.getInstance().mongooseModel);
         });
         this.schema.pre("findOne", function () {
+            if (this.getOptions().skipPopulate) return;
+
             taxonomyPopulate(this, "occupations.skills");
             taxonomyPopulate(this, "domains.domain");
             middlewarePopulateProperty(this, "mainImage");

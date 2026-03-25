@@ -192,6 +192,8 @@ class Place extends AbstractModel {
      */
     public registerEvents(): void {
         this.schema.pre("find", function () {
+            if (this.getOptions().skipPopulate) return;
+
             middlewarePopulateProperty(this, "mainImage");
 
             //populateUser(this, "meta.requestedBy");
@@ -199,6 +201,8 @@ class Place extends AbstractModel {
         });
 
         this.schema.pre("findOne", function () {
+            if (this.getOptions().skipPopulate) return;
+
             middlewarePopulateProperty(this, "mainImage");
 
             populateUser(this, "meta.requestedBy");

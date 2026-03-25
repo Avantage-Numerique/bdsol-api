@@ -31,14 +31,18 @@ export function mapEntityByURL() {
 
 export function createRefType<T extends PrimitiveType>(type: T): RefTypePrimitive<T>;
 export function createRefType(type: "object"): RefTypeObject;
-export function createRefType(type: "reference", arg: EntityTypesEnum[]): RefTypeReference;
-export function createRefType(type: PrimitiveType | "object" | "reference", arg: EntityTypesEnum[] = []): RefType {
+export function createRefType(type: "reference", arg: EntityTypesEnum[], refPath?: string): RefTypeReference;
+export function createRefType(
+    type: PrimitiveType | "object" | "reference",
+    arg: EntityTypesEnum[] = [],
+    refPath?: string
+): RefType {
     if (type === "object") {
         return { kind: "object" };
     }
 
     if (type === "reference") {
-        return { kind: "reference", targets: arg };
+        return { kind: "reference", targets: arg, refPath };
     }
 
     return { kind: "primitive", name: type };

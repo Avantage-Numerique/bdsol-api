@@ -221,10 +221,14 @@ class Taxonomy extends AbstractModel {
 
     public registerEvents(): void {
         this.schema.pre("find", function () {
+            if (this.getOptions().skipPopulate) return;
+
             taxonomyPopulate(this, "domains.domain");
         });
 
         this.schema.pre("findOne", function () {
+            if (this.getOptions().skipPopulate) return;
+
             taxonomyPopulate(this, "domains.domain");
         });
     }
