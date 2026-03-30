@@ -38,6 +38,15 @@ import { refOrganisationLink } from "./RelationLinks/RefOrganisationLink";
 import { refPlaceLink } from "./RelationLinks/RefPlaceLink";
 import { refLocation } from "@ref/Data/SubSchema/RefLocation";
 
+//Vocabularies
+import { refAttendanceMode } from "@ref/Data/Vocabularies/RefAttendanceMode";
+import { refProjectContext } from "@ref/Data/Vocabularies/RefProjectContext";
+import { refRegions } from "@ref/Data/Vocabularies/RefRegions";
+import { refTimeFrameEta } from "@ref/Data/Vocabularies/RefTimeframeEta";
+import { refBudgetRanges } from "@ref/Data/Vocabularies/RefBudgetRange";
+import { refDynamicTaxonomyCategories } from "@ref/Data/Vocabularies/RefDynamicTaxonomyCategories";
+import { refEntityTypes } from "@ref/Data/Vocabularies/RefEntityTypes";
+
 export const refData: RefData = {
     entities: {
         [refPerson.label]: refPerson,
@@ -79,5 +88,15 @@ export const refData: RefData = {
         [refMainImageLink.label]: refMainImageLink,
         [refOrganisationLink.label]: refOrganisationLink,
         [refPlaceLink.label]: refPlaceLink,
+    },
+
+    vocabularies: {
+        [refEntityTypes.label]: refEntityTypes,
+        [refDynamicTaxonomyCategories.label]: refDynamicTaxonomyCategories,
+        [refAttendanceMode.label]: refAttendanceMode,
+        [refProjectContext.label]: refProjectContext,
+        [refRegions.label]: refRegions,
+        [refTimeFrameEta.label]: refTimeFrameEta,
+        [refBudgetRanges.label]: refBudgetRanges,
     },
 };

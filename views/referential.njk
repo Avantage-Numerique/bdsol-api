@@ -90,6 +90,39 @@
         </p>
 
         <a href="{{ baseUrl }}{{ baseRoute }}/primitives">Liste des propriétés primitives</a>
+
+        {% if items.vocabularies %}
+
+            <h2>Vocabulaires</h2>
+
+            <p>Noms controllés pour décrires des entités, qui ressemblent souvent à des mots clés.</p>
+
+            <table class="ref">
+
+                <thead>
+                <tr>
+                    <th>Classe</th>
+                    <th>URL</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for label, item in items.vocabularies %}
+                    <tr>
+                        <td>{{ label }}</td>
+                        <td>
+                            <a href="{{ baseUrl }}{{ baseRoute }}{{ item.url }}">{{ baseRoute }}{{ item.url }}</a>
+                        </td>
+                        <td>{{ item.description }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        {% else %}
+            <p>Rien à afficher!</p>
+        {% endif %}
     </div>
 
 {% endblock %}

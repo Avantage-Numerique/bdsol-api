@@ -7,6 +7,7 @@ export type RefData = {
     subschemas: Record<string, RefProperty>;
     properties: Record<string, RefProperty>;
     relationLinks: Record<string, RefProperty>;
+    vocabularies: Record<string, RefVocabulary>;
 };
 
 //Properties no ref
@@ -88,4 +89,17 @@ export type RefStringConstraints = {
 export type RefNumberConstraints = {
     minimum?: number;
     maximum?: number;
+};
+
+export type RefVocabulary = {
+    label: string;
+    name?: string; //Default field name
+    field?: string;
+    ontologyProperty?: string;
+    description?: string; //description of the property
+    apiType: "enum" | "static" | "dynamic";
+    apiSource?: any; //enum ou array
+    url: `/${string}`;
+    compatibility?: RefCompatibility[]; //compatibility to other ontologies
+    note?: string; //Note
 };

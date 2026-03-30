@@ -84,6 +84,36 @@ class ReferentialController {
             },
         });
     }
+    public async referentialVocabulariesLayout(entity?: string): Promise<string> {
+        const baseData = getTemplateBaseData();
+
+        const index = new PublicTemplate("referentialSingleVocabulary"); //tempalte have already a default in the EmailContent.Prepare.
+
+        const title: string = `Vocabulaires controlé de ${config.appName} &rarr; <code>/ref/${entity}</code>`;
+        // let body: string = ``;
+
+        const baseRoute = "/ref";
+
+        return await index.render({
+            context: {
+                ...baseData, //basic app and api default string and links
+                ...DefaultEmailTheme, //basic theme for colors and sizes.
+                title: `${title}`,
+                // body: `${body}`,
+
+                baseUrl: config.baseUrl,
+                baseRoute,
+
+                item: this._routes.get(`/vocabularies/${entity}`),
+
+                meta: {
+                    title: `${title}`,
+                    // description: `${body}`,
+                    author: `${config.appName}`,
+                },
+            },
+        });
+    }
 
     public async referentialPrimitivesLayout(): Promise<string> {
         const baseData = getTemplateBaseData();
