@@ -120,7 +120,7 @@ class ReferentialController {
 
         const index = new PublicTemplate("referentialPrimitives"); //tempalte have already a default in the EmailContent.Prepare.
 
-        const title: string = `Référentiel de ${config.appName} &rarr; <code>/ref/primitives</code>`;
+        const title: string = `Référentiel de ${config.appName} &rarr; <code>/ref/properties</code>`;
         // let body: string = ``;
 
         const baseRoute = "/ref";

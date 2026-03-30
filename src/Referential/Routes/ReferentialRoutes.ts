@@ -23,7 +23,7 @@ class ReferentialRoutes {
      */
     public setupPublicRoutes(): express.Router {
         this.routerInstance.get("/", [this.getRefIndexHandler.bind(this)]);
-        this.routerInstance.get("/primitives", [this.getRefPrimitiveHandler.bind(this)]);
+        this.routerInstance.get("/properties", [this.getRefPrimitiveHandler.bind(this)]);
         this.routerInstance.get("/vocabularies/:entity", [this.getRefVocabulariesHandler.bind(this)]);
         this.routerInstance.get("/:entity", [this.getRefEntityHandler.bind(this)]);
         return this.routerInstance;
@@ -78,6 +78,12 @@ class ReferentialRoutes {
      */
     public async getRefVocabulariesHandler(req: Request, res: Response): Promise<any> {
         const { params } = req;
+
+        if ("json" in req.query) {
+            res.set("Content-Type", "application/json");
+
+            return res.status(StatusCodes.OK).send(findEntityByURL(params.entity.toLowerCase()));
+        }
 
         res.set("Content-Type", "text/html");
         return res
