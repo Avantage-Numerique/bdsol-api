@@ -27,9 +27,11 @@ class JSONLDController {
 
         if (!model || !ref) throw new Error("Pas de collection ou de ref!");
 
-        const entity = await model.findById(entityId).setOptions({ skipPopulate: true });
+        const document = await model.findById(entityId).setOptions({ skipPopulate: true });
 
-        if (!entity) return false;
+        if (!document) return false;
+
+        let entity = document.toObject();
 
         const options = {
             contextMode: "inline", // | "url";

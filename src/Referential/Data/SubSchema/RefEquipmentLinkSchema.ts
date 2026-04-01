@@ -2,7 +2,6 @@ import { refEquipmentLink } from "../RelationLinks/RefEquipmentLink";
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
 import { refSubMeta } from "./RefSubMeta";
-import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const refEquipmentLinkSchema: RefProperty = {
     field: "equipment",

@@ -5,14 +5,19 @@ enum OntologyTarget {
 }
 
 export class JsonLDBuilder {
-    constructor(
-        private entity: any,
-        private rootRef: any, // RefProperty complet (racine)
-        private options?: {
-            contextMode?: "inline" | "url";
-            contextUrl?: string;
-        }
-    ) {}
+    private entity: any;
+    private rootRef: any; // RefProperty complet (racine)
+    private options?: {
+        contextMode?: "inline" | "url";
+        contextUrl?: string;
+    };
+    constructor(entity: any, rootRef: any, options?: any) {
+        this.entity = entity;
+        this.rootRef = rootRef;
+        if (!options) {
+            this.options = { contextMode: "inline" };
+        } else this.options = options;
+    }
 
     // build natif AVNU
     build() {
@@ -104,6 +109,10 @@ export class JsonLDBuilder {
                                 );
                             } else if (entity[refPath]) return { "@id": val, "@type": entity[refPath] };
                         }
+                        if ("_id" in val) {
+                            return { "@id": val._id, "@type": propertyRef.type.targets[0], ...val };
+                        }
+
                         return { "@id": val, "@type": propertyRef.type.targets[0] };
                     }
 
