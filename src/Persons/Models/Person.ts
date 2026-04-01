@@ -10,10 +10,11 @@ import { populateUser } from "@src/Users/Middlewares/populateUser";
 import { SkillGroup } from "@src/Taxonomy/Schemas/SkillGroupSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
-import BadgeTypes from "@src/Badges/BadgeTypes";
-import { middlewareInsertBadges } from "@src/Badges/MiddlewareInsertBadges";
+import BadgeTypes from "@src/SubProperty/Badges/BadgeTypes";
+import { middlewareInsertBadges } from "@src/SubProperty/Badges/MiddlewareInsertBadges";
 import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
-import { RegionEnum } from "@src/Badges/RegionEnum";
+import { RegionEnum } from "@src/SubProperty/Badges/RegionEnum";
+import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
 
 class Person extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -122,6 +123,10 @@ class Person extends AbstractModel {
             },
             description: {
                 type: String,
+            },
+            shortDescription: {
+                type: String,
+                maxLength: 160,
             },
             // DRY this with groupName to have this "skillGroup as
             occupations: {
@@ -242,6 +247,7 @@ class Person extends AbstractModel {
             firstName: document.firstName ?? "",
             nickname: document.nickname ?? "",
             description: document.description ?? "",
+            shortDescription: document.shortDescription ?? "",
             occupations: document.occupations ?? "",
             domains: document.domains ?? "",
             mainImage: document.mainImage ?? "",
@@ -260,6 +266,7 @@ class Person extends AbstractModel {
             fullName: document.fullName ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
+            _generated: generateEntityContent(document),
         };
     }
 
@@ -327,6 +334,7 @@ class Person extends AbstractModel {
                 */
                 //Check and insert badges
                 middlewareInsertBadges(updatedDocument);
+
                 return next();
             });
         }

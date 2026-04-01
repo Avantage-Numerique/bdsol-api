@@ -12,6 +12,7 @@ export interface PersonSchema extends Document {
     slug: string;
     nickname: string;
     description: string;
+    shortDescription: string;
     occupations: [SkillGroup];
     domains: [DomainListSchema];
     mainImage: Media; //ça fonctionne ça ?

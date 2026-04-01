@@ -28,6 +28,7 @@ class EventsRoutes extends CrudRoute {
             urlSanitizerAlias("data.url.*.url"),
 
             basicHtmlSanitizerAlias("data.description"),
+            basicHtmlSanitizerAlias("data.shortDescription"),
             objectIdSanitizerAlias("data.entityInCharge"),
             objectIdSanitizerAlias("data.organizer"),
             objectIdSanitizerAlias("data.eventType.*"),
@@ -67,6 +68,7 @@ class EventsRoutes extends CrudRoute {
             urlSanitizerAlias("data.url.*.url"),
 
             basicHtmlSanitizerAlias("data.description"),
+            basicHtmlSanitizerAlias("data.shortDescription"),
             objectIdSanitizerAlias("data.entityInCharge"),
             objectIdSanitizerAlias("data.organizer"),
             objectIdSanitizerAlias("data.eventType.*"),

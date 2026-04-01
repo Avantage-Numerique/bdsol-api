@@ -18,6 +18,7 @@ import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 
 import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
+import { refShortDescription } from "../Properties/RefShortDescription";
 import { refMemberOf } from "@ref/Data/Properties/RefMemberOf";
 
 export const refPerson: RefProperty = {
@@ -109,14 +110,7 @@ export const refPerson: RefProperty = {
                 "Autre appellation parfois utilisé pour designer la personne. Exemple : 'Coeur de pirate' pour 'Béatrice Martin'.",
         },
         { ...refDescription },
-        //Aucune trace de short-description dans notre api.
-        /* {
-                    label: "short-description",
-                    type: "string",
-                    compatibility: {
-                        datascene: ["Description Courte", "https://datascene.ca/references/proprietes/contributeur/"],
-                    },
-                }, */
+        { ...refShortDescription },
         { ...refCatchphrase, compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("additionalName")] },
         {
             ...refSocialHandle,

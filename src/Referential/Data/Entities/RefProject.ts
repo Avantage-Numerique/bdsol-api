@@ -16,6 +16,7 @@ import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
 import { refAlternateName } from "../Properties/RefAlternateName";
 import { createPrimitiveUrl, createRefType } from "../utils";
 import { ProjectContextEnum } from "@src/Projects/ProjectContextEnum";
+import { refShortDescription } from "../Properties/RefShortDescription";
 import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
@@ -46,6 +47,7 @@ export const refProject: RefProperty = {
             description: "Autre nom sous lequel le projet est également connu.",
         },
         { ...refDescription },
+        { ...refShortDescription },
         {
             ...refOrganisationLink,
             field: "entityInCharge", //https://schema.org/author //https://schema.org/maintainer //https://schema.org/producer //https://schema.org/owner

@@ -1,6 +1,6 @@
 import { Document } from "mongoose";
 import { Meta } from "@src/Moderation/Schemas/MetaSchema";
-import { Member } from "@src/Team/Schemas/MemberSchema";
+import { Member } from "@src/SubProperty/Team/Schemas/MemberSchema";
 import Media from "@src/Media/Models/Media";
 import { ObjectId } from "mongodb";
 import { Sponsor } from "@database/Schemas/SponsorSchema";
@@ -17,6 +17,7 @@ export interface ProjectSchema extends Document {
     entityInCharge: [ObjectId];
     producer: [ObjectId];
     description: string;
+    shortDescription: string;
     url: [SocialHandle];
     contactPoint: ContactPoint;
     location: [ObjectId];

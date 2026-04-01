@@ -15,6 +15,7 @@ import { refSocialHandle } from "../SubSchema/RefSocialHandle";
 import { refTeam } from "../SubSchema/RefTeam";
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
+import { refShortDescription } from "../Properties/RefShortDescription";
 import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
@@ -43,6 +44,7 @@ export const refEvent: RefProperty = {
         { ...refAlternateName },
         { ...refSocialHandle },
         { ...refDescription },
+        { ...refShortDescription },
         {
             ...refOrganisationLink,
             url: "/entityInCharge",

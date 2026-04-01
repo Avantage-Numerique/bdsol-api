@@ -14,6 +14,7 @@ import { refBadges } from "../Properties/RefBadges";
 import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 import { refPlaceLink } from "../RelationLinks/RefPlaceLink";
 import { createPrimitiveUrl, createRefType } from "../utils";
+import { refShortDescription } from "../Properties/RefShortDescription";
 import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
@@ -44,6 +45,7 @@ export const refOrganisation: RefProperty = {
         { ...refType },
         { ...refName },
         { ...refDescription },
+        { ...refShortDescription },
         {
             field: "fondationDate",
             type: createRefType("date"),
