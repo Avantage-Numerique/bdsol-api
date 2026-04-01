@@ -1,6 +1,6 @@
 import { RefProperty } from "../types";
-import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
-import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 import { createPrimitiveUrl, createRefType } from "../utils";
 
 export const refAlternateName: RefProperty = {
@@ -12,8 +12,8 @@ export const refAlternateName: RefProperty = {
     cardinality: "0..1",
     description: "Autre nom sous lequel l'entité est également connu.",
     compatibility: [
-        compatibilitySchemaOrg.getOntologyCompatibilityArray("alternateName"),
-        compatibilityDataScene.getOntologyCompatibilityArray(
+        SchemaOrgCompatibility.getOntologyCompatibilityArray("alternateName"),
+        DataSceneCompatibility.getOntologyCompatibilityArray(
             "alternateName",
             "alternateName",
             "https://documentation.datascene.ca/references/show/#5-propriete-spectacle-show-alternatename-nom-alternatif"

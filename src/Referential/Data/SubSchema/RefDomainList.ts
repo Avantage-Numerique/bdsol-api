@@ -1,8 +1,8 @@
-import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { RefProperty } from "../types";
 import { refSubMeta } from "./RefSubMeta";
 import { createRefType } from "../utils";
 import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 
 export const refDomainList: RefProperty = {
     field: "domains",
@@ -11,7 +11,7 @@ export const refDomainList: RefProperty = {
     url: "/domainList",
     cardinality: "0..N",
     description: "Taxonomie de catégorie 'domain'.",
-
+    compatibility: [AvnuCompatibility.compatibilityMessage()],
     type: createRefType("object"),
     ref: [
         {
@@ -21,6 +21,6 @@ export const refDomainList: RefProperty = {
             cardinality: "0..1",
             description: "Référence à une taxonomie de type 'domain'",
         },
-        { ...refSubMeta },
+        { ...refSubMeta, compatibility: [AvnuCompatibility.compatibilityMessage()] },
     ],
 };

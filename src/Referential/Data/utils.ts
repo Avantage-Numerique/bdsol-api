@@ -45,11 +45,11 @@ export function createRefType(type: PrimitiveType | "object" | "reference", arg:
 }
 
 export function createPrimitiveUrl(name: string): `/${string}#avnu:${string}` {
-    return ("/primitives#avnu:" + name) as `/${string}#avnu:${string}`;
+    return ("/properties#avnu:" + name) as `/${string}#avnu:${string}`;
 }
 
 export function isObjectProp(entity: RefProperty): entity is RefPropertyObject {
-    return entity.type.kind === "object";
+    return entity.type?.kind === "object";
 }
 
 function getAllPrimitives(base: RefProperty[]): RefPropertyPrimitive[] {
@@ -57,7 +57,7 @@ function getAllPrimitives(base: RefProperty[]): RefPropertyPrimitive[] {
 
     for (const entity of base) {
         // Primitive branch
-        if (entity.type.kind === "primitive") {
+        if (entity.type?.kind === "primitive") {
             filtered.push(entity as RefPropertyPrimitive);
         }
 

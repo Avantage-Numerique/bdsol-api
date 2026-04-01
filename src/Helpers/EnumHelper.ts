@@ -12,6 +12,12 @@ class EnumHelper {
         });
         return selectOptions;
     }
+
+    public static toArray(baseEnum: any) {
+        return Object.keys(baseEnum)
+            .filter((value) => !isNaN(Number(value)) && value !== undefined)
+            .map((key) => baseEnum[key]);
+    }
 }
 
 export default EnumHelper;
