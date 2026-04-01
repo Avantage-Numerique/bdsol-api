@@ -1,7 +1,8 @@
 import { BudgetRangeEnum, TimeframeEtaEnum } from "@src/Database/Schemas/ScheduleBudgetSchema";
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
-import { refSubMeta } from "./RefSubMeta";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import { refOrder } from "@ref/Data/Properties/RefOrder";
 
 export const refTimeframe: RefProperty = {
     field: "timeframe",
@@ -10,7 +11,7 @@ export const refTimeframe: RefProperty = {
     label: "Échéancier par étapes",
     cardinality: "0..N",
     description: "Étape de progression, avec un temps estimé et un budget associé.",
-    compatibility: [],
+    compatibility: [AvnuCompatibility.compatibilityMessage()],
     //note: "",
 
     type: createRefType("object"),
@@ -23,7 +24,7 @@ export const refTimeframe: RefProperty = {
             label: "Nom de l'étape",
             cardinality: "1..1",
             description: "Libellé descriptif de l'étape",
-            compatibility: [],
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
             //note: "",
         },
         {
@@ -34,7 +35,7 @@ export const refTimeframe: RefProperty = {
             label: "Durée estimé de l'étape",
             cardinality: "0..1",
             description: "Parmis l'enum TimeframeEtaEnum",
-            compatibility: [],
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
             constraints: {
                 enum: TimeframeEtaEnum,
             },
@@ -48,12 +49,12 @@ export const refTimeframe: RefProperty = {
             label: "Budget estimé pour l'étape",
             cardinality: "0..1",
             description: "Parmis l'enum BudgetRangeEnum",
-            compatibility: [],
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
             constraints: {
                 enum: BudgetRangeEnum,
             },
             //note: "",
         },
-        { ...refSubMeta },
+        { ...refOrder },
     ],
 };

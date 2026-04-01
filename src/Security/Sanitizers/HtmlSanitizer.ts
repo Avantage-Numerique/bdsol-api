@@ -21,6 +21,7 @@ export class HtmlSanitizer {
                 "h5",
                 "h6",
                 "blockquote",
+                "del",
                 "dl",
                 "dt",
                 "figcaption",
@@ -70,6 +71,8 @@ export class HtmlSanitizer {
             ],
             disallowedTagsMode: "discard",
             allowedAttributes: {
+                p: ["class"],
+                span: ["style"],
                 a: ["href", "name", "target"],
                 // We don't currently allow img itself by default, but
                 // these attributes would make sense if we did.

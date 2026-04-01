@@ -1,7 +1,7 @@
-import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { RefProperty } from "../types";
 import { refSubMeta } from "./RefSubMeta";
 import { createPrimitiveUrl, createRefType } from "../utils";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 
 export const refSchedule: RefProperty = {
     field: "schedule",
@@ -10,7 +10,7 @@ export const refSchedule: RefProperty = {
     label: "Horaire",
     cardinality: "0..N",
     description: "Décris une plage horaire avec un nom, une date et heure de début et de fin.",
-    compatibility: [],
+    compatibility: [AvnuCompatibility.compatibilityMessage()],
     //note: "",
 
     type: createRefType("object"),

@@ -15,13 +15,29 @@ import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 import { refPlaceLink } from "../RelationLinks/RefPlaceLink";
 import { createPrimitiveUrl, createRefType } from "../utils";
 import { refShortDescription } from "../Properties/RefShortDescription";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refOrganisation: RefProperty = {
     ontologyProperty: "avnu:organisation",
     url: "/organisation",
     label: "Organisation",
     description: "",
-    compatibility: [],
+    compatibility: [
+        ArtsdataCompatibility.getOntologyCompatibilityArray(
+            "Organization",
+            "Organization",
+            "https://docs.artsdata.ca/classes/organization.html"
+        ),
+        SchemaOrgCompatibility.getOntologyCompatibilityArray("Organization"),
+        DataSceneCompatibility.getOntologyCompatibilityArray(
+            "contributor",
+            "Contributor (type:Organization)",
+            "https://documentation.datascene.ca/references/contributor/#1-propriete-contributeur-contributor-type"
+        ),
+    ],
     note: "",
 
     type: createRefType("object"),
@@ -38,7 +54,7 @@ export const refOrganisation: RefProperty = {
             label: "Date de fondation",
             cardinality: "0..1",
             description: "Date où l'entité a été fondé.",
-            compatibility: [],
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("foundingDate")],
             //note: "",
         },
         { ...refCatchphrase },
@@ -50,12 +66,12 @@ export const refOrganisation: RefProperty = {
             ...refSkillGroup,
             field: "offers",
         },
+        { ...refPlaceLink },
         { ...refDomainList },
         { ...refTeam },
 
         { ...refMainImageLink },
-        { ...refPlaceLink },
-        { ...refEquipmentLinkSchema },
+        { ...refEquipmentLinkSchema, compatibility: [AvnuCompatibility.compatibilityMessage()] },
         { ...refRegion },
         { ...refBadges },
 
