@@ -1,4 +1,4 @@
-import { JsonLDBuilder } from "../JsonLDBuilder";
+import { JsonLDBuilder } from "@src/jsonld/JsonLDBuilder";
 import EntityControllerFactory from "@src/Abstract/EntityControllerFactory";
 import EntityRefFactory from "@src/Referential/EntityRefFactory";
 
@@ -17,6 +17,10 @@ class JSONLDController {
         return JSONLDController._instance;
     }
 
+    /**
+     *
+     * @throws {Error} If the `collection` param is invalid (`model` or `ref` not found)
+     */
     public async jsonLDIndex(collection: string, entityId: string): Promise<object | false> {
         const model = EntityControllerFactory.getControllerFromEntity(collection)?.entity?.mongooseModel;
         const ref = EntityRefFactory.getRefFromEntity(collection);
