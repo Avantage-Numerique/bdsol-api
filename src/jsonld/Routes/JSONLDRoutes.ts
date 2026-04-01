@@ -33,7 +33,7 @@ class JSONLDRoutes extends AbstractRoute {
      * @public @method
      */
     public setupPublicRoutes(): express.Router {
-        this.routerInstance.get("/:collection/:entity", [
+        this.routerInstance.get("/:entity/:id", [
             this.getJsonLDEntityHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
@@ -50,7 +50,7 @@ class JSONLDRoutes extends AbstractRoute {
         let jsonldContent;
 
         try {
-            jsonldContent = await this.controllerInstance.jsonLDIndex(params.collection, params.entity);
+            jsonldContent = await this.controllerInstance.jsonLDIndex(params.entity, params.id);
         } catch (e) {
             console.error(e);
 
