@@ -21,7 +21,7 @@ import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refOrganisation: RefProperty = {
-    ontologyProperty: "avnu:organisation",
+    ontologyProperty: "avnu:Organisation",
     url: "/organisation",
     label: "Organisation",
     description: "",

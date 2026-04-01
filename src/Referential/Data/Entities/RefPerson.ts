@@ -22,7 +22,7 @@ import { refShortDescription } from "../Properties/RefShortDescription";
 import { refMemberOf } from "@ref/Data/Properties/RefMemberOf";
 
 export const refPerson: RefProperty = {
-    ontologyProperty: "avnu:person",
+    ontologyProperty: "avnu:Person",
     label: "Personne",
     url: "/person",
     description: "Entité qui désigne une personne, qui décrit ses activités, ces compétences et autres.",

@@ -12,7 +12,7 @@ import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refPlace: RefProperty = {
-    ontologyProperty: "avnu:place",
+    ontologyProperty: "avnu:Place",
     url: "/place",
     label: "Lieu",
     description: "Entité décrivant un lieu, son emplacement physique ou virtuel.",

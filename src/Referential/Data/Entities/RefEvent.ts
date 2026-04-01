@@ -22,7 +22,7 @@ import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 import { refPlaceLink } from "@ref/Data/RelationLinks/RefPlaceLink";
 
 export const refEvent: RefProperty = {
-    ontologyProperty: "avnu:event",
+    ontologyProperty: "avnu:Event",
     url: "/event",
     label: "Événement",
     description: "Décrit un événement, son lieu, son horaire, ses caractéristiques etc.",

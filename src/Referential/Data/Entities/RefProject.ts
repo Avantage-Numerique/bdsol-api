@@ -23,10 +23,12 @@ import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refProject: RefProperty = {
-    ontologyProperty: "avnu:project",
+    ontologyProperty: "avnu:Project",
+    ontologyType: "Project",
     url: "/project",
     label: "Projet",
-    description: "Décrit un projet : les organisations qui en sont responsable, les équipements utilisé etc.",
+    description:
+        "Classe Projet qui décrit des projets fait par des organisations, les équipements utilisés, le budget et les étapes nécessaires pour accomplir le projet.",
     compatibility: [
         ArtsdataCompatibility.getOntologyCompatibilityArray(
             "CreativeWork",

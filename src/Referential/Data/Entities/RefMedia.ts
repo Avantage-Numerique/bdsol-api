@@ -8,7 +8,7 @@ import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 export const refMedia: RefProperty = {
     label: "Média",
     description: "Usage interne seulement. Référence un média dans la plateforme par son identifiant unique.",
-    ontologyProperty: "avnu:media",
+    ontologyProperty: "avnu:Media",
     url: "/media",
     type: createRefType("object"),
     compatibility: [
