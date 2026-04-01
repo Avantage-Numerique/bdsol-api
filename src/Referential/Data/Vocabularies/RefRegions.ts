@@ -1,4 +1,4 @@
-import { RegionEnum } from "@src/Badges/RegionEnum";
+import { RegionEnum } from "@src/SubProperty/Badges/RegionEnum";
 import { RefVocabulary } from "@ref/Data/types";
 import EnumHelper from "@src/Helpers/EnumHelper";
 
