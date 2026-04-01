@@ -4,7 +4,7 @@ import { DbProvider } from "../../Database/DatabaseDomain";
 import AbstractModel from "../../Abstract/Model";
 import * as fs from "fs";
 import OrganisationsService from "../Services/OrganisationsService";
-import { Member } from "@src/Team/Schemas/MemberSchema";
+import { Member } from "@src/SubProperty/Team/Schemas/MemberSchema";
 import { Meta, SubMeta } from "@src/Moderation/Schemas/MetaSchema";
 import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import { populateUser } from "@src/Users/Middlewares/populateUser";
@@ -12,9 +12,11 @@ import { SkillGroup } from "@src/Taxonomy/Schemas/SkillGroupSchema";
 import { EquipmentLink } from "@src/Database/Schemas/EquipmentLinkSchema";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
-import BadgeTypes from "@src/Badges/BadgeTypes";
-import { middlewareInsertBadges } from "@src/Badges/MiddlewareInsertBadges";
-import { RegionEnum } from "@src/Badges/RegionEnum";
+import BadgeTypes from "@src/SubProperty/Badges/BadgeTypes";
+import { middlewareInsertBadges } from "@src/SubProperty/Badges/MiddlewareInsertBadges";
+import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
+import { RegionEnum } from "@src/SubProperty/Badges/RegionEnum";
+import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
 
 class Organisation extends AbstractModel {
     /** @protected @static Singleton instance of model Organisation */
@@ -91,6 +93,10 @@ class Organisation extends AbstractModel {
                 type: String,
                 //alias: 'desc'
             },
+            shortDescription: {
+                type: String,
+                maxLength: 160,
+            },
             url: {
                 type: [SocialHandle.schema],
             },
@@ -105,16 +111,7 @@ class Organisation extends AbstractModel {
                 type: [SkillGroup.schema],
             },
             domains: {
-                type: [
-                    {
-                        domain: {
-                            type: mongoose.Types.ObjectId,
-                            ref: "Taxonomy",
-                        },
-                        subMeta: SubMeta.schema,
-                        _id: false,
-                    },
-                ],
+                type: [DomainList.schema],
             },
             team: {
                 type: [Member.schema],
@@ -176,6 +173,7 @@ class Organisation extends AbstractModel {
             _id: document._id ?? "",
             name: document.name ?? "",
             description: document.description ?? "",
+            shortDescription: document.shortDescription ?? "",
             url: document.url ?? [],
             contactPoint: document.contactPoint ?? {
                 tel: { num: "", ext: "" },
@@ -197,6 +195,7 @@ class Organisation extends AbstractModel {
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
+            _generated: generateEntityContent(document),
         };
     }
 

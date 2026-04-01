@@ -1,12 +1,12 @@
 import { Document } from "mongoose";
 import { Meta } from "@src/Moderation/Schemas/MetaSchema";
-import { Member } from "@src/Team/Schemas/MemberSchema";
+import { Member } from "@src/SubProperty/Team/Schemas/MemberSchema";
 import Media from "@src/Media/Models/Media";
 import { ObjectId } from "mongodb";
 import { Sponsor } from "@database/Schemas/SponsorSchema";
 import { ScheduleBudget } from "@database/Schemas/ScheduleBudgetSchema";
 import { ProjectContextEnum } from "../ProjectContextEnum";
-import { DomainSchema } from "@src/Taxonomy/Schemas/DomainSchema";
+import { DomainListSchema } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 
@@ -17,6 +17,7 @@ export interface ProjectSchema extends Document {
     entityInCharge: [ObjectId];
     producer: [ObjectId];
     description: string;
+    shortDescription: string;
     url: [SocialHandle];
     contactPoint: ContactPoint;
     location: [ObjectId];
@@ -25,7 +26,7 @@ export interface ProjectSchema extends Document {
     sponsor: [Sponsor];
     scheduleBudget: ScheduleBudget;
     skills: [ObjectId];
-    domains: [DomainSchema];
+    domains: [DomainListSchema];
     context: ProjectContextEnum;
     equipment: [ObjectId];
     meta: Meta;

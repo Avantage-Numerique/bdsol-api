@@ -17,6 +17,7 @@ import LogHelper from "./Monitoring/Helpers/LogHelper";
 import { ApiErrorHandler } from "./Error/Middlewares/ApiErrorHandler";
 import { GetRequestIp } from "./Monitoring/Middlewares/GetRequestIp";
 import ModerationRoutes from "./Moderation/Routes/ModerationRoutes";
+import ReferentialRoutes from "./Referential/Routes/ReferentialRoutes";
 import SearchRoutes from "./Database/Search/SearchRoutes";
 import { StaticContentsRoutes } from "./StaticContent/Routes/StaticContentsRoutes";
 import { ProjectsRoutes } from "./Projects/Routes/ProjectsRoute";
@@ -33,6 +34,7 @@ import EmbedTaxonomiesMetas from "@src/Schedule/Jobs/EmbedTaxonomiesMetas";
 import { BackukDbJob } from "@src/Schedule/Jobs/BackupDb";
 import { PagesRoutes } from "@src/Pages/Routes/PagesRoutes";
 import SlowDownMiddleware from "@src/Server/Middlewares/SlowDownMiddleware";
+import path from "path";
 
 /**
  * Main class for the API
@@ -53,7 +55,9 @@ export default class Api {
 
     private _slowDown: boolean;
 
-    constructor() {}
+    constructor() {
+        //nothing here.
+    }
 
     public start() {
         this._initEntitiesRouters();
@@ -106,7 +110,12 @@ export default class Api {
         this.templateSystem = Nunjucks.configure(this.templateBasePath, {
             express: this.express,
             autoescape: true,
+            noCache: this._config.isDevelopment,
         });
+
+        const staticAssetsPath = `${this._config.appPath}/views/assets`;
+        LogHelper.info(`SERVING STATICS WEB ASSETS AT ${staticAssetsPath}`);
+        this.express.use(express.static(path.join(staticAssetsPath)));
     }
 
     private _initBaseRoutes() {
@@ -162,6 +171,10 @@ export default class Api {
             {
                 baseRoute: "/info",
                 manager: new ModerationRoutes(),
+            },
+            {
+                baseRoute: "/ref",
+                manager: new ReferentialRoutes(),
             },
             {
                 baseRoute: "/communications",

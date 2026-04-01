@@ -43,6 +43,7 @@ class PagesRoutes extends AbstractRoute {
     public setupPublicRoutes(): express.Router {
         this.routerInstance.get("/versions", [this.versionsLayoutHandler.bind(this)]);
         this.routerInstance.get("/statistics", [this.statisticsLayoutHandler.bind(this)]);
+        this.routerInstance.get("/", [this.homePageHandler.bind(this)]);
 
         return this.routerInstance;
     }
@@ -53,6 +54,10 @@ class PagesRoutes extends AbstractRoute {
      */
     public setupAdditionnalPublicRoutes(router: express.Router): express.Router {
         return router;
+    }
+
+    public async homePageHandler(req: Request, res: Response): Promise<any> {
+        return this.layoutHandler(await this.controllerInstance.homePage(), req, res);
     }
 
     public async statisticsLayoutHandler(req: Request, res: Response): Promise<any> {

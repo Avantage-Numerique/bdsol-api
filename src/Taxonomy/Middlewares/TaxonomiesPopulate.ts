@@ -2,7 +2,7 @@ import { mongoosePopulate } from "../../Database/Middlewares/mongoosePopulate";
 
 /**
  * Populate field on pre "find"
- * @param document {any} The mongoose document
+ * @param document {any} The mongoose query it's not a document
  * @param schemaProperty {string} The parameters in the document to populate (with the ref value).
  * @param fieldToPopulate {string} Field to get from this populate.
  * @param model {any} if we need to populate between DB. This is the second schema.
@@ -21,7 +21,7 @@ export { middlewarePopulateProperty };
 
 /**
  * Populate a taxonomy
- * @param document {any} The mongoose document
+ * @param document {any} The mongoose query it's not a document
  * @param schemaProperty {string} The parameters in the document to populate (with the ref value).
  * @param fieldToPopulate {string} Field to get from this populate.
  * @param model {any} if we need to populate between DB. This is the second schema.

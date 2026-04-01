@@ -9,10 +9,12 @@ import { populateUser } from "@src/Users/Middlewares/populateUser";
 import { Sponsor } from "@database/Schemas/SponsorSchema";
 import { ScheduleBudget } from "@database/Schemas/ScheduleBudgetSchema";
 import { ProjectContextEnum } from "../ProjectContextEnum";
-import { TeamField } from "@src/Team/Schemas/TeamSchema";
+import { TeamField } from "@src/SubProperty/Team/Schemas/TeamSchema";
 import * as fs from "fs";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
+import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
+import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
 
 class Project extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -101,6 +103,10 @@ class Project extends AbstractModel {
             description: {
                 type: String,
             },
+            shortDescription: {
+                type: String,
+                maxLength: 160,
+            },
             url: {
                 type: [SocialHandle.schema],
             },
@@ -127,15 +133,7 @@ class Project extends AbstractModel {
                 ref: "Taxonomy",
             },
             domains: {
-                type: [
-                    {
-                        domain: {
-                            type: mongoose.Types.ObjectId,
-                            ref: "Taxonomy",
-                        },
-                        subMeta: SubMeta.schema,
-                    },
-                ],
+                type: [DomainList.schema],
             },
             context: {
                 type: String,
@@ -196,6 +194,7 @@ class Project extends AbstractModel {
             slug: document.slug ?? "",
             alternateName: document.alternateName ?? "",
             description: document.description ?? "",
+            shortDescription: document.shortDescription ?? "",
             url: document.url ?? "",
             contactPoint: document.contactPoint ?? {
                 tel: { num: "", ext: "" },
@@ -215,6 +214,7 @@ class Project extends AbstractModel {
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
+            _generated: generateEntityContent(document),
         };
     }
 

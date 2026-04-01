@@ -1,12 +1,12 @@
 import express, { Request, Response } from "express";
 import { MetaStates } from "../Schemas/MetaSchema";
 import { StatusCodes } from "http-status-codes";
-import { ProjectContextEnum } from "../../Projects/ProjectContextEnum";
-import { BudgetRangeEnum, TimeframeEtaEnum } from "../../Database/Schemas/ScheduleBudgetSchema";
-import EnumHelper from "../../Helpers/EnumHelper";
+import { ProjectContextEnum } from "@src/Projects/ProjectContextEnum";
+import { BudgetRangeEnum, TimeframeEtaEnum } from "@src/Database/Schemas/ScheduleBudgetSchema";
+import EnumHelper from "@src/Helpers/EnumHelper";
 import { EventFormatEnum } from "@src/Events/EventFormatEnum";
-import BadgeTypes from "@src/Badges/BadgeTypes";
-import { RegionEnum } from "@src/Badges/RegionEnum";
+import BadgeTypes from "@src/SubProperty/Badges/BadgeTypes";
+import { RegionEnum } from "@src/SubProperty/Badges/RegionEnum";
 
 class ModerationRoutes {
     public routerInstance: express.Router;

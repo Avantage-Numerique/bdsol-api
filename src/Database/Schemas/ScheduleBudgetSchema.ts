@@ -37,6 +37,7 @@ export class Timeframe {
     static schema: Schema = new Schema<TimeframeSchema>({
         step: {
             type: String,
+            required: true,
         },
         eta: {
             type: String,

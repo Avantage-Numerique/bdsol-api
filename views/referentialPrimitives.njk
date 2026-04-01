@@ -1,0 +1,137 @@
+{% extends 'default.njk' %}
+
+{% from "Partials/isRequire.njk" import isRequire %}
+
+{% block content %}
+
+    <div class="container">
+
+        {% block contentHeader %}
+            {% include "Partials/header.njk" %}
+        {% endblock %}
+
+        <h1>{{ title | safe }}</h1>
+
+        <div class="breadcrumbs">
+            <a class="btn" href="/ref" title="Référentiel">&larr; Référentiel</a>
+        </div>
+
+        <h2>Liste des propriétes</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th rowspan='2'>Nom dans l'ontologie</th>
+                    <th rowspan='2'>Format</th>
+                    <th rowspan='2'>Cardinality</th>
+                    <th rowspan='2'>Description</th>
+                    <th colspan='2'>Compatibilité</th>
+                </tr>
+
+                <tr class="compat-header">
+                    <th>Ontologie</th>
+                    <th>Propriété</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for item in items %}
+
+                    <tr id="{{ item.ontologyProperty }}">
+
+                        <td {% if item.note %} rowspan="2" {% endif %}>
+                            {{ isRequire(item.cardinality) }}
+
+                            {{ item.label }}
+
+                            {% if item.ontologyProperty and item.ontologyProperty !== "" %}
+                                <br/>
+                                <code>{{ item.ontologyProperty }}</code>
+                            {% endif %}
+                        </td>
+
+                        <td>
+
+                            {% if item.type.kind === 'reference' %}
+
+                                {% for entityRef in item.type.targets %}
+
+                                    <a href="{{ baseRoute }}/{{ entityRef }}">{{ entityRef }}</a>
+
+                                {% endfor %}
+
+                            {% else %}
+
+                                {{ item.type.name }}
+
+                            {% endif %}
+                        </td>
+
+                        <td>{{ item.cardinality }}</td>
+                        <td>{{ item.description }}</td>
+
+                        <td colspan="2">
+
+                            <div class="compat-grid">
+
+                                {% for compatItem in item.compatibility %}
+                                    {% if compatItem.messageOnly and compatItem.messageOnly !== "" %}
+                                        <div class="full-width">
+                                            {{ compatItem.messageOnly }}
+                                        </div>
+                                    {% else %}
+                                        <div>
+                                            {{ compatItem.externalSource.name }}
+                                        </div>
+
+                                        <div>
+                                            <a href="{{ compatItem.documentationUrl }}" target="_blank">
+                                                {{ compatItem.mapping.externalField }}
+                                                <i class="la la-external-link"></i>
+                                            </a>
+                                        </div>
+                                    {% endif %}
+
+                                {% else %}
+
+                                    <span class="nodata">Aucune donnée de compatibilité disponible.</span>
+
+                                {% endfor %}
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% if item.note %}
+                        <tr>
+                            <td class="td-note" colspan="666">
+                                <strong>Note :</strong>
+                                {{ item.note }}
+                            </td>
+                        </tr>
+                    {% endif %}
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+{% endblock %}
+
+{% block contentFooter %}
+    <section class="container">
+        <div class="legende">
+            <h3>Légende</h3>
+            <p>
+                {{ isRequire("1..1", false) }} : Cette propriété est requise
+            </p>
+        </div>
+    </section>
+{% endblock %}
