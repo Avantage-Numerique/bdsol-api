@@ -50,7 +50,7 @@ class JSONLDRoutes extends AbstractRoute {
         let jsonldContent;
 
         try {
-            jsonldContent = await this.controllerInstance.jsonLDIndex(params.entity, params.id);
+            jsonldContent = await this.controllerInstance.getJsonLDForEntity(params.entity, params.id);
         } catch (e) {
             console.error(e);
 

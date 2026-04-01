@@ -13,7 +13,7 @@ class EntityRefFactory {
 
     public static getRefFromEntity(entityType: string): RefProperty | undefined {
         let ref;
-        switch (entityType.toLocaleLowerCase()) {
+        switch (entityType?.toLocaleLowerCase()) {
             case "person":
                 ref = refPerson;
                 break;

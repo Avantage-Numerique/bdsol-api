@@ -21,26 +21,37 @@ class JSONLDController {
      *
      * @throws {Error} If the `collection` param is invalid (`model` or `ref` not found)
      */
-    public async jsonLDIndex(collection: string, entityId: string): Promise<object | false> {
+    public async getJsonLDForEntity(collection: string, entityId: string): Promise<object | false> {
         const model = EntityControllerFactory.getControllerFromEntity(collection)?.entity?.mongooseModel;
-        const ref = EntityRefFactory.getRefFromEntity(collection);
+        if (!model) throw new Error("Pas de collection !");
 
-        if (!model || !ref) throw new Error("Pas de collection ou de ref!");
-
-        const document = await model.findById(entityId).setOptions({ skipPopulate: true });
-
+        const document = await model.findById(entityId); //.setOptions({ skipPopulate: true });
         if (!document) return false;
 
-        let entity = document.toObject();
+        return this.createJsonLDForDocument(document);
+    }
+
+    public createJsonLDForDocument(document: any, contextMode: string = "inline", contextUrl: string = "/jsonld"): any {
+        let entity;
+        try {
+            entity = document.toObject();
+        } catch (error) {
+            entity = document;
+        }
+
+        if (entity?.type) {
+            return false;
+        }
+        const ref = EntityRefFactory.getRefFromEntity(entity.type);
+        if (!ref) return false;
 
         const options = {
-            contextMode: "inline", // | "url";
-            contextUrl: "/jsonld",
+            contextMode,
+            contextUrl,
         } as const;
 
-        const jsonld = new JsonLDBuilder(entity, ref, options);
-
-        return jsonld.build();
+        const jsonLdBuilder = new JsonLDBuilder(entity, ref, options);
+        return jsonLdBuilder.build();
     }
 }
 
