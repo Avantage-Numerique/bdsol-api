@@ -1,12 +1,7 @@
 import { RefProperty } from "../types";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
-
-import { refSubMeta } from "./RefSubMeta";
 import { createPrimitiveUrl, createRefType } from "../utils";
 import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
-import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
-import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
-import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 import { refOrder } from "@ref/Data/Properties/RefOrder";
 
 export const refSkillGroup: RefProperty = {
@@ -29,6 +24,7 @@ export const refSkillGroup: RefProperty = {
             type: createRefType("string"),
             cardinality: "1..1",
             description: "Libellé utilisé par la personne pour décrire son groupe de compétences",
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
         },
         {
             field: "skills",
@@ -38,7 +34,7 @@ export const refSkillGroup: RefProperty = {
             type: createRefType("reference", [EntityTypesEnum.taxonomy]),
             description: "Liste de compétences, habiletés ou de technologies.",
             cardinality: "0..N",
-            compatibility: [],
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
         },
         { ...refOrder },
     ],

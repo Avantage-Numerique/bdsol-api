@@ -1,8 +1,8 @@
 import { RefProperty } from "../types";
-import { refSubMeta } from "./RefSubMeta";
 import { createRefType } from "../utils";
 import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
 import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import { refOrder } from "@ref/Data/Properties/RefOrder";
 
 export const refDomainList: RefProperty = {
     field: "domains",
@@ -20,7 +20,8 @@ export const refDomainList: RefProperty = {
             label: "Domaine",
             cardinality: "0..1",
             description: "Référence à une taxonomie de type 'domain'",
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
         },
-        { ...refSubMeta, compatibility: [AvnuCompatibility.compatibilityMessage()] },
+        { ...refOrder },
     ],
 };
