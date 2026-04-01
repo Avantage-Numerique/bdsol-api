@@ -6,6 +6,7 @@ import PlacesService from "@src/Places/Services/PlacesService";
 import { middlewarePopulateProperty } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 import { populateUser } from "@src/Users/Middlewares/populateUser";
+import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
 
 class Place extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -85,6 +86,10 @@ class Place extends AbstractModel {
             },
             description: {
                 type: String,
+            },
+            shortDescription: {
+                type: String,
+                maxLength: 160,
             },
             slug: {
                 type: String,
@@ -174,6 +179,7 @@ class Place extends AbstractModel {
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
+            _generated: generateEntityContent(document),
         };
     }
 

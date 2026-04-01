@@ -6,7 +6,7 @@ import { objectIdSanitizerAlias } from "@src/Security/SanitizerAliases/ObjectIdS
 import { noHtmlStringSanitizerAlias } from "@src/Security/SanitizerAliases/NoHtmlStringSanitizerAlias";
 import { basicHtmlSanitizerAlias } from "@src/Security/SanitizerAliases/BasicHtmlSanitizerAlias";
 import { urlSanitizerAlias } from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
-import { RegionEnum } from "@src/Badges/RegionEnum";
+import { RegionEnum } from "@src/SubProperty/Badges/RegionEnum";
 import { isInEnumSanitizerAlias } from "@src/Security/SanitizerAliases/IsInEnumSanitizerAlias";
 
 class PersonsRoutes extends CrudRoute {
@@ -22,6 +22,7 @@ class PersonsRoutes extends CrudRoute {
             noHtmlStringSanitizerAlias("data.firstName", false),
             noHtmlStringSanitizerAlias("data.nickname"),
             basicHtmlSanitizerAlias("data.description"),
+            basicHtmlSanitizerAlias("data.shortDescription"),
             objectIdSanitizerAlias("data.occupations.*.skills.*"),
             noHtmlStringSanitizerAlias("data.occupations.*.groupName.*"),
             objectIdSanitizerAlias("data.domains.*.domain"),
@@ -45,6 +46,7 @@ class PersonsRoutes extends CrudRoute {
             noHtmlStringSanitizerAlias("data.firstName"),
             noHtmlStringSanitizerAlias("data.nickname"),
             basicHtmlSanitizerAlias("data.description"),
+            basicHtmlSanitizerAlias("data.shortDescription"),
             objectIdSanitizerAlias("data.occupations.*.skills.*"),
             noHtmlStringSanitizerAlias("data.occupations.*.groupName.*"),
             objectIdSanitizerAlias("data.domains.*.domain"),

@@ -180,7 +180,7 @@ const getApiConfig = () => {
     };
 };
 
-const config: any = getApiConfig();
+const config = getApiConfig();
 
 export default config;
 export { getApiConfig };

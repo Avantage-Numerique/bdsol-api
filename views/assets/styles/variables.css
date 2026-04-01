@@ -1,0 +1,39 @@
+:root {
+    --primary: #6ec8cd;
+    --primary-dark: #1da6a8;
+    --primary-light: #c4eaeb;
+
+    --secondary-lighter: #fdece1;
+    --secondary-lightest: #fbf7f5;
+
+    --dark: #1f1f2e;
+    --light: var(--secondary-lightest);
+
+    --gray-light: #e4e4e4;
+
+    --default-bg: var(--light);
+    --default-bg2: #f3edea;
+    --default-color: var(--dark);
+    --default-title-color: var(--dark);
+    --default-content-bg: var(--secondary-lightest);
+    --default-content-color: var(--dark);
+
+    --default-radius: 1.5rem;
+    --default-spacing: 1rem;
+    --default-h-spacing: 1rem;
+    --default-v-spacing: 1rem;
+
+    --button-radius: 2rem;
+    --button-size: 1rem;
+    --button-padding: 1rem;
+
+    --button-bg: var(--primary);
+    --button-color: var(--dark);
+    --button-over-bg: var(--primary-light);
+    --button-over-color: var(--primary-dark);
+
+    --code-bg: var(--gray-light);
+
+    --table-default-border: 2px solid var(--dark);
+    --table-primary-border: 2px solid var(--primary);
+}

@@ -3,7 +3,7 @@ import AbstractModel from "@core/Model";
 import type { DbProvider } from "@database/DatabaseDomain";
 import { EventSchema } from "@src/Events/Schemas/EventSchema";
 import EventsService from "@src/Events/Services/EventsService";
-import { TeamField } from "@src/Team/Schemas/TeamSchema";
+import { TeamField } from "@src/SubProperty/Team/Schemas/TeamSchema";
 import { Meta, SubMeta } from "@src/Moderation/Schemas/MetaSchema";
 import * as fs from "fs";
 import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
@@ -12,6 +12,8 @@ import { Schedule } from "@src/Database/Schemas/ScheduleSchema";
 import { EventFormatEnum } from "../EventFormatEnum";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
+import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
+import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
 
 class Event extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -90,6 +92,10 @@ class Event extends AbstractModel {
             description: {
                 type: String,
             },
+            shortDescription: {
+                type: String,
+                maxLength: 160,
+            },
             entityInCharge: {
                 type: mongoose.Types.ObjectId,
                 //required: true,
@@ -130,15 +136,7 @@ class Event extends AbstractModel {
                 ref: "Taxonomy",
             },
             domains: {
-                type: [
-                    {
-                        domain: {
-                            type: mongoose.Types.ObjectId,
-                            ref: "Taxonomy",
-                        },
-                        subMeta: SubMeta.schema,
-                    },
-                ],
+                type: [DomainList.schema],
             },
             schedule: {
                 type: [Schedule.schema],
@@ -197,6 +195,7 @@ class Event extends AbstractModel {
             alternateName: document.alternateName ?? "",
             url: document.url ?? [],
             description: document.description ?? "",
+            shortDescription: document.shortDescription ?? "",
             entityInCharge: document.entityInCharge ?? "",
             organizer: document.organizer ?? "",
             eventType: document.eventType ?? "",
@@ -221,6 +220,7 @@ class Event extends AbstractModel {
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
+            _generated: generateEntityContent(document),
         };
     }
 

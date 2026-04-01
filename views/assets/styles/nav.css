@@ -1,0 +1,17 @@
+nav.nav-compatibility ul {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    margin: 0;
+    padding: 0;
+}
+nav.nav-compatibility.small {
+    font-size: 0.85rem;
+}
+
+nav.nav-compatibility ul li {
+    list-style: none;
+    padding: 0 1rem 0 0;
+    margin: 0;
+}

@@ -1,0 +1,139 @@
+{% extends 'default.njk' %}
+
+{% from "Partials/isRequire.njk" import isRequire %}
+
+{% block content %}
+
+    <div class="container">
+
+        {% block contentHeader %}
+            {% include "Partials/header.njk" %}
+        {% endblock %}
+
+        <h1>{{ title }}</h1>
+
+        {% if items.entities %}
+
+            <h2>Entités principales</h2>
+
+            <p>Les entities principales de la plateforme AVNU.</p>
+
+            <table class="ref">
+
+                <thead>
+                    <tr>
+                        <th>Classe</th>
+                        <th>URL</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for label, item in items.entities %}
+                        <tr>
+                            <td>{{ label }}</td>
+                            <td>
+                                <a href="{{ baseUrl }}{{ baseRoute }}{{ item.url }}">{{ baseRoute }}{{ item.url }}</a>
+                            </td>
+                            <td>{{ item.description }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        {% else %}
+            <p>Rien à afficher!</p>
+        {% endif %}
+
+        {% if items.subschemas %}
+
+            <h2>Sous-schémas</h2>
+
+            <p>Formes d'objets des sous-propriétés complexes des entitées principales.</p>
+
+            <table class="ref">
+
+                <thead>
+                    <tr>
+                        <th>Classe</th>
+                        <th>URL</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for label, item in items.subschemas %}
+                        <tr>
+                            <td>{{ label }}</td>
+                            <td>
+                                <a href="{{ baseUrl }}{{ baseRoute }}{{ item.url }}">{{ baseRoute }}{{ item.url }}</a>
+                            </td>
+                            <td>{{ item.description }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        {% else %}
+            <p>Rien à afficher!</p>
+        {% endif %}
+
+        <h2>Propriétés</h2>
+
+        <p>
+            Propriétés de type
+            <em>chaîne de caractère</em>,
+            <em>nombre</em>,
+            <em>booléen</em>
+            ou
+            <em>date</em>.
+        </p>
+
+        <a href="{{ baseUrl }}{{ baseRoute }}/properties">Liste des propriétés</a>
+
+        {% if items.vocabularies %}
+
+            <h2>Vocabulaires</h2>
+
+            <p>Noms controllés pour décrires des entités, qui ressemblent souvent à des mots clés.</p>
+
+            <table class="ref">
+
+                <thead>
+                <tr>
+                    <th>Classe</th>
+                    <th>URL</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for label, item in items.vocabularies %}
+                    <tr>
+                        <td>{{ label }}</td>
+                        <td>
+                            <a href="{{ baseUrl }}{{ baseRoute }}{{ item.url }}">{{ baseRoute }}{{ item.url }}</a>
+                        </td>
+                        <td>{{ item.description }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        {% else %}
+            <p>Rien à afficher!</p>
+        {% endif %}
+    </div>
+
+{% endblock %}
+
+{% block contentFooter %}
+    <section class="container">
+        <div class="legende">
+            <h3>Légende</h3>
+            <p>
+                {{ isRequire("1..1", false) }} : Cette propriété est requise
+            </p>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,75 @@
+import { RefProperty } from "../types";
+import { refSubMeta } from "./RefSubMeta";
+import { createPrimitiveUrl, createRefType } from "../utils";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+
+export const refSchedule: RefProperty = {
+    field: "schedule",
+    ontologyProperty: "avnu:schedule",
+    url: "/schedule",
+    label: "Horaire",
+    cardinality: "0..N",
+    description: "Décris une plage horaire avec un nom, une date et heure de début et de fin.",
+    compatibility: [AvnuCompatibility.compatibilityMessage()],
+    //note: "",
+
+    type: createRefType("object"),
+    ref: [
+        {
+            field: "name",
+            type: createRefType("string"),
+            ontologyProperty: "avnu:scheduleName",
+            url: createPrimitiveUrl("scheduleName"),
+            label: "Nom de l'activité",
+            cardinality: "0..1",
+            description: "",
+            compatibility: [],
+            //note: "",
+        },
+        {
+            field: "startDate",
+            type: createRefType("date"),
+            ontologyProperty: "avnu:scheduleStartDate",
+            url: createPrimitiveUrl("scheduleStartDate"),
+            label: "Date de début de l'activité (plage horaire)",
+            cardinality: "0..1",
+            description: "",
+            compatibility: [],
+            //note: "",
+        },
+        {
+            field: "startTime",
+            type: createRefType("string"),
+            ontologyProperty: "avnu:startTime",
+            url: createPrimitiveUrl("startTime"),
+            label: "Heure de début de l'activité (plage horaire)",
+            cardinality: "0..1",
+            description: "",
+            compatibility: [],
+            //note: "",
+        },
+        {
+            field: "endDate",
+            type: createRefType("date"),
+            ontologyProperty: "avnu:scheduleEndDate",
+            url: createPrimitiveUrl("scheduleEndDate"),
+            label: "Date de début de l'activité (plage horaire)",
+            cardinality: "0..1",
+            description: "",
+            compatibility: [],
+            //note: "",
+        },
+        {
+            field: "endTime",
+            type: createRefType("string"),
+            ontologyProperty: "avnu:endTime",
+            url: createPrimitiveUrl("endTime"),
+            label: "Heure de début de l'activité (plage horaire)",
+            cardinality: "0..1",
+            description: "",
+            compatibility: [],
+            //note: "",
+        },
+        { ...refSubMeta },
+    ],
+};

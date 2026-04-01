@@ -1,0 +1,12 @@
+{% extends 'default.njk' %}
+
+{% block content %}
+    <div class="container">
+        {% block contentHeader %}
+            {% include "Partials/header.njk" %}
+        {% endblock %}
+        <h1>{{ title }}</h1>
+        <p>{{ api.description }}</p>
+        <p>{{ body | safe }}</p>
+    </div>
+{% endblock %}
