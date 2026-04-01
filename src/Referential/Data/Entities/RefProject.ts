@@ -1,5 +1,4 @@
 import { RefProperty } from "../types";
-import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { refDescription } from "../Properties/RefDescription";
 import { refName } from "../Properties/RefName";
 import { refType } from "../Properties/RefType";
@@ -18,13 +17,25 @@ import { refAlternateName } from "../Properties/RefAlternateName";
 import { createPrimitiveUrl, createRefType } from "../utils";
 import { ProjectContextEnum } from "@src/Projects/ProjectContextEnum";
 import { refShortDescription } from "../Properties/RefShortDescription";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refProject: RefProperty = {
     ontologyProperty: "avnu:project",
     url: "/project",
     label: "Projet",
     description: "Décrit un projet : les organisations qui en sont responsable, les équipements utilisé etc.",
-    compatibility: [],
+    compatibility: [
+        ArtsdataCompatibility.getOntologyCompatibilityArray(
+            "CreativeWork",
+            "CreativeWork",
+            "https://schema.org/CreativeWork"
+        ),
+        SchemaOrgCompatibility.getOntologyCompatibilityArray("CreativeWork"),
+        DataSceneCompatibility.getOntologyCompatibilityArray("show", "Show"),
+    ],
     //note:"",
 
     type: createRefType("object"),
@@ -39,13 +50,26 @@ export const refProject: RefProperty = {
         { ...refShortDescription },
         {
             ...refOrganisationLink,
-            field: "entityInCharge",
+            field: "entityInCharge", //https://schema.org/author //https://schema.org/maintainer //https://schema.org/producer //https://schema.org/owner
             label: "Entité en charge / Créateur·rice",
+            //https://schema.org/owner
+            compatibility: [
+                ArtsdataCompatibility.getOntologyCompatibilityArray("creator", "Creator", "https://schema.org/creator"),
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("Creator"),
+            ],
         },
         {
             ...refOrganisationLink,
             field: "producer",
             label: "Producteur·rice",
+            compatibility: [
+                ArtsdataCompatibility.getOntologyCompatibilityArray(
+                    "producer",
+                    "producer",
+                    "https://schema.org/producer"
+                ),
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("producer"),
+            ],
         },
         { ...refSocialHandle },
         { ...refContactPoint },
@@ -71,7 +95,7 @@ export const refProject: RefProperty = {
             label: "Contexte du projet",
             cardinality: "0..1",
             description: "Contexte du projet. Enum 'academic', 'hobby', 'professional'.",
-            compatibility: [],
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
             constraints: {
                 enum: ProjectContextEnum,
             },

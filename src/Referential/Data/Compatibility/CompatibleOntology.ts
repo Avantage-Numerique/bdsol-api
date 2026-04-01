@@ -41,6 +41,15 @@ export default class CompatibleOntology implements Ontology {
         return this.ontologyUrl + (prependSlash ? "/" : "") + path;
     }
 
+    compatibilityMessage(msg: string = ""): RefCompatibility {
+        msg = msg === "" ? `Seulement compatible avec ${this.name} pour l'instant` : msg;
+        return {
+            messageOnly: msg,
+            externalSource: {},
+            mapping: {},
+        } as RefCompatibility;
+    }
+
     /**
      *
      * @param property {string} the property of in the target compatibility ontologie

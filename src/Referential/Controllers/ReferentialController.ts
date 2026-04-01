@@ -31,7 +31,7 @@ class ReferentialController {
 
         const index = new PublicTemplate("referential"); //tempalte have already a default in the EmailContent.Prepare.
 
-        const title: string = `Référentiel de ${config.appName}`;
+        const title: string = `Référentiel`;
         // let body: string = ``;
 
         return await index.render({
@@ -84,13 +84,43 @@ class ReferentialController {
             },
         });
     }
+    public async referentialVocabulariesLayout(entity?: string): Promise<string> {
+        const baseData = getTemplateBaseData();
+
+        const index = new PublicTemplate("referentialSingleVocabulary"); //tempalte have already a default in the EmailContent.Prepare.
+
+        const title: string = `Vocabulaires controlé de ${config.appName} &rarr; <code>/ref/${entity}</code>`;
+        // let body: string = ``;
+
+        const baseRoute = "/ref";
+
+        return await index.render({
+            context: {
+                ...baseData, //basic app and api default string and links
+                ...DefaultEmailTheme, //basic theme for colors and sizes.
+                title: `${title}`,
+                // body: `${body}`,
+
+                baseUrl: config.baseUrl,
+                baseRoute,
+
+                item: this._routes.get(`/vocabularies/${entity}`),
+
+                meta: {
+                    title: `${title}`,
+                    // description: `${body}`,
+                    author: `${config.appName}`,
+                },
+            },
+        });
+    }
 
     public async referentialPrimitivesLayout(): Promise<string> {
         const baseData = getTemplateBaseData();
 
         const index = new PublicTemplate("referentialPrimitives"); //tempalte have already a default in the EmailContent.Prepare.
 
-        const title: string = `Référentiel de ${config.appName} &rarr; <code>/ref/primitives</code>`;
+        const title: string = `Référentiel de ${config.appName} &rarr; <code>/ref/properties</code>`;
         // let body: string = ``;
 
         const baseRoute = "/ref";

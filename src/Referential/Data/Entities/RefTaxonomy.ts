@@ -5,13 +5,19 @@ import { refType } from "../Properties/RefType";
 import { refDomainList } from "../SubSchema/RefDomainList";
 import { RefProperty } from "../types";
 import { createRefType } from "../utils";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refTaxonomy: RefProperty = {
     ontologyProperty: "avnu:taxonomy",
     url: "/taxonomy",
     label: "Taxonomie (catégorie)",
     description: "Vocabulaire de catégorie pour décrire et regrouper des compétences, des technologies ou autres.",
-    compatibility: [],
+    compatibility: [
+        SchemaOrgCompatibility.getOntologyCompatibilityArray("DefinedTerm"),
+        DataSceneCompatibility.getOntologyCompatibilityArray("term", "Term"),
+    ],
     //note: "",
 
     type: createRefType("object"),
@@ -26,7 +32,7 @@ export const refTaxonomy: RefProperty = {
             cardinality: "1..1",
             description:
                 "Vocabulaire pour distinguer quel type de taxonomie il s'agit. S'il s'agit d'une compétence, ou d'une technologie par exemple.",
-            compatibility: [],
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
             constraints: {
                 enum: TaxonomiesCategoriesEnum,
             },

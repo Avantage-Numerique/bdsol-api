@@ -1,5 +1,6 @@
 import { RefProperty } from "../types";
-import { createPrimitiveUrl, createRefType } from "../utils";
+import { createRefType } from "../utils";
+import { refOrder } from "@ref/Data/Properties/RefOrder";
 
 export const refSubMeta: RefProperty = {
     field: "subMeta",
@@ -10,15 +11,5 @@ export const refSubMeta: RefProperty = {
     description: "Objet de méta qui conserve des informations pour les sous-schéma.",
 
     type: createRefType("object"),
-    ref: [
-        {
-            field: "order",
-            type: createRefType("number"),
-            ontologyProperty: "avnu:order",
-            url: createPrimitiveUrl("order"),
-            label: "Ordre",
-            cardinality: "0..1",
-            description: "Order des éléments pour le visuel",
-        },
-    ],
-};
+    ref: [{ ...refOrder }],
+}; //https://schema.org/position

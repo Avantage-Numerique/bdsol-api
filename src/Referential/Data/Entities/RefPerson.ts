@@ -13,13 +13,13 @@ import { refRegion } from "@ref/Data/Properties/RefRegion";
 import { refBadges } from "@ref/Data/Properties/RefBadges";
 import { refType } from "@ref/Data/Properties/RefType";
 
-import compatibilitySchemaOrg from "@ref/Data/Compatibility/SchemaOrg";
-import compatibilityDataScene from "@ref/Data/Compatibility/DataScene";
-import compatibilityAvnu from "@ref/Data/Compatibility/Avnu";
-import compatibilityArtsdata from "@ref/Data/Compatibility/Artsdata";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
+import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 
 import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
 import { refShortDescription } from "../Properties/RefShortDescription";
+import { refMemberOf } from "@ref/Data/Properties/RefMemberOf";
 
 export const refPerson: RefProperty = {
     ontologyProperty: "avnu:person",
@@ -27,16 +27,15 @@ export const refPerson: RefProperty = {
     url: "/person",
     description: "Entité qui désigne une personne, qui décrit ses activités, ces compétences et autres.",
     compatibility: [
-        compatibilityAvnu.getOntologyCompatibilityArray("Person"),
-        compatibilityArtsdata.getOntologyCompatibilityArray(
+        ArtsdataCompatibility.getOntologyCompatibilityArray(
             "Person",
             "Person",
             "https://docs.artsdata.ca/classes/person.html"
         ),
-        compatibilitySchemaOrg.getOntologyCompatibilityArray("Person"),
-        compatibilityDataScene.getOntologyCompatibilityArray(
+        SchemaOrgCompatibility.getOntologyCompatibilityArray("Person"),
+        DataSceneCompatibility.getOntologyCompatibilityArray(
             "contributor",
-            "Contributor",
+            "Contributor (type:Person)",
             "https://documentation.datascene.ca/references/contributor/#1-propriete-contributeur-contributor-type"
         ),
     ],
@@ -52,8 +51,8 @@ export const refPerson: RefProperty = {
             url: createPrimitiveUrl("identifiers"),
             cardinality: "0..N",
             compatibility: [
-                compatibilitySchemaOrg.getOntologyCompatibilityArray("identifier"),
-                compatibilityArtsdata.getOntologyCompatibilityArray("identifier"),
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("identifier"),
+                ArtsdataCompatibility.getOntologyCompatibilityArray("identifier"),
             ],
             description: "Identifiants de la personne",
             note: "À implémenter",
@@ -65,7 +64,7 @@ export const refPerson: RefProperty = {
             type: createRefType("string"),
             url: createPrimitiveUrl("lastName"),
             cardinality: "1..1",
-            compatibility: [compatibilitySchemaOrg.getOntologyCompatibilityArray("familyName")],
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("familyName")],
             description: "Nom de famille de la personne.",
         },
         {
@@ -75,7 +74,7 @@ export const refPerson: RefProperty = {
             type: createRefType("string"),
             url: createPrimitiveUrl("firstName"),
             cardinality: "1..1",
-            compatibility: [compatibilitySchemaOrg.getOntologyCompatibilityArray("givenName")],
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("givenName")],
             description: "Prénom de la personne.",
         },
         {
@@ -86,13 +85,12 @@ export const refPerson: RefProperty = {
             url: createPrimitiveUrl("fullName"),
             cardinality: "1..1",
             compatibility: [
-                compatibilityDataScene.getOntologyCompatibilityArray(
+                DataSceneCompatibility.getOntologyCompatibilityArray(
                     "name",
                     "Nom",
                     "https://documentation.datascene.ca/references/contributor/#4-propriete-contributeur-contributor-name-nom"
                 ),
-                compatibilityAvnu.getOntologyCompatibilityArray("fullname"),
-                compatibilityArtsdata.getOntologyCompatibilityArray("name"),
+                ArtsdataCompatibility.getOntologyCompatibilityArray("name"),
             ],
             description:
                 "Prénom et nom. Virtuel et non-modifiable, il s'agit de la simple concaténation du prénom suivi du nom tel qu'inscrit dans les champs 'Nom' et 'Prénom'",
@@ -105,32 +103,21 @@ export const refPerson: RefProperty = {
             url: createPrimitiveUrl("nickname"),
             cardinality: "0..1",
             compatibility: [
-                compatibilitySchemaOrg.getOntologyCompatibilityArray("alternateName"),
-                compatibilityArtsdata.getOntologyCompatibilityArray("alternateName"),
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("alternateName"),
+                ArtsdataCompatibility.getOntologyCompatibilityArray("alternateName"),
             ],
-            //Propriété non conforme, il s'agit d'une liste de noms alternatifs.
-            /* {
-                externalSource: {
-                    name: "Datascene",
-                },
-                mapping: {
-                    externalField: "Nom alternatifs",
-                    ontologyProperty: "",
-                    ontologyUri: "",
-                },
-                documentationUrl: "https://datascene.ca/references/proprietes/contributeur/",
-            }, */
             description:
                 "Autre appellation parfois utilisé pour designer la personne. Exemple : 'Coeur de pirate' pour 'Béatrice Martin'.",
         },
         { ...refDescription },
         { ...refShortDescription },
-        { ...refCatchphrase },
+        { ...refCatchphrase, compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("additionalName")] },
         {
             ...refSocialHandle,
             field: "url",
         },
         { ...refRegion },
+        { ...refBadges },
         { ...refContactPoint },
         {
             ...refSkillGroup,
@@ -142,7 +129,7 @@ export const refPerson: RefProperty = {
         //Ontologie :
         //Identifiants
         //Projets
-        //Organisations
+        { ...refMemberOf },
         //Participants à des événements
         //Pronoun
 

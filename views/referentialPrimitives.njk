@@ -1,8 +1,10 @@
 {% extends 'default.njk' %}
 
+{% from "Partials/isRequire.njk" import isRequire %}
+
 {% block content %}
 
-    <div class="indexContent">
+    <div class="container">
 
         {% block contentHeader %}
             {% include "Partials/header.njk" %}
@@ -16,16 +18,16 @@
 
         <h2>Liste des propriétes</h2>
 
-        <table style="margin-bottom: 100vh;">
+        <table>
 
             <thead>
 
                 <tr>
                     <th rowspan='2'>Nom dans l'ontologie</th>
                     <th rowspan='2'>Format</th>
+                    <th rowspan='2'>Cardinality</th>
                     <th rowspan='2'>Description</th>
                     <th colspan='2'>Compatibilité</th>
-                    <th rowspan='2'>Note</th>
                 </tr>
 
                 <tr class="compat-header">
@@ -40,7 +42,11 @@
 
                     <tr id="{{ item.ontologyProperty }}">
 
-                        <td>{{ item.label }}
+                        <td {% if item.note %} rowspan="2" {% endif %}>
+                            {{ isRequire(item.cardinality) }}
+
+                            {{ item.label }}
+
                             {% if item.ontologyProperty and item.ontologyProperty !== "" %}
                                 <br/>
                                 <code>{{ item.ontologyProperty }}</code>
@@ -50,7 +56,6 @@
                         <td>
 
                             {% if item.type.kind === 'reference' %}
-                                ID de :
 
                                 {% for entityRef in item.type.targets %}
 
@@ -65,6 +70,7 @@
                             {% endif %}
                         </td>
 
+                        <td>{{ item.cardinality }}</td>
                         <td>{{ item.description }}</td>
 
                         <td colspan="2">
@@ -72,16 +78,22 @@
                             <div class="compat-grid">
 
                                 {% for compatItem in item.compatibility %}
+                                    {% if compatItem.messageOnly and compatItem.messageOnly !== "" %}
+                                        <div class="full-width">
+                                            {{ compatItem.messageOnly }}
+                                        </div>
+                                    {% else %}
+                                        <div>
+                                            {{ compatItem.externalSource.name }}
+                                        </div>
 
-                                    <div>
-                                        {{ compatItem.externalSource.name }}
-                                    </div>
-
-                                    <div>
-                                        <a href="{{ compatItem.documentationUrl }}" target="_blank">
-                                            {{ compatItem.mapping.externalField }}
-                                        </a>
-                                    </div>
+                                        <div>
+                                            <a href="{{ compatItem.documentationUrl }}" target="_blank">
+                                                {{ compatItem.mapping.externalField }}
+                                                <i class="la la-external-link"></i>
+                                            </a>
+                                        </div>
+                                    {% endif %}
 
                                 {% else %}
 
@@ -92,9 +104,16 @@
 
                         </td>
 
-                        <td>{{ item.note }}</td>
-
                     </tr>
+
+                    {% if item.note %}
+                        <tr>
+                            <td class="td-note" colspan="666">
+                                <strong>Note :</strong>
+                                {{ item.note }}
+                            </td>
+                        </tr>
+                    {% endif %}
 
                 {% endfor %}
 
@@ -104,4 +123,15 @@
 
     </div>
 
+{% endblock %}
+
+{% block contentFooter %}
+    <section class="container">
+        <div class="legende">
+            <h3>Légende</h3>
+            <p>
+                {{ isRequire("1..1", false) }} : Cette propriété est requise
+            </p>
+        </div>
+    </section>
 {% endblock %}
