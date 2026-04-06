@@ -25,25 +25,31 @@ class JSONLDController {
         const model = EntityControllerFactory.getControllerFromEntity(collection)?.entity?.mongooseModel;
         if (!model) throw new Error("Pas de collection !");
 
-        const document = await model.findById(entityId); //.setOptions({ skipPopulate: true });
+        const document = await model.findById(entityId).setOptions({ skipPopulate: true });
         if (!document) return false;
 
-        return this.createJsonLDForDocument({
-            ...("toObject" in document ? document.toObject() : document),
-            type: collection,
-        });
+        return this.createJsonLDForDocument(document);
     }
 
-    public createJsonLDForDocument(
-        document: { [k: string]: any; type: string },
-        contextMode: string = "inline",
-        contextUrl: string = "/jsonld"
-    ): any {
-        if (!document?.type) {
+    /**
+     *
+     * @param document database entity as a mongo document
+     * @param contextMode "url" or "inline", defaults to "inline"
+     * @param contextUrl defaults to avnu context
+     * @returns
+     */
+    public createJsonLDForDocument(document: any, contextMode: string = "inline", contextUrl: string = "/jsonld"): any {
+        let entity;
+        try {
+            entity = document.toObject({ virtuals: true });
+        } catch (error) {
+            entity = document;
+        }
+        if (!entity?.type) {
             return false;
         }
 
-        const ref = EntityRefFactory.getRefFromEntity(document.type);
+        const ref = EntityRefFactory.getRefFromEntity(entity.type);
         if (!ref) return false;
 
         const options = {
@@ -51,7 +57,7 @@ class JSONLDController {
             contextUrl,
         } as const;
 
-        const jsonLdBuilder = new JsonLDBuilder(document, ref, options);
+        const jsonLdBuilder = new JsonLDBuilder(entity, ref, options);
         return jsonLdBuilder.build();
     }
 }
