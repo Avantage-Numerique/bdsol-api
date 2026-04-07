@@ -18,6 +18,9 @@ import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
 class Event extends AbstractModel {
     /** @protected @static Singleton instance */
     protected static _instance: Event;
+    private constructor() {
+        super();
+    }
 
     /** @public @static Model singleton instance constructor */
     public static getInstance(doIndexes = true): Event {

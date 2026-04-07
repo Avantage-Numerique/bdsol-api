@@ -7,6 +7,9 @@ import StaticContentsService from "../Services/StaticContentsService";
 class StaticContent extends AbstractModel {
     /** @protected @static Singleton instance */
     protected static _instance: StaticContent;
+    private constructor() {
+        super();
+    }
 
     /** @public @static Model singleton instance constructor */
     public static getInstance(): StaticContent {

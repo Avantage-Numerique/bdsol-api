@@ -1,8 +1,5 @@
 import Page, { PageContent } from "@src/Pages/Controllers/Pages/Page";
 
-import PublicTemplate from "@src/Templates/PublicTemplate";
-import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
-
 import HomePage from "@src/Pages/Controllers/Pages/HomePage";
 import VersionsPage from "@src/Pages/Controllers/Pages/VersionsPage";
 import StatisticsPage from "@src/Pages/Controllers/Pages/StatisticsPage";
@@ -11,19 +8,13 @@ import ReferentialPage from "@src/Pages/Controllers/Pages/ReferentialPage";
 import ReferentialSinglePage from "@src/Pages/Controllers/Pages/ReferentialSinglePage";
 import ReferentialPrimitivesPage from "./Pages/ReferentialPrimitivesPage";
 
-import LogHelper from "@src/Monitoring/Helpers/LogHelper";
-
-import { getApiConfig } from "@src/config";
-import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
-import { StatusCodes } from "http-status-codes";
-
 class PagesController {
     /** @private @static Singleton instance */
     private static _instance: PagesController;
 
     public name: string = "PagesController";
 
-    constructor() {}
+    private constructor() {}
 
     /**
      * @public @static @method getInstance Create the singleton instance if not existing

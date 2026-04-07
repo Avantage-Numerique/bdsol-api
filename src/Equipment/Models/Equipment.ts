@@ -11,6 +11,9 @@ import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 class Equipment extends AbstractModel {
     /** @protected @static Singleton instance */
     protected static _instance: Equipment;
+    private constructor() {
+        super();
+    }
 
     /** @public @static Model singleton instance constructor */
     public static getInstance(doIndexes = true): Equipment {

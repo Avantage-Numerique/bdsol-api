@@ -14,7 +14,7 @@ class PlacesController extends AbstractController {
 
     name: string = "Place";
 
-    constructor() {
+    private constructor() {
         super();
         this.entity = Place.getInstance();
         this.service = PlacesService.getInstance(this.entity);

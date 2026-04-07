@@ -13,6 +13,9 @@ import { populateUser } from "@src/Users/Middlewares/populateUser";
 class Media extends AbstractModel {
     /** @protected @static Singleton instance */
     protected static _instance: Media;
+    private constructor() {
+        super();
+    }
 
     /** @public @static Model singleton instance constructor */
     public static getInstance(doIndexes = true): Media {

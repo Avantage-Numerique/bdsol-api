@@ -2,7 +2,7 @@ class MonitoringService {
     /** @private @static Singleton instance */
     private static _instance: MonitoringService;
 
-    constructor() {}
+    private constructor() {}
 
     /** @public @static Singleton constructor for StaticContentsService */
     public static getInstance(): MonitoringService {

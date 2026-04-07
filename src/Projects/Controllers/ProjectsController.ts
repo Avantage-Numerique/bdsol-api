@@ -12,7 +12,7 @@ class ProjectsController extends AbstractController {
     /** @public Model */
     entity: Project;
 
-    constructor() {
+    private constructor() {
         super();
         this.entity = Project.getInstance();
         this.service = ProjectsService.getInstance(this.entity);

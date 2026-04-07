@@ -11,6 +11,9 @@ import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
 class Place extends AbstractModel {
     /** @protected @static Singleton instance */
     protected static _instance: Place;
+    private constructor() {
+        super();
+    }
 
     /** @public @static Model singleton instance constructor */
     public static getInstance(doIndexes = true): Place {

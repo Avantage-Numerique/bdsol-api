@@ -10,7 +10,7 @@ export class RegistrationController {
     public userModel: User;
 
     /** @constructor */
-    constructor() {
+    private constructor() {
         this.service = new UsersService(User.getInstance());
         this.userModel = User.getInstance();
     }

@@ -21,6 +21,9 @@ import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
 class Organisation extends AbstractModel {
     /** @protected @static Singleton instance of model Organisation */
     protected static _instance: Organisation;
+    private constructor() {
+        super();
+    }
 
     /** @public @static Model singleton instance constructor */
     public static getInstance(doIndexes = true): Organisation {

@@ -5,6 +5,7 @@ import EntityRefFactory from "@src/Referential/EntityRefFactory";
 class JSONLDController {
     /** @private @static Singleton instance */
     private static _instance: JSONLDController;
+    private constructor() {}
 
     /**
      * @public @static @method getInstance Create the singleton instance if not existing

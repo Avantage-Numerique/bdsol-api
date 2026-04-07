@@ -18,7 +18,7 @@ class MonitoringController {
     public mongoDriver: MongoDBDriver;
     public mongoClient: MongoClient;
 
-    constructor() {}
+    private constructor() {}
 
     /**
      * @public @static @method getInstance Create the singleton instance if not existing
