@@ -10,6 +10,13 @@
             {% include "Partials/header.njk" %}
         {% endblock %}
 
+        <nav class="breadcrumbs default-padding-y">
+            <ul>
+                <li><a class="btn" href="/" title={{ api.name }}><i class="las la-home"></i></a></li>
+                <li><span>{{ title }}</span></li>
+            </ul>
+        </nav>
+
         <h1>{{ title }}</h1>
 
         {% if items.entities %}

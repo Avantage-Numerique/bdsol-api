@@ -1,17 +1,18 @@
 import { refEquipmentLink } from "../RelationLinks/RefEquipmentLink";
 import { RefProperty } from "../types";
 import { createPrimitiveUrl, createRefType } from "../utils";
-import { refSubMeta } from "./RefSubMeta";
-import { EntityTypesEnum } from "@src/Entities/EntityTypes";
+import { refOrder } from "@ref/Data/Properties/RefOrder";
+import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 
 export const refEquipmentLinkSchema: RefProperty = {
     field: "equipment",
-    ontologyProperty: "avnu:equipmentLink",
-    url: "/equipmentLink",
-    label: "Équipement et quantité",
+    ontologyProperty: "avnu:ownsInventory",
+    url: "/owns-inventory",
+    label: "Équipement avec une quantité",
     cardinality: "0..N",
     description: "Fait référence à une entité Équipement et lui ajoute une quantité.",
-    compatibility: [],
+    compatibility: [AvnuCompatibility.compatibilityMessage()],
     //note: "",
 
     type: createRefType("object"),
@@ -22,7 +23,7 @@ export const refEquipmentLinkSchema: RefProperty = {
             label: "Identifiant d'équipement",
             cardinality: "0..1",
             description: "Fait référence à un équipement.",
-            compatibility: [],
+            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("owns")],
             //note: "",
         },
         {
@@ -33,9 +34,9 @@ export const refEquipmentLinkSchema: RefProperty = {
             label: "Quantité",
             cardinality: "0..1",
             description: "Décris la quantité d'un équipement possédé en plusieurs exemplaires.",
-            compatibility: [],
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
             //note: "",
         },
-        { ...refSubMeta },
+        { ...refOrder },
     ],
 };

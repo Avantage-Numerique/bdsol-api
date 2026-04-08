@@ -6,13 +6,12 @@ import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 import { refLocation } from "../SubSchema/RefLocation";
 import { RefProperty } from "../types";
 import { createRefType } from "../utils";
-import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refPlace: RefProperty = {
-    ontologyProperty: "avnu:place",
+    ontologyProperty: "avnu:Place",
     url: "/place",
     label: "Lieu",
     description: "Entité décrivant un lieu, son emplacement physique ou virtuel.",
@@ -32,7 +31,17 @@ export const refPlace: RefProperty = {
         { ...refType },
         { ...refName },
         { ...refDescription },
-        { ...refShortDescription },
+        {
+            ...refShortDescription,
+            compatibility: [
+                ArtsdataCompatibility.getOntologyCompatibilityArray(
+                    "disambiguatingDescription",
+                    "disambiguatingDescription",
+                    "https://schema.org/disambiguatingDescription"
+                ),
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("disambiguatingDescription"),
+            ],
+        },
         { ...refMainImageLink },
         {
             //À MODIFIER QUAND ON VA MERGE LA BRANCHE DE CARTE.

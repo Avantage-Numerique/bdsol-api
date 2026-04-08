@@ -8,6 +8,14 @@
             {% include "Partials/header.njk" %}
         {% endblock %}
 
+        <nav class="breadcrumbs default-padding-y">
+            <ul>
+                <li><a class="btn" href="/" title={{ api.name }}><i class="las la-home"></i></a></li>
+                <li><a class="btn" href="/ref" title="Référentiel">Référentiel</a></li>
+                <li><span>{{ item.label }}</span></li>
+            </ul>
+        </nav>
+
         {% if item %}
 
             <h1>{{ title | safe }}</h1>
@@ -18,13 +26,7 @@
 
         {% endif %}
 
-        <div class="breadcrumbs">
-            <a class="btn" href="/ref" title="Référentiel">&larr; Référentiel</a>
-        </div>
-
         {% if item %}
-
-            <h2 class="no-margin-b">{{ item.label }}</h2>
 
             <p class="no-margin-t">{{ item.description }}</p>
 

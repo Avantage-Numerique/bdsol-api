@@ -10,13 +10,15 @@
             {% include "Partials/header.njk" %}
         {% endblock %}
 
+        <nav class="breadcrumbs default-padding-y">
+            <ul>
+                <li><a class="btn" href="/" title={{ api.name }}><i class="las la-home"></i></a></li>
+                <li><a class="btn" href="/ref" title="Référentiel">Référentiel</a></li>
+                <li><span>propriétés</span></li>
+            </ul>
+        </nav>
+
         <h1>{{ title | safe }}</h1>
-
-        <div class="breadcrumbs">
-            <a class="btn" href="/ref" title="Référentiel">&larr; Référentiel</a>
-        </div>
-
-        <h2>Liste des propriétes</h2>
 
         <table>
 

@@ -21,7 +21,7 @@ import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refOrganisation: RefProperty = {
-    ontologyProperty: "avnu:organisation",
+    ontologyProperty: "avnu:Organisation",
     url: "/organisation",
     label: "Organisation",
     description: "",
@@ -45,7 +45,22 @@ export const refOrganisation: RefProperty = {
         { ...refType },
         { ...refName },
         { ...refDescription },
-        { ...refShortDescription },
+        {
+            ...refShortDescription,
+            compatibility: [
+                ArtsdataCompatibility.getOntologyCompatibilityArray(
+                    "disambiguatingDescription",
+                    "disambiguatingDescription",
+                    "https://schema.org/disambiguatingDescription"
+                ),
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("disambiguatingDescription"),
+                DataSceneCompatibility.getOntologyCompatibilityArray(
+                    "shortDescription",
+                    "shortDescription",
+                    "https://documentation.datascene.ca/references/show/#7-propriete-spectacle-show-shortdescription-description-courte"
+                ),
+            ],
+        },
         {
             field: "fondationDate",
             type: createRefType("date"),

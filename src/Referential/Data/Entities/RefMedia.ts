@@ -1,6 +1,5 @@
 import { RefProperty } from "../types";
 import { createRefType } from "../utils";
-import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
@@ -8,7 +7,7 @@ import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 export const refMedia: RefProperty = {
     label: "Média",
     description: "Usage interne seulement. Référence un média dans la plateforme par son identifiant unique.",
-    ontologyProperty: "avnu:media",
+    ontologyProperty: "avnu:Media",
     url: "/media",
     type: createRefType("object"),
     compatibility: [
