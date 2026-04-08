@@ -49,7 +49,22 @@ export const refProject: RefProperty = {
             description: "Autre nom sous lequel le projet est également connu.",
         },
         { ...refDescription },
-        { ...refShortDescription },
+        {
+            ...refShortDescription,
+            compatibility: [
+                ArtsdataCompatibility.getOntologyCompatibilityArray(
+                    "disambiguatingDescription",
+                    "disambiguatingDescription",
+                    "https://schema.org/disambiguatingDescription"
+                ),
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("disambiguatingDescription"),
+                DataSceneCompatibility.getOntologyCompatibilityArray(
+                    "shortDescription",
+                    "shortDescription",
+                    "https://documentation.datascene.ca/references/show/#7-propriete-spectacle-show-shortdescription-description-courte"
+                ),
+            ],
+        },
         {
             ...refOrganisationLink,
             field: "entityInCharge", //https://schema.org/author //https://schema.org/maintainer //https://schema.org/producer //https://schema.org/owner

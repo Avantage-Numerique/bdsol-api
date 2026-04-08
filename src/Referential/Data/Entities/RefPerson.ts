@@ -110,7 +110,22 @@ export const refPerson: RefProperty = {
                 "Autre appellation parfois utilisé pour designer la personne. Exemple : 'Coeur de pirate' pour 'Béatrice Martin'.",
         },
         { ...refDescription },
-        { ...refShortDescription },
+        {
+            ...refShortDescription,
+            compatibility: [
+                ArtsdataCompatibility.getOntologyCompatibilityArray(
+                    "disambiguatingDescription",
+                    "disambiguatingDescription",
+                    "https://schema.org/disambiguatingDescription"
+                ),
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("disambiguatingDescription"),
+                DataSceneCompatibility.getOntologyCompatibilityArray(
+                    "shortDescription",
+                    "shortDescription",
+                    "https://documentation.datascene.ca/references/show/#7-propriete-spectacle-show-shortdescription-description-courte"
+                ),
+            ],
+        },
         { ...refCatchphrase, compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("additionalName")] },
         {
             ...refSocialHandle,

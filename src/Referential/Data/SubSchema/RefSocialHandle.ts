@@ -34,7 +34,7 @@ export const refSocialHandle: RefProperty = {
             label: "label",
             cardinality: "0..1",
             description: "Libellé du site ou du nom à afficher en lien cliquable.",
-            compatibility: [],
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
             //note: "",
         },
         {
@@ -45,7 +45,7 @@ export const refSocialHandle: RefProperty = {
             label: "Hyperlien vers le site",
             cardinality: "0..1",
             description: "Hyperlien qui mène vers le site internet.",
-            compatibility: [],
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
             //note: "",
         },
         { ...refOrder },

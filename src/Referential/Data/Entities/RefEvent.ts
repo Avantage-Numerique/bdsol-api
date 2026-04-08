@@ -44,7 +44,17 @@ export const refEvent: RefProperty = {
         { ...refAlternateName },
         { ...refSocialHandle },
         { ...refDescription },
-        { ...refShortDescription },
+        {
+            ...refShortDescription,
+            compatibility: [
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("disambiguatingDescription"),
+                DataSceneCompatibility.getOntologyCompatibilityArray(
+                    "shortDescription",
+                    "shortDescription",
+                    "https://documentation.datascene.ca/references/show/#7-propriete-spectacle-show-shortdescription-description-courte"
+                ),
+            ],
+        },
         {
             ...refOrganisationLink,
             url: "/entityInCharge",

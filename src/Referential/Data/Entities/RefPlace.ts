@@ -31,7 +31,17 @@ export const refPlace: RefProperty = {
         { ...refType },
         { ...refName },
         { ...refDescription },
-        { ...refShortDescription },
+        {
+            ...refShortDescription,
+            compatibility: [
+                ArtsdataCompatibility.getOntologyCompatibilityArray(
+                    "disambiguatingDescription",
+                    "disambiguatingDescription",
+                    "https://schema.org/disambiguatingDescription"
+                ),
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("disambiguatingDescription"),
+            ],
+        },
         { ...refMainImageLink },
         {
             //À MODIFIER QUAND ON VA MERGE LA BRANCHE DE CARTE.
