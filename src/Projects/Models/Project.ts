@@ -217,7 +217,6 @@ class Project extends AbstractModel {
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
-            _generated: generateEntityContent(document),
         };
     }
 

@@ -1,14 +1,8 @@
 import express, { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import ReferentialController from "../Controllers/ReferentialController";
 
+import ReferentialController from "@ref/Controllers/ReferentialController";
 import { refData } from "@ref/Data/data";
-import { findEntityByURL } from "@ref/Data/utils";
-import { JsonLDBuilder } from "@src/jsonld/JsonLDBuilder";
-import { refPerson } from "../Data/Entities/RefPerson";
-import Person from "@src/Persons/Models/Person";
-import Project from "@src/Projects/Models/Project";
-import { refProject } from "../Data/Entities/RefProject";
 
 class ReferentialRoutes {
     public routerInstance: express.Router;
@@ -18,6 +12,12 @@ class ReferentialRoutes {
     constructor() {
         this.routerInstance = express.Router();
         this.routerInstanceAuthentification = express.Router();
+    }
+
+    private findEntityByURL(url: string) {
+        return Object.values(refData)
+            .flatMap((x) => Object.values(x).flat())
+            .find((i) => `/${url}` === i.url?.toLowerCase());
     }
 
     /**
@@ -67,7 +67,7 @@ class ReferentialRoutes {
         if ("json" in req.query) {
             res.set("Content-Type", "application/json");
 
-            return res.status(StatusCodes.OK).send(findEntityByURL(params.entity.toLowerCase()));
+            return res.status(StatusCodes.OK).send(this.findEntityByURL(params.entity.toLowerCase()));
         }
 
         res.set("Content-Type", "text/html");
@@ -87,7 +87,7 @@ class ReferentialRoutes {
         if ("json" in req.query) {
             res.set("Content-Type", "application/json");
 
-            return res.status(StatusCodes.OK).send(findEntityByURL(params.entity.toLowerCase()));
+            return res.status(StatusCodes.OK).send(this.findEntityByURL(params.entity.toLowerCase()));
         }
 
         res.set("Content-Type", "text/html");

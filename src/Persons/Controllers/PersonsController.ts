@@ -14,7 +14,6 @@ import Project from "@src/Projects/Models/Project";
 import { lookupModelsByQueries } from "@database/HelperAggregate";
 import Media from "@src/Media/Models/Media";
 import Event from "@src/Events/Models/Event";
-import JSONLDController from "@src/jsonld/Controllers/JSONLDController";
 
 class PersonsController extends AbstractController {
     /** @private @static Singleton instance */
@@ -114,17 +113,7 @@ class PersonsController extends AbstractController {
         });
 
         if (results.length > 0) {
-            let jsonLDforResult;
-            try {
-                //jsonLDforResult = JSONLDController.getInstance(); //.createJsonLDForDocument(results[0]);
-            } catch (error) {
-                console.error("Failed to generate JSONLD from aggregation (controller.single)");
-            }
-            return SuccessResponse.create(
-                { ...results[0], jsonLD: "jsonLDforResult" },
-                StatusCodes.OK,
-                ReasonPhrases.OK
-            );
+            return SuccessResponse.create(results[0], StatusCodes.OK, ReasonPhrases.OK);
         }
 
         return ErrorResponse.create(new Error(""), StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);

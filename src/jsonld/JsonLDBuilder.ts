@@ -109,7 +109,7 @@ export class JsonLDBuilder {
                                 );
                             } else if (entity[refPath]) return { "@id": val, "@type": entity[refPath] };
                         }
-                        if ("_id" in val) {
+                        if (typeof val === "object" && "_id" in val) {
                             return { "@id": val._id, "@type": propertyRef.type.targets[0], ...val };
                         }
 

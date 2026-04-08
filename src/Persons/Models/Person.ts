@@ -269,7 +269,6 @@ class Person extends AbstractModel {
             fullName: document.fullName ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
-            _generated: generateEntityContent(document),
         };
     }
 

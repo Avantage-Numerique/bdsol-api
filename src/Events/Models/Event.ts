@@ -223,7 +223,6 @@ class Event extends AbstractModel {
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
-            _generated: generateEntityContent(document),
         };
     }
 

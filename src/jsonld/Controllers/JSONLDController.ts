@@ -12,7 +12,7 @@ class JSONLDController {
      * @return {JSONLDController} Controller singleton constructor
      */
     public static getInstance(): JSONLDController {
-        if (!JSONLDController._instance) {
+        if (JSONLDController._instance === undefined) {
             JSONLDController._instance = new JSONLDController();
         }
         return JSONLDController._instance;
@@ -41,6 +41,7 @@ class JSONLDController {
      */
     public createJsonLDForDocument(document: any, contextMode: string = "inline", contextUrl: string = "/jsonld"): any {
         let entity;
+
         try {
             entity = document.toObject({ virtuals: true });
         } catch (error) {
