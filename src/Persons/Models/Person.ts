@@ -264,7 +264,7 @@ class Person extends AbstractModel {
             },
             region: document.region ?? "",
             badges: document.badges ?? [],
-            meta: document.meta ?? "",
+            meta: document.meta ?? {},
             type: document.type ?? "",
             fullName: document.fullName ?? "",
             createdAt: document.createdAt ?? "",

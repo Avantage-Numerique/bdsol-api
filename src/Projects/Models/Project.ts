@@ -213,7 +213,7 @@ class Project extends AbstractModel {
             domains: document.domains ?? undefined,
             context: document.context ?? "",
             equipment: document.equipment ?? [],
-            meta: document.meta ?? undefined,
+            meta: document.meta ?? {},
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",

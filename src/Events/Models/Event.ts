@@ -219,7 +219,7 @@ class Event extends AbstractModel {
             subEvents: document.subEvents ?? [],
             location: document.location ?? [],
             photoGallery: document.photoGallery ?? "",
-            meta: document.meta ?? "",
+            meta: document.meta ?? {},
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",

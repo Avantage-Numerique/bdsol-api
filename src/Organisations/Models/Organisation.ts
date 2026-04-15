@@ -190,7 +190,7 @@ class Organisation extends AbstractModel {
             mainImage: document.mainImage ?? "",
             slug: document.slug ?? "",
             catchphrase: document.catchphrase ?? "",
-            meta: document.meta ?? "",
+            meta: document.meta ?? {},
             location: document.location ?? [],
             equipment: document.equipment ?? [],
             region: document.region ?? "",

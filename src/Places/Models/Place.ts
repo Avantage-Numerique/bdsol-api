@@ -178,7 +178,7 @@ class Place extends AbstractModel {
             country: document.country ?? "",
             latitude: document.latitude ?? "",
             longitude: document.longitude ?? "",
-            meta: document.meta ?? "",
+            meta: document.meta ?? {},
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",

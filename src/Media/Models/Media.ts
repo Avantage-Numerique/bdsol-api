@@ -172,7 +172,7 @@ class Media extends AbstractModel {
             entityId: document.entityId ?? "",
             entityType: document.entityType ?? "",
             uploadedBy: document.uploadedBy ?? "",
-            meta: document.meta ?? "",
+            meta: document.meta ?? {},
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
