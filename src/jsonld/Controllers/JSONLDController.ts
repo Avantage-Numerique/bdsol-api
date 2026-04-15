@@ -42,10 +42,41 @@ class JSONLDController {
     public createJsonLDForDocument(document: any, contextMode: string = "inline", contextUrl: string = "/jsonld"): any {
         let entity;
 
+        /**
+         * Créer un clone pour laisser le document Mongo intact
+         */
+        const _document = { ...document };
+
+        /**
+         * Fix semi-temporaire pour que les objets nested soient .toObject()
+         *
+         * @param doc
+         * @returns
+         */
+        function deepToObject(doc: any): any {
+            if (Array.isArray(doc)) {
+                return doc.map(deepToObject);
+            }
+
+            if (doc && typeof doc === "object") {
+                // Si c'est un document mongoose
+                if (doc.$__ || doc.toObject) {
+                    doc = doc.toObject({ virtuals: true });
+                }
+
+                for (const key of Object.keys(doc)) {
+                    doc[key] = deepToObject(doc[key]);
+                }
+            }
+
+            return doc;
+        }
+
         try {
-            entity = document.toObject({ virtuals: true });
+            entity = deepToObject(_document);
         } catch (error) {
-            entity = document;
+            console.error(error);
+            entity = _document;
         }
         if (!entity?.type) {
             return false;
