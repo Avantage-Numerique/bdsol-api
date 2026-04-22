@@ -28,6 +28,7 @@ export class JsonLDBuilder {
     buildFor(targetOntology: OntologyTarget | string) {
         return {
             "@context": this.buildContext(),
+            "@id": this.entity._id,
             "@type": this.rootRef.ontologyProperty,
             ...this.buildForOntology(targetOntology, this.entity, this.rootRef.ref || []),
         };

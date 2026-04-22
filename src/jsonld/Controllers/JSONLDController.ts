@@ -43,9 +43,11 @@ class JSONLDController {
         let entity;
 
         /**
-         * Créer un clone pour laisser le document Mongo intact
+         * Créer un clone pour laisser le document Mongo intact (?)
+         *
+         * WARN: quand on clone la fonction `.toObject()` est undefined
          */
-        const _document = { ...document };
+        // const _document = { ...document };
 
         /**
          * Fix semi-temporaire pour que les objets nested soient .toObject()
@@ -60,7 +62,7 @@ class JSONLDController {
 
             if (doc && typeof doc === "object") {
                 // Si c'est un document mongoose
-                if (doc.$__ || doc.toObject) {
+                if ("toObject" in doc && typeof doc.toObject === "function") {
                     doc = doc.toObject({ virtuals: true });
                 }
 
@@ -73,10 +75,10 @@ class JSONLDController {
         }
 
         try {
-            entity = deepToObject(_document);
+            entity = deepToObject(document);
         } catch (error) {
             console.error(error);
-            entity = _document;
+            entity = document;
         }
         if (!entity?.type) {
             return false;
