@@ -78,13 +78,23 @@
             {% endif %}
 
         {% if item.apiType === "enum" and item.apiSource %}
-            <ul>
+        <table>
+            <thead>
+                <tr>
+                    <th class="text-center">Valeur</th>
+                    <th style="text-align: left">Définition</th>
+                </tr>
+            </thead>
 
-            </ul>
+            <tbody>
             {% for vocabulary in item.apiSource %}
-                <li>{{ vocabulary.label }} <code>{{ vocabulary.value }}</code></li>
+                <tr>
+                    <td class="text-center" style="width: 20%"><code>{{ vocabulary.value }}</code></td>
+                    <td>{{ vocabulary.label }}</td>
+                </tr>
             {% endfor %}
-
+            </tbody>
+        </table>
         {% endif %}
 
         {% else %}
