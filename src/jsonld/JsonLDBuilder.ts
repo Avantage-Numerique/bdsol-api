@@ -1,8 +1,14 @@
+import { getApiConfig } from "@src/config";
+
+const isDev = getApiConfig().isDevelopment;
+
 enum OntologyTarget {
     SCHEMA_ORG = "schema.org",
     DATASCENE = "datascene",
     AVNU = "avnu",
 }
+
+const addIdInDev = (id: any) => (isDev ? { "@id_for_dev": id } : null);
 
 export class JsonLDBuilder {
     private entity: any;
@@ -28,7 +34,7 @@ export class JsonLDBuilder {
     buildFor(targetOntology: OntologyTarget | string) {
         return {
             "@context": this.buildContext(),
-            "@id": this.entity._id,
+            ...addIdInDev(this.entity._id),
             "@type": this.rootRef.ontologyProperty,
             ...this.buildForOntology(targetOntology, this.entity, this.rootRef.ref || []),
         };
@@ -108,13 +114,17 @@ export class JsonLDBuilder {
                                 console.log(
                                     `[JsonLDBuilder] Couldn't collapse targets ${propertyRef.type.targets} to refPath ${refPath} in field ${field}`
                                 );
-                            } else if (entity[refPath]) return { "@id": val, "@type": entity[refPath] };
+                            } else if (entity[refPath]) return { ...addIdInDev(val), "@type": entity[refPath] };
                         }
                         if (typeof val === "object" && "_id" in val) {
-                            return { "@id": val._id, "@type": propertyRef.type.targets[0], ...val };
+                            return {
+                                ...addIdInDev(val._id),
+                                "@type": propertyRef.type.targets[0],
+                                ...val,
+                            };
                         }
 
-                        return { "@id": val, "@type": propertyRef.type.targets[0] };
+                        return { ...addIdInDev(val), "@type": propertyRef.type.targets[0] };
                     }
 
                     const mapping = this.findMapping(propertyRef, targetOntology);
