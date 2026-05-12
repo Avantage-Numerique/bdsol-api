@@ -1,5 +1,6 @@
 import { refDescription } from "../Properties/RefDescription";
 import { refName } from "../Properties/RefName";
+import { refShortDescription } from "../Properties/RefShortDescription";
 import { refType } from "../Properties/RefType";
 import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
 import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
@@ -47,6 +48,7 @@ export const refEquipment: RefProperty = {
             compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("alternateName")],
         },
         { ...refDescription },
+        { ...refShortDescription },
         {
             field: "brand",
             ontologyProperty: "avnu:brand",

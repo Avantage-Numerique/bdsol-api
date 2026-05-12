@@ -6,6 +6,7 @@ export interface EquipmentSchema extends Document {
     equipmentType: ObjectId;
     label: string;
     description: string;
+    shortDescription: string;
     brand: string;
     modelName: string;
     slug: string;
