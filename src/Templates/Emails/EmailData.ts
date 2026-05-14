@@ -7,7 +7,7 @@ export const EmailData = {
         mediasUrl: `${config.baseUrl}/static/medias/emails/`,
         version: config.version,
         description:
-            "Base de donnée ouverte et liée crée par Avantage Numérique et qui recense les techno-créatifs sur le territoire du Croissant boréal.",
+            "Base de données ouverte et liée créée par Avantage Numérique et qui recense les ressources technologiques francophones régionales et locales.",
     },
     app: {
         name: "AVNU",
@@ -32,7 +32,7 @@ export const getTemplateBaseData = () => {
             mediasUrl: `${config.baseUrl}/static/medias/emails/`,
             version: config.version,
             description:
-                "Base de donnée ouverte et liée crée par Avantage Numérique et qui recense les techno-créatifs sur le territoire du Croissant boréal.",
+                "Base de données ouverte et liée créée par Avantage Numérique et qui recense les ressources technologiques francophones régionales et locales.",
         },
         app: {
             name: "AVNU",
