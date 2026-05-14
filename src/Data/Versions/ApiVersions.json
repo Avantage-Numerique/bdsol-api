@@ -1,6 +1,36 @@
 {
     "versions": [
         {
+            "label": "Ontologie AVNU et son référentiel + Datascène",
+            "value": "1.0.3",
+            "date": "2026-04-30",
+            "description": "Transfert du référentiel excel en version publique",
+            "notes": [
+                {
+                    "value": "Référentiel de l'ontologie d'AVNU, documentation de ses compatibilités et différences avec Artsdata, Datascene et Schema.org"
+                },
+                {
+                    "value": "Mise à jour de routine et réglage de bogues"
+                },
+                {
+                    "value": "<strong>Équipe</strong>",
+                    "additionnalClasses": "pt-3 pb-2"
+                },
+                {
+                    "value": "<strong>Frédéric Rivard</strong>, Backend et front-end"
+                },
+                {
+                    "value": "<strong>Jeanne Perrin</strong> web design et UX"
+                },
+                {
+                    "value": "<strong>Jules Luzy-Riopel</strong>, Backend, front-end"
+                },
+                {
+                    "value": "<strong>Marc-André Martin</strong>, Backend, front-end et responsable du développement"
+                }
+            ]
+        },
+        {
             "label": "Pagination",
             "value": "1.0.2",
             "date": "2025-02-17",
