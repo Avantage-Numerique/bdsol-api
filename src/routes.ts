@@ -7,42 +7,8 @@ import config, { getApiConfig } from "@src/config";
 import PublicTemplate from "@src/Templates/PublicTemplate";
 import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
 import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
-import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 const ApiRouter = express.Router();
-
-// Would this print the doc or not ?
-ApiRouter.get("/", async (req, res) => {
-    const updatedConfig = getApiConfig();
-    const baseData = getTemplateBaseData();
-    const index = new PublicTemplate(); //template have already a default in the EmailContent.Prepare.
-    const title: string = `${updatedConfig.appName} (version ${updatedConfig.version})`;
-    let body: string =
-        updatedConfig.environnement === "development" ? `<p>écoute sur le port: ${updatedConfig.port}<br /></p>` : "";
-    body += `<p>${baseData.api.description}</p>`;
-    body +=
-        updatedConfig.environnement === "development"
-            ? `<p>Slow Down Middleware est <strong>${updatedConfig.debugSlowConnection ? "activé" : "désactivé"}</strong> et ralenti avec ${updatedConfig.debugSlowDuration}ms</p>`
-            : "";
-    res.set("Content-Type", "text/html");
-    LogHelper.info("Rendering index", baseData);
-    return res.status(StatusCodes.OK).send(
-        await index.render({
-            context: {
-                ...baseData, //basic app and api default string and links
-                ...DefaultEmailTheme, //basic theme for colors and sizes.
-                title: `${title}`,
-                body: `${body}`,
-                meta: {
-                    title: `${title}`,
-                    description: `${body}`,
-                    author: `${updatedConfig.appName}`,
-                },
-            },
-        })
-    );
-    //return res.status(StatusCodes.OK).send("OK");
-});
 
 //Disalow indexing for all path of the api.
 ApiRouter.get("/robots.txt", function (req, res) {

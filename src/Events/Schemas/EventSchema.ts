@@ -1,9 +1,9 @@
 import { ObjectId } from "mongodb";
 import Media from "@src/Media/Models/Media";
-import { DomainSchema } from "@src/Taxonomy/Schemas/DomainSchema";
+import { DomainListSchema } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 import { Document } from "mongoose";
-import { Member } from "@src/Team/Schemas/MemberSchema";
+import { Member } from "@src/SubProperty/Team/Schemas/MemberSchema";
 import { Schedule } from "@src/Database/Schemas/ScheduleSchema";
 import { EventFormatEnum } from "../EventFormatEnum";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
@@ -15,6 +15,7 @@ export interface EventSchema extends Document {
     alternateName: string;
     url: [SocialHandle];
     description: string;
+    shortDescription: string;
     entityInCharge: ObjectId;
     organizer: ObjectId;
     eventType: [ObjectId];
@@ -25,7 +26,7 @@ export interface EventSchema extends Document {
     contactPoint: ContactPoint;
     mainImage: Media;
     attendees: [ObjectId];
-    domains: [DomainSchema];
+    domains: [DomainListSchema];
     skills: [ObjectId];
     schedule: [Schedule];
     subEvents: [ObjectId];

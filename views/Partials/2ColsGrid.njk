@@ -1,0 +1,24 @@
+{% if gridItems %}
+    <h3>Compatibilité</h3>
+    <p>Notre classe <code>{{ item.ontologyProperty }}</code>, est compatible avec ces équivalences contenues dans d'autres ontologies :</p>
+    <div class="compat-grid">
+
+        {% for gridItem in gridItems %}
+
+            <div>
+                {{ compatItem.externalSource.name }}
+            </div>
+
+            <div>
+                <a href="{{ compatItem.documentationUrl }}" target="_blank">
+                    {{ compatItem.mapping.externalField }}
+                </a>
+            </div>
+
+        {% else %}
+
+            <span class="nodata">Aucune donnée de compatibilité disponible.</span>
+
+        {% endfor %}
+    </div>
+{% endif %}

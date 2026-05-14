@@ -1,0 +1,5 @@
+{% macro isRequire(cardinality, inTable=true) %}
+    {% if cardinality === '1..1' %}
+        <span class="is-required bg-primary{% if inTable %} in-table{% endif %}"><i class="la la-check"></i></span>
+    {%  endif %}
+{% endmacro %}

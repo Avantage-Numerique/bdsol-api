@@ -79,10 +79,15 @@ class Equipment extends AbstractModel {
             },
             label: {
                 type: String,
+                //minLength: 2,
                 required: true,
             },
             description: {
                 type: String,
+            },
+            shortDescription: {
+                type: String,
+                maxLength: 160,
             },
             brand: {
                 type: String,
@@ -141,6 +146,7 @@ class Equipment extends AbstractModel {
             name: document.name ?? "",
             label: document.label ?? "",
             description: document.description ?? "",
+            shortDescription: document.shortDescription ?? "",
             brand: document.brand ?? "",
             modelName: document.modelName ?? "",
             slug: document.slug ?? "",

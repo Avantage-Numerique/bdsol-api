@@ -1,0 +1,183 @@
+{% extends 'default.njk' %}
+{% from "Partials/isRequire.njk" import isRequire %}
+{% block content %}
+
+    <div class="container">
+
+        {% block contentHeader %}
+            {% include "Partials/header.njk" %}
+        {% endblock %}
+
+        <nav class="breadcrumbs default-padding-y">
+            <ul>
+                <li><a class="btn" href="/" title={{ api.name }}><i class="las la-home"></i></a></li>
+                <li><a class="btn" href="/ref" title="Référentiel">Référentiel</a></li>
+                <li><span>{{ item.label }}</span></li>
+            </ul>
+        </nav>
+
+        {% if item %}
+
+            <h1>{{ title | safe }}</h1>
+
+        {% else %}
+
+            <h1>Référentiel de AVNU API</h1>
+
+        {% endif %}
+
+        {% if item %}
+            <p>{{ item.description }}</p>
+
+            {% if item.compatibility.length > 0 %}
+
+                <h3><code>{{ item.ontologyProperty }}</code> est compatible avec :</h3>
+
+                <nav class="nav-compatibility vertical default-padding-b">
+                    <ul>
+                        {% for compatItem in item.compatibility %}
+
+                            {% if compatItem.messageOnly and compatItem.messageOnly !== "" %}
+                                <li class="full-width">
+                                    <span>{{ compatItem.messageOnly }}</span>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <a href="{{ compatItem.documentationUrl }}" target="_blank" class="external code">{{ compatItem.mapping.externalField }}<i class="la la-external-link"></i></a>
+                                    <span>dans l'ontologie</span>
+                                    <label>
+                                        <i class="las {{ compatItem.externalSource.icon }}"></i> {{ compatItem.externalSource.name }}
+                                    </label>
+                                </li>
+                            {% endif %}
+
+                        {% endfor %}
+
+                    </ul>
+
+                </nav>
+
+            {% endif %}
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th rowspan='2'>Nom dans l'ontologie</th>
+                        <th rowspan='2'>Format</th>
+                        <th rowspan='2'>Cardinalité</th>
+                        <th rowspan='2'>Description</th>
+                        <th colspan='2'>Compatibilité</th>
+                    </tr>
+
+                    <tr class="compat-header">
+                        <th>Ontologie</th>
+                        <th>Propriété</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for row in item.ref %}
+                        <tr>
+
+                            <td {% if row.note %} rowspan="2" {% endif %}>
+                                {{ isRequire(row.cardinality) }}
+
+                                {{ row.label }}
+
+                                {% if row.ontologyProperty and row.ontologyProperty !== "" %}
+                                    <br/>
+                                    <code>{{ row.ontologyProperty }}</code>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if row.type.kind === "object" %}
+                                    <a href="{{ baseRoute }}{{ row.url }}">
+                                        {{ row.label }}
+                                    </a>
+                                {% elseif row.type.kind === 'reference' %}
+
+                                    {% for entityRef in row.type.targets %}
+
+                                        <a href="{{ baseRoute }}/{{ entityRef }}">{{ entityRef }}</a>
+
+                                    {% endfor %}
+
+                                {% else %}
+
+                                    {% if row.url %}
+                                        <a href="{{ baseRoute }}{{ row.url }}">{{ row.label }}</a>
+                                        ({{ row.type.name }})
+                                    {% else %}
+                                        {{ row.type.name }}
+                                    {% endif %}
+
+                                {% endif %}
+                            </td>
+
+                            <td class="text-center">{{ row.cardinality }}</td>
+
+                            <td>{{ row.description }}</td>
+
+                            <td colspan="2">
+
+                                <div class="compat-grid">
+
+                                    {% for compatItem in row.compatibility %}
+                                        {% if compatItem.messageOnly and compatItem.messageOnly !== "" %}
+                                            <div class="full-width">
+                                                {{ compatItem.messageOnly }}
+                                            </div>
+                                        {% else %}
+                                            <div>
+                                                {{ compatItem.externalSource.name }}
+                                            </div>
+
+                                            <div>
+                                                <a href="{{ compatItem.documentationUrl }}" target="_blank">
+                                                    {{ compatItem.mapping.externalField }}
+                                                    <i class="la la-external-link"></i>
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    {% else %}
+
+                                        <span class="nodata">Aucune donnée de compatibilité disponible.</span>
+
+                                    {% endfor %}
+                                </div>
+
+                            </td>
+                        </tr>
+
+                        {% if row.note %}
+                            <tr>
+                                <td class="td-note" colspan="666">
+                                    <strong>Note :</strong>
+                                    {{ row.note }}
+                                </td>
+                            </tr>
+                        {% endif %}
+
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        {% else %}
+            <p>Rien à afficher!</p>
+        {% endif %}
+
+    </div>
+{% endblock %}
+
+{% block contentFooter %}
+    <section class="container">
+        <div class="legende">
+            <h3>Légende</h3>
+            <p>
+                {{ isRequire("1..1", false) }} : Cette propriété est requise
+            </p>
+        </div>
+    </section>
+{% endblock %}

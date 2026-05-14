@@ -1,0 +1,116 @@
+{% extends 'default.njk' %}
+{% from "Partials/isRequire.njk" import isRequire %}
+{% block content %}
+
+    <div class="container">
+
+        {% block contentHeader %}
+            {% include "Partials/header.njk" %}
+        {% endblock %}
+
+        <nav class="breadcrumbs default-padding-y">
+            <ul>
+                <li><a class="btn" href="/" title={{ api.name }}><i class="las la-home"></i></a></li>
+                <li><a class="btn" href="/ref" title="Référentiel">Référentiel</a></li>
+                <li><span>{{ item.label }}</span></li>
+            </ul>
+        </nav>
+
+        {% if item %}
+
+            <h1>{{ title | safe }}</h1>
+
+        {% else %}
+
+            <h1>Référentiel de AVNU API</h1>
+
+        {% endif %}
+
+        {% if item %}
+
+            <p class="no-margin-t">{{ item.description }}</p>
+
+            {% if item.compatibility.length > 0 %}
+
+                <h3 class="no-margin">
+                    <code>{{ item.ontologyProperty }}</code>
+                </h3>
+
+                <nav class="nav-compatibility small default-padding-b">
+
+                    <ul>
+                        <li>
+                            <i class="la la-arrow-right"></i>
+                            Compatibilité
+                            <i class="la la-arrow-right"></i>
+                            ontologies
+                            <i class="la la-arrow-right"></i>
+                        </li>
+
+                        {% for compatItem in item.compatibility %}
+
+                            {% if compatItem.messageOnly and compatItem.messageOnly !== "" %}
+                                <li class="full-width">
+                                    <span>{{ compatItem.messageOnly }}</span>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <span>
+                                        {{ compatItem.externalSource.name }}
+                                    </span>
+
+                                    <span>
+                                        <a href="{{ compatItem.documentationUrl }}" target="_blank" class="btn external code">
+                                            <i class="la la-link"></i>
+                                            {{ compatItem.mapping.externalField }}
+                                            <i class="la la-external-link"></i>
+                                        </a>
+                                    </span>
+                                </li>
+                            {% endif %}
+
+                        {% endfor %}
+
+                    </ul>
+
+                </nav>
+
+            {% endif %}
+
+        {% if item.apiType === "enum" and item.apiSource %}
+        <table>
+            <thead>
+                <tr>
+                    <th class="text-center">Valeur</th>
+                    <th style="text-align: left">Définition</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for vocabulary in item.apiSource %}
+                <tr>
+                    <td class="text-center" style="width: 20%"><code>{{ vocabulary.value }}</code></td>
+                    <td>{{ vocabulary.label }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+        {% else %}
+            <p>Rien à afficher!</p>
+        {% endif %}
+
+    </div>
+{% endblock %}
+
+{% block contentFooter %}
+    <section class="container">
+        <div class="legende">
+            <h3>Légende</h3>
+            <p>
+                {{ isRequire("1..1", false) }} : Cette propriété est requise
+            </p>
+        </div>
+    </section>
+{% endblock %}
