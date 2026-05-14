@@ -4,6 +4,7 @@ import ReferentialController from "../Controllers/ReferentialController";
 
 import { refData } from "@ref/Data/data";
 import { findEntityByURL } from "@ref/Data/utils";
+import { PublicRoute } from "@src/Pages/Types/PublicRoute";
 
 class ReferentialRoutes {
     public routerInstance: express.Router;
@@ -40,6 +41,11 @@ class ReferentialRoutes {
      * @return {Promise<any>}
      */
     public async getRefIndexHandler(req: Request, res: Response): Promise<any> {
+        const refHomePageRoute = {
+            url: req.url,
+            name: "ReferentialHomePage",
+        } as PublicRoute;
+
         if ("json" in req.query) {
             res.set("Content-Type", "application/json");
 
@@ -47,7 +53,7 @@ class ReferentialRoutes {
         }
 
         res.set("Content-Type", "text/html");
-        return res.status(StatusCodes.OK).send(await this.controllerInstance.referentialLayout());
+        return res.status(StatusCodes.OK).send(await this.controllerInstance.referentialLayout(refHomePageRoute));
     }
 
     /**
@@ -59,6 +65,11 @@ class ReferentialRoutes {
     public async getRefEntityHandler(req: Request, res: Response): Promise<any> {
         const { params } = req;
 
+        const refEntityPageRoute = {
+            url: req.url,
+            name: "ReferentialEntity",
+        } as PublicRoute;
+
         if ("json" in req.query) {
             res.set("Content-Type", "application/json");
 
@@ -68,7 +79,12 @@ class ReferentialRoutes {
         res.set("Content-Type", "text/html");
         return res
             .status(StatusCodes.OK)
-            .send(await this.controllerInstance.referentialSingleEntityLayout(params.entity.toLowerCase()));
+            .send(
+                await this.controllerInstance.referentialSingleEntityLayout(
+                    params.entity.toLowerCase(),
+                    refEntityPageRoute
+                )
+            );
     }
     /**
      *
@@ -79,6 +95,11 @@ class ReferentialRoutes {
     public async getRefVocabulariesHandler(req: Request, res: Response): Promise<any> {
         const { params } = req;
 
+        const refVocabulariesPageRoute = {
+            url: req.url,
+            name: "ReferentialVocabularies",
+        } as PublicRoute;
+
         if ("json" in req.query) {
             res.set("Content-Type", "application/json");
 
@@ -88,7 +109,12 @@ class ReferentialRoutes {
         res.set("Content-Type", "text/html");
         return res
             .status(StatusCodes.OK)
-            .send(await this.controllerInstance.referentialVocabulariesLayout(params.entity.toLowerCase() ?? null));
+            .send(
+                await this.controllerInstance.referentialVocabulariesLayout(
+                    params.entity.toLowerCase() ?? null,
+                    refVocabulariesPageRoute
+                )
+            );
     }
 
     /**
@@ -100,6 +126,11 @@ class ReferentialRoutes {
     public async getRefPrimitiveHandler(req: Request, res: Response): Promise<any> {
         const { params } = req;
 
+        const refPrimitivePageRoute = {
+            url: req.url,
+            name: "ReferentialPrimitive",
+        } as PublicRoute;
+
         // TODO: clarifier le comportement en mode JSON
         // if ("json" in req.query) {
         //     res.set("Content-Type", "application/json");
@@ -108,7 +139,9 @@ class ReferentialRoutes {
         // }
 
         res.set("Content-Type", "text/html");
-        return res.status(StatusCodes.OK).send(await this.controllerInstance.referentialPrimitivesLayout());
+        return res
+            .status(StatusCodes.OK)
+            .send(await this.controllerInstance.referentialPrimitivesLayout(refPrimitivePageRoute));
     }
 }
 export default ReferentialRoutes;

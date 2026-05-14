@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import AbstractRoute from "@core/Route";
 import { StatusCodes } from "http-status-codes";
 import PagesController from "@src/Pages/Controllers/PagesController";
+import { PublicRoute } from "@src/Pages/Types/PublicRoute";
 
 class PagesRoutes extends AbstractRoute {
     controllerInstance: any = PagesController.getInstance();
@@ -57,7 +58,11 @@ class PagesRoutes extends AbstractRoute {
     }
 
     public async homePageHandler(req: Request, res: Response): Promise<any> {
-        return this.layoutHandler(await this.controllerInstance.homePage(), req, res);
+        const homePageRoute = {
+            url: req.url,
+            name: "homePage",
+        } as PublicRoute;
+        return this.layoutHandler(await this.controllerInstance.homePage(homePageRoute), req, res);
     }
 
     public async statisticsLayoutHandler(req: Request, res: Response): Promise<any> {

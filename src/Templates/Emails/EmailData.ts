@@ -24,6 +24,16 @@ export const EmailData = {
     },
 };
 
+/**
+ *     <meta name="twitter:title" content="{{ meta.title | safe }}" />
+ *     <meta name="twitter:description" content="{{ meta.description }}" />
+ *     <meta name="twitter:card" content="summary_large_image" />
+ *     <meta name="twitter:image" content={displayedImg} />
+ *     <meta property="twitter:image:alt" content={defaultImgAlt} />
+ *     <meta property="twitter:image:width" content={defaultImgWidth} />
+ *     <meta property="twitter:image:height" content={defaultImgHeight} />
+ */
+
 export const getTemplateBaseData = () => {
     return {
         api: {
@@ -39,6 +49,16 @@ export const getTemplateBaseData = () => {
             baseUrl: config.baseUrl,
             mediasUrl: `${config.baseUrl}/static/medias/emails/`,
             version: config.version,
+        },
+        defaultThumbnail: {
+            title: "AVNU",
+            description:
+                "Base de données ouverte et liée créée par Avantage Numérique et qui recense les ressources technologiques francophones régionales et locales.",
+            imageUrl: `${config.baseUrl}/static/medias/avnu-thumb.png`,
+            imageAlt:
+                "Retrouvez en quelques clics les organisations, projets, personnes, équipements et événements en lien avec le numérique sur votre territoire.",
+            imageWidth: "1200",
+            imageHeight: "630",
         },
         company: {
             label: "Est une initiative du",

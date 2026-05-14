@@ -16,6 +16,8 @@ import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 import { getApiConfig } from "@src/config";
 import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
 import { StatusCodes } from "http-status-codes";
+import { Request, Response } from "express";
+import { PublicRoute } from "@src/Pages/Types/PublicRoute";
 
 class PagesController {
     /** @private @static Singleton instance */
@@ -42,37 +44,9 @@ class PagesController {
         return await versionsPage.render();
     }
 
-    public async homePage(): Promise<string> {
-        /*const updatedConfig = getApiConfig();
-        const baseData = getTemplateBaseData();
-        const index = new PublicTemplate(); //template have already a default in the EmailContent.Prepare.
-        const title: string = `${updatedConfig.appName} (version ${updatedConfig.version})`;
-        let body: string = "Dans le controler de page !";
-        body +=
-            updatedConfig.environnement === "development"
-                ? `<p>écoute sur le port: ${updatedConfig.port}<br /></p>`
-                : "";
-
-        body += `<p>${baseData.api.description}</p>`;
-        body +=
-            updatedConfig.environnement === "development"
-                ? `<p>Slow Down Middleware est <strong>${updatedConfig.debugSlowConnection ? "activé" : "désactivé"}</strong> et ralenti avec ${updatedConfig.debugSlowDuration}ms</p>`
-                : "";
-        return await index.render({
-            context: {
-                ...baseData, //basic app and api default string and links
-                ...DefaultEmailTheme, //basic theme for colors and sizes.
-                title: `${title}`,
-                body: `${body}`,
-                meta: {
-                    title: `${title}`,
-                    description: `${body}`,
-                    author: `${updatedConfig.appName}`,
-                },
-            },
-        });*/
+    public async homePage(route: PublicRoute = {}): Promise<string> {
         const homePage = new HomePage("homePage");
-
+        homePage.route = route;
         return await homePage.render();
     }
 
