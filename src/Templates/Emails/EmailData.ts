@@ -33,7 +33,11 @@ export const EmailData = {
  *     <meta property="twitter:image:width" content={defaultImgWidth} />
  *     <meta property="twitter:image:height" content={defaultImgHeight} />
  */
-
+/**
+ * Get the template date to push into nunjucks template.
+ * Note : defaultThumbnail use the express static delivery and emails uses the API based one.
+ * @return {Object}
+ */
 export const getTemplateBaseData = () => {
     return {
         api: {
@@ -54,7 +58,7 @@ export const getTemplateBaseData = () => {
             title: "AVNU",
             description:
                 "Base de données ouverte et liée créée par Avantage Numérique et qui recense les ressources technologiques francophones régionales et locales.",
-            imageUrl: `${config.baseUrl}/static/medias/avnu-thumb.png`,
+            imageUrl: `${config.baseUrl}/images/avnu-thumb.png`,
             imageAlt:
                 "Retrouvez en quelques clics les organisations, projets, personnes, équipements et événements en lien avec le numérique sur votre territoire.",
             imageWidth: "1200",

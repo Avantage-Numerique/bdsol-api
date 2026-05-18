@@ -38,9 +38,9 @@ class PagesController {
         return PagesController._instance;
     }
 
-    public async versions(): Promise<string> {
+    public async versions(route: PublicRoute = {}): Promise<string> {
         const versionsPage = new VersionsPage("versions", "versions");
-
+        versionsPage.route = route;
         return await versionsPage.render();
     }
 
@@ -50,27 +50,27 @@ class PagesController {
         return await homePage.render();
     }
 
-    public async statistics(): Promise<string> {
+    public async statistics(route: PublicRoute = {}): Promise<string> {
         const versionsPage = new StatisticsPage("statistics");
-
+        versionsPage.route = route;
         return await versionsPage.render();
     }
 
-    public async referential(): Promise<string> {
+    public async referential(route: PublicRoute = {}): Promise<string> {
         const referentialPage = new ReferentialPage("referential");
-
+        referentialPage.route = route;
         return await referentialPage.render();
     }
 
-    public async referentialSingle(): Promise<string> {
+    public async referentialSingle(route: PublicRoute = {}): Promise<string> {
         const referentialPageSingle = new ReferentialSinglePage("referentialSingle");
-
+        referentialPageSingle.route = route;
         return await referentialPageSingle.render();
     }
 
-    public async referentialPrimitives(): Promise<string> {
+    public async referentialPrimitives(route: PublicRoute = {}): Promise<string> {
         const referentialPagePrimitives = new ReferentialPrimitivesPage("referentialPrimitives");
-
+        referentialPagePrimitives.route = route;
         return await referentialPagePrimitives.render();
     }
 

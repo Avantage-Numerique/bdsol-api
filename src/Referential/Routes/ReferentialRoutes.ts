@@ -11,9 +11,12 @@ class ReferentialRoutes {
     public routerInstanceAuthentification: express.Router;
     public controllerInstance: ReferentialController = ReferentialController.getInstance();
 
+    public baseUrl: string;
+
     constructor() {
         this.routerInstance = express.Router();
         this.routerInstanceAuthentification = express.Router();
+        this.baseUrl = "/ref";
     }
 
     /**
@@ -42,7 +45,7 @@ class ReferentialRoutes {
      */
     public async getRefIndexHandler(req: Request, res: Response): Promise<any> {
         const refHomePageRoute = {
-            url: req.url,
+            url: this.baseUrl,
             name: "ReferentialHomePage",
         } as PublicRoute;
 
@@ -66,7 +69,7 @@ class ReferentialRoutes {
         const { params } = req;
 
         const refEntityPageRoute = {
-            url: req.url,
+            url: this.baseUrl + req.url,
             name: "ReferentialEntity",
         } as PublicRoute;
 
@@ -96,7 +99,7 @@ class ReferentialRoutes {
         const { params } = req;
 
         const refVocabulariesPageRoute = {
-            url: req.url,
+            url: this.baseUrl + req.url,
             name: "ReferentialVocabularies",
         } as PublicRoute;
 
@@ -127,7 +130,7 @@ class ReferentialRoutes {
         const { params } = req;
 
         const refPrimitivePageRoute = {
-            url: req.url,
+            url: this.baseUrl + req.url,
             name: "ReferentialPrimitive",
         } as PublicRoute;
 

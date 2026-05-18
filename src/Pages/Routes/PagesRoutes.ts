@@ -66,11 +66,19 @@ class PagesRoutes extends AbstractRoute {
     }
 
     public async statisticsLayoutHandler(req: Request, res: Response): Promise<any> {
-        return this.layoutHandler(await this.controllerInstance.statistics(), req, res);
+        const statsPageRoute = {
+            url: req.url,
+            name: "statistics",
+        } as PublicRoute;
+        return this.layoutHandler(await this.controllerInstance.statistics(statsPageRoute), req, res);
     }
 
     public async versionsLayoutHandler(req: Request, res: Response): Promise<any> {
-        return this.layoutHandler(await this.controllerInstance.versions(), req, res);
+        const versionsPageRoute = {
+            url: req.url,
+            name: "versions",
+        } as PublicRoute;
+        return this.layoutHandler(await this.controllerInstance.versions(versionsPageRoute), req, res);
     }
 
     public async layoutHandler(renderedLayout: any, req: Request, res: Response): Promise<any> {
