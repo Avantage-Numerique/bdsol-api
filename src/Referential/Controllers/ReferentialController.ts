@@ -3,8 +3,8 @@ import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
 import PublicTemplate from "@src/Templates/PublicTemplate";
 import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
 import { refData } from "@ref/Data/data";
-import { getAllUniquePrimitives } from "@ref/Data/utils";
-import { RefProperty } from "@ref/Data/types";
+import { getAllUniquePrimitives, mapEntityByURL } from "@ref/Data/utils";
+import { PublicRoute } from "@src/Pages/Types/PublicRoute";
 
 class ReferentialController {
     /** @private @static Singleton instance */
@@ -12,20 +12,10 @@ class ReferentialController {
 
     private _routes;
 
+    protected _baseRoute: string = "/ref";
+
     private constructor() {
-        this._routes = this.mapRefRoutes();
-    }
-
-    private mapRefRoutes() {
-        const routesMap: Map<string, RefProperty> = new Map();
-
-        Object.values(refData)
-            .flatMap((x) => Object.values(x))
-            .forEach((v) => {
-                if (v.url) routesMap.set(v.url.toLowerCase(), v);
-            });
-
-        return routesMap;
+        this._routes = mapEntityByURL();
     }
 
     /**
@@ -39,27 +29,31 @@ class ReferentialController {
         return ReferentialController._instance;
     }
 
-    public async referentialLayout(): Promise<string> {
+    public async referentialLayout(route: PublicRoute = {}): Promise<string> {
         const baseData = getTemplateBaseData();
 
         const index = new PublicTemplate("referential"); //tempalte have already a default in the EmailContent.Prepare.
 
         const title: string = `Référentiel`;
-        // let body: string = ``;
+
+        const entityRoute = `${this._baseRoute}`;
+
+        const metaTitle: string = `${title} &rarr; ${config.appName}`;
 
         return await index.render({
             context: {
                 ...baseData, //basic app and api default string and links
                 ...DefaultEmailTheme, //basic theme for colors and sizes.
                 title: `${title}`,
-                // body: `${body}`,
 
                 baseRoute: "/ref",
 
                 items: refData,
-
+                route: {
+                    ...route,
+                },
                 meta: {
-                    title: `${title}`,
+                    title: `${metaTitle}`,
                     // description: `${body}`,
                     author: `${config.appName}`,
                 },
@@ -67,15 +61,17 @@ class ReferentialController {
         });
     }
 
-    public async referentialSingleEntityLayout(entity: string): Promise<string> {
+    public async referentialSingleEntityLayout(entity: string, route: PublicRoute = {}): Promise<string> {
         const baseData = getTemplateBaseData();
 
         const index = new PublicTemplate("referentialSingle"); //tempalte have already a default in the EmailContent.Prepare.
 
-        const title: string = `Référentiel de ${config.appName} &rarr; <code>/ref/${entity}</code>`;
-        // let body: string = ``;
+        const entityRoute = `${this._baseRoute}/${entity}`;
 
-        const baseRoute = "/ref";
+        const entityData = this._routes.get(`/${entity}`);
+
+        const title: string = `${entityData?.label}`; // <small><code>${entityData?.ontologyProperty}</code></small>`Référentiel de ${config.appName} &rarr; <code>${entityRoute}</code>`;
+        const metaTitle: string = `${entity} &rarr; ${entityData?.ontologyProperty} &rarr; Référentiel ${config.appName}`;
 
         return await index.render({
             context: {
@@ -85,27 +81,34 @@ class ReferentialController {
                 // body: `${body}`,
 
                 baseUrl: config.baseUrl,
-                baseRoute,
+                baseRoute: this._baseRoute,
+                entityRoute: entityRoute,
 
-                item: this._routes.get(`/${entity}`),
+                item: entityData,
+                entity: entity,
 
+                route: {
+                    ...route,
+                },
                 meta: {
-                    title: `${title}`,
+                    title: `${metaTitle}`,
                     // description: `${body}`,
                     author: `${config.appName}`,
                 },
             },
         });
     }
-    public async referentialVocabulariesLayout(entity?: string): Promise<string> {
+    public async referentialVocabulariesLayout(entity?: string, route: PublicRoute = {}): Promise<string> {
         const baseData = getTemplateBaseData();
 
         const index = new PublicTemplate("referentialSingleVocabulary"); //tempalte have already a default in the EmailContent.Prepare.
+        const entityRoute = `${this._baseRoute}/vocabularies/${entity}`;
 
-        const title: string = `Vocabulaires controlé de ${config.appName} &rarr; <code>/ref/${entity}</code>`;
-        // let body: string = ``;
+        const entityData = this._routes.get(`/vocabularies/${entity}`);
 
-        const baseRoute = "/ref";
+        const title: string = `${entityData?.label}`;
+        //const title: string = `Vocabulaire controlé de ${config.appName} &rarr; <code>/ref/${entity}</code>`;
+        const metaTitle: string = `${entity} &rarr; ${entityData?.ontologyProperty} &rarr; Référentiel ${config.appName}`;
 
         return await index.render({
             context: {
@@ -115,12 +118,18 @@ class ReferentialController {
                 // body: `${body}`,
 
                 baseUrl: config.baseUrl,
-                baseRoute,
+                baseRoute: this._baseRoute,
 
-                item: this._routes.get(`/vocabularies/${entity}`),
+                item: entityData,
+                entity: entity,
+                entityRoute: entityRoute,
+
+                route: {
+                    ...route,
+                },
 
                 meta: {
-                    title: `${title}`,
+                    title: `${metaTitle}`,
                     // description: `${body}`,
                     author: `${config.appName}`,
                 },
@@ -128,30 +137,30 @@ class ReferentialController {
         });
     }
 
-    public async referentialPrimitivesLayout(): Promise<string> {
+    public async referentialPrimitivesLayout(route: PublicRoute = {}): Promise<string> {
         const baseData = getTemplateBaseData();
 
         const index = new PublicTemplate("referentialPrimitives"); //tempalte have already a default in the EmailContent.Prepare.
 
-        const title: string = `Référentiel de ${config.appName} &rarr; <code>/ref/properties</code>`;
-        // let body: string = ``;
-
-        const baseRoute = "/ref";
+        const title: string = `Liste des propriétés`;
+        const metaTitle: string = `Liste des propriétés &rarr; &rarr; Référentiel &rarr; ${config.appName}`;
 
         return await index.render({
             context: {
                 ...baseData, //basic app and api default string and links
                 ...DefaultEmailTheme, //basic theme for colors and sizes.
                 title: `${title}`,
-                // body: `${body}`,
 
                 baseUrl: config.baseUrl,
-                baseRoute,
+                baseRoute: this._baseRoute,
 
                 items: getAllUniquePrimitives(Object.values(refData).flatMap((item) => Object.values(item))),
 
+                route: {
+                    ...route,
+                },
                 meta: {
-                    title: `${title}`,
+                    title: `${metaTitle}`,
                     // description: `${body}`,
                     author: `${config.appName}`,
                 },

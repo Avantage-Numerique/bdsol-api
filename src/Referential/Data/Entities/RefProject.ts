@@ -23,10 +23,12 @@ import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refProject: RefProperty = {
-    ontologyProperty: "avnu:project",
+    ontologyProperty: "avnu:Project",
+    ontologyType: "Project",
     url: "/project",
     label: "Projet",
-    description: "Décrit un projet : les organisations qui en sont responsable, les équipements utilisé etc.",
+    description:
+        "Classe Projet qui décrit des projets fait par des organisations, les équipements utilisés, le budget et les étapes nécessaires pour accomplir le projet.",
     compatibility: [
         ArtsdataCompatibility.getOntologyCompatibilityArray(
             "CreativeWork",
@@ -47,7 +49,22 @@ export const refProject: RefProperty = {
             description: "Autre nom sous lequel le projet est également connu.",
         },
         { ...refDescription },
-        { ...refShortDescription },
+        {
+            ...refShortDescription,
+            compatibility: [
+                ArtsdataCompatibility.getOntologyCompatibilityArray(
+                    "disambiguatingDescription",
+                    "disambiguatingDescription",
+                    "https://schema.org/disambiguatingDescription"
+                ),
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("disambiguatingDescription"),
+                DataSceneCompatibility.getOntologyCompatibilityArray(
+                    "shortDescription",
+                    "shortDescription",
+                    "https://documentation.datascene.ca/references/show/#7-propriete-spectacle-show-shortdescription-description-courte"
+                ),
+            ],
+        },
         {
             ...refOrganisationLink,
             field: "entityInCharge", //https://schema.org/author //https://schema.org/maintainer //https://schema.org/producer //https://schema.org/owner

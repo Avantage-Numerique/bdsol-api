@@ -1,5 +1,8 @@
 import Page, { PageContent } from "@src/Pages/Controllers/Pages/Page";
 
+import PublicTemplate from "@src/Templates/PublicTemplate";
+import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
+
 import HomePage from "@src/Pages/Controllers/Pages/HomePage";
 import VersionsPage from "@src/Pages/Controllers/Pages/VersionsPage";
 import StatisticsPage from "@src/Pages/Controllers/Pages/StatisticsPage";
@@ -7,6 +10,14 @@ import StatisticsPage from "@src/Pages/Controllers/Pages/StatisticsPage";
 import ReferentialPage from "@src/Pages/Controllers/Pages/ReferentialPage";
 import ReferentialSinglePage from "@src/Pages/Controllers/Pages/ReferentialSinglePage";
 import ReferentialPrimitivesPage from "./Pages/ReferentialPrimitivesPage";
+
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
+
+import { getApiConfig } from "@src/config";
+import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
+import { StatusCodes } from "http-status-codes";
+import { Request, Response } from "express";
+import { PublicRoute } from "@src/Pages/Types/PublicRoute";
 
 class PagesController {
     /** @private @static Singleton instance */
@@ -27,67 +38,39 @@ class PagesController {
         return PagesController._instance;
     }
 
-    public async versions(): Promise<string> {
+    public async versions(route: PublicRoute = {}): Promise<string> {
         const versionsPage = new VersionsPage("versions", "versions");
-
+        versionsPage.route = route;
         return await versionsPage.render();
     }
 
-    public async homePage(): Promise<string> {
-        /*const updatedConfig = getApiConfig();
-        const baseData = getTemplateBaseData();
-        const index = new PublicTemplate(); //template have already a default in the EmailContent.Prepare.
-        const title: string = `${updatedConfig.appName} (version ${updatedConfig.version})`;
-        let body: string = "Dans le controler de page !";
-        body +=
-            updatedConfig.environnement === "development"
-                ? `<p>écoute sur le port: ${updatedConfig.port}<br /></p>`
-                : "";
-
-        body += `<p>${baseData.api.description}</p>`;
-        body +=
-            updatedConfig.environnement === "development"
-                ? `<p>Slow Down Middleware est <strong>${updatedConfig.debugSlowConnection ? "activé" : "désactivé"}</strong> et ralenti avec ${updatedConfig.debugSlowDuration}ms</p>`
-                : "";
-        return await index.render({
-            context: {
-                ...baseData, //basic app and api default string and links
-                ...DefaultEmailTheme, //basic theme for colors and sizes.
-                title: `${title}`,
-                body: `${body}`,
-                meta: {
-                    title: `${title}`,
-                    description: `${body}`,
-                    author: `${updatedConfig.appName}`,
-                },
-            },
-        });*/
+    public async homePage(route: PublicRoute = {}): Promise<string> {
         const homePage = new HomePage("homePage");
-
+        homePage.route = route;
         return await homePage.render();
     }
 
-    public async statistics(): Promise<string> {
+    public async statistics(route: PublicRoute = {}): Promise<string> {
         const versionsPage = new StatisticsPage("statistics");
-
+        versionsPage.route = route;
         return await versionsPage.render();
     }
 
-    public async referential(): Promise<string> {
+    public async referential(route: PublicRoute = {}): Promise<string> {
         const referentialPage = new ReferentialPage("referential");
-
+        referentialPage.route = route;
         return await referentialPage.render();
     }
 
-    public async referentialSingle(): Promise<string> {
+    public async referentialSingle(route: PublicRoute = {}): Promise<string> {
         const referentialPageSingle = new ReferentialSinglePage("referentialSingle");
-
+        referentialPageSingle.route = route;
         return await referentialPageSingle.render();
     }
 
-    public async referentialPrimitives(): Promise<string> {
+    public async referentialPrimitives(route: PublicRoute = {}): Promise<string> {
         const referentialPagePrimitives = new ReferentialPrimitivesPage("referentialPrimitives");
-
+        referentialPagePrimitives.route = route;
         return await referentialPagePrimitives.render();
     }
 

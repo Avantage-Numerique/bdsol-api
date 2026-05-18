@@ -22,7 +22,7 @@ import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 import { refPlaceLink } from "@ref/Data/RelationLinks/RefPlaceLink";
 
 export const refEvent: RefProperty = {
-    ontologyProperty: "avnu:event",
+    ontologyProperty: "avnu:Event",
     url: "/event",
     label: "Événement",
     description: "Décrit un événement, son lieu, son horaire, ses caractéristiques etc.",
@@ -44,7 +44,17 @@ export const refEvent: RefProperty = {
         { ...refAlternateName },
         { ...refSocialHandle },
         { ...refDescription },
-        { ...refShortDescription },
+        {
+            ...refShortDescription,
+            compatibility: [
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("disambiguatingDescription"),
+                DataSceneCompatibility.getOntologyCompatibilityArray(
+                    "shortDescription",
+                    "shortDescription",
+                    "https://documentation.datascene.ca/references/show/#7-propriete-spectacle-show-shortdescription-description-courte"
+                ),
+            ],
+        },
         {
             ...refOrganisationLink,
             url: "/entityInCharge",

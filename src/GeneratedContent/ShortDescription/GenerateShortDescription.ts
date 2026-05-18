@@ -1,7 +1,7 @@
 import sanitizeHtml from "sanitize-html";
 
 export function generateShortDescriptionFromDescription(description: string) {
-    let strippedDescription = description == undefined ? "" : stripHtml(description);
+    const strippedDescription = description == undefined ? "" : stripHtml(description);
     if (strippedDescription == "") return "";
 
     //Else, stripHtml and build shortDescription
@@ -12,10 +12,14 @@ export function generateShortDescriptionFromDescription(description: string) {
     return shortenedDescription;
 }
 
+/**
+ * @todo check et migre, potentiel de DOUBLON : migré vers le Str helper
+ * @param html
+ */
 function stripHtml(html: string): string {
     if (!html) return "";
 
-    let clean = sanitizeHtml(html, {
+    const clean = sanitizeHtml(html, {
         allowedTags: [], //no tag
         allowedAttributes: {}, //no attribute
     });
@@ -32,7 +36,7 @@ function addTagSpacing(input: string): string {
 
 //Reduce text to maxLength
 function reduceToMaxLength(text: string, maxLength: number = 160): string {
-    let words = text.split(/[\., ]+/);
+    const words = text.split(/[\., ]+/);
     let result = "";
     for (const word of words) {
         //Si le dernier mot déborde de la limite on le coupe de la description

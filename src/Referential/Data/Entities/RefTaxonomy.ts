@@ -10,7 +10,7 @@ import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 
 export const refTaxonomy: RefProperty = {
-    ontologyProperty: "avnu:taxonomy",
+    ontologyProperty: "avnu:Taxonomy",
     url: "/taxonomy",
     label: "Taxonomie (catégorie)",
     description: "Vocabulaire de catégorie pour décrire et regrouper des compétences, des technologies ou autres.",
@@ -25,7 +25,7 @@ export const refTaxonomy: RefProperty = {
         { ...refType },
         {
             field: "category",
-            ontologyProperty: "avnu:category",
+            ontologyProperty: "avnu:Category",
             url: "/category",
             type: createRefType("string"),
             label: "Type de taxonomie",

@@ -1,7 +1,6 @@
 import { RefProperty } from "../types";
-
+import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 import { createPrimitiveUrl, createRefType } from "../utils";
-import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
 import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 import { refOrder } from "@ref/Data/Properties/RefOrder";
 
@@ -25,14 +24,17 @@ export const refSkillGroup: RefProperty = {
             type: createRefType("string"),
             cardinality: "1..1",
             description: "Libellé utilisé par la personne pour décrire son groupe de compétences",
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
         },
         {
-            ...refTaxonomyLink,
             field: "skills",
+            ontologyProperty: "avnu:skills",
+            url: "/skills",
             label: "Compétences",
+            type: createRefType("reference", [EntityTypesEnum.taxonomy]),
             description: "Liste de compétences, habiletés ou de technologies.",
             cardinality: "0..N",
-            compatibility: [],
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
         },
         { ...refOrder },
     ],

@@ -8,6 +8,14 @@
             {% include "Partials/header.njk" %}
         {% endblock %}
 
+        <nav class="breadcrumbs default-padding-y">
+            <ul>
+                <li><a class="btn" href="/" title={{ api.name }}><i class="las la-home"></i></a></li>
+                <li><a class="btn" href="/ref" title="Référentiel">Référentiel</a></li>
+                <li><span>{{ item.label }}</span></li>
+            </ul>
+        </nav>
+
         {% if item %}
 
             <h1>{{ title | safe }}</h1>
@@ -18,33 +26,15 @@
 
         {% endif %}
 
-        <div class="breadcrumbs">
-            <a class="btn" href="/ref" title="Référentiel">&larr; Référentiel</a>
-        </div>
-
         {% if item %}
-
-            <h2 class="no-margin-b">{{ item.label }}</h2>
-
-            <p class="no-margin-t">{{ item.description }}</p>
+            <p>{{ item.description }}</p>
 
             {% if item.compatibility.length > 0 %}
 
-                <h3 class="no-margin">
-                    <code>{{ item.ontologyProperty }}</code>
-                </h3>
+                <h3><code>{{ item.ontologyProperty }}</code> est compatible avec :</h3>
 
-                <nav class="nav-compatibility small default-padding-b">
-
+                <nav class="nav-compatibility vertical default-padding-b">
                     <ul>
-                        <li>
-                            <i class="la la-arrow-right"></i>
-                            Compatibilité
-                            <i class="la la-arrow-right"></i>
-                            ontologies
-                            <i class="la la-arrow-right"></i>
-                        </li>
-
                         {% for compatItem in item.compatibility %}
 
                             {% if compatItem.messageOnly and compatItem.messageOnly !== "" %}
@@ -53,17 +43,11 @@
                                 </li>
                             {% else %}
                                 <li>
-                                    <span>
-                                        {{ compatItem.externalSource.name }}
-                                    </span>
-
-                                    <span>
-                                        <a href="{{ compatItem.documentationUrl }}" target="_blank" class="btn external code">
-                                            <i class="la la-link"></i>
-                                            {{ compatItem.mapping.externalField }}
-                                            <i class="la la-external-link"></i>
-                                        </a>
-                                    </span>
+                                    <a href="{{ compatItem.documentationUrl }}" target="_blank" class="external code">{{ compatItem.mapping.externalField }}<i class="la la-external-link"></i></a>
+                                    <span>dans l'ontologie</span>
+                                    <label>
+                                        <i class="las {{ compatItem.externalSource.icon }}"></i> {{ compatItem.externalSource.name }}
+                                    </label>
                                 </li>
                             {% endif %}
 

@@ -14,6 +14,7 @@ export type RefData = {
 export type RefPropertyBase = {
     field?: string; //Default field name
     ontologyProperty: `avnu:${string}`; //our ontology property name
+    ontologyType?: `${string}`; //our ontology property name
     url: `/${string}`;
     label: string; //Default label
     cardinality?: Cardinality; //Default cardinality
@@ -48,7 +49,10 @@ export type RefProperty = RefPropertyPrimitive | RefPropertyReference | RefPrope
 export type RefCompatibility = {
     externalSource: {
         name: string;
+        description?: string;
         sparqlEndpoint?: string;
+        icon?: string;
+        frontpageUrl?: string;
         //graph?: string;
     };
     mapping: {

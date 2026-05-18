@@ -10,7 +10,7 @@ import { createPrimitiveUrl, createRefType } from "../utils";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 
 export const refEquipment: RefProperty = {
-    ontologyProperty: "avnu:equipment",
+    ontologyProperty: "avnu:Equipment",
     url: "/equipment",
     label: "Equipement",
     description: "Entité décrivant un équipement, son modèle, sa marque, ses particularités.",

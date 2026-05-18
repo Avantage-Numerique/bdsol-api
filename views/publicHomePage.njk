@@ -8,5 +8,8 @@
         <h1>{{ title }}</h1>
         <p>{{ api.description }}</p>
         <p>{{ body | safe }}</p>
+
+        {% include "Partials/ontologies.njk" %}
+
     </div>
 {% endblock %}

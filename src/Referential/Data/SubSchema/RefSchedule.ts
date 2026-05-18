@@ -23,7 +23,7 @@ export const refSchedule: RefProperty = {
             label: "Nom de l'activité",
             cardinality: "0..1",
             description: "",
-            compatibility: [],
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
             //note: "",
         },
         {
@@ -34,7 +34,7 @@ export const refSchedule: RefProperty = {
             label: "Date de début de l'activité (plage horaire)",
             cardinality: "0..1",
             description: "",
-            compatibility: [],
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
             //note: "",
         },
         {
@@ -45,7 +45,7 @@ export const refSchedule: RefProperty = {
             label: "Heure de début de l'activité (plage horaire)",
             cardinality: "0..1",
             description: "",
-            compatibility: [],
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
             //note: "",
         },
         {
@@ -56,7 +56,7 @@ export const refSchedule: RefProperty = {
             label: "Date de début de l'activité (plage horaire)",
             cardinality: "0..1",
             description: "",
-            compatibility: [],
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
             //note: "",
         },
         {
@@ -67,7 +67,7 @@ export const refSchedule: RefProperty = {
             label: "Heure de début de l'activité (plage horaire)",
             cardinality: "0..1",
             description: "",
-            compatibility: [],
+            compatibility: [AvnuCompatibility.compatibilityMessage()],
             //note: "",
         },
         { ...refSubMeta },
