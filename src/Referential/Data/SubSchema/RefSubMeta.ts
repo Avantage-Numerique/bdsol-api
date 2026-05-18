@@ -1,5 +1,5 @@
-import { RefProperty } from "../types";
-import { createRefType } from "../utils";
+import { RefProperty } from "@ref/Data/types";
+import { createRefType } from "@ref/Data/utils";
 import { refOrder } from "@ref/Data/Properties/RefOrder";
 
 export const refSubMeta: RefProperty = {

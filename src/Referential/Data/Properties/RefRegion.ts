@@ -1,6 +1,6 @@
 import { RegionEnum } from "@src/SubProperty/Badges/RegionEnum";
-import { RefProperty } from "../types";
-import { createPrimitiveUrl, createRefType } from "../utils";
+import { RefProperty } from "@ref/Data/types";
+import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
 import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 
 export const refRegion: RefProperty = {

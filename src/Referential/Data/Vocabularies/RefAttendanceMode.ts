@@ -1,5 +1,5 @@
 //eventAttendanceMode
-import { RefVocabulary } from "../types";
+import { RefVocabulary } from "@ref/Data/types";
 import { EventFormatEnum } from "@src/Events/EventFormatEnum";
 import EnumHelper from "@src/Helpers/EnumHelper";
 

@@ -18,7 +18,7 @@ import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 
 import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
-import { refShortDescription } from "../Properties/RefShortDescription";
+import { refShortDescription } from "@ref/Data/Properties/RefShortDescription";
 import { refMemberOf } from "@ref/Data/Properties/RefMemberOf";
 
 export const refPerson: RefProperty = {

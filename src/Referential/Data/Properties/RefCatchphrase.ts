@@ -1,8 +1,11 @@
-import { RefProperty } from "../types";
-import { createPrimitiveUrl, createRefType } from "../utils";
+import { RefProperty } from "@ref/Data/types";
+import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 
-export const refCatchphrase: RefProperty = {
+/**
+ * type RefProperty for the Catchphrase
+ */
+const refCatchphrase: RefProperty = {
     field: "catchphrase",
     ontologyProperty: "avnu:catchphrase",
     url: createPrimitiveUrl("catchphrase"),
@@ -12,3 +15,5 @@ export const refCatchphrase: RefProperty = {
     compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("slogan")],
     description: "Courte phrase d'accroche, moto, slogan, citation.",
 };
+
+export { refCatchphrase };

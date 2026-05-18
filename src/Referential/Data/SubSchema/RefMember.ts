@@ -1,6 +1,6 @@
-import { RefProperty } from "../types";
-import { createPrimitiveUrl, createRefType } from "../utils";
-import { refPersonLink } from "../RelationLinks/RefPersonLink";
+import { RefProperty } from "@ref/Data/types";
+import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
+import { refPersonLink } from "@ref/Data/RelationLinks/RefPersonLink";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 import { refPerson } from "@ref/Data/Entities/RefPerson";

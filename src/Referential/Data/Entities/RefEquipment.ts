@@ -1,12 +1,12 @@
-import { refDescription } from "../Properties/RefDescription";
-import { refName } from "../Properties/RefName";
-import { refShortDescription } from "../Properties/RefShortDescription";
-import { refType } from "../Properties/RefType";
-import { refMainImageLink } from "../RelationLinks/RefMainImageLink";
-import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
-import { refSocialHandle } from "../SubSchema/RefSocialHandle";
-import { RefProperty } from "../types";
-import { createPrimitiveUrl, createRefType } from "../utils";
+import { refDescription } from "@ref/Data/Properties/RefDescription";
+import { refName } from "@ref/Data/Properties/RefName";
+import { refShortDescription } from "@ref/Data/Properties/RefShortDescription";
+import { refType } from "@ref/Data/Properties/RefType";
+import { refMainImageLink } from "@ref/Data/RelationLinks/RefMainImageLink";
+import { refTaxonomyLink } from "@ref/Data/RelationLinks/RefTaxonomyLink";
+import { refSocialHandle } from "@ref/Data/SubSchema/RefSocialHandle";
+import { RefProperty } from "@ref/Data/types";
+import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 
 export const refEquipment: RefProperty = {

@@ -1,7 +1,7 @@
-import { RefProperty } from "../types";
+import { RefProperty } from "@ref/Data/types";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
-import { createPrimitiveUrl, createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
 
 export const refAlternateName: RefProperty = {
     field: "alternateName",

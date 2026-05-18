@@ -9,15 +9,16 @@ import type {
     RefTypePrimitive,
     RefTypeReference,
 } from "./types";
+
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
-export function findEntityByURL(url: string) {
+function findEntityByURL(url: string) {
     return Object.values(refData)
         .flatMap((x) => Object.values(x).flat())
         .find((i) => `/${url}` === i.url?.toLowerCase());
 }
 
-export function mapEntityByURL() {
+function mapEntityByURL() {
     const routesMap: Map<string, RefProperty> = new Map();
 
     Object.values(refData)
@@ -29,10 +30,10 @@ export function mapEntityByURL() {
     return routesMap;
 }
 
-export function createRefType<T extends PrimitiveType>(type: T): RefTypePrimitive<T>;
-export function createRefType(type: "object"): RefTypeObject;
-export function createRefType(type: "reference", arg: EntityTypesEnum[], refPath?: string): RefTypeReference;
-export function createRefType(
+function createRefType<T extends PrimitiveType>(type: T): RefTypePrimitive<T>;
+function createRefType(type: "object"): RefTypeObject;
+function createRefType(type: "reference", arg: EntityTypesEnum[], refPath?: string): RefTypeReference;
+function createRefType(
     type: PrimitiveType | "object" | "reference",
     arg: EntityTypesEnum[] = [],
     refPath?: string
@@ -48,11 +49,11 @@ export function createRefType(
     return { kind: "primitive", name: type };
 }
 
-export function createPrimitiveUrl(name: string): `/${string}#avnu:${string}` {
+function createPrimitiveUrl(name: string): `/${string}#avnu:${string}` {
     return ("/properties#avnu:" + name) as `/${string}#avnu:${string}`;
 }
 
-export function isObjectProp(entity: RefProperty): entity is RefPropertyObject {
+function isObjectProp(entity: RefProperty): entity is RefPropertyObject {
     return entity.type?.kind === "object";
 }
 
@@ -74,7 +75,7 @@ function getAllPrimitives(base: RefProperty[]): RefPropertyPrimitive[] {
     return filtered;
 }
 
-export function getAllUniquePrimitives(base: RefProperty[]) {
+function getAllUniquePrimitives(base: RefProperty[]) {
     const distinctsKeys = new Set();
 
     return getAllPrimitives(base).filter((item) => {
@@ -86,3 +87,5 @@ export function getAllUniquePrimitives(base: RefProperty[]) {
         }
     });
 }
+
+export { getAllUniquePrimitives, isObjectProp, createPrimitiveUrl, createRefType, mapEntityByURL, findEntityByURL };

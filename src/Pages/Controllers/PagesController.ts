@@ -11,12 +11,6 @@ import ReferentialPage from "@src/Pages/Controllers/Pages/ReferentialPage";
 import ReferentialSinglePage from "@src/Pages/Controllers/Pages/ReferentialSinglePage";
 import ReferentialPrimitivesPage from "./Pages/ReferentialPrimitivesPage";
 
-import LogHelper from "@src/Monitoring/Helpers/LogHelper";
-
-import { getApiConfig } from "@src/config";
-import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
-import { StatusCodes } from "http-status-codes";
-import { Request, Response } from "express";
 import { PublicRoute } from "@src/Pages/Types/PublicRoute";
 
 class PagesController {
