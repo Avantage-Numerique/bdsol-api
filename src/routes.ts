@@ -7,6 +7,7 @@ import config, { getApiConfig } from "@src/config";
 import PublicTemplate from "@src/Templates/PublicTemplate";
 import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
 import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
+import AutoIncrement from "./AutoIncrement/AutoIncrement";
 
 const ApiRouter = express.Router();
 
@@ -60,6 +61,13 @@ ApiRouter.get("/42", async (req, res) => {
             "<br/>" +
             "</h1></pre>"
     );
+});
+
+ApiRouter.get("/autoincrement", async (req, res) => {
+    let seqDoc = await AutoIncrement.getNextURIGlobalNumber();
+    res.set("Content-Type", "text/html");
+
+    return res.status(StatusCodes.OK).send(seqDoc);
 });
 
 ApiRouter.get("/embed-taxonomies-metas", async (req, res) => {

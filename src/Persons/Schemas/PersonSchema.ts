@@ -1,10 +1,10 @@
-import { Document } from "mongoose";
-import Media from "../../Media/Models/Media";
+import { Document, ObjectId } from "mongoose";
 import { Meta } from "../../Moderation/Schemas/MetaSchema";
 import { DomainListSchema } from "../../Taxonomy/Schemas/DomainListSchema";
-import { SkillGroup } from "../../Taxonomy/Schemas/SkillGroupSchema";
-import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
-import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
+import { SkillGroupSchema } from "../../Taxonomy/Schemas/SkillGroupSchema";
+import { ContactPointSchema } from "@src/Database/Schemas/ContactPointSchema";
+import { SocialHandleSchema } from "@src/Database/Schemas/SocialHandleSchema";
+import { UriSchema } from "@src/Database/Schemas/URISchema";
 
 export interface PersonSchema extends Document {
     lastName: string;
@@ -13,13 +13,14 @@ export interface PersonSchema extends Document {
     nickname: string;
     description: string;
     shortDescription: string;
-    occupations: [SkillGroup];
+    occupations: [SkillGroupSchema];
     domains: [DomainListSchema];
-    mainImage: Media; //ça fonctionne ça ?
+    mainImage: ObjectId;
     catchphrase: string;
-    contactPoint: ContactPoint;
-    url: [SocialHandle];
+    contactPoint: ContactPointSchema;
+    url: [SocialHandleSchema];
     region: string;
     badges: [string];
     meta: Meta;
+    uri: UriSchema;
 }

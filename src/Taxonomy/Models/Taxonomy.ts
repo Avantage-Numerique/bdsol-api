@@ -7,6 +7,7 @@ import TaxonomyService from "../Services/TaxonomyService";
 import { Meta, SubMeta } from "@src/Moderation/Schemas/MetaSchema";
 import * as fs from "fs";
 import { taxonomyPopulate } from "../Middlewares/TaxonomiesPopulate";
+import { UriObject } from "@src/Database/Schemas/URISchema";
 
 class Taxonomy extends AbstractModel {
     /** @protected @static Singleton instance of model Taxonomy */
@@ -118,6 +119,9 @@ class Taxonomy extends AbstractModel {
             meta: {
                 type: Meta.schema,
                 //required: true,
+            },
+            uri: {
+                type: UriObject.schema,
             },
         },
         {

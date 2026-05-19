@@ -7,6 +7,7 @@ import { middlewarePopulateProperty } from "@src/Taxonomy/Middlewares/Taxonomies
 import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 import { populateUser } from "@src/Users/Middlewares/populateUser";
 import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
+import { UriObject } from "@src/Database/Schemas/URISchema";
 
 class Place extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -131,6 +132,9 @@ class Place extends AbstractModel {
             },
             meta: {
                 type: Meta.schema,
+            },
+            uri: {
+                type: UriObject.schema,
             },
         },
         {

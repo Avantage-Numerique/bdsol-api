@@ -15,6 +15,7 @@ import { middlewareInsertBadges } from "@src/SubProperty/Badges/MiddlewareInsert
 import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { RegionEnum } from "@src/SubProperty/Badges/RegionEnum";
 import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
+import { UriObject } from "@src/Database/Schemas/URISchema";
 
 class Person extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -158,6 +159,9 @@ class Person extends AbstractModel {
             },
             meta: {
                 type: Meta.schema,
+            },
+            uri: {
+                type: UriObject.schema,
             },
         },
         {
