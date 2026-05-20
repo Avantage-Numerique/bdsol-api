@@ -143,9 +143,7 @@ class Organisation extends AbstractModel {
             meta: {
                 type: Meta.schema,
             },
-            uri: {
-                type: UriObject.schema,
-            },
+            uri: UriObject.field,
         },
         {
             toJSON: { virtuals: true },
@@ -197,6 +195,7 @@ class Organisation extends AbstractModel {
             region: document.region ?? "",
             badges: document.badges ?? [],
             type: document.type ?? "",
+            uri: document.uri ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
             _generated: generateEntityContent(document),

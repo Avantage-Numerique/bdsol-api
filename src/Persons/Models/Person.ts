@@ -160,9 +160,7 @@ class Person extends AbstractModel {
             meta: {
                 type: Meta.schema,
             },
-            uri: {
-                type: UriObject.schema,
-            },
+            uri: UriObject.field,
         },
         {
             toJSON: { virtuals: true },
@@ -266,6 +264,7 @@ class Person extends AbstractModel {
             region: document.region ?? "",
             badges: document.badges ?? [],
             meta: document.meta ?? "",
+            uri: document.uri ?? "",
             type: document.type ?? "",
             fullName: document.fullName ?? "",
             createdAt: document.createdAt ?? "",

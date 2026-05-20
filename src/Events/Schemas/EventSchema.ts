@@ -8,7 +8,7 @@ import { Schedule } from "@src/Database/Schemas/ScheduleSchema";
 import { EventFormatEnum } from "../EventFormatEnum";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
-import { UriSchema } from "@src/Database/Schemas/URISchema";
+import { UriObject } from "@src/Database/Schemas/URISchema";
 
 export interface EventSchema extends Document {
     name: string;
@@ -34,5 +34,5 @@ export interface EventSchema extends Document {
     location: [ObjectId];
     photoGallery: ObjectId;
     meta: Meta;
-    uri: UriSchema;
+    uri: UriObject;
 }

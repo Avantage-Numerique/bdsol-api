@@ -4,7 +4,7 @@ import { DomainListSchema } from "../../Taxonomy/Schemas/DomainListSchema";
 import { SkillGroupSchema } from "../../Taxonomy/Schemas/SkillGroupSchema";
 import { ContactPointSchema } from "@src/Database/Schemas/ContactPointSchema";
 import { SocialHandleSchema } from "@src/Database/Schemas/SocialHandleSchema";
-import { UriSchema } from "@src/Database/Schemas/URISchema";
+import { UriObject } from "@src/Database/Schemas/URISchema";
 
 export interface PersonSchema extends Document {
     lastName: string;
@@ -22,5 +22,5 @@ export interface PersonSchema extends Document {
     region: string;
     badges: [string];
     meta: Meta;
-    uri: UriSchema;
+    uri: UriObject;
 }

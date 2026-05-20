@@ -67,8 +67,7 @@ async function assignReservedUris(reservedUriList: ReservedUriType[]): Promise<v
             LogHelper.error("[Migration][Assign Reserved URI]", "URI already exists on another entity:", uri);
             continue;
         }
-        console.log("ABOUT TO SET URI:", uri, entity._id.toString());
-        await modelEntry.instance.mongooseModel.updateOne(
+        await modelEntry.instance.mongooseModel.collection.updateOne(
             { _id: entity._id },
             {
                 $set: {
@@ -118,21 +117,18 @@ async function assignSequentialUris(reservedUriList: ReservedUriType[]): Promise
     const reservedSeqSet = new Set(reservedUriList.map((elem) => elem.seq));
 
     const globalUriDoc = await AutoIncrement.getNextURIGlobalNumber();
-
-    let currentSeq = globalUriDoc.seq;
+    let currentSeq = globalUriDoc.split("/").pop();
 
     for (const entity of allEntities) {
         while (reservedSeqSet.has(currentSeq)) {
             currentSeq++;
         }
         const uri = buildUri(currentSeq);
-        await entity.model.updateOne(
+        await entity.model.collection.updateOne(
             { _id: entity._id },
             {
                 $set: {
-                    uri: {
-                        value: uri,
-                    },
+                    uri,
                 },
             }
         );
@@ -149,7 +145,7 @@ async function assignSequentialUris(reservedUriList: ReservedUriType[]): Promise
         }
     );
 
-    console.log("Updated global-uri sequence to:", currentSeq);
+    LogHelper.log("Updated global-uri sequence to:", currentSeq);
 }
 
 export async function up(): Promise<void> {
@@ -160,7 +156,7 @@ export async function up(): Promise<void> {
         const db: DBDriver = getDbDriver();
         await db.connect(); //check this when it's run in the env. of the API already running.
         if (db?.providers?.data) {
-            //await assignReservedUris(ReservedUri);
+            await assignReservedUris(ReservedUri);
             await assignSequentialUris(ReservedUri);
         }
     } catch (e: any) {

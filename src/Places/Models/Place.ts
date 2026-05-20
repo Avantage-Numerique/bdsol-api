@@ -133,9 +133,7 @@ class Place extends AbstractModel {
             meta: {
                 type: Meta.schema,
             },
-            uri: {
-                type: UriObject.schema,
-            },
+            uri: UriObject.field,
         },
         {
             toJSON: { virtuals: true },
@@ -180,6 +178,7 @@ class Place extends AbstractModel {
             latitude: document.latitude ?? "",
             longitude: document.longitude ?? "",
             meta: document.meta ?? "",
+            uri: document.uri ?? "",
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",

@@ -8,7 +8,7 @@ import { DomainListSchema } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { SocialHandleSchema } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPointSchema } from "@src/Database/Schemas/ContactPointSchema";
 import { MediaSchema } from "@src/Media/Schemas/MediaSchema";
-import { UriSchema } from "@src/Database/Schemas/URISchema";
+import { UriObject } from "@src/Database/Schemas/URISchema";
 
 export interface ProjectSchema extends Document {
     name: string;
@@ -30,5 +30,5 @@ export interface ProjectSchema extends Document {
     context: ProjectContextEnum;
     equipment: [ObjectId];
     meta: Meta;
-    uri: UriSchema;
+    uri: UriObject;
 }

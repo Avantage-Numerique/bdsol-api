@@ -157,9 +157,7 @@ class Event extends AbstractModel {
             meta: {
                 type: Meta.schema,
             },
-            uri: {
-                type: UriObject.schema,
-            },
+            uri: UriObject.field,
         },
         {
             toJSON: { virtuals: true },
@@ -221,6 +219,7 @@ class Event extends AbstractModel {
             location: document.location ?? [],
             photoGallery: document.photoGallery ?? "",
             meta: document.meta ?? "",
+            uri: document.uri ?? "",
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",

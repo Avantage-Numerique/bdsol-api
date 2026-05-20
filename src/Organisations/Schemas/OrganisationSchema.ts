@@ -7,7 +7,7 @@ import { ObjectId } from "mongoose";
 import { EquipmentLinkSchema } from "@src/Database/Schemas/EquipmentLinkSchema";
 import { SocialHandleSchema } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPointSchema } from "@src/Database/Schemas/ContactPointSchema";
-import { UriSchema } from "@src/Database/Schemas/URISchema";
+import { UriObject } from "@src/Database/Schemas/URISchema";
 
 export interface OrganisationSchema extends Document {
     name: string;
@@ -27,5 +27,5 @@ export interface OrganisationSchema extends Document {
     region: string;
     badges: [string];
     meta: MetaSchema;
-    uri: UriSchema;
+    uri: UriObject;
 }

@@ -1,21 +1,15 @@
-import { Schema } from "mongoose";
+import { SchemaDefinitionProperty } from "mongoose";
 
 export interface UriSchema {
-    value: string;
+    uri: string;
 }
 
 export class UriObject {
     /** @static schema */
-    static schema: Schema = new Schema<UriSchema>(
-        {
-            value: {
-                type: String,
-                required: true,
-            },
-        },
-        {
-            timestamps: false,
-            _id: false,
-        }
-    );
+    static field: SchemaDefinitionProperty<string> = {
+        type: String,
+        required: true,
+        unique: true,
+        immutable: true,
+    };
 }

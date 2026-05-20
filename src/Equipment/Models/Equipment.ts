@@ -113,9 +113,7 @@ class Equipment extends AbstractModel {
             meta: {
                 type: Meta.schema,
             },
-            uri: {
-                type: UriObject.schema,
-            },
+            uri: UriObject.field,
         },
         {
             toJSON: { virtuals: true },
@@ -159,6 +157,7 @@ class Equipment extends AbstractModel {
             meta: document.meta ?? {},
             createdAt: document.createAt ?? "",
             updatedAt: document.updatedAt ?? "",
+            uri: document.uri ?? "",
             type: document.type ?? "",
         };
     }

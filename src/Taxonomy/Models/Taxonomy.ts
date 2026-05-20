@@ -120,9 +120,7 @@ class Taxonomy extends AbstractModel {
                 type: Meta.schema,
                 //required: true,
             },
-            uri: {
-                type: UriObject.schema,
-            },
+            uri: UriObject.field,
         },
         {
             toJSON: { virtuals: true },
@@ -214,6 +212,7 @@ class Taxonomy extends AbstractModel {
             type: document.type ?? "",
             domains: document.domains ?? [],
             meta: document.meta ?? {},
+            uri: document.uri ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
         };
