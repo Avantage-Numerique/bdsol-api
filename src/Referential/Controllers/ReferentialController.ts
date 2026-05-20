@@ -3,8 +3,9 @@ import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
 import PublicTemplate from "@src/Templates/PublicTemplate";
 import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
 import { refData } from "@ref/Data/data";
-import { getAllUniquePrimitives, mapEntityByURL } from "@ref/Data/utils";
+import { getAllUniquePrimitives } from "@ref/Data/utils";
 import { PublicRoute } from "@src/Pages/Types/PublicRoute";
+import { RefProperty } from "@ref/Data/types";
 
 class ReferentialController {
     /** @private @static Singleton instance */
@@ -15,7 +16,19 @@ class ReferentialController {
     protected _baseRoute: string = "/ref";
 
     private constructor() {
-        this._routes = mapEntityByURL();
+        this._routes = this.mapRefRoutes();
+    }
+
+    private mapRefRoutes() {
+        const routesMap: Map<string, RefProperty> = new Map();
+
+        Object.values(refData)
+            .flatMap((x) => Object.values(x))
+            .forEach((v) => {
+                if (v.url) routesMap.set(v.url.toLowerCase(), v);
+            });
+
+        return routesMap;
     }
 
     /**

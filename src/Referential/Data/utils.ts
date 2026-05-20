@@ -1,5 +1,4 @@
 import { RefProperty } from "./types";
-import { refData } from "./data";
 import type {
     PrimitiveType,
     RefPropertyObject,
@@ -11,24 +10,6 @@ import type {
 } from "./types";
 
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
-
-function findEntityByURL(url: string) {
-    return Object.values(refData)
-        .flatMap((x) => Object.values(x).flat())
-        .find((i) => `/${url}` === i.url?.toLowerCase());
-}
-
-function mapEntityByURL() {
-    const routesMap: Map<string, RefProperty> = new Map();
-
-    Object.values(refData)
-        .flatMap((x) => Object.values(x))
-        .forEach((v) => {
-            if (v.url) routesMap.set(v.url.toLowerCase(), v);
-        });
-
-    return routesMap;
-}
 
 function createRefType<T extends PrimitiveType>(type: T): RefTypePrimitive<T>;
 function createRefType(type: "object"): RefTypeObject;
@@ -88,4 +69,4 @@ function getAllUniquePrimitives(base: RefProperty[]) {
     });
 }
 
-export { getAllUniquePrimitives, isObjectProp, createPrimitiveUrl, createRefType, mapEntityByURL, findEntityByURL };
+export { getAllUniquePrimitives, isObjectProp, createPrimitiveUrl, createRefType };

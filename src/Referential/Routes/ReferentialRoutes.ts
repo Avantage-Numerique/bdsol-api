@@ -3,7 +3,6 @@ import { StatusCodes } from "http-status-codes";
 
 import ReferentialController from "@ref/Controllers/ReferentialController";
 import { refData } from "@ref/Data/data";
-import { findEntityByURL } from "@ref/Data/utils";
 import { PublicRoute } from "@src/Pages/Types/PublicRoute";
 
 class ReferentialRoutes {
@@ -17,6 +16,12 @@ class ReferentialRoutes {
         this.routerInstance = express.Router();
         this.routerInstanceAuthentification = express.Router();
         this.baseUrl = "/ref";
+    }
+
+    private findEntityByURL(url: string) {
+        return Object.values(refData)
+            .flatMap((x) => Object.values(x).flat())
+            .find((i) => `/${url}` === i.url?.toLowerCase());
     }
 
     /**
@@ -76,7 +81,7 @@ class ReferentialRoutes {
         if ("json" in req.query) {
             res.set("Content-Type", "application/json");
 
-            return res.status(StatusCodes.OK).send(findEntityByURL(params.entity.toLowerCase()));
+            return res.status(StatusCodes.OK).send(this.findEntityByURL(params.entity.toLowerCase()));
         }
 
         res.set("Content-Type", "text/html");
@@ -106,7 +111,7 @@ class ReferentialRoutes {
         if ("json" in req.query) {
             res.set("Content-Type", "application/json");
 
-            return res.status(StatusCodes.OK).send(findEntityByURL(params.entity.toLowerCase()));
+            return res.status(StatusCodes.OK).send(this.findEntityByURL(params.entity.toLowerCase()));
         }
 
         res.set("Content-Type", "text/html");
@@ -138,7 +143,7 @@ class ReferentialRoutes {
         // if ("json" in req.query) {
         //     res.set("Content-Type", "application/json");
 
-        //     return res.status(StatusCodes.OK).send(findEntityByURL(params.type.toLowerCase()));
+        //     return res.status(StatusCodes.OK).send(this.findEntityByURL(params.type.toLowerCase()));
         // }
 
         res.set("Content-Type", "text/html");
