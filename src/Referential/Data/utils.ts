@@ -24,7 +24,7 @@ function createRefType(
     }
 
     if (type === "reference") {
-        return { kind: "reference", targets: arg, refPath };
+        return { kind: "reference", targets: arg, refPath: refPath };
     }
 
     return { kind: "primitive", name: type };
