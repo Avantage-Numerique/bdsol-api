@@ -46,7 +46,6 @@ export default class Api {
     public templateSystem: Nunjucks.Environment;
     public templateBasePath: string;
     public mainRouter: express.Router;
-    public authRouters: express.Router;
 
     public baseRoutes: Array<any>;
     public entitiesRoutes: Array<any>;
@@ -254,8 +253,6 @@ export default class Api {
         for (const baseRoute of this.baseRoutes) {
             this.mainRouter.use("/", baseRoute.manager.setupPublicRoutes());
         }
-
-        //this.mainRouter.use("/", RegistrationRouter);this is now manage by the AuthentificationController. But It should be a create in the User domain. @todo find a better design for this.
 
         //main log and feedback from the API
         this.mainRouter.use("/", ApiRouter);
