@@ -1,15 +1,16 @@
 import { getApiConfig } from "@src/config";
+import { CompatibleOntologiesEnum } from "@ref/Data/Compatibility/CompatibleOntology";
 
 const isDev = getApiConfig().isDevelopment;
 
-enum OntologyTarget {
-    SCHEMA_ORG = "schema.org",
-    DATASCENE = "datascene",
-    AVNU = "avnu",
-}
-
 const addIdInDev = (id: any) => (isDev ? { "@id_for_dev": id } : null);
 
+//context : Inline == we add all the types to do it like an Internal @context.
+//context : url == is an external context pass via an URL.
+
+/**
+ *  Build de jsonld
+ */
 export class JsonLDBuilder {
     private entity: any;
     private rootRef: any; // RefProperty complet (racine)
@@ -17,6 +18,13 @@ export class JsonLDBuilder {
         contextMode?: "inline" | "url";
         contextUrl?: string;
     };
+
+    /**
+     *
+     * @param entity
+     * @param rootRef root of target Property
+     * @param options
+     */
     constructor(entity: any, rootRef: any, options?: any) {
         this.entity = entity;
         this.rootRef = rootRef;
@@ -27,12 +35,13 @@ export class JsonLDBuilder {
 
     // build natif AVNU
     build() {
-        return this.buildFor(OntologyTarget.AVNU);
+        return this.buildFor(CompatibleOntologiesEnum.Schemaorg);
     }
 
     // build pour ontologie externe
-    buildFor(targetOntology: OntologyTarget | string) {
+    buildFor(targetOntology: CompatibleOntologiesEnum | string) {
         return {
+            "@dev": `Build for ${targetOntology}`,
             "@context": this.buildContext(),
             ...addIdInDev(this.entity._id),
             "@type": this.rootRef.ontologyProperty,
@@ -82,7 +91,7 @@ export class JsonLDBuilder {
 
             //Check if that field exists in the entity
             const value = entity?.[field];
-            const isArray = propertyRef.cardinality?.includes("N");
+            const isPropertyPluralRelation = propertyRef.cardinality?.includes("N");
 
             //check valeur absente
             if (value === undefined || value === null) {
@@ -96,7 +105,7 @@ export class JsonLDBuilder {
             const processValue = (val: any): any => {
                 //primitives
                 if (propertyRef.type?.kind === "primitive") {
-                    if (targetOntology === OntologyTarget.AVNU) return val;
+                    if (targetOntology === CompatibleOntologiesEnum.AVNU) return val;
 
                     const mapping = this.findMapping(propertyRef, targetOntology);
                     if (mapping) return val;
@@ -105,7 +114,7 @@ export class JsonLDBuilder {
 
                 //references
                 if (propertyRef.type?.kind === "reference") {
-                    if (targetOntology === OntologyTarget.AVNU) {
+                    if (targetOntology === CompatibleOntologiesEnum.AVNU) {
                         //If more then 1 target, check the refPath to collapse to the right value
                         if (propertyRef.type.targets.length > 1) {
                             const refPath = propertyRef.type.refPath;
@@ -143,7 +152,7 @@ export class JsonLDBuilder {
             };
 
             //gestion array ou single
-            if (isArray) {
+            if (isPropertyPluralRelation) {
                 if (!Array.isArray(value)) {
                     console.error(`[JsonLDBuilder] Expected array for property: ${field}`);
                     continue;
@@ -152,7 +161,7 @@ export class JsonLDBuilder {
                 const processedArray = value.map(processValue).filter((v) => v !== undefined);
 
                 if (processedArray.length > 0) {
-                    if (targetOntology === OntologyTarget.AVNU) result[field] = processedArray;
+                    if (targetOntology === CompatibleOntologiesEnum.AVNU) result[field] = processedArray;
                     else {
                         const mapping = this.findMapping(propertyRef, targetOntology);
                         result[mapping?.externalField || field] = processedArray;
@@ -161,7 +170,7 @@ export class JsonLDBuilder {
             } else {
                 const processed = processValue(value);
                 if (processed !== undefined) {
-                    if (targetOntology === OntologyTarget.AVNU) result[field] = processed;
+                    if (targetOntology === CompatibleOntologiesEnum.AVNU) result[field] = processed;
                     else {
                         const mapping = this.findMapping(propertyRef, targetOntology);
                         if (mapping) result[mapping.externalField] = processed;
@@ -176,7 +185,7 @@ export class JsonLDBuilder {
 
     // recherche le mapping RefCompatibility pour l'ontologie cible
     private findMapping(propertyRef: any, targetOntology: string) {
-        if (!propertyRef.compatibility || targetOntology === OntologyTarget.AVNU) return null;
+        if (!propertyRef.compatibility || targetOntology === CompatibleOntologiesEnum.AVNU) return null;
 
         const comp = propertyRef.compatibility.find((c: any) => c.externalSource?.name === targetOntology);
         return comp?.mapping || null;

@@ -16,18 +16,6 @@ export const refType: RefProperty = {
         ),
     ],
     //Pas le même vocabulaire https://datascene.ca/references/vocabulaires/types_de_contributeurs/
-    /* {
-        externalSource: {
-            name: "Datascene",
-            //sparqlEndpoint: ""
-        },
-        mapping: {
-            externalField: "Type de contributeur",
-            //ontologyProperty: "",
-            //ontologyUri: "",
-        },
-        documentationUrl: "https://datascene.ca/references/vocabulaires/types_de_contributeurs/",
-    }, */
     description: "Type de l'entité statique. Virtuel, statique et non-modifiable.",
     constraints: {
         enum: EntityTypesEnum,

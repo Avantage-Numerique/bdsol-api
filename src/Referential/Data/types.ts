@@ -49,6 +49,7 @@ export type RefProperty = RefPropertyPrimitive | RefPropertyReference | RefPrope
 export type RefCompatibility = {
     externalSource: {
         name: string;
+        label: string;
         description?: string;
         sparqlEndpoint?: string;
         icon?: string;

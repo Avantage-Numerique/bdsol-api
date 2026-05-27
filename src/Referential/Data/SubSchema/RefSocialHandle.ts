@@ -12,17 +12,6 @@ export const refSocialHandle: RefProperty = {
     description: "Liens vers différent réseau sociaux et leur noms.",
     compatibility: [AvnuCompatibility.compatibilityMessage()],
     //Propriété non conforme, SocialHandle (object) != sameAs (string)
-    /* {
-            externalSource: {
-                name: "Schema.org",
-            },
-            mapping: {
-                externalField: "sameAs",
-                ontologyProperty: "schema:sameAs",
-                ontologyUri: "https://schema.org/sameAs",
-            },
-            documentationUrl: "https://schema.org/sameAs",
-        }, */
 
     type: createRefType("object"),
     ref: [

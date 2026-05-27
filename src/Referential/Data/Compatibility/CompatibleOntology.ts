@@ -4,17 +4,19 @@ import { RefCompatibility } from "@ref/Data/types";
 export type CompatibleOntologyPropertyPrefix = `${string}:${string}`;
 
 export enum CompatibleOntologiesEnum {
-    "AVNU" = "AVNU",
-    "Artsdata" = "Artsdata",
-    "DataScene" = "Data Scene",
-    "Schemaorg" = "Schema.org",
+    "AVNU" = "avnu",
+    "Artsdata" = "artsdata",
+    "DataScene" = "datascene",
+    "Schemaorg" = "schema.org",
 }
 
 export interface CompatibleOntologyParam {
     referentialUrl: string;
     ontologyUrl: string;
+    contextUrl: string;
     frontpageUrl?: string;
     name: string;
+    label?: string;
     prefix: string;
     description?: string;
     suffix?: string;
@@ -24,8 +26,10 @@ export interface CompatibleOntologyParam {
 export default class CompatibleOntology implements Ontology {
     referentialUrl: string;
     ontologyUrl: string;
+    contextUrl: string;
     frontpageUrl: string;
     name: string;
+    label: string;
     description: string;
     prefix: string;
     suffix: string;
@@ -34,8 +38,10 @@ export default class CompatibleOntology implements Ontology {
     constructor(params: CompatibleOntologyParam) {
         this.referentialUrl = params.referentialUrl;
         this.ontologyUrl = params.ontologyUrl;
+        this.contextUrl = params.contextUrl;
         this.frontpageUrl = params.frontpageUrl ?? params.referentialUrl;
         this.name = params.name;
+        this.label = params.label ?? params.name;
         this.description = params.description ?? "";
         this.prefix = params.prefix;
         this.suffix = params.suffix ?? "";
@@ -80,6 +86,7 @@ export default class CompatibleOntology implements Ontology {
         return {
             externalSource: {
                 name: this.name,
+                label: this.label,
                 icon: this.icon,
                 description: this.description,
                 sparqlEndpoint: "",
