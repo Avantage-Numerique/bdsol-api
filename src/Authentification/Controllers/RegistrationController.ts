@@ -9,10 +9,24 @@ export class RegistrationController {
     public service: UsersService;
     public userModel: User;
 
+    /** @private @static Singleton instance */
+    private static _instance: RegistrationController;
+
     /** @constructor */
     private constructor() {
         this.service = new UsersService(User.getInstance());
         this.userModel = User.getInstance();
+    }
+
+    /**
+     * @public @static @method getInstance Create the singleton instance if not existing
+     * @return {RegistrationController} Controller singleton constructor
+     */
+    public static getInstance(): RegistrationController {
+        if (RegistrationController._instance === undefined) {
+            RegistrationController._instance = new RegistrationController();
+        }
+        return RegistrationController._instance;
     }
 
     public async register(requestData: any): Promise<ApiResponseContract> {
