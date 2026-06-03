@@ -21,9 +21,10 @@ class EquipmentRoutes extends CrudRoute {
             noHtmlStringSanitizerAlias("data.brand"),
             noHtmlStringSanitizerAlias("data.model"),
             objectIdSanitizerAlias("data.mainImage"),
-            //noHtmlStringSanitizerAlias('data.url')
 
-            // TODO: sameAs (?)
+            // TODO: sanitize SocialHandle & SameAs (?)
+            //noHtmlStringSanitizerAlias('data.url.*.url')
+            //noHtmlStringSanitizerAlias('data.sameAs.*.url')
         ],
         update: [
             objectIdSanitizerAlias("data.id", false),
@@ -33,9 +34,10 @@ class EquipmentRoutes extends CrudRoute {
             noHtmlStringSanitizerAlias("data.brand"),
             noHtmlStringSanitizerAlias("data.model"),
             objectIdSanitizerAlias("data.mainImage"),
-            //noHtmlStringSanitizerAlias('data.url')
 
-            // TODO: sameAs (?)
+            // TODO: sanitize SocialHandle & SameAs (?)
+            //noHtmlStringSanitizerAlias('data.url.*.url')
+            //noHtmlStringSanitizerAlias('data.sameAs.*.url')
         ],
         delete: [],
         search: [],
