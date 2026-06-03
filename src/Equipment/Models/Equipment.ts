@@ -7,6 +7,7 @@ import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 import { populateUser } from "@src/Users/Middlewares/populateUser";
 import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
+import { SameAs } from "@src/Database/Schemas/SameAsSchema";
 
 class Equipment extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -112,6 +113,9 @@ class Equipment extends AbstractModel {
             url: {
                 type: [SocialHandle.schema],
             },
+            sameAs: {
+                type: [SameAs.schema],
+            },
             meta: {
                 type: Meta.schema,
             },
@@ -155,6 +159,7 @@ class Equipment extends AbstractModel {
             slug: document.slug ?? "",
             mainImage: document.mainImage ?? "",
             url: document.url ?? [],
+            sameAs: document.sameAs ?? [],
             meta: document.meta ?? {},
             createdAt: document.createAt ?? "",
             updatedAt: document.updatedAt ?? "",

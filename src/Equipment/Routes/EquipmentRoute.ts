@@ -22,6 +22,8 @@ class EquipmentRoutes extends CrudRoute {
             noHtmlStringSanitizerAlias("data.model"),
             objectIdSanitizerAlias("data.mainImage"),
             //noHtmlStringSanitizerAlias('data.url')
+
+            // TODO: sameAs (?)
         ],
         update: [
             objectIdSanitizerAlias("data.id", false),
@@ -32,6 +34,8 @@ class EquipmentRoutes extends CrudRoute {
             noHtmlStringSanitizerAlias("data.model"),
             objectIdSanitizerAlias("data.mainImage"),
             //noHtmlStringSanitizerAlias('data.url')
+
+            // TODO: sameAs (?)
         ],
         delete: [],
         search: [],
