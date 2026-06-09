@@ -1,6 +1,6 @@
 import AbstractModel from "@src/Abstract/Model";
 import { DbProvider } from "@src/Database/DatabaseDomain";
-import mongoose, { Schema } from "mongoose";
+import mongoose, { ClientSession, Schema } from "mongoose";
 import AutoIncrementService from "./AutoIncrementService";
 import { AutoIncrementSchema } from "./AutoIncrementSchema";
 import ReservedUri from "./ReservedURI";
@@ -62,10 +62,8 @@ class AutoIncrement extends AbstractModel {
         //return fs.readFileSync("/api/doc/AutoIncrement.md", "utf-8");
     }
 
-    public static async getNextURIGlobalNumber(): Promise<any> {
-        let reservedSeq = ReservedUri.map((elem) => {
-            return elem.seq;
-        });
+    public static async getNextURIGlobalNumber(session?: ClientSession): Promise<string> {
+        const reservedSeq = ReservedUri.map((elem) => elem.seq);
         let globalUriDoc;
         do {
             globalUriDoc = await AutoIncrement.getInstance().mongooseModel.findOneAndUpdate(
@@ -74,11 +72,12 @@ class AutoIncrement extends AbstractModel {
                 {
                     upsert: true,
                     new: true,
+                    session,
                 }
             );
         } while (reservedSeq.includes(globalUriDoc.seq));
-        const seq = globalUriDoc.seq;
-        return "http://avnu.ca/entity/" + seq;
+
+        return `http://avnu.ca/entity/${globalUriDoc.seq}`;
     }
 }
 export default AutoIncrement;

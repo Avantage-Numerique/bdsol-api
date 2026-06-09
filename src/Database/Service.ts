@@ -9,6 +9,7 @@ import AbstractModel from "../Abstract/Model";
 import { Obj } from "../Helpers/Obj";
 import HttpError from "../Error/HttpError";
 import ApiQuery from "@database/QueryBuilder/ApiQuery";
+import AutoIncrement from "@src/AutoIncrement/AutoIncrement";
 
 /**
  * Give ability to query and CRUD on collections and its documents.
@@ -125,25 +126,26 @@ export abstract class Service {
      * @param data any the document structure. This is type any because that class will be extended.
      */
     async insert(data: any): Promise<ApiResponseContract> {
-        let meta;
+        console.log("Pre session");
+        const session = await this.appModel.connection.startSession();
+        //const session = await this.model.db.startSession();
         try {
-            meta = await this.model.create(data).catch((e: any) => {
-                LogHelper.error("Service insert can't create entity", e);
-                //commented during test to manage this.
-                const insertError: HttpError = new HttpError("Impossible de créer l'entité.", e); //suppression de l e.message car l'app renvoie tout.
-                insertError.status = StatusCodes.UNPROCESSABLE_ENTITY;
-                //Throw the original error to be able to parsed it in error check. Throw http error only outside of the service.
-                throw insertError;
-            });
+            session.startTransaction();
 
-            return this._parseResult(meta, Service.CREATE_STATE);
-        } catch (insertError: any) {
-            return this.errorCheck(insertError, Service.UPDATE_STATE);
-            /*return ErrorResponse.create(
-                insertError.errors,
-                StatusCodes.INTERNAL_SERVER_ERROR,
-                insertError.message || "Not able to insert item"
-            );*/
+            // Generate URI only if schema supports it
+            if (this.model.schema.path("uri")) {
+                data.uri = await AutoIncrement.getNextURIGlobalNumber(session);
+            }
+            const meta = await this.model.create([data], { session });
+            await session.commitTransaction();
+
+            return this._parseResult(meta[0], Service.CREATE_STATE);
+        } catch (e: any) {
+            await session.abortTransaction();
+            LogHelper.error("Service insert can't create entity", e);
+            return this.errorCheck(e, Service.CREATE_STATE);
+        } finally {
+            session.endSession();
         }
     }
 

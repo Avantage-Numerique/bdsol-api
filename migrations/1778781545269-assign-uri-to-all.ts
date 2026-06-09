@@ -12,9 +12,12 @@ function buildUri(seq: number): string {
     return BASE_URI + seq;
 }
 
+//Find each entity that have reserved a uri and if they don't have uri, assign it to them.
 async function assignReservedUris(reservedUriList: ReservedUriType[]): Promise<void> {
     const modelInstances = EntityModelFactory.getAllModels();
+    //for each entity that want to reserve a uri
     for (const reserved of reservedUriList) {
+        //Check if entityType exist, targetObjectId or targetSlug
         if (!reserved.entityType) {
             LogHelper.warn("[Migration][Assign Reserved URI]", "Skipping reserved URI without entityType", reserved);
             continue;
@@ -27,13 +30,14 @@ async function assignReservedUris(reservedUriList: ReservedUriType[]): Promise<v
 
         const modelEntry = modelInstances.find((elem) => elem?.type === reserved.entityType);
 
+        //If model instance found
         if (!modelEntry) {
             LogHelper.warn("[Migration][Assign Reserved URI]", "Model not found for", reserved.entityType);
             continue;
         }
 
+        //Build query based on id or slug
         const query: any = {};
-
         if (reserved.targetObjectId) {
             query._id = reserved.targetObjectId;
         } else if (reserved.targetSlug) {
@@ -42,13 +46,14 @@ async function assignReservedUris(reservedUriList: ReservedUriType[]): Promise<v
 
         const entity = await modelEntry.instance.mongooseModel.findOne(query);
 
+        //If entity not found
         if (!entity) {
             LogHelper.error("[Migration][Assign Reserved URI]", "Entity not found", reserved);
             continue;
         }
 
         const uri = buildUri(reserved.seq);
-
+        //If entity already has uri skip
         if (entity.uri && entity.uri !== "") {
             LogHelper.error(
                 "[Migration][Assign Reserved URI]",
@@ -63,10 +68,12 @@ async function assignReservedUris(reservedUriList: ReservedUriType[]): Promise<v
             uri,
         });
 
+        //Check if uri that we want to assign already exist
         if (existingUriEntity) {
             LogHelper.error("[Migration][Assign Reserved URI]", "URI already exists on another entity:", uri);
             continue;
         }
+        //Assign reserved uri to entity
         await modelEntry.instance.mongooseModel.collection.updateOne(
             { _id: entity._id },
             {
@@ -79,16 +86,39 @@ async function assignReservedUris(reservedUriList: ReservedUriType[]): Promise<v
     }
 }
 
+//Assign uri in sequence to every entity of the database (that can have a uri) in order of createdAt ASC
 async function assignSequentialUris(reservedUriList: ReservedUriType[]): Promise<void> {
+    //Get the next number in the sequence for uri (if it fails cancel assignation)
+    const session = await AutoIncrement.getInstance().connection.startSession();
+    let globalUriDoc;
+    try {
+        session.startTransaction();
+        globalUriDoc = await AutoIncrement.getNextURIGlobalNumber(session);
+        await session.commitTransaction();
+    } catch (err) {
+        await session.abortTransaction();
+        throw err;
+    } finally {
+        session.endSession();
+    }
+    //Next number to assign in the sequence
+    let currentSeq = Number(globalUriDoc.split("/").pop());
+
+    //Create a set of reserved number to skip
+    const reservedSeqSet = new Set(reservedUriList.map((elem) => elem.seq));
+
+    //For each model get entities
     const modelInstances = EntityModelFactory.getAllModels();
     const allEntities: any[] = [];
-
     for (const modelEntry of modelInstances) {
         if (!modelEntry) {
             LogHelper.error("[Migration][Assign Squential URI]", "one model instance is undefined in", modelInstances);
             continue;
         }
-        if (modelEntry.instance.modelName == "Media") continue;
+        //If model doesn't support "uri" skip to next model
+        if (!modelEntry.instance.schema.path("uri")) continue;
+
+        //Find every entity that has no uri
         const entities = await modelEntry.instance.mongooseModel
             .find({
                 $or: [{ uri: { $exists: false } }, { uri: "" }, { uri: null }],
@@ -101,12 +131,13 @@ async function assignSequentialUris(reservedUriList: ReservedUriType[]): Promise
             entityType: modelEntry.type,
             model: modelEntry.instance.mongooseModel,
         }));
-
+        //Push entities lean into array
         allEntities.push(...mappedEntities);
 
         LogHelper.log(`[Migration][Assign URI] type [${modelEntry.type}] loaded ${mappedEntities.length} entities`);
     }
 
+    //Order array into ASC createdAt
     allEntities.sort((a, b) => {
         return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
     });
@@ -114,15 +145,13 @@ async function assignSequentialUris(reservedUriList: ReservedUriType[]): Promise
     LogHelper.log("[Migration][Assign URI]", "Total entities to assign URI:", allEntities.length);
     LogHelper.log("[Migration][Assign URI]", "Starting to assign URI");
 
-    const reservedSeqSet = new Set(reservedUriList.map((elem) => elem.seq));
-
-    const globalUriDoc = await AutoIncrement.getNextURIGlobalNumber();
-    let currentSeq = globalUriDoc.split("/").pop();
-
+    //For all entities in order, assign a uri
     for (const entity of allEntities) {
+        //If reserved go next
         while (reservedSeqSet.has(currentSeq)) {
             currentSeq++;
         }
+        //Assign uri
         const uri = buildUri(currentSeq);
         await entity.model.collection.updateOne(
             { _id: entity._id },
@@ -132,7 +161,7 @@ async function assignSequentialUris(reservedUriList: ReservedUriType[]): Promise
                 },
             }
         );
-        console.log("Assigned sequential URI:", uri, "to entity ", entity._id.toString());
+        LogHelper.log("Assigned sequential URI:", uri, "to entity ", entity._id.toString(), entity.entityType);
         currentSeq++;
     }
 

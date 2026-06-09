@@ -10,25 +10,25 @@ export type ReservedUriType = {
 
 const ReservedUri: ReservedUriType[] = [
     {
-        seq: 5,
+        seq: 21,
         entityType: EntityTypeFactory.Person,
-        targetObjectId: "68c313c732da684859a24643",
+        targetObjectId: "6a2322145dc0df7c499e3ecc",
         //targetSlug: "jean-guy-le-ballon-poire",
-        comment: "Réservé pour Jean guy le ballon poire",
+        comment: "Réservé pour Jean guydoune le ballon pêche",
     },
     {
-        seq: 7,
+        seq: 42,
         entityType: EntityTypeFactory.Organisation,
-        targetObjectId: "6643aa7cc8976cec81a377e5",
+        targetObjectId: "6a21ec6f9dfda6142a059bbe",
         //targetSlug: "petit-theatre-du-vieux-noranda",
         comment: "Réservé pour PTVN",
     },
     {
-        seq: 42,
+        seq: 10101,
         entityType: EntityTypeFactory.Project,
-        targetObjectId: "664254ddb53eedd349f9ec07",
+        targetObjectId: "6a27174a34f67420d5f29ba7",
         //targetSlug: "avantage-numerique",
-        comment: "Réservé pour Avantage numérique",
+        comment: "Réservé pour Götterdammerung",
     },
     {
         seq: 666,
@@ -37,7 +37,7 @@ const ReservedUri: ReservedUriType[] = [
         //targetSlug: "format-de-date-2",
         comment: "Réservé pour 'format de date'",
     },
-    {
+    /* {
         seq: 54,
         entityType: EntityTypeFactory.Equipment,
         targetObjectId: "668c1a50688c7bc31c444ff0",
@@ -57,7 +57,7 @@ const ReservedUri: ReservedUriType[] = [
         targetObjectId: "664254d6b53eedd349f9e7b9",
         //targetSlug: "choregraphe",
         comment: "Réservé pour chorégraphe",
-    },
+    }, */
 ];
 
 export default ReservedUri;
