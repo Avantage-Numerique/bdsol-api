@@ -5,6 +5,7 @@ import { DomainListSchema } from "../../Taxonomy/Schemas/DomainListSchema";
 import { SkillGroup } from "../../Taxonomy/Schemas/SkillGroupSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
+import { SameAs } from "@src/Database/Schemas/SameAsSchema";
 
 export interface PersonSchema extends Document {
     lastName: string;
@@ -21,5 +22,6 @@ export interface PersonSchema extends Document {
     url: [SocialHandle];
     region: string;
     badges: [string];
+    sameAs: [SameAs];
     meta: Meta;
 }

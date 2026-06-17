@@ -15,6 +15,7 @@ import { middlewareInsertBadges } from "@src/SubProperty/Badges/MiddlewareInsert
 import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { RegionEnum } from "@src/SubProperty/Badges/RegionEnum";
 import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
+import { SameAs } from "@src/Database/Schemas/SameAsSchema";
 
 class Person extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -159,6 +160,9 @@ class Person extends AbstractModel {
                 type: [String],
                 enum: BadgeTypes.allBadgeTypes(),
             },
+            sameAs: {
+                type: [SameAs.schema],
+            },
             meta: {
                 type: Meta.schema,
             },
@@ -264,6 +268,7 @@ class Person extends AbstractModel {
             },
             region: document.region ?? "",
             badges: document.badges ?? [],
+            sameAs: document.sameAs ?? [],
             meta: document.meta ?? {},
             type: document.type ?? "",
             fullName: document.fullName ?? "",

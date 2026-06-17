@@ -17,6 +17,7 @@ import { middlewareInsertBadges } from "@src/SubProperty/Badges/MiddlewareInsert
 import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { RegionEnum } from "@src/SubProperty/Badges/RegionEnum";
 import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
+import { SameAs } from "@src/Database/Schemas/SameAsSchema";
 
 class Organisation extends AbstractModel {
     /** @protected @static Singleton instance of model Organisation */
@@ -142,6 +143,9 @@ class Organisation extends AbstractModel {
                 type: [String],
                 enum: BadgeTypes.allBadgeTypes(),
             },
+            sameAs: {
+                type: [SameAs.schema],
+            },
             meta: {
                 type: Meta.schema,
             },
@@ -190,6 +194,7 @@ class Organisation extends AbstractModel {
             mainImage: document.mainImage ?? "",
             slug: document.slug ?? "",
             catchphrase: document.catchphrase ?? "",
+            sameAs: document.sameAs ?? [],
             meta: document.meta ?? {},
             location: document.location ?? [],
             equipment: document.equipment ?? [],

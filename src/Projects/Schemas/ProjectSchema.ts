@@ -9,6 +9,7 @@ import { ProjectContextEnum } from "../ProjectContextEnum";
 import { DomainListSchema } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
+import { SameAs } from "@src/Database/Schemas/SameAsSchema";
 
 export interface ProjectSchema extends Document {
     name: string;
@@ -29,5 +30,6 @@ export interface ProjectSchema extends Document {
     domains: [DomainListSchema];
     context: ProjectContextEnum;
     equipment: [ObjectId];
+    sameAs: [SameAs];
     meta: Meta;
 }

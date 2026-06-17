@@ -8,6 +8,7 @@ import { ObjectId } from "mongodb";
 import { EquipmentLink } from "@src/Database/Schemas/EquipmentLinkSchema";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
+import { SameAs } from "@src/Database/Schemas/SameAsSchema";
 
 export interface OrganisationSchema extends Document {
     name: string;
@@ -26,5 +27,6 @@ export interface OrganisationSchema extends Document {
     equipment: [EquipmentLink];
     region: string;
     badges: [string];
+    sameAs: [SameAs];
     meta: Meta;
 }
