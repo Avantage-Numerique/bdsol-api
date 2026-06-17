@@ -8,6 +8,7 @@ import { refSocialHandle } from "@ref/Data/SubSchema/RefSocialHandle";
 import { RefProperty } from "@ref/Data/types";
 import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import { refSameAs } from "@ref/Data/Properties/RefSameAs";
 
 export const refEquipment: RefProperty = {
     ontologyProperty: "avnu:Equipment",
@@ -73,6 +74,8 @@ export const refEquipment: RefProperty = {
         },
         { ...refMainImageLink },
         { ...refSocialHandle },
+
+        { ...refSameAs },
 
         //Ontologie:
         //array de media
