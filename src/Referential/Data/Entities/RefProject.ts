@@ -21,6 +21,7 @@ import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
+import { refSameAs } from "../Properties/RefSameAs";
 
 export const refProject: RefProperty = {
     ontologyProperty: "avnu:Project",
@@ -119,6 +120,8 @@ export const refProject: RefProperty = {
             //note: "",
         },
         { ...refEquipmentLink },
+
+        { ...refSameAs },
 
         //Ontologie :
         //Identifiant

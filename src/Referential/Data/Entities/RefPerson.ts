@@ -20,6 +20,7 @@ import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
 import { refShortDescription } from "@ref/Data/Properties/RefShortDescription";
 import { refMemberOf } from "@ref/Data/Properties/RefMemberOf";
+import { refSameAs } from "../Properties/RefSameAs";
 
 export const refPerson: RefProperty = {
     ontologyProperty: "avnu:Person",
@@ -141,6 +142,9 @@ export const refPerson: RefProperty = {
         { ...refDomainList },
         { ...refMainImageLink },
         { ...refBadges },
+
+        { ...refSameAs },
+
         //Ontologie :
         //Identifiants
         //Projets

@@ -19,6 +19,7 @@ import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
+import { refSameAs } from "../Properties/RefSameAs";
 
 export const refOrganisation: RefProperty = {
     ontologyProperty: "avnu:Organisation",
@@ -89,6 +90,8 @@ export const refOrganisation: RefProperty = {
         { ...refEquipmentLinkSchema, compatibility: [AvnuCompatibility.compatibilityMessage()] },
         { ...refRegion },
         { ...refBadges },
+
+        { ...refSameAs },
 
         //Ontologie :
         //Projets

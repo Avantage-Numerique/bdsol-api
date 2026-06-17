@@ -20,6 +20,7 @@ import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
 import { refPlaceLink } from "@ref/Data/RelationLinks/RefPlaceLink";
+import { refSameAs } from "../Properties/RefSameAs";
 
 export const refEvent: RefProperty = {
     ontologyProperty: "avnu:Event",
@@ -175,6 +176,8 @@ export const refEvent: RefProperty = {
             ...refMainImageLink,
             description: "Ce champs est en cours de développement pour devenir un array d'objet média.",
         },
+
+        { ...refSameAs },
 
         //Ontologie :
         //Identifiant
