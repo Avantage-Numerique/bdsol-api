@@ -9,6 +9,14 @@ body {
     background-color: var(--default-bg);
     color: var(--default-color);
 }
+
+.p-relative {
+    position: relative;
+}
+.inline-block {
+    display: inline-block;
+}
+
 h2 {
     margin-top: 2em;
 }
