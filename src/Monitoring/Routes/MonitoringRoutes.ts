@@ -2,6 +2,9 @@ import express, { Request, Response } from "express";
 import AbstractRoute from "@core/Route";
 import { StatusCodes } from "http-status-codes";
 import MonitoringController from "@src/Monitoring/Controllers/MonitoringController";
+import StatisticsController from "@src/Monitoring/Controllers/StatisticsController";
+import { dateSanitizerAlias } from "@src/Security/SanitizerAliases/DateSanitizerAlias";
+import { query } from "express-validator/lib/middlewares/validation-chain-builders";
 
 class MonitoringRoutes extends AbstractRoute {
     controllerInstance: any = MonitoringController.getInstance();
@@ -16,6 +19,7 @@ class MonitoringRoutes extends AbstractRoute {
     defaultMiddlewaresDistribution: any = {
         all: [],
         bySlug: [],
+        allStats: [dateSanitizerAlias("startDate", true, query), dateSanitizerAlias("endDate", true, query)],
     };
 
     // Initiator (called in api.ts)
@@ -42,6 +46,10 @@ class MonitoringRoutes extends AbstractRoute {
      */
     public setupPublicRoutes(): express.Router {
         this.routerInstance.get("/status", [this.gatherStatusesHandler.bind(this)]);
+        this.routerInstance.get("/all-stats", [
+            ...this.addMiddlewares("allStats"),
+            this.getAllStatisticsHandler.bind(this),
+        ]);
 
         return this.routerInstance;
     }
@@ -57,6 +65,19 @@ class MonitoringRoutes extends AbstractRoute {
     public async gatherStatusesHandler(req: Request, res: Response): Promise<any> {
         res.set("Content-Type", "text/html");
         return res.status(StatusCodes.OK).send(await this.controllerInstance.statusesLayout());
+    }
+
+    public async getAllStatisticsHandler(req: Request, res: Response): Promise<any> {
+        res.set("Content-Type", "text/html");
+        const datesQuery: any = {};
+        for (const param in req.query) {
+            datesQuery[param] = req.query[param];
+        }
+        console.log("getAllStatisticsHandler", datesQuery);
+        const statsController: StatisticsController = StatisticsController.getInstance();
+        return res
+            .status(StatusCodes.OK)
+            .send(await statsController.renderIndex(datesQuery.startDate ?? "", datesQuery.endDate ?? ""));
     }
 }
 

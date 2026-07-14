@@ -1,0 +1,119 @@
+{% extends 'default.njk' %}
+
+{% block content %}
+    <style>
+        :root {
+            --stats-total-width: 10%;
+            --label-width: calc(100% - var(--stats-total-width));
+        }
+        table {
+            th {
+                text-align: left;
+            }
+            .label {
+                width: var(--label-width);
+            }
+            .total {
+                width: var(--stats-total-width);
+            }
+        }
+    </style>
+    <div class="container">
+        {% block contentHeader %}
+            {% include "Partials/header.njk" %}
+        {% endblock %}
+
+        <nav class="breadcrumbs default-padding-y">
+            <ul>
+                <li><a class="btn" href="/" title={{ api.name }}><i class="las la-home"></i></a></li>
+                <li><span>{{ title }}</span></li>
+            </ul>
+        </nav>
+
+        <h1>{{ title }}</h1>
+
+        {% if stats %}
+
+            {% if stats.users %}
+                <h2>Utilisateurs</h2>
+                <table class="table">
+                    <tr>
+                        <th class="label">Collections</th>
+                        <th class="total">total</th>
+                    </tr>
+                    <tbody>
+                    {% for collection in stats.users %}
+                        <tr>
+                            <td>{{collection.name}}</td>
+                            <td>{{collection.total}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+            {% if stats.userHistories %}
+                <h2>Modifications par des utilisateurs</h2>
+                <table class="table">
+                    <tr>
+                        <th class="label">Collections</th>
+                        <th class="total">total</th>
+                    </tr>
+                    <tbody>
+                    {% for collection in stats.userHistories %}
+                        <tr>
+                            <td>{{collection.name}}</td>
+                            <td>{{collection.total}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+            {% if stats.general %}
+                <h2>Entités</h2>
+                <table class="table">
+                    <tr>
+                        <th class="label">Collections</th>
+                        <th class="total">total</th>
+                    </tr>
+                    <tbody>
+                    {% for collection in stats.general %}
+                        <tr>
+                            <td>{{collection.name}}</td>
+                            <td>{{collection.total}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+            {% if stats.taxonomies %}
+                <h2>Taxonomies</h2>
+                <table class="table">
+                    <tr>
+                        <th class="label">Taxonomie</th>
+                        <th class="total">total</th>
+                    </tr>
+                    <tbody>
+                    {% for taxonomy in stats.taxonomies %}
+                        <tr>
+                            <td>{{taxonomy.name}}</td>
+                            <td>{{taxonomy.total}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+        {% else %}
+            no stats yet.
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block contentFooter %}
+    <section class="container">
+        Footer
+    </section>
+{% endblock %}
