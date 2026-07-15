@@ -46,7 +46,7 @@ class MonitoringRoutes extends AbstractRoute {
      */
     public setupPublicRoutes(): express.Router {
         this.routerInstance.get("/status", [this.gatherStatusesHandler.bind(this)]);
-        this.routerInstance.get("/all-stats", [
+        this.routerInstance.get("/stats", [
             ...this.addMiddlewares("allStats"),
             this.getAllStatisticsHandler.bind(this),
         ]);

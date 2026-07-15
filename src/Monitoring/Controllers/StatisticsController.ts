@@ -3,7 +3,7 @@ import config from "@src/config";
 import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
 import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
 import { MongoDBDriver } from "@database/Drivers/MongoDriver";
-import { Db, Document, Filter, MongoClient } from "mongodb";
+import { Db, Document, Filter } from "mongodb";
 import { TaxonomiesCategoriesEnum } from "@src/Taxonomy/TaxonomiesCategoriesEnum";
 
 interface TaxonomyStat {
@@ -23,9 +23,6 @@ class StatisticsController {
 
     public name: string = "MonitoringController";
 
-    public mongoDriver: MongoDBDriver;
-    public mongoClient: MongoClient;
-
     private constructor() {}
 
     /**
@@ -39,19 +36,26 @@ class StatisticsController {
         return StatisticsController._instance;
     }
 
+    /**
+     * Get a public template, pass variable to statistics.njk, and render it.
+     * @param startDateStr
+     * @param endDateStr
+     * @return {Promise<string>}
+     */
     public async renderIndex(startDateStr = "", endDateStr = ""): Promise<string> {
         const index = new PublicTemplate("statistics"); //template
         const baseData = getTemplateBaseData();
 
         const title: string = `Statistiques`;
         const body: string = `<p>Statistiques d'avnu générique, d'utilisations et sur les données.</p>`;
-        console.log(title, body);
+
         return await index.render({
             context: {
                 ...baseData, //basic app and api default string and links
                 ...DefaultEmailTheme, //basic theme for colors and sizes.
                 title: `${title}`,
                 body: `${body}`,
+                filters: { startDate: startDateStr, endDate: endDateStr },
                 stats: await this.getStatistics(startDateStr, endDateStr),
                 meta: {
                     title: `${title}`,
@@ -62,8 +66,26 @@ class StatisticsController {
         });
     }
 
-    public async getStatistics(startDateStr = "", endDateStr = ""): Promise<any> {
-        const dbName = "bdsol-data";
+    /**
+     * Manage the db connection + all the query that is needed for stats.
+     * @param startDateStr
+     * @param endDateStr
+     * @return {Promise<{
+     *             general?: Array<StatRow>;
+     *             taxonomies?: Array<StatRow>;
+     *             users?: Array<StatRow>;
+     *             userHistories?: Array<StatRow>;
+     *         }>} the stats object
+     */
+    public async getStatistics(
+        startDateStr = "",
+        endDateStr = ""
+    ): Promise<{
+        general?: Array<StatRow>;
+        taxonomies?: Array<StatRow>;
+        users?: Array<StatRow>;
+        userHistories?: Array<StatRow>;
+    }> {
         const createdAt: { $gte?: Date; $lte?: Date } = {};
         if (startDateStr) createdAt.$gte = new Date(startDateStr);
         if (endDateStr) createdAt.$lte = new Date(endDateStr);
@@ -88,7 +110,6 @@ class StatisticsController {
             const dbUser: Db = client.db("bdsol-users");
             resultsStats.users = await this.getTotalUsers(dbUser, hasFilters, filters);
 
-            console.log(dbName, "get stats", resultsStats);
             return resultsStats;
         } finally {
             await driver.close();
@@ -111,18 +132,14 @@ class StatisticsController {
         const rows = await db
             .collection("taxonomies")
             .aggregate<{ _id: TaxonomiesCategoriesEnum; total: number }>([
-                // narrow first — fewer docs to group
-                ...(hasFilters ? [{ $match: filters }] : []),
-                // guard against orphan/legacy values not in the enum
-                { $match: { category: { $in: categories } } },
+                ...(hasFilters ? [{ $match: filters }] : []), // narrow first, fewer docs to group
+                { $match: { category: { $in: categories } } }, // guard against orphan/legacy values not in the enum
                 { $group: { _id: "$category", total: { $sum: 1 } } },
             ])
             .toArray();
 
-        // O(1) lookups instead of rows.find() inside the loop
         const totals = new Map(rows.map((r) => [r._id, r.total]));
-        console.log("getTaxonomiesStatistics", totals);
-        // drive the output from the enum so empty taxonomies still return 0
+
         return categories.map((name) => ({
             name,
             total: totals.get(name) ?? 0,
@@ -173,7 +190,7 @@ class StatisticsController {
         hasFilters: boolean,
         filters: any
     ): Promise<Array<StatRow>> {
-        const resultsStats = await Promise.all(
+        return await Promise.all(
             collections.map(async (name) => ({
                 name: name,
                 label: "",
@@ -182,7 +199,6 @@ class StatisticsController {
                     : await db.collection(name).estimatedDocumentCount(),
             }))
         );
-        return resultsStats;
     }
 }
 

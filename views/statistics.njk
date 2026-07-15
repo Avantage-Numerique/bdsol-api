@@ -31,7 +31,18 @@
         </nav>
 
         <h1>{{ title }}</h1>
-
+        {% if filters %}
+        <nav class="horizontal">
+            <h3>Filtres : {{ filters.startDate }} &agrave; {{ filters.endDate }} </h3>
+            <form name="filtersStats" method="GET">
+                <ul>
+                    <li><label for="startDate">De</label> <input type="date" name="startDate" /></li>
+                    <li><label for="endDate">&agrave;</label> <input type="date" name="endDate" /></li>
+                    <li><button type="submit">Filtrer</button></li>
+                </ul>
+            </form>
+        </nav>
+        {% endif %}
         {% if stats %}
 
             {% if stats.users %}
@@ -116,4 +127,35 @@
     <section class="container">
         Footer
     </section>
+    <script>
+        const form = document.forms.filtersStats;
+
+        // Set the input type date value from query vars.
+        const current = new URLSearchParams(window.location.search);
+        for (const name of ['startDate', 'endDate']) {
+            const value = current.get(name);
+            if (value) form.elements[name].value = value;
+        }
+
+        /**
+         * On submit filter to queryvars.
+         */
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const params = new URLSearchParams(window.location.search);
+
+            for (const name of ['startDate', 'endDate']) {
+                const value = form.elements[name].value;
+                if (value) {
+                    params.set(name, value);
+                } else {
+                    params.delete(name);
+                }
+            }
+
+            // Déclenche le rechargement de la page courante
+            window.location.search = params.toString();
+        });
+    </script>
 {% endblock %}
