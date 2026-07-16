@@ -1,60 +1,30 @@
 import { BudgetRangeEnum, TimeframeEtaEnum } from "@src/Database/Schemas/ScheduleBudgetSchema";
-import { RefProperty } from "@ref/Data/types";
-import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
-import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
-import { refOrder } from "@ref/Data/Properties/RefOrder";
+import { RefSchema } from "@ref/Data/types";
+import { createRefType } from "@ref/Data/utils";
+import { refSubMeta } from "./RefSubMeta";
 
-export const refTimeframe: RefProperty = {
-    field: "timeframe",
-    ontologyProperty: "avnu:timeframe",
-    url: "/timeframe",
-    label: "Échéancier par étapes",
-    cardinality: "0..N",
-    description: "Étape de progression, avec un temps estimé et un budget associé.",
-    compatibility: [AvnuCompatibility.compatibilityMessage()],
-    //note: "",
-
+export const refTimeframe: RefSchema = {
     type: createRefType("object"),
-    ref: [
-        {
-            field: "step",
-            type: createRefType("string"),
-            ontologyProperty: "avnu:step",
-            url: createPrimitiveUrl("step"),
-            label: "Nom de l'étape",
+    fields: {
+        step: {
             cardinality: "1..1",
-            description: "Libellé descriptif de l'étape",
-            compatibility: [AvnuCompatibility.compatibilityMessage()],
-            //note: "",
-        },
-        {
-            field: "eta",
             type: createRefType("string"),
-            ontologyProperty: "avnu:timeframeEta",
-            url: createPrimitiveUrl("timeframeEta"),
-            label: "Durée estimé de l'étape",
-            cardinality: "0..1",
-            description: "Parmis l'enum TimeframeEtaEnum",
-            compatibility: [AvnuCompatibility.compatibilityMessage()],
-            constraints: {
-                enum: TimeframeEtaEnum,
-            },
-            //note: "",
+            constraints: { required: true },
         },
-        {
-            field: "budgetRange",
+        eta: {
+            cardinality: "0..1",
             type: createRefType("string"),
-            ontologyProperty: "avnu:budgetRange",
-            url: createPrimitiveUrl("budgetRange"),
-            label: "Budget estimé pour l'étape",
-            cardinality: "0..1",
-            description: "Parmis l'enum BudgetRangeEnum",
-            compatibility: [AvnuCompatibility.compatibilityMessage()],
-            constraints: {
-                enum: BudgetRangeEnum,
-            },
-            //note: "",
+            constraints: { enum: TimeframeEtaEnum },
         },
-        { ...refOrder },
-    ],
+        budgetRange: {
+            cardinality: "0..1",
+            type: createRefType("string"),
+            constraints: { enum: BudgetRangeEnum },
+        },
+        subMeta: {
+            cardinality: "0..1",
+            type: createRefType("object"),
+            fields: refSubMeta.fields,
+        },
+    },
 };

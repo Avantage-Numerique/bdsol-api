@@ -3,47 +3,33 @@ import { refDescription } from "@ref/Data/Properties/RefDescription";
 import { refName } from "@ref/Data/Properties/RefName";
 import { refType } from "@ref/Data/Properties/RefType";
 import { refDomainList } from "@ref/Data/SubSchema/RefDomainList";
-import { RefProperty } from "@ref/Data/types";
+import { RefSchema } from "@ref/Data/types";
 import { createRefType } from "@ref/Data/utils";
 import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
-import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
-import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
+import { refMeta } from "../SubSchema/RefMeta";
 
-export const refTaxonomy: RefProperty = {
-    ontologyProperty: "avnu:Taxonomy",
-    url: "/taxonomy",
-    label: "Taxonomie (catégorie)",
-    description: "Vocabulaire de catégorie pour décrire et regrouper des compétences, des technologies ou autres.",
-    compatibility: [
-        SchemaOrgCompatibility.getOntologyCompatibilityArray("DefinedTerm"),
-        DataSceneCompatibility.getOntologyCompatibilityArray("term", "Term"),
-    ],
-    //note: "",
-
+export const refTaxonomy: RefSchema = {
     type: createRefType("object"),
-    ref: [
-        { ...refType },
-        {
-            field: "category",
-            ontologyProperty: "avnu:Category",
-            url: "/category",
-            type: createRefType("string"),
-            label: "Type de taxonomie",
+    fields: {
+        type: refType,
+        category: {
             cardinality: "1..1",
-            description:
-                "Vocabulaire pour distinguer quel type de taxonomie il s'agit. S'il s'agit d'une compétence, ou d'une technologie par exemple.",
-            compatibility: [AvnuCompatibility.compatibilityMessage()],
+            type: createRefType("string"),
             constraints: {
                 enum: TaxonomiesCategoriesEnum,
             },
-            note: "Fait partie de l'enum 'TaxonomiesCategoriesEnum'. Ces vocabulaires servent à décrire des groupes de quelque chose, autant de compétence, technologie ou type d'événement et type d'équipement etc.",
         },
-        { ...refName },
-        { ...refDescription },
-        {
-            ...refDomainList,
-            description: "Domaine parent de la taxonomie, voire vocabulaire qui regroupe la taxonomie.",
-            note: "Le ou les domaines ici ne peuvent pas se référencer eux même. (Une taxonomie de type domaine, ne peux pas faire partie de son propre domaine).",
+        name: refName,
+        description: refDescription,
+        domains: {
+            cardinality: "0..N",
+            type: createRefType("object"),
+            fields: refDomainList.fields,
+        },
+        meta: {
+            cardinality: "0..1",
+            type: createRefType("object"),
+            fields: refMeta.fields,
         },
         //Ontologie:
         //Vocabulaire
@@ -54,5 +40,5 @@ export const refTaxonomy: RefProperty = {
         //Pas ontologie:
         //slug
         //meta
-    ],
+    },
 };

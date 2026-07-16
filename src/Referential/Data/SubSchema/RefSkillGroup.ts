@@ -1,41 +1,24 @@
-import { RefProperty } from "@ref/Data/types";
+import { RefSchema } from "@ref/Data/types";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
-import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
-import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
-import { refOrder } from "@ref/Data/Properties/RefOrder";
+import { createRefType } from "@ref/Data/utils";
+import { refSubMeta } from "./RefSubMeta";
 
-export const refSkillGroup: RefProperty = {
-    //field: "offers"||"occupations",
-    ontologyProperty: "avnu:skillgroup",
-    label: "Groupe de compétences",
-    url: "/skillgroup",
-    cardinality: "0..N",
-    description:
-        "Groupe de compétences, habiletés et/ou de technologies, tirés de notre base de données, accompagné d'un libellé qui décrit le regroupement.",
-
-    compatibility: [AvnuCompatibility.compatibilityMessage()],
+export const refSkillGroup: RefSchema = {
     type: createRefType("object"),
-    ref: [
-        {
-            field: "groupName",
-            ontologyProperty: "avnu:groupName",
-            url: createPrimitiveUrl("groupName"),
-            label: "Nom du groupe",
-            type: createRefType("string"),
+    fields: {
+        groupName: {
             cardinality: "1..1",
-            description: "Libellé utilisé par la personne pour décrire son groupe de compétences",
-            compatibility: [AvnuCompatibility.compatibilityMessage()],
+            type: createRefType("string"),
+            constraints: { required: true },
         },
-        {
-            field: "skills",
-            ontologyProperty: "avnu:skills",
-            url: "/skills",
-            label: "Compétences",
-            type: createRefType("reference", [EntityTypesEnum.taxonomy]),
-            description: "Liste de compétences, habiletés ou de technologies.",
+        skills: {
             cardinality: "0..N",
-            compatibility: [AvnuCompatibility.compatibilityMessage()],
+            type: createRefType("reference", [EntityTypesEnum.taxonomy]),
         },
-        { ...refOrder },
-    ],
+        subMeta: {
+            cardinality: "0..1",
+            type: createRefType("object"),
+            fields: refSubMeta.fields,
+        },
+    },
 };

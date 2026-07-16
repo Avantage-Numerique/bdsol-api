@@ -1,12 +1,13 @@
-import { RefProperty } from "./types";
 import type {
-    PrimitiveType,
-    RefPropertyObject,
-    RefPropertyPrimitive,
+    RefField,
+    RefObjectField,
+    RefPrimitiveField,
+    RefSchema,
     RefType,
     RefTypeObject,
     RefTypePrimitive,
     RefTypeReference,
+    PrimitiveType,
 } from "./types";
 
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
@@ -34,12 +35,13 @@ function createPrimitiveUrl(name: string): `/${string}#avnu:${string}` {
     return ("/properties#avnu:" + name) as `/${string}#avnu:${string}`;
 }
 
-function isObjectProp(entity: RefProperty): entity is RefPropertyObject {
-    return entity.type?.kind === "object";
+function isObjectProp(field: RefField): field is RefObjectField {
+    return field.type.kind === "object";
 }
 
-function getAllPrimitives(base: RefProperty[]): RefPropertyPrimitive[] {
-    const filtered: RefPropertyPrimitive[] = [];
+/* Nouvelle structure de ref brise ceci
+function getAllPrimitives(base: RefSchema): RefPrimitiveField[] {
+    const filtered: RefPrimitiveField[] = [];
 
     for (const entity of base) {
         // Primitive branch
@@ -67,6 +69,6 @@ function getAllUniquePrimitives(base: RefProperty[]) {
             return true;
         }
     });
-}
+} */
 
-export { getAllUniquePrimitives, isObjectProp, createPrimitiveUrl, createRefType };
+export { isObjectProp, createPrimitiveUrl, createRefType };

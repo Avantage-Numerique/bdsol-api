@@ -1,34 +1,30 @@
 import { RefSchema } from "@ref/Data/types";
-import { refSubMeta } from "./RefSubMeta";
 import { createRefType } from "@ref/Data/utils";
+import { MetaStates } from "@src/Moderation/Schemas/MetaSchema";
 
-export const refSchedule: RefSchema = {
+export const refMeta: RefSchema = {
     type: createRefType("object"),
     fields: {
-        name: {
+        state: {
+            cardinality: "0..1",
+            type: createRefType("string"),
+            constraints: { enum: MetaStates },
+        },
+        requestedBy: {
+            cardinality: "0..1",
+            type: createRefType("reference", []),
+        },
+        lastModifiedBy: {
+            cardinality: "0..1",
+            type: createRefType("reference", []),
+        },
+        message: {
             cardinality: "0..1",
             type: createRefType("string"),
         },
-        startDate: {
+        statistics: {
             cardinality: "0..1",
-            type: createRefType("date"),
-        },
-        startTime: {
-            cardinality: "0..1",
-            type: createRefType("string"),
-        },
-        endDate: {
-            cardinality: "0..1",
-            type: createRefType("date"),
-        },
-        endTime: {
-            cardinality: "0..1",
-            type: createRefType("string"),
-        },
-        subMeta: {
-            cardinality: "0..1",
-            type: createRefType("object"),
-            fields: refSubMeta.fields,
+            type: createRefType("number"),
         },
     },
 };

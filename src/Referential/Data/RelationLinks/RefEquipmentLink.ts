@@ -1,15 +1,12 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
-import { RefProperty } from "@ref/Data/types";
+import { RefReferenceField } from "@ref/Data/types";
 import { createRefType } from "@ref/Data/utils";
-import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 
-export const refEquipmentLink: RefProperty = {
-    field: "owns-equipment",
-    url: "/owns-equipment",
-    ontologyProperty: "avnu:owns",
-    label: "Équipements liés",
+export const refEquipmentLink: RefReferenceField = {
+    cardinality: "0..1",
     type: createRefType("reference", [EntityTypesEnum.equipment]),
+};
+export const refEquipmentLinks: RefReferenceField = {
     cardinality: "0..N",
-    compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("owns")],
-    description: "Référence à un ou plusieurs equipements utilisé ou liée à l'entité.",
+    type: createRefType("reference", [EntityTypesEnum.equipment]),
 };

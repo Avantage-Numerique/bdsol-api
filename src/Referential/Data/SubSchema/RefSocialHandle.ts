@@ -1,42 +1,22 @@
-import { RefProperty } from "@ref/Data/types";
-import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
-import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
-import { refOrder } from "@ref/Data/Properties/RefOrder";
+import { RefSchema } from "@ref/Data/types";
+import { createRefType } from "@ref/Data/utils";
+import { refSubMeta } from "./RefSubMeta";
 
-export const refSocialHandle: RefProperty = {
-    field: "url",
-    ontologyProperty: "avnu:socialHandle",
-    url: "/socialHandle",
-    label: "Contact de réseaux sociaux",
-    cardinality: "0..N",
-    description: "Liens vers différent réseau sociaux et leur noms.",
-    compatibility: [AvnuCompatibility.compatibilityMessage()],
-    //Propriété non conforme, SocialHandle (object) != sameAs (string)
-
+export const refSocialHandle: RefSchema = {
     type: createRefType("object"),
-    ref: [
-        {
-            field: "label",
-            type: createRefType("string"),
-            ontologyProperty: "avnu:label",
-            url: createPrimitiveUrl("label"),
-            label: "label",
+    fields: {
+        label: {
             cardinality: "0..1",
-            description: "Libellé du site ou du nom à afficher en lien cliquable.",
-            compatibility: [AvnuCompatibility.compatibilityMessage()],
-            //note: "",
-        },
-        {
-            field: "url",
             type: createRefType("string"),
-            ontologyProperty: "avnu:url",
-            url: createPrimitiveUrl("url"),
-            label: "Hyperlien vers le site",
-            cardinality: "0..1",
-            description: "Hyperlien qui mène vers le site internet.",
-            compatibility: [AvnuCompatibility.compatibilityMessage()],
-            //note: "",
         },
-        { ...refOrder },
-    ],
+        url: {
+            cardinality: "0..1",
+            type: createRefType("string"),
+        },
+        subMeta: {
+            cardinality: "0..1",
+            type: createRefType("object"),
+            fields: refSubMeta.fields,
+        },
+    },
 };

@@ -1,9 +1,9 @@
-import { RefProperty } from "@ref/Data/types";
+import { RefSchema } from "@ref/Data/types";
 import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
 import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 
-export const refSameAs: RefProperty = {
+/* export const refSameAs: RefProperty = {
     field: "sameAs",
     ontologyProperty: "avnu:sameAs",
     type: createRefType("string"),
@@ -16,4 +16,4 @@ export const refSameAs: RefProperty = {
         SchemaOrgCompatibility.getOntologyCompatibilityArray("sameAs"),
     ],
     //note: "",
-};
+}; */

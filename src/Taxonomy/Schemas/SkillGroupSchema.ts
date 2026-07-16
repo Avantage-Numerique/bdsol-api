@@ -13,6 +13,7 @@ export class SkillGroup {
         {
             groupName: {
                 type: String,
+                //required: true,
             },
             skills: {
                 type: [mongoose.Types.ObjectId],
