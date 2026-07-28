@@ -8,7 +8,7 @@ import AbstractController from "./Controller";
 import { Service } from "@database/Service";
 import { urlSanitizerAlias } from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
 import { SlugSanitizer } from "@src/Security/Sanitizers/SlugSanitizer";
-// import { injectJSONLD } from "@src/jsonld/Middlewares/JSONLDInjector";
+import { injectJSONLD } from "@src/jsonld/Middlewares/JSONLDInjector";
 import { injectGeneratedContent } from "@src/GeneratedContent/Miidlewares/GeneratedInjector";
 
 /**
@@ -172,7 +172,7 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
             ...this.addMiddlewares("bySlug"),
             this.validatingResults.bind(this),
             this.getByUriParamsHandler.bind(this),
-            // injectJSONLD(),
+            injectJSONLD(),
             injectGeneratedContent(),
             this.routeSendResponse.bind(this),
         ]);

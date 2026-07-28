@@ -1,6 +1,7 @@
-import { JsonLDBuilder } from "@src/jsonld/JsonLDBuilder";
+import { JSONLDBuilder } from "@src/jsonld/JSONLDBuilder";
 import EntityControllerFactory from "@src/Abstract/EntityControllerFactory";
-import EntityRefFactory from "@src/Referential/EntityRefFactory";
+import { compatibilityData } from "@src/Compatibility/CompatibilityObject";
+import { CompatibleOntologiesEnum } from "@src/Compatibility/types";
 
 class JSONLDController {
     /** @private @static Singleton instance */
@@ -26,7 +27,7 @@ class JSONLDController {
         const model = EntityControllerFactory.getControllerFromEntity(collection)?.entity?.mongooseModel;
         if (!model) throw new Error("Pas de collection !");
 
-        const document = await model.findById(entityId).setOptions({ skipPopulate: true });
+        const document = await model.findById(entityId); //.setOptions({ skipPopulate: true });
         if (!document) return false;
 
         return this.createJsonLDForDocument(document);
@@ -84,16 +85,7 @@ class JSONLDController {
             return false;
         }
 
-        const ref = EntityRefFactory.getRefFromEntity(entity.type);
-        if (!ref) return false;
-
-        const options = {
-            contextMode,
-            contextUrl,
-        } as const;
-
-        const jsonLdBuilder = new JsonLDBuilder(entity, ref, options);
-        return jsonLdBuilder.build();
+        return JSONLDBuilder.build(entity, compatibilityData[CompatibleOntologiesEnum.Schemaorg]);
     }
 }
 

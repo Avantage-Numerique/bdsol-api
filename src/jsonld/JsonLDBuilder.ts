@@ -1,193 +1,89 @@
-import { getApiConfig } from "@src/config";
-import { CompatibleOntologiesEnum } from "@ref/Data/Compatibility/CompatibleOntology";
+import { CompatibleEntity, CompatibilityOntology } from "@src/Compatibility/types";
 
-const isDev = getApiConfig().isDevelopment;
+export class JSONLDBuilder {
+    public static build<TDocument extends { type: CompatibleEntity }>(
+        doc: TDocument,
+        compatibility: CompatibilityOntology<TDocument>
+    ): Record<string, unknown> {
+        const entityCompatibility = compatibility[doc.type];
 
-const addIdInDev = (id: any) => (isDev ? { "@id_for_dev": id } : null);
-
-//context : Inline == we add all the types to do it like an Internal @context.
-//context : url == is an external context pass via an URL.
-
-/**
- *  Build de jsonld
- */
-export class JsonLDBuilder {
-    private entity: any;
-    private rootRef: any; // RefProperty complet (racine)
-    private options?: {
-        contextMode?: "inline" | "url";
-        contextUrl?: string;
-    };
-
-    /**
-     *
-     * @param entity
-     * @param rootRef root of target Property
-     * @param options
-     */
-    constructor(entity: any, rootRef: any, options?: any) {
-        this.entity = entity;
-        this.rootRef = rootRef;
-        if (!options) {
-            this.options = { contextMode: "inline" };
-        } else this.options = options;
-    }
-
-    // build natif AVNU
-    build() {
-        return this.buildFor(CompatibleOntologiesEnum.Schemaorg);
-    }
-
-    // build pour ontologie externe
-    buildFor(targetOntology: CompatibleOntologiesEnum | string) {
-        return {
-            "@dev": `Build for ${targetOntology}`,
-            "@context": this.buildContext(),
-            ...addIdInDev(this.entity._id),
-            "@type": this.rootRef.ontologyProperty,
-            ...this.buildForOntology(targetOntology, this.entity, this.rootRef.ref || []),
-        };
-    }
-
-    // context récursif
-    private buildContext(): any {
-        if (this.options?.contextMode === "url") {
-            return this.options.contextUrl || "";
+        if (!entityCompatibility) {
+            return {};
         }
 
-        const context: Record<string, string> = {};
+        const jsonld: Record<string, unknown> = {};
 
-        const walk = (referential: any[]) => {
-            for (const propertyRef of referential) {
-                const field = propertyRef.field;
-                const ontology = propertyRef.ontologyProperty;
+        this.buildMetadata(jsonld, doc);
 
-                if (field && ontology && !context[field]) {
-                    context[field] = ontology;
-                }
+        for (const [property, entry] of Object.entries(entityCompatibility)) {
+            const value = entry.source?.(doc);
 
-                if (propertyRef.type?.kind === "object" && Array.isArray(propertyRef.ref)) {
-                    walk(propertyRef.ref);
-                }
-            }
-        };
-
-        if (Array.isArray(this.rootRef.ref)) {
-            walk(this.rootRef.ref);
-        }
-
-        return context;
-    }
-
-    // build interne récursif
-    private buildForOntology(targetOntology: string, entity: any, referential: any[]): Record<string, any> {
-        const result: Record<string, any> = {};
-
-        //For each property in ref (ref[] from the parent)
-        for (const propertyRef of referential) {
-            //Check if property from ref have a field key
-            const field = propertyRef.field;
-            if (!field) continue;
-
-            //Check if that field exists in the entity
-            const value = entity?.[field];
-            const isPropertyPluralRelation = propertyRef.cardinality?.includes("N");
-
-            //check valeur absente
-            if (value === undefined || value === null) {
-                if (propertyRef.cardinality?.startsWith("1")) {
-                    console.error(`[JsonLDBuilder] Missing required property: ${field}`);
-                }
+            if (!this.shouldIncludeValue(value)) {
                 continue;
             }
 
-            //fonction de mapping
-            const processValue = (val: any): any => {
-                //primitives
-                if (propertyRef.type?.kind === "primitive") {
-                    if (targetOntology === CompatibleOntologiesEnum.AVNU) return val;
-
-                    const mapping = this.findMapping(propertyRef, targetOntology);
-                    if (mapping) return val;
-                    return undefined; // pas compatible
-                }
-
-                //references
-                if (propertyRef.type?.kind === "reference") {
-                    if (targetOntology === CompatibleOntologiesEnum.AVNU) {
-                        //If more then 1 target, check the refPath to collapse to the right value
-                        if (propertyRef.type.targets.length > 1) {
-                            const refPath = propertyRef.type.refPath;
-                            const refTargetObj = referential.find((refElem) => refElem.field === refPath);
-                            if (!refTargetObj) {
-                                console.log(
-                                    `[JsonLDBuilder] Couldn't collapse targets ${propertyRef.type.targets} to refPath ${refPath} in field ${field}`
-                                );
-                            } else if (entity[refPath]) return { ...addIdInDev(val), "@type": entity[refPath] };
-                        }
-                        if (typeof val === "object" && "_id" in val) {
-                            return {
-                                ...addIdInDev(val._id),
-                                "@type": propertyRef.type.targets[0],
-                                ...val,
-                            };
-                        }
-
-                        return { ...addIdInDev(val), "@type": propertyRef.type.targets[0] };
-                    }
-
-                    const mapping = this.findMapping(propertyRef, targetOntology);
-                    if (mapping) return { "@id": val };
-                    return undefined;
-                }
-
-                //objets récursifs
-                if (propertyRef.type?.kind === "object") {
-                    const sub = this.buildForOntology(targetOntology, val, propertyRef.ref || []);
-                    if (Object.keys(sub).length > 0) return sub;
-                    return undefined; // rien de compatible dans les sous-champs
-                }
-
-                return undefined;
-            };
-
-            //gestion array ou single
-            if (isPropertyPluralRelation) {
-                if (!Array.isArray(value)) {
-                    console.error(`[JsonLDBuilder] Expected array for property: ${field}`);
-                    continue;
-                }
-
-                const processedArray = value.map(processValue).filter((v) => v !== undefined);
-
-                if (processedArray.length > 0) {
-                    if (targetOntology === CompatibleOntologiesEnum.AVNU) result[field] = processedArray;
-                    else {
-                        const mapping = this.findMapping(propertyRef, targetOntology);
-                        result[mapping?.externalField || field] = processedArray;
-                    }
-                }
-            } else {
-                const processed = processValue(value);
-                if (processed !== undefined) {
-                    if (targetOntology === CompatibleOntologiesEnum.AVNU) result[field] = processed;
-                    else {
-                        const mapping = this.findMapping(propertyRef, targetOntology);
-                        if (mapping) result[mapping.externalField] = processed;
-                        // si mapping absent mais sous-champs compatibles, le champ est inclus tel quel
-                        else if (propertyRef.type?.kind === "object") result[field] = processed;
-                    }
-                }
-            }
+            this.assignValue(jsonld, this.normalizeProperty(property), value);
         }
-        return result;
+
+        return jsonld;
     }
 
-    // recherche le mapping RefCompatibility pour l'ontologie cible
-    private findMapping(propertyRef: any, targetOntology: string) {
-        if (!propertyRef.compatibility || targetOntology === CompatibleOntologiesEnum.AVNU) return null;
+    private static buildMetadata<TDocument extends { type: CompatibleEntity }>(
+        jsonld: Record<string, unknown>,
+        doc: TDocument
+    ): void {
+        // TODO : Remplacer le contexte par un dictionnaire selon l'ontologie.
+        jsonld["@context"] = {
+            schema: "https://schema.org/",
+        };
 
-        const comp = propertyRef.compatibility.find((c: any) => c.externalSource?.name === targetOntology);
-        return comp?.mapping || null;
+        // TODO : Mapper vers le véritable type de l'ontologie.
+        jsonld["@type"] = doc.type;
+    }
+
+    private static normalizeProperty(property: string): string {
+        // TODO : Lorsque le @context sera utilisé pour résoudre les préfixes,
+        // on pourra retourner uniquement le nom de la propriété.
+        //
+        // Exemple :
+        // "schema:name" -> "name"
+
+        return property;
+    }
+
+    private static shouldIncludeValue(value: unknown): boolean {
+        if (value === undefined || value === null) {
+            return false;
+        }
+
+        // C'est ici que réside la logique de décision pour les edge cases.
+        // Pour l'instant, les tableaux vides sont conservés puisque JSON-LD
+        // les accepte généralement.
+        //
+        // Exemple si un jour on veut les ignorer :
+        //
+        // if (Array.isArray(value) && value.length === 0) {
+        //     return false;
+        // }
+
+        return true;
+    }
+
+    private static assignValue(jsonld: Record<string, unknown>, property: string, value: unknown): void {
+        // Point d'extension.
+        //
+        // Aujourd'hui :
+        //  - primitives
+        //  - objets
+        //  - tableaux
+        //
+        // Demain :
+        //  - détection des entités Mongo populées
+        //  - génération récursive du JSON-LD
+        //  - génération de @id
+        //  - choix entre embed ou référence
+        //  - traitement particulier de certains types
+
+        jsonld[property] = value;
     }
 }

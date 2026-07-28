@@ -36,7 +36,7 @@ import SlowDownMiddleware from "@src/Server/Middlewares/SlowDownMiddleware";
 import path from "path";
 
 // import ReferentialRoutes from "./Referential/Routes/ReferentialRoutes";
-// import JSONLDRoutes from "./jsonld/Routes/JSONLDRoutes";
+import JSONLDRoutes from "./jsonld/Routes/JSONLDRoutes";
 
 /**
  * Main class for the API
@@ -177,10 +177,10 @@ export default class Api {
             //     baseRoute: "/ref",
             //     manager: new ReferentialRoutes(),
             // },
-            // {
-            //     baseRoute: "/jsonld",
-            //     manager: new JSONLDRoutes(),
-            // },
+            {
+                baseRoute: "/jsonld",
+                manager: new JSONLDRoutes(),
+            },
             {
                 baseRoute: "/communications",
                 manager: new CommunicationsRoutes(),
