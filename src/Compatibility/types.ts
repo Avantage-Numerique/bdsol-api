@@ -1,5 +1,12 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
+export enum CompatibleOntologiesEnum {
+    //"AVNU" = "avnu",
+    "Schemaorg" = "schema.org",
+    "DataScene" = "datascene",
+    "Artsdata" = "artsdata",
+}
+
 export type CompatibleEntity =
     | EntityTypesEnum.person
     | EntityTypesEnum.organisation

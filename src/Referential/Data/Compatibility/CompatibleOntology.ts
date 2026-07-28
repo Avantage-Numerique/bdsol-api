@@ -3,13 +3,13 @@ import { RefCompatibility } from "@ref/Data/types";
 
 export type CompatibleOntologyPropertyPrefix = `${string}:${string}`;
 
-export enum CompatibleOntologiesEnum {
+/* export enum CompatibleOntologiesEnum {
     "AVNU" = "avnu",
     "Artsdata" = "artsdata",
     "DataScene" = "datascene",
     "Schemaorg" = "schema.org",
 }
-
+ */
 export interface CompatibleOntologyParam {
     referentialUrl: string;
     ontologyUrl: string;
