@@ -17,7 +17,6 @@ import LogHelper from "./Monitoring/Helpers/LogHelper";
 import { ApiErrorHandler } from "./Error/Middlewares/ApiErrorHandler";
 import { GetRequestIp } from "./Monitoring/Middlewares/GetRequestIp";
 import ModerationRoutes from "./Moderation/Routes/ModerationRoutes";
-import ReferentialRoutes from "./Referential/Routes/ReferentialRoutes";
 import SearchRoutes from "./Database/Search/SearchRoutes";
 import { StaticContentsRoutes } from "./StaticContent/Routes/StaticContentsRoutes";
 import { ProjectsRoutes } from "./Projects/Routes/ProjectsRoute";
@@ -35,7 +34,9 @@ import { BackukDbJob } from "@src/Schedule/Jobs/BackupDb";
 import { PagesRoutes } from "@src/Pages/Routes/PagesRoutes";
 import SlowDownMiddleware from "@src/Server/Middlewares/SlowDownMiddleware";
 import path from "path";
-import JSONLDRoutes from "./jsonld/Routes/JSONLDRoutes";
+
+// import ReferentialRoutes from "./Referential/Routes/ReferentialRoutes";
+// import JSONLDRoutes from "./jsonld/Routes/JSONLDRoutes";
 
 /**
  * Main class for the API
@@ -172,14 +173,14 @@ export default class Api {
                 baseRoute: "/info",
                 manager: new ModerationRoutes(),
             },
-            {
-                baseRoute: "/ref",
-                manager: new ReferentialRoutes(),
-            },
-            {
-                baseRoute: "/jsonld",
-                manager: new JSONLDRoutes(),
-            },
+            // {
+            //     baseRoute: "/ref",
+            //     manager: new ReferentialRoutes(),
+            // },
+            // {
+            //     baseRoute: "/jsonld",
+            //     manager: new JSONLDRoutes(),
+            // },
             {
                 baseRoute: "/communications",
                 manager: new CommunicationsRoutes(),
