@@ -1,6 +1,6 @@
-import CompatibleOntology, { CompatibleOntologiesEnum } from "@ref/Data/Compatibility/CompatibleOntology";
+import { CompatibleOntologiesEnum, OntologyMetaData } from "../types";
 
-const DataSceneCompatibility: CompatibleOntology = new CompatibleOntology({
+const DataSceneMetaData: OntologyMetaData = {
     referentialUrl: "https://documentation.datascene.ca/references",
     ontologyUrl: "https://documentation.datascene.ca",
     contextUrl: "https://documentation.datascene.ca",
@@ -10,5 +10,5 @@ const DataSceneCompatibility: CompatibleOntology = new CompatibleOntology({
     icon: "la-lightbulb",
     description:
         "Des données standardisées pour un écosystème des arts de la scène connecté et performant. Moins de ressaisies. Plus de cohérence. Une information qui voyage mieux.",
-});
-export default DataSceneCompatibility;
+};
+export default DataSceneMetaData;

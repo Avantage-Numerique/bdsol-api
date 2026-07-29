@@ -3,34 +3,34 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBEquipmentToSchemaOrg: CompatibilityOntology = {
     [EntityTypesEnum.equipment]: {
-        "schema:name": {
+        name: {
             fields: ["name"],
             source: (doc) => doc.name,
         },
-        /* "schema:category": {
+        /* "category": {
             fields: ["equipmentType"],
             source: (doc) => doc.equipmentType,
         }, */
-        "schema:alternateName": {
+        alternateName: {
             fields: ["label"],
             source: (doc) => doc.label,
         },
-        "schema:description": {
+        description: {
             fields: ["description"],
             source: (doc) => doc.description,
         },
-        "schema:abstract": {
+        abstract: {
             fields: ["shortDescription"],
             source: (doc) => doc.shortDescription,
         },
-        "schema:brand": {
+        brand: {
             fields: ["brand"],
             source: (doc) => doc.brand,
         },
-        "schema:model": {
+        model: {
             fields: ["modelName"],
             source: (doc) => doc.modelName,
         },
-        //schema:mediaObject ??
+        //mediaObject ??
     },
 };

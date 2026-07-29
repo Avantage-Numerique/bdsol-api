@@ -1,7 +1,7 @@
 import { RefSchema } from "@ref/Data/types";
 import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
-import ArtsdataCompatibility from "@ref/Data/Compatibility/Artsdata";
-import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
+import ArtsdataCompatibility from "@src/Compatibility/ArtsData/Artsdata";
+import SchemaOrgCompatibility from "@src/Compatibility/SchemaOrg/SchemaOrg";
 
 /* export const refSameAs: RefProperty = {
     field: "sameAs",

@@ -5,7 +5,7 @@ import { refType } from "@ref/Data/Properties/RefType";
 import { refDomainList } from "@ref/Data/SubSchema/RefDomainList";
 import { RefSchema } from "@ref/Data/types";
 import { createRefType } from "@ref/Data/utils";
-import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import AvnuCompatibility from "@src/Compatibility/Compatibility/Avnu";
 import { refMeta } from "../SubSchema/RefMeta";
 
 export const refTaxonomy: RefSchema = {

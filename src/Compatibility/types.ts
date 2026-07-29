@@ -26,3 +26,14 @@ export type CompatibilityProperties<TDocument = any> = Record<string, Compatibil
 export type CompatibilityOntology<TDocument = any> = Partial<
     Record<CompatibleEntity, CompatibilityProperties<TDocument>>
 >;
+
+export type OntologyMetaData = {
+    referentialUrl?: string;
+    ontologyUrl?: string;
+    contextUrl?: string;
+    prefix: string;
+    name?: string;
+    label?: string;
+    icon?: string;
+    description?: string;
+};

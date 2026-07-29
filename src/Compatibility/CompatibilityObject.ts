@@ -23,36 +23,44 @@ import { compatibilityDBProjectToDataScene } from "./DataScene/CompatDataScenePr
 import { compatibilityDBTaxonomyToDataScene } from "./DataScene/CompatDataSceneTaxonomy";
 
 import { CompatibleOntologiesEnum } from "./types";
-import { EntityTypesEnum } from "@src/Entities/EntityTypes";
+import SchemaOrgMetaData from "./SchemaOrg/SchemaOrg";
+import ArtsdataMetaData from "./ArtsData/Artsdata";
+import DataSceneMetaData from "./DataScene/DataScene";
 
 export const compatibilityData = {
     [CompatibleOntologiesEnum.Schemaorg]: {
-        [EntityTypesEnum.equipment]: compatibilityDBEquipmentToSchemaOrg,
-        [EntityTypesEnum.event]: compatibilityDBEventToSchemaOrg,
-        [EntityTypesEnum.organisation]: compatibilityDBOrganisationToSchemaOrg,
-        [EntityTypesEnum.person]: compatibilityDBPersonToSchemaOrg,
-        [EntityTypesEnum.place]: compatibilityDBPlaceToSchemaOrg,
-        [EntityTypesEnum.project]: compatibilityDBProjectToSchemaOrg,
-        [EntityTypesEnum.taxonomy]: compatibilityDBTaxonomyToSchemaOrg,
+        ...compatibilityDBEquipmentToSchemaOrg,
+        ...compatibilityDBEventToSchemaOrg,
+        ...compatibilityDBOrganisationToSchemaOrg,
+        ...compatibilityDBPersonToSchemaOrg,
+        ...compatibilityDBPlaceToSchemaOrg,
+        ...compatibilityDBProjectToSchemaOrg,
+        ...compatibilityDBTaxonomyToSchemaOrg,
     },
 
     [CompatibleOntologiesEnum.Artsdata]: {
-        [EntityTypesEnum.equipment]: compatibilityDBEquipmentToArtsData,
-        [EntityTypesEnum.event]: compatibilityDBEventToArtsData,
-        [EntityTypesEnum.organisation]: compatibilityDBOrganisationToArtsData,
-        [EntityTypesEnum.person]: compatibilityDBPersonToArtsData,
-        [EntityTypesEnum.place]: compatibilityDBPlaceToArtsData,
-        [EntityTypesEnum.project]: compatibilityDBProjectToArtsData,
-        [EntityTypesEnum.taxonomy]: compatibilityDBTaxonomyToArtsData,
+        ...compatibilityDBEquipmentToArtsData,
+        ...compatibilityDBEventToArtsData,
+        ...compatibilityDBOrganisationToArtsData,
+        ...compatibilityDBPersonToArtsData,
+        ...compatibilityDBPlaceToArtsData,
+        ...compatibilityDBProjectToArtsData,
+        ...compatibilityDBTaxonomyToArtsData,
     },
 
     [CompatibleOntologiesEnum.DataScene]: {
-        [EntityTypesEnum.equipment]: compatibilityDBEquipmentToDataScene,
-        [EntityTypesEnum.event]: compatibilityDBEventToDataScene,
-        [EntityTypesEnum.organisation]: compatibilityDBOrganisationToDataScene,
-        [EntityTypesEnum.person]: compatibilityDBPersonToDataScene,
-        [EntityTypesEnum.place]: compatibilityDBPlaceToDataScene,
-        [EntityTypesEnum.project]: compatibilityDBProjectToDataScene,
-        [EntityTypesEnum.taxonomy]: compatibilityDBTaxonomyToDataScene,
+        ...compatibilityDBEquipmentToDataScene,
+        ...compatibilityDBEventToDataScene,
+        ...compatibilityDBOrganisationToDataScene,
+        ...compatibilityDBPersonToDataScene,
+        ...compatibilityDBPlaceToDataScene,
+        ...compatibilityDBProjectToDataScene,
+        ...compatibilityDBTaxonomyToDataScene,
     },
+};
+
+export const ontologiesMetaData = {
+    [CompatibleOntologiesEnum.Schemaorg]: SchemaOrgMetaData,
+    [CompatibleOntologiesEnum.Artsdata]: ArtsdataMetaData,
+    [CompatibleOntologiesEnum.DataScene]: DataSceneMetaData,
 };

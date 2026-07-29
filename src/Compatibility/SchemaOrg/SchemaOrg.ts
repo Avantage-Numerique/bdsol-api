@@ -1,6 +1,6 @@
-import CompatibleOntology, { CompatibleOntologiesEnum } from "@ref/Data/Compatibility/CompatibleOntology";
+import { CompatibleOntologiesEnum, OntologyMetaData } from "../types";
 
-const SchemaOrgCompatibility: CompatibleOntology = new CompatibleOntology({
+const SchemaOrgMetaData: OntologyMetaData = {
     referentialUrl: "https://schema.org",
     ontologyUrl: "https://schema.org",
     contextUrl: "https://schema.org",
@@ -10,5 +10,5 @@ const SchemaOrgCompatibility: CompatibleOntology = new CompatibleOntology({
     icon: "la-pencil-ruler",
     description:
         "Schema.org est un vocabulaire structuré collaboratif et communautaire dont la mission est de créer, maintenir et promouvoir des schémas pour les données structurées sur Internet.",
-});
-export default SchemaOrgCompatibility;
+};
+export default SchemaOrgMetaData;

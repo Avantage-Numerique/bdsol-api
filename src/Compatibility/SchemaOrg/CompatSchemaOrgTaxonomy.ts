@@ -3,11 +3,11 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBTaxonomyToSchemaOrg: CompatibilityOntology = {
     [EntityTypesEnum.taxonomy]: {
-        "schema:name": {
+        name: {
             fields: ["name"],
             source: (doc) => doc.name,
         },
-        "schema:description": {
+        description: {
             fields: ["description"],
             source: (doc) => doc.description,
         },

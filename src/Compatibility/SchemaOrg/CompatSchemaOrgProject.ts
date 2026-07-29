@@ -3,67 +3,67 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBProjectToSchemaOrg: CompatibilityOntology = {
     [EntityTypesEnum.project]: {
-        "schema:name": {
+        name: {
             fields: ["name"],
             source: (doc) => doc.name,
         },
-        "schema:alternateName": {
+        alternateName: {
             fields: ["alternateName"],
             source: (doc) => doc.alternateName,
         },
-        "schema:description": {
+        description: {
             fields: ["description"],
             source: (doc) => doc.description,
         },
-        "schema:disambiguatingDescription": {
+        disambiguatingDescription: {
             fields: ["shortDescription"],
             source: (doc) => doc.shortDescription,
         },
-        /* "schema:creator": {
+        /* "creator": {
             fields: ["entityInCharge"],
             source: (doc) => doc.entityInCharge,
         }, */
-        /* "schema:producer": {
+        /* "producer": {
             fields: ["producer"],
             source: (doc) => doc.producer,
         }, */
-        /* "schema:contactPoint": {
+        /* "contactPoint": {
             fields: ["contactPoint"],
             source: (doc) => doc.contactPoint,
         }, */
-        "schema:email": {
+        email: {
             fields: ["email"],
             source: (doc) => doc.contactPoint.email,
         },
-        "schema:telephone": {
+        telephone: {
             fields: ["tel"],
             source: (doc) => doc.contactPoint.tel,
         },
-        "schema:url": {
+        url: {
             fields: ["website"],
             source: (doc) => doc.contactPoint.website,
         },
-        /* "schema:location": {
+        /* "location": {
             fields: ["location"],
             source: (doc) => doc.map(), //map les locations
         }, */
-        /* "schema:member": {
+        /* "member": {
             fields: ["team"],
             source: (doc) => doc.team.map(),//Map members?
         }, */
-        /* "schema:sponsor": {
+        /* "sponsor": {
             fields: ["sponsor"],
             source: (doc) => doc.sponsor.map(),//Map sponsor?
         }, */
-        /* "schema:keywords": {
+        /* "keywords": {
             fields: ["skills"],
             source: (doc) => doc.skills.map(),//Map skills name?
         }, */
-        /* "schema:owns": {
+        /* "owns": {
             fields: ["equipment"],
             source: (doc) => doc.equipment.map(),//Map equipment?
         }, */
         //DateTime pour ScheduleBudget?
-        //schema:mediaObject ??
+        //mediaObject ??
     },
 };

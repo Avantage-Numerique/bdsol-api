@@ -21,7 +21,6 @@ class JSONLDRoutes extends AbstractRoute {
 
     constructor() {
         super();
-
         this.routerInstance = express.Router();
         this.routerInstanceAuthentification = express.Router();
     }
@@ -46,11 +45,15 @@ class JSONLDRoutes extends AbstractRoute {
 
     public async getJsonLDEntityHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
         const { params } = req;
+        const { ontology } = req.query;
 
         let jsonldContent;
 
         try {
-            jsonldContent = await this.controllerInstance.getJsonLDForEntity(params.entity, params.id);
+            if (typeof ontology !== "string") {
+                throw new Error("Missing or invalid ontology");
+            }
+            jsonldContent = await this.controllerInstance.getJsonLDForEntity(params.entity, params.id, ontology);
         } catch (e) {
             console.error(e);
 

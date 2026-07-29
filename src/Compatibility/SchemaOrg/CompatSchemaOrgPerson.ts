@@ -33,7 +33,7 @@ export const compatibilityDBPersonToSchemaOrg: CompatibilityOntology = {
         }, */
         "schema:email": {
             fields: ["email"],
-            source: (doc) => doc.contactPoint.email,
+            source: (doc) => doc.contactPoint.email.address,
         },
         "schema:telephone": {
             fields: ["tel"],

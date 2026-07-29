@@ -36,7 +36,7 @@ enum LogFormats {
 
 export default class LogHelper {
     static printToConsole: boolean = true;
-    static styled: boolean = false;
+    static styled: boolean = true;
     static logToFile: boolean = getApiConfig().logToFile;
 
     public static showLog = true;

@@ -1,11 +1,12 @@
-import { CompatibleEntity, CompatibilityOntology } from "@src/Compatibility/types";
+import { compatibilityData, ontologiesMetaData } from "@src/Compatibility/CompatibilityObject";
+import { CompatibleEntity, CompatibleOntologiesEnum, OntologyMetaData } from "@src/Compatibility/types";
 
 export class JSONLDBuilder {
     public static build<TDocument extends { type: CompatibleEntity }>(
         doc: TDocument,
-        compatibility: CompatibilityOntology<TDocument>
+        compatibleOntology: CompatibleOntologiesEnum
     ): Record<string, unknown> {
-        const entityCompatibility = compatibility[doc.type];
+        const entityCompatibility = compatibilityData[compatibleOntology][doc.type];
 
         if (!entityCompatibility) {
             return {};
@@ -13,16 +14,18 @@ export class JSONLDBuilder {
 
         const jsonld: Record<string, unknown> = {};
 
-        this.buildMetadata(jsonld, doc);
-
+        //Add @context, @type
+        this.buildMetadata(jsonld, doc, compatibleOntology);
+        //For each compatible property
         for (const [property, entry] of Object.entries(entityCompatibility)) {
+            //Parse database object with source function
             const value = entry.source?.(doc);
-
+            //Confirm if we should include the result in JSONLD
             if (!this.shouldIncludeValue(value)) {
                 continue;
             }
-
-            this.assignValue(jsonld, this.normalizeProperty(property), value);
+            //Add value to JSONLD according to the value
+            this.assignValue(jsonld, property, value);
         }
 
         return jsonld;
@@ -30,54 +33,27 @@ export class JSONLDBuilder {
 
     private static buildMetadata<TDocument extends { type: CompatibleEntity }>(
         jsonld: Record<string, unknown>,
-        doc: TDocument
+        doc: TDocument,
+        compatibleOntology: CompatibleOntologiesEnum
     ): void {
-        // TODO : Remplacer le contexte par un dictionnaire selon l'ontologie.
         jsonld["@context"] = {
-            schema: "https://schema.org/",
+            [ontologiesMetaData[compatibleOntology].prefix]: ontologiesMetaData[compatibleOntology].ontologyUrl,
         };
 
         // TODO : Mapper vers le véritable type de l'ontologie.
         jsonld["@type"] = doc.type;
     }
 
-    private static normalizeProperty(property: string): string {
-        // TODO : Lorsque le @context sera utilisé pour résoudre les préfixes,
-        // on pourra retourner uniquement le nom de la propriété.
-        //
-        // Exemple :
-        // "schema:name" -> "name"
-
-        return property;
-    }
-
+    //Logic of edge case if we should map value
     private static shouldIncludeValue(value: unknown): boolean {
         if (value === undefined || value === null) {
             return false;
         }
-
-        // C'est ici que réside la logique de décision pour les edge cases.
-        // Pour l'instant, les tableaux vides sont conservés puisque JSON-LD
-        // les accepte généralement.
-        //
-        // Exemple si un jour on veut les ignorer :
-        //
-        // if (Array.isArray(value) && value.length === 0) {
-        //     return false;
-        // }
-
         return true;
     }
 
+    //How to assign value, can allow recursion of subschema potentially
     private static assignValue(jsonld: Record<string, unknown>, property: string, value: unknown): void {
-        // Point d'extension.
-        //
-        // Aujourd'hui :
-        //  - primitives
-        //  - objets
-        //  - tableaux
-        //
-        // Demain :
         //  - détection des entités Mongo populées
         //  - génération récursive du JSON-LD
         //  - génération de @id

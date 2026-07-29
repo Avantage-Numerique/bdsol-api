@@ -1,6 +1,6 @@
-import CompatibleOntology, { CompatibleOntologiesEnum } from "@ref/Data/Compatibility/CompatibleOntology";
+import { CompatibleOntologiesEnum, OntologyMetaData } from "../types";
 
-const ArtsdataCompatibility: CompatibleOntology = new CompatibleOntology({
+const ArtsdataMetaData: OntologyMetaData = {
     referentialUrl: "https://docs.artsdata.ca",
     ontologyUrl: "https://kg.artsdata.ca",
     contextUrl: "https://kg.artsdata.ca",
@@ -12,5 +12,5 @@ const ArtsdataCompatibility: CompatibleOntology = new CompatibleOntology({
         "Artsdata est un graphe de connaissances interrelié avec de nombreuses sources de données du secteur des arts ainsi\n" +
         "    qu’avec d’autres bases de connaissances ouvertes et liées. Cette infrastructure facilite la découvrabilité et la\n" +
         "    réutilisation des données sur les arts.",
-});
-export default ArtsdataCompatibility;
+};
+export default ArtsdataMetaData;

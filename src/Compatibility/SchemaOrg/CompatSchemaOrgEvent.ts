@@ -3,73 +3,73 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBEventToSchemaOrg: CompatibilityOntology = {
     [EntityTypesEnum.event]: {
-        "schema:name": {
+        name: {
             fields: ["name"],
             source: (doc) => doc.name,
         },
-        "schema:alternateName": {
+        alternateName: {
             fields: ["alternateName"],
             source: (doc) => doc.alternateName,
         },
-        "schema:description": {
+        description: {
             fields: ["description"],
             source: (doc) => doc.description,
         },
-        "schema:disambiguatingDescription": {
+        disambiguatingDescription: {
             fields: ["shortDescription"],
             source: (doc) => doc.shortDescription,
         },
-        /* "schema:funder": {
+        /* "funder": {
             fields: ["entityInCharge"],
             source: (doc) => doc.entityInCharge,
         }, */
         //organizer?
-        /* "schema:additionalType": {
+        /* "additionalType": {
             fields: ["eventType"],
             source: (doc) => doc.eventType,
         }, */
-        "schema:eventAttendanceMode": {
+        eventAttendanceMode: {
             fields: ["eventFormat"],
             source: (doc) => doc.eventFormat,
         },
-        /* "schema:member": {
+        /* "member": {
             fields: ["team"],
             source: (doc) => doc.team.map()//map member?,
         }, */
-        "schema:startDate": {
+        startDate: {
             fields: ["startDate"],
             source: (doc) => doc.startDate,
         },
-        "schema:endDate": {
+        endDate: {
             fields: ["endDate"],
             source: (doc) => doc.endDate,
         },
-        /* "schema:contactPoint": {
+        /* "contactPoint": {
             fields: ["contactPoint"],
             source: (doc) => doc.contactPoint,
         }, */
-        "schema:email": {
+        email: {
             fields: ["email"],
             source: (doc) => doc.contactPoint.email,
         },
-        "schema:telephone": {
+        telephone: {
             fields: ["tel"],
             source: (doc) => doc.contactPoint.tel,
         },
-        "schema:url": {
+        url: {
             fields: ["website"],
             source: (doc) => doc.contactPoint.website,
         },
-        //schema:mediaObject ??
-        /* "schema:attendee": {
+        //mediaObject ??
+        /* "attendee": {
             fields: ["attendees"],
             source: (doc) => doc.contactPoint.attendees,
         }, */
-        /* "schema:keywords": {
+        /* "keywords": {
             fields: ["skills"],
             source: (doc) => doc.contactPoint.skills,
         }, */
-        /* "schema:subEvent": {
+        /* "subEvent": {
             fields: ["subEvents"],
             source: (doc) => doc.subEvents.map(),
         }, */

@@ -3,55 +3,55 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBPlaceToSchemaOrg: CompatibilityOntology = {
     [EntityTypesEnum.place]: {
-        "schema:name": {
+        name: {
             fields: ["name"],
             source: (doc) => doc.name,
         },
-        "schema:description": {
+        description: {
             fields: ["description"],
             source: (doc) => doc.description,
         },
-        "schema:disambiguatingDescription": {
+        disambiguatingDescription: {
             fields: ["shortDescription"],
             source: (doc) => doc.shortDescription,
         },
-        "schema:streetAddress": {
+        streetAddress: {
             fields: ["address"],
             source: (doc) => doc.address,
         },
-        "schema:addressLocality": {
+        addressLocality: {
             fields: ["city"],
             source: (doc) => doc.city,
         },
-        "schema:addressRegion": {
+        addressRegion: {
             fields: ["region"],
             source: (doc) => doc.region,
         },
-        "schema:AdministrativeArea": {
+        AdministrativeArea: {
             fields: ["mrc"],
             source: (doc) => doc.mrc,
         },
         //Cannot have 2 property with same key
-        /* "schema:addressRegion": {
+        /* "addressRegion": {
             fields: ["province"],
             source: (doc) => doc.province,
         }, */
-        "schema:postalCode": {
+        postalCode: {
             fields: ["postalCode"],
             source: (doc) => doc.postalCode,
         },
-        "schema:addressCountry": {
+        addressCountry: {
             fields: ["country"],
             source: (doc) => doc.country,
         },
-        "schema:latitude": {
+        latitude: {
             fields: ["latitude"],
             source: (doc) => doc.latitude,
         },
-        "schema:longitude": {
+        longitude: {
             fields: ["longitude"],
             source: (doc) => doc.longitude,
         },
-        //schema:MediaObject?
+        //MediaObject?
     },
 };

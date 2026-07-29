@@ -1,5 +1,5 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
-import { CompatibleOntologyPropertyPrefix } from "@ref/Data/Compatibility/CompatibleOntology";
+import { CompatibleOntologyPropertyPrefix } from "@src/Compatibility/Compatibility/CompatibleOntology";
 
 //The object that structure the whole Ref tree
 export type RefData = {

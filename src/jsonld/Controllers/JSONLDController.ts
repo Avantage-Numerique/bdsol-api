@@ -1,7 +1,7 @@
 import { JSONLDBuilder } from "@src/jsonld/JSONLDBuilder";
 import EntityControllerFactory from "@src/Abstract/EntityControllerFactory";
-import { compatibilityData } from "@src/Compatibility/CompatibilityObject";
 import { CompatibleOntologiesEnum } from "@src/Compatibility/types";
+import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 class JSONLDController {
     /** @private @static Singleton instance */
@@ -23,14 +23,18 @@ class JSONLDController {
      *
      * @throws {Error} If the `collection` param is invalid (`model` or `ref` not found)
      */
-    public async getJsonLDForEntity(collection: string, entityId: string): Promise<object | false> {
+    public async getJsonLDForEntity(collection: string, entityId: string, ontology: string): Promise<object | false> {
         const model = EntityControllerFactory.getControllerFromEntity(collection)?.entity?.mongooseModel;
         if (!model) throw new Error("Pas de collection !");
 
         const document = await model.findById(entityId); //.setOptions({ skipPopulate: true });
         if (!document) return false;
 
-        return this.createJsonLDForDocument(document);
+        if (!Object.values(CompatibleOntologiesEnum).includes(ontology as CompatibleOntologiesEnum)) {
+            throw new Error("Unknown ontology");
+        }
+
+        return this.createJsonLDForDocument(document, ontology);
     }
 
     /**
@@ -40,16 +44,14 @@ class JSONLDController {
      * @param contextUrl defaults to avnu context
      * @returns
      */
-    public createJsonLDForDocument(document: any, contextMode: string = "inline", contextUrl: string = "/jsonld"): any {
+    public createJsonLDForDocument(document: any, ontology: string): any {
         let entity;
-
         /**
          * Créer un clone pour laisser le document Mongo intact (?)
          *
          * WARN: quand on clone la fonction `.toObject()` est undefined
          */
         // const _document = { ...document };
-
         /**
          * Fix semi-temporaire pour que les objets nested soient .toObject()
          *
@@ -60,7 +62,6 @@ class JSONLDController {
             if (Array.isArray(doc)) {
                 return doc.map(deepToObject);
             }
-
             if (doc && typeof doc === "object") {
                 // Si c'est un document mongoose
                 if ("toObject" in doc && typeof doc.toObject === "function") {
@@ -71,7 +72,6 @@ class JSONLDController {
                     doc[key] = deepToObject(doc[key]);
                 }
             }
-
             return doc;
         }
 
@@ -85,7 +85,9 @@ class JSONLDController {
             return false;
         }
 
-        return JSONLDBuilder.build(entity, compatibilityData[CompatibleOntologiesEnum.Schemaorg]);
+        const correctOntology = ontology as CompatibleOntologiesEnum;
+
+        return JSONLDBuilder.build(entity, correctOntology);
     }
 }
 
