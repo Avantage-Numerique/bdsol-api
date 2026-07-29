@@ -14,6 +14,7 @@ import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
+import { UriObject } from "@src/Database/Schemas/URISchema";
 
 class Event extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -159,6 +160,7 @@ class Event extends AbstractModel {
             meta: {
                 type: Meta.schema,
             },
+            uri: UriObject.field,
         },
         {
             toJSON: { virtuals: true },
@@ -220,6 +222,7 @@ class Event extends AbstractModel {
             location: document.location ?? [],
             photoGallery: document.photoGallery ?? "",
             meta: document.meta ?? {},
+            uri: document.uri ?? "",
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",

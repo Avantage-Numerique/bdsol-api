@@ -1,6 +1,7 @@
 import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 import { ObjectId } from "mongodb";
 import { Document } from "mongoose";
+import { UriObject } from "@src/Database/Schemas/URISchema";
 
 export interface PlaceSchema extends Document {
     name: string;
@@ -18,4 +19,5 @@ export interface PlaceSchema extends Document {
     latitude: string;
     longitude: string;
     meta: Meta;
+    uri: UriObject;
 }

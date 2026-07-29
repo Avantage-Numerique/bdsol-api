@@ -7,6 +7,7 @@ import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 import { populateUser } from "@src/Users/Middlewares/populateUser";
 import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
+import { UriObject } from "@src/Database/Schemas/URISchema";
 
 class Equipment extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -115,6 +116,7 @@ class Equipment extends AbstractModel {
             meta: {
                 type: Meta.schema,
             },
+            uri: UriObject.field,
         },
         {
             toJSON: { virtuals: true },
@@ -158,6 +160,7 @@ class Equipment extends AbstractModel {
             meta: document.meta ?? {},
             createdAt: document.createAt ?? "",
             updatedAt: document.updatedAt ?? "",
+            uri: document.uri ?? "",
             type: document.type ?? "",
         };
     }

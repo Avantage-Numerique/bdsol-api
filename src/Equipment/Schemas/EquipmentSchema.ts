@@ -1,6 +1,7 @@
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 import { Document, ObjectId } from "mongoose";
+import { UriObject } from "@src/Database/Schemas/URISchema";
 
 export interface EquipmentSchema extends Document {
     equipmentType: ObjectId;
@@ -13,4 +14,5 @@ export interface EquipmentSchema extends Document {
     mainImage: ObjectId;
     url: [SocialHandle];
     meta: Meta;
+    uri: UriObject;
 }

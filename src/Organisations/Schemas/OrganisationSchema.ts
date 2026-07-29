@@ -1,30 +1,31 @@
 import { Document } from "mongoose";
-import { Meta } from "../../Moderation/Schemas/MetaSchema";
-import Media from "../../Media/Models/Media";
-import { Member } from "../../SubProperty/Team/Schemas/MemberSchema";
+import { MetaSchema } from "../../Moderation/Schemas/MetaSchema";
+import { MemberSchema } from "../../SubProperty/Team/Schemas/MemberSchema";
 import { DomainListSchema } from "@src/Taxonomy/Schemas/DomainListSchema";
-import { SkillGroup } from "../../Taxonomy/Schemas/SkillGroupSchema";
-import { ObjectId } from "mongodb";
-import { EquipmentLink } from "@src/Database/Schemas/EquipmentLinkSchema";
-import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
-import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
+import { SkillGroupSchema } from "../../Taxonomy/Schemas/SkillGroupSchema";
+import { ObjectId } from "mongoose";
+import { EquipmentLinkSchema } from "@src/Database/Schemas/EquipmentLinkSchema";
+import { SocialHandleSchema } from "@src/Database/Schemas/SocialHandleSchema";
+import { ContactPointSchema } from "@src/Database/Schemas/ContactPointSchema";
+import { UriObject } from "@src/Database/Schemas/URISchema";
 
 export interface OrganisationSchema extends Document {
     name: string;
     slug: string;
     description: string;
     shortDescription: string;
-    url: [SocialHandle];
-    contactPoint: ContactPoint;
+    url: [SocialHandleSchema];
+    contactPoint: ContactPointSchema;
     fondationDate: Date;
-    offers: [SkillGroup];
+    offers: [SkillGroupSchema];
     domains: [DomainListSchema];
-    team: [Member];
-    mainImage: Media;
+    team: [MemberSchema];
+    mainImage: ObjectId;
     catchphrase: string;
     location: [ObjectId];
-    equipment: [EquipmentLink];
+    equipment: [EquipmentLinkSchema];
     region: string;
     badges: [string];
-    meta: Meta;
+    meta: MetaSchema;
+    uri: UriObject;
 }
