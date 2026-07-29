@@ -1,10 +1,13 @@
 import { compatibilityData, ontologiesMetaData } from "@src/Compatibility/CompatibilityObject";
 import { CompatibleEntity, CompatibleOntologiesEnum, OntologyMetaData } from "@src/Compatibility/types";
 
+type MinimalDocument = { type: CompatibleEntity; uri: string };
+
 export class JSONLDBuilder {
-    public static build<TDocument extends { type: CompatibleEntity }>(
+    public static build<TDocument extends MinimalDocument>(
         doc: TDocument,
-        compatibleOntology: CompatibleOntologiesEnum
+        compatibleOntology: CompatibleOntologiesEnum,
+        depth: number = 1
     ): Record<string, unknown> {
         const entityCompatibility = compatibilityData[compatibleOntology][doc.type];
 
@@ -15,7 +18,7 @@ export class JSONLDBuilder {
         const jsonld: Record<string, unknown> = {};
 
         //Add @context, @type
-        this.buildMetadata(jsonld, doc, compatibleOntology);
+        this.buildMetadata(jsonld, doc, compatibleOntology, depth);
         //For each compatible property
         for (const [property, entry] of Object.entries(entityCompatibility)) {
             //Parse database object with source function
@@ -25,23 +28,27 @@ export class JSONLDBuilder {
                 continue;
             }
             //Add value to JSONLD according to the value
-            this.assignValue(jsonld, property, value);
+            this.assignValue(jsonld, property, value, compatibleOntology, depth);
         }
 
         return jsonld;
     }
 
-    private static buildMetadata<TDocument extends { type: CompatibleEntity }>(
+    private static buildMetadata<TDocument extends MinimalDocument>(
         jsonld: Record<string, unknown>,
         doc: TDocument,
-        compatibleOntology: CompatibleOntologiesEnum
+        compatibleOntology: CompatibleOntologiesEnum,
+        depth: number
     ): void {
-        jsonld["@context"] = {
-            [ontologiesMetaData[compatibleOntology].prefix]: ontologiesMetaData[compatibleOntology].ontologyUrl,
-        };
+        if (depth == 1) {
+            jsonld["@context"] = {
+                [ontologiesMetaData[compatibleOntology].prefix]: ontologiesMetaData[compatibleOntology].ontologyUrl,
+            };
+        }
 
         // TODO : Mapper vers le véritable type de l'ontologie.
-        jsonld["@type"] = doc.type;
+        jsonld["@type"] = doc.type; //doc.type => quelle type de l'ontologie cible
+        jsonld["@id"] = doc.uri;
     }
 
     //Logic of edge case if we should map value
@@ -52,14 +59,30 @@ export class JSONLDBuilder {
         return true;
     }
 
-    //How to assign value, can allow recursion of subschema potentially
-    private static assignValue(jsonld: Record<string, unknown>, property: string, value: unknown): void {
-        //  - détection des entités Mongo populées
-        //  - génération récursive du JSON-LD
-        //  - génération de @id
+    //How to assign value, can allow recursion of subschema
+    private static assignValue(
+        jsonld: Record<string, unknown>,
+        property: string,
+        value: unknown,
+        ontology: CompatibleOntologiesEnum,
+        depth: number
+    ): void {
+        const handlePropertyValue = (val: unknown) => {
+            //détection des entités Mongo populées
+            if (typeof val === "object" && val && "uri" in val && "type" in val && depth < 4) {
+                //  - génération récursive du JSON-LD
+                return JSONLDBuilder.build(val as MinimalDocument, ontology, depth + 1);
+            } else return val;
+        };
+        let result;
+        //If array handle each
+        if (Array.isArray(value)) {
+            result = value.map(handlePropertyValue);
+        } else result = handlePropertyValue(value);
+
         //  - choix entre embed ou référence
         //  - traitement particulier de certains types
 
-        jsonld[property] = value;
+        jsonld[property] = result;
     }
 }

@@ -23,10 +23,10 @@ export const compatibilityDBProjectToSchemaOrg: CompatibilityOntology = {
             fields: ["entityInCharge"],
             source: (doc) => doc.entityInCharge,
         }, */
-        /* "producer": {
+        producer: {
             fields: ["producer"],
             source: (doc) => doc.producer,
-        }, */
+        },
         /* "contactPoint": {
             fields: ["contactPoint"],
             source: (doc) => doc.contactPoint,

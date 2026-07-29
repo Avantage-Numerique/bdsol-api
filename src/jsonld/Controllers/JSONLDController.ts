@@ -29,7 +29,7 @@ class JSONLDController {
 
         const document = await model.findById(entityId); //.setOptions({ skipPopulate: true });
         if (!document) return false;
-
+        LogHelper.debug(document);
         if (!Object.values(CompatibleOntologiesEnum).includes(ontology as CompatibleOntologiesEnum)) {
             throw new Error("Unknown ontology");
         }
