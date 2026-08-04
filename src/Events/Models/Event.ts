@@ -100,12 +100,12 @@ class Event extends AbstractModel {
                 maxLength: 160,
             },
             entityInCharge: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 //required: true,
                 ref: "Organisation",
             },
             organizer: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: "Organisation",
             },
             eventType: {
@@ -127,7 +127,7 @@ class Event extends AbstractModel {
                 type: ContactPoint.schema,
             },
             mainImage: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: "Media",
             },
             attendees: {
@@ -153,7 +153,7 @@ class Event extends AbstractModel {
                 ref: "Place",
             },
             photoGallery: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: "Media",
             },
             meta: {

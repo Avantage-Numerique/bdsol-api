@@ -139,7 +139,7 @@ class Person extends AbstractModel {
                 type: [DomainList.schema],
             },
             mainImage: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: "Media",
             },
             catchphrase: {

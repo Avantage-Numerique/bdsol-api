@@ -35,7 +35,7 @@ export class Member {
         {
             //Id of the member of the team
             member: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 required: [true, "Required memberId to identify member"],
                 ref: "Person",
             },

@@ -17,7 +17,7 @@ export class Sponsor {
             },
             //Id of the entity linked if exist
             entity: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 refPath: "sponsor.entityType",
                 //required: true
             },
