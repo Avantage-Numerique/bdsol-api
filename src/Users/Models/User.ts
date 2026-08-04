@@ -41,7 +41,7 @@ export class User extends AbstractModel {
     mongooseModel: mongoose.Model<any>;
 
     /** @public Database schema */
-    schema: Schema = new Schema<UserContract>(
+    schema: Schema<UserContract> = new Schema(
         {
             username: {
                 type: String,

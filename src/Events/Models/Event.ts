@@ -239,9 +239,9 @@ class Event extends AbstractModel {
         this.schema.pre("find", function (next) {
             // @ts-ignore //it sucks, but we need this to be the documents so shut up typescript.
             if (this.options?._recursed) {
-                return next();
+                return;
             }
-            if (this.getOptions().skipPopulate) return next();
+            if (this.getOptions().skipPopulate) return;
             //middlewarePopulateProperty(this, 'team.member');
 
             taxonomyPopulate(this, "skills");
@@ -260,16 +260,14 @@ class Event extends AbstractModel {
 
             //populateUser(this, "meta.requestedBy");
             //populateUser(this, "meta.lastModifiedBy");
-
-            next();
         });
 
-        this.schema.pre("findOne", function (next) {
+        this.schema.pre("findOne", function () {
             // @ts-ignore //it sucks, but we need this to be the documents so shut up typescript.
             if (this.options?._recursed) {
-                return next();
+                return;
             }
-            if (this.getOptions().skipPopulate) return next();
+            if (this.getOptions().skipPopulate) return;
 
             middlewarePopulateProperty(this, "team.member");
             taxonomyPopulate(this, "skills");
@@ -284,8 +282,6 @@ class Event extends AbstractModel {
             middlewarePopulateProperty(this, "photoGallery");
             populateUser(this, "meta.requestedBy");
             populateUser(this, "meta.lastModifiedBy");
-
-            next();
         });
     }
 }

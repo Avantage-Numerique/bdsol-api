@@ -305,7 +305,7 @@ class Person extends AbstractModel {
     public registerPreEvents() {
         if (this.schema !== undefined) {
             //Pre save, verification for occupation
-            this.schema.pre("save", async function (next: any): Promise<any> {
+            this.schema.pre("save", function () {
                 /* VOIR DOCUMENTATION TECHNIQUE, FONCTIONNALITÉ API, VALIDATION.MD */
                 /*
                 //Verify that occupations in the array exists and that there are no duplicates
@@ -318,12 +318,10 @@ class Person extends AbstractModel {
                 */
                 //Check and insert badges (this == document)
                 middlewareInsertBadges(this);
-
-                return next();
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
-            this.schema.pre("findOneAndUpdate", async function (next: any): Promise<any> {
+            this.schema.pre("findOneAndUpdate", function () {
                 const updatedDocument: any = this.getUpdate();
                 /*if (updatedDocument["occupations"] != undefined){
                     const idList = updatedDocument.occupations.map( (el:any) => {
@@ -336,8 +334,6 @@ class Person extends AbstractModel {
                 */
                 //Check and insert badges
                 middlewareInsertBadges(updatedDocument);
-
-                return next();
             });
         }
     }
