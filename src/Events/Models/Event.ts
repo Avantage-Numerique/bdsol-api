@@ -236,7 +236,7 @@ class Event extends AbstractModel {
      * Register mongoose events, for now pre-save, pre-findOneAndUpdate
      */
     public registerEvents(): void {
-        this.schema.pre("find", function (next) {
+        this.schema.pre("find", function () {
             // @ts-ignore //it sucks, but we need this to be the documents so shut up typescript.
             if (this.options?._recursed) {
                 return;

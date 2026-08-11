@@ -321,7 +321,7 @@ class Person extends AbstractModel {
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
-            this.schema.pre("findOneAndUpdate", function () {
+            this.schema.pre("findOneAndUpdate", function (next: any) {
                 const updatedDocument: any = this.getUpdate();
                 /*if (updatedDocument["occupations"] != undefined){
                     const idList = updatedDocument.occupations.map( (el:any) => {
@@ -334,6 +334,8 @@ class Person extends AbstractModel {
                 */
                 //Check and insert badges
                 middlewareInsertBadges(updatedDocument);
+
+                return next();
             });
         }
     }
