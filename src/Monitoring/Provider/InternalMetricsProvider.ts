@@ -620,8 +620,10 @@ class MongoDBMetricsMonitor {
      */
     public async performHealthCheck(): Promise<HealthCheckResult> {
         try {
+            if (!mongoose.connection.db) throw new Error("mongoose.connection.db does not exist!");
+
             const start = Date.now();
-            await mongoose.connection.db?.admin().ping();
+            await mongoose.connection.db.admin().ping();
             const pingTime = Date.now() - start;
 
             return {
