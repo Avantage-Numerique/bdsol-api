@@ -17,6 +17,8 @@ import { createRefType } from "@ref/Data/utils";
 import { refShortDescription } from "@ref/Data/Properties/RefShortDescription";
 import { refPlaceLinks } from "@ref/Data/RelationLinks/RefPlaceLink";
 
+import { refSameAs } from "../Properties/RefSameAs";
+
 export const refEvent: RefSchema = {
     type: createRefType("object"),
     fields: {
@@ -77,6 +79,8 @@ export const refEvent: RefSchema = {
         subEvents: refEventLinks,
         location: refPlaceLinks,
         photoGallery: refMainImageLink,
+
+        { ...refSameAs },
 
         //Ontologie :
         //Identifiant

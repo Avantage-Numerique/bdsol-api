@@ -9,6 +9,7 @@ import { EventFormatEnum } from "../EventFormatEnum";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 import { UriObject } from "@src/Database/Schemas/URISchema";
+import { SameAs } from "@src/Database/Schemas/SameAsSchema";
 
 export interface EventSchema extends Document {
     name: string;
@@ -33,6 +34,7 @@ export interface EventSchema extends Document {
     subEvents: [ObjectId];
     location: [ObjectId];
     photoGallery: ObjectId;
+    sameAs: [SameAs];
     meta: Meta;
     uri: UriObject;
 }

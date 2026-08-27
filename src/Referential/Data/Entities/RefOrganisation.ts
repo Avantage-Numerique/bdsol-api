@@ -16,6 +16,8 @@ import { refShortDescription } from "@ref/Data/Properties/RefShortDescription";
 import { refMeta } from "../SubSchema/RefMeta";
 import { refPlaceLinks } from "../RelationLinks/RefPlaceLink";
 
+import { refSameAs } from "../Properties/RefSameAs";
+
 export const refOrganisation: RefSchema = {
     type: createRefType("object"),
     fields: {
@@ -70,6 +72,8 @@ export const refOrganisation: RefSchema = {
             type: createRefType("object"),
             fields: refMeta.fields,
         },
+
+        { ...refSameAs },
 
         //Ontologie :
         //Projets

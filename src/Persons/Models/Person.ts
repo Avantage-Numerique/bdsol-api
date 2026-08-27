@@ -16,6 +16,7 @@ import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { RegionEnum } from "@src/SubProperty/Badges/RegionEnum";
 import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
 import { UriObject } from "@src/Database/Schemas/URISchema";
+import { SameAs } from "@src/Database/Schemas/SameAsSchema";
 
 class Person extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -160,6 +161,9 @@ class Person extends AbstractModel {
                 type: [String],
                 enum: BadgeTypes.allBadgeTypes(),
             },
+            sameAs: {
+                type: [SameAs.schema],
+            },
             meta: {
                 type: Meta.schema,
             },
@@ -266,6 +270,7 @@ class Person extends AbstractModel {
             },
             region: document.region ?? "",
             badges: document.badges ?? [],
+            sameAs: document.sameAs ?? [],
             meta: document.meta ?? {},
             uri: document.uri ?? "",
             type: document.type ?? "",

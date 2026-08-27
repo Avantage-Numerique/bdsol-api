@@ -14,6 +14,8 @@ import { refMeta } from "../SubSchema/RefMeta";
 import { refRegion } from "../Properties/RefRegion";
 import { refBadges } from "../Properties/RefBadges";
 
+import { refSameAs } from "../Properties/RefSameAs";
+
 export const refPerson: RefSchema = {
     type: createRefType("object"),
     fields: {
@@ -111,6 +113,61 @@ export const refPerson: RefSchema = {
             description:
                 "Prénom et nom. Virtuel et non-modifiable, il s'agit de la simple concaténation du prénom suivi du nom tel qu'inscrit dans les champs 'Nom' et 'Prénom'",
         },
+        {
+            field: "nickname",
+            ontologyProperty: "avnu:nickname",
+            label: "Surnom",
+            type: createRefType("string"),
+            url: createPrimitiveUrl("nickname"),
+            cardinality: "0..1",
+            compatibility: [
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("alternateName"),
+                ArtsdataCompatibility.getOntologyCompatibilityArray("alternateName"),
+            ],
+            description:
+                "Autre appellation parfois utilisé pour designer la personne. Exemple : 'Coeur de pirate' pour 'Béatrice Martin'.",
+        },
+        { ...refDescription },
+        {
+            ...refShortDescription,
+            compatibility: [
+                ArtsdataCompatibility.getOntologyCompatibilityArray(
+                    "disambiguatingDescription",
+                    "disambiguatingDescription",
+                    "https://schema.org/disambiguatingDescription"
+                ),
+                SchemaOrgCompatibility.getOntologyCompatibilityArray("disambiguatingDescription"),
+                DataSceneCompatibility.getOntologyCompatibilityArray(
+                    "shortDescription",
+                    "shortDescription",
+                    "https://documentation.datascene.ca/references/show/#7-propriete-spectacle-show-shortdescription-description-courte"
+                ),
+            ],
+        },
+        { ...refCatchphrase, compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("additionalName")] },
+        {
+            ...refSocialHandle,
+            field: "url",
+        },
+        { ...refRegion },
+        { ...refBadges },
+        { ...refContactPoint },
+        {
+            ...refSkillGroup,
+            field: "occupations",
+        },
+        { ...refDomainList },
+        { ...refMainImageLink },
+        { ...refBadges },
+
+        { ...refSameAs },
+
+        //Ontologie :
+        //Identifiants
+        //Projets
+        { ...refMemberOf },
+        //Participants à des événements
+        //Pronoun
 
         { ...refMemberOf },
         */

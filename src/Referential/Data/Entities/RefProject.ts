@@ -18,6 +18,8 @@ import { ProjectContextEnum } from "@src/Projects/ProjectContextEnum";
 import { refShortDescription } from "@ref/Data/Properties/RefShortDescription";
 import { refMeta } from "../SubSchema/RefMeta";
 
+import { refSameAs } from "../Properties/RefSameAs";
+
 export const refProject: RefSchema = {
     type: createRefType("object"),
     fields: {
@@ -71,12 +73,17 @@ export const refProject: RefSchema = {
                 enum: ProjectContextEnum,
             },
         },
+
         equipment: refEquipmentLinks,
+        
         meta: {
             cardinality: "0..1",
             type: createRefType("object"),
             fields: refMeta.fields,
         },
+
+        { ...refSameAs },
+
         //Ontologie :
         //Identifiant
         //Short-description

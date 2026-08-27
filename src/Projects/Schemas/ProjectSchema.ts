@@ -9,6 +9,7 @@ import { SocialHandleSchema } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPointSchema } from "@src/Database/Schemas/ContactPointSchema";
 import { MediaSchema } from "@src/Media/Schemas/MediaSchema";
 import { UriObject } from "@src/Database/Schemas/URISchema";
+import { SameAs } from "@src/Database/Schemas/SameAsSchema";
 
 export interface ProjectSchema extends Document {
     name: string;
@@ -29,6 +30,7 @@ export interface ProjectSchema extends Document {
     domains: [DomainListSchema];
     context: ProjectContextEnum;
     equipment: [ObjectId];
+    sameAs: [SameAs];
     meta: Meta;
     uri: UriObject;
 }

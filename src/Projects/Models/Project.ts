@@ -16,6 +16,7 @@ import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
 import { UriObject } from "@src/Database/Schemas/URISchema";
+import { SameAs } from "@src/Database/Schemas/SameAsSchema";
 
 class Project extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -147,6 +148,9 @@ class Project extends AbstractModel {
                 type: [mongoose.Types.ObjectId],
                 ref: "Equipment",
             },
+            sameAs: {
+                type: [SameAs.schema],
+            },
             meta: {
                 type: Meta.schema,
             },
@@ -215,6 +219,7 @@ class Project extends AbstractModel {
             domains: document.domains ?? undefined,
             context: document.context ?? "",
             equipment: document.equipment ?? [],
+            sameAs: document.sameAs ?? [],
             meta: document.meta ?? {},
             uri: document.uri ?? "",
             type: document.type ?? "",

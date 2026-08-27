@@ -15,6 +15,7 @@ import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
 import { UriObject } from "@src/Database/Schemas/URISchema";
+import { SameAs } from "@src/Database/Schemas/SameAsSchema";
 
 class Event extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -157,6 +158,9 @@ class Event extends AbstractModel {
                 type: mongoose.Types.ObjectId,
                 ref: "Media",
             },
+            sameAs: {
+                type: [SameAs.schema],
+            },
             meta: {
                 type: Meta.schema,
             },
@@ -221,6 +225,7 @@ class Event extends AbstractModel {
             subEvents: document.subEvents ?? [],
             location: document.location ?? [],
             photoGallery: document.photoGallery ?? "",
+            sameAs: document.sameAs ?? [],
             meta: document.meta ?? {},
             uri: document.uri ?? "",
             type: document.type ?? "",

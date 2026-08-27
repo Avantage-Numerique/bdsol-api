@@ -3,11 +3,12 @@ import { MetaSchema } from "../../Moderation/Schemas/MetaSchema";
 import { MemberSchema } from "../../SubProperty/Team/Schemas/MemberSchema";
 import { DomainListSchema } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { SkillGroupSchema } from "../../Taxonomy/Schemas/SkillGroupSchema";
-import { ObjectId } from "mongoose";
 import { EquipmentLinkSchema } from "@src/Database/Schemas/EquipmentLinkSchema";
 import { SocialHandleSchema } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPointSchema } from "@src/Database/Schemas/ContactPointSchema";
 import { UriObject } from "@src/Database/Schemas/URISchema";
+import { ObjectId } from "mongodb";
+import { SameAs } from "@src/Database/Schemas/SameAsSchema";
 
 export interface OrganisationSchema extends Document {
     name: string;
@@ -26,6 +27,7 @@ export interface OrganisationSchema extends Document {
     equipment: [EquipmentLinkSchema];
     region: string;
     badges: [string];
+    sameAs: [SameAs];
     meta: MetaSchema;
     uri: UriObject;
 }

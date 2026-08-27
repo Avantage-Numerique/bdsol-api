@@ -6,6 +6,7 @@ import { refTaxonomyLink } from "@ref/Data/RelationLinks/RefTaxonomyLink";
 import { refSocialHandle } from "@ref/Data/SubSchema/RefSocialHandle";
 import { RefSchema } from "@ref/Data/types";
 import { createRefType } from "@ref/Data/utils";
+import { refSameAs } from "@ref/Data/Properties/RefSameAs";
 
 export const refEquipment: RefSchema = {
     type: createRefType("object"),
@@ -37,6 +38,8 @@ export const refEquipment: RefSchema = {
             type: createRefType("object"),
             fields: refSocialHandle.fields,
         },
+
+        { ...refSameAs },
 
         //Ontologie:
         //array de media
