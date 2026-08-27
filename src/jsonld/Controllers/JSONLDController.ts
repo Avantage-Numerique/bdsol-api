@@ -1,4 +1,4 @@
-import { JSONLDBuilder } from "@src/jsonld/JSONLDBuilder";
+import { JSONLDBuilder } from "@src/jsonld/JsonLDBuilder";
 import EntityControllerFactory from "@src/Abstract/EntityControllerFactory";
 import { CompatibleOntologiesEnum } from "@src/Compatibility/types";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";

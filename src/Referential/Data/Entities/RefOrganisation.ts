@@ -73,7 +73,7 @@ export const refOrganisation: RefSchema = {
             fields: refMeta.fields,
         },
 
-        { ...refSameAs },
+        sameAs: refSameAs,
 
         //Ontologie :
         //Projets

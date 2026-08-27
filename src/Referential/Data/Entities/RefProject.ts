@@ -75,14 +75,14 @@ export const refProject: RefSchema = {
         },
 
         equipment: refEquipmentLinks,
-        
+
         meta: {
             cardinality: "0..1",
             type: createRefType("object"),
             fields: refMeta.fields,
         },
 
-        { ...refSameAs },
+        sameAs: refSameAs,
 
         //Ontologie :
         //Identifiant

@@ -80,7 +80,7 @@ export const refEvent: RefSchema = {
         location: refPlaceLinks,
         photoGallery: refMainImageLink,
 
-        { ...refSameAs },
+        sameAs: refSameAs,
 
         //Ontologie :
         //Identifiant

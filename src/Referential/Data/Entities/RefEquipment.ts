@@ -39,7 +39,7 @@ export const refEquipment: RefSchema = {
             fields: refSocialHandle.fields,
         },
 
-        { ...refSameAs },
+        sameAs: refSameAs,
 
         //Ontologie:
         //array de media
