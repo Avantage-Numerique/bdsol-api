@@ -3,33 +3,35 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBProjectToArtsData: CompatibilityOntology = {
     [EntityTypesEnum.project]: {
-        name: {
-            fields: ["name"],
-            source: (doc) => doc.name,
-        },
-        description: {
-            fields: ["description"],
-            source: (doc) => doc.description,
-        },
-        disambiguatingDescription: {
-            fields: ["shortDescription"],
-            source: (doc) => doc.shortDescription,
-        },
-        /* creator: {
+        compatibility: {
+            name: {
+                fields: ["name"],
+                source: (doc) => doc.name,
+            },
+            description: {
+                fields: ["description"],
+                source: (doc) => doc.description,
+            },
+            disambiguatingDescription: {
+                fields: ["shortDescription"],
+                source: (doc) => doc.shortDescription,
+            },
+            /* creator: {
             fields: ["entityInCharge"],
             source: (doc) => doc.entityInCharge,
         }, */
-        /* producer: {
+            /* producer: {
             fields: ["producer"],
             source: (doc) => doc.producer,
         }, */
-        /* "location": {
+            /* "location": {
             fields: ["location"],
             source: (doc) => doc.map(), //map les locations
         }, */
-        /* image: {
+            /* image: {
             fields: ["mainImage"],
             source: (doc) => doc.mainImage,
         }, */
+        },
     },
 };

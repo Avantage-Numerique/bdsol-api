@@ -21,7 +21,9 @@ export type CompatibilityEntry<TDocument = any> = {
     source?: (doc: TDocument) => unknown;
 };
 
-export type CompatibilityProperties<TDocument = any> = Record<string, CompatibilityEntry<TDocument>>;
+export type CompatibilityProperties<TDocument = any> = {
+    compatibility: Record<string, CompatibilityEntry<TDocument>>;
+};
 
 export type CompatibilityOntology<TDocument = any> = Partial<
     Record<CompatibleEntity, CompatibilityProperties<TDocument>>

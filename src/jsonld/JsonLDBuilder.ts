@@ -20,7 +20,7 @@ export class JSONLDBuilder {
         //Add @context, @type
         this.buildMetadata(jsonld, doc, compatibleOntology, depth);
         //For each compatible property
-        for (const [property, entry] of Object.entries(entityCompatibility)) {
+        for (const [property, entry] of Object.entries(entityCompatibility.compatibility)) {
             //Parse database object with source function
             const value = entry.source?.(doc);
             //Confirm if we should include the result in JSONLD
