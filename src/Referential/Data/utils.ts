@@ -39,36 +39,52 @@ function isObjectProp(field: RefField): field is RefObjectField {
     return field.type.kind === "object";
 }
 
-/* Nouvelle structure de ref brise ceci
+/* Nouvelle structure de ref brise ceci */
 function getAllPrimitives(base: RefSchema): RefPrimitiveField[] {
-    const filtered: RefPrimitiveField[] = [];
+    // HACK
+    return [
+        {
+            cardinality: "0..N",
+            type: createRefType("string"),
+            //constraints : enum : badgeenum
+        },
+        {
+            cardinality: "0..N",
+            type: createRefType("string"),
+            //constraints : enum : badgeenum
+        },
+    ];
 
-    for (const entity of base) {
-        // Primitive branch
-        if (entity.type?.kind === "primitive") {
-            filtered.push(entity as RefPropertyPrimitive);
-        }
+    // const filtered: RefPrimitiveField[] = [];
 
-        // Object branch
-        if (isObjectProp(entity)) {
-            filtered.push(...getAllPrimitives(entity.ref));
-        }
-    }
+    // for (const entity of base) {
+    //     // Primitive branch
+    //     if (entity.type?.kind === "primitive") {
+    //         filtered.push(entity as RefPropertyPrimitive);
+    //     }
 
-    return filtered;
+    //     // Object branch
+    //     if (isObjectProp(entity)) {
+    //         filtered.push(...getAllPrimitives(entity.ref));
+    //     }
+    // }
+
+    // return filtered;
 }
 
-function getAllUniquePrimitives(base: RefProperty[]) {
-    const distinctsKeys = new Set();
+function getAllUniquePrimitives(base: RefSchema[]) {
+    return base.map(getAllPrimitives);
 
-    return getAllPrimitives(base).filter((item) => {
-        if (item.ontologyProperty && distinctsKeys.has(item.ontologyProperty)) {
-            return false;
-        } else {
-            distinctsKeys.add(item.ontologyProperty);
-            return true;
-        }
-    });
-} */
+    // const distinctsKeys = new Set();
 
-export { isObjectProp, createPrimitiveUrl, createRefType };
+    // return getAllPrimitives(base).filter((item) => {
+    //     if (item.ontologyProperty && distinctsKeys.has(item.ontologyProperty)) {
+    //         return false;
+    //     } else {
+    //         distinctsKeys.add(item.ontologyProperty);
+    //         return true;
+    //     }
+    // });
+}
+
+export { isObjectProp, createPrimitiveUrl, createRefType, getAllUniquePrimitives };

@@ -25,7 +25,7 @@ import { refSubMeta } from "./SubSchema/RefSubMeta";
 
 //Properties
 import { refBadges } from "./Properties/RefBadges";
-import { refCatchphrase } from "./Properties/RefCatchphrase";
+// import { refCatchphrase } from "./Properties/RefCatchphrase";
 import { refDescription } from "./Properties/RefDescription";
 import { refName } from "./Properties/RefName";
 import { refRegion } from "./Properties/RefRegion";
@@ -49,54 +49,54 @@ import { refEntityTypes } from "@ref/Data/Vocabularies/RefEntityTypes";
 
 export const refData: RefData = {
     entities: {
-        [refPerson.label]: refPerson,
-        [refOrganisation.label]: refOrganisation,
-        [refTaxonomy.label]: refTaxonomy,
-        [refProject.label]: refProject,
-        [refEvent.label]: refEvent,
-        [refMedia.label]: refMedia,
-        [refPlace.label]: refPlace,
-        [refEquipment.label]: refEquipment,
+        Person: refPerson,
+        Organisation: refOrganisation,
+        Taxonomy: refTaxonomy,
+        Project: refProject,
+        Event: refEvent,
+        Media: refMedia,
+        Place: refPlace,
+        Equipment: refEquipment,
     },
 
     subschemas: {
-        [refLocation.label]: refLocation,
-        [refSkillGroup.label]: refSkillGroup,
-        [refDomainList.label]: refDomainList,
-        [refContactPoint.label]: refContactPoint,
-        [refSocialHandle.label]: refSocialHandle,
-        [refEquipmentLinkSchema.label]: refEquipmentLinkSchema,
-        [refTimeframe.label]: refTimeframe,
-        [refMember.label]: refMember,
-        [refScheduleBudget.label]: refScheduleBudget,
-        [refSponsor.label]: refSponsor,
-        [refTeam.label]: refTeam,
-        [refSubMeta.label]: refSubMeta,
+        Location: refLocation,
+        SkillGroup: refSkillGroup,
+        DomainList: refDomainList,
+        ContactPoint: refContactPoint,
+        SocialHandle: refSocialHandle,
+        EquipmentLinkSchema: refEquipmentLinkSchema,
+        Timeframe: refTimeframe,
+        Member: refMember,
+        ScheduleBudget: refScheduleBudget,
+        Sponsor: refSponsor,
+        Team: refTeam,
+        SubMeta: refSubMeta,
     },
 
     properties: {
-        [refBadges.label]: refBadges,
-        [refCatchphrase.label]: refCatchphrase,
-        [refDescription.label]: refDescription,
-        [refName.label]: refName,
-        [refRegion.label]: refRegion,
-        [refType.label]: refType,
+        Badges: refBadges,
+        // refCatchphrase: refCatchphrase,
+        Description: refDescription,
+        Name: refName,
+        Region: refRegion,
+        Type: refType,
     },
 
     relationLinks: {
-        [refEquipmentLink.label]: refEquipmentLink,
-        [refMainImageLink.label]: refMainImageLink,
-        [refOrganisationLink.label]: refOrganisationLink,
-        [refPlaceLink.label]: refPlaceLink,
+        EquipmentLink: refEquipmentLink,
+        MainImageLink: refMainImageLink,
+        OrganisationLink: refOrganisationLink,
+        PlaceLink: refPlaceLink,
     },
 
     vocabularies: {
-        [refEntityTypes.label]: refEntityTypes,
-        [refDynamicTaxonomyCategories.label]: refDynamicTaxonomyCategories,
-        [refAttendanceMode.label]: refAttendanceMode,
-        [refProjectContext.label]: refProjectContext,
-        [refRegions.label]: refRegions,
-        [refTimeFrameEta.label]: refTimeFrameEta,
-        [refBudgetRanges.label]: refBudgetRanges,
+        EntityTypes: refEntityTypes,
+        DynamicTaxonomyCategories: refDynamicTaxonomyCategories,
+        AttendanceMode: refAttendanceMode,
+        ProjectContext: refProjectContext,
+        Regions: refRegions,
+        TimeFrameEta: refTimeFrameEta,
+        BudgetRanges: refBudgetRanges,
     },
 };

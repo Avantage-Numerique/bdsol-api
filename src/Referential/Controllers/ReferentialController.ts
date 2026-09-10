@@ -5,7 +5,7 @@ import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
 import { refData } from "@ref/Data/data";
 import { getAllUniquePrimitives } from "@ref/Data/utils";
 import { PublicRoute } from "@src/Pages/Types/PublicRoute";
-import { RefProperty } from "@ref/Data/types";
+import { RefSchema } from "@ref/Data/types";
 
 class ReferentialController {
     /** @private @static Singleton instance */
@@ -20,7 +20,7 @@ class ReferentialController {
     }
 
     private mapRefRoutes() {
-        const routesMap: Map<string, RefProperty> = new Map();
+        const routesMap: Map<string, RefSchema> = new Map();
 
         Object.values(refData)
             .flatMap((x) => Object.values(x))
@@ -83,8 +83,8 @@ class ReferentialController {
 
         const entityData = this._routes.get(`/${entity}`);
 
-        const title: string = `${entityData?.label}`; // <small><code>${entityData?.ontologyProperty}</code></small>`Référentiel de ${config.appName} &rarr; <code>${entityRoute}</code>`;
-        const metaTitle: string = `${entity} &rarr; ${entityData?.ontologyProperty} &rarr; Référentiel ${config.appName}`;
+        const title: string = `${entity}`; // <small><code>${entityData?.ontologyProperty}</code></small>`Référentiel de ${config.appName} &rarr; <code>${entityRoute}</code>`;
+        const metaTitle: string = `${entity} &rarr; ${entity} &rarr; Référentiel ${config.appName}`;
 
         return await index.render({
             context: {
@@ -119,9 +119,9 @@ class ReferentialController {
 
         const entityData = this._routes.get(`/vocabularies/${entity}`);
 
-        const title: string = `${entityData?.label}`;
+        const title: string = `${entity}`;
         //const title: string = `Vocabulaire controlé de ${config.appName} &rarr; <code>/ref/${entity}</code>`;
-        const metaTitle: string = `${entity} &rarr; ${entityData?.ontologyProperty} &rarr; Référentiel ${config.appName}`;
+        const metaTitle: string = `${entity} &rarr; ${entity} &rarr; Référentiel ${config.appName}`;
 
         return await index.render({
             context: {

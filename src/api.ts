@@ -37,6 +37,7 @@ import path from "path";
 
 // import ReferentialRoutes from "./Referential/Routes/ReferentialRoutes";
 import JSONLDRoutes from "./jsonld/Routes/JSONLDRoutes";
+import ReferentialRoutes from "./Referential/Routes/ReferentialRoutes";
 
 /**
  * Main class for the API
@@ -173,10 +174,10 @@ export default class Api {
                 baseRoute: "/info",
                 manager: new ModerationRoutes(),
             },
-            // {
-            //     baseRoute: "/ref",
-            //     manager: new ReferentialRoutes(),
-            // },
+            {
+                baseRoute: "/ref",
+                manager: new ReferentialRoutes(),
+            },
             {
                 baseRoute: "/jsonld",
                 manager: new JSONLDRoutes(),

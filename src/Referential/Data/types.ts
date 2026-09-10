@@ -5,8 +5,8 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 export type RefData = {
     entities: Record<string, RefSchema>;
     subschemas: Record<string, RefSchema>;
-    properties: Record<string, RefSchema>;
-    relationLinks: Record<string, RefSchema>;
+    properties: Record<string, RefPrimitiveField>;
+    relationLinks: Record<string, RefReferenceField>;
     vocabularies: Record<string, RefVocabulary>;
 };
 
