@@ -16,7 +16,8 @@ import { refShortDescription } from "@ref/Data/Properties/RefShortDescription";
 import { refMeta } from "../SubSchema/RefMeta";
 import { refPlaceLinks } from "../RelationLinks/RefPlaceLink";
 
-import { refSameAs } from "../Properties/RefSameAs";
+import { refSameAs } from "../SubSchema/RefSameAs";
+import { refUri } from "../Properties/RefUri";
 
 export const refOrganisation: RefSchema = {
     type: createRefType("object"),
@@ -67,23 +68,16 @@ export const refOrganisation: RefSchema = {
         },
         region: refRegion,
         badges: refBadges,
+        sameAs: {
+            cardinality: "0..N",
+            type: createRefType("object"),
+            fields: refSameAs.fields,
+        },
         meta: {
             cardinality: "0..1",
             type: createRefType("object"),
             fields: refMeta.fields,
         },
-
-        sameAs: refSameAs,
-
-        //Ontologie :
-        //Projets
-        //Identifiants
-        //Participant à des événement list[]
-        //Alternate name
-        //short-description
-
-        //Hors-ontologie :
-        //meta
-        //slug
+        uri: refUri,
     },
 };

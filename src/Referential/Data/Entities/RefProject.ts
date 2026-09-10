@@ -18,7 +18,8 @@ import { ProjectContextEnum } from "@src/Projects/ProjectContextEnum";
 import { refShortDescription } from "@ref/Data/Properties/RefShortDescription";
 import { refMeta } from "../SubSchema/RefMeta";
 
-import { refSameAs } from "../Properties/RefSameAs";
+import { refSameAs } from "../SubSchema/RefSameAs";
+import { refUri } from "../Properties/RefUri";
 
 export const refProject: RefSchema = {
     type: createRefType("object"),
@@ -73,27 +74,17 @@ export const refProject: RefSchema = {
                 enum: ProjectContextEnum,
             },
         },
-
         equipment: refEquipmentLinks,
-
+        sameAs: {
+            cardinality: "0..N",
+            type: createRefType("object"),
+            fields: refSameAs.fields,
+        },
         meta: {
             cardinality: "0..1",
             type: createRefType("object"),
             fields: refMeta.fields,
         },
-
-        sameAs: refSameAs,
-
-        //Ontologie :
-        //Identifiant
-        //Short-description
-        //Média => pas une liste d'image
-        //Événement
-        //Langues
-        //Sans parole
-
-        //Hors ontologie
-        //slug
-        //meta
+        uri: refUri,
     },
 };

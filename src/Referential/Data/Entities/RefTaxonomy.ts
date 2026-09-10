@@ -5,8 +5,8 @@ import { refType } from "@ref/Data/Properties/RefType";
 import { refDomainList } from "@ref/Data/SubSchema/RefDomainList";
 import { RefSchema } from "@ref/Data/types";
 import { createRefType } from "@ref/Data/utils";
-import AvnuCompatibility from "@src/Compatibility/Compatibility/Avnu";
 import { refMeta } from "../SubSchema/RefMeta";
+import { refUri } from "../Properties/RefUri";
 
 export const refTaxonomy: RefSchema = {
     type: createRefType("object"),
@@ -31,14 +31,6 @@ export const refTaxonomy: RefSchema = {
             type: createRefType("object"),
             fields: refMeta.fields,
         },
-        //Ontologie:
-        //Vocabulaire
-        //Version
-        //Code
-        //Order
-
-        //Pas ontologie:
-        //slug
-        //meta
+        uri: refUri,
     },
 };

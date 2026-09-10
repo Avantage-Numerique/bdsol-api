@@ -7,6 +7,7 @@ import { RefSchema } from "@ref/Data/types";
 import { createRefType } from "@ref/Data/utils";
 import { refMeta } from "../SubSchema/RefMeta";
 import { refLocation } from "../SubSchema/RefLocation";
+import { refUri } from "../Properties/RefUri";
 
 export const refPlace: RefSchema = {
     type: createRefType("object"),
@@ -22,22 +23,11 @@ export const refPlace: RefSchema = {
             type: createRefType("object"),
             fields: refMeta.fields,
         },
+        uri: refUri,
         /* {
             //À MODIFIER QUAND ON VA MERGE LA BRANCHE DE CARTE.
             ...refLocation,
             note: "Présentement pas dans un objet 'location', mais chaque valeur est directement dans l'entité.",
         }, */
-        //Ontologie:
-        //Identifiant
-        //short-description
-        //mainImage version array
-        //rooms (liste de salle)
-        //type de lieu
-        //virtuel (booléen qui dit si le lieu est physique ou non)
-        //centroid (GeoData)
-
-        //Hors ontologie:
-        //slug
-        //meta
     },
 };

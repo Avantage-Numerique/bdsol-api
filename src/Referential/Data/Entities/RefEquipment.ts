@@ -6,7 +6,9 @@ import { refTaxonomyLink } from "@ref/Data/RelationLinks/RefTaxonomyLink";
 import { refSocialHandle } from "@ref/Data/SubSchema/RefSocialHandle";
 import { RefSchema } from "@ref/Data/types";
 import { createRefType } from "@ref/Data/utils";
-import { refSameAs } from "@ref/Data/Properties/RefSameAs";
+import { refSameAs } from "@src/Referential/Data/SubSchema/RefSameAs";
+import { refUri } from "../Properties/RefUri";
+import { refMeta } from "../SubSchema/RefMeta";
 
 export const refEquipment: RefSchema = {
     type: createRefType("object"),
@@ -38,14 +40,16 @@ export const refEquipment: RefSchema = {
             type: createRefType("object"),
             fields: refSocialHandle.fields,
         },
-
-        sameAs: refSameAs,
-
-        //Ontologie:
-        //array de media
-
-        //Hors-ontologie :
-        //slug
-        //meta
+        sameAs: {
+            cardinality: "0..N",
+            type: createRefType("object"),
+            fields: refSameAs.fields,
+        },
+        meta: {
+            cardinality: "0..1",
+            type: createRefType("object"),
+            fields: refMeta.fields,
+        },
+        uri: refUri,
     },
 };
