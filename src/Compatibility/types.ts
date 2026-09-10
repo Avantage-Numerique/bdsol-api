@@ -22,6 +22,9 @@ export type CompatibilityEntry<TDocument = any> = {
 };
 
 export type CompatibilityProperties<TDocument = any> = {
+    "@type"?: string;
+    description?: string;
+    external?: string;
     compatibility: Record<string, CompatibilityEntry<TDocument>>;
 };
 

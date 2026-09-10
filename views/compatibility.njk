@@ -1,0 +1,93 @@
+{% extends 'default.njk' %}
+
+{% from "Partials/isRequire.njk" import isRequire %}
+
+{% block content %}
+
+    <div class="container">
+
+        {% block contentHeader %}
+            {% include "Partials/header.njk" %}
+        {% endblock %}
+
+        <nav class="breadcrumbs default-padding-y">
+            <ul>
+                <li>
+                    <a class="btn" href="/" title={{ api.name }}>
+                        <i class="las la-home"></i>
+                    </a>
+                </li>
+                <li>
+                    <span>{{ title }}</span>
+                </li>
+            </ul>
+        </nav>
+
+        <h1>{{ title }}</h1>
+
+        <h2>Ontologies supportées</h2>
+
+        {% for key, item in metaItems %}
+
+            <p>
+                <h3>
+                    <a href="{{ item.referentialUrl }}" ">{{ item.label }}</a>
+                </h3>
+            </p>
+
+            <p>{{ item.description }}</p>
+
+            {# {% endfor %} #}
+
+            {# {% for key, ontology in items %} #}
+
+            {% set ontology = items[key] %}
+
+            <table class="ref">
+
+                <thead>
+                    <tr>
+                        <th>Entité AVNU</th>
+                        <th>URL externe</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for _key, entity in ontology %}
+
+                        <tr>
+                            <td>
+                                <a href="{{ baseUrl }}{{ baseRoute }}/{{ key }}/{{ _key }}">
+                                    avnu:{{ _key }}
+                                </a>
+                            </td>
+
+                            <td>
+                                {% if entity.external %}
+                                    <a href="{{ entity.external }}">{{ entity["@type"] or _key }}</a>
+                                {% else %}
+                                    {{ entity["@type"] or _key }}
+                                {% endif %}
+                            </td>
+
+                            <td>{{ entity.description }}</td>
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block contentFooter %}
+    <section class="container">
+        <div class="legende">
+            <h3>Légende</h3>
+            <p>{{ isRequire("1..1", false) }} : Cette propriété est requise</p>
+        </div>
+    </section>
+{% endblock %}

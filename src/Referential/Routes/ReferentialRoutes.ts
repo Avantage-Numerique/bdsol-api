@@ -34,6 +34,11 @@ class ReferentialRoutes {
         this.routerInstance.get("/", [this.getRefIndexHandler.bind(this)]);
         this.routerInstance.get("/properties", [this.getRefPrimitiveHandler.bind(this)]);
         this.routerInstance.get("/vocabularies/:entity", [this.getRefVocabulariesHandler.bind(this)]);
+        this.routerInstance.get("/compatibility", [this.getRefCompatibilityHandler.bind(this)]);
+        this.routerInstance.get("/compatibility/:ontology", [this.getRefCompatibleOntologyHandler.bind(this)]);
+        this.routerInstance.get("/compatibility/:ontology/:entity", [
+            this.getRefCompatibleOntologyEntityHandler.bind(this),
+        ]);
         this.routerInstance.get("/:entity", [this.getRefEntityHandler.bind(this)]);
         return this.routerInstance;
     }
@@ -94,6 +99,7 @@ class ReferentialRoutes {
                 )
             );
     }
+
     /**
      *
      * @param req {Request}
@@ -150,6 +156,92 @@ class ReferentialRoutes {
         return res
             .status(StatusCodes.OK)
             .send(await this.controllerInstance.referentialPrimitivesLayout(refPrimitivePageRoute));
+    }
+
+    /**
+     *
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async getRefCompatibilityHandler(req: Request, res: Response): Promise<any> {
+        const { params } = req;
+
+        const refCompatibilityPageRoute = {
+            url: this.baseUrl + req.url,
+            name: "Compatibility",
+        } as PublicRoute;
+
+        res.set("Content-Type", "text/html");
+        return res
+            .status(StatusCodes.OK)
+            .send(await this.controllerInstance.referentialCompatibilityLayout(refCompatibilityPageRoute));
+    }
+
+    /**
+     *
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async getRefCompatibleOntologyHandler(req: Request, res: Response): Promise<any> {
+        // TODO
+
+        const { params } = req;
+
+        const refEntityPageRoute = {
+            url: this.baseUrl + req.url,
+            name: "ReferentialEntity",
+        } as PublicRoute;
+
+        if ("json" in req.query) {
+            res.set("Content-Type", "application/json");
+
+            return res.status(StatusCodes.OK).send(this.findEntityByURL(params.entity.toLowerCase()));
+        }
+
+        res.set("Content-Type", "text/html");
+        return res
+            .status(StatusCodes.OK)
+            .send(
+                await this.controllerInstance.referentialSingleEntityLayout(
+                    params.entity.toLowerCase(),
+                    refEntityPageRoute
+                )
+            );
+    }
+
+    /**
+     *
+     * @param req {Request}
+     * @param res {Response}
+     * @return {Promise<any>}
+     */
+    public async getRefCompatibleOntologyEntityHandler(req: Request, res: Response): Promise<any> {
+        // TODO
+
+        const { params } = req;
+
+        const refEntityPageRoute = {
+            url: this.baseUrl + req.url,
+            name: "ReferentialEntity",
+        } as PublicRoute;
+
+        if ("json" in req.query) {
+            res.set("Content-Type", "application/json");
+
+            return res.status(StatusCodes.OK).send(this.findEntityByURL(params.entity.toLowerCase()));
+        }
+
+        res.set("Content-Type", "text/html");
+        return res
+            .status(StatusCodes.OK)
+            .send(
+                await this.controllerInstance.referentialSingleEntityLayout(
+                    params.entity.toLowerCase(),
+                    refEntityPageRoute
+                )
+            );
     }
 }
 export default ReferentialRoutes;

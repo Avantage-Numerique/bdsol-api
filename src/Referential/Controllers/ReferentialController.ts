@@ -6,6 +6,7 @@ import { refData } from "@ref/Data/data";
 import { getAllUniquePrimitives } from "@ref/Data/utils";
 import { PublicRoute } from "@src/Pages/Types/PublicRoute";
 import { RefSchema } from "@ref/Data/types";
+import { compatibilityData, ontologiesMetaData } from "@src/Compatibility/CompatibilityObject";
 
 class ReferentialController {
     /** @private @static Singleton instance */
@@ -111,6 +112,7 @@ class ReferentialController {
             },
         });
     }
+
     public async referentialVocabulariesLayout(entity?: string, route: PublicRoute = {}): Promise<string> {
         const baseData = getTemplateBaseData();
 
@@ -169,6 +171,39 @@ class ReferentialController {
 
                 items: getAllUniquePrimitives(Object.values(refData).flatMap((item) => Object.values(item))),
 
+                route: {
+                    ...route,
+                },
+                meta: {
+                    title: `${metaTitle}`,
+                    // description: `${body}`,
+                    author: `${config.appName}`,
+                },
+            },
+        });
+    }
+
+    public async referentialCompatibilityLayout(route: PublicRoute = {}): Promise<string> {
+        const baseData = getTemplateBaseData();
+
+        const index = new PublicTemplate("compatibility"); //tempalte have already a default in the EmailContent.Prepare.
+
+        const title: string = `Compatibilité`;
+
+        const entityRoute = `${this._baseRoute}`;
+
+        const metaTitle: string = `${title} &rarr; ${config.appName}`;
+
+        return await index.render({
+            context: {
+                ...baseData, //basic app and api default string and links
+                ...DefaultEmailTheme, //basic theme for colors and sizes.
+                title: `${title}`,
+
+                baseRoute: "/ref",
+
+                metaItems: ontologiesMetaData,
+                items: compatibilityData,
                 route: {
                     ...route,
                 },
