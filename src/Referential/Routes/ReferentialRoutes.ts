@@ -36,10 +36,7 @@ class ReferentialRoutes {
         this.routerInstance.get("/properties", [this.getRefPrimitiveHandler.bind(this)]);
         this.routerInstance.get("/vocabularies/:entity", [this.getRefVocabulariesHandler.bind(this)]);
         this.routerInstance.get("/compatibility", [this.getRefCompatibilityHandler.bind(this)]);
-        this.routerInstance.get("/compatibility/:ontology", [this.getRefCompatibleOntologyHandler.bind(this)]);
-        this.routerInstance.get("/compatibility/:ontology/:entity", [
-            this.getRefCompatibleOntologyEntityHandler.bind(this),
-        ]);
+        this.routerInstance.get("/compatibility/:entity", [this.getRefCompatibleEntityHandler.bind(this)]);
         this.routerInstance.get("/:entity", [this.getRefEntityHandler.bind(this)]);
         return this.routerInstance;
     }
@@ -183,62 +180,29 @@ class ReferentialRoutes {
      * @param res {Response}
      * @return {Promise<any>}
      */
-    public async getRefCompatibleOntologyHandler(req: Request, res: Response): Promise<any> {
+    public async getRefCompatibleEntityHandler(req: Request, res: Response): Promise<any> {
         // TODO
 
         const { params } = req;
 
-        const refEntityPageRoute = {
+        const refCompatibileEntityPageRoute = {
             url: this.baseUrl + req.url,
-            name: "ReferentialEntity",
+            name: "CompatibilityOntologyEntity",
         } as PublicRoute;
 
-        if ("json" in req.query) {
-            res.set("Content-Type", "application/json");
+        // if ("json" in req.query) {
+        //     res.set("Content-Type", "application/json");
 
-            return res.status(StatusCodes.OK).send(this.findEntityByURL(params.entity.toLowerCase()));
-        }
+        //     return res.status(StatusCodes.OK).send(this.findEntityByURL(params.entity.toLowerCase()));
+        // }
 
         res.set("Content-Type", "text/html");
         return res
             .status(StatusCodes.OK)
             .send(
-                await this.controllerInstance.referentialSingleEntityLayout(
-                    params.entity.toLowerCase(),
-                    refEntityPageRoute
-                )
-            );
-    }
-
-    /**
-     *
-     * @param req {Request}
-     * @param res {Response}
-     * @return {Promise<any>}
-     */
-    public async getRefCompatibleOntologyEntityHandler(req: Request, res: Response): Promise<any> {
-        // TODO
-
-        const { params } = req;
-
-        const refEntityPageRoute = {
-            url: this.baseUrl + req.url,
-            name: "ReferentialEntity",
-        } as PublicRoute;
-
-        if ("json" in req.query) {
-            res.set("Content-Type", "application/json");
-
-            return res.status(StatusCodes.OK).send(this.findEntityByURL(params.entity.toLowerCase()));
-        }
-
-        res.set("Content-Type", "text/html");
-        return res
-            .status(StatusCodes.OK)
-            .send(
-                await this.controllerInstance.referentialSingleEntityLayout(
-                    params.entity.toLowerCase(),
-                    refEntityPageRoute
+                await this.controllerInstance.referentialCompatibleEntityLayout(
+                    params.entity,
+                    refCompatibileEntityPageRoute
                 )
             );
     }

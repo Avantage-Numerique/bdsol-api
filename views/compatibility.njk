@@ -1,7 +1,5 @@
 {% extends 'default.njk' %}
 
-{% from "Partials/isRequire.njk" import isRequire %}
-
 {% block content %}
 
     <div class="container">
@@ -27,21 +25,17 @@
 
         <h2>Ontologies supportées</h2>
 
-        {% for key, item in metaItems %}
+        {% for ontologyKey, ontology in metaItems %}
 
             <p>
-                <h3>
-                    <a href="{{ item.referentialUrl }}" ">{{ item.label }}</a>
+                <h3 id="{{ ontologyKey }}">
+                    <a href="{{ ontology.referentialUrl }}" ">{{ ontology.label }}</a>
                 </h3>
             </p>
 
-            <p>{{ item.description }}</p>
+            <p>{{ ontology.description }}</p>
 
-            {# {% endfor %} #}
-
-            {# {% for key, ontology in items %} #}
-
-            {% set ontology = items[key] %}
+            {% set ontology = items[ontologyKey] %}
 
             <table class="ref">
 
@@ -55,20 +49,20 @@
 
                 <tbody>
 
-                    {% for _key, entity in ontology %}
+                    {% for entityKey, entity in ontology %}
 
                         <tr>
                             <td>
-                                <a href="{{ baseUrl }}{{ baseRoute }}/{{ key }}/{{ _key }}">
-                                    avnu:{{ _key }}
+                                <a href="{{ baseUrl }}{{ baseRoute }}/compatibility/{{ entityKey }}">
+                                    {{ entityKey }}
                                 </a>
                             </td>
 
                             <td>
                                 {% if entity.external %}
-                                    <a href="{{ entity.external }}">{{ entity["@type"] or _key }}</a>
+                                    <a href="{{ entity.external }}">{{ entity["@type"] or entityKey }}</a>
                                 {% else %}
-                                    {{ entity["@type"] or _key }}
+                                    {{ entity["@type"] or entityKey }}
                                 {% endif %}
                             </td>
 
@@ -83,11 +77,7 @@
         {% endfor %}
     </div>
 {% endblock %}
+
 {% block contentFooter %}
-    <section class="container">
-        <div class="legende">
-            <h3>Légende</h3>
-            <p>{{ isRequire("1..1", false) }} : Cette propriété est requise</p>
-        </div>
-    </section>
+    <section class="container"></section>
 {% endblock %}

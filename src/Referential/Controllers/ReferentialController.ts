@@ -5,8 +5,8 @@ import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
 import { refData } from "@ref/Data/data";
 import { getAllUniquePrimitives } from "@ref/Data/utils";
 import { PublicRoute } from "@src/Pages/Types/PublicRoute";
-import { RefSchema } from "@ref/Data/types";
 import { compatibilityData, ontologiesMetaData } from "@src/Compatibility/CompatibilityObject";
+import { CompatibilityOntology, CompatibleEntity } from "@src/Compatibility/types";
 
 class ReferentialController {
     /** @private @static Singleton instance */
@@ -21,13 +21,19 @@ class ReferentialController {
     }
 
     private mapRefRoutes() {
-        const routesMap: Map<string, RefSchema> = new Map();
+        let routesMap: Map<string, Record<string, object>> = new Map();
 
-        Object.values(refData)
-            .flatMap((x) => Object.values(x))
-            .forEach((v) => {
-                if (v.url) routesMap.set(v.url.toLowerCase(), v);
+        routesMap = Object.entries(compatibilityData).reduce((result, [ontology, entities]) => {
+            Object.entries(entities).forEach(([entity, compatibility]) => {
+                if (!result.get(entity)) {
+                    result.set(entity, {});
+                }
+
+                result.set(entity, { ...result.get(entity), [ontology]: compatibility });
             });
+
+            return result;
+        }, new Map());
 
         return routesMap;
     }
@@ -204,6 +210,46 @@ class ReferentialController {
 
                 metaItems: ontologiesMetaData,
                 items: compatibilityData,
+                route: {
+                    ...route,
+                },
+                meta: {
+                    title: `${metaTitle}`,
+                    // description: `${body}`,
+                    author: `${config.appName}`,
+                },
+            },
+        });
+    }
+
+    public async referentialCompatibleEntityLayout(entity: string, route: PublicRoute = {}): Promise<string> {
+        const baseData = getTemplateBaseData();
+
+        const index = new PublicTemplate("compatibilitySingle"); //tempalte have already a default in the EmailContent.Prepare.
+
+        const entityRoute = `${this._baseRoute}/${entity}`;
+
+        const entityData = this._routes.get(entity);
+
+        console.log(this._routes, entityData);
+
+        const title: string = `${entity}`; // <small><code>${entityData?.ontologyProperty}</code></small>`Référentiel de ${config.appName} &rarr; <code>${entityRoute}</code>`;
+        const metaTitle: string = `${entity} &rarr; ${entity} &rarr; Référentiel ${config.appName}`;
+
+        return await index.render({
+            context: {
+                ...baseData, //basic app and api default string and links
+                ...DefaultEmailTheme, //basic theme for colors and sizes.
+                title: `${title}`,
+                // body: `${body}`,
+
+                baseUrl: config.baseUrl,
+                baseRoute: this._baseRoute,
+                entityRoute: entityRoute,
+
+                item: entityData,
+                entity: entity,
+
                 route: {
                     ...route,
                 },
