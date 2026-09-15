@@ -158,7 +158,8 @@ export class JsonLDBuilder {
             };
 
             //gestion array ou single
-            if (isPropertyPluralRelation) {
+            //skip to avoid pasting everyting populate did.
+            /*if (isPropertyPluralRelation) {
                 if (!Array.isArray(value)) {
                     console.error(`[JsonLDBuilder] Expected array for property: ${field}`);
                     continue;
@@ -184,7 +185,7 @@ export class JsonLDBuilder {
                         else if (propertyRef.type?.kind === "object") result[field] = processed;
                     }
                 }
-            }
+            }*/
         }
         return result;
     }
