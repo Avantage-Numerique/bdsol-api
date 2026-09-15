@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import ReferentialController from "@ref/Controllers/ReferentialController";
 import { refData } from "@ref/Data/data";
 import { PublicRoute } from "@src/Pages/Types/PublicRoute";
+import { compatibilityData, ontologiesMetaData } from "@src/Compatibility/CompatibilityObject";
 
 class ReferentialRoutes {
     public routerInstance: express.Router;
@@ -48,7 +49,6 @@ class ReferentialRoutes {
     }
 
     /**
-     *
      * @param req {Request}
      * @param res {Response}
      * @return {Promise<any>}
@@ -62,7 +62,7 @@ class ReferentialRoutes {
         if ("json" in req.query) {
             res.set("Content-Type", "application/json");
 
-            return res.status(StatusCodes.OK).send(refData);
+            return res.status(StatusCodes.OK).send({ ontologiesMetaData });
         }
 
         res.set("Content-Type", "text/html");
@@ -70,7 +70,6 @@ class ReferentialRoutes {
     }
 
     /**
-     *
      * @param req {Request}
      * @param res {Response}
      * @return {Promise<any>}
