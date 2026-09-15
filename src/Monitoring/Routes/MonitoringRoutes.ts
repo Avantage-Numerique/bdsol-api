@@ -73,7 +73,7 @@ class MonitoringRoutes extends AbstractRoute {
         for (const param in req.query) {
             datesQuery[param] = req.query[param];
         }
-        console.log("getAllStatisticsHandler", datesQuery);
+
         const statsController: StatisticsController = StatisticsController.getInstance();
         return res
             .status(StatusCodes.OK)

@@ -38,15 +38,15 @@ class StatisticsController {
 
     /**
      * Get a public template, pass variable to statistics.njk, and render it.
-     * @param startDateStr
-     * @param endDateStr
+     * @param startDateStr {string} that represent a date.
+     * @param endDateStr {string} that represent a date.
      * @return {Promise<string>}
      */
     public async renderIndex(startDateStr = "", endDateStr = ""): Promise<string> {
         const index = new PublicTemplate("statistics"); //template
         const baseData = getTemplateBaseData();
 
-        const title: string = `Statistiques`;
+        const title: string = `Statistiques des données d'AVNU.`;
         const body: string = `<p>Statistiques d'avnu générique, d'utilisations et sur les données.</p>`;
 
         return await index.render({

@@ -33,7 +33,11 @@
         <h1>{{ title }}</h1>
         {% if filters %}
         <nav class="horizontal">
-            <h3>Filtres : {{ filters.startDate }} &agrave; {{ filters.endDate }} </h3>
+            {% if filters.startDate !== "" or filters.endDate !== "" %}
+                <h3>Filtres : {{ filters.startDate }} &agrave; {{ filters.endDate }} </h3>
+            {% else %}
+                <h3>Appliquer un filtre de dates</h3>
+            {% endif %}
             <form name="filtersStats" method="GET">
                 <ul>
                     <li><label for="startDate">De</label> <input type="date" name="startDate" /></li>
@@ -124,9 +128,6 @@
 {% endblock %}
 
 {% block contentFooter %}
-    <section class="container">
-        Footer
-    </section>
     <script>
         const form = document.forms.filtersStats;
 
