@@ -233,7 +233,7 @@ class ReferentialController {
 
         console.log(this._routes, entityData);
 
-        const title: string = `${entity}`; // <small><code>${entityData?.ontologyProperty}</code></small>`Référentiel de ${config.appName} &rarr; <code>${entityRoute}</code>`;
+        const title: string = `Compatibilité - ${entity}`; // <small><code>${entityData?.ontologyProperty}</code></small>`Référentiel de ${config.appName} &rarr; <code>${entityRoute}</code>`;
         const metaTitle: string = `${entity} &rarr; ${entity} &rarr; Référentiel ${config.appName}`;
 
         return await index.render({
