@@ -201,7 +201,7 @@ class ReferentialRoutes {
             .status(StatusCodes.OK)
             .send(
                 await this.controllerInstance.referentialCompatibleEntityLayout(
-                    params.entity,
+                    params.entity.toLowerCase(),
                     refCompatibileEntityPageRoute
                 )
             );

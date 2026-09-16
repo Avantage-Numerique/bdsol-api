@@ -6,7 +6,7 @@ import { refData } from "@ref/Data/data";
 import { getAllUniquePrimitives } from "@ref/Data/utils";
 import { PublicRoute } from "@src/Pages/Types/PublicRoute";
 import { compatibilityData, ontologiesMetaData } from "@src/Compatibility/CompatibilityObject";
-import { CompatibilityOntology, CompatibleEntity } from "@src/Compatibility/types";
+import { Str } from "@src/Helpers/Str";
 
 class ReferentialController {
     /** @private @static Singleton instance */
@@ -25,6 +25,8 @@ class ReferentialController {
 
         routesMap = Object.entries(compatibilityData).reduce((result, [ontology, entities]) => {
             Object.entries(entities).forEach(([entity, compatibility]) => {
+                entity = entity.toLowerCase();
+
                 if (!result.get(entity)) {
                     result.set(entity, {});
                 }
@@ -227,14 +229,13 @@ class ReferentialController {
 
         const index = new PublicTemplate("compatibilitySingle"); //tempalte have already a default in the EmailContent.Prepare.
 
-        const entityRoute = `${this._baseRoute}/${entity}`;
-
+        // const entityRoute = `${this._baseRoute}/${entity}`;
         const entityData = this._routes.get(entity);
 
-        console.log(this._routes, entityData);
+        const entityType = Str.firstCharUpper(entity);
 
-        const title: string = `Compatibilité - ${entity}`; // <small><code>${entityData?.ontologyProperty}</code></small>`Référentiel de ${config.appName} &rarr; <code>${entityRoute}</code>`;
-        const metaTitle: string = `${entity} &rarr; ${entity} &rarr; Référentiel ${config.appName}`;
+        const title: string = `Compatibilité - ${entityType}`; // <small><code>${entityData?.ontologyProperty}</code></small>`Référentiel de ${config.appName} &rarr; <code>${entityRoute}</code>`;
+        const metaTitle: string = `${entityType} &rarr; Référentiel ${config.appName}`;
 
         return await index.render({
             context: {
@@ -245,10 +246,10 @@ class ReferentialController {
 
                 baseUrl: config.baseUrl,
                 baseRoute: this._baseRoute,
-                entityRoute: entityRoute,
+                // entityRoute: entityRoute,
 
                 item: entityData,
-                entity: entity,
+                entity: entityType,
 
                 route: {
                     ...route,
