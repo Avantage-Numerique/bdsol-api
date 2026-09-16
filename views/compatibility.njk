@@ -25,15 +25,15 @@
 
         <h2>Ontologies supportées</h2>
 
-        {% for ontologyKey, ontology in metaItems %}
+        {% for ontologyKey, ontologyMeta in metaItems %}
 
             <p>
                 <h3 id="{{ ontologyKey }}">
-                    <a href="{{ ontology.referentialUrl }}" ">{{ ontology.label }}</a>
+                    <a href="{{ ontologyMeta.referentialUrl }}" ">{{ ontologyMeta.label }}</a>
                 </h3>
             </p>
 
-            <p>{{ ontology.description }}</p>
+            <p>{{ ontologyMeta.description }}</p>
 
             {% set ontology = items[ontologyKey] %}
 
@@ -53,7 +53,7 @@
 
                         <tr>
                             <td>
-                                <a href="{{ baseUrl }}{{ baseRoute }}/compatibility/{{ entityKey }}">
+                                <a href="{{ baseUrl }}{{ baseRoute }}/compatibility/{{ entityKey }}#{{ ontologyKey }}">
                                     {{ entityKey }}
                                 </a>
                             </td>

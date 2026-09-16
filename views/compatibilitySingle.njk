@@ -32,11 +32,13 @@
 
             {% for ontologyName, ontology in item %}
 
-                <h2>{{ ontologyName }}</h2>
+                <h2 id="{{ ontologyName }}">
+                    {{ metaItems[ontologyName].label }} - {{ ontology["@type"] or entity }}
+                </h2>
 
                 <p>{{ ontology.description or "" }}</p>
 
-                <table class="ref">
+                <table class="ref-single">
 
                     <thead>
                         <tr>
@@ -66,4 +68,8 @@
         {% endif %}
 
     </div>
+{% endblock %}
+
+{% block footer %}
+    <section style="min-height: 50vh"></section>
 {% endblock %}

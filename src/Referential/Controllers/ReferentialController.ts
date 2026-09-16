@@ -248,6 +248,7 @@ class ReferentialController {
                 baseRoute: this._baseRoute,
                 // entityRoute: entityRoute,
 
+                metaItems: ontologiesMetaData,
                 item: entityData,
                 entity: entityType,
 
