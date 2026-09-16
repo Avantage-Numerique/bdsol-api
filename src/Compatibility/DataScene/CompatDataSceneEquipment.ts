@@ -3,6 +3,9 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBEquipmentToDataScene: CompatibilityOntology = {
     [EntityTypesEnum.equipment]: {
+        "@type": "",
+        description: "",
+        external: "",
         compatibility: {
             description: {
                 fields: ["description"],
@@ -13,9 +16,9 @@ export const compatibilityDBEquipmentToDataScene: CompatibilityOntology = {
                 source: (doc) => doc.shortDescription,
             },
             /* media: {
-            fields: ["mainImage"],
-            source: (doc) => doc.mainImage,
-        }, */
+                fields: ["mainImage"],
+                source: (doc) => doc.mainImage,
+            }, */
         },
     },
 };

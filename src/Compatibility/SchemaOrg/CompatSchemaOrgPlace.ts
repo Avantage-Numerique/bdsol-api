@@ -3,6 +3,9 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBPlaceToSchemaOrg: CompatibilityOntology = {
     [EntityTypesEnum.place]: {
+        "@type": "PostalAddress",
+        description: "L'adresse postale",
+        external: "https://schema.org/PostalAddress",
         compatibility: {
             name: {
                 fields: ["name"],

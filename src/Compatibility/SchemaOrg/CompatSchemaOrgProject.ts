@@ -3,6 +3,10 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBProjectToSchemaOrg: CompatibilityOntology = {
     [EntityTypesEnum.project]: {
+        "@type": "Project",
+        description:
+            "Une entreprise (potentiellement individuelle, mais généralement collaborative), planifiée dans le but d'atteindre un objectif précis.",
+        external: "https://schema.org/Project",
         compatibility: {
             name: {
                 fields: ["name"],

@@ -41,13 +41,10 @@ export class JSONLDBuilder {
         depth: number
     ): void {
         if (depth == 1) {
-            jsonld["@context"] = {
-                [ontologiesMetaData[compatibleOntology].prefix]: ontologiesMetaData[compatibleOntology].ontologyUrl,
-            };
+            jsonld["@context"] = ontologiesMetaData[compatibleOntology].ontologyUrl;
         }
 
-        // TODO : Mapper vers le véritable type de l'ontologie.
-        jsonld["@type"] = doc.type; //doc.type => quelle type de l'ontologie cible
+        jsonld["@type"] = compatibilityData[compatibleOntology][doc.type]?.["@type"] ?? doc.type; //doc.type => quelle type de l'ontologie cible
         jsonld["@id"] = doc.uri;
     }
 

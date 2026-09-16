@@ -3,6 +3,9 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBProjectToArtsData: CompatibilityOntology = {
     [EntityTypesEnum.project]: {
+        "@type": "",
+        description: "",
+        external: "",
         compatibility: {
             name: {
                 fields: ["name"],

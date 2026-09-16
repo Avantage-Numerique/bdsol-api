@@ -3,44 +3,47 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBPersonToSchemaOrg: CompatibilityOntology = {
     [EntityTypesEnum.person]: {
+        "@type": "Person",
+        description: "Une personne (vivante, morte, morte-vivante ou fictive).",
+        external: "https://schema.org/Person",
         compatibility: {
-            "schema:givenName": {
+            givenName: {
                 fields: ["firstName"],
                 source: (doc) => doc.firstName,
             },
-            "schema:familyName": {
+            familyName: {
                 fields: ["lastName"],
                 source: (doc) => doc.lastName,
             },
-            "schema:nickname": {
+            nickname: {
                 fields: ["nickname"],
                 source: (doc) => doc.nickname,
             },
-            "schema:description": {
+            description: {
                 fields: ["description"],
                 source: (doc) => doc.description,
             },
-            "schema:disambiguatingDescription": {
+            disambiguatingDescription: {
                 fields: ["shortDescription"],
                 source: (doc) => doc.shortDescription,
             },
-            "schema:additionalName": {
+            additionalName: {
                 fields: ["catchphrase"],
                 source: (doc) => doc.catchphrase,
             },
-            /* "schema:contactPoint": {
+            /* contactPoint: {
                 fields: ["contactPoint"],
                 source: (doc) => doc.contactPoint,
             }, */
-            "schema:email": {
+            email: {
                 fields: ["contactPoint.email.address"],
                 source: (doc) => doc.contactPoint.email.address,
             },
-            "schema:telephone": {
+            telephone: {
                 fields: ["contactPoint.tel"],
                 source: (doc) => doc.contactPoint.tel,
             },
-            "schema:url": {
+            url: {
                 fields: ["contactPoint.website"],
                 source: (doc) => doc.contactPoint.website,
             },

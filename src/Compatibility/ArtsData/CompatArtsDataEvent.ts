@@ -3,6 +3,10 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBEventToArtsData: CompatibilityOntology = {
     [EntityTypesEnum.event]: {
+        "@type": "Event",
+        description:
+            "Dans Artsdata, un événement est défini comme « une activité organisée qui se déroule à un moment et un lieu précis ». La classe adr:Event est considérée comme une classe équivalente à schema:Event.",
+        external: "https://docs.artsdata.ca/classes/event.html",
         compatibility: {
             name: {
                 fields: ["name"],

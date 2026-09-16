@@ -3,6 +3,9 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBOrganisationToSchemaOrg: CompatibilityOntology = {
     [EntityTypesEnum.organisation]: {
+        "@type": "Organization",
+        description: "Une organisation tel une école, une ONG, une entreprise, un club, etc.",
+        external: "https://schema.org/Organization",
         compatibility: {
             name: {
                 fields: ["name"],

@@ -3,6 +3,9 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBOrganisationToDataScene: CompatibilityOntology = {
     [EntityTypesEnum.organisation]: {
+        "@type": "",
+        description: "",
+        external: "",
         compatibility: {
             name: {
                 fields: ["name"],

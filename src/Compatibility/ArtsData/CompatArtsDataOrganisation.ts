@@ -3,6 +3,10 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBOrganisationToArtsData: CompatibilityOntology = {
     [EntityTypesEnum.organisation]: {
+        "@type": "Organization",
+        description:
+            "Sous classe de http://schema.org/Thing. Dans le modèle de donnée d'Artsdata, schema:Organization est aussi une sous classe de dbo:Agent.",
+        external: "https://docs.artsdata.ca/classes/organization.html",
         compatibility: {
             name: {
                 fields: ["name"],

@@ -3,6 +3,10 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBEventToSchemaOrg: CompatibilityOntology = {
     [EntityTypesEnum.event]: {
+        "@type": "Event",
+        description:
+            "Un événement se déroulant à une heure et dans un lieu précis, comme un concert, une conférence ou un festival. Les événements récurrents peuvent être structurés comme des objets Event distincts.",
+        external: "https://schema.org/Event",
         compatibility: {
             name: {
                 fields: ["name"],
