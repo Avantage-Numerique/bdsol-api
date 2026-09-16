@@ -19,6 +19,7 @@ export type CompatibleEntity =
 export type CompatibilityEntry<TDocument = any> = {
     fields?: string[];
     source?: (doc: TDocument) => unknown;
+    description?: string;
 };
 
 export type CompatibilityProperties<TDocument = any> = {

@@ -4,13 +4,14 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 export const compatibilityDBPersonToDataScene: CompatibilityOntology = {
     [EntityTypesEnum.person]: {
         "@type": "Contributor",
-        description: "Blablabla",
+        description: "Blablabla description de Contributor",
         external: "https://documentation.datascene.ca/references/contributor/",
 
         compatibility: {
             name: {
                 fields: ["firstName", "lastName"],
                 source: (doc) => doc.firstName + " " + doc.lastName,
+                description: "Desciption de `name` pour DataScene",
             },
             description: {
                 fields: ["description"],
