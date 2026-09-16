@@ -18,44 +18,48 @@
                     </a>
                 </li>
                 <li>
-                    <a class="btn" href="/ref" title="Référentiel">Référentiel</a>
+                    <a class="btn" href="/ref/compatibility" title="Référentiel">Compatibilité</a>
                 </li>
                 <li>
-                    <span>{{ item.label }}</span>
+                    <span>{{ entity }}</span>
                 </li>
             </ul>
         </nav>
 
         {% if item %}
+
             <h1>{{ title | safe }}</h1>
+
             {% for ontologyName, ontology in item %}
 
-            <h2>{{ ontologyName }}</h2>
-            <p>{{ ontology.description or "" }}</p>
+                <h2>{{ ontologyName }}</h2>
 
-            <table class="ref">
-                <thead>
-                    <tr>
-                        <th>Nom de la propriété</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
+                <p>{{ ontology.description or "" }}</p>
 
-                <tbody>
+                <table class="ref">
 
-                    {% for propertyName, property in ontology.compatibility %}
-
+                    <thead>
                         <tr>
-                            <td>{{ propertyName }}</td>
-                            <td>{{ property.description }}</td>
+                            <th>Nom de la propriété</th>
+                            <th>Description</th>
                         </tr>
+                    </thead>
 
-                    {% endfor %}
+                    <tbody>
 
-                </tbody>
-            </table>
+                        {% for propertyName, property in ontology.compatibility %}
 
-        {% endfor %}
+                            <tr>
+                                <td>{{ propertyName }}</td>
+                                <td>{{ property.description }}</td>
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+
+            {% endfor %}
 
         {% else %}
             <p>Rien à afficher!</p>
