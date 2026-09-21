@@ -1,4 +1,4 @@
-import { RefVocabulary } from "../types";
+import { RefVocabulary } from "@ref/Data/types";
 import EnumHelper from "@src/Helpers/EnumHelper";
 import { TaxonomiesCategoriesEnum } from "@src/Taxonomy/TaxonomiesCategoriesEnum";
 

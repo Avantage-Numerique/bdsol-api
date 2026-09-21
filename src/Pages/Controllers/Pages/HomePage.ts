@@ -1,10 +1,16 @@
 import Page, { PageContent } from "@src/Pages/Controllers/Pages/Page";
 import { getApiConfig } from "@src/config";
+import { PublicRoute } from "@src/Pages/Types/PublicRoute";
 
 class HomePage extends Page {
     apiConfig;
 
-    constructor(name: string, layout: string = "", content: PageContent = { title: "Page", body: "contenu" }) {
+    constructor(
+        name: string,
+        layout: string = "",
+        content: PageContent = { title: "Page", body: "contenu" },
+        route: PublicRoute = {}
+    ) {
         super(name, layout || "publicHomePage", content);
         this.apiConfig = getApiConfig();
         this.content.title = this.title();

@@ -7,6 +7,9 @@ import UsersHistoryService from "../Services/UsersHistoryService";
 class UserHistory extends AbstractModel {
     /** @protected @static Singleton instance */
     protected static _instance: UserHistory;
+    private constructor() {
+        super();
+    }
 
     /** @public @static Model singleton instance constructor */
     public static getInstance(): UserHistory {

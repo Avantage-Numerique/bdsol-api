@@ -27,7 +27,7 @@ class OrganisationsController extends AbstractController {
     /** @public Model */
     entity: Organisation;
 
-    constructor() {
+    private constructor() {
         super();
         this.entity = Organisation.getInstance();
         this.service = OrganisationsService.getInstance(this.entity);

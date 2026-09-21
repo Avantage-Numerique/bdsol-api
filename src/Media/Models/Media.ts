@@ -13,6 +13,9 @@ import { populateUser } from "@src/Users/Middlewares/populateUser";
 class Media extends AbstractModel {
     /** @protected @static Singleton instance */
     protected static _instance: Media;
+    private constructor() {
+        super();
+    }
 
     /** @public @static Model singleton instance constructor */
     public static getInstance(doIndexes = true): Media {
@@ -169,7 +172,7 @@ class Media extends AbstractModel {
             entityId: document.entityId ?? "",
             entityType: document.entityType ?? "",
             uploadedBy: document.uploadedBy ?? "",
-            meta: document.meta ?? "",
+            meta: document.meta ?? {},
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
@@ -182,11 +185,15 @@ class Media extends AbstractModel {
 
     public registerEvents(): void {
         this.schema.pre("find", function () {
+            if (this.getOptions().skipPopulate) return;
+
             //middlewarePopulateProperty(this, "entityId");
             populateUser(this, "meta.requestedBy");
             populateUser(this, "meta.lastModifiedBy");
         });
         this.schema.pre("findOne", function () {
+            if (this.getOptions().skipPopulate) return;
+
             middlewarePopulateProperty(this, "entityId");
             populateUser(this, "meta.requestedBy");
             populateUser(this, "meta.lastModifiedBy");

@@ -18,6 +18,9 @@ import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
 class Event extends AbstractModel {
     /** @protected @static Singleton instance */
     protected static _instance: Event;
+    private constructor() {
+        super();
+    }
 
     /** @public @static Model singleton instance constructor */
     public static getInstance(doIndexes = true): Event {
@@ -216,11 +219,10 @@ class Event extends AbstractModel {
             subEvents: document.subEvents ?? [],
             location: document.location ?? [],
             photoGallery: document.photoGallery ?? "",
-            meta: document.meta ?? "",
+            meta: document.meta ?? {},
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
-            _generated: generateEntityContent(document),
         };
     }
 
@@ -239,6 +241,7 @@ class Event extends AbstractModel {
             if (this.options?._recursed) {
                 return next();
             }
+            if (this.getOptions().skipPopulate) return next();
             //middlewarePopulateProperty(this, 'team.member');
 
             taxonomyPopulate(this, "skills");
@@ -266,6 +269,8 @@ class Event extends AbstractModel {
             if (this.options?._recursed) {
                 return next();
             }
+            if (this.getOptions().skipPopulate) return next();
+
             middlewarePopulateProperty(this, "team.member");
             taxonomyPopulate(this, "skills");
             taxonomyPopulate(this, "domains.domain");

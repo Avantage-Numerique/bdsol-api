@@ -34,7 +34,7 @@ class AuthentificationController {
     public userModel: User;
     private static verifyTokenLength = 16;
 
-    constructor() {
+    private constructor() {
         this.userModel = User.getInstance();
         this.service = UsersService.getInstance(this.userModel);
 

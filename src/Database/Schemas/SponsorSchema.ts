@@ -25,7 +25,6 @@ export class Sponsor {
                 type: String,
                 required: true,
                 enum: ["Person", "Organisation"],
-                //required: true
             },
             subMeta: {
                 type: SubMeta.schema,

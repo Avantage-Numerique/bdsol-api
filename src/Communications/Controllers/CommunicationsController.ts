@@ -19,7 +19,7 @@ class CommunicationsController extends AbstractController {
     /** @public Model */
     entity: Communication;
 
-    constructor() {
+    private constructor() {
         super();
         this.entity = Communication.getInstance();
         this.service = CommunicationsService.getInstance(this.entity);

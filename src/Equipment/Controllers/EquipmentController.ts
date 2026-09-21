@@ -26,7 +26,7 @@ class EquipmentController extends AbstractController {
 
     name: string = "Equipment";
 
-    constructor() {
+    private constructor() {
         super();
         this.entity = Equipment.getInstance();
         this.service = EquipmentService.getInstance(this.entity);

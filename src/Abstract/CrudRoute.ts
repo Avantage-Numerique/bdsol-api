@@ -8,6 +8,8 @@ import AbstractController from "./Controller";
 import { Service } from "@database/Service";
 import { urlSanitizerAlias } from "@src/Security/SanitizerAliases/UrlSanitizerAlias";
 import { SlugSanitizer } from "@src/Security/Sanitizers/SlugSanitizer";
+import { injectJSONLD } from "@src/jsonld/Middlewares/JSONLDInjector";
+import { injectGeneratedContent } from "@src/GeneratedContent/Miidlewares/GeneratedInjector";
 
 /**
  * The CrudRoute class is an abstract class that provides the basic functionality for CRUD (Create, Read, Update, Delete) operations on a specific entity.
@@ -170,6 +172,8 @@ abstract class CrudRoute extends AbstractRoute implements RouteContract {
             ...this.addMiddlewares("bySlug"),
             this.validatingResults.bind(this),
             this.getByUriParamsHandler.bind(this),
+            injectJSONLD(),
+            injectGeneratedContent(),
             this.routeSendResponse.bind(this),
         ]);
 

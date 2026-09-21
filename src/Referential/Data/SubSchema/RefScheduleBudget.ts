@@ -1,6 +1,6 @@
 import { RefProperty } from "@ref/Data/types";
 import { refTimeframe } from "./RefTimeframe";
-import { createPrimitiveUrl, createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
 import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 

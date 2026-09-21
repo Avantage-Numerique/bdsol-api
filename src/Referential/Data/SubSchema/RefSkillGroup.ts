@@ -1,6 +1,6 @@
-import { RefProperty } from "../types";
+import { RefProperty } from "@ref/Data/types";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
-import { createPrimitiveUrl, createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
 import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 import { refOrder } from "@ref/Data/Properties/RefOrder";
 

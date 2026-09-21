@@ -11,6 +11,9 @@ import { taxonomyPopulate } from "../Middlewares/TaxonomiesPopulate";
 class Taxonomy extends AbstractModel {
     /** @protected @static Singleton instance of model Taxonomy */
     protected static _instance: Taxonomy;
+    private constructor() {
+        super();
+    }
 
     /** @public @static Model singleton instance constructor */
     public static getInstance(doIndexes = true): Taxonomy {
@@ -221,10 +224,14 @@ class Taxonomy extends AbstractModel {
 
     public registerEvents(): void {
         this.schema.pre("find", function () {
+            if (this.getOptions().skipPopulate) return;
+
             taxonomyPopulate(this, "domains.domain");
         });
 
         this.schema.pre("findOne", function () {
+            if (this.getOptions().skipPopulate) return;
+
             taxonomyPopulate(this, "domains.domain");
         });
     }

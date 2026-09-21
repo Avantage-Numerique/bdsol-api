@@ -14,7 +14,7 @@ class EventsController extends AbstractController {
 
     name: string = "Event";
 
-    constructor() {
+    private constructor() {
         super();
         this.entity = Event.getInstance();
         this.service = EventsService.getInstance(this.entity);

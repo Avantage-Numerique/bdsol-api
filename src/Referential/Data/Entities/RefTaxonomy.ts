@@ -1,10 +1,10 @@
 import { TaxonomiesCategoriesEnum } from "@src/Taxonomy/TaxonomiesCategoriesEnum";
-import { refDescription } from "../Properties/RefDescription";
-import { refName } from "../Properties/RefName";
-import { refType } from "../Properties/RefType";
-import { refDomainList } from "../SubSchema/RefDomainList";
-import { RefProperty } from "../types";
-import { createRefType } from "../utils";
+import { refDescription } from "@ref/Data/Properties/RefDescription";
+import { refName } from "@ref/Data/Properties/RefName";
+import { refType } from "@ref/Data/Properties/RefType";
+import { refDomainList } from "@ref/Data/SubSchema/RefDomainList";
+import { RefProperty } from "@ref/Data/types";
+import { createRefType } from "@ref/Data/utils";
 import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
 import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";

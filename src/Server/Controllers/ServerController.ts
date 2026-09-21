@@ -21,7 +21,7 @@ export default class ServerController {
      * Create an instance of ServerController with the express app.
      * @param api express.Application
      */
-    constructor(api: Api) {
+    private constructor(api: Api) {
         //set the api if it's passed via instanciation.
         ServerController.api = api;
         ServerController.api.configure();

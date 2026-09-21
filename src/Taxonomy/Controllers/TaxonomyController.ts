@@ -15,7 +15,7 @@ class TaxonomyController extends AbstractController {
     /** @public Model */
     entity: Taxonomy;
 
-    constructor() {
+    private constructor() {
         super();
         this.entity = Taxonomy.getInstance();
         this.service = TaxonomyService.getInstance(this.entity);

@@ -1,6 +1,6 @@
-import { RefProperty } from "../types";
+import { RefProperty } from "@ref/Data/types";
 import { refSubMeta } from "./RefSubMeta";
-import { createPrimitiveUrl, createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
 import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 
 export const refSchedule: RefProperty = {

@@ -15,7 +15,7 @@ class UsersHistoryController extends AbstractController {
     /** @public Model */
     entity: UserHistory;
 
-    constructor() {
+    private constructor() {
         super();
         this.entity = UserHistory.getInstance();
         this.service = UsersHistoryService.getInstance(this.entity);

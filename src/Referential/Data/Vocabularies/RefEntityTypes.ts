@@ -1,5 +1,5 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
-import { RefVocabulary } from "../types";
+import { RefVocabulary } from "@ref/Data/types";
 import EnumHelper from "@src/Helpers/EnumHelper";
 
 export const refEntityTypes: RefVocabulary = {
