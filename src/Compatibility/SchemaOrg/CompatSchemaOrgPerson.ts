@@ -9,43 +9,43 @@ export const compatibilityDBPersonToSchemaOrg: CompatibilityOntology = {
         compatibility: {
             givenName: {
                 fields: ["firstName"],
-                source: (doc) => doc.firstName,
+                export: (doc) => doc.firstName,
             },
             familyName: {
                 fields: ["lastName"],
-                source: (doc) => doc.lastName,
+                export: (doc) => doc.lastName,
             },
             nickname: {
                 fields: ["nickname"],
-                source: (doc) => doc.nickname,
+                export: (doc) => doc.nickname,
             },
             description: {
                 fields: ["description"],
-                source: (doc) => doc.description,
+                export: (doc) => doc.description,
             },
             disambiguatingDescription: {
                 fields: ["shortDescription"],
-                source: (doc) => doc.shortDescription,
+                export: (doc) => doc.shortDescription,
             },
             additionalName: {
                 fields: ["catchphrase"],
-                source: (doc) => doc.catchphrase,
+                export: (doc) => doc.catchphrase,
             },
             /* contactPoint: {
                 fields: ["contactPoint"],
-                source: (doc) => doc.contactPoint,
+                export: (doc) => doc.contactPoint,
             }, */
             email: {
                 fields: ["contactPoint.email.address"],
-                source: (doc) => doc.contactPoint.email.address,
+                export: (doc) => doc.contactPoint.email.address,
             },
             telephone: {
                 fields: ["contactPoint.tel"],
-                source: (doc) => doc.contactPoint.tel,
+                export: (doc) => doc.contactPoint.tel,
             },
             url: {
                 fields: ["contactPoint.website"],
-                source: (doc) => doc.contactPoint.website,
+                export: (doc) => doc.contactPoint.website,
             },
             //schema:mediaObject ??
         },

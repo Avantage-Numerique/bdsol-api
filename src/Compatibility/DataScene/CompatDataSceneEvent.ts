@@ -10,36 +10,36 @@ export const compatibilityDBEventToDataScene: CompatibilityOntology = {
         compatibility: {
             name: {
                 fields: ["name"],
-                source: (doc) => doc.name,
+                export: (doc) => doc.name,
             },
             alternateName: {
                 fields: ["alternateName"],
-                source: (doc) => doc.alternateName,
+                export: (doc) => doc.alternateName,
             },
             description: {
                 fields: ["description"],
-                source: (doc) => doc.description,
+                export: (doc) => doc.description,
             },
             shortDescription: {
                 fields: ["shortDescription"],
-                source: (doc) => doc.shortDescription,
+                export: (doc) => doc.shortDescription,
             },
             //organizer?
             /* hasMembers: {
             fields: ["team"],
-            source: (doc) => doc.team.map(),//Map member
+            export: (doc) => doc.team.map(),//Map member
         }, */
             startDate: {
                 fields: ["startDate"],
-                source: (doc) => doc.startDate,
+                export: (doc) => doc.startDate,
             },
             endDateTime: {
                 fields: ["endDate"],
-                source: (doc) => doc.endDate,
+                export: (doc) => doc.endDate,
             },
             /* media: {
             fields: ["mainImage"],
-            source: (doc) => doc.mainImage,
+            export: (doc) => doc.mainImage,
         }, */
             //location?
         },

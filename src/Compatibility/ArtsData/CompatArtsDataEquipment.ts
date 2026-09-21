@@ -9,15 +9,15 @@ export const compatibilityDBEquipmentToArtsData: CompatibilityOntology = {
         compatibility: {
             description: {
                 fields: ["description"],
-                source: (doc) => doc.description,
+                export: (doc) => doc.description,
             },
             abstract: {
                 fields: ["shortDescription"],
-                source: (doc) => doc.shortDescription,
+                export: (doc) => doc.shortDescription,
             },
             /* image: {
             fields: ["mainImage"],
-            source: (doc) => doc.mainImage,
+            export: (doc) => doc.mainImage,
         }, */
         },
     },

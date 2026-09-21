@@ -9,23 +9,23 @@ export const compatibilityDBOrganisationToDataScene: CompatibilityOntology = {
         compatibility: {
             name: {
                 fields: ["name"],
-                source: (doc) => doc.name,
+                export: (doc) => doc.name,
             },
             description: {
                 fields: ["description"],
-                source: (doc) => doc.description,
+                export: (doc) => doc.description,
             },
             shortDescription: {
                 fields: ["shortDescription"],
-                source: (doc) => doc.shortDescription,
+                export: (doc) => doc.shortDescription,
             },
             /* hasMembers: {
             fields: ["shortDescription"],
-            source: (doc) => doc.team.map(), //map member?
+            export: (doc) => doc.team.map(), //map member?
         }, */
             /* media: {
             fields: ["mainImage"],
-            source: (doc) => doc.mainImage,
+            export: (doc) => doc.mainImage,
         }, */
         },
     },

@@ -9,52 +9,52 @@ export const compatibilityDBPlaceToSchemaOrg: CompatibilityOntology = {
         compatibility: {
             name: {
                 fields: ["name"],
-                source: (doc) => doc.name,
+                export: (doc) => doc.name,
             },
             description: {
                 fields: ["description"],
-                source: (doc) => doc.description,
+                export: (doc) => doc.description,
             },
             disambiguatingDescription: {
                 fields: ["shortDescription"],
-                source: (doc) => doc.shortDescription,
+                export: (doc) => doc.shortDescription,
             },
             streetAddress: {
                 fields: ["address"],
-                source: (doc) => doc.address,
+                export: (doc) => doc.address,
             },
             addressLocality: {
                 fields: ["city"],
-                source: (doc) => doc.city,
+                export: (doc) => doc.city,
             },
             addressRegion: {
                 fields: ["region"],
-                source: (doc) => doc.region,
+                export: (doc) => doc.region,
             },
             AdministrativeArea: {
                 fields: ["mrc"],
-                source: (doc) => doc.mrc,
+                export: (doc) => doc.mrc,
             },
             //Cannot have 2 property with same key
             /* "addressRegion": {
             fields: ["province"],
-            source: (doc) => doc.province,
+            export: (doc) => doc.province,
         }, */
             postalCode: {
                 fields: ["postalCode"],
-                source: (doc) => doc.postalCode,
+                export: (doc) => doc.postalCode,
             },
             addressCountry: {
                 fields: ["country"],
-                source: (doc) => doc.country,
+                export: (doc) => doc.country,
             },
             latitude: {
                 fields: ["latitude"],
-                source: (doc) => doc.latitude,
+                export: (doc) => doc.latitude,
             },
             longitude: {
                 fields: ["longitude"],
-                source: (doc) => doc.longitude,
+                export: (doc) => doc.longitude,
             },
             //MediaObject?
         },

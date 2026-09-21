@@ -9,15 +9,15 @@ export const compatibilityDBEquipmentToDataScene: CompatibilityOntology = {
         compatibility: {
             description: {
                 fields: ["description"],
-                source: (doc) => doc.description,
+                export: (doc) => doc.description,
             },
             shortDescription: {
                 fields: ["shortDescription"],
-                source: (doc) => doc.shortDescription,
+                export: (doc) => doc.shortDescription,
             },
             /* media: {
                 fields: ["mainImage"],
-                source: (doc) => doc.mainImage,
+                export: (doc) => doc.mainImage,
             }, */
         },
     },

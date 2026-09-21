@@ -9,55 +9,55 @@ export const compatibilityDBOrganisationToSchemaOrg: CompatibilityOntology = {
         compatibility: {
             name: {
                 fields: ["name"],
-                source: (doc) => doc.name,
+                export: (doc) => doc.name,
             },
             description: {
                 fields: ["description"],
-                source: (doc) => doc.description,
+                export: (doc) => doc.description,
             },
             disambiguatingDescription: {
                 fields: ["shortDescription"],
-                source: (doc) => doc.shortDescription,
+                export: (doc) => doc.shortDescription,
             },
             foundingDate: {
                 fields: ["fondationDate"],
-                source: (doc) => doc.fondationDate,
+                export: (doc) => doc.fondationDate,
             },
             slogan: {
                 fields: ["catchphrase"],
-                source: (doc) => doc.catchphrase,
+                export: (doc) => doc.catchphrase,
             },
             /* "contactPoint": {
             fields: ["contactPoint"],
-            source: (doc) => doc.contactPoint,
+            export: (doc) => doc.contactPoint,
         }, */
             email: {
                 fields: ["email"],
-                source: (doc) => doc.contactPoint.email,
+                export: (doc) => doc.contactPoint.email,
             },
             telephone: {
                 fields: ["tel"],
-                source: (doc) => doc.contactPoint.tel,
+                export: (doc) => doc.contactPoint.tel,
             },
             url: {
                 fields: ["website"],
-                source: (doc) => doc.contactPoint.website,
+                export: (doc) => doc.contactPoint.website,
             },
             //id to entity, à voir
             /* "location": {
             fields: ["location"],
-            source: (doc) => doc.map(), //map les locations
+            export: (doc) => doc.map(), //map les locations
         }, */
             //id to entity, à voir
             /* "member": {
             fields: ["website"],
-            source: (doc) => doc.team.map(),//map member ?
+            export: (doc) => doc.team.map(),//map member ?
         }, */
             //mediaObject ??
             //id to entity, à voir
             /* "owns": {
             fields: ["equipment"],
-            source: (doc) => doc.equipment.map(),//map equipment ?
+            export: (doc) => doc.equipment.map(),//map equipment ?
         }, */
         },
     },

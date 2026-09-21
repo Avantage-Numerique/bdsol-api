@@ -9,23 +9,23 @@ export const compatibilityDBPersonToArtsData: CompatibilityOntology = {
         compatibility: {
             name: {
                 fields: ["firstName", "lastName"],
-                source: (doc) => doc.firstName + " " + doc.lastName,
+                export: (doc) => doc.firstName + " " + doc.lastName,
             },
             alternateName: {
                 fields: ["nickname"],
-                source: (doc) => doc.nickname,
+                export: (doc) => doc.nickname,
             },
             description: {
                 fields: ["description"],
-                source: (doc) => doc.description,
+                export: (doc) => doc.description,
             },
             disambiguatingDescription: {
                 fields: ["shortDescription"],
-                source: (doc) => doc.shortDescription,
+                export: (doc) => doc.shortDescription,
             },
             /* image: {
             fields: ["mainImage"],
-            source: (doc) => doc.mainImage,
+            export: (doc) => doc.mainImage,
         }, */
         },
     },

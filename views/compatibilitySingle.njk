@@ -33,7 +33,7 @@
             {% for ontologyName, ontology in item %}
 
                 <h2 id="{{ ontologyName }}">
-                    {{ metaItems[ontologyName].label }} - {{ ontology["@type"] or entity }}
+                    {{ metaItems[ontologyName].label }}{% if ontology["@type"] is defined and ontology["@type"] != "" %} - {{ ontology["@type"] }}{% endif %}
                 </h2>
 
                 <p>{{ ontology.description or "" }}</p>

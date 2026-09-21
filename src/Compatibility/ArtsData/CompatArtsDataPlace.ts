@@ -10,15 +10,15 @@ export const compatibilityDBPlaceToArtsData: CompatibilityOntology = {
         compatibility: {
             streetAddress: {
                 fields: ["address"],
-                source: (doc) => doc.address,
+                export: (doc) => doc.address,
             },
             addressLocality: {
                 fields: ["city"],
-                source: (doc) => doc.city,
+                export: (doc) => doc.city,
             },
             /* image: {
             fields: ["mainImage"],
-            source: (doc) => doc.mainImage,
+            export: (doc) => doc.mainImage,
         }, */
         },
     },

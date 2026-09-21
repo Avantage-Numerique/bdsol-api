@@ -1,5 +1,5 @@
 import { compatibilityData, ontologiesMetaData } from "@src/Compatibility/CompatibilityObject";
-import { CompatibleEntity, CompatibleOntologiesEnum, OntologyMetaData } from "@src/Compatibility/types";
+import { CompatibleEntity, CompatibleOntologiesEnum } from "@src/Compatibility/types";
 
 type MinimalDocument = { type: CompatibleEntity; uri: string };
 
@@ -22,7 +22,7 @@ export class JSONLDBuilder {
         //For each compatible property
         for (const [property, entry] of Object.entries(entityCompatibility.compatibility)) {
             //Parse database object with source function
-            const value = entry.source?.(doc);
+            const value = entry.export?.(doc);
             //Confirm if we should include the result in JSONLD
             if (!this.shouldIncludeValue(value)) {
                 continue;

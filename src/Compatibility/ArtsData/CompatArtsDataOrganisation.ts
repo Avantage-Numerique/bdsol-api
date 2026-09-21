@@ -10,23 +10,23 @@ export const compatibilityDBOrganisationToArtsData: CompatibilityOntology = {
         compatibility: {
             name: {
                 fields: ["name"],
-                source: (doc) => doc.name,
+                export: (doc) => doc.name,
             },
             description: {
                 fields: ["description"],
-                source: (doc) => doc.description,
+                export: (doc) => doc.description,
             },
             disambiguatingDescription: {
                 fields: ["shortDescription"],
-                source: (doc) => doc.shortDescription,
+                export: (doc) => doc.shortDescription,
             },
             /* "location": {
             fields: ["location"],
-            source: (doc) => doc.map(), //map les locations
+            export: (doc) => doc.map(), //map les locations
         }, */
             /* image: {
             fields: ["mainImage"],
-            source: (doc) => doc.mainImage,
+            export: (doc) => doc.mainImage,
         }, */
         },
     },

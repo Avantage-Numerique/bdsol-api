@@ -10,36 +10,36 @@ export const compatibilityDBEventToArtsData: CompatibilityOntology = {
         compatibility: {
             name: {
                 fields: ["name"],
-                source: (doc) => doc.name,
+                export: (doc) => doc.name,
             },
             description: {
                 fields: ["description"],
-                source: (doc) => doc.description,
+                export: (doc) => doc.description,
             },
             //organizer?
             /* additionalType: {
             fields: ["eventType"],
-            source: (doc) => doc.eventType,
+            export: (doc) => doc.eventType,
         }, */
             eventAttendanceMode: {
                 fields: ["eventFormat"],
-                source: (doc) => doc.eventFormat,
+                export: (doc) => doc.eventFormat,
             },
             startDate: {
                 fields: ["startDate"],
-                source: (doc) => doc.startDate,
+                export: (doc) => doc.startDate,
             },
             endDate: {
                 fields: ["endDate"],
-                source: (doc) => doc.endDate,
+                export: (doc) => doc.endDate,
             },
             /* image: {
             fields: ["mainImage"],
-            source: (doc) => doc.mainImage,
+            export: (doc) => doc.mainImage,
         }, */
             /* subEvent: {
             fields: ["subEvents"],
-            source: (doc) => doc.subEvents.map(),
+            export: (doc) => doc.subEvents.map(),
         }, */
             //location?
         },

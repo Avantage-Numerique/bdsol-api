@@ -11,31 +11,31 @@ export const compatibilityDBEquipmentToSchemaOrg: CompatibilityOntology = {
         compatibility: {
             name: {
                 fields: ["name"],
-                source: (doc) => doc.name,
+                export: (doc) => doc.name,
             },
             /* "category": {
             fields: ["equipmentType"],
-            source: (doc) => doc.equipmentType,
+            export: (doc) => doc.equipmentType,
         }, */
             alternateName: {
                 fields: ["label"],
-                source: (doc) => doc.label,
+                export: (doc) => doc.label,
             },
             description: {
                 fields: ["description"],
-                source: (doc) => doc.description,
+                export: (doc) => doc.description,
             },
             abstract: {
                 fields: ["shortDescription"],
-                source: (doc) => doc.shortDescription,
+                export: (doc) => doc.shortDescription,
             },
             brand: {
                 fields: ["brand"],
-                source: (doc) => doc.brand,
+                export: (doc) => doc.brand,
             },
             model: {
                 fields: ["modelName"],
-                source: (doc) => doc.modelName,
+                export: (doc) => doc.modelName,
             },
             //mediaObject ??
         },
