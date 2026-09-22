@@ -23,7 +23,10 @@ export const compatibilityDBPersonToDataScene: CompatibilityOntology = {
             },
             alternateName: {
                 fields: ["firstName", "lastName", "nickname"],
-                export: (doc) => [doc.firstName + " " + doc.lastName, doc.nickname].filter((v) => v),
+                export: (doc) =>
+                    [`${doc.firstName} ${doc.lastName}`, doc.nickname]
+                        .filter((v) => v)
+                        .map((v) => ({ lang: "fr", value: v })),
                 description: "Autres appelations parfois utilisées pour le contributeur.",
             },
             /* media: {
