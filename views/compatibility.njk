@@ -63,7 +63,7 @@
 
                             <td>
                                 {% if entity.external %}
-                                    <a href="{{ entity.external }}">{{ entity["@type"] or entityKey }}</a>
+                                    <a href="{{ entity.external }}" target="_blank">{{ entity["@type"] or entityKey }}</a>
                                 {% else %}
                                     {{ entity["@type"] or entityKey }}
                                 {% endif %}
