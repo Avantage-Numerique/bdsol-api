@@ -35,9 +35,8 @@ import { PagesRoutes } from "@src/Pages/Routes/PagesRoutes";
 import SlowDownMiddleware from "@src/Server/Middlewares/SlowDownMiddleware";
 import path from "path";
 
-// import ReferentialRoutes from "./Referential/Routes/ReferentialRoutes";
 import JSONLDRoutes from "./jsonld/Routes/JSONLDRoutes";
-import ReferentialRoutes from "./Referential/Routes/ReferentialRoutes";
+import CompatibilityRoutes from "./Compatibility/Routes/CompatibilityRoutes";
 
 /**
  * Main class for the API
@@ -175,8 +174,8 @@ export default class Api {
                 manager: new ModerationRoutes(),
             },
             {
-                baseRoute: "/ref",
-                manager: new ReferentialRoutes(),
+                baseRoute: "/compatibility",
+                manager: new CompatibilityRoutes(),
             },
             {
                 baseRoute: "/jsonld",

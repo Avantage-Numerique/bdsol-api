@@ -1,7 +1,7 @@
-import { CompatibilityOntology } from "../types";
+import { CompatibilityOntology } from "../../types";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
-export const compatibilityDBProjectToArtsData: CompatibilityOntology = {
+export const compatibilityDBProjectToDataScene: CompatibilityOntology = {
     [EntityTypesEnum.project]: {
         "@type": "",
         description: "",
@@ -11,27 +11,23 @@ export const compatibilityDBProjectToArtsData: CompatibilityOntology = {
                 fields: ["name"],
                 export: (doc) => doc.name,
             },
+            alternateName: {
+                fields: ["alternateName"],
+                export: (doc) => doc.alternateName,
+            },
             description: {
                 fields: ["description"],
                 export: (doc) => doc.description,
             },
-            disambiguatingDescription: {
+            shortDescription: {
                 fields: ["shortDescription"],
                 export: (doc) => doc.shortDescription,
             },
-            /* creator: {
-            fields: ["entityInCharge"],
-            export: (doc) => doc.entityInCharge,
+            /* hasMembers: {
+            fields: ["shortDescription"],
+            export: (doc) => doc.team.map(), //map member?
         }, */
-            /* producer: {
-            fields: ["producer"],
-            export: (doc) => doc.producer,
-        }, */
-            /* "location": {
-            fields: ["location"],
-            export: (doc) => doc.map(), //map les locations
-        }, */
-            /* image: {
+            /* media: {
             fields: ["mainImage"],
             export: (doc) => doc.mainImage,
         }, */

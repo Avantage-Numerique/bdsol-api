@@ -1,8 +1,8 @@
-import { CompatibilityOntology } from "../types";
+import { CompatibilityOntology } from "../../types";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
-export const compatibilityDBProjectToDataScene: CompatibilityOntology = {
-    [EntityTypesEnum.project]: {
+export const compatibilityDBOrganisationToDataScene: CompatibilityOntology = {
+    [EntityTypesEnum.organisation]: {
         "@type": "",
         description: "",
         external: "",
@@ -10,10 +10,6 @@ export const compatibilityDBProjectToDataScene: CompatibilityOntology = {
             name: {
                 fields: ["name"],
                 export: (doc) => doc.name,
-            },
-            alternateName: {
-                fields: ["alternateName"],
-                export: (doc) => doc.alternateName,
             },
             description: {
                 fields: ["description"],

@@ -1,4 +1,4 @@
-import { CompatibleOntologiesEnum, OntologyMetaData } from "../types";
+import { CompatibleOntologiesEnum, OntologyMetaData } from "../../types";
 
 const SchemaOrgMetaData: OntologyMetaData = {
     referentialUrl: "https://schema.org",

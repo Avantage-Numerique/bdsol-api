@@ -1,5 +1,4 @@
-import { refEquipment } from "@src/Referential/Data/Entities/RefEquipment";
-import { CompatibilityOntology } from "../types";
+import { CompatibilityOntology } from "@src/Compatibility/types";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBEquipmentToSchemaOrg: CompatibilityOntology = {

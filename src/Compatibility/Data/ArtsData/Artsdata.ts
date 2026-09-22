@@ -1,4 +1,4 @@
-import { CompatibleOntologiesEnum, OntologyMetaData } from "../types";
+import { CompatibleOntologiesEnum, OntologyMetaData } from "../../types";
 
 const ArtsdataMetaData: OntologyMetaData = {
     referentialUrl: "https://docs.artsdata.ca",

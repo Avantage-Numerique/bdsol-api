@@ -18,7 +18,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class="btn" href="/ref/compatibility" title="Référentiel">Compatibilité</a>
+                    <a class="btn" href="/compatibility" title="Compatibilité">Compatibilité</a>
                 </li>
                 <li>
                     <span>{{ entity }}</span>
@@ -33,7 +33,10 @@
             {% for ontologyName, ontology in item %}
 
                 <h2 id="{{ ontologyName }}">
-                    {{ metaItems[ontologyName].label }}{% if ontology["@type"] is defined and ontology["@type"] != "" %} - {{ ontology["@type"] }}{% endif %}
+                    {{ metaItems[ontologyName].label }}
+                    {% if ontology["@type"] %}
+                        - {{ ontology["@type"] }}
+                    {% endif %}
                 </h2>
 
                 <p>{{ ontology.description or "" }}</p>

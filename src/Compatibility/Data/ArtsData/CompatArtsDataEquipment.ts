@@ -1,7 +1,7 @@
-import { CompatibilityOntology } from "../types";
+import { CompatibilityOntology } from "../../types";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
-export const compatibilityDBEquipmentToDataScene: CompatibilityOntology = {
+export const compatibilityDBEquipmentToArtsData: CompatibilityOntology = {
     [EntityTypesEnum.equipment]: {
         "@type": "",
         description: "",
@@ -11,14 +11,14 @@ export const compatibilityDBEquipmentToDataScene: CompatibilityOntology = {
                 fields: ["description"],
                 export: (doc) => doc.description,
             },
-            shortDescription: {
+            abstract: {
                 fields: ["shortDescription"],
                 export: (doc) => doc.shortDescription,
             },
-            /* media: {
-                fields: ["mainImage"],
-                export: (doc) => doc.mainImage,
-            }, */
+            /* image: {
+            fields: ["mainImage"],
+            export: (doc) => doc.mainImage,
+        }, */
         },
     },
 };

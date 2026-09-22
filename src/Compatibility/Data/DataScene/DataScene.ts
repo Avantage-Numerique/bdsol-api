@@ -1,4 +1,4 @@
-import { CompatibleOntologiesEnum, OntologyMetaData } from "../types";
+import { CompatibleOntologiesEnum, OntologyMetaData } from "../../types";
 
 const DataSceneMetaData: OntologyMetaData = {
     referentialUrl: "https://documentation.datascene.ca/references",

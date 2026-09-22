@@ -1,31 +1,31 @@
-import { compatibilityDBEquipmentToSchemaOrg } from "./SchemaOrg/CompatSchemaOrgEquipment";
-import { compatibilityDBEventToSchemaOrg } from "./SchemaOrg/CompatSchemaOrgEvent";
-import { compatibilityDBOrganisationToSchemaOrg } from "./SchemaOrg/CompatSchemaOrgOrganisation";
-import { compatibilityDBPersonToSchemaOrg } from "./SchemaOrg/CompatSchemaOrgPerson";
-import { compatibilityDBPlaceToSchemaOrg } from "./SchemaOrg/CompatSchemaOrgPlace";
-import { compatibilityDBProjectToSchemaOrg } from "./SchemaOrg/CompatSchemaOrgProject";
-import { compatibilityDBTaxonomyToSchemaOrg } from "./SchemaOrg/CompatSchemaOrgTaxonomy";
+import { compatibilityDBEquipmentToSchemaOrg } from "./Data/SchemaOrg/CompatSchemaOrgEquipment";
+import { compatibilityDBEventToSchemaOrg } from "./Data/SchemaOrg/CompatSchemaOrgEvent";
+import { compatibilityDBOrganisationToSchemaOrg } from "./Data/SchemaOrg/CompatSchemaOrgOrganisation";
+import { compatibilityDBPersonToSchemaOrg } from "./Data/SchemaOrg/CompatSchemaOrgPerson";
+import { compatibilityDBPlaceToSchemaOrg } from "./Data/SchemaOrg/CompatSchemaOrgPlace";
+import { compatibilityDBProjectToSchemaOrg } from "./Data/SchemaOrg/CompatSchemaOrgProject";
+import { compatibilityDBTaxonomyToSchemaOrg } from "./Data/SchemaOrg/CompatSchemaOrgTaxonomy";
 
-import { compatibilityDBEquipmentToArtsData } from "./ArtsData/CompatArtsDataEquipment";
-import { compatibilityDBEventToArtsData } from "./ArtsData/CompatArtsDataEvent";
-import { compatibilityDBOrganisationToArtsData } from "./ArtsData/CompatArtsDataOrganisation";
-import { compatibilityDBPersonToArtsData } from "./ArtsData/CompatArtsDataPerson";
-import { compatibilityDBPlaceToArtsData } from "./ArtsData/CompatArtsDataPlace";
-import { compatibilityDBProjectToArtsData } from "./ArtsData/CompatArtsDataProject";
-import { compatibilityDBTaxonomyToArtsData } from "./ArtsData/CompatArtsDataTaxonomy";
+import { compatibilityDBEquipmentToArtsData } from "./Data/ArtsData/CompatArtsDataEquipment";
+import { compatibilityDBEventToArtsData } from "./Data/ArtsData/CompatArtsDataEvent";
+import { compatibilityDBOrganisationToArtsData } from "./Data/ArtsData/CompatArtsDataOrganisation";
+import { compatibilityDBPersonToArtsData } from "./Data/ArtsData/CompatArtsDataPerson";
+import { compatibilityDBPlaceToArtsData } from "./Data/ArtsData/CompatArtsDataPlace";
+import { compatibilityDBProjectToArtsData } from "./Data/ArtsData/CompatArtsDataProject";
+import { compatibilityDBTaxonomyToArtsData } from "./Data/ArtsData/CompatArtsDataTaxonomy";
 
-import { compatibilityDBEquipmentToDataScene } from "./DataScene/CompatDataSceneEquipment";
-import { compatibilityDBEventToDataScene } from "./DataScene/CompatDataSceneEvent";
-import { compatibilityDBOrganisationToDataScene } from "./DataScene/CompatDataSceneOrganisation";
-import { compatibilityDBPersonToDataScene } from "./DataScene/CompatDataScenePerson";
-import { compatibilityDBPlaceToDataScene } from "./DataScene/CompatDataScenePlace";
-import { compatibilityDBProjectToDataScene } from "./DataScene/CompatDataSceneProject";
-import { compatibilityDBTaxonomyToDataScene } from "./DataScene/CompatDataSceneTaxonomy";
+import { compatibilityDBEquipmentToDataScene } from "./Data/DataScene/CompatDataSceneEquipment";
+import { compatibilityDBEventToDataScene } from "./Data/DataScene/CompatDataSceneEvent";
+import { compatibilityDBOrganisationToDataScene } from "./Data/DataScene/CompatDataSceneOrganisation";
+import { compatibilityDBPersonToDataScene } from "./Data/DataScene/CompatDataScenePerson";
+import { compatibilityDBPlaceToDataScene } from "./Data/DataScene/CompatDataScenePlace";
+import { compatibilityDBProjectToDataScene } from "./Data/DataScene/CompatDataSceneProject";
+import { compatibilityDBTaxonomyToDataScene } from "./Data/DataScene/CompatDataSceneTaxonomy";
 
 import { CompatibleOntologiesEnum } from "./types";
-import SchemaOrgMetaData from "./SchemaOrg/SchemaOrg";
-import ArtsdataMetaData from "./ArtsData/Artsdata";
-import DataSceneMetaData from "./DataScene/DataScene";
+import SchemaOrgMetaData from "./Data/SchemaOrg/SchemaOrg";
+import ArtsdataMetaData from "./Data/ArtsData/Artsdata";
+import DataSceneMetaData from "./Data/DataScene/DataScene";
 
 export const compatibilityData = {
     [CompatibleOntologiesEnum.Schemaorg]: {

@@ -1,12 +1,11 @@
-import { CompatibilityOntology } from "../types";
+import { CompatibilityOntology } from "../../types";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
-export const compatibilityDBOrganisationToArtsData: CompatibilityOntology = {
-    [EntityTypesEnum.organisation]: {
-        "@type": "Organization",
-        description:
-            "Sous classe de http://schema.org/Thing. Dans le modèle de donnée d'Artsdata, schema:Organization est aussi une sous classe de dbo:Agent.",
-        external: "https://docs.artsdata.ca/classes/organization.html",
+export const compatibilityDBProjectToArtsData: CompatibilityOntology = {
+    [EntityTypesEnum.project]: {
+        "@type": "",
+        description: "",
+        external: "",
         compatibility: {
             name: {
                 fields: ["name"],
@@ -20,6 +19,14 @@ export const compatibilityDBOrganisationToArtsData: CompatibilityOntology = {
                 fields: ["shortDescription"],
                 export: (doc) => doc.shortDescription,
             },
+            /* creator: {
+            fields: ["entityInCharge"],
+            export: (doc) => doc.entityInCharge,
+        }, */
+            /* producer: {
+            fields: ["producer"],
+            export: (doc) => doc.producer,
+        }, */
             /* "location": {
             fields: ["location"],
             export: (doc) => doc.map(), //map les locations

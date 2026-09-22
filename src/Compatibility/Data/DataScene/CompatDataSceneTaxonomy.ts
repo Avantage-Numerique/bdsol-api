@@ -1,4 +1,4 @@
-import { CompatibilityOntology } from "../types";
+import { CompatibilityOntology } from "../../types";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBTaxonomyToDataScene: CompatibilityOntology = {
