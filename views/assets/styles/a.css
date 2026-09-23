@@ -1,3 +1,12 @@
 a {
     color: var(--primary-dark);
 }
+
+.external-link,
+a[rel="external"] {
+    &::after {
+        font-family: "Line Awesome Free";
+        content: " \f35d"; /* line-awesome la-external-link-alt */
+        font-weight: 900;
+    }
+}

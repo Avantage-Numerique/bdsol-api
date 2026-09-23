@@ -6,15 +6,18 @@ nav.nav-compatibility ul {
     margin: 0;
     padding: 0;
 }
+
 nav.nav-compatibility.small {
     font-size: 0.85rem;
 }
+
 nav.nav-compatibility.vertical {
     ul {
         flex-direction: column;
         align-items: start;
         justify-content: center;
     }
+
     ul li {
         padding: 0.3rem 0;
     }
@@ -33,15 +36,20 @@ nav.breadcrumbs ul {
     justify-content: start;
     margin: 0;
     padding: 0;
+
     li {
+        display: inline-flex;
+        align-items: center;
         list-style: none;
         margin: 0;
     }
+
     span {
         border-radius: calc(var(--default-radius) / 3);
         padding: 0.2em 0.5em;
         background-color: var(--gray-light);
     }
+
     a,
     a:active,
     a:focus,
@@ -50,15 +58,17 @@ nav.breadcrumbs ul {
         padding: 0.2em 0.5em;
         background-color: var(--primary-light);
     }
+
     a:hover {
         background-color: var(--primary);
         color: var(--light);
     }
+
     font-size: 0.85rem;
 }
 
 nav.breadcrumbs ul li + li:before {
-    padding: 8px;
+    padding: 0.5em;
     color: black;
-    content: "/\00a0";
+    content: "/";
 }

@@ -164,7 +164,7 @@ class CompatibilityController {
 
         const entityType = Str.firstCharUpper(entity);
 
-        const title: string = `Compatibilité ontologique d'AVNU - ${entityType}`;
+        const title: string = `${entityType} - Compatibilité ontologique d'AVNU`;
         const metaTitle: string = `${entityType} &rarr; Compatibilité ontologique d'AVNU ${config.appName}`;
 
         return await index.render({

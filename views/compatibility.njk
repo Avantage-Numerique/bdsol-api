@@ -11,7 +11,7 @@
         <nav class="breadcrumbs default-padding-y">
             <ul>
                 <li>
-                    <a class="btn" href="/" title={{ api.name }}>
+                    <a class="btn" href="/" title="{{ api.name }}">
                         <i class="las la-home"></i>
                     </a>
                 </li>
@@ -34,7 +34,7 @@
 
             <p>
                 <h3 id="{{ ontologyKey }}">
-                    <a href="{{ ontologyMeta.referentialUrl }}" target="_blank">{{ ontologyMeta.label }}</a>
+                    <a href="{{ ontologyMeta.referentialUrl }}" target="_blank" class='external-link' rel='external'>{{ ontologyMeta.label }}</a>
                 </h3>
             </p>
 
@@ -65,7 +65,7 @@
 
                             <td>
                                 {% if entity.external %}
-                                    <a href="{{ entity.external }}" target="_blank">{{ entity["@type"] or entityKey }}</a>
+                                    <a href="{{ entity.external }}" target="_blank" class='external-link' rel='external'>{{ entity["@type"] or entityKey }}</a>
                                 {% else %}
                                     {{ entity["@type"] or entityKey }}
                                 {% endif %}
