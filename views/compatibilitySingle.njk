@@ -29,15 +29,14 @@
         {% if item %}
 
             <h1>{{ title | safe }}</h1>
-
+            <p>Les tableaux ci-dessous présentent les propriétés ontologiques externes compatibles avec le type "{{ entity }}"" de la base de données d'AVNU.</p>
             {% for ontologyName, ontology in item %}
 
                 <h2 id="{{ ontologyName }}">
-                    {{ metaItems[ontologyName].label }}
-                    {% if ontology["@type"] %}
-                        - {{ ontology["@type"] }}
-                    {% endif %}
+                    {{ ontology["@type"] }} - {{ metaItems[ontologyName].label }}
                 </h2>
+                <code>"@context": "{{ metaItems[ontologyName].contextUrl }}"</code><br/>
+                <code>"@type": "{{ ontology["@type"] }}"</code>
 
                 <p>{{ ontology.description or "" }}</p>
 
@@ -45,7 +44,7 @@
 
                     <thead>
                         <tr>
-                            <th>Nom de la propriété</th>
+                            <th>Nom de la propriété externe</th>
                             <th>Description</th>
                         </tr>
                     </thead>

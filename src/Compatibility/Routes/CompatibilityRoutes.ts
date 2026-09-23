@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import CompatibilityController from "@src/Compatibility/Controllers/CompatibilityController";
 import { refData } from "@ref/Data/data";
 import { PublicRoute } from "@src/Pages/Types/PublicRoute";
+import { ontologiesMetaData } from "../CompatibilityObject";
 
 class CompatibilityRoutes {
     public routerInstance: express.Router;
@@ -55,6 +56,11 @@ class CompatibilityRoutes {
             url: this.baseUrl + req.url,
             name: "Compatibility",
         } as PublicRoute;
+
+        if ("json" in req.query) {
+            res.set("Content-Type", "application/json");
+            return res.status(StatusCodes.OK).send({ ontologiesMetaData });
+        }
 
         res.set("Content-Type", "text/html");
         return res

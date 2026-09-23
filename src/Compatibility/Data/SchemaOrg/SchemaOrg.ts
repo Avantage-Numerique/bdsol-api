@@ -3,7 +3,7 @@ import { CompatibleOntologiesEnum, OntologyMetaData } from "../../types";
 const SchemaOrgMetaData: OntologyMetaData = {
     referentialUrl: "https://schema.org",
     ontologyUrl: "https://schema.org",
-    contextUrl: "https://schema.org",
+    contextUrl: "http://schema.org",
     prefix: "schema",
     name: CompatibleOntologiesEnum.Schemaorg,
     label: "Schema.org",

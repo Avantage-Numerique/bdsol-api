@@ -56,7 +56,7 @@ class CompatibilityController {
 
         const index = new PublicTemplate("compatibility"); //tempalte have already a default in the EmailContent.Prepare.
 
-        const title: string = `Compatibilité`;
+        const title: string = `Compatibilités ontologiques supportées`;
 
         const entityRoute = `${this._baseRoute}`;
 
@@ -164,8 +164,8 @@ class CompatibilityController {
 
         const entityType = Str.firstCharUpper(entity);
 
-        const title: string = `Compatibilité - ${entityType}`; // <small><code>${entityData?.ontologyProperty}</code></small>`Référentiel de ${config.appName} &rarr; <code>${entityRoute}</code>`;
-        const metaTitle: string = `${entityType} &rarr; Référentiel ${config.appName}`;
+        const title: string = `Compatibilité ontologique d'AVNU - ${entityType}`;
+        const metaTitle: string = `${entityType} &rarr; Compatibilité ontologique d'AVNU ${config.appName}`;
 
         return await index.render({
             context: {
