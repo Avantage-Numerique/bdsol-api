@@ -1,6 +1,7 @@
 import { CompatibilityOntology } from "../../types";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
+//No type compatibility
 export const compatibilityDBEquipmentToDataScene: CompatibilityOntology = {
     [EntityTypesEnum.equipment]: {
         "@type": "",

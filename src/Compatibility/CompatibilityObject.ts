@@ -49,7 +49,7 @@ export const compatibilityData = {
     },
 
     [CompatibleOntologiesEnum.DataScene]: {
-        ...compatibilityDBEquipmentToDataScene,
+        //...compatibilityDBEquipmentToDataScene,
         ...compatibilityDBEventToDataScene,
         ...compatibilityDBOrganisationToDataScene,
         ...compatibilityDBPersonToDataScene,

@@ -1,13 +1,27 @@
+import { SameAsSchema } from "@src/Database/Schemas/SameAsSchema";
 import { CompatibilityOntology } from "../../types";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBEventToDataScene: CompatibilityOntology = {
     [EntityTypesEnum.event]: {
-        "@type": "Performance",
+        "@type": "Show",
         description:
-            "Décrit une représentation, qui est un événement unique associé à un lieu, une date et une heure, et qui peut inclure des informations sur les artistes, les œuvres présentées, et d'autres détails pertinents.",
-        external: "https://documentation.datascene.ca/references/performance/",
+            "La classe centrale du référentiel. Elle permet de documenter ce qui relève du spectacle au sens d'œuvre mise en scène. Par contraste, cela exclut donc les éléments descriptifs des représentations.",
+        external: "https://documentation.datascene.ca/references/show/",
         compatibility: {
+            type: {
+                fields: [],
+                export: (doc) => "Show",
+                description: "-",
+            },
+            identifier: {
+                fields: ["uri", "sameAs"],
+                export: (doc) => [
+                    doc.uri,
+                    ...doc.sameAs.map((elem: SameAsSchema) => elem.url).filter((v: string) => v),
+                ],
+                description: "Identification du spectacle, avec tous les identifiants connus.",
+            },
             name: {
                 fields: ["name"],
                 export: (doc) => doc.name,
@@ -18,30 +32,15 @@ export const compatibilityDBEventToDataScene: CompatibilityOntology = {
             },
             description: {
                 fields: ["description"],
-                export: (doc) => doc.description,
+                export: (doc) => [{ lang: "fr", value: doc.description }],
+                description: "Description du spectacle",
             },
             shortDescription: {
                 fields: ["shortDescription"],
                 export: (doc) => doc.shortDescription,
+                description: "Description résumée du spectacle.",
             },
-            //organizer?
-            /* hasMembers: {
-            fields: ["team"],
-            export: (doc) => doc.team.map(),//Map member
-        }, */
-            startDate: {
-                fields: ["startDate"],
-                export: (doc) => doc.startDate,
-            },
-            endDateTime: {
-                fields: ["endDate"],
-                export: (doc) => doc.endDate,
-            },
-            /* media: {
-            fields: ["mainImage"],
-            export: (doc) => doc.mainImage,
-        }, */
-            //location?
+            //hasPerformance serait compatible avec le schedule (Représentation (Performance))
         },
     },
 };

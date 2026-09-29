@@ -1,9 +1,9 @@
 import { CompatibleOntologiesEnum, OntologyMetaData } from "../../types";
 
 const DataSceneMetaData: OntologyMetaData = {
-    referentialUrl: "https://documentation.datascene.ca/references",
-    ontologyUrl: "https://documentation.datascene.ca",
-    contextUrl: "https://documentation.datascene.ca",
+    referentialUrl: "https://documentation.datascene.ca/modele/",
+    ontologyUrl: "https://documentation.datascene.ca/modele/",
+    contextUrl: "https://documentation.datascene.ca/references/context.json",
     prefix: "ds",
     name: CompatibleOntologiesEnum.DataScene,
     label: "Datascene",
