@@ -1,6 +1,42 @@
 {
     "versions": [
         {
+            "label": "Version de maintenance, seo et ajustements",
+            "value": "1.0.4",
+            "date": "2026-09-25",
+            "description": "Ajustement visuel+seo, début des ajouts pour le json+ld dynamique, statistiques de la bd et réglage de bogues.",
+            "notes": [
+                {
+                    "value": "WIP pour le json+ld dynamique."
+                },
+                {
+                    "value": "Changement visuels dans le pied de page."
+                },
+                {
+                    "value": "Ajout d'une section de consultation des statistiques de la bd pour le suivi."
+                },
+                {
+                    "value": "Mise à jour de routine et réglage de bogues."
+                },
+                {
+                    "value": "<strong>Équipe</strong>",
+                    "additionnalClasses": "pt-3 pb-2"
+                },
+                {
+                    "value": "<strong>Frédéric Rivard</strong>, Backend et front-end"
+                },
+                {
+                    "value": "<strong>Jeanne Perrin</strong> web design et UX"
+                },
+                {
+                    "value": "<strong>Jules Luzy-Riopel</strong>, Backend, front-end"
+                },
+                {
+                    "value": "<strong>Marc-André Martin</strong>, Backend, front-end et responsable du développement"
+                }
+            ]
+        },
+        {
             "label": "Ontologie AVNU et son référentiel + Datascène",
             "value": "1.0.3",
             "date": "2026-04-30",
