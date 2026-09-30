@@ -44,13 +44,20 @@
                     {% endif %}
                     {{ metaItems[ontologyName].label }}
                 </h2>
+
                 {% if ontology.external != "" %}
-                    <a href="{{ ontology.external }}" target="_blank" class='external-link' rel='external'>{{ ontology.external}}</a><br/>
+                    <p>
+                        <a href="{{ ontology.external }}" target="_blank" class='external-link' rel='external'>{{ ontology.external }}</a>
+                    </p>
                 {% endif %}
-                <code>"@context": "{{ metaItems[ontologyName].contextUrl }}"</code><br/>
-                <code>"@type": "{{ ontology["@type"] }}"</code>
+
+                <p>
+                    <code>"@context": "{{ metaItems[ontologyName].contextUrl }}"</code><br/>
+                    <code>"@type": "{{ ontology["@type"] }}"</code>
+                </p>
 
                 <p>{{ ontology.description or "" }}</p>
+
                 <table class="ref-single">
 
                     <thead>

@@ -11,10 +11,12 @@ export const compatibilityDBPlaceToDataScene: CompatibilityOntology = {
             type: {
                 fields: [],
                 export: (doc) => "Place",
+                description: "Constante",
             },
             virtualPlace: {
                 fields: [],
                 export: (doc) => false,
+                description: "Pas d'équivalent, faux par défaut.",
             },
             identifier: {
                 fields: ["uri"],
@@ -32,14 +34,52 @@ export const compatibilityDBPlaceToDataScene: CompatibilityOntology = {
                 export: (doc) => [{ lang: "fr", value: doc.description }],
                 description: "Énumération de textes longs",
             },
-            streetAddress: {
-                fields: ["address"],
-                export: (doc) => doc.address,
+            address: {
+                fields: ["address", "city", "region", "mrc", "province", "postalCode", "country"],
+                export: (doc) => ({
+                    streetAddress: doc.address,
+                    addressLocality: `${doc.city}, ${doc.region} (${doc.mrc})`, // Nom de la ville. Peut aussi contenir le nom de la municipalité ou de la localité.
+                    addressRegion: doc.province, // QC
+                    addressCountry: doc.country, // CAN
+                    postalCode: doc.postalCode,
+                }),
+                description: "Sert à décrire un lieu, typiquement associé à une représentation.",
             },
-            addressLocality: {
-                fields: ["city"],
-                export: (doc) => doc.city,
+            mainEntityOfPage: {
+                fields: ["uri"],
+                export: (doc) => ({
+                    type: "WebPage",
+                    url: doc.uri,
+                    // inLanguage: "fr", // code de langue ISO 639-1, facultatif
+                }),
+                description: "URL vers des pages web donnant plus d'information sur le lieu.",
             },
+
+            // pas d'équivalent dans AVNU
+            // placeAccessibility: {
+            //     fields: [],
+            //     export: (doc) => [],
+            //     description:
+            //         "Caractéristiques d'accessibilité universelle pour le lieu. Des caractéristiques supplémentaires pourraient être documentées pour la ou les salles.",
+            // },
+
+            // pas d'équivalent dans AVNU
+            // hasRooms: {
+            //     fields: [],
+            //     export: (doc) => [],
+            //     description:
+            //         "Énumération des salles présentes dans le lieu. Recommandé pour les lieux contenant plusieurs salles, ou pour documenter des informations associés à la classe Salle (par exemple, les configurations possibles) dans un lieu avec une seule salle.",
+            // },
+
+            geoCoordinates: {
+                fields: ["longitude", "latitude"],
+                export: (doc) => ({
+                    longitude: doc.longitude,
+                    latitude: doc.latitude,
+                }),
+                description: "Coordonnées géographiques",
+            },
+
             /* media: {
                 fields: ["mainImage"],
                 export: (doc) => doc.mainImage,

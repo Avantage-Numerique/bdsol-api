@@ -3,6 +3,7 @@ import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
 export const compatibilityDBTaxonomyToDataScene: CompatibilityOntology = {
     [EntityTypesEnum.taxonomy]: {
+        // Term ? https://documentation.datascene.ca/references/term/
         "@type": "",
         description: "",
         external: "",

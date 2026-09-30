@@ -39,7 +39,7 @@ export const compatibilityData = {
     },
 
     [CompatibleOntologiesEnum.Artsdata]: {
-        ...compatibilityDBEquipmentToArtsData,
+        // ...compatibilityDBEquipmentToArtsData,
         ...compatibilityDBEventToArtsData,
         ...compatibilityDBOrganisationToArtsData,
         ...compatibilityDBPersonToArtsData,
