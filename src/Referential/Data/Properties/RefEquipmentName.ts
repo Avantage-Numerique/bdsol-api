@@ -1,6 +1,6 @@
-import { RefProperty } from "../types";
+import { RefProperty } from "@ref/Data/types";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
-import { createPrimitiveUrl, createRefType } from "../utils";
+import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
 
 export const refEquipmentName: RefProperty = {
     field: "equipmentName",

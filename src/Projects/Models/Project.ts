@@ -19,6 +19,9 @@ import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
 class Project extends AbstractModel {
     /** @protected @static Singleton instance */
     protected static _instance: Project;
+    private constructor() {
+        super();
+    }
 
     /** @public @static Model singleton instance constructor */
     public static getInstance(doIndexes = true): Project {
@@ -210,11 +213,10 @@ class Project extends AbstractModel {
             domains: document.domains ?? undefined,
             context: document.context ?? "",
             equipment: document.equipment ?? [],
-            meta: document.meta ?? undefined,
+            meta: document.meta ?? {},
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
-            _generated: generateEntityContent(document),
         };
     }
 
@@ -258,6 +260,8 @@ class Project extends AbstractModel {
      */
     public registerEvents(): void {
         this.schema.pre("find", function () {
+            if (this.getOptions().skipPopulate) return;
+
             taxonomyPopulate(this, "skills");
             taxonomyPopulate(this, "domains.domain");
             //middlewarePopulateProperty(this, 'equipment');
@@ -271,6 +275,8 @@ class Project extends AbstractModel {
         });
 
         this.schema.pre("findOne", function () {
+            if (this.getOptions().skipPopulate) return;
+
             taxonomyPopulate(this, "skills");
             taxonomyPopulate(this, "domains.domain");
             middlewarePopulateProperty(this, "equipment");

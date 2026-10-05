@@ -11,6 +11,9 @@ import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 class Equipment extends AbstractModel {
     /** @protected @static Singleton instance */
     protected static _instance: Equipment;
+    private constructor() {
+        super();
+    }
 
     /** @public @static Model singleton instance constructor */
     public static getInstance(doIndexes = true): Equipment {
@@ -169,12 +172,14 @@ class Equipment extends AbstractModel {
     public registerEvents(): void {
         //for basic information, used in a
         this.schema.pre("find", function () {
+            if (this.getOptions().skipPopulate) return;
             taxonomyPopulate(this, "equipmentType");
             middlewarePopulateProperty(this, "mainImage");
             //populateUser(this, "meta.requestedBy");
             //populateUser(this, "meta.lastModifiedBy");
         });
         this.schema.pre("findOne", function () {
+            if (this.getOptions().skipPopulate) return;
             taxonomyPopulate(this, "equipmentType");
             middlewarePopulateProperty(this, "mainImage");
             populateUser(this, "meta.requestedBy");

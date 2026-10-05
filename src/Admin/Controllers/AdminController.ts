@@ -6,7 +6,7 @@ class AdminController {
     private static _instance: AdminController;
     name: string = "AdminController";
 
-    constructor() {}
+    private constructor() {}
 
     /**
      * @public @static @method getInstance Create the singleton instance if not existing

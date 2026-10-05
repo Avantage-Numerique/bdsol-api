@@ -18,7 +18,7 @@ class UsersController extends AbstractController {
     /** @public Model */
     entity: User;
 
-    constructor() {
+    private constructor() {
         super();
         this.entity = User.getInstance();
         this.service = UsersService.getInstance(this.entity);

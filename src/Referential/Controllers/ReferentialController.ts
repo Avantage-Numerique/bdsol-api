@@ -3,7 +3,9 @@ import { getTemplateBaseData } from "@src/Templates/Emails/EmailData";
 import PublicTemplate from "@src/Templates/PublicTemplate";
 import DefaultEmailTheme from "@src/Templates/Themes/DefaultEmailTheme";
 import { refData } from "@ref/Data/data";
-import { getAllUniquePrimitives, mapEntityByURL } from "@ref/Data/utils";
+import { getAllUniquePrimitives } from "@ref/Data/utils";
+import { PublicRoute } from "@src/Pages/Types/PublicRoute";
+import { RefProperty } from "@ref/Data/types";
 
 class ReferentialController {
     /** @private @static Singleton instance */
@@ -14,13 +16,19 @@ class ReferentialController {
     protected _baseRoute: string = "/ref";
 
     private constructor() {
-        this._routes = mapEntityByURL();
+        this._routes = this.mapRefRoutes();
     }
 
-    private _getReferentialParams() {
-        return {
-            templateData: getTemplateBaseData(),
-        };
+    private mapRefRoutes() {
+        const routesMap: Map<string, RefProperty> = new Map();
+
+        Object.values(refData)
+            .flatMap((x) => Object.values(x))
+            .forEach((v) => {
+                if (v.url) routesMap.set(v.url.toLowerCase(), v);
+            });
+
+        return routesMap;
     }
 
     /**
@@ -34,7 +42,7 @@ class ReferentialController {
         return ReferentialController._instance;
     }
 
-    public async referentialLayout(): Promise<string> {
+    public async referentialLayout(route: PublicRoute = {}): Promise<string> {
         const baseData = getTemplateBaseData();
 
         const index = new PublicTemplate("referential"); //tempalte have already a default in the EmailContent.Prepare.
@@ -54,7 +62,9 @@ class ReferentialController {
                 baseRoute: "/ref",
 
                 items: refData,
-
+                route: {
+                    ...route,
+                },
                 meta: {
                     title: `${metaTitle}`,
                     // description: `${body}`,
@@ -64,7 +74,7 @@ class ReferentialController {
         });
     }
 
-    public async referentialSingleEntityLayout(entity: string): Promise<string> {
+    public async referentialSingleEntityLayout(entity: string, route: PublicRoute = {}): Promise<string> {
         const baseData = getTemplateBaseData();
 
         const index = new PublicTemplate("referentialSingle"); //tempalte have already a default in the EmailContent.Prepare.
@@ -90,6 +100,9 @@ class ReferentialController {
                 item: entityData,
                 entity: entity,
 
+                route: {
+                    ...route,
+                },
                 meta: {
                     title: `${metaTitle}`,
                     // description: `${body}`,
@@ -98,7 +111,7 @@ class ReferentialController {
             },
         });
     }
-    public async referentialVocabulariesLayout(entity?: string): Promise<string> {
+    public async referentialVocabulariesLayout(entity?: string, route: PublicRoute = {}): Promise<string> {
         const baseData = getTemplateBaseData();
 
         const index = new PublicTemplate("referentialSingleVocabulary"); //tempalte have already a default in the EmailContent.Prepare.
@@ -124,6 +137,10 @@ class ReferentialController {
                 entity: entity,
                 entityRoute: entityRoute,
 
+                route: {
+                    ...route,
+                },
+
                 meta: {
                     title: `${metaTitle}`,
                     // description: `${body}`,
@@ -133,7 +150,7 @@ class ReferentialController {
         });
     }
 
-    public async referentialPrimitivesLayout(): Promise<string> {
+    public async referentialPrimitivesLayout(route: PublicRoute = {}): Promise<string> {
         const baseData = getTemplateBaseData();
 
         const index = new PublicTemplate("referentialPrimitives"); //tempalte have already a default in the EmailContent.Prepare.
@@ -152,6 +169,9 @@ class ReferentialController {
 
                 items: getAllUniquePrimitives(Object.values(refData).flatMap((item) => Object.values(item))),
 
+                route: {
+                    ...route,
+                },
                 meta: {
                     title: `${metaTitle}`,
                     // description: `${body}`,

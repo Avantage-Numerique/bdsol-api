@@ -1,5 +1,5 @@
 //eventAttendanceMode
-import { RefVocabulary } from "../types";
+import { RefVocabulary } from "@ref/Data/types";
 import EnumHelper from "@src/Helpers/EnumHelper";
 import { ProjectContextEnum } from "@src/Projects/ProjectContextEnum";
 

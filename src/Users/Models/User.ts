@@ -9,6 +9,9 @@ import { UsersService } from "../Services/UsersService";
 export class User extends AbstractModel {
     /** @protected @static Singleton instance of model User */
     protected static _instance: User;
+    private constructor() {
+        super();
+    }
 
     /** @public @static Model singleton instance constructor */
     public static getInstance(): User {

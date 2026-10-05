@@ -22,6 +22,7 @@ class SearchResults {
     public equipmentModel: any;
 
     public configs: any;
+    private constructor() {}
 
     //Singleton
     public static _instance: SearchResults;

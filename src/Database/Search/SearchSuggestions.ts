@@ -17,6 +17,7 @@ class SearchSuggestions {
     public searchResults_instance: SearchResults;
     //Singleton
     public static _instance: SearchSuggestions;
+    private constructor() {}
     public static getInstance(): SearchSuggestions {
         if (SearchSuggestions._instance === undefined) {
             SearchSuggestions._instance = new SearchSuggestions();

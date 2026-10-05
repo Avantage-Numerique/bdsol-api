@@ -1,6 +1,6 @@
-import { RefProperty } from "../types";
-import { createRefType } from "../utils";
-import { refTaxonomyLink } from "../RelationLinks/RefTaxonomyLink";
+import { RefProperty } from "@ref/Data/types";
+import { createRefType } from "@ref/Data/utils";
+import { refTaxonomyLink } from "@ref/Data/RelationLinks/RefTaxonomyLink";
 import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 import { refOrder } from "@ref/Data/Properties/RefOrder";
 

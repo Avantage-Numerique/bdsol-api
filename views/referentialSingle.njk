@@ -46,7 +46,7 @@
                                     <a href="{{ compatItem.documentationUrl }}" target="_blank" class="external code">{{ compatItem.mapping.externalField }}<i class="la la-external-link"></i></a>
                                     <span>dans l'ontologie</span>
                                     <label>
-                                        <i class="las {{ compatItem.externalSource.icon }}"></i> {{ compatItem.externalSource.name }}
+                                        <i class="las {{ compatItem.externalSource.icon }}"></i> {{ compatItem.externalSource.label }}
                                     </label>
                                 </li>
                             {% endif %}
@@ -131,7 +131,7 @@
                                             </div>
                                         {% else %}
                                             <div>
-                                                {{ compatItem.externalSource.name }}
+                                                {{ compatItem.externalSource.label }}
                                             </div>
 
                                             <div>

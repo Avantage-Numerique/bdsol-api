@@ -49,6 +49,7 @@ export type RefProperty = RefPropertyPrimitive | RefPropertyReference | RefPrope
 export type RefCompatibility = {
     externalSource: {
         name: string;
+        label: string;
         description?: string;
         sparqlEndpoint?: string;
         icon?: string;
@@ -72,7 +73,7 @@ export type RefTypePrimitive<T extends PrimitiveType = PrimitiveType> = {
     kind: "primitive";
     name: T;
 };
-export type RefTypeReference = { kind: "reference"; targets: EntityTypesEnum[] };
+export type RefTypeReference = { kind: "reference"; targets: EntityTypesEnum[]; refPath?: string };
 export type RefTypeObject = { kind: "object" };
 export type RefType = RefTypePrimitive | RefTypeReference | RefTypeObject;
 

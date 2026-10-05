@@ -25,7 +25,7 @@ class MediasController extends AbstractController {
     /** @public Model */
     entity: Media;
 
-    constructor() {
+    private constructor() {
         super();
         this.entity = Media.getInstance();
         this.service = MediasService.getInstance(this.entity);

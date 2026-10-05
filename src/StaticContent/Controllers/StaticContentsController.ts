@@ -27,7 +27,7 @@ class StaticContentsController implements ControllerContract {
 
     public licences: any;
 
-    constructor() {
+    private constructor() {
         this.entity = StaticContent.getInstance();
         this.service = StaticContentsService.getInstance(this.entity);
         this._loadStaticData();

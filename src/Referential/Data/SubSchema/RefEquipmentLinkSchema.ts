@@ -1,6 +1,6 @@
-import { refEquipmentLink } from "../RelationLinks/RefEquipmentLink";
-import { RefProperty } from "../types";
-import { createPrimitiveUrl, createRefType } from "../utils";
+import { refEquipmentLink } from "@ref/Data/RelationLinks/RefEquipmentLink";
+import { RefProperty } from "@ref/Data/types";
+import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
 import { refOrder } from "@ref/Data/Properties/RefOrder";
 import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
 import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";

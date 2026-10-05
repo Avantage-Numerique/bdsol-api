@@ -11,6 +11,9 @@ import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
 class Place extends AbstractModel {
     /** @protected @static Singleton instance */
     protected static _instance: Place;
+    private constructor() {
+        super();
+    }
 
     /** @public @static Model singleton instance constructor */
     public static getInstance(doIndexes = true): Place {
@@ -175,11 +178,10 @@ class Place extends AbstractModel {
             country: document.country ?? "",
             latitude: document.latitude ?? "",
             longitude: document.longitude ?? "",
-            meta: document.meta ?? "",
+            meta: document.meta ?? {},
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
-            _generated: generateEntityContent(document),
         };
     }
 
@@ -192,6 +194,8 @@ class Place extends AbstractModel {
      */
     public registerEvents(): void {
         this.schema.pre("find", function () {
+            if (this.getOptions().skipPopulate) return;
+
             middlewarePopulateProperty(this, "mainImage");
 
             //populateUser(this, "meta.requestedBy");
@@ -199,6 +203,8 @@ class Place extends AbstractModel {
         });
 
         this.schema.pre("findOne", function () {
+            if (this.getOptions().skipPopulate) return;
+
             middlewarePopulateProperty(this, "mainImage");
 
             populateUser(this, "meta.requestedBy");
