@@ -3,7 +3,7 @@ import { CompatibleOntologiesEnum, OntologyMetaData } from "../../types";
 const ArtsdataMetaData: OntologyMetaData = {
     referentialUrl: "https://docs.artsdata.ca",
     ontologyUrl: "https://kg.artsdata.ca",
-    contextUrl: "https://kg.artsdata.ca",
+    contextUrl: "http://schema.org/",
     prefix: "adr",
     name: CompatibleOntologiesEnum.Artsdata,
     label: "Artsdata",

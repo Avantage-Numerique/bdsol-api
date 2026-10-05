@@ -55,7 +55,7 @@ export const compatibilityData = {
         ...compatibilityDBPersonToDataScene,
         ...compatibilityDBPlaceToDataScene,
         ...compatibilityDBProjectToDataScene,
-        ...compatibilityDBTaxonomyToDataScene,
+        //...compatibilityDBTaxonomyToDataScene,
     },
 };
 
