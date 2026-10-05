@@ -1,0 +1,162 @@
+{% extends 'default.njk' %}
+
+{% block content %}
+    <style>
+        :root {
+            --stats-total-width: 10%;
+            --label-width: calc(100% - var(--stats-total-width));
+        }
+        table {
+            th {
+                text-align: left;
+            }
+            .label {
+                width: var(--label-width);
+            }
+            .total {
+                width: var(--stats-total-width);
+            }
+        }
+    </style>
+    <div class="container">
+        {% block contentHeader %}
+            {% include "Partials/header.njk" %}
+        {% endblock %}
+
+        <nav class="breadcrumbs default-padding-y">
+            <ul>
+                <li><a class="btn" href="/" title={{ api.name }}><i class="las la-home"></i></a></li>
+                <li><span>{{ title }}</span></li>
+            </ul>
+        </nav>
+
+        <h1>{{ title }}</h1>
+        {% if filters %}
+        <nav class="horizontal">
+            {% if filters.startDate !== "" or filters.endDate !== "" %}
+                <h3>Filtres : {{ filters.startDate }} &agrave; {{ filters.endDate }} </h3>
+            {% else %}
+                <h3>Appliquer un filtre de dates</h3>
+            {% endif %}
+            <form name="filtersStats" method="GET">
+                <ul>
+                    <li><label for="startDate">De</label> <input type="date" name="startDate" /></li>
+                    <li><label for="endDate">&agrave;</label> <input type="date" name="endDate" /></li>
+                    <li><button type="submit">Filtrer</button></li>
+                </ul>
+            </form>
+        </nav>
+        {% endif %}
+        {% if stats %}
+
+            {% if stats.users %}
+                <h2>Utilisateurs</h2>
+                <table class="table">
+                    <tr>
+                        <th class="label">Collections</th>
+                        <th class="total">total</th>
+                    </tr>
+                    <tbody>
+                    {% for collection in stats.users %}
+                        <tr>
+                            <td>{{collection.name}}</td>
+                            <td>{{collection.total}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+            {% if stats.userHistories %}
+                <h2>Modifications par des utilisateurs</h2>
+                <table class="table">
+                    <tr>
+                        <th class="label">Collections</th>
+                        <th class="total">total</th>
+                    </tr>
+                    <tbody>
+                    {% for collection in stats.userHistories %}
+                        <tr>
+                            <td>{{collection.name}}</td>
+                            <td>{{collection.total}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+            {% if stats.general %}
+                <h2>Entités</h2>
+                <table class="table">
+                    <tr>
+                        <th class="label">Collections</th>
+                        <th class="total">total</th>
+                    </tr>
+                    <tbody>
+                    {% for collection in stats.general %}
+                        <tr>
+                            <td>{{collection.name}}</td>
+                            <td>{{collection.total}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+            {% if stats.taxonomies %}
+                <h2>Taxonomies</h2>
+                <table class="table">
+                    <tr>
+                        <th class="label">Taxonomie</th>
+                        <th class="total">total</th>
+                    </tr>
+                    <tbody>
+                    {% for taxonomy in stats.taxonomies %}
+                        <tr>
+                            <td>{{taxonomy.name}}</td>
+                            <td>{{taxonomy.total}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+        {% else %}
+            no stats yet.
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block contentFooter %}
+    <script>
+        const form = document.forms.filtersStats;
+
+        // Set the input type date value from query vars.
+        const current = new URLSearchParams(window.location.search);
+        for (const name of ['startDate', 'endDate']) {
+            const value = current.get(name);
+            if (value) form.elements[name].value = value;
+        }
+
+        /**
+         * On submit filter to queryvars.
+         */
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const params = new URLSearchParams(window.location.search);
+
+            for (const name of ['startDate', 'endDate']) {
+                const value = form.elements[name].value;
+                if (value) {
+                    params.set(name, value);
+                } else {
+                    params.delete(name);
+                }
+            }
+
+            // Déclenche le rechargement de la page courante
+            window.location.search = params.toString();
+        });
+    </script>
+{% endblock %}

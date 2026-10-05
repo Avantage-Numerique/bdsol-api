@@ -39,7 +39,7 @@ class JSONLDController {
      * @param contextUrl defaults to avnu context
      * @returns
      */
-    public createJsonLDForDocument(document: any, contextMode: string = "inline", contextUrl: string = "/jsonld"): any {
+    public createJsonLDForDocument(document: any, contextMode: string = "url", contextUrl: string = "/jsonld"): any {
         let entity;
 
         /**
