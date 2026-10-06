@@ -35,7 +35,7 @@ export const compatibilityData = {
         ...compatibilityDBPersonToSchemaOrg,
         ...compatibilityDBPlaceToSchemaOrg,
         ...compatibilityDBProjectToSchemaOrg,
-        ...compatibilityDBTaxonomyToSchemaOrg,
+        //...compatibilityDBTaxonomyToSchemaOrg,
     },
 
     [CompatibleOntologiesEnum.Artsdata]: {
