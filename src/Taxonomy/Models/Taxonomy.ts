@@ -104,7 +104,7 @@ class Taxonomy extends AbstractModel {
                 type: [
                     {
                         domain: {
-                            type: mongoose.Types.ObjectId,
+                            type: Schema.Types.ObjectId,
                             ref: "Taxonomy",
                             validate: function (value: mongoose.Types.ObjectId | null) {
                                 const currentDocument = this as any; // Cast 'this' to any to access the document

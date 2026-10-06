@@ -46,7 +46,7 @@ class UserHistory extends AbstractModel {
     schema: Schema = new Schema<UserHistorySchema>(
         {
             user: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 required: true,
                 //ref: 'users' //Note, c'est dans une autre bd ?
             },
@@ -68,7 +68,7 @@ class UserHistory extends AbstractModel {
                 required: true,
             },
             modifiedEntity: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 required: true,
             },
             fields: {

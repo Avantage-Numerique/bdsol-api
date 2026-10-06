@@ -28,11 +28,11 @@ export class Meta {
             },
             //The user who requested the creation
             requestedBy: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
             },
             //The last user that modified the entity
             lastModifiedBy: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 //required: true
             },
             //If need to have a message attached to it (Reason to add taxonomy, comment...)

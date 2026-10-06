@@ -9,13 +9,14 @@ import AbstractModel from "../Abstract/Model";
 import { Obj } from "../Helpers/Obj";
 import HttpError from "../Error/HttpError";
 import ApiQuery from "@database/QueryBuilder/ApiQuery";
+import { FindOneAndUpdateOptions } from "mongodb";
 
 /**
  * Give ability to query and CRUD on collections and its documents.
  * @param model any The model to be use to query in the documents.
  */
 export abstract class Service {
-    model: any; //@todo create or find the best type for this.
+    model: any; // mongoose.Model<any, {}, {}, {}, any, any, any>; //@todo create or find the best type for this.
     appModel: AbstractModel;
     //connection: any;
     state: string;
@@ -178,10 +179,14 @@ export abstract class Service {
      * @note error 11000 //error = not unique {"index":0,"code":11000,"keyPattern":{"username":1},"keyValue":{"username":"mamilidasdasdasd"}}
      */
     async update(data: any, options?: any): Promise<ApiResponseContract> {
-        const updateOptions = {
-            new: true,
-            runValidators: true,
+        const updateOptions: FindOneAndUpdateOptions = {
+            // @deprecated
+            // new: true,
             //returnOriginal: true,
+            // replaced by 'returnDocument: "after"'
+            returnDocument: "after",
+
+            runValidators: true,
             ...options,
         };
 

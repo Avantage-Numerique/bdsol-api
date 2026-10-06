@@ -121,7 +121,7 @@ class Organisation extends AbstractModel {
                 ref: "Person",
             },
             mainImage: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: "Media",
             },
             catchphrase: {

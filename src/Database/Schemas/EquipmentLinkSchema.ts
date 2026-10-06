@@ -12,7 +12,7 @@ export class EquipmentLink {
     static schema: Schema = new Schema<EquipmentLinkSchema>(
         {
             equipment: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: "Equipment",
             },
             qty: {

@@ -133,8 +133,6 @@ export abstract class BaseProvider implements DbProvider {
                           dbName: this._databaseName,
                           connectTimeoutMS: 1000,
                           socketTimeoutMS: 1000,
-                          useUnifiedTopology: true,
-                          useNewUrlParser: true,
                       }
                     : {};
             if (config.db.addAuthSource) {

@@ -100,7 +100,7 @@ class Media extends AbstractModel {
                 unique: true,
             },
             entityId: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 refPath: "entityType",
                 //required: true
             },
@@ -110,7 +110,7 @@ class Media extends AbstractModel {
                 enum: EntityTypesEnum,
             },
             uploadedBy: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 //required: true
             },
             dbStatus: {

@@ -274,7 +274,8 @@ class MongoDBMetricsMonitor {
 
         try {
             if (!dataConnection) throw Error("MongoDB connection not found");
-            if (dataConnection.readyState !== 1) throw Error("MongoDB connection not established");
+            if (dataConnection.readyState !== 1 || !dataConnection.db)
+                throw Error("MongoDB connection not established");
 
             // Get database admin stats
             const adminDb = dataConnection.db.admin();
@@ -619,6 +620,8 @@ class MongoDBMetricsMonitor {
      */
     public async performHealthCheck(): Promise<HealthCheckResult> {
         try {
+            if (!mongoose.connection.db) throw new Error("mongoose.connection.db does not exist!");
+
             const start = Date.now();
             await mongoose.connection.db.admin().ping();
             const pingTime = Date.now() - start;

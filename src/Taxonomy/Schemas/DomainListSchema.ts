@@ -11,7 +11,7 @@ export class DomainList {
     static schema: Schema = new Schema<DomainListSchema>(
         {
             domain: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: "Taxonomy",
             },
             subMeta: {
