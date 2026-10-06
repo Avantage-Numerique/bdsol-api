@@ -1,13 +1,14 @@
 import { CompatibilityOntology } from "../../types";
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
 
+//Doesn't map to anything
 export const compatibilityDBProjectToArtsData: CompatibilityOntology = {
     [EntityTypesEnum.project]: {
         "@type": "",
         description: "",
         external: "",
         compatibility: {
-            name: {
+            /*name: {
                 fields: ["name"],
                 export: (doc) => doc.name,
             },
@@ -18,7 +19,7 @@ export const compatibilityDBProjectToArtsData: CompatibilityOntology = {
             disambiguatingDescription: {
                 fields: ["shortDescription"],
                 export: (doc) => doc.shortDescription,
-            },
+            }, */
             /* creator: {
             fields: ["entityInCharge"],
             export: (doc) => doc.entityInCharge,

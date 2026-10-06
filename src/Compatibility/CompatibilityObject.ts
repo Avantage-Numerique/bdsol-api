@@ -44,8 +44,8 @@ export const compatibilityData = {
         ...compatibilityDBOrganisationToArtsData,
         ...compatibilityDBPersonToArtsData,
         ...compatibilityDBPlaceToArtsData,
-        ...compatibilityDBProjectToArtsData,
-        ...compatibilityDBTaxonomyToArtsData,
+        //...compatibilityDBProjectToArtsData,
+        //...compatibilityDBTaxonomyToArtsData,
     },
 
     [CompatibleOntologiesEnum.DataScene]: {

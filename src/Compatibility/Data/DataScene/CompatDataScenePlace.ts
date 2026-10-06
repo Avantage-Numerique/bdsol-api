@@ -37,6 +37,7 @@ export const compatibilityDBPlaceToDataScene: CompatibilityOntology = {
             address: {
                 fields: ["address", "city", "region", "mrc", "province", "postalCode", "country"],
                 export: (doc) => ({
+                    type: "PostalAddress",
                     streetAddress: doc.address,
                     addressLocality: `${doc.city}, ${doc.region} (${doc.mrc})`, // Nom de la ville. Peut aussi contenir le nom de la municipalité ou de la localité.
                     addressRegion: doc.province, // QC

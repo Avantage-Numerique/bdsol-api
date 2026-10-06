@@ -9,11 +9,19 @@ export const compatibilityDBPersonToArtsData: CompatibilityOntology = {
         compatibility: {
             name: {
                 fields: ["firstName", "lastName"],
-                export: (doc) => doc.firstName + " " + doc.lastName,
+                export: (doc) => [{ "@value": doc.firstName + " " + doc.lastName, "@language": "fr" }],
             },
             alternateName: {
                 fields: ["nickname"],
                 export: (doc) => doc.nickname,
+            },
+            url: {
+                fields: ["url"],
+                export: (doc) => doc.contactPoint?.website?.url,
+            },
+            sameAs: {
+                fields: ["sameAs"],
+                export: (doc) => doc.sameAs?.map((elem: any) => elem.url),
             },
             description: {
                 fields: ["description"],
