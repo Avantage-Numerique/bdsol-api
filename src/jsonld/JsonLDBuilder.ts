@@ -12,7 +12,7 @@ export class JSONLDBuilder {
         const entityCompatibility = compatibilityData[compatibleOntology][doc.type];
 
         if (!entityCompatibility) {
-            return {};
+            return {}; //Pourrait retourner une erreur aucune compatibilité
         }
 
         const jsonld: Record<string, unknown> = {};
@@ -41,11 +41,12 @@ export class JSONLDBuilder {
         depth: number
     ): void {
         if (depth == 1) {
-            jsonld["@context"] = ontologiesMetaData[compatibleOntology].ontologyUrl;
+            //Le context qui défini le type et ses propriétés
+            jsonld["@context"] = ontologiesMetaData[compatibleOntology].contextUrl;
         }
-
-        jsonld["@type"] = compatibilityData[compatibleOntology][doc.type]?.["@type"] ?? doc.type; //doc.type => quelle type de l'ontologie cible
-        jsonld["@id"] = doc.uri;
+        //@type est le type qui est décrit dans le @context
+        jsonld["@type"] = compatibilityData[compatibleOntology][doc.type]?.["@type"] ?? doc.type;
+        jsonld["@id"] = doc.uri; //Notre URI décrivant la ressource
     }
 
     //Logic of edge case if we should map value
