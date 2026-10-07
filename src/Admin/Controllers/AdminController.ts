@@ -81,14 +81,14 @@ nav ul li a {
             const segments: Array<any> = route.path.split("/");
             segments.shift(); //remove the base empty string before the base /.
 
-            const basePathName: string = `${segments[0]}` ?? "notset";
+            const basePathName: string = `${segments[0] || "notset"}`;
             const pathColor: string = this.getRandomColor();
 
             if (!basesRoutesColors.get(basePathName)) {
                 basesRoutesColors.set(basePathName, pathColor);
             }
 
-            const color: string = basesRoutesColors.get(basePathName) ?? "#FF0000";
+            const color: string = basesRoutesColors.get(basePathName) || "#FF0000";
             const border: string = "2px solid " + color + ";";
             routesRender += "<li style='padding: 1rem; margin:2rem; border-left:" + border + "'>";
             routesRender += this.methodToHtml(
