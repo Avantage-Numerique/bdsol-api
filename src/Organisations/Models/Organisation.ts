@@ -45,8 +45,7 @@ class Organisation extends AbstractModel {
 
     public registerIndexes(): void {
         //Indexes
-        this.schema.index({ "offers.skills": 1 });
-        this.schema.index({ "team.member": 1 });
+        this.schema.index({ "offers.skills": 1, "team.member": 1, uri: 1 });
         this.schema.index(
             { name: "text", description: "text", slug: "text" },
             {

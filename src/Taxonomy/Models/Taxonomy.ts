@@ -37,6 +37,7 @@ class Taxonomy extends AbstractModel {
 
     public registerIndexes(): void {
         //Indexes
+        Taxonomy._instance.schema.index({ uri: 1 });
         Taxonomy._instance.schema.index({ category: 1 });
         Taxonomy._instance.schema.index({ name: 1, category: 1 }, { unique: true });
         Taxonomy._instance.schema.index(

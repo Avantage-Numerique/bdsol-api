@@ -53,7 +53,7 @@ class Person extends AbstractModel {
 
     public registerIndexes(): void {
         //Indexes
-        Person._instance.schema.index({ "occupations.skills": 1 });
+        Person._instance.schema.index({ "occupations.skills": 1, uri: 1 });
         Person._instance.schema.index(
             {
                 firstName: "text",

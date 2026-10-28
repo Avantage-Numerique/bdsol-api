@@ -47,8 +47,9 @@ class Event extends AbstractModel {
 
     public registerIndexes(): void {
         //Indexes
+        Event._instance.schema.index({ uri: 1 });
         Event._instance.schema.index(
-            { name: "text", alternateNate: "text", slug: "text" },
+            { name: "text", alternateNate: "text", slug: "text", uri: "text" },
             {
                 default_language: "french",
                 //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)

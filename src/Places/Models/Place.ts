@@ -41,6 +41,7 @@ class Place extends AbstractModel {
 
     public registerIndexes(): void {
         //Indexes
+        Place._instance.schema.index({ uri: 1 });
         Place._instance.schema.index(
             {
                 name: "text",

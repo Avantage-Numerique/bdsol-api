@@ -47,6 +47,7 @@ class Project extends AbstractModel {
 
     public registerIndexes(): void {
         //Indexes
+        Project._instance.schema.index({ uri: 1 });
         Project._instance.schema.index(
             { name: "text", alternateNate: "text", slug: "text", url: "text" },
             {

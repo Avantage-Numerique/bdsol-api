@@ -42,6 +42,7 @@ class Equipment extends AbstractModel {
 
     public registerIndexes(): void {
         //Indexes
+        Equipment._instance.schema.index({ uri: 1 });
         Equipment._instance.schema.index(
             { brand: "text", model: "text", label: "text", slug: "text" },
             {
