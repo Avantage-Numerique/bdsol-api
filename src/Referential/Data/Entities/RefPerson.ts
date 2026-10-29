@@ -12,6 +12,7 @@ import { refMeta } from "../SubSchema/RefMeta";
 import { refRegion } from "../Properties/RefRegion";
 import { refBadges } from "../Properties/RefBadges";
 import { refSameAs } from "../SubSchema/RefSameAs";
+import { refUri } from "../Properties/RefUri";
 
 export const refPerson: RefSchema = {
     type: createRefType("object"),
@@ -70,5 +71,6 @@ export const refPerson: RefSchema = {
             type: createRefType("object"),
             fields: refMeta.fields,
         },
+        uri: refUri,
     },
 };

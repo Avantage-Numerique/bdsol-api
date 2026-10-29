@@ -2,6 +2,7 @@ import { JSONLDBuilder } from "@src/jsonld/JsonLDBuilder";
 import EntityControllerFactory from "@src/Abstract/EntityControllerFactory";
 import { CompatibleOntologiesEnum } from "@src/Compatibility/types";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
+import EntityModelFactory from "@src/Abstract/EntityModelFactory";
 
 class JSONLDController {
     /** @private @static Singleton instance */
@@ -19,12 +20,39 @@ class JSONLDController {
         return JSONLDController._instance;
     }
 
+    public async getJsonLDByUri(uri: string, ontology: string): Promise<object | false> {
+        if (!Object.values(CompatibleOntologiesEnum).includes(ontology as CompatibleOntologiesEnum)) {
+            throw new Error("Unknown ontology");
+        }
+
+        const entitiesWithUri = ["person", "organisation", "taxonomy", "project", "event", "place", "equipment"];
+
+        const promiseDocuments = [];
+        for (const entityType of entitiesWithUri) {
+            const model = EntityModelFactory.getModelInstanceFromEntity(entityType)?.mongooseModel;
+            if (model === undefined) continue;
+            promiseDocuments.push(model.findOne({ uri: "http://avnu.ca/entity/" + uri }));
+        }
+        const documents = (await Promise.all(promiseDocuments)).filter((v) => v);
+        if (documents.length === 1) {
+            const doc = documents[0];
+            LogHelper.debug(doc);
+            return this.createJsonLDForDocument(doc, ontology);
+        }
+
+        throw new Error("Document not found");
+    }
+
     /**
      *
      * @throws {Error} If the `collection` param is invalid (`model` or `ref` not found)
      */
-    public async getJsonLDForEntity(collection: string, entityId: string, ontology: string): Promise<object | false> {
-        const model = EntityControllerFactory.getControllerFromEntity(collection)?.entity?.mongooseModel;
+    public async getJsonLDForEntityAndId(
+        collection: string,
+        entityId: string,
+        ontology: string
+    ): Promise<object | false> {
+        const model = EntityModelFactory.getModelInstanceFromEntity(collection)?.mongooseModel;
         if (!model) throw new Error("Pas de collection !");
 
         const document = await model.findById(entityId); //.setOptions({ skipPopulate: true });

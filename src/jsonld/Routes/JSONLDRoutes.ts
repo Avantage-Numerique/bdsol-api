@@ -32,8 +32,12 @@ class JSONLDRoutes extends AbstractRoute {
      * @public @method
      */
     public setupPublicRoutes(): express.Router {
+        this.routerInstance.get("/entity/:uri", [
+            this.getJsonLDByUriHandler.bind(this),
+            this.routeSendResponse.bind(this),
+        ]);
         this.routerInstance.get("/:entity/:id", [
-            this.getJsonLDEntityHandler.bind(this),
+            this.getJsonLDByEntityAndIdHandler.bind(this),
             this.routeSendResponse.bind(this),
         ]);
         return this.routerInstance;
@@ -43,7 +47,28 @@ class JSONLDRoutes extends AbstractRoute {
         return this.routerInstance;
     }
 
-    public async getJsonLDEntityHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+    public async getJsonLDByUriHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
+        const { params } = req;
+        const { ontology } = req.query;
+        let jsonldContent;
+        try {
+            if (typeof ontology !== "string") {
+                throw new Error("Missing or invalid ontology");
+            }
+            jsonldContent = await this.controllerInstance.getJsonLDByUri(params.uri, ontology);
+        } catch (e) {
+            res.serviceResponse = ErrorResponse.create(
+                new Error(ReasonPhrases.BAD_REQUEST),
+                StatusCodes.BAD_REQUEST,
+                String(e)
+            );
+            return next();
+        }
+        res.set("Content-Type", "application/ld+json");
+        return res.status(StatusCodes.OK).json(jsonldContent);
+    }
+
+    public async getJsonLDByEntityAndIdHandler(req: Request, res: Response, next: NextFunction): Promise<any> {
         const { params } = req;
         const { ontology } = req.query;
 
@@ -53,7 +78,7 @@ class JSONLDRoutes extends AbstractRoute {
             if (typeof ontology !== "string") {
                 throw new Error("Missing or invalid ontology");
             }
-            jsonldContent = await this.controllerInstance.getJsonLDForEntity(params.entity, params.id, ontology);
+            jsonldContent = await this.controllerInstance.getJsonLDForEntityAndId(params.entity, params.uri, ontology);
         } catch (e) {
             console.error(e);
 
@@ -73,7 +98,7 @@ class JSONLDRoutes extends AbstractRoute {
             );
             return next();
         } else {
-            res.set("Content-Type", "application/json");
+            res.set("Content-Type", "application/ld+json");
             return res.status(StatusCodes.OK).json(jsonldContent);
         }
     }

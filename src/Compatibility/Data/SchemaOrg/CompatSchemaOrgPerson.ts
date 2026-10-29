@@ -37,15 +37,15 @@ export const compatibilityDBPersonToSchemaOrg: CompatibilityOntology = {
             }, */
             email: {
                 fields: ["contactPoint.email.address"],
-                export: (doc) => doc.contactPoint.email.address,
+                export: (doc) => doc.contactPoint?.email?.address,
             },
             telephone: {
                 fields: ["contactPoint.tel"],
-                export: (doc) => doc.contactPoint.tel,
+                export: (doc) => doc.contactPoint?.tel,
             },
             url: {
                 fields: ["contactPoint.website"],
-                export: (doc) => doc.contactPoint.website,
+                export: (doc) => doc.contactPoint?.website,
             },
             //schema:mediaObject ??
         },
