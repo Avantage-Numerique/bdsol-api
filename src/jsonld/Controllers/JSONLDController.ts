@@ -20,7 +20,7 @@ class JSONLDController {
         return JSONLDController._instance;
     }
 
-    public async getJsonLDByUri(uri: string, ontology: string): Promise<object | false> {
+    public async getJsonLDByUri(uri: string, ontology: string = "schema.org"): Promise<object | false> {
         if (!Object.values(CompatibleOntologiesEnum).includes(ontology as CompatibleOntologiesEnum)) {
             throw new Error("Unknown ontology");
         }
@@ -30,13 +30,16 @@ class JSONLDController {
         const promiseDocuments = [];
         for (const entityType of entitiesWithUri) {
             const model = EntityModelFactory.getModelInstanceFromEntity(entityType)?.mongooseModel;
+
             if (model === undefined) continue;
+
             promiseDocuments.push(model.findOne({ uri: "http://avnu.ca/entity/" + uri }));
         }
+
         const documents = (await Promise.all(promiseDocuments)).filter((v) => v);
+
         if (documents.length === 1) {
             const doc = documents[0];
-            LogHelper.debug(doc);
             return this.createJsonLDForDocument(doc, ontology);
         }
 

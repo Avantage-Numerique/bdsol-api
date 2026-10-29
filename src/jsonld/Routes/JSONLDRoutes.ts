@@ -52,9 +52,10 @@ class JSONLDRoutes extends AbstractRoute {
         const { ontology } = req.query;
         let jsonldContent;
         try {
-            if (typeof ontology !== "string") {
-                throw new Error("Missing or invalid ontology");
+            if (ontology && typeof ontology !== "string") {
+                throw new Error("Invalid ontology");
             }
+
             jsonldContent = await this.controllerInstance.getJsonLDByUri(params.uri, ontology);
         } catch (e) {
             res.serviceResponse = ErrorResponse.create(
