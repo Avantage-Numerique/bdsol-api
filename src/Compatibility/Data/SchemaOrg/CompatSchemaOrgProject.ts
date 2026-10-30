@@ -38,15 +38,15 @@ export const compatibilityDBProjectToSchemaOrg: CompatibilityOntology = {
         }, */
             email: {
                 fields: ["email"],
-                export: (doc) => doc.contactPoint.email,
+                export: (doc) => doc.contactPoint?.email,
             },
             telephone: {
                 fields: ["tel"],
-                export: (doc) => doc.contactPoint.tel,
+                export: (doc) => doc.contactPoint?.tel,
             },
             url: {
                 fields: ["website"],
-                export: (doc) => doc.contactPoint.website,
+                export: (doc) => doc.contactPoint?.website,
             },
             /* "location": {
             fields: ["location"],
