@@ -75,6 +75,15 @@ ApiRouter.get("/embed-taxonomies-metas", async (req, res) => {
     await EmbedTaxonomiesMetas();
 });
 
+/**
+ * redirection de l'ancien ref pour éviter les 401/404
+ */
+ApiRouter.get(["/ref", "/ref/*"], (req, res) => {
+    const entity = req.params[0];
+    const url = "/compatibility" + (entity ? `/${entity}` : "");
+    return res.redirect(url);
+});
+
 if (config.environnement === "development") {
     ApiRouter.get("/test-email", async (req, res) => {
         const testNotification: EmailNotification = new EmailNotification(
