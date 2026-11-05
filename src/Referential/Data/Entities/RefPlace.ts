@@ -8,6 +8,7 @@ import { createRefType } from "@ref/Data/utils";
 import { refMeta } from "../SubSchema/RefMeta";
 import { refLocation } from "../SubSchema/RefLocation";
 import { refUri } from "../Properties/RefUri";
+import { refSameAs } from "../SubSchema/RefSameAs";
 
 export const refPlace: RefSchema = {
     type: createRefType("object"),
@@ -18,12 +19,18 @@ export const refPlace: RefSchema = {
         shortDescription: refShortDescription,
         mainImage: refMainImageLink,
         ...refLocation.fields,
+        sameAs: {
+            cardinality: "0..N",
+            type: createRefType("object"),
+            fields: refSameAs.fields,
+        },
         meta: {
             cardinality: "0..1",
             type: createRefType("object"),
             fields: refMeta.fields,
         },
         uri: refUri,
+
         /* {
             //À MODIFIER QUAND ON VA MERGE LA BRANCHE DE CARTE.
             ...refLocation,
