@@ -2,6 +2,7 @@ import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 import { ObjectId } from "mongodb";
 import { Document } from "mongoose";
 import { UriObject } from "@src/Database/Schemas/URISchema";
+import { SameAs } from "@src/Database/Schemas/SameAsSchema";
 
 export interface PlaceSchema extends Document {
     name: string;
@@ -18,6 +19,7 @@ export interface PlaceSchema extends Document {
     country: string;
     latitude: string;
     longitude: string;
+    sameAs: SameAs;
     meta: Meta;
     uri: UriObject;
 }
