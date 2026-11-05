@@ -7,10 +7,6 @@ import HomePage from "@src/Pages/Controllers/Pages/HomePage";
 import VersionsPage from "@src/Pages/Controllers/Pages/VersionsPage";
 import StatisticsPage from "@src/Pages/Controllers/Pages/StatisticsPage";
 
-// import ReferentialPage from "@src/Pages/Controllers/Pages/ReferentialPage";
-// import ReferentialSinglePage from "@src/Pages/Controllers/Pages/ReferentialSinglePage";
-// import ReferentialPrimitivesPage from "./Pages/ReferentialPrimitivesPage";
-
 import { PublicRoute } from "@src/Pages/Types/PublicRoute";
 
 class PagesController {
@@ -49,24 +45,6 @@ class PagesController {
         versionsPage.route = route;
         return await versionsPage.render();
     }
-
-    // public async referential(route: PublicRoute = {}): Promise<string> {
-    //     const referentialPage = new ReferentialPage("referential");
-    //     referentialPage.route = route;
-    //     return await referentialPage.render();
-    // }
-
-    // public async referentialSingle(route: PublicRoute = {}): Promise<string> {
-    //     const referentialPageSingle = new ReferentialSinglePage("referentialSingle");
-    //     referentialPageSingle.route = route;
-    //     return await referentialPageSingle.render();
-    // }
-
-    // public async referentialPrimitives(route: PublicRoute = {}): Promise<string> {
-    //     const referentialPagePrimitives = new ReferentialPrimitivesPage("referentialPrimitives");
-    //     referentialPagePrimitives.route = route;
-    //     return await referentialPagePrimitives.render();
-    // }
 
     public async layout(name = "page", content: PageContent): Promise<string> {
         const genericPage = new Page(name, "page", content);
