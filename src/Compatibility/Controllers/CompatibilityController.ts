@@ -21,6 +21,10 @@ class CompatibilityController {
         this._routes = this.mapCompatibilityRoutes();
     }
 
+    /**
+     * Map entity JSON object to its corresponding key (entity name in lowercase)
+     * @private @method mapCompatibilityRoutes
+     */
     private mapCompatibilityRoutes() {
         let routesMap: Map<string, Record<string, object>> = new Map();
 
