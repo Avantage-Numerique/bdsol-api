@@ -142,11 +142,13 @@ class CompatibilityRoutes {
             name: "CompatibilityOntologyEntity",
         } as PublicRoute;
 
-        // if ("json" in req.query) {
-        //     res.set("Content-Type", "application/json");
+        if ("json" in req.query) {
+            res.set("Content-Type", "application/json");
 
-        //     return res.status(StatusCodes.OK).send(this.findEntityByURL(params.entity.toLowerCase()));
-        // }
+            return res
+                .status(StatusCodes.OK)
+                .send(this.controllerInstance.getEntityRawData(params.entity.toLowerCase()));
+        }
 
         res.set("Content-Type", "text/html");
         return res

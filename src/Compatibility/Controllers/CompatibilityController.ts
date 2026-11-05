@@ -41,6 +41,13 @@ class CompatibilityController {
     }
 
     /**
+     * @public @method getEntityRawData Return the raw JSON data for an entity
+     */
+    public getEntityRawData(entity: string) {
+        return this._routes.get(entity);
+    }
+
+    /**
      * @public @static @method getInstance Create the singleton instance if not existing
      * @return {CompatibilityController} Controller singleton constructor
      */
