@@ -1,6 +1,3 @@
-
 //use Server.ts
 
-export default class Cli {
-
-}
+export default class Cli {}

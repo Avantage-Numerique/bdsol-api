@@ -1,10 +1,15 @@
 # Documentation d'utilisation pour l'API
+
 version 0.0.5
 
 ## Table des matières
+
 ### Général
+
 - [Structure de la base de données actuelle](base-de-donnees.md)
+
 ### Domaines
+
 - [Authentification](Authentification.md)
 - [Registration](Registration.md)
 - [Utilisateurs](Users.md)
@@ -13,7 +18,6 @@ version 0.0.5
 - [Médias](Medias.md)
 - [Taxonomy](Taxonomy.md)
 - [Licences](Licences.md) (pour les médias présentement)
-
 
 ## Struture générale de l'object `JSON` à fournir lors d'une requête en `POST`.
 

@@ -1,15 +1,14 @@
-import {ApiResponseContract} from "../Http/Responses/ApiResponse";
-import express, {NextFunction, Request, Response} from "express";
+import { ApiResponseContract } from "../Http/Responses/ApiResponse";
+import express, { NextFunction, Request, Response } from "express";
 //import AbstractController from "./Controller";
-import {RouteContract} from "./Contracts/RouteContract";
+import { RouteContract } from "./Contracts/RouteContract";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
-import {ReasonPhrases, StatusCodes} from "http-status-codes";
-import {ErrorResponse} from "../Http/Responses/ErrorResponse";
-import {Result, validationResult} from "express-validator";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import { ErrorResponse } from "../Http/Responses/ErrorResponse";
+import { Result, validationResult } from "express-validator";
 import HttpError from "../Error/HttpError";
 
-abstract class AbstractRoute implements RouteContract
-{
+abstract class AbstractRoute implements RouteContract {
     /**
      * Controller of a specific entity.
      * @abstract
@@ -32,14 +31,13 @@ abstract class AbstractRoute implements RouteContract
      * All he current routes middlewares to add into the routes.
      * @abstract
      */
-    abstract middlewaresDistribution:any;
+    abstract middlewaresDistribution: any;
 
     /**
      * The default middlewares for targeted route.
      * @abstract
      */
-    abstract defaultMiddlewaresDistribution:any;
-
+    abstract defaultMiddlewaresDistribution: any;
 
     // Initiator (called in api.ts)
 
@@ -49,11 +47,9 @@ abstract class AbstractRoute implements RouteContract
      * @return {express.Router} router for the private route.
      * @public @method
      */
-    abstract setupAuthRoutes():express.Router;
+    abstract setupAuthRoutes(): express.Router;
 
-
-    abstract setupAdditionnalAuthRoutes(router:express.Router):express.Router;
-
+    abstract setupAdditionnalAuthRoutes(router: express.Router): express.Router;
 
     /**
      * Public routes init
@@ -61,34 +57,28 @@ abstract class AbstractRoute implements RouteContract
      * @return {express.Router} router for the public routes
      * @public @method
      */
-    abstract setupPublicRoutes():express.Router;
-
+    abstract setupPublicRoutes(): express.Router;
 
     /**
      * Allow routes Manager to declare route on the same router.
      * @param router {express.Router} The router to associate other routes, at the target Routes scope.
      */
-    abstract setupAdditionnalPublicRoutes(router:express.Router):express.Router;
-
+    abstract setupAdditionnalPublicRoutes(router: express.Router): express.Router;
 
     //  Middlewares
-
 
     /**
      * Search for target route's middlewares
      * @param route {string}
      * @param middlewares {string}
      */
-    public addMiddlewares(route:string, middlewares:string = ""):Array<any> {
-
-        const defaultRoutes:any = this.defaultMiddlewaresDistribution[route] ?? [];
-        const currentRouter:any = this.middlewaresDistribution[route] ?? [];
+    public addMiddlewares(route: string, middlewares: string = ""): Array<any> {
+        const defaultRoutes: any = this.defaultMiddlewaresDistribution[route] ?? [];
+        const currentRouter: any = this.middlewaresDistribution[route] ?? [];
         return [...defaultRoutes, ...currentRouter];
     }
 
-
     //  Routes' handlers
-
 
     /**
      * Uniform return the response of service method. Previous routes middlewares must require the next params to be able to end the chain by this.
@@ -112,7 +102,6 @@ abstract class AbstractRoute implements RouteContract
         );
     }
 
-
     //  UTILS TO DRY THINGS
 
     /**
@@ -122,12 +111,15 @@ abstract class AbstractRoute implements RouteContract
      * @param res {Response}
      * @protected
      */
-    protected async defaultReturnResponseJson(appResponse:ApiResponseContract, req: Request, res: Response): Promise<any> {
+    protected async defaultReturnResponseJson(
+        appResponse: ApiResponseContract,
+        req: Request,
+        res: Response
+    ): Promise<any> {
         const logger = new LogHelper(req);
         logger.log(`Response status ${appResponse.code}, ${StatusCodes[appResponse.code]}`);
         return res.status(appResponse.code).send(appResponse);
     }
-
 
     /**
      * Build up the response for the template route, (only getDoc for now).
@@ -136,12 +128,11 @@ abstract class AbstractRoute implements RouteContract
      * @param res {Response}
      * @protected
      */
-    protected async defaultReturnTemplate(appResponse:any, req: Request, res: Response): Promise<any> {
+    protected async defaultReturnTemplate(appResponse: any, req: Request, res: Response): Promise<any> {
         const logger = new LogHelper(req);
         logger.log(`Response status ${StatusCodes.OK}, ${StatusCodes["OK"]}`);
         return res.status(StatusCodes.OK).send(appResponse);
     }
-
 
     /**
      * Single place to standardized the route loggin here.
@@ -149,8 +140,7 @@ abstract class AbstractRoute implements RouteContract
      * @param req {any} the request to trace some things setup in there.
      * @protected
      */
-    protected logRoute(code:any, req:Request):void {
-
+    protected logRoute(code: any, req: Request): void {
         LogHelper.log(`${req.originalUrl} response : ${code}, ${StatusCodes[code]}`);
     }
 
@@ -161,8 +151,7 @@ abstract class AbstractRoute implements RouteContract
      * @param res
      * @param next
      */
-    public async contentTypeParser(req:Request, res:Response, next:NextFunction): Promise<any> {
-
+    public async contentTypeParser(req: Request, res: Response, next: NextFunction): Promise<any> {
         //quand on save le fichier en temp. Il est cleared à la fin de la equest est est passé en buffer dans le request.
         /**
          * cb(null, {
@@ -173,12 +162,12 @@ abstract class AbstractRoute implements RouteContract
          * 2. check le fichier temps pour vider ensuite.
          */
 
-        const contentType:any = req.get('content-type');
-        if (contentType.includes('application/json')) {
+        const contentType: any = req.get("content-type");
+        if (contentType.includes("application/json")) {
             return next();
         }
 
-        if (contentType.includes('multipart/form-data')) {
+        if (contentType.includes("multipart/form-data")) {
             req.body.data = JSON.parse(req.body.data);
             return next();
         }
@@ -186,15 +175,12 @@ abstract class AbstractRoute implements RouteContract
         return next();
     }
 
-
-
-    public async validatingResults(req: Request, res: Response, next: NextFunction):Promise<any> {
-        const validationResults:Result = validationResult(req);
+    public async validatingResults(req: Request, res: Response, next: NextFunction): Promise<any> {
+        const validationResults: Result = validationResult(req);
 
         if (validationResults.isEmpty()) {
             return next();
         }
-
 
         /*
         Express Validator error returns.
@@ -210,17 +196,17 @@ abstract class AbstractRoute implements RouteContract
         ]
          */
 
-        const messages:Array<any> = [];
+        const messages: Array<any> = [];
         for (const error of validationResults.array()) {
-            messages.push(`[Validating][${error.location}][${error.path}] ${error.type} : ${error.msg} (value "${error.value}")`);
+            messages.push(
+                `[Validating][${error.location}][${error.path}] ${error.type} : ${error.msg} (value "${error.value}")`
+            );
         }
 
-        const validationError:HttpError = new HttpError(messages.join(","));
+        const validationError: HttpError = new HttpError(messages.join(","));
         validationError.status = StatusCodes.BAD_REQUEST;
         return next(validationError);
     }
-
-
 }
 
 export default AbstractRoute;

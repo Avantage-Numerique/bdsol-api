@@ -28,11 +28,7 @@
         "verbose": true,
         "template": "./node_modules/better-docs"
     },
-    "plugins": [
-        "plugins/markdown",
-        "node_modules/better-docs/typescript",
-        "node_modules/better-docs/category"
-    ],
+    "plugins": ["plugins/markdown", "node_modules/better-docs/typescript", "node_modules/better-docs/category"],
     "templates": {
         "cleverLinks": false,
         "monospaceLinks": false,

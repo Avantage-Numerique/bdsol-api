@@ -1,0 +1,29 @@
+.btn,
+.btn:active,
+.btn:focus,
+.btn:visited {
+    display: inline-block;
+    font-size: 1em;
+    text-decoration: none;
+    padding: 0.5em 1em;
+    border: 0;
+    border-radius: var(--default-radius);
+    transition: all 0.1s ease-in-out;
+    color: var(--button-color);
+    background-color: var(--button-bg);
+}
+
+.btn.external {
+    padding: 0.1em 0.3em;
+    border-radius: calc(var(--default-radius) * 0.2);
+    background-color: var(--button-bg);
+}
+
+.btn.code {
+    background-color: var(--code-bg);
+}
+
+.btn:hover {
+    background-color: var(--button-over-bg);
+    color: var(--button-over-color);
+}

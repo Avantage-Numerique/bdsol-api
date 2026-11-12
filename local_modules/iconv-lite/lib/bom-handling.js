@@ -1,26 +1,25 @@
 "use strict";
 
-var BOMChar = '\uFEFF';
+var BOMChar = "\uFEFF";
 
-exports.PrependBOM = PrependBOMWrapper
+exports.PrependBOM = PrependBOMWrapper;
 function PrependBOMWrapper(encoder, options) {
     this.encoder = encoder;
     this.addBOM = true;
 }
 
-PrependBOMWrapper.prototype.write = function(str) {
+PrependBOMWrapper.prototype.write = function (str) {
     if (this.addBOM) {
         str = BOMChar + str;
         this.addBOM = false;
     }
 
     return this.encoder.write(str);
-}
+};
 
-PrependBOMWrapper.prototype.end = function() {
+PrependBOMWrapper.prototype.end = function () {
     return this.encoder.end();
-}
-
+};
 
 //------------------------------------------------------------------------------
 
@@ -31,22 +30,19 @@ function StripBOMWrapper(decoder, options) {
     this.options = options || {};
 }
 
-StripBOMWrapper.prototype.write = function(buf) {
+StripBOMWrapper.prototype.write = function (buf) {
     var res = this.decoder.write(buf);
-    if (this.pass || !res)
-        return res;
+    if (this.pass || !res) return res;
 
     if (res[0] === BOMChar) {
         res = res.slice(1);
-        if (typeof this.options.stripBOM === 'function')
-            this.options.stripBOM();
+        if (typeof this.options.stripBOM === "function") this.options.stripBOM();
     }
 
     this.pass = true;
     return res;
-}
+};
 
-StripBOMWrapper.prototype.end = function() {
+StripBOMWrapper.prototype.end = function () {
     return this.decoder.end();
-}
-
+};

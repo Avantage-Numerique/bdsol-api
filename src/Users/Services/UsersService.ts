@@ -1,17 +1,16 @@
-import {Service} from "@database/DatabaseDomain";
-import {ApiResponseContract} from "@src/Http/Responses/ApiResponse";
+import { Service } from "@database/DatabaseDomain";
+import { ApiResponseContract } from "@src/Http/Responses/ApiResponse";
 
 export class UsersService extends Service {
-
     /** @private @static Singleton instance */
-    private static _instance:UsersService;
+    private static _instance: UsersService;
 
-    constructor(model:any=null) {
+    constructor(model: any = null) {
         super(model);
     }
 
     /** @public @static Singleton constructor for UsersService */
-    public static getInstance(model:any):UsersService {
+    public static getInstance(model: any): UsersService {
         if (UsersService._instance === undefined) {
             UsersService._instance = new UsersService(model);
         }
@@ -22,8 +21,7 @@ export class UsersService extends Service {
         return await super.get(query);
     }
 
-    async getUserByUsername(username:string): Promise<any>
-    {
-        return await this.get({username: username});
+    async getUserByUsername(username: string): Promise<any> {
+        return await this.get({ username: username });
     }
 }

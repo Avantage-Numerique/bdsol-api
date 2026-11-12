@@ -3,7 +3,6 @@
  * et ceci https://masteringjs.io/tutorials/mongoose/unique
  */
 export default class MongoError {
-
     /*
     "name": "MongoError",
     "message": "insertDocument :: caused by :: 11000 E11000 duplicate key error index: example.users.$name_1 dup key: { : \"John\" }",
@@ -12,14 +11,14 @@ export default class MongoError {
     "errmsg": "insertDocument :: caused by :: 11000 E11000 duplicate key error index: example.users.$name_1 dup key: { : \"John\" }"
 }
      */
-    private _raw:object;
-    private _name:string;
-    private _message:string;
-    private _index:number;
-    private _code:number;
-    private _errormsg:string;
+    private _raw: object;
+    private _name: string;
+    private _message: string;
+    private _index: number;
+    private _code: number;
+    private _errormsg: string;
 
-    constructor(e:object) {
+    constructor(e: object) {
         this._raw = e;
     }
 
@@ -59,5 +58,4 @@ export default class MongoError {
     public set errormsg(value: string) {
         this._errormsg = value;
     }
-
 }

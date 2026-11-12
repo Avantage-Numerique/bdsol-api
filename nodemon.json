@@ -1,10 +1,7 @@
 {
-  "verbose": true,
-  "ignore": [
-    "node_modules",
-    "logs",
-    "localStorage"],
-  "legacyWatch": true,
-  "watch": ["**/*.ts"],
-  "ext": "js json ts"
+    "verbose": true,
+    "ignore": ["node_modules", "logs", "localStorage"],
+    "legacyWatch": true,
+    "watch": ["**/*.ts"],
+    "ext": "js json ts"
 }

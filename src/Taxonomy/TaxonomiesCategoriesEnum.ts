@@ -8,5 +8,5 @@ export enum TaxonomiesCategoriesEnum {
     Technology = "technologies",
     EventType = "eventType",
     Equipments = "equipmentType",
-    PlaceTypes = "placeType"
+    PlaceTypes = "placeType",
 }

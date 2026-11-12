@@ -2,7 +2,6 @@
 
 Domaine de gestion des médias pour l'API. Implémentation pour Image en premier.
 
-
 ## Données qu'on receuille et possible.
 
 ```json
@@ -29,7 +28,8 @@ Domaine de gestion des médias pour l'API. Implémentation pour Image en premier
 Notez que les fichiers ont des données en exif d'inclus.
 
 ## Plan d'implémentation
-- [X] Ajouter la route pour get un fichier afin que l'API devienne le CDN de ce fichier.
-  - [X] Déterminer le patern de l'URI `/:entity/:id/:fileName`
-- [X] Ajouter le chemin pour querir les données sur le médias
-  - [X] L'ajouter avec un slug ? Présentement fait avec un ID.
+
+- [x] Ajouter la route pour get un fichier afin que l'API devienne le CDN de ce fichier.
+    - [x] Déterminer le patern de l'URI `/:entity/:id/:fileName`
+- [x] Ajouter le chemin pour querir les données sur le médias
+    - [x] L'ajouter avec un slug ? Présentement fait avec un ID.

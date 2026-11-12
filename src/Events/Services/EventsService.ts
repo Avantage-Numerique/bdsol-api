@@ -1,4 +1,4 @@
-import {Service} from "@database/DatabaseDomain";
+import { Service } from "@database/DatabaseDomain";
 import Event from "@src/Events/Models/Event";
 
 class EventsService extends Service {

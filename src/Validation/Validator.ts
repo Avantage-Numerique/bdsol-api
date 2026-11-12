@@ -22,9 +22,7 @@ import * as Rules from "./Rules";
  .required(),
  */
 
-
 export default class Validator {
-
     //Instantiate de rules handler
     public isdefined = new Rules.isDefined();
     private isnotnull = new Rules.isNotNull();
@@ -37,29 +35,29 @@ export default class Validator {
     private objectnotempty = new Rules.objectNotEmpty();
     private isdate = new Rules.isDate();
 
-    /** 
+    /**
      * @method validateData Validate data against a rule set
      * @note   if a rule is followed by ":" the next thing is a parameter to pass to the method
      * @note   if fields to validate contains "gte:" or "lte:" in their beginning, values will be evaluated without it.
      * @param {any} data - Value to validate : { "nom" : "Audet" }
      * @param {any} ruleSet - set of rule to check for each field: { "nom":["isDefined", "isSet" ...], "prenom":[...] }
-     * @param {boolean} emptyOk - when false, Return error if object is empty 
+     * @param {boolean} emptyOk - when false, Return error if object is empty
      * @note ruleSet is in entity model
      * @return {object} - { isValid, message } :
      * @desc isValid (boolean): Passed the ruleSet or not.
-     * @desc message (string) : Error or success message 
+     * @desc message (string) : Error or success message
      */
-    public validateData(data:any, ruleSet:any, emptyOk:boolean=false){
+    public validateData(data: any, ruleSet: any, emptyOk: boolean = false) {
         this.isdefined
-        .setNext(this.isnotnull)
-        .setNext(this.isstring)
-        .setNext(this.isnotempty)
-        .setNext(this.minlength)
-        .setNext(this.maxlength)
-        .setNext(this.idvalid)
-        .setNext(this.isobject)
-        .setNext(this.objectnotempty)
-        .setNext(this.isdate);
+            .setNext(this.isnotnull)
+            .setNext(this.isstring)
+            .setNext(this.isnotempty)
+            .setNext(this.minlength)
+            .setNext(this.maxlength)
+            .setNext(this.idvalid)
+            .setNext(this.isobject)
+            .setNext(this.objectnotempty)
+            .setNext(this.isdate);
 
         //in (key) / of (value)
         //Warning : "for in" not neccesarily proceed in order
@@ -68,8 +66,8 @@ export default class Validator {
         let rule;
 
         //Object empty check
-        if(!emptyOk) {
-            if (data == undefined || typeof data != 'object' || Object.entries(data).length == 0){
+        if (!emptyOk) {
+            if (data == undefined || typeof data != "object" || Object.entries(data).length == 0) {
                 message += "\n L'objet à valider est vide.";
                 isValid = false;
                 return { isValid, message };
@@ -80,29 +78,32 @@ export default class Validator {
         //For each field in ruleSet ("nom"...)
         for (const field in ruleSet) {
             //For each rule of those field ("isDefined"...)
-            for (rule of ruleSet[field]) { //do we instead => validate(data[field], ruleSet[field].pop())
+            for (rule of ruleSet[field]) {
+                //do we instead => validate(data[field], ruleSet[field].pop())
                 //Set data to validate
                 let dataField = data[field];
 
                 //Remove (gte, lte) operator if needed (those are for QueryBuilder)
-                if(dataField !== undefined){
-                    if (dataField.toString().indexOf("gte:") == 0 || dataField.toString().indexOf("lte:") == 0){
+                if (dataField !== undefined) {
+                    if (dataField.toString().indexOf("gte:") == 0 || dataField.toString().indexOf("lte:") == 0) {
                         dataField = dataField.toString().substring(4, dataField.toString().length);
                     }
                 }
 
                 let param = -1;
                 //If param is passed
-                if ( rule.indexOf(":") != -1) {
+                if (rule.indexOf(":") != -1) {
                     //ex: minLength:3  => param = 3, rule = minLength
-                    param = rule.substring(rule.indexOf(":")+1, rule.length);
+                    param = rule.substring(rule.indexOf(":") + 1, rule.length);
                     rule = rule.substring(0, rule.indexOf(":"));
                 }
-                
-                //Verify rule if data is there |OR| if data is not but should be (isDefined) 
-                if((dataField !== undefined && typeof dataField !== 'undefined') ||
-                    ((dataField == undefined || typeof dataField == 'undefined') && ruleSet[field].includes("isDefined"))){
 
+                //Verify rule if data is there |OR| if data is not but should be (isDefined)
+                if (
+                    (dataField !== undefined && typeof dataField !== "undefined") ||
+                    ((dataField == undefined || typeof dataField == "undefined") &&
+                        ruleSet[field].includes("isDefined"))
+                ) {
                     const ruleMsg = this.isdefined.handle(rule, dataField, param);
                     if (ruleMsg != "OK") {
                         message += ruleMsg;
@@ -111,10 +112,8 @@ export default class Validator {
                 }
             }
         }
-        if (isValid)
-            message = "OK";
-        
+        if (isValid) message = "OK";
+
         return { isValid, message };
     }
-
 }

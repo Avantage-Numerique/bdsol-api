@@ -1,18 +1,17 @@
-import {ApiResponseContract} from "../Http/Responses/ApiResponse";
+import { ApiResponseContract } from "../Http/Responses/ApiResponse";
 import LogHelper from "../Monitoring/Helpers/LogHelper";
-import {ReasonPhrases, StatusCodes} from "http-status-codes";
-import {ErrorResponse} from "../Http/Responses/ErrorResponse";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import { ErrorResponse } from "../Http/Responses/ErrorResponse";
 
 export default class HttpError extends Error {
+    public name: any;
+    public status: any;
+    public message: string;
+    public stack: any;
+    public response: any;
+    public rawError: any;
 
-    public name:any;
-    public status:any;
-    public message:string;
-    public stack:any;
-    public response:any;
-    public rawError:any;
-
-    constructor(message:string = "Erreur", raw:any=null) {
+    constructor(message: string = "Erreur", raw: any = null) {
         super(message);
         if (raw !== null) {
             this.rawError = raw;
@@ -26,19 +25,13 @@ export default class HttpError extends Error {
      * @param {boolean} log - Si on log l'erreur @default true
      * @returns {ApiResponseContract}
      */
-    static NotAcceptable(message: string = "", log=true): ApiResponseContract
-    {
+    static NotAcceptable(message: string = "", log = true): ApiResponseContract {
         if (log) {
             LogHelper.error(ReasonPhrases.NOT_ACCEPTABLE, message);
         }
 
-        return ErrorResponse.create(
-            new Error(ReasonPhrases.NOT_ACCEPTABLE),
-            StatusCodes.NOT_ACCEPTABLE,
-            message
-        );
+        return ErrorResponse.create(new Error(ReasonPhrases.NOT_ACCEPTABLE), StatusCodes.NOT_ACCEPTABLE, message);
     }
-
 
     /**
      * @static @method NotImplemented log erreur $message et retourne une réponse d'erreur (ServiceResponse).
@@ -49,24 +42,17 @@ export default class HttpError extends Error {
      * Retourne :
      *      @returns {ServiceResponse}
      */
-    static NotImplemented(message: string = ""): ApiResponseContract
-    {
+    static NotImplemented(message: string = ""): ApiResponseContract {
         LogHelper.error(ReasonPhrases.NOT_IMPLEMENTED, StatusCodes.NOT_IMPLEMENTED, message);
-        return ErrorResponse.create(
-            new Error(ReasonPhrases.NOT_IMPLEMENTED),
-            StatusCodes.NOT_IMPLEMENTED,
-            message
-        );
+        return ErrorResponse.create(new Error(ReasonPhrases.NOT_IMPLEMENTED), StatusCodes.NOT_IMPLEMENTED, message);
     }
 
-
-    static Unauthorized (message: string = "")
-    {
-        const msg:string = message !== "" ? message : "Ce chemin d'accès nécessiste un token pour être utilisé.";
+    static Unauthorized(message: string = "") {
+        const msg: string = message !== "" ? message : "Ce chemin d'accès nécessiste un token pour être utilisé.";
 
         LogHelper.error(ReasonPhrases.UNAUTHORIZED, StatusCodes.UNAUTHORIZED, msg);
 
-        const unauthorizedError:HttpError = new HttpError(msg);
+        const unauthorizedError: HttpError = new HttpError(msg);
         unauthorizedError.name = "UNAUTHORIZED";
         unauthorizedError.status = StatusCodes.UNAUTHORIZED;
 
@@ -81,5 +67,4 @@ export default class HttpError extends Error {
         return unauthorizedError;
         //return unauthorizedRequestError;
     }
-
 }

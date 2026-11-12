@@ -2,9 +2,9 @@
  * Interface to determine the structure of the response after a login call.
  */
 export default interface LoginResponse {
-    error: boolean,
+    error: boolean;
     code: number;
-    errors: object|null;
+    errors: object | null;
     message: string;
-    data: object|null;
+    data: object | null;
 }

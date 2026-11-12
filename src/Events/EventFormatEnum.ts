@@ -6,5 +6,5 @@ export enum EventFormatEnum {
     "Présentiel" = "presential",
     "Asynchrone" = "asynchronous",
     "Mixte" = "mixed",
-    "En ligne" = "online"
+    "En ligne" = "online",
 }

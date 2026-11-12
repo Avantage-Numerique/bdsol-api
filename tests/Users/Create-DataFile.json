@@ -1,10 +1,9 @@
 [
     {
-        "infoTest":
-        {
-            "name":"Full create",
-            "error":false,
-            "status":201
+        "infoTest": {
+            "name": "Full create",
+            "error": false,
+            "status": 201
         },
         "username": "datageekerinooo",
         "email": "vilain@wwe.com",
@@ -14,11 +13,10 @@
         "role": "admin"
     },
     {
-        "infoTest":
-        {
-            "name":"Full create 2",
-            "error":false,
-            "status":201
+        "infoTest": {
+            "name": "Full create 2",
+            "error": false,
+            "status": 201
         },
         "username": "Flowra",
         "email": "petitefleure95@jardin.petal",
@@ -28,11 +26,10 @@
         "role": "Paysagiste"
     },
     {
-        "infoTest":
-        {
-            "name":"empty username",
-            "error":true,
-            "status":400
+        "infoTest": {
+            "name": "empty username",
+            "error": true,
+            "status": 400
         },
         "username": "",
         "email": "AlTem@culturel.org",
@@ -42,11 +39,10 @@
         "role": "Larbin"
     },
     {
-        "infoTest":
-        {
-            "name":"no username",
-            "error":true,
-            "status":400
+        "infoTest": {
+            "name": "no username",
+            "error": true,
+            "status": 400
         },
         "email": "Symon@camaro.org",
         "password": "poulet",
@@ -55,27 +51,25 @@
         "role": "Mécanicien"
     },
     {
-        "infoTest":
-        {
-            "name":"not unique username",
-            "error":true,
-            "status":409
+        "infoTest": {
+            "name": "not unique username",
+            "error": true,
+            "status": 409
         },
-        "username":"datageekerinooo",
-        "email":"Lafaillette.@tulipod.com",
-        "password":"1234",
+        "username": "datageekerinooo",
+        "email": "Lafaillette.@tulipod.com",
+        "password": "1234",
         "avatar": "ard",
         "name": "Martin de fre",
         "role": "Rigodoneee"
     },
     {
-        "infoTest":
-        {
-            "name":"empty email",
-            "error":true,
-            "status":400
+        "infoTest": {
+            "name": "empty email",
+            "error": true,
+            "status": 400
         },
-        "username":"Lutino69",
+        "username": "Lutino69",
         "email": "",
         "password": "dinde",
         "avatar": "Jinx",
@@ -83,105 +77,96 @@
         "role": "Composatroce"
     },
     {
-        "infoTest":
-        {
-            "name":"no email",
-            "error":true,
-            "status":400
+        "infoTest": {
+            "name": "no email",
+            "error": true,
+            "status": 400
         },
-        "username":"Lutino420",
+        "username": "Lutino420",
         "password": "dinderino",
         "avatar": "Vi",
         "name": "Luciole Martineau",
         "role": "Compositrice"
     },
     {
-        "infoTest":
-        {
-            "name":"not unique email",
-            "error":true,
-            "status":409
+        "infoTest": {
+            "name": "not unique email",
+            "error": true,
+            "status": 409
         },
-        "username":"Trescerte15",
-        "email":"vilain@wwe.com",
-        "password":"1234",
+        "username": "Trescerte15",
+        "email": "vilain@wwe.com",
+        "password": "1234",
         "avatar": "forum gold",
         "name": "Nitro Fasd",
         "role": "Kripodoneee"
     },
     {
-        "infoTest":
-        {
-            "name":"empty password",
-            "error":true,
-            "status":400
+        "infoTest": {
+            "name": "empty password",
+            "error": true,
+            "status": 400
         },
-        "username":"martilette420",
-        "email":"Lafaillette.@tulipe.com",
+        "username": "martilette420",
+        "email": "Lafaillette.@tulipe.com",
         "password": "",
         "avatar": "Rich",
         "name": "Martino de Martin",
         "role": "Ligotron"
     },
     {
-        "infoTest":
-        {
-            "name":"no password",
-            "error":true,
-            "status":400
+        "infoTest": {
+            "name": "no password",
+            "error": true,
+            "status": 400
         },
-        "username":"martino024",
-        "email":"Lafaillette.@tulipod.com",
+        "username": "martino024",
+        "email": "Lafaillette.@tulipod.com",
         "avatar": "ard",
         "name": "Martin de Martino",
         "role": "Rigodon"
     },
     {
-        "infoTest":
-        {
-            "name":"empty non req",
-            "error":false,
-            "status":201
+        "infoTest": {
+            "name": "empty non req",
+            "error": false,
+            "status": 201
         },
-        "username":"frisker65952",
-        "email":"friski.toto@lenovo.wisdom",
-        "password":"pladada",
+        "username": "frisker65952",
+        "email": "friski.toto@lenovo.wisdom",
+        "password": "pladada",
         "avatar": "",
         "name": "",
         "role": ""
     },
     {
-        "infoTest":
-        {
-            "name":"no non req",
-            "error":false,
-            "status":201
+        "infoTest": {
+            "name": "no non req",
+            "error": false,
+            "status": 201
         },
-        "username":"fdasdfasdv",
-        "email":"vadsvasdf.dsfad@asbabr.bsdf",
-        "password":"cvasdv"
+        "username": "fdasdfasdv",
+        "email": "vadsvasdf.dsfad@asbabr.bsdf",
+        "password": "cvasdv"
     },
     {
-        "infoTest":
-        {
-            "name":"empty data",
-            "error":true,
-            "status":400
+        "infoTest": {
+            "name": "empty data",
+            "error": true,
+            "status": 400
         },
-        "username":"",
-        "email":"",
-        "password":"",
+        "username": "",
+        "email": "",
+        "password": "",
         "avatar": "",
         "name": "",
         "role": ""
     },
     {
-        "infoTest":
-        {
-            "name":"no data",
-            "error":true,
-            "status":400
+        "infoTest": {
+            "name": "no data",
+            "error": true,
+            "status": 400
         }
     }
-
 ]

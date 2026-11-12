@@ -1,11 +1,10 @@
-import {NextFunction, Request, Response} from "express";
-import {body} from 'express-validator'; //, validationResult, checkSchema
+import { NextFunction, Request, Response } from "express";
+import { body } from "express-validator"; //, validationResult, checkSchema
 
 //doc : https://express-validator.github.io/docs/sanitization.html
 //     /*body('email').isEmail().normalizeEmail(),
 //     body('text').not().isEmpty().trim().escape(),
 //     body('notifyOnReply').toBoolean(),*/
-
 
 // Algortihm
 
@@ -16,21 +15,19 @@ import {body} from 'express-validator'; //, validationResult, checkSchema
 //4. allow chaining of the sanitization there to be able to the the right functions to sanitized the property correctly.
 //5. trace this work in log
 
-
 /**
  * Santize the request's body base on their model's schema.
  */
 export class UserSchemaSanitizer {
+    public static sanitizationDictionary: any;
 
-    public static sanitizationDictionary:any
-
-    public sanitizationSchema:any = {
-        'data.email': {
-            in: ['body'],
+    public sanitizationSchema: any = {
+        "data.email": {
+            in: ["body"],
             isEmail: {
                 bail: true,
             },
-            errorMessage: 'Email isn\'t correctly formed',
+            errorMessage: "Email isn't correctly formed",
             isString: true,
 
             // Sanitizers can go here as well
@@ -39,27 +36,27 @@ export class UserSchemaSanitizer {
             normalizeEmail: true,
             trim: true,
         },
-        'data.password': {
-            in: ['body'],
+        "data.password": {
+            in: ["body"],
             isLength: {
-                errorMessage: 'Password should be at least 7 chars long',
+                errorMessage: "Password should be at least 7 chars long",
                 // Multiple options would be expressed as an array
                 options: { min: 7 },
             },
             trim: true,
         },
-        'data.username': {
-            in: ['body'],
+        "data.username": {
+            in: ["body"],
             isUppercase: {
                 // To negate a validator
                 negated: true,
             },
 
             //sanitizer
-            trim: true
+            trim: true,
         },
-        'data.description': {
-            in: ['body'],
+        "data.description": {
+            in: ["body"],
             optional: true,
             isString: true,
             //sanitizer
@@ -78,17 +75,15 @@ export class UserSchemaSanitizer {
                 },*/
             },
             escape: true,
-
-        }
-    }
+        },
+    };
 
     /**
      * Getter for the anonymous function that will act as the middleware, with the parameters and the next() call.
      */
-    public static middlewareFunction(entity:string)
-    {
-        const entitysSchema:any = "User" || entity;
-        let entitysSanitizationRules:any = UserSchemaSanitizer.parseSchema(entitysSchema);
+    public static middlewareFunction(entity: string) {
+        const entitysSchema: any = "User" || entity;
+        let entitysSanitizationRules: any = UserSchemaSanitizer.parseSchema(entitysSchema);
 
         //since all properties are sanitize by itself in a middleware slot (as an array elements). We need to return an array with all the rules
 
@@ -102,23 +97,22 @@ export class UserSchemaSanitizer {
         return async function (req: Request, res: Response, next: NextFunction) {
             entitysSanitizationRules = {};
             next();
-        }
+        };
     }
 
-    public static sanitizingMethods():Array<any> {
+    public static sanitizingMethods(): Array<any> {
         return [
-            body('data.email').isString().isEmail().trim().escape().normalizeEmail(),
-            body('data.username').isString().trim().escape(),
-            body('data.password').isString(),
+            body("data.email").isString().isEmail().trim().escape().normalizeEmail(),
+            body("data.username").isString().trim().escape(),
+            body("data.password").isString(),
         ];
     }
 
-    public static parseSchema(schema:any):Array<any> {
+    public static parseSchema(schema: any): Array<any> {
         if (UserSchemaSanitizer.sanitizationDictionary === undefined) {
             //set the dictionary
         }
 
         return [schema];
     }
-
 }

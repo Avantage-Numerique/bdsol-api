@@ -3,9 +3,9 @@
  * As suggested from this article by Michel Weststrade : https://medium.com/visual-development/how-to-fix-nasty-circular-dependency-issues-once-and-for-all-in-javascript-typescript-a04c987cf0de
  */
 
-export * from './Models/User';
-export * from './Contracts/UserContract';//UserContract
+export * from "./Models/User";
+export * from "./Contracts/UserContract"; //UserContract
 
-export * from './Services/UsersService';
-export * from './Controllers/UsersController';
-export * from './Routes/UsersRouter';
+export * from "./Services/UsersService";
+export * from "./Controllers/UsersController";
+export * from "./Routes/UsersRouter";

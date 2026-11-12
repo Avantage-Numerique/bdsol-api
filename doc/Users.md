@@ -7,6 +7,7 @@ Retour à la base de [Documention de l'API](readme.md)
 ### POST `/users/create`
 
 #### Structure demandée
+
 ```json
 {
     "type": "object",
@@ -41,7 +42,7 @@ Retour à la base de [Documention de l'API](readme.md)
         "data": {
             "type": "object",
             "properties": {
-                "id":{ "type": "objectID" },
+                "id": { "type": "objectID" },
                 "username": { "type": "string" },
                 "email": { "type": "string" },
                 "password": { "type": "string" },
@@ -59,22 +60,26 @@ Retour à la base de [Documention de l'API](readme.md)
 ```
 
 ### POST `/users/getinfo`
+
 Si une route est spécifiée (create, update, search, list, delete), les informations des champs seront retournée avec les règles de vérification des champs spécifique à la route, ainsi que les règles par défaut.
 Sinon, les champs n'auront que les règles par défaut.
+
 #### Structure demandéee
+
 ```json
 {
-  "type": "object",
-  "properties": {
-      "data": {
-          "type": "object",
-          "properties": {
-              "route": { "type": "string",
-                         "enum": ["create", "update", "list", "search", "delete"]
-              }
-          }
-      },
-      "required": ["data"]
-  }
+    "type": "object",
+    "properties": {
+        "data": {
+            "type": "object",
+            "properties": {
+                "route": {
+                    "type": "string",
+                    "enum": ["create", "update", "list", "search", "delete"]
+                }
+            }
+        },
+        "required": ["data"]
+    }
 }
 ```

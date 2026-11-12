@@ -1,7 +1,7 @@
-import type {Service} from "../Service";
+import type { Service } from "../Service";
 
 export default interface SeederTaskContract {
-    service: Service,
-    data: any,
-    whereKeys: any
+    service: Service;
+    data: any;
+    whereKeys: any;
 }

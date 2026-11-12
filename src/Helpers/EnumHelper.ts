@@ -1,20 +1,22 @@
-
-
 class EnumHelper {
-
-    public static enumToStringArray (baseEnum:any) {
-        return Object.values(baseEnum)
+    public static enumToStringArray(baseEnum: any) {
+        return Object.values(baseEnum);
     }
 
-    public static enumToSelectOptions (baseEnum:any) {
-        const selectOptions:any[] = [];
-        Object.keys(baseEnum).forEach( (el:any) => {
+    public static enumToSelectOptions(baseEnum: any) {
+        const selectOptions: any[] = [];
+        Object.keys(baseEnum).forEach((el: any) => {
             //Not returning empty string element as option to select, but allow enum to accept "" for non required if select is blank.
-            if(el == "")
-                return;
-            selectOptions.push( { value : baseEnum[el], label : el} )
+            if (el == "") return;
+            selectOptions.push({ value: baseEnum[el], label: el });
         });
         return selectOptions;
+    }
+
+    public static toArray(baseEnum: any) {
+        return Object.keys(baseEnum)
+            .filter((value) => !isNaN(Number(value)) && value !== undefined)
+            .map((key) => baseEnum[key]);
     }
 }
 

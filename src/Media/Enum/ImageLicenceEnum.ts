@@ -1,5 +1,3 @@
-
-
 export enum ImageLicenceEnum {
     CC0 = "Public Domain (CC0)",
     CCBY = "CC By",
@@ -10,4 +8,3 @@ export enum ImageLicenceEnum {
     CCBYNCND = "CC By-NC-ND",
     COPY = "Copyright to user",
 }
-

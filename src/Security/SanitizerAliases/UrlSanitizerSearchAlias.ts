@@ -1,18 +1,22 @@
-import {body} from "express-validator";
-import {NoHtmlSanitizer} from "../Sanitizers/NoHtmlSanitizer";
-import {UrlSanitizer} from "../Sanitizers/UrlSanitizer";
-import {ApiValidatingSanitizingChainType} from "../ExpressValidator/ApiValidatingSanitizingChain";
+import { body } from "express-validator";
+import { NoHtmlSanitizer } from "../Sanitizers/NoHtmlSanitizer";
+import { UrlSanitizer } from "../Sanitizers/UrlSanitizer";
+import { ApiValidatingSanitizingChainType } from "../ExpressValidator/ApiValidatingSanitizingChain";
 
-const urlSanitizerSearchAlias = (param:string, isOptional:boolean=true, source=body):ApiValidatingSanitizingChainType => {
-
-    let chain:ApiValidatingSanitizingChainType = source(param);
-    chain = chain.optional({values:"falsy"});
+const urlSanitizerSearchAlias = (
+    param: string,
+    isOptional: boolean = true,
+    source = body
+): ApiValidatingSanitizingChainType => {
+    let chain: ApiValidatingSanitizingChainType = source(param);
+    chain = chain.optional({ values: "falsy" });
 
     if (!isOptional) {
         chain = chain.notEmpty().withMessage("Is required");
     }
 
-    chain = chain.stripLow()
+    chain = chain
+        .stripLow()
         .customSanitizer(NoHtmlSanitizer.validatorCustomSanitizer())
         //.customSanitizer(NoSpaceSanitizer.validatorCustomSanitizer())
         //.customSanitizer(NoAccentSanitizer.validatorCustomSanitizer())
@@ -21,6 +25,6 @@ const urlSanitizerSearchAlias = (param:string, isOptional:boolean=true, source=b
         .customSanitizer(UrlSanitizer.validatorCustomSanitizer());
 
     return chain;
-}
+};
 
-export {urlSanitizerSearchAlias}
+export { urlSanitizerSearchAlias };

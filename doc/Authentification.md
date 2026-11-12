@@ -85,8 +85,8 @@ Code : **200** : lorsque le token est valide
     "data": {}
 }
 ```
-Note ici on pourrait ajouter une information sur le nombre de temps qu'il reste au token ?
 
+Note ici on pourrait ajouter une information sur le nombre de temps qu'il reste au token ?
 
 ### Retour s'il y aune erreur
 
@@ -108,6 +108,7 @@ Code : **401** : lorsque le token n'est pas valide
 Code : **501** : Changer le driver dans le fichier `.env`.
 
 ---
+
 ## POST `/logout`
 
 Cette fonction n'est pas implémenté encore. l'url retourne toujours cette réponse positive pour l'instant.

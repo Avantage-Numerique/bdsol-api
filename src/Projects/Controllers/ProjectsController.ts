@@ -3,7 +3,6 @@ import ProjectsService from "@src/Projects/Services/ProjectsService";
 import Project from "@src/Projects/Models/Project";
 
 class ProjectsController extends AbstractController {
-
     /** @private @static Singleton instance */
     private static _instance: AbstractController;
 
@@ -13,8 +12,7 @@ class ProjectsController extends AbstractController {
     /** @public Model */
     entity: Project;
 
-
-    constructor() {
+    private constructor() {
         super();
         this.entity = Project.getInstance();
         this.service = ProjectsService.getInstance(this.entity);

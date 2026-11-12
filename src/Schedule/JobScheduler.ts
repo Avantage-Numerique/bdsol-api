@@ -1,5 +1,5 @@
-import schedule, {Job} from 'node-schedule';
-import {JobSheet, Sheet} from "@src/Schedule/Sheet";
+import schedule, { Job } from "node-schedule";
+import { JobSheet, Sheet } from "@src/Schedule/Sheet";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 /**
@@ -7,12 +7,11 @@ import LogHelper from "@src/Monitoring/Helpers/LogHelper";
  * With job's sheet we prepare job to be schedule in the node-schedule.
  */
 class JobScheduler {
-
-    public jobs:Array<JobSheet>;
-    public scheduledJobs:Array<Job>;
-    public defaultIntervale:string;
-    public defaultRule:schedule.RecurrenceRule;
-    public defaultTestRule:schedule.RecurrenceRule;
+    public jobs: Array<JobSheet>;
+    public scheduledJobs: Array<Job>;
+    public defaultIntervale: string;
+    public defaultRule: schedule.RecurrenceRule;
+    public defaultTestRule: schedule.RecurrenceRule;
 
     constructor() {
         this.jobs = [];
@@ -32,11 +31,10 @@ class JobScheduler {
         this.defaultRule.hour = 0;
         this.defaultRule.minute = 15;
         //this.defaultTestRule.second = 2;
-        this.defaultIntervale = '* /5 * * * *';
+        this.defaultIntervale = "* /5 * * * *";
     }
 
-
-    public init(sheets:Array<JobSheet>=[]) {
+    public init(sheets: Array<JobSheet> = []) {
         if (sheets.length > 0) {
             for (const sheet of sheets) {
                 this.add(sheet);
@@ -47,7 +45,6 @@ class JobScheduler {
         }
         LogHelper.info(`[SCHEDULER] No jobSheet to schedule.`);
     }
-
 
     public schedule() {
         if (this.jobs.length > 0) {
@@ -68,38 +65,39 @@ class JobScheduler {
      */
     private _registerEvents() {
         //console.log("Job scheduler  :  register events");
-
     }
-
 
     private async _down() {
         LogHelper.info(`[SCHEDULER] gracefulShutdown`);
         await schedule.gracefulShutdown();
     }
 
-
-    public createSheet(name:string, jobCallback:any, rule:schedule.RecurrenceRule=this.defaultRule, message:string="") {
+    public createSheet(
+        name: string,
+        jobCallback: any,
+        rule: schedule.RecurrenceRule = this.defaultRule,
+        message: string = ""
+    ) {
         console.log("[SCHEDULER] CreateSheet", name, "rule", rule);
         return new Sheet({
             name: name,
             rule: rule,
             callback: jobCallback,
-            message:message
+            message: message,
         });
     }
 
-    public add(sheet:JobSheet) {
+    public add(sheet: JobSheet) {
         this.jobs.push(sheet);
     }
 
-    public createRule(param:string, value:number):schedule.RecurrenceRule {
-        const rule:schedule.RecurrenceRule = new schedule.RecurrenceRule();
-        Object.assign(rule, {[param]: value});
+    public createRule(param: string, value: number): schedule.RecurrenceRule {
+        const rule: schedule.RecurrenceRule = new schedule.RecurrenceRule();
+        Object.assign(rule, { [param]: value });
         if (param !== "minute") {
-            Object.assign(rule, {"minute": 1});
+            Object.assign(rule, { minute: 1 });
         }
         return rule;
     }
-
 }
 export default JobScheduler;

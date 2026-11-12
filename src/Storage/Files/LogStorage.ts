@@ -1,5 +1,5 @@
-import {getApiConfig} from "@src/config";
+import { getApiConfig } from "@src/config";
 
 export default class LogStorage {
-    public static basePath:string = `${getApiConfig().serverPath}/logs`;
+    public static basePath: string = `${getApiConfig().serverPath}/logs`;
 }

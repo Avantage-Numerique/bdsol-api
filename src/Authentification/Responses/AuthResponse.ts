@@ -1,9 +1,8 @@
 import ApiResponse from "../../Http/Responses/ApiResponse";
-import type {ApiResponseContract} from "../../Http/Responses/ApiResponse";
+import type { ApiResponseContract } from "../../Http/Responses/ApiResponse";
 
 export class AuthResponse extends ApiResponse {
-
-    constructor(response:ApiResponseContract) {
+    constructor(response: ApiResponseContract) {
         super(response);
         this.error = true;
     }
@@ -16,14 +15,19 @@ export class AuthResponse extends ApiResponse {
      * @param message string the error message
      * @param data the data almost always empty
      */
-    public static create(token:string, code:number, message:string="Erreur", data:object={}):ApiResponseContract {
+    public static create(
+        token: string,
+        code: number,
+        message: string = "Erreur",
+        data: object = {}
+    ): ApiResponseContract {
         const error = new AuthResponse({
-            error:false,
+            error: false,
             code: code,
             userConnectedToken: token,
             message: message,
             errors: [],
-            data: data
+            data: data,
         } as ApiResponseContract);
         return error.response;
     }

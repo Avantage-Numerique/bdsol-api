@@ -1,5 +1,3 @@
-
-
 // Request extending with user in it.
 //import {UserRequestContract} from "../../Users/Contracts/UserRequestContract";
 //import { Request } from 'express';
@@ -15,6 +13,6 @@ namespace Express {
 namespace Express {
     export interface Response {
         serviceResponse?: any;
-        performance?: any
+        performance?: any;
     }
 }

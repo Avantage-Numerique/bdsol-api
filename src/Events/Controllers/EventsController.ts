@@ -3,7 +3,6 @@ import EventsService from "@src/Events/Services/EventsService";
 import Event from "@src/Events/Models/Event";
 
 class EventsController extends AbstractController {
-
     /** @private @static Singleton instance */
     private static _instance: AbstractController;
 
@@ -15,7 +14,7 @@ class EventsController extends AbstractController {
 
     name: string = "Event";
 
-    constructor() {
+    private constructor() {
         super();
         this.entity = Event.getInstance();
         this.service = EventsService.getInstance(this.entity);

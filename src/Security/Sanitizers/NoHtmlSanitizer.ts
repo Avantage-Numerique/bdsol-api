@@ -1,26 +1,23 @@
-import {NextFunction, Request, Response} from "express";
-import sanitizeHtml from 'sanitize-html';
-import {CustomSanitizer} from "express-validator";
+import { NextFunction, Request, Response } from "express";
+import sanitizeHtml from "sanitize-html";
+import { CustomSanitizer } from "express-validator";
 
 export class NoHtmlSanitizer {
-
     /**
      * Method to sanitize field with no Html field.
      * @param raw {string}
      */
-    public static sanitize(raw:string):string
-    {
+    public static sanitize(raw: string): string {
         return sanitizeHtml(raw, NoHtmlSanitizer.options());
     }
 
     /**
      *
      */
-    public static options():sanitizeHtml.IOptions
-    {
+    public static options(): sanitizeHtml.IOptions {
         return {
             allowedTags: [],
-            disallowedTagsMode: 'discard',
+            disallowedTagsMode: "discard",
             allowedAttributes: {},
             selfClosing: [],
             allowedSchemes: [],
@@ -30,8 +27,8 @@ export class NoHtmlSanitizer {
             enforceHtmlBoundary: false,
             allowedIframeHostnames: [],
             allowedIframeDomains: [],
-            allowIframeRelativeUrls: false
-        }
+            allowIframeRelativeUrls: false,
+        };
     }
 
     // MIDDLEWARES and CUSTOMVALIDATOR
@@ -39,19 +36,17 @@ export class NoHtmlSanitizer {
     /**
      * Express validator, CustomSanitizer getter of the function to be added as the function.
      */
-    public static validatorCustomSanitizer():CustomSanitizer {
+    public static validatorCustomSanitizer(): CustomSanitizer {
         return (input, meta) => {
             return NoHtmlSanitizer.sanitize(input);
-        }
+        };
     }
-
 
     /**
      * Express validator, schema validator getter of the function to be added as the function.
      */
-    public static validatorSchemaMiddleware():CustomSanitizer
-    {
-        return (value, {req, location, path}) => {
+    public static validatorSchemaMiddleware(): CustomSanitizer {
+        return (value, { req, location, path }) => {
             let sanitizedValue;
 
             if (req.body.foo && location && path) {
@@ -60,35 +55,29 @@ export class NoHtmlSanitizer {
                 sanitizedValue = 0;
             }
             return sanitizedValue;
-        }
+        };
     }
 
-
-    public static mongoosePostMiddleware():any {
-        return async (doc:any, next:any): Promise<any> =>
-        {
+    public static mongoosePostMiddleware(): any {
+        return async (doc: any, next: any): Promise<any> => {
             return next();
-        }
+        };
     }
-
 
     /**
      * Middleware getter of the function to be added as the function.
      */
-    public static expressMiddleware():any {
+    public static expressMiddleware(): any {
         return (req: Request, res: Response, next: NextFunction) => {
-            let raw, sanitizedValue = "";
+            let raw,
+                sanitizedValue = "";
 
-            if (req.body
-                && req.body.data
-                && req.body.data.description)
-            {
+            if (req.body && req.body.data && req.body.data.description) {
                 raw = req.body.data.description;
                 sanitizedValue = NoHtmlSanitizer.sanitize(raw);
             }
 
             return sanitizedValue;
-        }
+        };
     }
-
 }

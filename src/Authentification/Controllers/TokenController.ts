@@ -1,7 +1,7 @@
 import * as jwt from "jsonwebtoken";
-import {JwtPayload, VerifyErrors} from "jsonwebtoken";
-import {getApiConfig} from "@src/config";
-import {now} from "@src/Helpers/DateTime";
+import { JwtPayload, VerifyErrors } from "jsonwebtoken";
+import { getApiConfig } from "@src/config";
+import { now } from "@src/Helpers/DateTime";
 import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 
 /**
@@ -9,15 +9,13 @@ import LogHelper from "@src/Monitoring/Helpers/LogHelper";
  * used in AuthentificationController.
  */
 export class TokenController {
-
-    static config:any;
+    static config: any;
 
     /**
      * Use un Authenfication mainly, with user data as : { username: user.username,  role: user.role }
      * @param encapsulateData object encapsulate this object in the token.
      */
-    public static generate(encapsulateData:any):string
-    {
+    public static generate(encapsulateData: any): string {
         TokenController.initConfig();
 
         return jwt.sign(encapsulateData, TokenController.config.tokenSecret, TokenController.config.jwt.defaultOptions);
@@ -34,29 +32,20 @@ export class TokenController {
      * It assign the results to the callback TokenController.onVerifyToken
      * @param token
      */
-    public static async verify(token:string):Promise<string|JwtPayload|undefined|any>
-    {
+    public static async verify(token: string): Promise<string | JwtPayload | undefined | any> {
         let verifiedToken;
         TokenController.initConfig();
         try {
-            await jwt.verify(
-                token,
-                TokenController.config.tokenSecret,
-                (err:any, decoded:any) => {
-                    verifiedToken = TokenController.onVerifyToken(err, decoded);
-                }
-            );
+            await jwt.verify(token, TokenController.config.tokenSecret, (err: any, decoded: any) => {
+                verifiedToken = TokenController.onVerifyToken(err, decoded);
+            });
             return verifiedToken;
-
-        } catch (error:any)
-        {
+        } catch (error: any) {
             LogHelper.error(`Verify Token Error ${error.message}`, error);
             // escalade the erry to the next try and catch.
             throw error;
         }
-
     }
-
 
     /**
      * Callback of the jwt.verify, to handle the error and the decoded value in the TokenController Scope.
@@ -87,36 +76,28 @@ export class TokenController {
      * @param decoded {JwtPayload|null}
      * @protected
      */
-    protected static onVerifyToken(err:VerifyErrors|null, decoded:any|JwtPayload|undefined)
-    {
-        if (err)
-        {
+    protected static onVerifyToken(err: VerifyErrors | null, decoded: any | JwtPayload | undefined) {
+        if (err) {
             //could be : JsonWebTokenError
             // could be : TokenExpiredError
             throw err;
         }
 
-        if (TokenController.isValid(decoded) &&
-            TokenController.isActive(decoded))
-        {
+        if (TokenController.isValid(decoded) && TokenController.isActive(decoded)) {
             // we assume here,it will be an Object that we can deconstructed.
             decoded.validated = true;
             return decoded;
         }
-        throw new Error('Token format is wrong.');
+        throw new Error("Token format is wrong.");
     }
-
 
     /**
      * @Deprecated
      * @param verifiedToken {any} Likely to be an object.
      * @protected
      */
-    protected static updateTokenLife(verifiedToken:any):any
-    {
-        if (TokenController.isValid(verifiedToken) &&
-            TokenController.isActive(verifiedToken))
-        {
+    protected static updateTokenLife(verifiedToken: any): any {
+        if (TokenController.isValid(verifiedToken) && TokenController.isActive(verifiedToken)) {
             //const now = date();
             //if augment lifespan
             //add params with last updated
@@ -125,30 +106,27 @@ export class TokenController {
         }
     }
 
-    protected static isActive(verifiedToken:any):any
-    {
-        if (TokenController.isValid(verifiedToken))
-        {
+    protected static isActive(verifiedToken: any): any {
+        if (TokenController.isValid(verifiedToken)) {
             return now() >= verifiedToken.exp;
         }
-        return false
+        return false;
     }
 
-
-    protected static isValid (verifiedToken:any):any {
-        return verifiedToken &&
+    protected static isValid(verifiedToken: any): any {
+        return (
+            verifiedToken &&
             verifiedToken.iat !== undefined &&
             verifiedToken.iat >= 0 &&
             verifiedToken.exp !== undefined &&
             verifiedToken.exp >= 0 &&
             verifiedToken._id !== undefined &&
             verifiedToken.username !== undefined &&
-            verifiedToken.role !== undefined;
+            verifiedToken.role !== undefined
+        );
     }
 
-    public static generateUserToken(user:any):string
-    {
+    public static generateUserToken(user: any): string {
         return TokenController.generate(user);
     }
-
 }

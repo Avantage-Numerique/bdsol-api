@@ -1,96 +1,88 @@
 [
     {
-        "infoTest":
-        {
-            "name":"Update Full + add fondationDate",
-            "error":false,
-            "status":200,
-            "ignoreFields":{
-                "fondationDate":"1999-09-10T00:00:00.000Z"
+        "infoTest": {
+            "name": "Update Full + add fondationDate",
+            "error": false,
+            "status": 200,
+            "ignoreFields": {
+                "fondationDate": "1999-09-10T00:00:00.000Z"
             }
         },
-        "name":"Petit théâtre du vieux Noranda",
+        "name": "Petit théâtre du vieux Noranda",
         "description": "Théâtre et magie",
-        "url":"https://petittheatre.org/",
-        "contactPoint":"info@petittheatre.org",
-        "fondationDate":"1999-09-10"
+        "url": "https://petittheatre.org/",
+        "contactPoint": "info@petittheatre.org",
+        "fondationDate": "1999-09-10"
     },
     {
-        "infoTest":
-        {
-            "name":"Update empty data",
-            "error":true,
-            "status":400
+        "infoTest": {
+            "name": "Update empty data",
+            "error": true,
+            "status": 400
         }
     },
     {
-        "infoTest":
-        {
-            "name":"Update random id",
-            "error":true,
-            "status":422
+        "infoTest": {
+            "name": "Update random id",
+            "error": true,
+            "status": 422
         },
-        "id":"123456789123456789123456",
-        "name":"Marche - e - pas"
+        "id": "123456789123456789123456",
+        "name": "Marche - e - pas"
     },
     {
-        "infoTest":
-        {
-            "name":"Update id length != 24",
-            "error":true,
-            "status":400
+        "infoTest": {
+            "name": "Update id length != 24",
+            "error": true,
+            "status": 400
         },
-        "id":"123456",
+        "id": "123456",
         "name": "Petit f"
     },
     {
-        "infoTest":
-        {
-            "name":"Update empty req",
-            "error":true,
-            "status":400
+        "infoTest": {
+            "name": "Update empty req",
+            "error": true,
+            "status": 400
         },
         "name": ""
     },
     {
-        "infoTest":
-        {
-            "name":"Update empty non req",
-            "error":false,
-            "status":200
+        "infoTest": {
+            "name": "Update empty non req",
+            "error": false,
+            "status": 200
         },
         "name": "Oui permis",
         "description": "",
-        "url":"",
-        "contactPoint":""
+        "url": "",
+        "contactPoint": ""
     },
     {
-        "infoTest":
-        {
-            "name":"Update empty date",
-            "error":false,
-            "status":200
+        "infoTest": {
+            "name": "Update empty date",
+            "error": false,
+            "status": 200
         },
         "name": "Oui permis",
         "description": "afd",
-        "url":"vda",
-        "contactPoint":"",
-        "fondationDate":null
+        "url": "vda",
+        "contactPoint": "",
+        "fondationDate": null
     },
     {
-        "infoTest":
-        {
-            "name":"Update prepare for search/list",
-            "error":false,
-            "status":200,
-            "ignoreFields":{
-                "fondationDate":"1999-09-10T00:00:00.000Z"
+        "infoTest": {
+            "name": "Update prepare for search/list",
+            "error": false,
+            "status": 200,
+            "ignoreFields": {
+                "fondationDate": "1999-09-10T00:00:00.000Z"
             }
         },
-        "name":"Petit théâtre du vieux Noranda",
+        "name": "Petit théâtre du vieux Noranda",
         "description": "Théâtre et magie",
-        "url":"https://petittheatre.org/",
-        "contactPoint":"info@petittheatre.org",
-        "fondationDate":"1999-09-10"
+        "url": "https://petittheatre.org/",
+        "contactPoint": "info@petittheatre.org",
+        "fondationDate": "1999-09-10"
     }
 ]

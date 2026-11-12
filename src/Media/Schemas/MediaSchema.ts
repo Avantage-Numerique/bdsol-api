@@ -1,5 +1,5 @@
-import mongoose, {Document} from "mongoose";
-import {Meta} from "@src/Moderation/Schemas/MetaSchema";
+import mongoose, { Document } from "mongoose";
+import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 
 export interface MediaSchema extends Document {
     title: string;

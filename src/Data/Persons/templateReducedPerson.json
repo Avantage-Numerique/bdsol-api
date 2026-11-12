@@ -16,11 +16,11 @@
         "occupations": [],
         "domains": [],
         "catchphrase": "",
-        "extra":{
-            "ville":"Val-d'or",
-            "province":"Québec",
-            "numeroTelephone":"(819)345-8241",
-            "email":"info@loulacreation.ca"
+        "extra": {
+            "ville": "Val-d'or",
+            "province": "Québec",
+            "numeroTelephone": "(819)345-8241",
+            "email": "info@loulacreation.ca"
         }
     },
     {
@@ -31,11 +31,11 @@
         "occupations": [],
         "domains": [],
         "catchphrase": "",
-        "extra":{
-            "ville":"",
-            "province":"",
-            "numeroTelephone":"",
-            "email":"leslie@lillym.ca"
+        "extra": {
+            "ville": "",
+            "province": "",
+            "numeroTelephone": "",
+            "email": "leslie@lillym.ca"
         }
     },
     {
@@ -46,13 +46,13 @@
         "occupations": [],
         "domains": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"27, rue Larch",
-            "ville":"Sudbury",
-            "province":"Ontario",
-            "codePostal":"P3E1B7",
-            "numeroTelephone":"(705)665-5027",
-            "email":"atetreault@maplacedesarts.ca"
+        "extra": {
+            "adresse": "27, rue Larch",
+            "ville": "Sudbury",
+            "province": "Ontario",
+            "codePostal": "P3E1B7",
+            "numeroTelephone": "(705)665-5027",
+            "email": "atetreault@maplacedesarts.ca"
         }
     },
     {
@@ -63,8 +63,8 @@
         "occupations": [],
         "domains": [],
         "catchphrase": "",
-        "extra":{
-            "email":"tom.pollet@petittheatre.org"
+        "extra": {
+            "email": "tom.pollet@petittheatre.org"
         }
     },
     {
@@ -73,10 +73,10 @@
         "nickname": "",
         "description": "",
         "occupations": [],
-        "domains": [{"domain":{}}],
+        "domains": [{ "domain": {} }],
         "catchphrase": "",
-        "extra":{
-            "email":"guillaume.sain@gmail.com"
+        "extra": {
+            "email": "guillaume.sain@gmail.com"
         }
     },
     {
@@ -87,13 +87,13 @@
         "occupations": [],
         "domains": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"295 rue Principale",
-            "ville":"La Sarre",
-            "codePostal":"J9Z 1Z1",
-            "province":"QC",
-            "numeroTelephone":"(819) 333-1110",
-            "email":"sguilbert@cjeao.qc.ca"
+        "extra": {
+            "adresse": "295 rue Principale",
+            "ville": "La Sarre",
+            "codePostal": "J9Z 1Z1",
+            "province": "QC",
+            "numeroTelephone": "(819) 333-1110",
+            "email": "sguilbert@cjeao.qc.ca"
         }
     },
     {
@@ -104,8 +104,8 @@
         "occupations": [],
         "domains": [],
         "catchphrase": "",
-        "extra":{
-            "email":"dominicleclerc@me.com"
+        "extra": {
+            "email": "dominicleclerc@me.com"
         }
     },
     {
@@ -116,8 +116,8 @@
         "occupations": [],
         "domains": [],
         "catchphrase": "",
-        "extra":{
-            "email":"hector.vallet@laposte.net"
+        "extra": {
+            "email": "hector.vallet@laposte.net"
         }
     },
     {
@@ -137,13 +137,13 @@
         "occupations": [],
         "domains": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"",
-            "ville":"LA SARRE",
-            "codePostal":"QUÉBEC",
-            "province":"",
-            "numeroTelephone":"(819) 301-3023",
-            "email":"contact@rectoverso-site-web-abitibi.com"
+        "extra": {
+            "adresse": "",
+            "ville": "LA SARRE",
+            "codePostal": "QUÉBEC",
+            "province": "",
+            "numeroTelephone": "(819) 301-3023",
+            "email": "contact@rectoverso-site-web-abitibi.com"
         }
     },
     {
@@ -154,8 +154,8 @@
         "occupations": [],
         "domains": [],
         "catchphrase": "",
-        "extra":{
-            "email":"julien@pi-web.ca"
+        "extra": {
+            "email": "julien@pi-web.ca"
         }
     },
     {
@@ -166,8 +166,8 @@
         "occupations": [],
         "domains": [],
         "catchphrase": "",
-        "extra":{
-            "email":"veroniquelevert@hotmail.com"
+        "extra": {
+            "email": "veroniquelevert@hotmail.com"
         }
     },
     {
@@ -178,9 +178,9 @@
         "occupations": [],
         "domains": [],
         "catchphrase": "",
-        "extra":{
-            "numeroTelephone":"(819) 860-7722",
-            "email":"info@evemcommunications.com"
+        "extra": {
+            "numeroTelephone": "(819) 860-7722",
+            "email": "info@evemcommunications.com"
         }
     },
     {
@@ -189,15 +189,15 @@
         "nickname": "",
         "description": "La passion de Francis pour l’infographie, le design d'interface et l’illustration dure déjà depuis 11 ans et ce n’est que le début. Aussi chargé de cours à l’UQAT depuis bientôt 6 ans, Francis fait de la communication visuelle une vocation. \nC’est en alliant ses connaissances théoriques et techniques qu’il réussit à concevoir des images percutantes, efficaces et uniques.",
         "occupations": [{}],
-        "domains": [{"domain":{}}],
+        "domains": [{ "domain": {} }],
         "catchphrase": "",
-        "extra":{
-            "adresse":"90 avenue Richelieu",
-            "ville":"Rouyn-Noranda",
-            "codePostal":"J9X 1L5",
-            "province":"Québec",
-            "numeroTelephone":"(819) 279-3484",
-            "email":"francis@ethop.studio"
+        "extra": {
+            "adresse": "90 avenue Richelieu",
+            "ville": "Rouyn-Noranda",
+            "codePostal": "J9X 1L5",
+            "province": "Québec",
+            "numeroTelephone": "(819) 279-3484",
+            "email": "francis@ethop.studio"
         }
     },
     {
@@ -206,7 +206,7 @@
         "nickname": "Dédé",
         "description": "Je suis une jeune artiste multidisciplinaire qui offre différents services artistiques, tels que la photographie argentique et numérique, ainsi que quelques services vidéos. Je fais aussi de la création d'illustrations dans mon métier principal, soit le tatouage.",
         "occupations": [],
-        "domains": [{"domain":{}}],
+        "domains": [{ "domain": {} }],
         "catchphrase": ""
     },
     {
@@ -217,9 +217,9 @@
         "occupations": [],
         "domains": [],
         "catchphrase": "",
-        "extra":{
-            "numeroTelephone":"(819) 527-6805",
-            "email":"infojphotographe@gmail.com"
+        "extra": {
+            "numeroTelephone": "(819) 527-6805",
+            "email": "infojphotographe@gmail.com"
         }
     },
     {
@@ -228,15 +228,15 @@
         "nickname": "Sulyvahnn",
         "description": "Je suis un designer graphique travailleur autonome originaire de Rouyn-Noranda, aujourd'hui établi dans la ville de Montréal.\n\nJ'ai oeuvré quelques années dans le domaine du design en région, entre autre en tant que graphiste, chargé de projet & gérant de production en impression grand format. J'ai travaillé avec plusieurs entreprises locals, souvent étroitement dans le domaine automobile avec les concessionnaires de la ville mais aussi avec une grande variété de clients entreprise & et clients particuliers, pour livrer une grande quantité de projet en conception graphique & en lettrage.\n\nAyant toujours un sentiment d'appartenance à ma région natale, j'y offre toujours mes services aux entrepreneurs et autres entités locales, que ce soit pour la conception d'un logo, la création d'un site web, ou tout autre service en design graphique. Pour la production et l'installation des projets, je priorise aussi toujours l'utilisation des ressources locales (par exemple, l'impression de stickers chez une entreprise locale).\n\nC'est donc avec fierté que je continue mon travail de graphiste, et que je tente de représenter du mieux les talents de la région!",
         "occupations": [],
-        "domains": [{"domain":{}}],
+        "domains": [{ "domain": {} }],
         "catchphrase": "",
-        "extra":{
-            "adresse":"2704 Rue Dandurand",
-            "ville":"Montréal",
-            "codePostal":"H1Y 1S9",
-            "province":"Quebec",
-            "numeroTelephone":"(819) 279-9016",
-            "email":"admin@sulyvahnn.com"
+        "extra": {
+            "adresse": "2704 Rue Dandurand",
+            "ville": "Montréal",
+            "codePostal": "H1Y 1S9",
+            "province": "Quebec",
+            "numeroTelephone": "(819) 279-9016",
+            "email": "admin@sulyvahnn.com"
         }
     },
     {
@@ -247,9 +247,9 @@
         "occupations": [],
         "domains": [],
         "catchphrase": "",
-        "extra":{
-            "numeroTelephone":"(819) 290-6443",
-            "email":"annickfphotographe@hotmail.com"
+        "extra": {
+            "numeroTelephone": "(819) 290-6443",
+            "email": "annickfphotographe@hotmail.com"
         }
     },
     {
@@ -260,9 +260,9 @@
         "occupations": [],
         "domains": [],
         "catchphrase": "",
-        "extra":{
-            "numeroTelephone":"(819) 345-8241",
-            "email":"info@loulacreation.ca"
+        "extra": {
+            "numeroTelephone": "(819) 345-8241",
+            "email": "info@loulacreation.ca"
         }
     },
     {
@@ -273,13 +273,13 @@
         "occupations": [],
         "domains": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"635 1ère Avenue Ouest",
-            "ville":"Amos",
-            "codePostal":"J9T1V4",
-            "province":"Québec",
-            "numeroTelephone":"(819) 443-3880",
-            "email":"info@tandemdesign.ca"
+        "extra": {
+            "adresse": "635 1ère Avenue Ouest",
+            "ville": "Amos",
+            "codePostal": "J9T1V4",
+            "province": "Québec",
+            "numeroTelephone": "(819) 443-3880",
+            "email": "info@tandemdesign.ca"
         }
     },
     {
@@ -299,13 +299,13 @@
         "occupations": [],
         "domains": [],
         "catchphrase": "",
-        "extra":{
-            "adresse":"377, Route 393 Nord",
-            "ville":"Saint-Vital-de-Clermont",
-            "codePostal":"J0Z 3M0",
-            "province":"Québec",
-            "numeroTelephone":"(819) 333-3582",
-            "email":"info@graphixdesign.ca"
+        "extra": {
+            "adresse": "377, Route 393 Nord",
+            "ville": "Saint-Vital-de-Clermont",
+            "codePostal": "J0Z 3M0",
+            "province": "Québec",
+            "numeroTelephone": "(819) 333-3582",
+            "email": "info@graphixdesign.ca"
         }
     },
     {
@@ -316,8 +316,8 @@
         "occupations": [],
         "domains": [],
         "catchphrase": "",
-        "extra":{
-            "email":"hugo@truerc.ca"
+        "extra": {
+            "email": "hugo@truerc.ca"
         }
     },
     {
@@ -326,10 +326,10 @@
         "nickname": "",
         "description": "",
         "occupations": [],
-        "domains": [{"domain":{}}],
+        "domains": [{ "domain": {} }],
         "catchphrase": "",
-        "extra":{
-            "email":"Leslie@lillym.ca"
+        "extra": {
+            "email": "Leslie@lillym.ca"
         }
     }
 ]
