@@ -219,38 +219,16 @@ class Organisation extends AbstractModel {
         if (this.schema !== undefined) {
             //Pre save, verification for occupation
             //Verify that occupations in the array exists and that there are no duplicates
-            this.schema.pre("save", async function (next: any): Promise<any> {
-                /* VOIR DOCUMENTATION TECHNIQUE, FONCTIONNALITÉ API, VALIDATION.MD */
-                /*
-                const idList = this.offers.map( (el:any) => {
-                    return el.skills.map( (id:any) =>{
-                        return new mongoose.Types.ObjectId(id);
-                    })
-                });
-                await middlewareTaxonomy(idList.flat(), TaxonomyController, "offers.skills");
-                */
+            this.schema.pre("save", async function (): Promise<any> {
                 //Check and insert badges (this == document)
                 middlewareInsertBadges(this);
-
-                return next();
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
-            this.schema.pre("findOneAndUpdate", async function (next: any): Promise<any> {
+            this.schema.pre("findOneAndUpdate", async function (): Promise<any> {
                 const updatedDocument: any = this.getUpdate();
-                /*
-                if (updatedDocument && updatedDocument["offers"] != undefined){
-                    const idList = updatedDocument["offers"].map( (el:any) => {
-                        return el.skills.map( (id:any) =>{
-                            return new mongoose.Types.ObjectId(id);
-                        });
-                    });
-                    await middlewareTaxonomy(idList.flat(), TaxonomyController, "offers.skills");
-                }
-                */
                 //Check and insert badges
                 middlewareInsertBadges(updatedDocument);
-                return next();
             });
         }
     }
