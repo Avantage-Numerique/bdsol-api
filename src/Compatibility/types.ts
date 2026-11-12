@@ -1,4 +1,5 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
+import { Cardinality } from "@src/Referential/Data/types";
 
 export enum CompatibleOntologiesEnum {
     //"AVNU" = "avnu",
@@ -20,6 +21,9 @@ export type CompatibilityEntry<TDocument = any> = {
     fields?: string[];
     export?: (doc: TDocument) => unknown;
     description?: string;
+    constraints?: {
+        required?: boolean;
+    };
 };
 
 export type CompatibilityProperties<TDocument = any> = {

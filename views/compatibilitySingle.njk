@@ -72,7 +72,9 @@
                         {% for propertyName, property in ontology.compatibility %}
 
                             <tr>
-                                <td>{{ propertyName }}</td>
+                                <td>
+                                    {{ isRequire(property.constraints.required) }}
+                                    {{ propertyName }}</td>
                                 <td>{{ property.description }}</td>
                             </tr>
 
