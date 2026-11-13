@@ -34,7 +34,7 @@
     ],
     "license": "à venir",
     "dependencies": {
-        "@braintree/sanitize-url": "^6.0.4",
+        "@braintree/sanitize-url": "^7.1.2",
         "@types/cors": "^2.8.19",
         "@types/express": "^4.17.25",
         "@types/http-server": "^0.12.4",
