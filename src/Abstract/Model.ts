@@ -19,7 +19,7 @@ abstract class AbstractModel {
     abstract connection: Connection;
     abstract provider: DbProvider;
     abstract service: Service;
-    abstract mongooseModel: Model<any>;
+    abstract mongooseModel: Model<any, any, any, any, any, any>;
 
     /** @abstract Schema in the database. */
     abstract schema: Schema;

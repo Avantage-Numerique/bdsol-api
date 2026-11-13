@@ -11,7 +11,7 @@ export class EnumSanitizer {
         if (Obj.enumHave(targetEnum, raw)) {
             return raw;
         }
-        return "";
+        return ""; // NOTE: depuis mongoose 8, on peut renvoyer `null` pour un enum non required
     }
 
     public static options(): any {

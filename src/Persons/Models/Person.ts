@@ -305,37 +305,17 @@ class Person extends AbstractModel {
     public registerPreEvents() {
         if (this.schema !== undefined) {
             //Pre save, verification for occupation
-            this.schema.pre("save", function () {
-                /* VOIR DOCUMENTATION TECHNIQUE, FONCTIONNALITÉ API, VALIDATION.MD */
-                /*
-                //Verify that occupations in the array exists and that there are no duplicates
-                const idList = this.occupations.map( (el:any) => {
-                    return el.skills.map( (id:any) =>{
-                        return new mongoose.Types.ObjectId(id);
-                    })
-                });
-                await middlewareTaxonomy(idList, TaxonomyController, "occupations.skills");
-                */
+            this.schema.pre("save", async function () {
                 //Check and insert badges (this == document)
                 middlewareInsertBadges(this);
             });
 
             //Pre update verification for occupation //Maybe it should be in the schema as a validator
-            this.schema.pre("findOneAndUpdate", function (next: any) {
+            this.schema.pre("findOneAndUpdate", async function () {
                 const updatedDocument: any = this.getUpdate();
-                /*if (updatedDocument["occupations"] != undefined){
-                    const idList = updatedDocument.occupations.map( (el:any) => {
-                        return el.skills.map( (id:any) =>{
-                            return new mongoose.Types.ObjectId(id);
-                        })
-                    });
-                    await middlewareTaxonomy(idList, TaxonomyController, "occupations.skills");
-                }
-                */
+
                 //Check and insert badges
                 middlewareInsertBadges(updatedDocument);
-
-                return next();
             });
         }
     }
