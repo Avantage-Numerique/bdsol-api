@@ -1,5 +1,4 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
-import { Cardinality } from "@src/Referential/Data/types";
 
 export enum CompatibleOntologiesEnum {
     //"AVNU" = "avnu",
