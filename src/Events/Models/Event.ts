@@ -100,12 +100,12 @@ class Event extends AbstractModel {
                 maxLength: 160,
             },
             entityInCharge: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 //required: true,
                 ref: "Organisation",
             },
             organizer: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: "Organisation",
             },
             eventType: {
@@ -127,7 +127,7 @@ class Event extends AbstractModel {
                 type: ContactPoint.schema,
             },
             mainImage: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: "Media",
             },
             attendees: {
@@ -153,7 +153,7 @@ class Event extends AbstractModel {
                 ref: "Place",
             },
             photoGallery: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: "Media",
             },
             meta: {
@@ -236,12 +236,12 @@ class Event extends AbstractModel {
      * Register mongoose events, for now pre-save, pre-findOneAndUpdate
      */
     public registerEvents(): void {
-        this.schema.pre("find", function (next) {
+        this.schema.pre("find", function () {
             // @ts-ignore //it sucks, but we need this to be the documents so shut up typescript.
             if (this.options?._recursed) {
-                return next();
+                return;
             }
-            if (this.getOptions().skipPopulate) return next();
+            if (this.getOptions().skipPopulate) return;
             //middlewarePopulateProperty(this, 'team.member');
 
             taxonomyPopulate(this, "skills");
@@ -260,16 +260,14 @@ class Event extends AbstractModel {
 
             //populateUser(this, "meta.requestedBy");
             //populateUser(this, "meta.lastModifiedBy");
-
-            next();
         });
 
-        this.schema.pre("findOne", function (next) {
+        this.schema.pre("findOne", function () {
             // @ts-ignore //it sucks, but we need this to be the documents so shut up typescript.
             if (this.options?._recursed) {
-                return next();
+                return;
             }
-            if (this.getOptions().skipPopulate) return next();
+            if (this.getOptions().skipPopulate) return;
 
             middlewarePopulateProperty(this, "team.member");
             taxonomyPopulate(this, "skills");
@@ -284,8 +282,6 @@ class Event extends AbstractModel {
             middlewarePopulateProperty(this, "photoGallery");
             populateUser(this, "meta.requestedBy");
             populateUser(this, "meta.lastModifiedBy");
-
-            next();
         });
     }
 }

@@ -82,7 +82,7 @@ export class UserSchemaSanitizer {
      * Getter for the anonymous function that will act as the middleware, with the parameters and the next() call.
      */
     public static middlewareFunction(entity: string) {
-        const entitysSchema: any = "User" || entity;
+        const entitysSchema: any = entity || "User";
         let entitysSanitizationRules: any = UserSchemaSanitizer.parseSchema(entitysSchema);
 
         //since all properties are sanitize by itself in a middleware slot (as an array elements). We need to return an array with all the rules
