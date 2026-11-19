@@ -1,7 +1,5 @@
-import mongoose, {Document, Schema} from "mongoose";
-import {SubMeta} from "@src/Moderation/Schemas/MetaSchema";
-import { Location } from "@src/Database/Schemas/LocationSchema";
-import { StringLiteral } from "typescript";
+import mongoose, { Document, Schema } from "mongoose";
+import { SubMeta } from "@src/Moderation/Schemas/MetaSchema";
 
 /* Made according to https://datascene.ca/references/proprietes/salle/
 Links between field name : theirs ==> ours :
@@ -19,8 +17,6 @@ Configuration type ==> config.roomConfigType
 Configuration capacité ==> config.roomConfigCapacity
 */
 
-
-
 export interface RoomSchema extends Document {
     name: string;
     placeName: string;
@@ -28,7 +24,7 @@ export interface RoomSchema extends Document {
     shortDescription: string;
     mainImage: mongoose.ObjectId;
     placeId: mongoose.ObjectId;
-    location: Location;
+    // location: Location;
     accessibilityInformation: object;
     config: object;
     subMeta: SubMeta;
@@ -36,47 +32,49 @@ export interface RoomSchema extends Document {
 
 export class Room {
     /** @static schema */
-    static schema:Schema = new Schema<RoomSchema>({
-        name: {
-            type: String
-        },
-        placeName: {
-            type: String,
-        },
-        description: {
-            type: String
-        },
-        shortDescription: {
-            type: String,
-        },
-        mainImage: {
-            type: mongoose.Types.ObjectId,
-            ref : "Media"
-        },
-        placeId: {
-            type: mongoose.Types.ObjectId,
-            ref : "Place"
-        },
-        location: {
-            type: Location.schema
-        },
-        accessibilityInformation: {
-            type: Object,
-        },
-        config: {
-            space: {
+    static schema: Schema = new Schema<RoomSchema>(
+        {
+            name: {
+                type: String,
+            },
+            placeName: {
+                type: String,
+            },
+            description: {
+                type: String,
+            },
+            shortDescription: {
+                type: String,
+            },
+            mainImage: {
+                type: mongoose.Types.ObjectId,
+                ref: "Media",
+            },
+            placeId: {
+                type: mongoose.Types.ObjectId,
+                ref: "Place",
+            },
+            // location: {
+            //     type: Location.schema
+            // },
+            accessibilityInformation: {
                 type: Object,
             },
-            roomConfigType: {
-                type: Object,
+            config: {
+                space: {
+                    type: Object,
+                },
+                roomConfigType: {
+                    type: Object,
+                },
+                roomConfigCapacity: {
+                    type: Number,
+                },
             },
-            roomConfigCapacity: {
-                type: Number,
+            subMeta: {
+                type: SubMeta.schema,
             },
-
         },
-        subMeta: {
-            type: SubMeta.schema
-        },
-    }, { _id : true });
+        { _id: true }
+    );
 }

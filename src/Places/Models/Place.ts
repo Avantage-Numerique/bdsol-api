@@ -1,13 +1,16 @@
 import mongoose, { Schema } from "mongoose";
-import AbstractModel from "@core/Model";
 import type { DbProvider } from "@database/DatabaseDomain";
-import { PlaceSchema } from "@src/Places/Schemas/PlaceSchema";
+
+import AbstractModel from "@core/Model";
 import PlacesService from "@src/Places/Services/PlacesService";
+
 import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
-import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 import { populateUser } from "@src/Users/Middlewares/populateUser";
-import { Location } from "@src/Database/Schemas/LocationSchema";
-import { Room } from "../Schemas/RoomSchema";
+
+import { Meta } from "@src/Moderation/Schemas/MetaSchema";
+import { PlaceSchema } from "@src/Places/Schemas/PlaceSchema";
+import { PostalAddress } from "@src/Places/Schemas/PostalAddressSchema";
+// import { Room } from "@src/Places/Schemas/RoomSchema";
 
 class Place extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -95,8 +98,22 @@ class Place extends AbstractModel {
                 type: String,
                 maxLength: 160,
             },
-            rooms: {
-                type: [Room.schema],
+            // rooms: {
+            //     type: [Room.schema],
+            // },
+            latitude: {
+                type: String,
+                required: true,
+                validate: {
+                    validator: (value: string) => {
+                        const n = Number(value);
+                        return value.trim() !== "" && Number.isFinite(n) && n >= -90 && n <= 90;
+                    },
+                    message: "Latitude must be a number between -90 and 90",
+                },
+            },
+            longitude: {
+                type: String,
             },
             placeType: {
                 type: [mongoose.Types.ObjectId],
@@ -113,8 +130,9 @@ class Place extends AbstractModel {
                 type: mongoose.Types.ObjectId,
                 ref: "Media",
             },
-            location: {
-                type: Location.schema,
+
+            postalAddress: {
+                type: PostalAddress.schema,
             },
             nomatimObject: {
                 type: Object,
@@ -140,7 +158,7 @@ class Place extends AbstractModel {
      * @return {Array} the field slug/names.
      */
     get searchSearchableFields(): object {
-        return ["name", "description", "location"];
+        return ["name", "description", "postalAddress"];
     }
 
     /**
@@ -156,9 +174,11 @@ class Place extends AbstractModel {
             description: document.description ?? "",
             slug: document.slug ?? "",
             mainImage: document.mainImage ?? "",
-            location: document.location ?? {},
+            postalAddress: document.postalAddress ?? {},
             shortDescription: document.shortDescription ?? "",
-            rooms: document.rooms ?? [],
+            latitude: document.latitude ?? "",
+            longitude: document.longitude ?? "",
+            // rooms: document.rooms ?? [],
             placeType: document.placeType ?? [],
             nomatimObject: document.nomatimObject ?? {},
             meta: document.meta ?? "",
