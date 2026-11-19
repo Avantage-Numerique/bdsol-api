@@ -126,7 +126,6 @@ export abstract class Service {
      * @param data any the document structure. This is type any because that class will be extended.
      */
     async insert(data: any): Promise<ApiResponseContract> {
-        console.log("Pre session");
         const session = await this.appModel.connection.startSession();
         try {
             session.startTransaction();
