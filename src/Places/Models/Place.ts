@@ -127,7 +127,7 @@ class Place extends AbstractModel {
                 unique: true,
             },
             mainImage: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: "Media",
             },
 

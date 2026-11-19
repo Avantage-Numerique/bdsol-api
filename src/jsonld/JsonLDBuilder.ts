@@ -34,12 +34,12 @@ export class JsonLDBuilder {
     }
 
     // build natif AVNU
-    build() {
+    public build() {
         return this.buildFor(CompatibleOntologiesEnum.Schemaorg);
     }
 
     // build pour ontologie externe
-    buildFor(targetOntology: CompatibleOntologiesEnum | string) {
+    protected buildFor(targetOntology: CompatibleOntologiesEnum | string) {
         return {
             "@dev": `Build for ${targetOntology}`,
             "@context": this.buildContext(),
@@ -49,7 +49,10 @@ export class JsonLDBuilder {
         };
     }
 
-    // context récursif
+    /**
+     * Build context @recurcive algorithm.
+     * @private
+     */
     private buildContext(): any {
         if (this.options?.contextMode === "url") {
             return this.options.contextUrl || "";
@@ -79,7 +82,10 @@ export class JsonLDBuilder {
         return context;
     }
 
-    // build interne récursif
+    /**
+     * Build LD+JSON object with a @recurcive algorithm.
+     * @private
+     */
     private buildForOntology(targetOntology: string, entity: any, referential: any[]): Record<string, any> {
         const result: Record<string, any> = {};
 
@@ -152,7 +158,8 @@ export class JsonLDBuilder {
             };
 
             //gestion array ou single
-            if (isPropertyPluralRelation) {
+            //skip to avoid pasting everyting populate did.
+            /*if (isPropertyPluralRelation) {
                 if (!Array.isArray(value)) {
                     console.error(`[JsonLDBuilder] Expected array for property: ${field}`);
                     continue;
@@ -178,7 +185,7 @@ export class JsonLDBuilder {
                         else if (propertyRef.type?.kind === "object") result[field] = processed;
                     }
                 }
-            }
+            }*/
         }
         return result;
     }

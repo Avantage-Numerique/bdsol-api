@@ -35,6 +35,9 @@ import {
     prepareUriForLoging,
 } from "./Connection";
 
+/**
+ * DBDriver to manage mongoose into the api.
+ */
 export class MongooseDBDriver implements DBDriver {
     public driverPrefix: string;
     public isSRV: boolean;
