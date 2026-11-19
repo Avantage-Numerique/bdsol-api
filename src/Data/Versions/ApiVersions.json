@@ -1,6 +1,30 @@
 {
     "versions": [
         {
+            "label": "Version de maintenance",
+            "value": "1.0.5",
+            "date": "2026-11-18",
+            "description": "Mise à jour de routine et réglage de bogues.",
+            "notes": [
+                {
+                    "value": "<strong>Équipe</strong>",
+                    "additionnalClasses": "pt-3 pb-2"
+                },
+                {
+                    "value": "<strong>Frédéric Rivard</strong>, Backend et front-end"
+                },
+                {
+                    "value": "<strong>Jeanne Perrin</strong> web design et UX"
+                },
+                {
+                    "value": "<strong>Jules Luzy-Riopel</strong>, Backend, front-end"
+                },
+                {
+                    "value": "<strong>Marc-André Martin</strong>, Backend, front-end et responsable du développement"
+                }
+            ]
+        },
+        {
             "label": "Version de maintenance, seo et ajustements",
             "value": "1.0.4",
             "date": "2026-09-25",
