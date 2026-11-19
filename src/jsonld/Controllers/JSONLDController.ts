@@ -1,7 +1,5 @@
 import { JSONLDBuilder } from "@src/jsonld/JsonLDBuilder";
-import EntityControllerFactory from "@src/Abstract/EntityControllerFactory";
 import { CompatibleOntologiesEnum } from "@src/Compatibility/types";
-import LogHelper from "@src/Monitoring/Helpers/LogHelper";
 import EntityModelFactory from "@src/Abstract/EntityModelFactory";
 
 class JSONLDController {
@@ -25,15 +23,11 @@ class JSONLDController {
             throw new Error("Unknown ontology");
         }
 
-        const entitiesWithUri = ["person", "organisation", "taxonomy", "project", "event", "place", "equipment"];
+        const modelsWithUri = EntityModelFactory.getAllModels().filter((model) => model?.instance.schema.path("uri"));
 
         const promiseDocuments = [];
-        for (const entityType of entitiesWithUri) {
-            const model = EntityModelFactory.getModelInstanceFromEntity(entityType)?.mongooseModel;
-
-            if (model === undefined) continue;
-
-            promiseDocuments.push(model.findOne({ uri: "http://avnu.ca/entity/" + uri }));
+        for (const model of modelsWithUri) {
+            promiseDocuments.push(model?.instance.mongooseModel.findOne({ uri: "http://avnu.ca/entity/" + uri }));
         }
 
         const documents = (await Promise.all(promiseDocuments)).filter((v) => v);
