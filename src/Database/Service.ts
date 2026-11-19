@@ -138,7 +138,7 @@ export abstract class Service {
 
             return this._parseResult(meta, Service.CREATE_STATE);
         } catch (insertError: any) {
-            return this.errorCheck(insertError, Service.UPDATE_STATE);
+            return this.errorCheck(insertError, Service.CREATE_STATE);
             /*return ErrorResponse.create(
                 insertError.errors,
                 StatusCodes.INTERNAL_SERVER_ERROR,
@@ -442,6 +442,13 @@ export abstract class Service {
             );
         }
 
+        if (meta.rawError?.errors) {
+            return ErrorResponse.createWithMultipleErrors(
+                meta.rawError.errors,
+                StatusCodes.BAD_REQUEST,
+                "Données non valide. Réajuster la requête."
+            );
+        }
         return ErrorResponse.create(
             meta.errors,
             StatusCodes.UNPROCESSABLE_ENTITY,
