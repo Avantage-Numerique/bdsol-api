@@ -7,6 +7,8 @@ import { middlewarePopulateProperty } from "@src/Taxonomy/Middlewares/Taxonomies
 import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 import { populateUser } from "@src/Users/Middlewares/populateUser";
 import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
+import { UriObject } from "@src/Database/Schemas/URISchema";
+import { SameAs } from "@src/Database/Schemas/SameAsSchema";
 
 class Place extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -40,6 +42,7 @@ class Place extends AbstractModel {
 
     public registerIndexes(): void {
         //Indexes
+        Place._instance.schema.index({ uri: 1 });
         Place._instance.schema.index(
             {
                 name: "text",
@@ -132,9 +135,13 @@ class Place extends AbstractModel {
             longitude: {
                 type: String,
             },
+            sameAs: {
+                type: [SameAs.schema],
+            },
             meta: {
                 type: Meta.schema,
             },
+            uri: UriObject.field,
         },
         {
             toJSON: { virtuals: true },
@@ -178,7 +185,9 @@ class Place extends AbstractModel {
             country: document.country ?? "",
             latitude: document.latitude ?? "",
             longitude: document.longitude ?? "",
+            sameAs: document.sameAs ?? [],
             meta: document.meta ?? {},
+            uri: document.uri ?? "",
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",

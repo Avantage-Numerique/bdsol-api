@@ -1,14 +1,15 @@
-import { Document } from "mongoose";
+import { Document, ObjectId } from "mongoose";
 import { Meta } from "@src/Moderation/Schemas/MetaSchema";
-import { Member } from "@src/SubProperty/Team/Schemas/MemberSchema";
-import Media from "@src/Media/Models/Media";
-import { ObjectId } from "mongodb";
-import { Sponsor } from "@database/Schemas/SponsorSchema";
-import { ScheduleBudget } from "@database/Schemas/ScheduleBudgetSchema";
+import { MemberSchema } from "@src/SubProperty/Team/Schemas/MemberSchema";
+import { SponsorSchema } from "@database/Schemas/SponsorSchema";
+import { ScheduleBudgetSchema } from "@database/Schemas/ScheduleBudgetSchema";
 import { ProjectContextEnum } from "../ProjectContextEnum";
 import { DomainListSchema } from "@src/Taxonomy/Schemas/DomainListSchema";
-import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
-import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
+import { SocialHandleSchema } from "@src/Database/Schemas/SocialHandleSchema";
+import { ContactPointSchema } from "@src/Database/Schemas/ContactPointSchema";
+import { MediaSchema } from "@src/Media/Schemas/MediaSchema";
+import { UriObject } from "@src/Database/Schemas/URISchema";
+import { SameAs } from "@src/Database/Schemas/SameAsSchema";
 
 export interface ProjectSchema extends Document {
     name: string;
@@ -18,16 +19,18 @@ export interface ProjectSchema extends Document {
     producer: [ObjectId];
     description: string;
     shortDescription: string;
-    url: [SocialHandle];
-    contactPoint: ContactPoint;
+    url: [SocialHandleSchema];
+    contactPoint: ContactPointSchema;
     location: [ObjectId];
-    team: [Member];
-    mainImage: Media;
-    sponsor: [Sponsor];
-    scheduleBudget: ScheduleBudget;
+    team: [MemberSchema];
+    mainImage: MediaSchema;
+    sponsor: [SponsorSchema];
+    scheduleBudget: ScheduleBudgetSchema;
     skills: [ObjectId];
     domains: [DomainListSchema];
     context: ProjectContextEnum;
     equipment: [ObjectId];
+    sameAs: [SameAs];
     meta: Meta;
+    uri: UriObject;
 }

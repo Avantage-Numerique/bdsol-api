@@ -1,50 +1,24 @@
-import { RefProperty } from "@ref/Data/types";
-import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
-import { refPersonLink } from "@ref/Data/RelationLinks/RefPersonLink";
-import SchemaOrgCompatibility from "@ref/Data/Compatibility/SchemaOrg";
-import DataSceneCompatibility from "@ref/Data/Compatibility/DataScene";
-import { refPerson } from "@ref/Data/Entities/RefPerson";
-import { refOrder } from "@ref/Data/Properties/RefOrder";
+import { RefSchema } from "@ref/Data/types";
+import { createRefType } from "@ref/Data/utils";
+import { EntityTypesEnum } from "@src/Entities/EntityTypes";
+import { refSubMeta } from "./RefSubMeta";
 
-export const refMember: RefProperty = {
-    //field: "member",
-    ontologyProperty: "avnu:member",
-    url: "/member",
-    label: "Membre d'équipe",
-    cardinality: "0..1",
-    description: "Identifiant d'un membre d'équipe et le libellé de son rôle dans l'équipe.",
-    compatibility: [
-        SchemaOrgCompatibility.getOntologyCompatibilityArray("member"),
-        DataSceneCompatibility.getOntologyCompatibilityArray(
-            "hasMembers",
-            "hasMembers (of type:Person)",
-            "https://documentation.datascene.ca/references/contributor/#11-propriete-contributeur-contributor-hasmembers-membres"
-        ),
-    ],
-    //note: "",
-
+export const refMember: RefSchema = {
     type: createRefType("object"),
-    ref: [
-        {
-            ...refPersonLink,
-            field: "member",
-            label: "Membre de l'équipe",
+    fields: {
+        member: {
             cardinality: "1..1",
-            description: refPerson.description,
-            compatibility: refPerson.compatibility,
-            //note: "",
+            type: createRefType("reference", [EntityTypesEnum.person]),
+            constraints: { required: true },
         },
-        {
-            field: "role",
-            type: createRefType("string"),
-            ontologyProperty: "avnu:role",
-            url: createPrimitiveUrl("role"),
-            label: "Role",
+        role: {
             cardinality: "0..1",
-            description: "Role assigné à ce membre.",
-            compatibility: [SchemaOrgCompatibility.getOntologyCompatibilityArray("roleName")],
-            //note: "",
+            type: createRefType("string"),
         },
-        { ...refOrder },
-    ],
+        subMeta: {
+            cardinality: "0..1",
+            type: createRefType("object"),
+            fields: refSubMeta.fields,
+        },
+    },
 };

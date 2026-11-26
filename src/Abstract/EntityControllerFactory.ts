@@ -7,10 +7,9 @@ import ProjectsController from "../Projects/Controllers/ProjectsController";
 import EventsController from "@src/Events/Controllers/EventsController";
 import PlacesController from "@src/Places/Controllers/PlacesController";
 import EquipmentController from "@src/Equipment/Controllers/EquipmentController";
+import EntityTypeFactory from "./EntityTypeFactory";
 
 class EntityControllerFactory {
-    public static typeList = ["person", "organisation", "taxonomy", "project", "media", "event", "place", "equipment"];
-
     public static getControllerFromEntity(entityType: string): AbstractController | undefined {
         let instance;
         switch (entityType.toLocaleLowerCase()) {

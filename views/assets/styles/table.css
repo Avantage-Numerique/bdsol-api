@@ -13,9 +13,23 @@ table {
 
     &.ref td,
     &.ref th {
+        overflow-inline: clip;
+        text-overflow: ellipsis;
+    }
+
+    &.ref td,
+    &.ref th {
         &:first-child,
         &:nth-child(2) {
             width: 20ch;
+        }
+    }
+
+    &.ref-single td,
+    &.ref-single th {
+        &:first-child {
+            width: 40ch;
+            max-width: 40ch;
         }
     }
 }

@@ -14,6 +14,8 @@ import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
 import { ContactPoint } from "@src/Database/Schemas/ContactPointSchema";
 import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
+import { UriObject } from "@src/Database/Schemas/URISchema";
+import { SameAs } from "@src/Database/Schemas/SameAsSchema";
 
 class Event extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -45,8 +47,9 @@ class Event extends AbstractModel {
 
     public registerIndexes(): void {
         //Indexes
+        Event._instance.schema.index({ uri: 1 });
         Event._instance.schema.index(
-            { name: "text", alternateNate: "text", slug: "text" },
+            { name: "text", alternateNate: "text", slug: "text", uri: "text" },
             {
                 default_language: "french",
                 //Note: if changed, make sure database really changed it by usings compass or mongosh (upon restart doesn't seem like it)
@@ -156,9 +159,13 @@ class Event extends AbstractModel {
                 type: Schema.Types.ObjectId,
                 ref: "Media",
             },
+            sameAs: {
+                type: [SameAs.schema],
+            },
             meta: {
                 type: Meta.schema,
             },
+            uri: UriObject.field,
         },
         {
             toJSON: { virtuals: true },
@@ -219,7 +226,9 @@ class Event extends AbstractModel {
             subEvents: document.subEvents ?? [],
             location: document.location ?? [],
             photoGallery: document.photoGallery ?? "",
+            sameAs: document.sameAs ?? [],
             meta: document.meta ?? {},
+            uri: document.uri ?? "",
             type: document.type ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",

@@ -51,7 +51,7 @@ export class Str {
             return cacheScope[key];
         }
 
-        return (cacheScope[key] = Str.firstCharUpper(Str.studly(str)));
+        return (cacheScope[key] = Str.firstCharLower(Str.studly(str)));
     }
 
     /**
@@ -152,8 +152,12 @@ export class Str {
         });
     }
 
+    public static firstCharLower(str: string) {
+        return str.charAt(0).toLowerCase() + str.slice(1);
+    }
+
     public static firstCharUpper(str: string) {
-        return str.charAt(0).toLowerCase() + str.substring(1, str.length);
+        return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
     public static allowedChars(str: string): string {

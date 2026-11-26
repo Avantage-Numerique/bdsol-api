@@ -1,20 +1,10 @@
 import { RegionEnum } from "@src/SubProperty/Badges/RegionEnum";
-import { RefProperty } from "@ref/Data/types";
-import { createPrimitiveUrl, createRefType } from "@ref/Data/utils";
-import AvnuCompatibility from "@ref/Data/Compatibility/Avnu";
+import { RefPrimitiveField } from "@ref/Data/types";
+import { createRefType } from "@ref/Data/utils";
 
-export const refRegion: RefProperty = {
-    field: "region",
-    ontologyProperty: "avnu:region",
-    url: createPrimitiveUrl("region"),
-    label: "Région",
-    type: createRefType("string"),
+export const refRegion: RefPrimitiveField = {
     cardinality: "0..1",
-    compatibility: [AvnuCompatibility.compatibilityMessage()],
-    //Propriété non conforme à datascene "associations géographiques".
-    //Similaire à "associations géographiques: ville", mais pas array
-    description:
-        "Région d'appartenance. Texte parmi la liste : ['', 'abitibi-temiscamingue', 'north Ontario', 'baies-james', 'other']",
+    type: createRefType("string"),
     constraints: {
         enum: RegionEnum,
     },

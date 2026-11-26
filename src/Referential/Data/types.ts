@@ -1,51 +1,58 @@
 import { EntityTypesEnum } from "@src/Entities/EntityTypes";
-import { CompatibleOntologyPropertyPrefix } from "@ref/Data/Compatibility/CompatibleOntology";
+// import { CompatibleOntologyPropertyPrefix } from "@src/Compatibility/Compatibility/CompatibleOntology";
 
 //The object that structure the whole Ref tree
 export type RefData = {
-    entities: Record<string, RefProperty>;
-    subschemas: Record<string, RefProperty>;
-    properties: Record<string, RefProperty>;
-    relationLinks: Record<string, RefProperty>;
+    entities: Record<string, RefSchema>;
+    subschemas: Record<string, RefSchema>;
+    properties: Record<string, RefPrimitiveField>;
+    relationLinks: Record<string, RefReferenceField>;
     vocabularies: Record<string, RefVocabulary>;
 };
 
-//Properties no ref
-export type RefPropertyBase = {
-    field?: string; //Default field name
-    ontologyProperty: `avnu:${string}`; //our ontology property name
-    ontologyType?: `${string}`; //our ontology property name
-    url: `/${string}`;
-    label: string; //Default label
-    cardinality?: Cardinality; //Default cardinality
-    description?: string; //description of the property
-    compatibility?: RefCompatibility[]; //compatibility to other ontologies
-    note?: string; //Note
-};
-
-export type RefPropertyPrimitive = {
-    [K in PrimitiveType]: RefPropertyBase & {
-        type: { kind: "primitive"; name: K };
-        constraints?: PrimitiveConstraintsMap[K];
-        //ref?: never;
-    };
-}[PrimitiveType];
-
-type RefPropertyReference = RefPropertyBase & {
-    type: RefTypeReference;
-    //ref?: never;
-    constraints?: never;
-};
-
-export type RefPropertyObject = RefPropertyBase & {
+//Object that represent a schema (entity or fixed subschema)
+export type RefSchema = {
     type: RefTypeObject;
-    ref: RefProperty[];
-    constraints?: never;
+    fields: Record<string, RefField>;
+    //documentation: RefFieldDocumentation
+};
+//export type RefFieldDocumentation = {
+//documentation?: RefDocumentationLink;
+//label?: string;
+//description?: string;
+//};
+//Different type of fields (primitive, reference or subschema/object)
+export type RefField = RefPrimitiveField | RefObjectField | RefReferenceField;
+
+//Properties that every fields have
+export type RefFieldBase = {
+    cardinality: Cardinality;
 };
 
-//RefProperty represent the list of entity, subschema, properties (primitive) or relationLinks
-export type RefProperty = RefPropertyPrimitive | RefPropertyReference | RefPropertyObject;
+//Base + Primitive Field
+export type RefPrimitiveField<K extends PrimitiveType = PrimitiveType> = RefFieldBase & {
+    type: { kind: "primitive"; name: K };
+    constraints?: RefPrimitiveConstraints<K>;
+};
+//Add required to primitive constraints
+export type RefPrimitiveConstraints<K extends PrimitiveType> = {
+    required?: boolean;
+} & PrimitiveConstraintsMap[K];
 
+//Base + Reference Field
+export type RefReferenceField = RefFieldBase & {
+    type: RefTypeReference;
+    constraints?: { required?: boolean };
+};
+
+//Base + Object Field
+export type RefObjectField = RefFieldBase & {
+    type: RefTypeObject;
+    fields: RefSchema["fields"];
+    constraints?: RefObjectConstraints;
+};
+
+//Compatibility
 export type RefCompatibility = {
     externalSource: {
         name: string;
@@ -58,7 +65,7 @@ export type RefCompatibility = {
     };
     mapping: {
         externalField: string;
-        ontologyProperty?: CompatibleOntologyPropertyPrefix;
+        // ontologyProperty?: CompatibleOntologyPropertyPrefix;
         ontologyUri?: string;
     };
     relation?: string;
@@ -66,17 +73,24 @@ export type RefCompatibility = {
     messageOnly?: string;
 };
 
+//Cardinality
 export type Cardinality = "0..1" | "1..1" | "0..N" | "1..N" | "N..N";
+//Primitive type / litterals list
 export type PrimitiveType = "string" | "number" | "boolean" | "date";
 
+//Type
+export type RefType = RefTypePrimitive | RefTypeReference | RefTypeObject;
+//Type Reference
+export type RefTypeReference = { kind: "reference"; targets: EntityTypesEnum[]; refPath?: string };
+//Type object
+export type RefTypeObject = { kind: "object" };
+//Type primitive (Redondant et remplacé par RefPrimitiveField)
 export type RefTypePrimitive<T extends PrimitiveType = PrimitiveType> = {
     kind: "primitive";
     name: T;
 };
-export type RefTypeReference = { kind: "reference"; targets: EntityTypesEnum[]; refPath?: string };
-export type RefTypeObject = { kind: "object" };
-export type RefType = RefTypePrimitive | RefTypeReference | RefTypeObject;
 
+//Contraints
 type PrimitiveConstraintsMap = {
     string: RefStringConstraints;
     number: RefNumberConstraints;
@@ -94,6 +108,12 @@ export type RefStringConstraints = {
 export type RefNumberConstraints = {
     minimum?: number;
     maximum?: number;
+};
+
+export type RefObjectConstraints = {
+    required?: boolean;
+    //immutable?: boolean;
+    //unique?: boolean
 };
 
 export type RefVocabulary = {

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import JSONLDController from "../Controllers/JSONLDController";
+import { CompatibleOntologiesEnum } from "@src/Compatibility/types";
 
 export function injectJSONLD() {
     /**
@@ -12,7 +13,10 @@ export function injectJSONLD() {
     return (req: Request, res: Response, next: NextFunction) => {
         let jsonLDforResult;
         try {
-            jsonLDforResult = JSONLDController.getInstance().createJsonLDForDocument(res.serviceResponse.data);
+            jsonLDforResult = JSONLDController.getInstance().createJsonLDForDocument(
+                res.serviceResponse.data,
+                CompatibleOntologiesEnum.Schemaorg
+            );
         } catch (error) {
             console.error("Failed to generate JSONLD from aggregation (controller.single)", error);
         }

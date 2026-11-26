@@ -1,0 +1,88 @@
+{% extends 'default.njk' %}
+
+{% block content %}
+
+    <div class="container">
+
+        {% block contentHeader %}
+            {% include "Partials/header.njk" %}
+        {% endblock %}
+
+        <nav class="breadcrumbs default-padding-y">
+            <ul>
+                <li>
+                    <a class="btn" href="/" title="{{ api.name }}">
+                        <i class="las la-home"></i>
+                    </a>
+                </li>
+                <li>
+                    <span>{{ title }}</span>
+                </li>
+            </ul>
+        </nav>
+
+        <h1>{{ title }}</h1>
+        <p>La base de données AVNU est développée en s'appuyant sur des ontologies reconnues et en veillant à maintenir une
+            compatiblité avec les standards ontologiques pertinents. Cette page présente les différentes entités disponibles dans
+            notre base de données ainsi que leurs liens et correspondances avec les concepts définis dans les ontologies externes
+            supportées.
+        </p>
+
+        <h2>Ontologies supportées</h2>
+
+        {% for ontologyKey, ontologyMeta in metaItems %}
+
+            <p>
+                <h3 id="{{ ontologyKey }}">
+                    <a href="{{ ontologyMeta.referentialUrl }}" target="_blank" class='external-link' rel='external'>{{ ontologyMeta.label }}</a>
+                </h3>
+            </p>
+
+            <p>{{ ontologyMeta.description }}</p>
+
+            {% set ontology = items[ontologyKey] %}
+
+            <table class="ref">
+
+                <thead>
+                    <tr>
+                        <th>Entité AVNU</th>
+                        <th>Correspondance à l'ontologie externe</th>
+                        <th>Description de l'ontologie externe</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for entityKey, entity in ontology %}
+
+                        <tr>
+                            <td>
+                                <a href="{{ baseUrl }}{{ baseRoute }}/{{ entityKey }}#{{ ontologyKey }}">
+                                    {{ entityKey }}
+                                </a>
+                            </td>
+
+                            <td>
+                                {% if entity.external %}
+                                    <a href="{{ entity.external }}" target="_blank" class='external-link' rel='external'>{{ entity["@type"] or entityKey }}</a>
+                                {% else %}
+                                    {{ entity["@type"] or entityKey }}
+                                {% endif %}
+                            </td>
+
+                            <td>{{ entity.description }}</td>
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block contentFooter %}
+    <section class="container"></section>
+{% endblock %}

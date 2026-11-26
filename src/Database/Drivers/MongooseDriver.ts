@@ -34,6 +34,8 @@ import {
     MongoDbUrlParamsContract,
     prepareUriForLoging,
 } from "./Connection";
+import AutoIncrement from "@src/AutoIncrement/AutoIncrement";
+import AutoIncrementService from "@src/AutoIncrement/AutoIncrementService";
 
 /**
  * DBDriver to manage mongoose into the api.
@@ -130,6 +132,7 @@ export class MongooseDBDriver implements DBDriver {
             this.providers.data.assign(EventsService.getInstance(Event.getInstance(doIndexes)));
             this.providers.data.assign(PlacesService.getInstance(Place.getInstance(doIndexes)));
             this.providers.data.assign(EquipmentService.getInstance(Equipment.getInstance(doIndexes)));
+            this.providers.data.assign(AutoIncrementService.getInstance(AutoIncrement.getInstance(doIndexes)));
         }
     }
 

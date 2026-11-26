@@ -7,6 +7,7 @@ import TaxonomyService from "../Services/TaxonomyService";
 import { Meta, SubMeta } from "@src/Moderation/Schemas/MetaSchema";
 import * as fs from "fs";
 import { taxonomyPopulate } from "../Middlewares/TaxonomiesPopulate";
+import { UriObject } from "@src/Database/Schemas/URISchema";
 
 class Taxonomy extends AbstractModel {
     /** @protected @static Singleton instance of model Taxonomy */
@@ -36,6 +37,7 @@ class Taxonomy extends AbstractModel {
 
     public registerIndexes(): void {
         //Indexes
+        Taxonomy._instance.schema.index({ uri: 1 });
         Taxonomy._instance.schema.index({ category: 1 });
         Taxonomy._instance.schema.index({ name: 1, category: 1 }, { unique: true });
         Taxonomy._instance.schema.index(
@@ -122,6 +124,7 @@ class Taxonomy extends AbstractModel {
                 type: Meta.schema,
                 //required: true,
             },
+            uri: UriObject.field,
         },
         {
             toJSON: { virtuals: true },
@@ -213,6 +216,7 @@ class Taxonomy extends AbstractModel {
             type: document.type ?? "",
             domains: document.domains ?? [],
             meta: document.meta ?? {},
+            uri: document.uri ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
         };

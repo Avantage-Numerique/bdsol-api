@@ -5,7 +5,7 @@ import AbstractModel from "../../Abstract/Model";
 import * as fs from "fs";
 import OrganisationsService from "../Services/OrganisationsService";
 import { Member } from "@src/SubProperty/Team/Schemas/MemberSchema";
-import { Meta, SubMeta } from "@src/Moderation/Schemas/MetaSchema";
+import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import { populateUser } from "@src/Users/Middlewares/populateUser";
 import { SkillGroup } from "@src/Taxonomy/Schemas/SkillGroupSchema";
@@ -17,6 +17,8 @@ import { middlewareInsertBadges } from "@src/SubProperty/Badges/MiddlewareInsert
 import { DomainList } from "@src/Taxonomy/Schemas/DomainListSchema";
 import { RegionEnum } from "@src/SubProperty/Badges/RegionEnum";
 import { generateEntityContent } from "@src/GeneratedContent/GenerateContent";
+import { UriObject } from "@src/Database/Schemas/URISchema";
+import { SameAs } from "@src/Database/Schemas/SameAsSchema";
 
 class Organisation extends AbstractModel {
     /** @protected @static Singleton instance of model Organisation */
@@ -43,8 +45,7 @@ class Organisation extends AbstractModel {
 
     public registerIndexes(): void {
         //Indexes
-        this.schema.index({ "offers.skills": 1 });
-        this.schema.index({ "team.member": 1 });
+        this.schema.index({ "offers.skills": 1, "team.member": 1, uri: 1 });
         this.schema.index(
             { name: "text", description: "text", slug: "text" },
             {
@@ -142,9 +143,13 @@ class Organisation extends AbstractModel {
                 type: [String],
                 enum: BadgeTypes.allBadgeTypes(),
             },
+            sameAs: {
+                type: [SameAs.schema],
+            },
             meta: {
                 type: Meta.schema,
             },
+            uri: UriObject.field,
         },
         {
             toJSON: { virtuals: true },
@@ -190,12 +195,14 @@ class Organisation extends AbstractModel {
             mainImage: document.mainImage ?? "",
             slug: document.slug ?? "",
             catchphrase: document.catchphrase ?? "",
+            sameAs: document.sameAs ?? [],
             meta: document.meta ?? {},
             location: document.location ?? [],
             equipment: document.equipment ?? [],
             region: document.region ?? "",
             badges: document.badges ?? [],
             type: document.type ?? "",
+            uri: document.uri ?? "",
             createdAt: document.createdAt ?? "",
             updatedAt: document.updatedAt ?? "",
         };

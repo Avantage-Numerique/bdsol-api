@@ -7,6 +7,8 @@ import { Meta } from "@src/Moderation/Schemas/MetaSchema";
 import { populateUser } from "@src/Users/Middlewares/populateUser";
 import { middlewarePopulateProperty, taxonomyPopulate } from "@src/Taxonomy/Middlewares/TaxonomiesPopulate";
 import { SocialHandle } from "@src/Database/Schemas/SocialHandleSchema";
+import { UriObject } from "@src/Database/Schemas/URISchema";
+import { SameAs } from "@src/Database/Schemas/SameAsSchema";
 
 class Equipment extends AbstractModel {
     /** @protected @static Singleton instance */
@@ -40,6 +42,7 @@ class Equipment extends AbstractModel {
 
     public registerIndexes(): void {
         //Indexes
+        Equipment._instance.schema.index({ uri: 1 });
         Equipment._instance.schema.index(
             { brand: "text", model: "text", label: "text", slug: "text" },
             {
@@ -112,9 +115,13 @@ class Equipment extends AbstractModel {
             url: {
                 type: [SocialHandle.schema],
             },
+            sameAs: {
+                type: [SameAs.schema],
+            },
             meta: {
                 type: Meta.schema,
             },
+            uri: UriObject.field,
         },
         {
             toJSON: { virtuals: true },
@@ -155,9 +162,11 @@ class Equipment extends AbstractModel {
             slug: document.slug ?? "",
             mainImage: document.mainImage ?? "",
             url: document.url ?? [],
+            sameAs: document.sameAs ?? [],
             meta: document.meta ?? {},
             createdAt: document.createAt ?? "",
             updatedAt: document.updatedAt ?? "",
+            uri: document.uri ?? "",
             type: document.type ?? "",
         };
     }

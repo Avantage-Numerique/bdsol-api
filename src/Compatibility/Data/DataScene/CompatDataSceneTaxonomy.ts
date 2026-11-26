@@ -1,0 +1,21 @@
+import { CompatibilityOntology } from "../../types";
+import { EntityTypesEnum } from "@src/Entities/EntityTypes";
+
+export const compatibilityDBTaxonomyToDataScene: CompatibilityOntology = {
+    [EntityTypesEnum.taxonomy]: {
+        // Term ? https://documentation.datascene.ca/references/term/
+        "@type": "",
+        description: "",
+        external: "",
+        compatibility: {
+            name: {
+                fields: ["name"],
+                export: (doc) => doc.name,
+            },
+            description: {
+                fields: ["description"],
+                export: (doc) => doc.description,
+            },
+        },
+    },
+};

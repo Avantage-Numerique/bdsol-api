@@ -1,0 +1,97 @@
+{% extends 'default.njk' %}
+
+{% from "Partials/isRequire.njk" import isRequire %}
+
+{% block content %}
+
+    <div class="container">
+
+        {% block contentHeader %}
+            {% include "Partials/header.njk" %}
+        {% endblock %}
+
+        <nav class="breadcrumbs default-padding-y">
+            <ul>
+                <li>
+                    <a class="btn" href="/" title="{{ api.name }}">
+                        <i class="las la-home"></i>
+                    </a>
+                </li>
+                <li>
+                    <a class="btn" href="/compatibility" title="Compatibilité">Compatibilité</a>
+                </li>
+                <li>
+                    <span>{{ entity }}</span>
+                </li>
+            </ul>
+        </nav>
+
+        {% if item %}
+
+            <h1>{{ title | safe }}</h1>
+
+            <p>
+                Les tableaux ci-dessous présentent les propriétés ontologiques externes compatibles avec le type
+                <strong>"{{ entity }}"</strong>
+                de la base de données d'AVNU.
+            </p>
+
+            {% for ontologyName, ontology in item %}
+
+                <h2 id="{{ ontologyName }}">
+                    {% if ontology["@type"] %}
+                        {{ ontology["@type"] }} -
+                    {% endif %}
+                    {{ metaItems[ontologyName].label }}
+                </h2>
+
+                {% if ontology.external != "" %}
+                    <p>
+                        <a href="{{ ontology.external }}" target="_blank" class='external-link' rel='external'>{{ ontology.external }}</a>
+                    </p>
+                {% endif %}
+
+                <p>
+                    <code>"@context": "{{ metaItems[ontologyName].contextUrl }}"</code><br/>
+                    <code>"@type": "{{ ontology["@type"] }}"</code>
+                </p>
+
+                <p>{{ ontology.description or "" }}</p>
+
+                <table class="ref-single">
+
+                    <thead>
+                        <tr>
+                            <th>Nom de la propriété externe</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for propertyName, property in ontology.compatibility %}
+
+                            <tr>
+                                <td>
+                                    {{ isRequire(property.constraints.required) }}
+                                    {{ propertyName }}</td>
+                                <td>{{ property.description }}</td>
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+
+            {% endfor %}
+
+        {% else %}
+            <p>Rien à afficher!</p>
+        {% endif %}
+
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <section style="min-height: 50vh"></section>
+{% endblock %}

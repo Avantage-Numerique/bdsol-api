@@ -68,6 +68,10 @@ class ProjectsRoutes extends CrudRoute {
             noHtmlStringSanitizerAlias("data.contactPoint.tel.ext"),
             noHtmlStringSanitizerAlias("data.contactPoint.email.address"),
             urlSanitizerAlias("data.contactPoint.website.url"),
+
+            //sameAs
+            noHtmlStringSanitizerAlias("data.sameAs.*.url"),
+            noHtmlStringSanitizerAlias("data.sameAs.*.label"),
         ],
         update: [
             objectIdSanitizerAlias("data.id"),
@@ -116,6 +120,10 @@ class ProjectsRoutes extends CrudRoute {
             noHtmlStringSanitizerAlias("data.contactPoint.tel.ext"),
             noHtmlStringSanitizerAlias("data.contactPoint.email.address"),
             urlSanitizerAlias("data.contactPoint.website.url"),
+
+            //sameAs
+            noHtmlStringSanitizerAlias("data.sameAs.*.url"),
+            noHtmlStringSanitizerAlias("data.sameAs.*.label"),
         ],
         delete: [],
         search: [],
