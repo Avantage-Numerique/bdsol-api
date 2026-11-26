@@ -43,11 +43,12 @@ class OrganisationsRoutes extends CrudRoute {
             noHtmlStringSanitizerAlias("data.contactPoint.tel.num"),
             noHtmlStringSanitizerAlias("data.contactPoint.tel.ext"),
             noHtmlStringSanitizerAlias("data.contactPoint.email.address"),
-            noHtmlStringSanitizerAlias("data.contactPoint.website.url"),
+            urlSanitizerAlias("data.contactPoint.website.url"),
 
             //sameAs
             noHtmlStringSanitizerAlias("data.sameAs.*.url"),
             noHtmlStringSanitizerAlias("data.sameAs.*.label"),
+
         ],
         update: [
             objectIdSanitizerAlias("data.id", false),
@@ -70,11 +71,12 @@ class OrganisationsRoutes extends CrudRoute {
             noHtmlStringSanitizerAlias("data.contactPoint.tel.num"),
             noHtmlStringSanitizerAlias("data.contactPoint.tel.ext"),
             noHtmlStringSanitizerAlias("data.contactPoint.email.address"),
-            noHtmlStringSanitizerAlias("data.contactPoint.website.url"),
+            urlSanitizerAlias("data.contactPoint.website.url"),
 
             //sameAs
             noHtmlStringSanitizerAlias("data.sameAs.*.url"),
             noHtmlStringSanitizerAlias("data.sameAs.*.label"),
+
         ],
         delete: [],
         search: [],

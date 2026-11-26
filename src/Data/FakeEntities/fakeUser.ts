@@ -1,4 +1,4 @@
-import type { UserContract } from "../../Users/Contracts/UserContract";
+import type { UserContract } from "@src/Users/Contracts/UserContract";
 
 export const fakeUser: Array<UserContract> = [
     {
@@ -10,7 +10,7 @@ export const fakeUser: Array<UserContract> = [
         role: "admin",
         verify: { isVerified: true },
         changePassword: {
-            token: null,
+            token: undefined,
             expireDate: new Date(),
         },
         tos: { accepted: true, acceptedOn: new Date() },
@@ -25,7 +25,7 @@ export const fakeUser: Array<UserContract> = [
         role: "admin",
         verify: { isVerified: true },
         changePassword: {
-            token: null,
+            token: undefined,
             expireDate: new Date(),
         },
         tos: { accepted: true, acceptedOn: new Date() },
@@ -40,7 +40,7 @@ export const fakeUser: Array<UserContract> = [
         role: "admin",
         verify: { isVerified: true },
         changePassword: {
-            token: null,
+            token: undefined,
             expireDate: new Date(),
         },
         tos: { accepted: true, acceptedOn: new Date() },
@@ -55,7 +55,7 @@ export const fakeUser: Array<UserContract> = [
         role: "admin",
         verify: { isVerified: true },
         changePassword: {
-            token: null,
+            token: undefined,
             expireDate: new Date(),
         },
         tos: { accepted: true, acceptedOn: new Date() },
@@ -70,7 +70,7 @@ export const fakeUser: Array<UserContract> = [
         role: "admin",
         verify: { isVerified: true },
         changePassword: {
-            token: null,
+            token: undefined,
             expireDate: new Date(),
         },
         tos: { accepted: true, acceptedOn: new Date() },
@@ -85,7 +85,7 @@ export const fakeUser: Array<UserContract> = [
         role: "admin",
         verify: { isVerified: true },
         changePassword: {
-            token: null,
+            token: undefined,
             expireDate: new Date(),
         },
         tos: { accepted: true, acceptedOn: new Date() },

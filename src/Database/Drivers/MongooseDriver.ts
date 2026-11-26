@@ -37,6 +37,9 @@ import {
 import AutoIncrement from "@src/AutoIncrement/AutoIncrement";
 import AutoIncrementService from "@src/AutoIncrement/AutoIncrementService";
 
+/**
+ * DBDriver to manage mongoose into the api.
+ */
 export class MongooseDBDriver implements DBDriver {
     public driverPrefix: string;
     public isSRV: boolean;

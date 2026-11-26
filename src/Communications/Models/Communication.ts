@@ -69,7 +69,7 @@ class Communication extends AbstractModel {
                 default: Date.now,
             },
             reportedEntityId: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
             },
             reportedEntityType: {
                 type: String,

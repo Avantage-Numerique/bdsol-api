@@ -79,7 +79,7 @@ class Equipment extends AbstractModel {
         {
             //name (virtual)
             equipmentType: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 required: true,
                 ref: "Taxonomy",
             },
@@ -109,7 +109,7 @@ class Equipment extends AbstractModel {
                 unique: true,
             },
             mainImage: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: "Media",
             },
             url: {

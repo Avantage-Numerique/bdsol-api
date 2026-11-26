@@ -38,7 +38,7 @@ class PersonsRoutes extends CrudRoute {
             noHtmlStringSanitizerAlias("data.contactPoint.tel.num"),
             noHtmlStringSanitizerAlias("data.contactPoint.tel.ext"),
             noHtmlStringSanitizerAlias("data.contactPoint.email.address"),
-            noHtmlStringSanitizerAlias("data.contactPoint.website.url"),
+            urlSanitizerAlias("data.contactPoint.website.url"),
 
             //sameAs
             noHtmlStringSanitizerAlias("data.sameAs.*.url"),
@@ -63,7 +63,7 @@ class PersonsRoutes extends CrudRoute {
             noHtmlStringSanitizerAlias("data.contactPoint.tel.num"),
             noHtmlStringSanitizerAlias("data.contactPoint.tel.ext"),
             noHtmlStringSanitizerAlias("data.contactPoint.email.address"),
-            noHtmlStringSanitizerAlias("data.contactPoint.website.url"),
+            urlSanitizerAlias("data.contactPoint.website.url"),
 
             //sameAs
             noHtmlStringSanitizerAlias("data.sameAs.*.url"),

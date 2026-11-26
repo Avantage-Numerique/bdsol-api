@@ -125,7 +125,7 @@ class Project extends AbstractModel {
             },
             team: TeamField,
             mainImage: {
-                type: mongoose.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: "Media",
             },
             sponsor: {
